@@ -8,4 +8,4 @@ mvnw spring-boot:run (Windows)
 Run app in docker using:
 docker-compose build --no-cache && docker-compose up
 
-Note: When creating postgres server in pgadmin, use the name of the postgres container(brewcraft_postgres_1) as the host
+Note: When creating postgres server in pgadmin, use the name of the postgres container(postgresdb) as the host

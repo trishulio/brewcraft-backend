@@ -3,20 +3,22 @@ services:
   app:
     build:
       context: .
+    container_name: brewcraftapp
     ports:
       - "9000:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db/tc
-      SPRING_DATASOURCE_USERNAME: tc
-      SPRING_DATASOURCE_PASSWORD: tc
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
-      - postgres
+      - postgresdb
 
-  postgres:
+  postgresdb:
     image: postgres
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
+    container_name: postgresdb
     ports:
       - "5432:5432"
     environment:
@@ -29,6 +31,7 @@ services:
     restart: always
     volumes:
         - db-admin-data:/var/lib/pgadmin
+    container_name: pgadmin
     ports:
         - "8443:443"
     environment: 
