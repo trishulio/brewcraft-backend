@@ -24,5 +24,18 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
 
+  pg-admin:
+    image: dpage/pgadmin4
+    restart: always
+    volumes:
+        - db-admin-data:/var/lib/pgadmin
+    ports:
+        - "8443:443"
+    environment: 
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+        PGADMIN_LISTEN_PORT: 443
+
 volumes:
     db-data:
+    db-admin-data:
