@@ -57,4 +57,15 @@ public class PostgresJdbcDialectTest {
         verify(mPs, times(1)).executeUpdate();
         verify(mPs, times(1)).close();
     }
+
+    @Test
+    public void testGrantPrivilege_RunsGrantSql() throws SQLException {
+        Connection mConn = mock(Connection.class);
+        PreparedStatement mPs = mockPs(mConn, sql.grantPrivilege("CONNECT", "DATABASE", "DB_1", "USER_1"), 1);
+
+        dialect.grantPrivilege(mConn, "CONNECT", "DATABASE", "DB_1", "USER_1");
+
+        verify(mPs, times(1)).executeUpdate();
+        verify(mPs, times(1)).close();
+    }
 }

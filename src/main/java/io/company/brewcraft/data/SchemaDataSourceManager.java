@@ -26,6 +26,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                  .build(new CacheLoader<String, DataSource>() {
                                      @Override
                                      public DataSource load(String key) throws Exception {
+                                         key = key.toLowerCase();
                                          log.debug("Loading new datasource for key: {}", key);
 
                                          Connection conn = adminDs.getConnection();
@@ -34,16 +35,12 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          DataSource ds = dsBuilder.clear()
                                                                   .url(conn.getMetaData().getURL())
                                                                   .autoCommit(conn.getAutoCommit())
-                                                                  .username(key)
+                                                                  .username(key.toLowerCase())
                                                                   .password(password)
                                                                   .schema(key)
                                                                   .build();
                                          conn.close();
-
-                                         Connection schemaConn = ds.getConnection();
-                                         dialect.createSchemaIfNotExists(schemaConn, key);
-                                         schemaConn.commit();
-                                         schemaConn.close();
+                                         createSchema(dialect, ds, key);
 
                                          return ds;
                                      }
@@ -61,5 +58,12 @@ public class SchemaDataSourceManager implements DataSourceManager {
         }
 
         return ds;
+    }
+
+    private void createSchema(JdbcDialect dialect, DataSource ds, String key) throws SQLException {
+        Connection schemaConn = ds.getConnection();
+        dialect.createSchemaIfNotExists(schemaConn, key);
+        schemaConn.commit();
+        schemaConn.close();
     }
 }

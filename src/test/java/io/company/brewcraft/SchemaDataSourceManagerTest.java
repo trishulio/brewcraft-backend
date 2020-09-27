@@ -38,22 +38,22 @@ public class SchemaDataSourceManagerTest {
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUser() throws SQLException {
-        DataSource ds = mgr.getDataSource("12345");
+    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws SQLException {
+        DataSource ds = mgr.getDataSource("ABC_123");
         Connection conn = ds.getConnection();
 
         assertNotSame(mDs, ds);
 
-        assertEquals("12345", conn.getSchema());
+        assertEquals("abc_123", conn.getSchema());
         assertFalse(conn.getAutoCommit());
 
-        assertEquals("12345", conn.getMetaData().getUserName());
+        assertEquals("abc_123", conn.getMetaData().getUserName());
         assertEquals("jdbc:db://localhost:port/db_name", conn.getMetaData().getURL());
 
         verify(mDsBuilder, times(1)).clear();
         verify(conn, times(1)).close();
 
-        verify(dialect, times(1)).createSchemaIfNotExists(conn, "12345");
+        verify(dialect, times(1)).createSchemaIfNotExists(conn, "abc_123");
 
         // Hack: Cannot get password from DataSource itself. Hence verifying like this.
         verify(mDsBuilder, times(1)).password("ABCDE");
@@ -77,7 +77,7 @@ public class SchemaDataSourceManagerTest {
 
     private KvStore<String, String> mockKvStore() {
         KvStore<String, String> store = mock(KvStore.class);
-        doReturn("ABCDE").when(store).get("12345");
+        doReturn("ABCDE").when(store).get("abc_123");
         return store;
     }
 

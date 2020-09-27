@@ -23,7 +23,7 @@ public class DataAutoConfiguration {
     @ConditionalOnMissingBean(DataSourceManager.class)
     public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect) {
         // TODO: Implement a Vault-based KvStore
-        KvStore<String, String> credsStore = null;
+        KvStore<String, String> credsStore = new InMemoryKvStore<String, String>();
         DataSourceManager mgr = new SchemaDataSourceManager(adminDs, credsStore, dsBuilder, jdbcDialect);
 
         return mgr;

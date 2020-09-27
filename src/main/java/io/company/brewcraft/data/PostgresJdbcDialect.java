@@ -24,6 +24,12 @@ public class PostgresJdbcDialect implements JdbcDialect {
         executeUpdate(conn, sql);
     }
 
+    @Override
+    public void grantPrivilege(Connection conn, String privilege, String resourceType, String resourceName, String username) throws SQLException {
+        String sql = this.pgSql.grantPrivilege(privilege, resourceType, resourceName, username);
+        executeUpdate(conn, sql);
+    }
+
     private int executeUpdate(Connection conn, String sql) throws SQLException {
         PreparedStatement ps = conn.prepareStatement(sql);
         int updateCount = ps.executeUpdate();

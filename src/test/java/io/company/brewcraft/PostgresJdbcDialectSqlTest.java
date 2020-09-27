@@ -25,6 +25,12 @@ public class PostgresJdbcDialectSqlTest {
     @Test
     public void testCreateUser_ReturnsSqlWithUsernameAndPassword() {
         String sql = pgSql.createUser("TEST_USER", "TEST_PASS");
-        assertEquals("CREATE USER TEST_USER PASSWORD TEST_PASS", sql);
+        assertEquals("CREATE USER TEST_USER PASSWORD 'TEST_PASS'", sql);
+    }
+
+    @Test
+    public void testGrantPrivilege_ReturnsPrivilegeSql_WithValues() {
+        String sql = pgSql.grantPrivilege("CONNECT", "DATABASE", "DB_1", "USER_1");
+        assertEquals("GRANT CONNECT ON DATABASE DB_1 TO USER_1", sql);
     }
 }

@@ -7,6 +7,10 @@ public class PostgresJdbcDialectSql {
     }
 
     public String createUser(String username, String password) {
-        return String.format("CREATE USER %s PASSWORD %s", username, password);
+        return String.format("CREATE USER %s PASSWORD '%s'", username, password);
+    }
+
+    public String grantPrivilege(String privilege, String resourceType, String resourceName, String username) {
+        return String.format("GRANT %s ON %s %s TO %s", privilege, resourceType, resourceName, username);
     }
 }
