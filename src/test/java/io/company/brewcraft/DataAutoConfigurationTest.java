@@ -24,7 +24,7 @@ public class DataAutoConfigurationTest {
 
     @Test
     public void testDataSourceManager_ReturnsSchemaBasedDataSourceManager() {
-        DataSourceManager mgr = config.dataSourceManager(null, null);
+        DataSourceManager mgr = config.dataSourceManager(null, null, null);
         assertTrue(mgr instanceof SchemaDataSourceManager);
     }
 

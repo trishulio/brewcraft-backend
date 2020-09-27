@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.data.DataSourceBuilder;
 import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
+import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.SchemaDataSourceManager;
 import io.company.brewcraft.security.store.KvStore;
 
@@ -25,13 +26,15 @@ public class SchemaDataSourceManagerTest {
     private DataSource mDs;
     private KvStore<String, String> mKvStore;
     private DataSourceBuilder mDsBuilder;
+    private JdbcDialect dialect;
 
     @BeforeEach
     public void init() throws SQLException {
         mKvStore = mockKvStore();
         mDs = mockAdminDataSource();
         mDsBuilder = mockDsBuilder();
-        mgr = new SchemaDataSourceManager(mDs, mKvStore, mDsBuilder);
+        dialect = mockDialect();
+        mgr = new SchemaDataSourceManager(mDs, mKvStore, mDsBuilder, dialect);
     }
 
     @Test
@@ -48,6 +51,9 @@ public class SchemaDataSourceManagerTest {
         assertEquals("jdbc:db://localhost:port/db_name", conn.getMetaData().getURL());
 
         verify(mDsBuilder, times(1)).clear();
+        verify(conn, times(1)).close();
+
+        verify(dialect, times(1)).createSchemaIfNotExists(conn, "12345");
 
         // Hack: Cannot get password from DataSource itself. Hence verifying like this.
         verify(mDsBuilder, times(1)).password("ABCDE");
@@ -93,5 +99,10 @@ public class SchemaDataSourceManagerTest {
         doReturn(md).when(conn).getMetaData();
 
         return builder;
+    }
+
+    private JdbcDialect mockDialect() {
+        JdbcDialect dialect = mock(JdbcDialect.class);
+        return dialect;
     }
 }

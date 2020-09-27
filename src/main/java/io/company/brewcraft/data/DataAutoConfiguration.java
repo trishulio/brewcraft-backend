@@ -13,11 +13,18 @@ import io.company.brewcraft.security.store.KvStore;
 public class DataAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(JdbcDialect.class)
+    public JdbcDialect jdbcDialect() {
+        PostgresJdbcDialectSql sql = new PostgresJdbcDialectSql();
+        return new PostgresJdbcDialect(sql);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(DataSourceManager.class)
-    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder) {
+    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect) {
         // TODO: Implement a Vault-based KvStore
         KvStore<String, String> credsStore = null;
-        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, credsStore, dsBuilder);
+        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, credsStore, dsBuilder, jdbcDialect);
 
         return mgr;
     }

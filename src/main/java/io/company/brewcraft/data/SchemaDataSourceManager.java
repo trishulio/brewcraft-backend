@@ -21,24 +21,33 @@ public class SchemaDataSourceManager implements DataSourceManager {
 
     private LoadingCache<String, DataSource> cache;
 
-    public SchemaDataSourceManager(DataSource adminDs, KvStore<String, String> credStore, DataSourceBuilder dsBuilder) {
-        this.cache = CacheBuilder.newBuilder().build(new CacheLoader<String, DataSource>() {
-            @Override
-            public DataSource load(String key) throws Exception {
-                log.debug("Loading new datasource for key: {}", key);
+    public SchemaDataSourceManager(DataSource adminDs, KvStore<String, String> credStore, DataSourceBuilder dsBuilder, JdbcDialect dialect) {
+        this.cache = CacheBuilder.newBuilder()
+                                 .build(new CacheLoader<String, DataSource>() {
+                                     @Override
+                                     public DataSource load(String key) throws Exception {
+                                         log.debug("Loading new datasource for key: {}", key);
 
-                Connection conn = adminDs.getConnection();
-                String password = credStore.get(key);
-                
-                return dsBuilder.clear()
-                                .url(conn.getMetaData().getURL())
-                                .autoCommit(conn.getAutoCommit())
-                                .username(key)
-                                .password(password)
-                                .schema(key)
-                                .build();
-            }
-        });
+                                         Connection conn = adminDs.getConnection();
+                                         String password = credStore.get(key);
+
+                                         DataSource ds = dsBuilder.clear()
+                                                                  .url(conn.getMetaData().getURL())
+                                                                  .autoCommit(conn.getAutoCommit())
+                                                                  .username(key)
+                                                                  .password(password)
+                                                                  .schema(key)
+                                                                  .build();
+                                         conn.close();
+
+                                         Connection schemaConn = ds.getConnection();
+                                         dialect.createSchemaIfNotExists(schemaConn, key);
+                                         schemaConn.commit();
+                                         schemaConn.close();
+
+                                         return ds;
+                                     }
+                                 });
     }
 
     @Override

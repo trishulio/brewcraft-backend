@@ -77,7 +77,7 @@ public class HikariDataSourceBuilderTest {
         boolean value = builder.autoCommit();
         assertFalse(value);
     }
-    
+
     @Test
     public void testClear_ClearsAllValues() {
         builder.username("username")
