@@ -9,17 +9,17 @@ import io.company.brewcraft.security.session.ContextHolder;
 
 public class ContextHolderDataSourceManager implements TenantDataSourceManager {
 
-    private DataSourceManager connMgr;
+    private DataSourceManager dsMgr;
     private ContextHolder ctxHolder;
 
-    public ContextHolderDataSourceManager(ContextHolder ctxHolder, DataSourceManager connMgr) {
-        this.connMgr = connMgr;
+    public ContextHolderDataSourceManager(ContextHolder ctxHolder, DataSourceManager dsMgr) {
+        this.dsMgr = dsMgr;
         this.ctxHolder = ctxHolder;
     }
 
     @Override
     public DataSource getDataSource() throws SQLException {
-        return connMgr.getDataSource(tenantId());
+        return dsMgr.getDataSource(tenantId());
     }
 
     @Override
