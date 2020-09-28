@@ -1,12 +1,17 @@
 package io.company.brewcraft.data;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-public interface TenantDataSourceManager {
+public interface TenantDataSourceManager extends DataSourceManager {
+    String getAdminSchemaName();
 
-    DataSource getDataSource() throws Exception;
+    String fqName(String tenantId);
 
-    Connection getConnection() throws Exception;
+    DataSource getDataSource() throws SQLException, IOException;
+
+    Connection getConnection() throws SQLException, IOException;
 }

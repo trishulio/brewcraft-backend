@@ -3,11 +3,14 @@ package io.company.brewcraft.data;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.security.session.ContextHolder;
+import io.company.brewcraft.security.store.AwsSecretsManagerClient;
+import io.company.brewcraft.security.store.SecretsManager;
 
 @Configuration
 public class DataAutoConfiguration {
@@ -20,9 +23,15 @@ public class DataAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SecretsManager.class)
+    public SecretsManager<String, String> secretManager(@Value("${aws.secretsmanager.region}") String region, @Value("${aws.secretsmanager.url}") String url) {
+        return new AwsSecretsManagerClient(region, url);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(DataSourceManager.class)
-    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect) {
-        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, dsBuilder, jdbcDialect);
+    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect, SecretsManager<String, String> secretsMgr) {
+        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, dsBuilder, jdbcDialect, secretsMgr);
         return mgr;
     }
 
@@ -34,10 +43,9 @@ public class DataAutoConfiguration {
     }
 
     @Bean
-    @Autowired(required=false)
     @ConditionalOnMissingBean(TenantDataSourceManager.class)
-    public TenantDataSourceManager tenantDsManager(ContextHolder ctxHolder, DataSourceManager dataSourceManager) {
-        TenantDataSourceManager mgr = new ContextHolderDataSourceManager(ctxHolder, dataSourceManager);
+    public TenantDataSourceManager tenantDsManager(@Autowired(required = false) ContextHolder ctxHolder, DataSourceManager dataSourceManager, @Value("${app.config.data.schema.name.admin}") String adminSchemaName, @Value("${app.config.data.schema.prefix.tenant}") String tenantSchemaPrefix) {
+        TenantDataSourceManager mgr = new ContextHolderTenantDataSourceManager(ctxHolder, dataSourceManager, adminSchemaName, tenantSchemaPrefix);
         return mgr;
     }
 }

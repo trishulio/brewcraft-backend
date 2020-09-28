@@ -1,9 +1,11 @@
 package io.company.brewcraft.security.store;
 
-public interface SecretsManager {
+import java.io.IOException;
 
-	public String getSecret(String secretId) throws Exception;
-	
-	public void storeSecret(String secretId, String secret) throws Exception;
-	
+public interface SecretsManager<K, V> {
+
+    public V get(K secretId) throws IOException;
+
+    public void put(K secretId, V secret) throws IOException;
+
 }
