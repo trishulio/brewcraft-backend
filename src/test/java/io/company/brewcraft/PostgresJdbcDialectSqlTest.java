@@ -33,4 +33,10 @@ public class PostgresJdbcDialectSqlTest {
         String sql = pgSql.grantPrivilege("CONNECT", "DATABASE", "DB_1", "USER_1");
         assertEquals("GRANT CONNECT ON DATABASE DB_1 TO USER_1", sql);
     }
+    
+    @Test
+    public void testUserExist_ReturnsBoolean() {
+        String sql = pgSql.userExist("USER_1");
+        assertEquals("SELECT 1 FROM pg_roles WHERE rolname='USER_1'", sql);
+    }
 }

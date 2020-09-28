@@ -18,12 +18,12 @@ public class ContextHolderDataSourceManager implements TenantDataSourceManager {
     }
 
     @Override
-    public DataSource getDataSource() throws SQLException {
+    public DataSource getDataSource() throws Exception {
         return dsMgr.getDataSource(tenantId());
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws Exception {
         return getDataSource().getConnection();
     }
 
