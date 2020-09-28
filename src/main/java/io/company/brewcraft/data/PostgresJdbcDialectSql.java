@@ -13,4 +13,8 @@ public class PostgresJdbcDialectSql {
     public String grantPrivilege(String privilege, String resourceType, String resourceName, String username) {
         return String.format("GRANT %s ON %s %s TO %s", privilege, resourceType, resourceName, username);
     }
+    
+    public String userExist(String username) {
+        return String.format("SELECT 1 FROM pg_roles WHERE rolname='%s'", username);
+    }
 }

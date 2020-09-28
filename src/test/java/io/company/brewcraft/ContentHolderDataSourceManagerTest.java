@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
@@ -31,7 +30,7 @@ public class ContentHolderDataSourceManagerTest {
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSource_WithKeyFromTenantId() throws SQLException {
+    public void testGetDataSource_ReturnsDataSource_WithKeyFromTenantId() throws Exception {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mConnMgr).getDataSource("12345");
 
@@ -41,7 +40,7 @@ public class ContentHolderDataSourceManagerTest {
     }
 
     @Test
-    public void testGetConnection_ReturnsConnectionFromDataSource_WithKeyFromTenantid() throws SQLException {
+    public void testGetConnection_ReturnsConnectionFromDataSource_WithKeyFromTenantid() throws Exception {
         DataSource mDs = mock(DataSource.class);
 
         Connection mConn = mock(Connection.class);

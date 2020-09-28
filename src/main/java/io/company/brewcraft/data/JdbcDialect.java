@@ -10,4 +10,6 @@ public interface JdbcDialect {
     void createUser(Connection conn, String username, String password) throws SQLException;
 
     void grantPrivilege(Connection conn, String privilege, String resourceType, String resourceName, String username) throws SQLException;
+    
+    boolean userExists(Connection conn, String username) throws SQLException;
 }

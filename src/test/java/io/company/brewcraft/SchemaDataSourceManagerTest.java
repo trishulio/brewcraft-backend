@@ -34,11 +34,11 @@ public class SchemaDataSourceManagerTest {
         mDs = mockAdminDataSource();
         mDsBuilder = mockDsBuilder();
         dialect = mockDialect();
-        mgr = new SchemaDataSourceManager(mDs, mKvStore, mDsBuilder, dialect);
+        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, dialect);
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws SQLException {
+    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws Exception {
         DataSource ds = mgr.getDataSource("ABC_123");
         Connection conn = ds.getConnection();
 
