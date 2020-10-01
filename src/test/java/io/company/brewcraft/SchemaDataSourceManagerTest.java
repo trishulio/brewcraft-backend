@@ -3,6 +3,7 @@ package io.company.brewcraft;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -17,28 +18,35 @@ import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.SchemaDataSourceManager;
-import io.company.brewcraft.security.store.KvStore;
+import io.company.brewcraft.security.store.SecretsManager;
 
 public class SchemaDataSourceManagerTest {
 
     private DataSourceManager mgr;
 
     private DataSource mDs;
-    private KvStore<String, String> mKvStore;
     private DataSourceBuilder mDsBuilder;
     private JdbcDialect dialect;
+    private SecretsManager<String, String> mSecretsMgr;
 
     @BeforeEach
     public void init() throws SQLException {
-        mKvStore = mockKvStore();
         mDs = mockAdminDataSource();
         mDsBuilder = mockDsBuilder();
-        dialect = mockDialect();
-        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, dialect);
+        mSecretsMgr = mock(SecretsManager.class);
+        dialect = mock(JdbcDialect.class);
+        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, dialect, mSecretsMgr);
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws Exception {
+    public void testGetAdminDataSource_ReturnsAdminDsObject() {
+        DataSource ds = mgr.getAdminDataSource();
+        assertSame(mDs, ds);
+    }
+
+    @Test
+    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws SQLException, IOException {
+        doReturn("ABCDE").when(mSecretsMgr).get("abc_123");
         DataSource ds = mgr.getDataSource("ABC_123");
         Connection conn = ds.getConnection();
 
@@ -56,7 +64,7 @@ public class SchemaDataSourceManagerTest {
         verify(dialect, times(1)).createSchemaIfNotExists(conn, "abc_123");
 
         // Hack: Cannot get password from DataSource itself. Hence verifying like this.
-        verify(mDsBuilder, times(1)).password("ABCDE");
+        assertEquals("ABCDE", mDsBuilder.password());
     }
 
     /** --------------- Mock Initialization Methods --------------- **/
@@ -73,12 +81,6 @@ public class SchemaDataSourceManagerTest {
         doReturn(conn).when(ds).getConnection();
 
         return ds;
-    }
-
-    private KvStore<String, String> mockKvStore() {
-        KvStore<String, String> store = mock(KvStore.class);
-        doReturn("ABCDE").when(store).get("abc_123");
-        return store;
     }
 
     private DataSourceBuilder mockDsBuilder() throws SQLException {
@@ -99,10 +101,5 @@ public class SchemaDataSourceManagerTest {
         doReturn(md).when(conn).getMetaData();
 
         return builder;
-    }
-
-    private JdbcDialect mockDialect() {
-        JdbcDialect dialect = mock(JdbcDialect.class);
-        return dialect;
     }
 }

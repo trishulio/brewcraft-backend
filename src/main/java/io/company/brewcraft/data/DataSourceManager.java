@@ -1,7 +1,11 @@
 package io.company.brewcraft.data;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 public interface DataSourceManager {
-    DataSource getDataSource(String id) throws Exception;
+    DataSource getAdminDataSource();
+    DataSource getDataSource(String id) throws SQLException, IOException;
 }
