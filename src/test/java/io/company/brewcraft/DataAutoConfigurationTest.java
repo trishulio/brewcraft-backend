@@ -9,7 +9,7 @@ import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataAutoConfiguration;
 import io.company.brewcraft.data.DataSourceBuilder;
 import io.company.brewcraft.data.DataSourceManager;
-import io.company.brewcraft.data.HikariDataSourceBuilder;
+import io.company.brewcraft.data.RoutingDataSourceBuilder;
 import io.company.brewcraft.data.SchemaDataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
@@ -37,9 +37,9 @@ public class DataAutoConfigurationTest {
     }
 
     @Test
-    public void testDsBuilder_ReturnsHikariDataSourceBuilder() {
+    public void testDsBuilder_ReturnsRoutingDataSourceBuilder() {
         DataSourceBuilder builder = config.dsBuilder();
-        assertTrue(builder instanceof HikariDataSourceBuilder);
+        assertTrue(builder instanceof RoutingDataSourceBuilder);
     }
 
     @Test

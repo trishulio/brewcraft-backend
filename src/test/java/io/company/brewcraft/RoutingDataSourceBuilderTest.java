@@ -13,36 +13,50 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.zaxxer.hikari.HikariDataSource;
-
 import io.company.brewcraft.data.DataSourceBuilder;
-import io.company.brewcraft.data.HikariDataSourceBuilder;
+import io.company.brewcraft.data.RoutingDataSource;
+import io.company.brewcraft.data.RoutingDataSourceBuilder;
 
-public class HikariDataSourceBuilderTest {
+public class RoutingDataSourceBuilderTest {
 
     private DataSourceBuilder builder;
 
     @BeforeEach
     public void init() {
-        builder = new HikariDataSourceBuilder();
+        builder = new RoutingDataSourceBuilder();
     }
 
     @Test
     public void testBuild_ReturnsDataSource_CreatedWithProps() throws SQLException {
-        DataSource ds = builder.url("jdbc:hsqldb:mem:unittestdb")
-                               .username("test_user")
-                               .password("test_pass")
-                               .autoCommit(false)
+        DataSource mDs = mock(DataSource.class);
+        createAndSetMockConnection(mDs, "user_1", "schema_1", "URL", false);
+
+        DataSource ds = builder.copy(mDs)
+                               .username("test_user_2")
+                               .password("test_pass_2")
+                               .autoCommit(true)
                                .build();
 
-        assertTrue(ds instanceof HikariDataSource);
+        assertTrue(ds instanceof RoutingDataSource);
 
         Connection conn = ds.getConnection();
-        assertEquals(false, conn.getAutoCommit());
+        assertEquals(true, conn.getAutoCommit()); // Uses custom autoCommit value when overridden
 
         DatabaseMetaData md = conn.getMetaData();
-        assertEquals("test_user", md.getUserName());
-        assertEquals("jdbc:hsqldb:mem:unittestdb", md.getURL());
+        assertEquals("test_user_2", md.getUserName()); // Uses custom username when overridden
+        assertEquals("URL", md.getURL());
+    }
+
+    @Test
+    public void testBuild_ThrowsError_WhenBaseDsIsNotSet() {
+        try {
+            builder.build();
+
+            fail("Build should throw an exception as no base datasource was set using builder.copy()");
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            assertEquals("Cannot create RoutingDataSource without a primary datasource", msg);
+        }
     }
 
     @Test
@@ -67,10 +81,32 @@ public class HikariDataSourceBuilderTest {
     }
 
     @Test
-    public void testUrl_SetsUrl() {
-        builder.url("url");
-        String value = builder.url();
-        assertEquals("url", value);
+    public void testUrl_ThrowsException_BecauseItsUnsupportedForThisBuilder() {
+        try {
+            builder.url("url");
+
+            fail("Set URL should throw an exception because it's unsupported for this class");
+        } catch (IllegalAccessError e) {
+            String msg = e.getMessage();
+            assertEquals("RoutingDataSource uses base datasource's connection pool. Hence, cannot use a custom URL", msg);
+        }
+    }
+
+    @Test
+    public void testGetUrl_ReturnsNull_WhenBaseDsIsNotSet() {
+        String url = builder.url();
+        assertNull(url);
+    }
+
+    @Test
+    public void testGetUrl_ReturnUrlFromBaseDsConnection_WhenBaseDsIsNotNull() throws SQLException {
+        DataSource mDs = mock(DataSource.class);
+        createAndSetMockConnection(mDs, "USERNAME", "SCHEMA", "URL", false);
+
+        builder.copy(mDs);
+        String url = builder.url();
+
+        assertEquals("URL", url);
     }
 
     @Test
@@ -86,12 +122,10 @@ public class HikariDataSourceBuilderTest {
                .password("password")
                .schema("schema")
                .autoCommit(true)
-               .url("url")
                .clear();
         assertNull(builder.username());
         assertNull(builder.password());
         assertNull(builder.schema());
-        assertNull(builder.url());
         assertFalse(builder.autoCommit());
     }
 
@@ -107,6 +141,9 @@ public class HikariDataSourceBuilderTest {
         assertEquals("SCHEMA", builder.schema());
         assertEquals(false, builder.autoCommit());
 
-        verify(mDs.getConnection(), times(1)).close();
+        // Close is called twice:
+        // 1) builder.url()
+        // 2) builder.copy()
+        verify(mDs.getConnection(), times(2)).close();
     }
 }

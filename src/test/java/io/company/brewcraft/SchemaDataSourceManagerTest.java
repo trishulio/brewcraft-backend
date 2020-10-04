@@ -1,5 +1,6 @@
 package io.company.brewcraft;
 
+import static io.company.brewcraft.DbMockUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,10 +32,14 @@ public class SchemaDataSourceManagerTest {
 
     @BeforeEach
     public void init() throws SQLException {
-        mDs = mockAdminDataSource();
         mDsBuilder = mockDsBuilder();
+
+        mDs = mock(DataSource.class);
+        createAndSetMockConnection(mDs, "USERNAME", "SCHEMA", "jdbc:db://localhost:port/db_name", false);
+
         mSecretsMgr = mock(SecretsManager.class);
         dialect = mock(JdbcDialect.class);
+
         mgr = new SchemaDataSourceManager(mDs, mDsBuilder, dialect, mSecretsMgr);
     }
 
@@ -68,20 +73,6 @@ public class SchemaDataSourceManagerTest {
     }
 
     /** --------------- Mock Initialization Methods --------------- **/
-
-    private DataSource mockAdminDataSource() throws SQLException {
-        DatabaseMetaData metadata = mock(DatabaseMetaData.class);
-        doReturn("jdbc:db://localhost:port/db_name").when(metadata).getURL();
-
-        Connection conn = mock(Connection.class);
-        doReturn(metadata).when(conn).getMetaData();
-        doReturn(false).when(conn).getAutoCommit();
-
-        DataSource ds = mock(DataSource.class);
-        doReturn(conn).when(ds).getConnection();
-
-        return ds;
-    }
 
     private DataSourceBuilder mockDsBuilder() throws SQLException {
         DataSourceBuilder builder = spy(new HikariDataSourceBuilder());

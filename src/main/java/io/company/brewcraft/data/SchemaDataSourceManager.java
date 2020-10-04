@@ -35,13 +35,12 @@ public class SchemaDataSourceManager implements DataSourceManager {
                 Connection conn = adminDs.getConnection();
                 String password = secretsMgr.get(key);
 
-                 DataSource ds = dsBuilder.clear()
-                                          .url(conn.getMetaData().getURL())
-                                          .autoCommit(conn.getAutoCommit())
-                                          .username(key)
-                                          .password(password)
-                                          .schema(key)
-                                          .build();
+                DataSource ds = dsBuilder.clear()
+                                         .copy(adminDs)
+                                         .schema(key)
+                                         .username(key)
+                                         .password(password)
+                                         .build();
                 conn.close();
                 createSchema(dialect, ds, key);
 

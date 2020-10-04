@@ -1,24 +1,23 @@
 package io.company.brewcraft.data;
 
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class HikariDataSourceBuilder implements DataSourceBuilder {
+public class HikariDataSourceBuilder extends AbstractDataSourceBuilder {
 
     public static final String KEY_USERNAME = "dataSource.user";
     public static final String KEY_PASSWORD = "dataSource.password";
     public static final String KEY_URL = "jdbcUrl";
-    public static final String KEY_SCHEMA = "schema";
     public static final String KEY_AUTO_COMMIT = "autoCommit";
-
-    private Properties props;
+    public static final String KEY_SCHEMA = "schema";
 
     public HikariDataSourceBuilder() {
-        this.props = new Properties(5);
+        super(KEY_USERNAME, KEY_PASSWORD, KEY_URL, KEY_AUTO_COMMIT, KEY_SCHEMA);
     }
 
     @Override
@@ -30,69 +29,17 @@ public class HikariDataSourceBuilder implements DataSourceBuilder {
     }
 
     @Override
-    public DataSourceBuilder username(String username) {
-        this.props.setProperty(KEY_USERNAME, username);
-        return this;
-    }
+    public DataSourceBuilder copy(DataSource ds) {
+        try (Connection conn = ds.getConnection()) {
+            username(conn.getMetaData().getUserName());
+            url(conn.getMetaData().getURL());
+            schema(conn.getSchema());
+            autoCommit(conn.getAutoCommit());
 
-    @Override
-    public DataSourceBuilder password(String password) {
-        props.setProperty(KEY_PASSWORD, password);
-        return this;
-    }
-
-    @Override
-    public DataSourceBuilder url(String url) {
-        props.setProperty(KEY_URL, url);
-        return this;
-    }
-
-    @Override
-    public DataSourceBuilder schema(String schema) {
-        props.setProperty(KEY_SCHEMA, schema);
-        return this;
-    }
-
-    @Override
-    public DataSourceBuilder autoCommit(boolean autoCommit) {
-        props.put(KEY_AUTO_COMMIT, autoCommit);
-        return this;
-    }
-
-    @Override
-    public String username() {
-        return props.getProperty(KEY_USERNAME);
-    }
-
-    @Override
-    public String password() {
-        return props.getProperty(KEY_PASSWORD);
-    }
-
-    @Override
-    public String url() {
-        return props.getProperty(KEY_URL);
-    }
-
-    @Override
-    public String schema() {
-        return props.getProperty(KEY_SCHEMA);
-    }
-
-    @Override
-    public boolean autoCommit() {
-        boolean b = false;
-        Object o = props.get(KEY_AUTO_COMMIT);
-        if (o != null) {
-            b = (Boolean) o;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to copy datasource metadata", e);
         }
 
-        return b;
-    }
-
-    @Override
-    public DataSourceBuilder clear() {
-        this.props.clear();
         return this;
     }
 }
