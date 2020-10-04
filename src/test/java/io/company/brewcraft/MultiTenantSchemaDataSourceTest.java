@@ -1,15 +1,15 @@
 package io.company.brewcraft;
 
+import static io.company.brewcraft.DbMockUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -22,6 +22,7 @@ import io.company.brewcraft.data.MultiTenantSchemaDataSource;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.TenantContext;
+import io.company.brewcraft.security.store.SecretsManager;
 
 public class MultiTenantSchemaDataSourceTest {
     private DataSource multiDs;
@@ -31,13 +32,11 @@ public class MultiTenantSchemaDataSourceTest {
     private ContextHolder mCtxHolder;
     private TenantContext mCtx;
     private TenantDataSourceManager mMgr;
+    private SecretsManager<String, String> mSecretMgr;
 
     @BeforeEach
     public void init() throws SQLException {
-        Map<String, String> data = new HashMap<>();
-        mConn = mock(Connection.class);
-        doAnswer(inv -> data.put("schema", inv.getArgument(0, String.class))).when(mConn).setSchema(anyString());
-        doAnswer(inv -> data.get("schema")).when(mConn).getSchema();
+        mConn = mockConnection("admin_username", "admin_schema", "jdbc_url", false);
 
         mBaseDs = mock(DataSource.class);
 
@@ -48,44 +47,35 @@ public class MultiTenantSchemaDataSourceTest {
         mMgr = mock(TenantDataSourceManager.class);
         doAnswer(inv -> "SCHEMA_" + inv.getArgument(0, String.class)).when(mMgr).fqName(anyString());
 
-        multiDs = new MultiTenantSchemaDataSource(mBaseDs, mCtxHolder, mMgr);
+        mSecretMgr = mock(SecretsManager.class);
+
+        multiDs = new MultiTenantSchemaDataSource(mBaseDs, mCtxHolder, mMgr, mSecretMgr);
     }
 
     @Test
-    public void testGetConnection_ReturnsConnectionFromAdminDs() throws SQLException {
-        doReturn(mConn).when(mBaseDs).getConnection();
-        Connection conn = multiDs.getConnection();
+    public void testGetConnection_SetsConnectionUserPassSchemaToCurrentTenant() throws SQLException, IOException {
+        doReturn("PASS_TENANT_ID").when(mSecretMgr).get("SCHEMA_TENANT_ID");
 
-        assertSame(mConn, conn);
-    }
-
-    @Test
-    public void testGetConnectionUserPass_ReturnsConnectionFromAdminDs() throws SQLException {
-        doReturn(mConn).when(mBaseDs).getConnection("USERNAME", "PASSWORD");
-
-        Connection conn = multiDs.getConnection("USERNAME", "PASSWORD");
-        assertSame(mConn, conn);
-    }
-
-    @Test
-    public void testGetConnection_SetsConnectionSchemaToCurrentTenant() throws SQLException {
-        doReturn(mConn).when(mBaseDs).getConnection();
+        doReturn(mConn).when(mBaseDs).getConnection("SCHEMA_TENANT_ID", "PASS_TENANT_ID");
         doReturn("TENANT_ID").when(mCtx).getTenantId();
 
         Connection conn = multiDs.getConnection();
         String schema = conn.getSchema();
 
+        assertSame(mConn, conn);
         assertEquals("SCHEMA_TENANT_ID", schema);
     }
 
     @Test
-    public void testGetConnectionUserPass_SetsConnectionSchemaToCurrentTenant() throws SQLException {
-        doReturn(mConn).when(mBaseDs).getConnection("USERNAME", "PASSWORD");
-        doReturn("TENANT_ID").when(mCtx).getTenantId();
+    public void testGetConnectionUserPass_SetsConnectionUserPassSchemaToCurrentTenant() throws SQLException, IOException {
+        doReturn("PASS_TENANT_ID").when(mSecretMgr).get("SCHEMA_TENANT_ID");
 
-        Connection conn = multiDs.getConnection("USERNAME", "PASSWORD");
+        doReturn(mConn).when(mBaseDs).getConnection("SCHEMA_TENANT_ID", "PASS_TENANT_ID");
+
+        Connection conn = multiDs.getConnection("SCHEMA_TENANT_ID", "PASS_TENANT_ID");
         String schema = conn.getSchema();
 
+        assertSame(mConn, conn);
         assertEquals("SCHEMA_TENANT_ID", schema);
     }
 
