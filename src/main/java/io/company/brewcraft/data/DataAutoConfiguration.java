@@ -38,7 +38,7 @@ public class DataAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(DataSourceBuilder.class)
     public DataSourceBuilder dsBuilder() {
-        DataSourceBuilder builder = new RoutingDataSourceBuilder();
+        DataSourceBuilder builder = new HikariDataSourceBuilder();
         return builder;
     }
 
