@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
@@ -47,5 +51,20 @@ public class DataAutoConfiguration {
     public TenantDataSourceManager tenantDsManager(@Autowired(required = false) ContextHolder ctxHolder, DataSourceManager dataSourceManager, @Value("${app.config.data.schema.name.admin}") String adminSchemaName, @Value("${app.config.data.schema.prefix.tenant}") String tenantSchemaPrefix) {
         TenantDataSourceManager mgr = new ContextHolderTenantDataSourceManager(ctxHolder, dataSourceManager, adminSchemaName, tenantSchemaPrefix);
         return mgr;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(JdbcTemplate.class)
+    public JdbcTemplate jdbcTemplate(DataSourceManager dataSourceManager) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSourceManager.getAdminDataSource());
+        return jdbcTemplate;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TransactionTemplate.class)
+    public TransactionTemplate transactionTemplate(DataSourceManager dataSourceManager) {
+        PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSourceManager.getAdminDataSource());
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        return transactionTemplate;
     }
 }

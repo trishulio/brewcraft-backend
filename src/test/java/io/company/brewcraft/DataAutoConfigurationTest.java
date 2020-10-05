@@ -2,8 +2,13 @@ package io.company.brewcraft;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.sql.DataSource;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataAutoConfiguration;
@@ -46,6 +51,28 @@ public class DataAutoConfigurationTest {
     public void testTenantDsManager_ReturnsContextHolderDsManager() {
         TenantDataSourceManager mgr = config.tenantDsManager(null, null, "admin_schema", "schema_prefix");
         assertTrue(mgr instanceof ContextHolderTenantDataSourceManager);
+    }
+    
+    @Test
+    public void testJdbcTemplate_ReturnsJdbcTemplate() {
+        DataSourceManager dataSourceManagerMock = Mockito.mock(SchemaDataSourceManager.class);
+        DataSource dataSourceMock = Mockito.mock(DataSource.class);
+
+        Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
+
+        JdbcTemplate jdbcTemplate = config.jdbcTemplate(dataSourceManagerMock);
+        assertTrue(jdbcTemplate instanceof JdbcTemplate);
+    }
+
+    @Test
+    public void testTransactionTemplate_ReturnsTransactionTemplate() {
+        DataSourceManager dataSourceManagerMock = Mockito.mock(SchemaDataSourceManager.class);
+        DataSource dataSourceMock = Mockito.mock(DataSource.class);
+
+        Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
+
+        TransactionTemplate transactionTemplate = config.transactionTemplate(dataSourceManagerMock);
+        assertTrue(transactionTemplate instanceof TransactionTemplate);
     }
 
 }
