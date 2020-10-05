@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "f1f1bb48-dcef-422d-9782-df8587dcf029",
+		"name": "BrewCraft",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TenantManagementService",
+			"item": [
+				{
+					"name": "Add Tenant",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test name\",\r\n    \"domain\": \"Test domain\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/operations/tenants/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"operations",
+								"tenants",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tenant",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/operations/tenants/{{tenantId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"operations",
+								"tenants",
+								"{{tenantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tenant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/operations/tenants/{{tenantId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"operations",
+								"tenants",
+								"{{tenantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Tenants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/operations/tenants/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"operations",
+								"tenants",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
