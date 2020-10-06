@@ -31,10 +31,10 @@ public class TenantDtoTest {
     }
 
     @Test
-    public void testGetSetDomain() {
-        String domain = "testDomain";
-        tenantDto.setDomain(domain);
-        assertSame(domain, tenantDto.getDomain());
+    public void testGetSetUrl() {
+        String url = "testUrl";
+        tenantDto.setUrl(url);
+        assertSame(url, tenantDto.getUrl());
     }
 
     @Test

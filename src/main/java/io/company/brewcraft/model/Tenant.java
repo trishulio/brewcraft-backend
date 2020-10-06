@@ -7,17 +7,17 @@ public class Tenant {
 
     private UUID id;
     private String name;
-    private String domain;
+    private String url;
     private LocalDateTime created;
 
     public Tenant() {
 
     }
 
-    public Tenant(UUID id, String name, String domain, LocalDateTime created) {
+    public Tenant(UUID id, String name, String url, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.domain = domain;
+        this.url = url;
         this.created = created;
     }
 
@@ -37,12 +37,12 @@ public class Tenant {
         this.name = name;
     }
 
-    public String getDomain() {
-        return domain;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public LocalDateTime getCreated() {

@@ -19,7 +19,7 @@ public class TenantRepositoryImpl implements TenantRepository {
 
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM TENANT WHERE ID = ?";
 
-    private static final String SAVE_QUERY = "INSERT INTO TENANT (NAME, DOMAIN) VALUES (?, ?)";
+    private static final String SAVE_QUERY = "INSERT INTO TENANT (NAME, URL) VALUES (?, ?)";
 
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM TENANT WHERE ID = ?";
 

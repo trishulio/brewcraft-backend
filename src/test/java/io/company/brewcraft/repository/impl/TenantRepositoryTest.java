@@ -68,8 +68,8 @@ public class TenantRepositoryTest {
 
     @Test
     public void testSave() {
-        Tenant tenant = new Tenant(null, "testName", "testDomain", null);
-        String insertSql = "INSERT INTO TENANT (NAME, DOMAIN) VALUES (?, ?)";
+        Tenant tenant = new Tenant(null, "testName", "testUrl", null);
+        String insertSql = "INSERT INTO TENANT (NAME, URL) VALUES (?, ?)";
         UUID uuid = UUID.randomUUID();
         Object expectedId = uuid;
 
@@ -78,7 +78,7 @@ public class TenantRepositoryTest {
 
         when(preparedStatementCreatorFactoryMock.newCreatorFor(tenant, insertSql)).thenReturn(preparedStatementCreatorMock);
         when(keyHolderFactoryMock.newKeyHolder()).thenReturn(keyHolderMock);
-        when(jdbcTemplateMock.update(any(PreparedStatementCreator.class), any())).thenReturn(1);
+        when(jdbcTemplateMock.update(preparedStatementCreatorMock, keyHolderMock)).thenReturn(1);
         when(keyHolderMock.getKeys()).thenReturn(map);
 
         UUID actualId = tenantRepository.save(tenant);

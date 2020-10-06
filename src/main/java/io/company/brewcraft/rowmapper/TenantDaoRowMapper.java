@@ -15,7 +15,7 @@ public class TenantDaoRowMapper implements RowMapper<Tenant> {
         Tenant tenant = new Tenant();
         tenant.setId(rs.getObject(1, java.util.UUID.class));
         tenant.setName(rs.getString(2));
-        tenant.setDomain(rs.getString(3));
+        tenant.setUrl(rs.getString(3));
         tenant.setCreated(rs.getObject(4, LocalDateTime.class));
 
         return tenant;
