@@ -27,6 +27,6 @@ public class ContextHolderTenantDataSourceManager extends AbstractTenantDsManage
     }
 
     private String tenantId() {
-        return this.ctxHolder.getTenantContext().getTenantId();
+        return this.ctxHolder.getPrincipalContext().getTenantId();
     }
 }

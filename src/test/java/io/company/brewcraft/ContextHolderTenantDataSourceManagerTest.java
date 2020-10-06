@@ -16,7 +16,7 @@ import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.security.session.TenantContext;
+import io.company.brewcraft.security.session.PrincipalContext;
 
 public class ContextHolderTenantDataSourceManagerTest {
 
@@ -78,11 +78,11 @@ public class ContextHolderTenantDataSourceManagerTest {
     }
 
     private ContextHolder mockContextHolder() {
-        TenantContext ctx = mock(TenantContext.class);
+        PrincipalContext ctx = mock(PrincipalContext.class);
         doReturn("12345").when(ctx).getTenantId();
 
         ContextHolder holder = mock(ContextHolder.class);
-        doReturn(ctx).when(holder).getTenantContext();
+        doReturn(ctx).when(holder).getPrincipalContext();
 
         return holder;
     }

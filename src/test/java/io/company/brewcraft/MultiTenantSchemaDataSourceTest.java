@@ -21,7 +21,7 @@ import org.mockito.Mockito;
 import io.company.brewcraft.data.MultiTenantSchemaDataSource;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.security.session.TenantContext;
+import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class MultiTenantSchemaDataSourceTest {
@@ -30,7 +30,7 @@ public class MultiTenantSchemaDataSourceTest {
     private DataSource mBaseDs;
     private Connection mConn;
     private ContextHolder mCtxHolder;
-    private TenantContext mCtx;
+    private PrincipalContext mCtx;
     private TenantDataSourceManager mMgr;
     private SecretsManager<String, String> mSecretMgr;
 
@@ -41,8 +41,8 @@ public class MultiTenantSchemaDataSourceTest {
         mBaseDs = mock(DataSource.class);
 
         mCtxHolder = mock(ContextHolder.class);
-        mCtx = mock(TenantContext.class);
-        doReturn(mCtx).when(mCtxHolder).getTenantContext();
+        mCtx = mock(PrincipalContext.class);
+        doReturn(mCtx).when(mCtxHolder).getPrincipalContext();
 
         mMgr = mock(TenantDataSourceManager.class);
         doAnswer(inv -> "SCHEMA_" + inv.getArgument(0, String.class)).when(mMgr).fqName(anyString());
