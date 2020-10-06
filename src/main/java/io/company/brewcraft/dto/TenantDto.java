@@ -4,27 +4,30 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 
 public class TenantDto {
 
+    @Null
     private UUID id;
 
     @NotEmpty
     private String name;
 
     @NotEmpty
-    private String domain;
+    private String url;
 
+    @Null
     private LocalDateTime created;
 
     public TenantDto() {
 
     }
 
-    public TenantDto(UUID id, String name, String domain, LocalDateTime created) {
+    public TenantDto(UUID id, String name, String url, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.domain = domain;
+        this.url = url;
         this.created = created;
     }
 
@@ -44,12 +47,12 @@ public class TenantDto {
         this.name = name;
     }
 
-    public String getDomain() {
-        return domain;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public LocalDateTime getCreated() {

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,9 +25,18 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = { DuplicateKeyException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorResponse runtimeException(DuplicateKeyException e, HttpServletRequest request) {
+    public ErrorResponse duplicateKeyException(DuplicateKeyException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        return message;
+    }
+    
+    @ExceptionHandler(value = { EmptyResultDataAccessException.class })
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ErrorResponse emptyResultDataAccessException(EmptyResultDataAccessException e, HttpServletRequest request) {
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         return message;
     }

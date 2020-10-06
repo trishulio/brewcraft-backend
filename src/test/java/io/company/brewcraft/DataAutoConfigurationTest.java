@@ -61,7 +61,6 @@ public class DataAutoConfigurationTest {
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
 
         JdbcTemplate jdbcTemplate = config.jdbcTemplate(dataSourceManagerMock);
-        assertTrue(jdbcTemplate instanceof JdbcTemplate);
     }
 
     @Test
@@ -72,7 +71,6 @@ public class DataAutoConfigurationTest {
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
 
         TransactionTemplate transactionTemplate = config.transactionTemplate(dataSourceManagerMock);
-        assertTrue(transactionTemplate instanceof TransactionTemplate);
     }
 
 }

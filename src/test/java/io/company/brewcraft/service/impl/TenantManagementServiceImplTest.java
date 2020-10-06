@@ -53,11 +53,11 @@ public class TenantManagementServiceImplTest {
 
     @Test
     public void testGetTenants_returnsTenants() throws Exception {
-        Tenant tenant1 = new Tenant(UUID.randomUUID(), "testName", "testDomain", LocalDateTime.now());
-        Tenant tenant2 = new Tenant(UUID.randomUUID(), "testName2", "testDomain2", LocalDateTime.now());
+        Tenant tenant1 = new Tenant(UUID.randomUUID(), "testName", "testUrl", LocalDateTime.now());
+        Tenant tenant2 = new Tenant(UUID.randomUUID(), "testName2", "testUrl", LocalDateTime.now());
 
-        TenantDto tenantDto1 = new TenantDto(UUID.randomUUID(), "testName", "testDomain", LocalDateTime.now());
-        TenantDto tenantDto2 = new TenantDto(UUID.randomUUID(), "testName2", "testDomain2", LocalDateTime.now());
+        TenantDto tenantDto1 = new TenantDto(UUID.randomUUID(), "testName", "testUrl", LocalDateTime.now());
+        TenantDto tenantDto2 = new TenantDto(UUID.randomUUID(), "testName2", "testUrl2", LocalDateTime.now());
 
         List<Tenant> tenants = Arrays.asList(tenant1, tenant2);
 
@@ -86,8 +86,8 @@ public class TenantManagementServiceImplTest {
 
     @Test
     public void testAddTenant_returnsId() throws Exception {
-        TenantDto tenantDto = new TenantDto(null, "testName", "testDomain", null);
-        Tenant tenant = new Tenant(null, "testName", "testDomain", null);
+        TenantDto tenantDto = new TenantDto(null, "testName", "testUrl", null);
+        Tenant tenant = new Tenant(null, "testName", "testUrl", null);
 
         UUID expectedId = UUID.randomUUID();
         when(tenantMapper.tenantDtoToTenant(tenantDto)).thenReturn(tenant);
@@ -123,8 +123,8 @@ public class TenantManagementServiceImplTest {
     @Test
     public void testGetTenant_returnsTenant() throws Exception {
         UUID id = UUID.randomUUID();
-        Tenant tenant = new Tenant(id, "testName", "testDomain", LocalDateTime.now());
-        TenantDto expectedTenantDto = new TenantDto(id, "testName", "testDomain", LocalDateTime.now());
+        Tenant tenant = new Tenant(id, "testName", "testUrl", LocalDateTime.now());
+        TenantDto expectedTenantDto = new TenantDto(id, "testName", "testUrl", LocalDateTime.now());
 
         when(tenantRepositoryMock.findById(id)).thenReturn(tenant);
         when(tenantMapper.tenantToTenantDto(tenant)).thenReturn(expectedTenantDto);

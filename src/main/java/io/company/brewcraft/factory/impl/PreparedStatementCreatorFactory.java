@@ -18,7 +18,7 @@ public class PreparedStatementCreatorFactory implements IPreparedStatementCreato
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql, new String[] { "id" });
                 ps.setString(1, tenant.getName());
-                ps.setString(2, tenant.getDomain());
+                ps.setString(2, tenant.getUrl());
                 return ps;
             }
         };

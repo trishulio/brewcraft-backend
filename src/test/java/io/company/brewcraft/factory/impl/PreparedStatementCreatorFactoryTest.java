@@ -33,7 +33,7 @@ public class PreparedStatementCreatorFactoryTest {
 
     @Test
     public void testCreateForTenant_createsPreparedStatement() throws SQLException {
-        Tenant tenant = new Tenant(null, "testName", "testDomain", null);
+        Tenant tenant = new Tenant(null, "testName", "testUrl", null);
 
         when(connectionMock.prepareStatement(any(), any(String[].class))).thenReturn(preparedStatementMock);
 
@@ -42,7 +42,7 @@ public class PreparedStatementCreatorFactoryTest {
 
         verify(connectionMock, times(1)).prepareStatement(eq("testSql"), refEq(new String[] { "id" }));
         verify(preparedStatementMock, times(2)).setString(anyInt(), anyString());
-        verify(preparedStatementMock).setString(1, tenant.getName());
-        verify(preparedStatementMock).setString(2, tenant.getDomain());
+        verify(preparedStatementMock).setString(1, "testName");
+        verify(preparedStatementMock).setString(2, "testUrl");
     }
 }

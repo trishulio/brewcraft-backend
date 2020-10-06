@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Test name\",\r\n    \"domain\": \"Test domain\"\r\n}",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

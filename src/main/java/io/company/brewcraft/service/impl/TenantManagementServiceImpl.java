@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -38,15 +36,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     public List<TenantDto> getTenants() {
         return transactionTemplate.execute(new TransactionCallback<List<TenantDto>>() {
             public List<TenantDto> doInTransaction(TransactionStatus transactionStatus) {
-                List<TenantDto> tenants = null;
-                try {
-                    tenants = tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).collect(Collectors.toList());
-                } catch (Exception e) {
-                    log.error("Error getting tenants", e);
-                    throw new RuntimeException("Error getting tenants list");
-                }
-
-                return tenants;
+                return tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).collect(Collectors.toList());
             }
         });
     }
@@ -55,18 +45,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         return transactionTemplate.execute(new TransactionCallback<UUID>() {
             public UUID doInTransaction(TransactionStatus transactionStatus) {
                 Tenant tenant = tenantMapper.tenantDtoToTenant(tenantDto);
-                UUID id = null;
-                try {
-                    id = tenantRepository.save(tenant);
-                } catch (DuplicateKeyException e) {
-                    throw new DuplicateKeyException("Tenant already exists", e);
-                } catch (Exception e) {
-                    log.error("Error adding tenant with name: {}, domain: {}", tenantDto.getName(),
-                            tenantDto.getDomain(), e);
-                    throw new RuntimeException("Error adding tenant");
-                }
-
-                return id;
+                return tenantRepository.save(tenant);
             }
         });
     }
@@ -74,16 +53,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     public TenantDto getTenant(UUID id) {
         return transactionTemplate.execute(new TransactionCallback<TenantDto>() {
             public TenantDto doInTransaction(TransactionStatus transactionStatus) {
-                TenantDto tenantDto = null;
-                try {
-                    tenantDto = tenantMapper.tenantToTenantDto(tenantRepository.findById(id));
-                } catch (EmptyResultDataAccessException e) {
-                    throw new EntityNotFoundException("Tenant", id.toString());
-                } catch (Exception e) {
-                    log.error("Error getting tenant with id: {}", id.toString(), e);
-                    throw new RuntimeException("Error getting tenant");
-                }
-                return tenantDto;
+                return tenantMapper.tenantToTenantDto(tenantRepository.findById(id));
             }
         });
     }
@@ -91,13 +61,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     public void deleteTenant(UUID id) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                int result;
-                try {
-                    result = tenantRepository.deleteById(id);
-                } catch (Exception e) {
-                    log.error("Error deleting tenant with id: {}", id.toString(), e);
-                    throw new RuntimeException("Error deleting tenant");
-                }
+                int result = tenantRepository.deleteById(id);
 
                 if (result == 0) {
                     throw new EntityNotFoundException("Tenant", id.toString());
