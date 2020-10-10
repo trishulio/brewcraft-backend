@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.security.session.ThreadLocalContexHolder;
+import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 
 public class AuthConfigurationTest {
 
@@ -20,6 +20,6 @@ public class AuthConfigurationTest {
     @Test
     public void testCtxHolder_ReturnsInstanceOfTypeThreadLocalContextHolder() {
         ContextHolder holder = config.ctxHolder();
-        assertTrue(holder instanceof ThreadLocalContexHolder);
+        assertTrue(holder instanceof ThreadLocalContextHolder);
     }
 }

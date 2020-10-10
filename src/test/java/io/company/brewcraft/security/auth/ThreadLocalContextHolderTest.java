@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.PrincipalContext;
-import io.company.brewcraft.security.session.ThreadLocalContexHolder;
+import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 
 public class ThreadLocalContextHolderTest {
     private ContextHolder holder;
 
     @BeforeEach
     public void init() {
-        holder = new ThreadLocalContexHolder();
+        holder = new ThreadLocalContextHolder();
     }
 
     @Test
