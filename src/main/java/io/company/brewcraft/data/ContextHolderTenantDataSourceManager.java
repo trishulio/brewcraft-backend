@@ -9,7 +9,6 @@ import io.company.brewcraft.security.session.ContextHolder;
 
 public class ContextHolderTenantDataSourceManager extends AbstractTenantDsManager {
 
-    private DataSourceManager dsMgr;
     private ContextHolder ctxHolder;
 
     public ContextHolderTenantDataSourceManager(ContextHolder ctxHolder, DataSourceManager dsMgr, String adminSchemaName, String schemaPrefix) {
