@@ -20,10 +20,9 @@ import io.company.brewcraft.migration.MigrationManager;
 @SpringBootTest
 @ActiveProfiles("test")
 class BrewcraftApplicationTests {
-
     private static Logger log = LoggerFactory.getLogger(BrewcraftApplicationTests.class);
-    // Mocking migration manager to avoid running the PostConstuct during the test.
-    @MockBean
+
+    @MockBean // Mocking migration manager to avoid running the PostConstuct during the test.
     private MigrationManager migrationMgr;
 
     @Test

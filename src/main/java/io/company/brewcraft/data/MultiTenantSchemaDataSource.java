@@ -42,7 +42,7 @@ public class MultiTenantSchemaDataSource extends AbstractDelegateDataSource impl
     }
 
     private String tenantId() {
-        return ctxHolder.getTenantContext().getTenantId();
+        return ctxHolder.getPrincipalContext().getTenantId();
     }
 
     private String fqName(String tenantId) {

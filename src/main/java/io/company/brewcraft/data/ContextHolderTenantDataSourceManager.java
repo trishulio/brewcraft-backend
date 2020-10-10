@@ -9,7 +9,6 @@ import io.company.brewcraft.security.session.ContextHolder;
 
 public class ContextHolderTenantDataSourceManager extends AbstractTenantDsManager {
 
-    private DataSourceManager dsMgr;
     private ContextHolder ctxHolder;
 
     public ContextHolderTenantDataSourceManager(ContextHolder ctxHolder, DataSourceManager dsMgr, String adminSchemaName, String schemaPrefix) {
@@ -27,6 +26,6 @@ public class ContextHolderTenantDataSourceManager extends AbstractTenantDsManage
     }
 
     private String tenantId() {
-        return this.ctxHolder.getTenantContext().getTenantId();
+        return this.ctxHolder.getPrincipalContext().getTenantId();
     }
 }
