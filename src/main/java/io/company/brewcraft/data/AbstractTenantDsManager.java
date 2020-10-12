@@ -24,7 +24,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     }
 
     @Override
-    public DataSource getDataSource(String id) {
+    public DataSource getDataSource(String id) throws SQLException, IOException {
         return this.dsMgr.getDataSource(fqName(id));
     }
 

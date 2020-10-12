@@ -107,6 +107,10 @@ public class FlywayTenantRegister implements TenantRegister {
         try {
             Flyway fw = config.locations(dbScriptPathTenant).schemas(dsMgr.fqName(tenantId)).dataSource(dsMgr.getDataSource(tenantId)).load();
             fw.migrate();
+        } catch (SQLException | IOException e) {
+            log.error("Failed to get the data-source for tenant: {}", tenantId);
+            throw new RuntimeException(e);
+
         } catch (FlywayException e) {
             log.error("Failed to migrate tenant: {}", tenantId);
             throw new RuntimeException(e);
