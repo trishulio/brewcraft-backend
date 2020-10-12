@@ -1,9 +1,7 @@
 package io.company.brewcraft.data;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
 
 import javax.sql.DataSource;
 
@@ -50,12 +48,12 @@ public class SchemaDataSourceManager implements DataSourceManager {
     }
 
     @Override
-    public DataSource getDataSource(String id) throws SQLException, IOException {
+    public DataSource getDataSource(String id) {
         DataSource ds = null;
         try {
             ds = this.cache.get(id);
-        } catch (ExecutionException e) {
-            log.error("Error loading the datasource from the cache");
+        } catch (Exception e) {
+            log.error("Error loading the datasource from the cache for id: {}", id);
             throw new RuntimeException(e);
         }
 
