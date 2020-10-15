@@ -20,13 +20,17 @@ public class MigrationAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantRegister.class)
-    public TenantRegister tenantRegister(TenantDataSourceManager dsMgr, SecretsManager<String, String> secretMgr, JdbcDialect dialect, RandomGenerator randomGen, @Value("${app.config.data.migration.path.tenant}") String dbScriptPathTenant, @Value("${app.config.data.migration.path.admin}") String dbScriptPathAdmin) {
-        return new FlywayTenantRegister(dsMgr, secretMgr, dialect, randomGen, dbScriptPathTenant, dbScriptPathAdmin);
+    public TenantRegister tenantRegister(TenantDataSourceManager dsMgr, SecretsManager<String, String> secretMgr, JdbcDialect dialect, RandomGenerator randomGen, @Value("spring.jpa.database") String dbName, @Value("${app.config.data.migration.path.tenant}") String dbScriptPathTenant, @Value("${app.config.data.migration.path.admin}") String dbScriptPathAdmin) {
+        TenantUserRegister userReg = new TenantUserRegister(dsMgr, secretMgr, dialect, randomGen, dbName);
+        TenantSchemaRegister schemaReg = new TenantSchemaRegister(dsMgr, dialect);
+        FlywayTenantMigrationRegister migrationReg = new FlywayTenantMigrationRegister(dsMgr, dbScriptPathTenant, dbScriptPathAdmin);
+
+        return new UnifiedTenantRegister(userReg, schemaReg, migrationReg);
     }
 
     @Bean
     @ConditionalOnMissingBean(MigrationManager.class)
     public MigrationManager migrationMgr(TenantRegister tenantRegister) {
-        return new FlywayMigrationManager(tenantRegister);
+        return new SequentialMigrationManager(tenantRegister);
     }
 }

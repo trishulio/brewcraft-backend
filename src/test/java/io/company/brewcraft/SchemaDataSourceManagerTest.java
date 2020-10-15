@@ -21,13 +21,14 @@ import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.SchemaDataSourceManager;
 import io.company.brewcraft.security.store.SecretsManager;
 
+@SuppressWarnings("unchecked")
 public class SchemaDataSourceManagerTest {
 
     private DataSourceManager mgr;
 
     private DataSource mDs;
     private DataSourceBuilder mDsBuilder;
-    private JdbcDialect dialect;
+    private JdbcDialect mDialect;
     private SecretsManager<String, String> mSecretsMgr;
 
     @BeforeEach
@@ -38,9 +39,9 @@ public class SchemaDataSourceManagerTest {
         createAndSetMockConnection(mDs, "USERNAME", "SCHEMA", "jdbc:db://localhost:port/db_name", false);
 
         mSecretsMgr = mock(SecretsManager.class);
-        dialect = mock(JdbcDialect.class);
+        mDialect = mock(JdbcDialect.class);
 
-        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, dialect, mSecretsMgr);
+        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, mDialect, mSecretsMgr);
     }
 
     @Test
@@ -50,23 +51,31 @@ public class SchemaDataSourceManagerTest {
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUserInLowerCase() throws SQLException, IOException {
-        doReturn("ABCDE").when(mSecretsMgr).get("abc_123");
+    public void testGetDataSource_ThrowsSQLException_WhenSchemaDoesNotExists() throws SQLException, IOException {
+        Connection mConn = mDs.getConnection();
+        doReturn(false).when(mDialect).schemaExists(mConn, "ABC_123");
+        assertThrows(SQLException.class, () -> mgr.getDataSource("ABC_123"));
+    }
+
+    @Test
+    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUser_WhenSchemaExists() throws SQLException, IOException {
+        Connection mConn = mDs.getConnection();
+        doReturn(true).when(mDialect).schemaExists(mConn, "ABC_123");
+
+        doReturn("ABCDE").when(mSecretsMgr).get("ABC_123");
+
         DataSource ds = mgr.getDataSource("ABC_123");
         Connection conn = ds.getConnection();
 
         assertNotSame(mDs, ds);
 
-        assertEquals("abc_123", conn.getSchema());
+        assertEquals("ABC_123", conn.getSchema());
         assertFalse(conn.getAutoCommit());
 
-        assertEquals("abc_123", conn.getMetaData().getUserName());
+        assertEquals("ABC_123", conn.getMetaData().getUserName());
         assertEquals("jdbc:db://localhost:port/db_name", conn.getMetaData().getURL());
 
         verify(mDsBuilder, times(1)).clear();
-        verify(conn, times(1)).close();
-
-        verify(dialect, times(1)).createSchemaIfNotExists(conn, "abc_123");
 
         // Hack: Cannot get password from DataSource itself. Hence verifying like this.
         assertEquals("ABCDE", mDsBuilder.password());

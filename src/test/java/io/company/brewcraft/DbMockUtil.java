@@ -42,6 +42,8 @@ public abstract class DbMockUtil {
             return null;
         }).when(rs).close();
 
+        doReturn(rs).when(stmt).executeQuery();
+
         return stmt;
     }
 
