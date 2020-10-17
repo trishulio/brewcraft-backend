@@ -26,6 +26,16 @@ public class SequentialTaskSet implements TaskSet {
     }
 
     @Override
+    public <T> void submit(Runnable runnable) {
+        try {
+            runnable.run();
+            results.add(null);
+        } catch (Exception e) {
+            errors.add(e);
+        }
+    }
+
+    @Override
     public List<Exception> getErrors() {
         return this.errors;
     }

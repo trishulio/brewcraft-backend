@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import io.company.brewcraft.data.CheckedRunnable;
+import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManager;
@@ -79,16 +81,19 @@ public class ContextHolderTenantDataSourceManagerTest {
     }
 
     @Test
-    public void testQuery_CallsRunnable_WithAdminDs() throws SQLException {
+    public void testQuery_CallsSupplierAndReturnsResponse_WithAdminDs() throws SQLException {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mConnMgr).getAdminDataSource();
 
         Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 
-        int res = mgr.query(conn -> {
-            assertSame(mConn, conn);
-            return 1;
+        int res = mgr.query(new CheckedSupplier<Integer, Connection, Exception>() {
+            @Override
+            public Integer get(Connection conn) throws Exception {
+                assertSame(mConn, conn);
+                return 1;
+            }
         });
 
         assertEquals(1, res);
@@ -96,7 +101,7 @@ public class ContextHolderTenantDataSourceManagerTest {
     }
 
     @Test
-    public void testQuery_PerformsConnectionRollback_WhenErrorIsThrown() throws SQLException {
+    public void testQuery_PerformsConnectionRollback_WhenErrorIsThrownInSupplier() throws SQLException {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mConnMgr).getAdminDataSource();
 
@@ -104,8 +109,93 @@ public class ContextHolderTenantDataSourceManagerTest {
         doReturn(mConn).when(mDs).getConnection();
 
         assertThrows(RuntimeException.class, () -> {
-            mgr.query(conn -> {
-                throw new SQLException("Assert rollback is done");
+            mgr.query(new CheckedSupplier<Integer, Connection, Exception>() {
+                @Override
+                public Integer get(Connection conn) throws Exception {
+                    throw new SQLException("Should result in rollback on Connection");
+                }
+            });
+        });
+
+        InOrder order = inOrder(mConn);
+        order.verify(mConn, times(1)).rollback();
+        order.verify(mConn, times(1)).close();
+    }
+
+    @Test
+    public void testQueryWithTenantId_CallsSupplier_WithTenantDs() throws SQLException, IOException {
+        DataSource mDs = mock(DataSource.class);
+        doReturn(mDs).when(mConnMgr).getDataSource("tenant_12345");
+
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mDs).getConnection();
+
+        int res = mgr.query("12345", new CheckedSupplier<Integer, Connection, Exception>() {
+            @Override
+            public Integer get(Connection conn) throws Exception {
+                assertSame(mConn, conn);
+                return 1;
+            }
+        });
+
+        assertEquals(1, res);
+        verify(mConn, times(1)).close();
+    }
+
+    @Test
+    public void testQueryWithTenantId_PerformsConnectionRollback_WhenErrorIsThrownInSupplier() throws SQLException, IOException {
+        DataSource mDs = mock(DataSource.class);
+        doReturn(mDs).when(mConnMgr).getDataSource("tenant_12345");
+
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mDs).getConnection();
+
+        assertThrows(RuntimeException.class, () -> {
+            mgr.query("12345", new CheckedSupplier<Integer, Connection, Exception>() {
+                @Override
+                public Integer get(Connection conn) throws Exception {
+                    throw new SQLException("Should result in rollback on Connection");
+                }
+            });
+        });
+
+        InOrder order = inOrder(mConn);
+        order.verify(mConn, times(1)).rollback();
+        order.verify(mConn, times(1)).close();
+    }
+
+    @Test
+    public void testQuery_CallsRunnable_WithAdminDs() throws SQLException {
+        DataSource mDs = mock(DataSource.class);
+        doReturn(mDs).when(mConnMgr).getAdminDataSource();
+
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mDs).getConnection();
+
+        mgr.query(new CheckedRunnable<Connection, Exception>() {
+            @Override
+            public void run(Connection conn) throws Exception {
+                assertSame(mConn, conn);
+            }
+        });
+
+        verify(mConn, times(1)).close();
+    }
+
+    @Test
+    public void testQuery_PerformsConnectionRollback_WhenErrorIsThrownInRunnable() throws SQLException {
+        DataSource mDs = mock(DataSource.class);
+        doReturn(mDs).when(mConnMgr).getAdminDataSource();
+
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mDs).getConnection();
+
+        assertThrows(RuntimeException.class, () -> {
+            mgr.query(new CheckedRunnable<Connection, Exception>() {
+                @Override
+                public void run(Connection conn) throws Exception {
+                    throw new SQLException("Should result in rollback on Connection");
+                }
             });
         });
 
@@ -122,12 +212,13 @@ public class ContextHolderTenantDataSourceManagerTest {
         Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 
-        int res = mgr.query("12345", conn -> {
-            assertSame(mConn, conn);
-            return 1;
+        mgr.query("12345", new CheckedRunnable<Connection, Exception>() {
+            @Override
+            public void run(Connection conn) throws Exception {
+                assertSame(mConn, conn);
+            }
         });
 
-        assertEquals(1, res);
         verify(mConn, times(1)).close();
     }
 
@@ -140,8 +231,11 @@ public class ContextHolderTenantDataSourceManagerTest {
         doReturn(mConn).when(mDs).getConnection();
 
         assertThrows(RuntimeException.class, () -> {
-            mgr.query("12345", conn -> {
-                throw new SQLException("Assert rollback is done");
+            mgr.query("12345", new CheckedRunnable<Connection, Exception>() {
+                @Override
+                public void run(Connection conn) throws Exception {
+                    throw new SQLException();
+                }
             });
         });
 

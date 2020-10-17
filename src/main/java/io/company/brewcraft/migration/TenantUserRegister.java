@@ -1,5 +1,7 @@
 package io.company.brewcraft.migration;
 
+import java.sql.Connection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +40,6 @@ public class TenantUserRegister implements TenantRegister {
 
             secretMgr.put(fqName, password);
             conn.commit();
-            return null;
         });
     }
 
@@ -50,17 +51,11 @@ public class TenantUserRegister implements TenantRegister {
             dialect.dropOwned(conn, fqName);
             dialect.dropUser(conn, fqName);
             conn.commit();
-            return null;
         });
     }
 
     @Override
     public boolean exists(String tenantId) {
-        return dsMgr.query(conn -> dialect.userExists(conn, dsMgr.fqName(tenantId)));
-    }
-
-    @Override
-    public void setup() {
-        // Does nothing
+        return dsMgr.query((Connection conn) -> dialect.userExists(conn, dsMgr.fqName(tenantId)));
     }
 }

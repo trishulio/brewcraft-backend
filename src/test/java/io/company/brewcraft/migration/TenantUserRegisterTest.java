@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import io.company.brewcraft.data.CheckedRunnable;
 import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
@@ -41,7 +42,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testAdd_CreatesUserAndGrantPrivilegesAndStorePassInSecretManager() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> {inv.getArgument(0, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedRunnable.class));
 
         doReturn("1234567890").when(mRand).string(TenantUserRegister.LENGTH_PASSWORD);
 
@@ -60,7 +61,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testExists_ReturnsTrue_WhenUserExistsReturnsTrue() throws SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
 
         doReturn(true).when(mDialect).userExists(mConn, "TENANT_12345");
 
@@ -72,7 +73,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testExists_ReturnsFalse_WhenUserExistsReturnsFalse() throws SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
 
         doReturn(false).when(mDialect).userExists(mConn, "TENANT_12345");
 
@@ -84,7 +85,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testRemove_TransfersUserOwnershipAndThenDropUser() throws SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> {inv.getArgument(0, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedRunnable.class));
 
         doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
 
@@ -96,10 +97,5 @@ public class TenantUserRegisterTest {
         order.verify(mDialect, times(1)).dropUser(mConn, "TENANT_12345");
 
         order.verify(mConn, times(1)).commit();
-    }
-
-    @Test
-    public void testSetup_DoesNothing() {
-        register.setup();
     }
 }

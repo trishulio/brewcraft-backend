@@ -23,8 +23,9 @@ public class FlywayTenantMigrationRegisterTest {
     public static final String DB_SCRIPT_PATH_ADMIN = "db/migrations/admin";
     public static final String DB_SCRIPT_PATH_TENANT = "db/migrations/tenant";
 
-    private TenantRegister register;
+    private MigrationRegister register;
     private TenantDataSourceManager mDsMgr;
+    private FluentConfiguration mFwConfig;
 
     @BeforeEach
     public void init() {
@@ -32,46 +33,8 @@ public class FlywayTenantMigrationRegisterTest {
         // dsMgr.fqName(String id) >>> 'TENANT_' + id
         doAnswer(inv -> "TENANT_" + inv.getArgument(0, String.class)).when(mDsMgr).fqName(anyString());
 
-        register = new FlywayTenantMigrationRegister(mDsMgr, DB_SCRIPT_PATH_TENANT, DB_SCRIPT_PATH_ADMIN);
-    }
-
-    @Test
-    public void testAdd_DelegatesRequestToMigrateTenantSchemaMethodWithNewFluentConfigurationObject() {
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        doNothing().when(fwRegister).migrateTenantSchema(any(FluentConfiguration.class), eq("12345"));
-        fwRegister.add("12345");
-        verify(fwRegister, times(1)).migrateTenantSchema(any(FluentConfiguration.class), eq("12345"));
-    }
-
-    @Test
-    public void testSetup_DelegatesRequestToMigrateAppSchemaMethodWithNewFluentConfigurationObject() {
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        doNothing().when(fwRegister).migrateAppSchema(any(FluentConfiguration.class));
-        fwRegister.setup();
-        verify(fwRegister, times(1)).migrateAppSchema(any(FluentConfiguration.class));
-    }
-
-    @Test
-    public void testRemove_DoesNothing() {
-        register.remove("12345");
-    }
-
-    @Test
-    public void testExists_ReturnsTrue_WhenIsMigratedReturnsTrue() {
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        doReturn(true).when(fwRegister).isMigrated(any(FluentConfiguration.class), eq("12345"));
-
-        boolean b = fwRegister.exists("12345");
-        assertTrue(b);
-    }
-
-    @Test
-    public void testExists_ReturnsFalse_WhenIsMigratedReturnsTrue() {
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        doReturn(false).when(fwRegister).isMigrated(any(FluentConfiguration.class), eq("12345"));
-
-        boolean b = fwRegister.exists("12345");
-        assertFalse(b);
+        mFwConfig = mock(FluentConfiguration.class);
+        register = new FlywayMigrationRegister(() -> mFwConfig, mDsMgr, DB_SCRIPT_PATH_TENANT, DB_SCRIPT_PATH_ADMIN);
     }
 
     @Test
@@ -79,9 +42,6 @@ public class FlywayTenantMigrationRegisterTest {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mDsMgr).getDataSource("12345");
 
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-
-        FluentConfiguration mFwConfig = mock(FluentConfiguration.class);
         Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
 
         MigrationInfoService mInfoService = mock(MigrationInfoService.class);
@@ -89,7 +49,7 @@ public class FlywayTenantMigrationRegisterTest {
         doReturn(new MigrationInfo[] { mock(MigrationInfo.class) }).when(mInfoService).applied();
         doReturn(mInfoService).when(mFw).info();
 
-        boolean b = fwRegister.isMigrated(mFwConfig, "12345");
+        boolean b = register.isMigrated("12345");
 
         assertTrue(b);
     }
@@ -99,9 +59,6 @@ public class FlywayTenantMigrationRegisterTest {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mDsMgr).getDataSource("12345");
 
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-
-        FluentConfiguration mFwConfig = mock(FluentConfiguration.class);
         Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
 
         MigrationInfoService mInfoService = mock(MigrationInfoService.class);
@@ -109,7 +66,7 @@ public class FlywayTenantMigrationRegisterTest {
         doReturn(new MigrationInfo[] { mock(MigrationInfo.class) }).when(mInfoService).applied();
         doReturn(mInfoService).when(mFw).info();
 
-        boolean b = fwRegister.isMigrated(mFwConfig, "12345");
+        boolean b = register.isMigrated("12345");
 
         assertFalse(b);
     }
@@ -119,11 +76,8 @@ public class FlywayTenantMigrationRegisterTest {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mDsMgr).getDataSource("12345");
 
-        FluentConfiguration mFwConfig = mock(FluentConfiguration.class);
         Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
-
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        fwRegister.migrateTenantSchema(mFwConfig, "12345");
+        register.migrate("12345");
 
         verify(mFw, times(1)).migrate();
     }
@@ -132,14 +86,10 @@ public class FlywayTenantMigrationRegisterTest {
     public void testMigrateAppSchema_ConfiguresFlywayWithAdminDatasourceAndMigrationScriptsAndRunsMigrate() throws SQLException, IOException {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mDsMgr).getAdminDataSource();
-
         doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
 
-        FluentConfiguration mFwConfig = mock(FluentConfiguration.class);
         Flyway mFw = mockFlyway(mFwConfig, "ADMIN_SCHEMA", DB_SCRIPT_PATH_ADMIN, mDs);
-
-        FlywayTenantMigrationRegister fwRegister = spy((FlywayTenantMigrationRegister) register);
-        fwRegister.migrateAppSchema(mFwConfig);
+        register.migrate();
 
         verify(mFw, times(1)).migrate();
     }

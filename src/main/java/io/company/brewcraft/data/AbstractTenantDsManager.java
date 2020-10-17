@@ -49,31 +49,69 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     }
 
     @Override
-    public <T> T query(String tenantId, CheckedSupplier<T, Connection, Exception> runnable) {
+    public <T> T query(String tenantId, CheckedSupplier<T, Connection, Exception> supplier) {
         try {
             DataSource ds = this.getDataSource(tenantId);
-            return executeQuery(ds, runnable);
+            return executeQuery(ds, supplier);
         } catch (SQLException | IOException e) {
             throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
         }
     }
 
     @Override
-    public <T> T query(CheckedSupplier<T, Connection, Exception> runnable) {
-        return executeQuery(this.getAdminDataSource(), runnable);
+    public <T> T query(CheckedSupplier<T, Connection, Exception> supplier) {
+        return executeQuery(this.getAdminDataSource(), supplier);
     }
 
-    private <T> T executeQuery(DataSource ds, CheckedSupplier<T, Connection, Exception> runnable) {
+    @Override
+    public void query(String tenantId, CheckedRunnable<Connection, Exception> runnable) {
+        try {
+            DataSource ds = this.getDataSource(tenantId);
+            executeQuery(ds, runnable);
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
+        }
+    }
+
+    @Override
+    public void query(CheckedRunnable<Connection, Exception> runnable) {
+        executeQuery(this.getAdminDataSource(), runnable);
+    }
+
+    private <T> T executeQuery(DataSource ds, CheckedSupplier<T, Connection, Exception> supplier) {
         Connection conn = null;
         try {
             conn = ds.getConnection();
-            return runnable.run(conn);
+            return supplier.get(conn);
         } catch (Exception e) {
             throw new RuntimeException("Failed to run SQL operation", e);
         } finally {
             if (conn != null) {
                 try {
-                    // TODO: Does rollback have any negative impact when called on a read-only failure?
+                    // TODO: Does rollback have any negative impact when called on a read-only
+                    // failure?
+                    conn.rollback();
+                    conn.close();
+                } catch (SQLException e) {
+                    log.error("Error occurred while attempting to close the connection", e);
+                    // Do nothing
+                }
+            }
+        }
+    }
+
+    private void executeQuery(DataSource ds, CheckedRunnable<Connection, Exception> runnable) {
+        Connection conn = null;
+        try {
+            conn = ds.getConnection();
+            runnable.run(conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to run SQL operation", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    // TODO: Does rollback have any negative impact when called on a read-only
+                    // failure?
                     conn.rollback();
                     conn.close();
                 } catch (SQLException e) {

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.data.DataSourceBuilder;
@@ -51,6 +52,9 @@ public class SchemaDataSourceManagerTest {
     }
 
     @Test
+    @Disabled
+    // Disabled because data-source can be created without having schema. This is
+    // needed in case data-source is used to create the schema)
     public void testGetDataSource_ThrowsSQLException_WhenSchemaDoesNotExists() throws SQLException, IOException {
         Connection mConn = mDs.getConnection();
         doReturn(false).when(mDialect).schemaExists(mConn, "ABC_123");
@@ -58,10 +62,7 @@ public class SchemaDataSourceManagerTest {
     }
 
     @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUser_WhenSchemaExists() throws SQLException, IOException {
-        Connection mConn = mDs.getConnection();
-        doReturn(true).when(mDialect).schemaExists(mConn, "ABC_123");
-
+    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUser() throws SQLException, IOException {
         doReturn("ABCDE").when(mSecretsMgr).get("ABC_123");
 
         DataSource ds = mgr.getDataSource("ABC_123");
@@ -79,6 +80,21 @@ public class SchemaDataSourceManagerTest {
 
         // Hack: Cannot get password from DataSource itself. Hence verifying like this.
         assertEquals("ABCDE", mDsBuilder.password());
+    }
+
+    @Test
+    public void testGetDataSource_ReturnsDataSourceFromCache_WhenSubsequentCallsAreMade() throws SQLException, IOException {
+        doReturn("ABCDE").when(mSecretsMgr).get("ABC_123");
+
+        DataSource ds1 = mgr.getDataSource("ABC_123");
+        DataSource ds2 = mgr.getDataSource("ABC_123");
+        DataSource ds3 = mgr.getDataSource("ABC_123");
+
+        assertNotSame(mDs, ds1);
+        assertSame(ds1, ds2);
+        assertSame(ds2, ds3);
+
+        verify(mDsBuilder, times(1)).build();
     }
 
     /** --------------- Mock Initialization Methods --------------- **/

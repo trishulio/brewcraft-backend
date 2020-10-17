@@ -18,7 +18,6 @@ public class TenantSchemaRegister implements TenantRegister {
             String fqName = dsMgr.fqName(tenantId);
             dialect.createSchemaIfNotExists(tenantConn, fqName);
             tenantConn.commit();
-            return null;
         });
     }
 
@@ -28,7 +27,6 @@ public class TenantSchemaRegister implements TenantRegister {
             String fqName = dsMgr.fqName(tenantId);
             dialect.dropSchema(tenantConn, fqName);
             tenantConn.commit();
-            return null;
         });
     }
 
@@ -38,10 +36,5 @@ public class TenantSchemaRegister implements TenantRegister {
             String fqName = dsMgr.fqName(tenantId);
             return dialect.schemaExists(tenantConn, fqName);
         });
-    }
-
-    @Override
-    public void setup() {
-        // Does nothing
     }
 }

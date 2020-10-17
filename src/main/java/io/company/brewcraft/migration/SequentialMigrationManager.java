@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 public class SequentialMigrationManager implements MigrationManager {
     private static final Logger log = LoggerFactory.getLogger(SequentialMigrationManager.class);
 
-    private TenantRegister register;
+    private TenantRegister tenantReg;
+    private MigrationRegister migrationReg;
 
-    public SequentialMigrationManager(TenantRegister register) {
-        this.register = register;
+    public SequentialMigrationManager(TenantRegister register, MigrationRegister mgr) {
+        this.tenantReg = register;
+        this.migrationReg = mgr;
     }
 
     @Override
@@ -31,26 +33,28 @@ public class SequentialMigrationManager implements MigrationManager {
     @Override
 
     public void migrate(String tenantId) {
-        if (register.exists(tenantId)) {
-            throw new RuntimeException(String.format("Tenant already exists: %s", tenantId));
+        if (!tenantReg.exists(tenantId)) {
+            log.info("Registering new tenantId: {}", tenantId);
+            tenantReg.add(tenantId);
         }
 
-        register.add(tenantId);
+        log.info("Applying migration to tenant: {}", tenantId);
+        migrationReg.migrate(tenantId);
     }
 
     protected void migrateAll(TaskSet tasks, List<String> tenants) {
         tasks.submit(() -> {
-            register.setup();
-            return null;
+            migrationReg.migrate();
         });
 
         tenants.forEach(id -> tasks.submit(() -> {
             migrate(id);
-            return null;
         }));
 
         log.info("{} tenants migrated successfully", tasks.getResults().size());
-        log.error("Failed to migrate {} tenants", tasks.getErrors().size());
+        if (tasks.getErrors().size() > 0) {
+            log.error("Failed to migrate {} tenants", tasks.getErrors().size());
+        }
 
         int i = 0;
         for (Exception e : tasks.getErrors()) {

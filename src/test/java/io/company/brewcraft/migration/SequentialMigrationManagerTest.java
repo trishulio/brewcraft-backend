@@ -15,26 +15,33 @@ public class SequentialMigrationManagerTest {
 
     private MigrationManager mgr;
 
-    private TenantRegister mReg;
+    private TenantRegister mTenantReg;
+    private MigrationRegister mMigrationReg;
 
     @BeforeEach
     public void init() {
-        mReg = mock(TenantRegister.class);
-        mgr = new SequentialMigrationManager(mReg);
+        mTenantReg = mock(TenantRegister.class);
+        mMigrationReg = mock(MigrationRegister.class);
+
+        mgr = new SequentialMigrationManager(mTenantReg, mMigrationReg);
     }
 
     @Test
-    public void testMigrate_CallsAddOnRegister_WhenTenantDoesNotExists() {
-        doReturn(false).when(mReg).exists("12345");
-
+    public void testMigrate_DoesNotAddTenantAndRunsMigration_WhenTenantExist() {
+        doReturn(true).when(mTenantReg).exists("12345");
         mgr.migrate("12345");
-        verify(mReg, times(1)).add("12345");
+
+        verify(mTenantReg, times(0)).add("12345");
+        verify(mMigrationReg, times(1)).migrate("12345");
     }
 
     @Test
-    public void testMigrate_ThrowsError_WhenTenantAlreadyExists() {
-        doReturn(true).when(mReg).exists("12345");
-        assertThrows(RuntimeException.class, () -> mgr.migrate("12345"));
+    public void testMigrate_AddsTenantAndRunsMigration_WhenTenantDoesNotExist() {
+        doReturn(false).when(mTenantReg).exists("12345");
+        mgr.migrate("12345");
+
+        verify(mTenantReg, times(1)).add("12345");
+        verify(mMigrationReg, times(1)).migrate("12345");
     }
 
     @Test
@@ -50,10 +57,10 @@ public class SequentialMigrationManagerTest {
     @Test
     public void migrateAllImpl_SubmitsSetupAndAllMigrationTasksToTaskSet() {
         SequentialMigrationManager sqMgr = spy((SequentialMigrationManager) mgr);
-        doReturn(false).when(mReg).exists(any(String.class));
-        doNothing().when(mReg).setup();
-        doNothing().when(mReg).add(startsWith("SUCCESS_"));
-        doThrow(new RuntimeException()).when(mReg).add(startsWith("FAIL_"));
+        doReturn(false).when(mTenantReg).exists(any(String.class));
+        doNothing().when(mMigrationReg).migrate();
+        doNothing().when(mTenantReg).add(startsWith("SUCCESS_"));
+        doThrow(new RuntimeException()).when(mTenantReg).add(startsWith("FAIL_"));
 
         TaskSet tasks = new SequentialTaskSet();
         sqMgr.migrateAll(tasks, Arrays.asList("SUCCESS_TENANT_1", "FAIL_TENANT_1", "SUCCESS_TENANT_2", "FAIL_TENANT_2"));
@@ -61,6 +68,6 @@ public class SequentialMigrationManagerTest {
         assertEquals(2, tasks.getErrors().size());
         assertEquals(3, tasks.getResults().size()); // Also contains setup()
 
-        verify(mReg, times(1)).setup();
+        verify(mMigrationReg, times(1)).migrate();
     }
 }

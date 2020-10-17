@@ -7,6 +7,4 @@ public interface TenantRegister {
     void remove(String tenantId);
 
     boolean exists(String tenantId);
-
-    void setup();
 }

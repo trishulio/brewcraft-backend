@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import io.company.brewcraft.data.CheckedRunnable;
 import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
@@ -35,7 +36,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testAdd_UsesTenantDsToCreateSchema() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
+        doAnswer(inv -> {inv.getArgument(1, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedRunnable.class));
 
         register.add("12345");
 
@@ -48,7 +49,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testExists_ReturnsTrue_WhenSchemaExistsReturnsTrue() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
+        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
 
         doReturn(true).when(mDialect).schemaExists(mConn, "TENANT_12345");
 
@@ -60,7 +61,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testExists_ReturnsFalse_WhenUserExistsReturnsFalse() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
+        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
 
         doReturn(false).when(mDialect).schemaExists(mConn, "TENANT_12345");
 
@@ -72,7 +73,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testRemove_DropsSchema() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(1, CheckedSupplier.class).run(mConn)).when(mDsMgr).query(eq("12345"), any(CheckedSupplier.class));
+        doAnswer(inv -> {inv.getArgument(1, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedRunnable.class));
 
         register.remove("12345");
 
@@ -80,10 +81,5 @@ public class TenantSchemaRegisterTest {
         order.verify(mDialect, times(1)).dropSchema(mConn, "TENANT_12345");
 
         order.verify(mConn, times(1)).commit();
-    }
-
-    @Test
-    public void testSetup_DoesNothing() {
-        register.setup();
     }
 }

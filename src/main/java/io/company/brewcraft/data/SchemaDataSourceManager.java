@@ -30,7 +30,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
             public DataSource load(String key) throws Exception {
                 log.debug("Loading new datasource for key: {}", key);
 
-                verifySchemaExists(dialect, adminDs, key);
+//                verifySchemaExists(dialect, adminDs, key);
                 String password = secretsMgr.get(key);
 
                 DataSource ds = dsBuilder.clear()
