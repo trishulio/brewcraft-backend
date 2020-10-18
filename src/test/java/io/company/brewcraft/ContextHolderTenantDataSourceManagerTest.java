@@ -98,6 +98,7 @@ public class ContextHolderTenantDataSourceManagerTest {
 
         assertEquals(1, res);
         verify(mConn, times(1)).close();
+        verify(mConn, times(0)).rollback();
     }
 
     @Test
@@ -105,7 +106,6 @@ public class ContextHolderTenantDataSourceManagerTest {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mConnMgr).getAdminDataSource();
 
-        Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 
         assertThrows(RuntimeException.class, () -> {
@@ -140,6 +140,7 @@ public class ContextHolderTenantDataSourceManagerTest {
 
         assertEquals(1, res);
         verify(mConn, times(1)).close();
+        verify(mConn, times(0)).rollback();
     }
 
     @Test
@@ -180,6 +181,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         });
 
         verify(mConn, times(1)).close();
+        verify(mConn, times(0)).rollback();
     }
 
     @Test
@@ -220,6 +222,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         });
 
         verify(mConn, times(1)).close();
+        verify(mConn, times(0)).rollback();
     }
 
     @Test

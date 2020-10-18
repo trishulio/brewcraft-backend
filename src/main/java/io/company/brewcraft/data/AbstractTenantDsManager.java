@@ -84,17 +84,18 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
             conn = ds.getConnection();
             return supplier.get(conn);
         } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (SQLException eR) {
+                log.error("Failed to perform rollback because {}", eR);
+            }
             throw new RuntimeException("Failed to run SQL operation", e);
         } finally {
             if (conn != null) {
                 try {
-                    // TODO: Does rollback have any negative impact when called on a read-only
-                    // failure?
-                    conn.rollback();
                     conn.close();
                 } catch (SQLException e) {
                     log.error("Error occurred while attempting to close the connection", e);
-                    // Do nothing
                 }
             }
         }
@@ -106,17 +107,18 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
             conn = ds.getConnection();
             runnable.run(conn);
         } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (SQLException eR) {
+                log.error("Failed to perform rollback because {}", eR);
+            }
             throw new RuntimeException("Failed to run SQL operation", e);
         } finally {
             if (conn != null) {
                 try {
-                    // TODO: Does rollback have any negative impact when called on a read-only
-                    // failure?
-                    conn.rollback();
                     conn.close();
                 } catch (SQLException e) {
                     log.error("Error occurred while attempting to close the connection", e);
-                    // Do nothing
                 }
             }
         }
