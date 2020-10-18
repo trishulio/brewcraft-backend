@@ -43,4 +43,11 @@ public class TenantTest {
         tenant.setCreated(created);
         assertSame(created, tenant.getCreated());
     }
+    
+    @Test
+    public void testGetSetLastUpdated() {
+        LocalDateTime lastUpdated = LocalDateTime.now();
+        tenant.setLastUpdated(lastUpdated);
+        assertSame(lastUpdated, tenant.getLastUpdated());
+    }
 }

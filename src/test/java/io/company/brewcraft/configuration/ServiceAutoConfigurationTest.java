@@ -19,7 +19,7 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testTenantRepository_returnsInstanceOfTenantRepository() {
-        TenantManagementService tenantManagementService = serviceAutoConfiguration.tenantManagementService(null, null);
+        TenantManagementService tenantManagementService = serviceAutoConfiguration.tenantManagementService(null, null ,null);
         assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
     }
 }

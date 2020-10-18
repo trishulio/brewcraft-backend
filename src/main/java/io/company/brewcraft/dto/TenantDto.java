@@ -19,16 +19,20 @@ public class TenantDto {
 
     @Null
     private LocalDateTime created;
+    
+    @Null
+    private LocalDateTime lastUpdated;
 
     public TenantDto() {
 
     }
 
-    public TenantDto(UUID id, String name, String url, LocalDateTime created) {
+    public TenantDto(UUID id, String name, String url, LocalDateTime created, LocalDateTime lastUpdated) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.created = created;
+        this.lastUpdated = lastUpdated;
     }
 
     public UUID getId() {
@@ -61,5 +65,13 @@ public class TenantDto {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+    
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

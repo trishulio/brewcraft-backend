@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.dao.DuplicateKeyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,23 +15,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
+    
+    public static final Logger log = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorResponse entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-
+        
+        log.debug("Entity Not Found Exception", e);
         return message;
     }
 
-    @ExceptionHandler(value = { DuplicateKeyException.class })
+    @ExceptionHandler(value = { DataIntegrityViolationException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorResponse duplicateKeyException(DuplicateKeyException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-
-        return message;
+    public ErrorResponse constraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
+           ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+             HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+           
+           log.debug("Data Integrity Violaton Exception", e);
+           return message;
     }
     
     @ExceptionHandler(value = { EmptyResultDataAccessException.class })
@@ -38,6 +44,7 @@ public class ControllerExceptionHandler {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
+        log.debug("Empty Result Exception", e);
         return message;
     }
 
@@ -46,7 +53,8 @@ public class ControllerExceptionHandler {
     public ErrorResponse runtimeException(RuntimeException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-
+        
+        log.error("Runtime Exception", e);
         return message;
     }
 }

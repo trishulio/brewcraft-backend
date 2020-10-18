@@ -43,4 +43,11 @@ public class TenantDtoTest {
         tenantDto.setCreated(created);
         assertSame(created, tenantDto.getCreated());
     }
+    
+    @Test
+    public void testGetSetLastUpdated() {
+        LocalDateTime lastUpdated = LocalDateTime.now();
+        tenantDto.setLastUpdated(lastUpdated);
+        assertSame(lastUpdated, tenantDto.getLastUpdated());
+    }
 }

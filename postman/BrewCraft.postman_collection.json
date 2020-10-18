@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f1f1bb48-dcef-422d-9782-df8587dcf029",
+		"_postman_id": "bdddd639-8a7b-4ad0-9d42-f9acabc28f2f",
 		"name": "BrewCraft",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,6 +11,16 @@
 				{
 					"name": "Add Tenant",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -37,8 +47,56 @@
 					"response": []
 				},
 				{
+					"name": "Update Tenant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/operations/tenants/{{tenantId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"operations",
+								"tenants",
+								"{{tenantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete Tenant",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -58,6 +116,16 @@
 				{
 					"name": "Get Tenant",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -77,6 +145,16 @@
 				{
 					"name": "Get All Tenants",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -88,6 +166,230 @@
 								"operations",
 								"tenants",
 								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Cognito",
+			"item": [
+				{
+					"name": "Authorization Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+							"host": [
+								"{{cognito_url}}"
+							],
+							"path": [
+								"oauth2",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "client_id",
+									"value": "{{cognito_client_id}}"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{cognito_redirect_url}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "JKW",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/jwks.json",
+							"protocol": "https",
+							"host": [
+								"cognito-idp",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"{{cognito_user_pool_id}}",
+								".well-known",
+								"jwks.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OpenId Configuration",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/openid-configuration",
+							"protocol": "https",
+							"host": [
+								"cognito-idp",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"{{cognito_user_pool_id}}",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cognito_url}}/login?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+							"host": [
+								"{{cognito_url}}"
+							],
+							"path": [
+								"login"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "client_id",
+									"value": "{{cognito_client_id}}"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{cognito_redirect_url}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{cognito_client_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{cognito_client_id}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{cognito_url}}/oauth2/token?grant_type=authorization_code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}&code=f1c94e17-1c62-4304-962e-b1e8bb1aa88a",
+							"host": [
+								"{{cognito_url}}"
+							],
+							"path": [
+								"oauth2",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code"
+								},
+								{
+									"key": "client_id",
+									"value": "{{cognito_client_id}}"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{cognito_redirect_url}}"
+								},
+								{
+									"key": "code",
+									"value": "f1c94e17-1c62-4304-962e-b1e8bb1aa88a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "E2E",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJkNzFmOGYzNy0zNWJlLTQ1NTItYjNmZi0wMjQ3ODJlOWYzMTQiLCJjb2duaXRvOmdyb3VwcyI6WyJtYXN0ZXIiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6ImE0MmJlODRiLTMyOTgtNDllMS04YWJjLWIwYjBjZTNlMTIwNCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDI1NjE3ODUsImV4cCI6MTYwMjU2NTM4NSwiaWF0IjoxNjAyNTYxNzg1LCJqdGkiOiJkNTIyNzU2YS0yODU1LTQyZDQtYjJhYS05YzMxZGU2NzBkMTgiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9tYXN0ZXIifQ.fKzvGz_lGWRAWTxabxwjpO7BY-p6JxQ_KG_vyhlXM8Pi_e67EdnsyxtW9oQokSEdFwAgPUs1p-y3hKLywmJhicEQYNVjRNjtSsg9bO7X8etwNcyvV2g96NCOEWpx4Do7HhO_j_NIk_OYGJ3Ahnmadynb4OuVXtO1dQd96a7ZsOCidaR2OGyvmN6MiqEtOa62TNpdRZjch8I_h0JU8DA9y3KgQNIeMzwvbnKmGeUn_NKF7uGdUIrfZXLO8ChtuPz4dkZLEnYQVNL4WmpktGyRxfFIPUF86jJ4iMbEAWlEFwnwBntu_Cjlb0m-ClMAcUn-tjeYOMXDhWVwk4YHt5cZew",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+							"host": [
+								"{{cognito_url}}"
+							],
+							"path": [
+								"oauth2",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "client_id",
+									"value": "{{cognito_client_id}}"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{cognito_redirect_url}}"
+								}
 							]
 						}
 					},
