@@ -45,7 +45,7 @@ public class HibernateAutoConfigurationTest {
         entityManagerFactoryMock = mock(EntityManagerFactory.class);
         jpaVendorAdapterMock = mock(HibernateJpaVendorAdapter.class);
         tenantDataSourceManageMock = mock(ContextHolderTenantDataSourceManager.class);
-        multiTenantConnectionProviderMock = mock(TenantConnectionProvider.class);
+        multiTenantConnectionProviderMock = mock(TenantConnectionProviderPool.class);
         currentTenantIdentifierResolverMock = mock(TenantIdentifierResolver.class);
         dataSourceMock = mock(DataSource.class);
       
@@ -56,7 +56,7 @@ public class HibernateAutoConfigurationTest {
     public void testMultiTenantConnectionProvider_ReturnsInstanceOfTenantConnectionProvider() {
         MultiTenantConnectionProvider multiTenantConnectionProvider = hibernateAutoConfiguration.multiTenantConnectionProvider(null, null);
         
-        assertTrue(multiTenantConnectionProvider instanceof TenantConnectionProvider);
+        assertTrue(multiTenantConnectionProvider instanceof TenantConnectionProviderPool);
     }
 
     @Test

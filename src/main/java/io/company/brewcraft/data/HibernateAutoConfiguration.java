@@ -31,7 +31,7 @@ public class HibernateAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MultiTenantConnectionProvider.class)
     public MultiTenantConnectionProvider multiTenantConnectionProvider(TenantDataSourceManager tenantDataSourceManager, @Value("${app.config.data.admin.name}") String adminIdentifier) {
-        MultiTenantConnectionProvider multiTenantConnectionProvider = new TenantConnectionProvider(tenantDataSourceManager, adminIdentifier);
+        MultiTenantConnectionProvider multiTenantConnectionProvider = new TenantConnectionProviderPool(tenantDataSourceManager, adminIdentifier);
         return multiTenantConnectionProvider;
     }
     
