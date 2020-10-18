@@ -1,7 +1,9 @@
 package io.company.brewcraft.data;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
 import javax.sql.DataSource;
 
@@ -26,11 +28,9 @@ public class SchemaDataSourceManager implements DataSourceManager {
         this.cache = CacheBuilder.newBuilder().build(new CacheLoader<String, DataSource>() {
             @Override
             public DataSource load(String key) throws Exception {
-
-                key = key.toLowerCase();
                 log.debug("Loading new datasource for key: {}", key);
 
-                Connection conn = adminDs.getConnection();
+//                verifySchemaExists(dialect, adminDs, key);
                 String password = secretsMgr.get(key);
 
                 DataSource ds = dsBuilder.clear()
@@ -39,8 +39,6 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          .username(key)
                                          .password(password)
                                          .build();
-                conn.close();
-                createSchema(dialect, ds, key);
 
                 return ds;
             }
@@ -48,26 +46,43 @@ public class SchemaDataSourceManager implements DataSourceManager {
     }
 
     @Override
-    public DataSource getDataSource(String id) {
+    public DataSource getDataSource(String id) throws SQLException, IOException {
         DataSource ds = null;
         try {
             ds = this.cache.get(id);
-        } catch (Exception e) {
-            log.error("Error loading the datasource from the cache for id: {}", id);
-            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            log.error("Error loading the datasource from the cache");
+            Throwable cause = e.getCause();
+            if (cause instanceof SQLException) {
+                log.error("SQLException occurred while fetching DataSource");
+                throw (SQLException) cause;
+            } else if (cause instanceof IOException) {
+                log.error("IOException occurred while fetching DataSource");
+                throw (IOException) cause;
+            } else {
+                log.error("Unknown error occurred while fetching DataSource");
+                throw new RuntimeException(cause);
+            }
         }
 
         return ds;
     }
 
-    private void createSchema(JdbcDialect dialect, DataSource ds, String schema) throws SQLException {
-        Connection schemaConn = ds.getConnection();
-        dialect.createSchemaIfNotExists(schemaConn, schema);
-        schemaConn.close();
-    }
-
     @Override
     public DataSource getAdminDataSource() {
         return this.adminDs;
+    }
+
+    private void verifySchemaExists(JdbcDialect dialect, DataSource ds, String schema) throws SQLException {
+        log.debug("Verifying the schema already exists: {}", schema);
+
+        Connection conn = ds.getConnection();
+        boolean exists = dialect.schemaExists(conn, schema);
+        log.debug("Schema named {} exists = {}", schema, exists);
+        conn.close();
+
+        if (!exists) {
+            throw new SQLException(String.format("Invalid attempt to set a non-existent schema: %s", schema));
+        }
     }
 }

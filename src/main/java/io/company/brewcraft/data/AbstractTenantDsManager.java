@@ -6,7 +6,12 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractTenantDsManager implements TenantDataSourceManager {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractTenantDsManager.class);
 
     protected DataSourceManager dsMgr;
     private String schemaPrefix;
@@ -14,7 +19,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
 
     public AbstractTenantDsManager(DataSourceManager dsMgr, String adminSchemaName, String schemaPrefix) {
         this.dsMgr = dsMgr;
-        this.adminSchemaName = adminSchemaName;
+        this.adminSchemaName = adminSchemaName.toLowerCase();
         this.schemaPrefix = schemaPrefix;
     }
 
@@ -24,13 +29,13 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     }
 
     @Override
-    public DataSource getDataSource(String id) {
+    public DataSource getDataSource(String id) throws SQLException, IOException {
         return this.dsMgr.getDataSource(fqName(id));
     }
 
     @Override
     public String fqName(String tenantId) {
-        return String.format("%s%s", this.schemaPrefix, tenantId);
+        return String.format("%s%s", this.schemaPrefix, tenantId).toLowerCase();
     }
 
     @Override
@@ -41,5 +46,79 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     @Override
     public Connection getConnection() throws SQLException, IOException {
         return getDataSource().getConnection();
+    }
+
+    @Override
+    public <T> T query(String tenantId, CheckedSupplier<T, Connection, Exception> supplier) {
+        try {
+            DataSource ds = this.getDataSource(tenantId);
+            return executeQuery(ds, supplier);
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
+        }
+    }
+
+    @Override
+    public <T> T query(CheckedSupplier<T, Connection, Exception> supplier) {
+        return executeQuery(this.getAdminDataSource(), supplier);
+    }
+
+    @Override
+    public void query(String tenantId, CheckedRunnable<Connection, Exception> runnable) {
+        try {
+            DataSource ds = this.getDataSource(tenantId);
+            executeQuery(ds, runnable);
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
+        }
+    }
+
+    @Override
+    public void query(CheckedRunnable<Connection, Exception> runnable) {
+        executeQuery(this.getAdminDataSource(), runnable);
+    }
+
+    private <T> T executeQuery(DataSource ds, CheckedSupplier<T, Connection, Exception> supplier) {
+        Connection conn = null;
+        try {
+            conn = ds.getConnection();
+            return supplier.get(conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to run SQL operation", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    // TODO: Does rollback have any negative impact when called on a read-only
+                    // failure?
+                    conn.rollback();
+                    conn.close();
+                } catch (SQLException e) {
+                    log.error("Error occurred while attempting to close the connection", e);
+                    // Do nothing
+                }
+            }
+        }
+    }
+
+    private void executeQuery(DataSource ds, CheckedRunnable<Connection, Exception> runnable) {
+        Connection conn = null;
+        try {
+            conn = ds.getConnection();
+            runnable.run(conn);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to run SQL operation", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    // TODO: Does rollback have any negative impact when called on a read-only
+                    // failure?
+                    conn.rollback();
+                    conn.close();
+                } catch (SQLException e) {
+                    log.error("Error occurred while attempting to close the connection", e);
+                    // Do nothing
+                }
+            }
+        }
     }
 }

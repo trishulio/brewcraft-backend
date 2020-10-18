@@ -33,10 +33,40 @@ public class PostgresJdbcDialectSqlTest {
         String sql = pgSql.grantPrivilege("CONNECT", "DATABASE", "DB_1", "USER_1");
         assertEquals("GRANT CONNECT ON DATABASE DB_1 TO USER_1", sql);
     }
-    
+
     @Test
-    public void testUserExist_ReturnsBoolean() {
-        String sql = pgSql.userExist("USER_1");
-        assertEquals("SELECT 1 FROM pg_roles WHERE rolname='USER_1'", sql);
+    public void testUserExist_ReturnsSqlWithPlaceholder() {
+        String sql = pgSql.userExist();
+        assertEquals("SELECT 1 FROM pg_roles WHERE rolname = ?", sql);
+    }
+
+    @Test
+    public void testSchemaExists_ReturnsSqlWithPlaceholder() {
+        String sql = pgSql.schemaExists();
+        assertEquals("SELECT schema_name FROM information_schema.schemata WHERE schema_name = ?", sql);
+    }
+
+    @Test
+    public void testDropUser_ReturnsSqlWithUsername() {
+        String sql = pgSql.dropUser("USER_1");
+        assertEquals("DROP USER USER_1", sql);
+    }
+
+    @Test
+    public void testDropSchema_ReturnsSqlWithSchemaName() {
+        String sql = pgSql.dropSchema("SCHEMA_1");
+        assertEquals("DROP SCHEMA SCHEMA_1", sql);
+    }
+
+    @Test
+    public void testReassignOwned_ReturnsSqlWithOwnerAndAssignee() {
+        String sql = pgSql.reassignOwned("OWNER", "ASSIGNEE");
+        assertEquals("REASSIGN OWNED BY OWNER TO ASSIGNEE", sql);
+    }
+
+    @Test
+    public void testDropOwned_ReturnsSqlWithOwner() {
+        String sql = pgSql.dropOwned("OWNER");
+        assertEquals("DROP OWNED BY OWNER", sql);
     }
 }

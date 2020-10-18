@@ -22,13 +22,19 @@ public class MigrationAutoConfigurationTest {
 
     @Test
     public void testTenantRegister_ReturnsInstanceOfFlywayTenantRegister() {
-        TenantRegister register = config.tenantRegister(null, null, null, null, null, null);
-        assertTrue(register instanceof FlywayTenantRegister);
+        TenantRegister register = config.tenantRegister(null, null, null, null, null);
+        assertTrue(register instanceof UnifiedTenantRegister);
     }
 
     @Test
-    public void testMigrationMgr_ReturnsInstanceOfFlywayMigrationManager() {
-        MigrationManager mgr = config.migrationMgr(null);
-        assertTrue(mgr instanceof FlywayMigrationManager);
+    public void testMigrationMgr_ReturnsInstanceOfSequentialMigrationManager() {
+        MigrationManager mgr = config.migrationMgr(null, null);
+        assertTrue(mgr instanceof SequentialMigrationManager);
+    }
+
+    @Test
+    public void testMigrationRegister_ReturnsInstanceOfFlywayMigrationRegister() {
+        MigrationRegister register = config.migrationReg(null, null, null);
+        assertTrue(register instanceof FlywayMigrationRegister);
     }
 }
