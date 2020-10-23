@@ -351,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJkNzFmOGYzNy0zNWJlLTQ1NTItYjNmZi0wMjQ3ODJlOWYzMTQiLCJjb2duaXRvOmdyb3VwcyI6WyJtYXN0ZXIiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6ImE0MmJlODRiLTMyOTgtNDllMS04YWJjLWIwYjBjZTNlMTIwNCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDI1NjE3ODUsImV4cCI6MTYwMjU2NTM4NSwiaWF0IjoxNjAyNTYxNzg1LCJqdGkiOiJkNTIyNzU2YS0yODU1LTQyZDQtYjJhYS05YzMxZGU2NzBkMTgiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9tYXN0ZXIifQ.fKzvGz_lGWRAWTxabxwjpO7BY-p6JxQ_KG_vyhlXM8Pi_e67EdnsyxtW9oQokSEdFwAgPUs1p-y3hKLywmJhicEQYNVjRNjtSsg9bO7X8etwNcyvV2g96NCOEWpx4Do7HhO_j_NIk_OYGJ3Ahnmadynb4OuVXtO1dQd96a7ZsOCidaR2OGyvmN6MiqEtOa62TNpdRZjch8I_h0JU8DA9y3KgQNIeMzwvbnKmGeUn_NKF7uGdUIrfZXLO8ChtuPz4dkZLEnYQVNL4WmpktGyRxfFIPUF86jJ4iMbEAWlEFwnwBntu_Cjlb0m-ClMAcUn-tjeYOMXDhWVwk4YHt5cZew",
+									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2MmEyM2QwZi0zOTZkLTQ3ZTItYTFiNi00ODAxYzU2YmVlNDgiLCJjb2duaXRvOmdyb3VwcyI6WyJlYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6IjVjMmFjMjQzLTkzNjQtNDNiMy04MGJiLWRhYzE2MDZhZjRlNyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDMyNDA4NjMsImV4cCI6MTYwMzI0NDQ2MywiaWF0IjoxNjAzMjQwODYzLCJqdGkiOiI2MzFlYjZmOC1kM2YxLTQwNDQtODI0Yy01MDZjZDU4ZmNlNjQiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9lYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgifQ.JsClNkxRZGfPIJA-sDxWjQNKV1xwjYmuKBL2Q6zYjG9RS6JGJLW7QcLuyujtCF6ebvbaHwqritf8UREMnaV0y-wWQUGLZ-Pca02a2ME5iMuwVKMps7UzVoH9h3UooYALYGGMhqH9UocM_JUkcxHlqaSDXEjZUomNBzqwmbjuUFjJCxUtxErFFVnIEjVL1Cs75ZwiqO9fzxEWngCGHd4MVi-PqoY6ycag_agGUZVTF_g9Z6o4jSnOVTF_u05-6SJgz99ut4QVl_2vpnzKr8kCVISGgDT7dMZjryPIJg2ZPkj9eEeRDGRUvC_kwcEoJZA15WM_QxnviTZe58lNX9ElDg",
 									"type": "string"
 								},
 								{
@@ -390,6 +390,175 @@
 									"key": "redirect_uri",
 									"value": "{{cognito_redirect_url}}"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "SupplierService",
+			"item": [
+				{
+					"name": "Add Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\":\"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"contacts\": [\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        },\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\r\n        \"name\": \"\",\r\n        \"contacts\": [\r\n            {\r\n                \"id\": 1,\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            },\r\n            {\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            }\r\n        ],\r\n        \"address\": {\r\n            \"id\": 1,\r\n            \"addressLine1\": \"\",\r\n            \"addressLine2\": \"\",\r\n            \"country\": \"\",\r\n            \"province\": \"\",\r\n            \"city\": \"\",\r\n            \"postalCode\": \"\"\r\n        },\r\n        \"version\": 0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								""
 							]
 						}
 					},

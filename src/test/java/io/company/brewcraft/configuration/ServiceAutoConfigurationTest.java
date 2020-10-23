@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
 
 public class ServiceAutoConfigurationTest {
@@ -18,8 +20,14 @@ public class ServiceAutoConfigurationTest {
     }
 
     @Test
-    public void testTenantRepository_returnsInstanceOfTenantRepository() {
+    public void testTenantManagementService_returnsInstanceOfTenantManagementServiceImpl() {
         TenantManagementService tenantManagementService = serviceAutoConfiguration.tenantManagementService(null, null ,null);
         assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
+    }
+    
+    @Test
+    public void testSupplierService_returnsInstanceOfSupplierServiceImpl() {
+        SupplierService supplierService = serviceAutoConfiguration.supplierService(null);
+        assertTrue(supplierService instanceof SupplierServiceImpl);
     }
 }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,16 @@ public class ControllerExceptionHandler {
                 HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         log.debug("Empty Result Exception", e);
+        return message;
+    }
+    
+    @ExceptionHandler(value = { ObjectOptimisticLockingFailureException.class })
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public ErrorResponse objectOptimisticLockingFailureException(ObjectOptimisticLockingFailureException e, HttpServletRequest request) {
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        log.debug("Optimistic Locking Failure Exception", e);
         return message;
     }
 
