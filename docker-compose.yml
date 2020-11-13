@@ -29,7 +29,6 @@ services:
       HOSTNAME_EXTERNAL: ${AWS_HOSTNAME_EXTERNAL}
       USE_SSL: "false"
       PORT_WEB_UI: ${LS_WEB_UI}
-      DATA_DIR: /tmp/localstack/data
       SERVICES: secretsmanager
     volumes:
       - './.localstack:/tmp/localstack'
