@@ -833,6 +833,59 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "SupplierContactService",
+			"item": [
+				{
+					"name": "Get All Supplier Contacts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								},
+								{
+									"key": "sort",
+									"value": "id"
+								},
+								{
+									"key": "order_asc",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
