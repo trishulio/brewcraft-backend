@@ -9,8 +9,10 @@ import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
+import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -31,5 +33,12 @@ public class ServiceAutoConfiguration {
     public SupplierService supplierService(SupplierRepository supplierRepository, SupplierContactRepository supplierContactRepository) {
         SupplierService supplierService = new SupplierServiceImpl(supplierRepository, supplierContactRepository, new EntityHelperImpl());
         return supplierService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(SupplierContactService.class)
+    public SupplierContactService supplierContactService(SupplierContactRepository supplierContactRepository) {
+        SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository);
+        return supplierContactService;
     }
 }
