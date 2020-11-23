@@ -6,14 +6,15 @@ import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.mapper.SupplierMapper;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.utils.EntityHelperImpl;
 
 @Configuration
 public class ServiceAutoConfiguration {
@@ -27,8 +28,8 @@ public class ServiceAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(SupplierService.class)
-    public SupplierService supplierService(SupplierRepository supplierRepository) {
-        SupplierService supplierService = new SupplierServiceImpl(supplierRepository, SupplierMapper.INSTANCE);
+    public SupplierService supplierService(SupplierRepository supplierRepository, SupplierContactRepository supplierContactRepository) {
+        SupplierService supplierService = new SupplierServiceImpl(supplierRepository, supplierContactRepository, new EntityHelperImpl());
         return supplierService;
     }
 }

@@ -3,7 +3,9 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,8 +18,12 @@ public class SupplierDto {
     @NotEmpty
     private String name;
 
+    @NotNull
+    @Valid
     private List<SupplierContactDto> contacts;
     
+    @NotNull
+    @Valid
     private SupplierAddressDto address;
     
     @Null
@@ -28,14 +34,15 @@ public class SupplierDto {
     @JsonIgnore
     private LocalDateTime lastUpdated;
     
+    @Null
     private Integer version;
     
     public SupplierDto() {
         
     }
     
-    public SupplierDto(@Null Long id, @NotEmpty String name, List<SupplierContactDto> contacts,
-            SupplierAddressDto address, @Null LocalDateTime created, @Null LocalDateTime lastUpdated, Integer version) {
+    public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
+            SupplierAddressDto address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         this.id = id;
         this.name = name;
         this.contacts = contacts;

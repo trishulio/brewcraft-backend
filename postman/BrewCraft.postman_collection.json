@@ -351,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2MmEyM2QwZi0zOTZkLTQ3ZTItYTFiNi00ODAxYzU2YmVlNDgiLCJjb2duaXRvOmdyb3VwcyI6WyJlYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6IjVjMmFjMjQzLTkzNjQtNDNiMy04MGJiLWRhYzE2MDZhZjRlNyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDMyNDA4NjMsImV4cCI6MTYwMzI0NDQ2MywiaWF0IjoxNjAzMjQwODYzLCJqdGkiOiI2MzFlYjZmOC1kM2YxLTQwNDQtODI0Yy01MDZjZDU4ZmNlNjQiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9lYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgifQ.JsClNkxRZGfPIJA-sDxWjQNKV1xwjYmuKBL2Q6zYjG9RS6JGJLW7QcLuyujtCF6ebvbaHwqritf8UREMnaV0y-wWQUGLZ-Pca02a2ME5iMuwVKMps7UzVoH9h3UooYALYGGMhqH9UocM_JUkcxHlqaSDXEjZUomNBzqwmbjuUFjJCxUtxErFFVnIEjVL1Cs75ZwiqO9fzxEWngCGHd4MVi-PqoY6ycag_agGUZVTF_g9Z6o4jSnOVTF_u05-6SJgz99ut4QVl_2vpnzKr8kCVISGgDT7dMZjryPIJg2ZPkj9eEeRDGRUvC_kwcEoJZA15WM_QxnviTZe58lNX9ElDg",
+									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2MmEyM2QwZi0zOTZkLTQ3ZTItYTFiNi00ODAxYzU2YmVlNDgiLCJjb2duaXRvOmdyb3VwcyI6WyJlYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6IjczNjEwYjQwLTI3ZGYtNDEzYS1hYTA3LTMwYjIyZWVhZjYxYyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDM2NTE0NTUsImV4cCI6MTYwMzY1NTA1NSwiaWF0IjoxNjAzNjUxNDU1LCJqdGkiOiI4NmMwM2Y2MS01YTk4LTQwZDctYmNiYS1kNDBmM2Q0N2ZmZTEiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9lYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgifQ.gTHK89siZku-CeQO0lZpn8EsUjB0f4PwHxe4dkBjZiiRXLhPB8n-mSIlaHMc5qnoEaenL8Z8TkCEEsvTvuiK3LgRsvzJHAM1ITLk1nlHXeH5aNbcjim4MNQ4DB8vlE9mL-dnkRERsWEiTwCUfjXsCTO-tFUXSNPx-aMiZSBM3mTqlUNFNuf09Oj3V5Iu3TZKRG7Pik5IdnsrxQAOvFOv4AeGCCi5JjJEZdYXlZl1xIX1_vQzBc7mdCk382jXzzfg0sA2xEkAJ8UFQNM0ZtTvheAQlcwPzIx1XgU0cVFm8N_lEkTDJuhmtxwgO9BKGbFY7Vv8YgmtKsgwTgbP9wZ05A",
 									"type": "string"
 								},
 								{
@@ -401,6 +401,82 @@
 		{
 			"name": "SupplierService",
 			"item": [
+				{
+					"name": "Get All Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/?page=0&size=100&sort=id,name&order_asc=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								},
+								{
+									"key": "sort",
+									"value": "id,name"
+								},
+								{
+									"key": "order_asc",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Add Supplier",
 					"request": {
@@ -456,7 +532,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "   {\r\n        \"name\": \"\",\r\n        \"contacts\": [\r\n            {\r\n                \"id\": 1,\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            },\r\n            {\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            }\r\n        ],\r\n        \"address\": {\r\n            \"id\": 1,\r\n            \"addressLine1\": \"\",\r\n            \"addressLine2\": \"\",\r\n            \"country\": \"\",\r\n            \"province\": \"\",\r\n            \"city\": \"\",\r\n            \"postalCode\": \"\"\r\n        },\r\n        \"version\": 0\r\n    }",
+							"raw": "   {\r\n        \"name\": \"\",\r\n        \"contacts\": [\r\n            {\r\n                \"id\": 1,\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\",\r\n                \"version\": 0\r\n            },\r\n            {\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            }\r\n        ],\r\n        \"address\": {\r\n            \"id\": 1,\r\n            \"addressLine1\": \"\",\r\n            \"addressLine2\": \"\",\r\n            \"country\": \"\",\r\n            \"province\": \"\",\r\n            \"city\": \"\",\r\n            \"postalCode\": \"\"\r\n        },\r\n        \"version\": 0\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -464,14 +540,52 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{id}}",
+							"raw": "{{url}}/api/suppliers/{{supplierId}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{id}}"
+								"{{supplierId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\",\r\n    \"version\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{supplierId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{supplierId}}"
 							]
 						}
 					},
@@ -507,7 +621,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Supplier",
+					"name": "Get Contacts",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -522,21 +636,22 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{id}}",
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{id}}"
+								"{{supplierId}}",
+								"contacts"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get All Suppliers",
+					"name": "Get Contact",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -551,14 +666,166 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/suppliers/",
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								""
+								"{{supplierId}}",
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{supplierId}}",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\",\r\n    \"version\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{supplierId}}",
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\r\n        \"firstName\": \"\",\r\n        \"version\": 0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{supplierId}}",
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"{{supplierId}}",
+								"contacts",
+								"{{contactId}}"
 							]
 						}
 					},

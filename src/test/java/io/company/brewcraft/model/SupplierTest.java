@@ -2,11 +2,16 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class SupplierTest {
 
@@ -84,5 +89,29 @@ public class SupplierTest {
         LocalDateTime lastUpdated = LocalDateTime.now();
         supplier.setLastUpdated(lastUpdated);
         assertSame(lastUpdated, supplier.getLastUpdated());
+    }
+    
+    @Test
+    public void testSetContacts_setsSupplierToEachContact() {
+        List<SupplierContact> contacts = Arrays.asList(new SupplierContact(), new SupplierContact());
+        supplier.setContacts(contacts);
+        
+        for (SupplierContact contact : supplier.getContacts()) {
+            assertSame(supplier, contact.getSupplier());
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSetContacts_clearsAndAddsToExistingListIfExistingListIsNotNull() {
+        List<SupplierContact> contactsMock = Mockito.mock(ArrayList.class);
+        supplier.setContacts(contactsMock);
+
+        List<SupplierContact> newContactsMock = Mockito.mock(ArrayList.class);
+        supplier.setContacts(newContactsMock);
+        
+        verify(contactsMock, times(1)).clear();
+        verify(contactsMock, times(1)).addAll(newContactsMock);
+        assertSame(supplier.getContacts(), contactsMock);
     }
 }

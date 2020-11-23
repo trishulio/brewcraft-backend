@@ -27,7 +27,7 @@ public class ServiceAutoConfigurationTest {
     
     @Test
     public void testSupplierService_returnsInstanceOfSupplierServiceImpl() {
-        SupplierService supplierService = serviceAutoConfiguration.supplierService(null);
+        SupplierService supplierService = serviceAutoConfiguration.supplierService(null, null);
         assertTrue(supplierService instanceof SupplierServiceImpl);
     }
 }

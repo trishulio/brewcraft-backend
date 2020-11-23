@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -52,6 +53,27 @@ public class SupplierContact {
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
     
+    @Version
+    private Integer version;
+
+    public SupplierContact() {
+        
+    }
+    
+    public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
+            String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+        this.id = id;
+        this.supplier = supplier;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.position = position;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
+        this.version = version;
+    }
+
     public Long getId() {
         return id;
     }
@@ -122,6 +144,14 @@ public class SupplierContact {
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    
+    public Integer getVersion() {
+        return version;
+    }
+    
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
 }

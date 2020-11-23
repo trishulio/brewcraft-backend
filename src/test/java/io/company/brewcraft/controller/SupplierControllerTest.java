@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,9 +25,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import io.company.brewcraft.dto.SupplierAddressDto;
-import io.company.brewcraft.dto.SupplierContactDto;
-import io.company.brewcraft.dto.SupplierDto;
+import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierAddress;
+import io.company.brewcraft.model.SupplierContact;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.SupplierService;
 
@@ -45,24 +47,28 @@ public class SupplierControllerTest {
 
     @Test
     public void testGetAll_ReturnsListOfAllSuppliers() throws Exception {
-       SupplierDto supplier1 = new SupplierDto(1L, "testName", new ArrayList<>(), new SupplierAddressDto(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       supplier1.getContacts().add(new SupplierContactDto(1L, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null));
-       supplier1.getContacts().add(new SupplierContactDto(2L, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null));
+       Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       supplier1.getContacts().add(new SupplierContact(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+       supplier1.getContacts().add(new SupplierContact(2L, supplier1, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
        
-       SupplierDto supplier2 = new SupplierDto(2L, "testName2", new ArrayList<>(), new SupplierAddressDto(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
-       supplier2.getContacts().add(new SupplierContactDto(3L, "name3", "lastName3", "position3", "email3", "phoneNumber3", null, null));
-       supplier2.getContacts().add(new SupplierContactDto(4L, "name4", "lastName4", "position4", "email4", "phoneNumber4", null, null));
+       Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new SupplierAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
+       supplier2.getContacts().add(new SupplierContact(3L, supplier2, "name3", "lastName3", "position3", "email3", "phoneNumber3", null, null, 1));
+       supplier2.getContacts().add(new SupplierContact(4L, supplier2, "name4", "lastName4", "position4", "email4", "phoneNumber4", null, null, 1));
 
-       List<SupplierDto> supplierList = new ArrayList<>();
-       supplierList.add(supplier1);
-       supplierList.add(supplier2);
+       List<Supplier> suppliers = new ArrayList<>();
+       suppliers.add(supplier1);
+       suppliers.add(supplier2);
+       
+       Page<Supplier> pagedResponse = new PageImpl<>(suppliers);
         
-       when(supplierServiceMock.getSuppliers()).thenReturn(supplierList);
+       when(supplierServiceMock.getSuppliers(0, 100, new String[]{"id"}, true)).thenReturn(pagedResponse);
         
        this.mockMvc.perform(get("/api/suppliers").header("Authorization", "Bearer " + "test"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().json("["
+        .andExpect(content().json(
+                "{"
+                + "'suppliers': ["
                 + "    {"
                 + "        'id': 1,"
                 + "        'name': 'testName',"
@@ -73,7 +79,8 @@ public class SupplierControllerTest {
                 + "                'lastName': 'lastName1',"
                 + "                'position': 'position1',"
                 + "                'email': 'email1',"
-                + "                'phoneNumber': 'phoneNumber1'"
+                + "                'phoneNumber': 'phoneNumber1',"
+                + "                'version': 1"
                 + "            },"
                 + "            {"
                 + "                'id': 2,"
@@ -81,7 +88,8 @@ public class SupplierControllerTest {
                 + "                'lastName': 'lastName2',"
                 + "                'position': 'position2',"
                 + "                'email': 'email2',"
-                + "                'phoneNumber': 'phoneNumber2'"
+                + "                'phoneNumber': 'phoneNumber2',"
+                + "                'version': 1"
                 + "            }"
                 + "        ],"
                 + "        'address': {"
@@ -105,7 +113,8 @@ public class SupplierControllerTest {
                 + "                'lastName': 'lastName3',"
                 + "                'position': 'position3',"
                 + "                'email': 'email3',"
-                + "                'phoneNumber': 'phoneNumber3'"
+                + "                'phoneNumber': 'phoneNumber3',"
+                + "                'version': 1"
                 + "            },"
                 + "            {"
                 + "                'id': 4,"
@@ -113,7 +122,8 @@ public class SupplierControllerTest {
                 + "                'lastName': 'lastName4',"
                 + "                'position': 'position4',"
                 + "                'email': 'email4',"
-                + "                'phoneNumber': 'phoneNumber4'"
+                + "                'phoneNumber': 'phoneNumber4',"
+                + "                'version': 1"
                 + "            }"
                 + "        ],"
                 + "        'address': {"
@@ -127,16 +137,19 @@ public class SupplierControllerTest {
                 + "        },"
                 + "        'version': 2"
                 + "    }"
-                + "]"));
+                + "],"
+                + "'totalItems': 2,"
+                + "'totalPages': 1"
+                + "}"));
         
-        verify(supplierServiceMock, times(1)).getSuppliers();
+        verify(supplierServiceMock, times(1)).getSuppliers(0, 100, new String[]{"id"}, true);
     }
     
     @Test
     public void testGetSupplier_ReturnsSupplier() throws Exception {
-        SupplierDto supplier = new SupplierDto(1L, "testName", new ArrayList<>(), new SupplierAddressDto(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        supplier.getContacts().add(new SupplierContactDto(1L, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null));
-        supplier.getContacts().add(new SupplierContactDto(2L, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null));
+        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+        supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
         
         when(supplierServiceMock.getSupplier(1L)).thenReturn(supplier);
          
@@ -153,7 +166,8 @@ public class SupplierControllerTest {
                  + "                'lastName': 'lastName1',"
                  + "                'position': 'position1',"
                  + "                'email': 'email1',"
-                 + "                'phoneNumber': 'phoneNumber1'"
+                 + "                'phoneNumber': 'phoneNumber1',"
+                 + "                'version': 1"
                  + "            },"
                  + "            {"
                  + "                'id': 2,"
@@ -161,7 +175,8 @@ public class SupplierControllerTest {
                  + "                'lastName': 'lastName2',"
                  + "                'position': 'position2',"
                  + "                'email': 'email2',"
-                 + "                'phoneNumber': 'phoneNumber2'"
+                 + "                'phoneNumber': 'phoneNumber2',"
+                 + "                'version': 1"
                  + "            }"
                  + "        ],"
                  + "        'address': {"
@@ -212,7 +227,7 @@ public class SupplierControllerTest {
         payload.put("address", address);        
         payload.put("contacts", contacts);
                      
-        doNothing().when(supplierServiceMock).addSupplier(any(SupplierDto.class));
+        doNothing().when(supplierServiceMock).addSupplier(any(Supplier.class));
         
         this.mockMvc.perform(post("/api/suppliers")
          .contentType(MediaType.APPLICATION_JSON)
@@ -220,7 +235,7 @@ public class SupplierControllerTest {
          .andExpect(status().isCreated())
          .andExpect(jsonPath("$").doesNotExist());
         
-        verify(supplierServiceMock, times(1)).addSupplier(any(SupplierDto.class));
+        verify(supplierServiceMock, times(1)).addSupplier(any(Supplier.class));
     }
     
     @Test
@@ -260,7 +275,7 @@ public class SupplierControllerTest {
         payload.put("contacts", contacts);
         payload.put("version", "1");
                      
-        doNothing().when(supplierServiceMock).updateSupplier(any(SupplierDto.class), eq(1L));
+        doNothing().when(supplierServiceMock).updateSupplier(eq(1L), any(Supplier.class));
              
         this.mockMvc.perform(put("/api/suppliers/1")
          .contentType(MediaType.APPLICATION_JSON)
@@ -268,7 +283,7 @@ public class SupplierControllerTest {
          .andExpect(status().isOk())
          .andExpect(jsonPath("$").doesNotExist());
         
-        verify(supplierServiceMock, times(1)).updateSupplier(any(SupplierDto.class), eq(1L));
+        verify(supplierServiceMock, times(1)).updateSupplier(eq(1L), any(Supplier.class));
     }
 
     @Test
@@ -277,5 +292,117 @@ public class SupplierControllerTest {
          .andExpect(status().isOk());
          
          verify(supplierServiceMock, times(1)).deleteSupplier(1L);
+    }
+
+    @Test
+    public void testGetContacts_ReturnsListOfAllContacts() throws Exception {
+       SupplierContact contact1 = new SupplierContact(1L, null, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+       SupplierContact contact2 = new SupplierContact(2L, null, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1);
+       
+       List<SupplierContact> contacts = new ArrayList<>();
+       contacts.add(contact1);
+       contacts.add(contact2);
+               
+       when(supplierServiceMock.getContacts(1L)).thenReturn(contacts);
+        
+       this.mockMvc.perform(get("/api/suppliers/1/contacts").header("Authorization", "Bearer " + "test"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json(
+                "["
+                + "   {"
+                + "      'id': 1,"
+                + "      'firstName': 'name1',"
+                + "      'lastName': 'lastName1',"
+                + "      'position': 'position1',"
+                + "      'email': 'email1',"
+                + "      'phoneNumber': 'phoneNumber1',"
+                + "      'version': 1"
+                + "   },"
+                + "   {"
+                + "      'id': 2,"
+                + "      'firstName': 'name2',"
+                + "      'lastName': 'lastName2',"
+                + "      'position': 'position2',"
+                + "      'email': 'email2',"
+                + "      'phoneNumber': 'phoneNumber2',"
+                + "      'version': 1"
+                + "   }"
+                + "]"));
+        
+        verify(supplierServiceMock, times(1)).getContacts(1L);
+    }
+    
+    @Test
+    public void testGetContact_ReturnsContact() throws Exception {
+        SupplierContact supplierContact = new SupplierContact(2L, null, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+        
+        when(supplierServiceMock.getContact(1L, 2L)).thenReturn(supplierContact);
+         
+        this.mockMvc.perform(get("/api/suppliers/1/contacts/2"))
+         .andExpect(status().isOk())
+         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+         .andExpect(content().json(
+                 "{"
+                 + "  'id': 2,"
+                 + "  'firstName': 'name1',"
+                 + "  'lastName': 'lastName1',"
+                 + "  'position': 'position1',"
+                 + "  'email': 'email1',"
+                 + "  'phoneNumber': 'phoneNumber1',"
+                 + "  'version': 1"
+                 + " }"));
+         
+         verify(supplierServiceMock, times(1)).getContact(1L, 2L);
+    }
+
+    @Test
+    public void testAddContact_AddsContact() throws Exception {       
+        JSONObject payload = new JSONObject();
+        payload.put("firstName", "name1");
+        payload.put("lastName", "lastName1");
+        payload.put("position", "position1");
+        payload.put("email", "email1");
+        payload.put("phoneNumber", "phoneNumber1");
+        
+        doNothing().when(supplierServiceMock).addContact(eq(1L), any(SupplierContact.class));
+        
+        this.mockMvc.perform(post("/api/suppliers/1/contacts/")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content(payload.toString()))
+         .andExpect(status().isCreated())
+         .andExpect(jsonPath("$").doesNotExist());
+        
+        verify(supplierServiceMock, times(1)).addContact(eq(1L), any(SupplierContact.class));
+    }
+    
+    @Test
+    public void testUpdateContact_UpdatesContact() throws Exception {        
+        JSONObject payload = new JSONObject();
+        payload.put("id", "2");
+        payload.put("firstName", "name1");
+        payload.put("lastName", "lastName1");
+        payload.put("position", "position1");
+        payload.put("email", "email1");
+        payload.put("phoneNumber", "phoneNumber1");
+        payload.put("version", "1");
+                     
+        doNothing().when(supplierServiceMock).updateContact(eq(1L), eq(2L), any(SupplierContact.class));
+             
+        this.mockMvc.perform(put("/api/suppliers/1/contacts/2")
+         .contentType(MediaType.APPLICATION_JSON)
+         .content(payload.toString()))
+         .andExpect(status().isOk())
+         .andExpect(jsonPath("$").doesNotExist());
+        
+        verify(supplierServiceMock, times(1)).updateContact(eq(1L), eq(2L), any(SupplierContact.class));
+    }
+
+    @Test
+    public void testDeleteContact_DeletesContact() throws Exception {         
+        this.mockMvc.perform(delete("/api/suppliers/1/contacts/2"))
+         .andExpect(status().isOk());
+         
+         verify(supplierServiceMock, times(1)).deleteContact(1L,2L);
     }
 }
