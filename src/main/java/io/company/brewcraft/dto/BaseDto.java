@@ -1,7 +1,10 @@
 package io.company.brewcraft.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class BaseDto {
 
     private ReflectionManipulator util;

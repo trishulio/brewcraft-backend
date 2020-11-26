@@ -1,19 +1,44 @@
 package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.joda.money.Money;
 
 @Entity(name = "INVOICE_ITEM")
 public class InvoiceItem extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_item_generator")
+    @SequenceGenerator(name = "invoice_item_generator", sequenceName = "invoice_item_sequence", allocationSize = 1)
     private Long id;
+
+    @ManyToOne
     private Invoice invoice;
+
+    // TODO: How to persiste this?
+    @Transient
     private Quantity<?> quantity;
+    // TODO: How to persiste this?
+    @Transient
     private Money price;
+
+    @Column(name = "lot")
     private String lot;
+
+//    @JoinColumn(name = "material_id")
+    @Transient
     private Object material; // TODO: Change when materials are supported
+
+    @Version
     private Integer version;
 
     public InvoiceItem() {

@@ -114,11 +114,16 @@ public class InvoiceServiceTest {
     }
 
     @Test
-    public void testUpdate_ThrowsEntityNotFoundException_WhenInvoiceDoesNotExists() {
+    public void testUpdate_SavesNetEntityWithId_WhenExistingDoesNotExist() {
+        doAnswer(inv -> inv.getArgument(0, Invoice.class)).when(mRepo).save(any(Invoice.class));
+
         Optional<Invoice> optional = Optional.empty();
         doReturn(optional).when(mRepo).findById(12345L);
 
-        assertThrows(EntityNotFoundException.class, () -> service.update(12345L, new Invoice(null, null, new Date(456), null, List.of(), 1)), "Invoice not found with id: 12345");
+        Invoice invoice = service.update(12345L, new Invoice(null, null, new Date(456), null, List.of(), 1));
+
+        assertEquals(new Invoice(12345L, null, new Date(456), null, List.of(), 1), invoice);
+        verify(mRepo, times(1)).save(new Invoice(12345L, null, new Date(456), null, List.of(), 1));
     }
 
     @Test

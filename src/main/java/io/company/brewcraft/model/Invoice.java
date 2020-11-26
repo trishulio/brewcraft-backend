@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import org.joda.money.Money;
 import org.slf4j.Logger;
@@ -12,14 +12,27 @@ import org.slf4j.LoggerFactory;
 
 @Entity(name = "INVOICE")
 public class Invoice extends BaseEntity {
-
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_generator")
+    @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+    
+    @Column(name = "date")
     private Date date;
+    
+    @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoiceItem> items;
+    
+    @Version
     private Integer version;
 
     public Invoice() {

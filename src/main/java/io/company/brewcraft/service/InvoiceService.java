@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceStatus;
@@ -14,6 +15,7 @@ import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceRepositoryGetAllInvoicesSpecification;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
+@Transactional
 public class InvoiceService {
 
     private InvoiceRepository repo;
@@ -55,10 +57,11 @@ public class InvoiceService {
 
     public Invoice update(Long id, Invoice invoice) {
         Invoice existing = getInvoice(id);
-        if (existing == null) {
-            throw new EntityNotFoundException("Invoice", id.toString());
+        if (existing != null) {      
+            invoice.outerJoin(existing);
         }
-        invoice.outerJoin(existing);
+
+        invoice.setId(id);
 
         Invoice updated = repo.save(invoice);
 
