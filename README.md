@@ -1,15 +1,10 @@
 # brewery-backend
 Backend for the brewery business management app
 
-We are using Makefiles to abstract the tasks to build, start, test, etc. For all the dockerized process the name starts with prefix `d_`.
+We are using Makefiles to abstract the tasks to build, start, and test, etc. For all the dockerized processes the name starts with prefix `d_`.
 
-Some commands have an alternative native targets available like `make d_install` uses dockerized maven to build the project whereas `make install` uses the host machine's maven available on path.
+Some commands have alternative native targets available, like, `make d_install` uses dockerized maven to build the project whereas `make install` uses the host machine's maven (if available on path).
 
-Run app using:
-```
-make run
-```
-_Note: mvnw should be available on the path_
 
 Build the project using
 ```
@@ -29,7 +24,14 @@ Run app in docker using:
 make d_start
 ```
 
-To build and start the container each time use:
+Alternatively, you can run app using:
+```
+make run
+```
+_Note: mvnw should be available on the path_
+
+
+To combine the build and start tasks, use:
 ```
 make d_install d_start
 ```
