@@ -7,7 +7,7 @@ run:
 	mvnw spring-boot:run
 
 d_install:
-	docker-compose -f docker-compose-install.yml run install
+	docker-compose -f docker-compose-install.yml run --rm install
 
 d_start:
 	docker-compose down &&\
