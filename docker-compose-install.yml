@@ -7,3 +7,6 @@ services:
     command: ['mvn', 'clean', 'install']
     volumes:
       - ${PWD}:/usr/code/app
+      - m2-data:/root/.m2
+volumes:
+  m2-data:
