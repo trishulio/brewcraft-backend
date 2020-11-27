@@ -76,7 +76,16 @@ public class Supplier extends BaseEntity {
     }
 
     public void setContacts(List<SupplierContact> contacts) {
-        this.contacts = contacts;
+        if (contacts != null) {
+            contacts.stream().forEach(contact -> contact.setSupplier(this));
+        }
+        
+        if (this.getContacts() != null) {
+            this.getContacts().clear();
+            this.getContacts().addAll(contacts);
+        } else {
+            this.contacts = contacts;
+        }
     }
 
     public SupplierAddress getAddress() {
@@ -125,4 +134,5 @@ public class Supplier extends BaseEntity {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
 }

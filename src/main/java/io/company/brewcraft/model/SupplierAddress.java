@@ -44,6 +44,23 @@ public class SupplierAddress {
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+    
+    public SupplierAddress() {
+        
+    }
+
+    public SupplierAddress(Long id, String addressLine1, String addressLine2, String country, String province,
+            String city, String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
+        this.id = id;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.postalCode = postalCode;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
+    }
 
     public Long getId() {
         return id;

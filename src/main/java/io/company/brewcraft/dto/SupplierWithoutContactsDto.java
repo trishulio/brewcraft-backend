@@ -1,28 +1,21 @@
 package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-import io.company.brewcraft.dto.BaseDto;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class SupplierDto extends BaseDto {
+public class SupplierWithoutContactsDto {
     
     @Null
     private Long id;
     
     @NotEmpty
     private String name;
-
-    @NotNull
-    @Valid
-    private List<SupplierContactDto> contacts;
     
     @NotNull
     @Valid
@@ -39,15 +32,14 @@ public class SupplierDto extends BaseDto {
     @Null
     private Integer version;
     
-    public SupplierDto() {
+    public SupplierWithoutContactsDto() {
         
     }
     
-    public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            SupplierAddressDto address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public SupplierWithoutContactsDto(Long id, String name, SupplierAddressDto address, LocalDateTime created,
+            LocalDateTime lastUpdated, Integer version) {
         this.id = id;
         this.name = name;
-        this.contacts = contacts;
         this.address = address;
         this.created = created;
         this.lastUpdated = lastUpdated;
@@ -68,14 +60,6 @@ public class SupplierDto extends BaseDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<SupplierContactDto> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<SupplierContactDto> contacts) {
-        this.contacts = contacts;
     }
 
     public SupplierAddressDto getAddress() {

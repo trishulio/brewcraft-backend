@@ -19,65 +19,71 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.SupplierMapper;
+import io.company.brewcraft.utils.EntityHelper;
 
 public class SupplierServiceImplTest {
 
     private SupplierService supplierService;
 
     private SupplierRepository supplierRepositoryMock;
+    
+    private SupplierContactRepository supplierContactRepositoryMock;
+    
+    private EntityHelper entityHelperMock;
         
-    private SupplierMapper supplierMapperMock;
-
     @BeforeEach
     public void init() {
         supplierRepositoryMock = mock(SupplierRepository.class);
-        supplierMapperMock = mock(SupplierMapper.class);
-        supplierService = new SupplierServiceImpl(supplierRepositoryMock, supplierMapperMock);
+        supplierContactRepositoryMock = mock(SupplierContactRepository.class);
+        entityHelperMock = mock(EntityHelper.class);
+        
+        supplierService = new SupplierServiceImpl(supplierRepositoryMock, supplierContactRepositoryMock, entityHelperMock);
     }
 
     @Test
     public void testGetSuppliers_returnsSuppliers() throws Exception {
         Supplier supplier1 = new Supplier();
-        Supplier supplier2 = new Supplier();
+        Supplier supplier2 = new Supplier();                
+        List<Supplier> suppliersList = Arrays.asList(supplier1, supplier2);
+        
+        Page<Supplier> expectedSuppliers = new PageImpl<>(suppliersList);
+        
+        ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
-        SupplierDto supplierDto1 = new SupplierDto();
-        SupplierDto supplierDto2 = new SupplierDto();
-                
-        List<Supplier> suppliers = Arrays.asList(supplier1, supplier2);
+        when(supplierRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedSuppliers);
 
-        when(supplierRepositoryMock.findAll()).thenReturn(suppliers);
-        when(supplierMapperMock.supplierToSupplierDto(supplier1)).thenReturn(supplierDto1);
-        when(supplierMapperMock.supplierToSupplierDto(supplier2)).thenReturn(supplierDto2);
+        Page<Supplier> actualSuppliers = supplierService.getSuppliers(0, 100, new String[]{"id"}, true);
 
-        List<SupplierDto> actualSuppliers = supplierService.getSuppliers();
-        List<SupplierDto> expectedSuppliers = Arrays.asList(supplierDto1, supplierDto2);
-
-        assertEquals(expectedSuppliers, actualSuppliers);
+        assertEquals(0, pageableArgument.getValue().getPageNumber());
+        assertEquals(100, pageableArgument.getValue().getPageSize());
+        assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
+        assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
+        assertEquals(expectedSuppliers.getContent(), actualSuppliers.getContent());
     }
     
     @Test
     public void testGetSupplier_returnsSupplier() throws Exception {
         Long id = 1L;
         Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        SupplierDto expectedSupplierDto = new SupplierDto();
 
         when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
-        when(supplierMapperMock.supplierToSupplierDto(supplier.get())).thenReturn(expectedSupplierDto);
 
-        SupplierDto actualSupplierDto = supplierService.getSupplier(id);
+        Supplier actualSupplier = supplierService.getSupplier(id);
 
-        assertSame(expectedSupplierDto, actualSupplierDto);
+        assertSame(supplier.get(), actualSupplier);
     }
 
     @Test
@@ -88,59 +94,197 @@ public class SupplierServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> {
             supplierService.getSupplier(id);
-            verify(supplierMapperMock, times(0)).supplierToSupplierDto(Mockito.any(Supplier.class));
         });
     }
 
     @Test
     public void testAddSupplier_SavesSupplier() throws Exception {
-        SupplierDto supplierDto = new SupplierDto();
         Supplier supplier = new Supplier();
         
-        when(supplierMapperMock.supplierDtoToSupplier(supplierDto)).thenReturn(supplier);
-
-        supplierService.addSupplier(supplierDto);
+        supplierService.addSupplier(supplier);
         
         verify(supplierRepositoryMock, times(1)).save(supplier);
     }
     
     @Test
-    public void testUpdateTenant_success() throws Exception {
+    public void testUpdateSupplier_success() throws Exception {
         Long id = 1L;
-        SupplierDto supplierDto = new SupplierDto();
-        Supplier supplier = new Supplier(id, "Supplier 1", Arrays.asList(new SupplierContact(), new SupplierContact()), null, null, null, null);
+        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
+        Supplier updatedSupplierMock = mock(Supplier.class);
         
-        when(supplierRepositoryMock.existsById(id)).thenReturn(true);
-        when(supplierMapperMock.supplierDtoToSupplier(supplierDto)).thenReturn(supplier);
+        when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
                 
-        supplierService.updateSupplier(supplierDto, id);
+        supplierService.updateSupplier(id, updatedSupplierMock);
        
-        ArgumentCaptor<Supplier> supplierArgument = ArgumentCaptor.forClass(Supplier.class);
-        verify(supplierRepositoryMock, times(1)).save(supplierArgument.capture());
-        assertSame(id, supplierArgument.getValue().getId());
+        verify(entityHelperMock, times(1)).applyUpdate(updatedSupplierMock, supplier.get());
+        verify(supplierRepositoryMock, times(1)).save(updatedSupplierMock);
     }
     
     @Test
-    public void testUpdateTenant_throwsEntityNotFoundException() throws Exception {
+    public void testUpdateSupplier_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
-        SupplierDto supplierDto = new SupplierDto();
+        Supplier supplier = new Supplier();
         
-        when(supplierRepositoryMock.existsById(id)).thenReturn(false);
+        when(supplierRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
       
         assertThrows(EntityNotFoundException.class, () -> {
-            supplierService.updateSupplier(supplierDto, id);
+            supplierService.updateSupplier(id, supplier);
             verify(supplierRepositoryMock, times(0)).save(Mockito.any(Supplier.class));
         });
     }
 
     @Test
-    public void testDeleteTenant_success() throws Exception {
+    public void testDeleteSupplier_success() throws Exception {
         Long id = 1L;
         supplierService.deleteSupplier(id);
         
         verify(supplierRepositoryMock, times(1)).deleteById(id);
     }
     
+    @Test
+    public void testSupplierExists() throws Exception {
+        Long id = 1L;
+        supplierService.supplierExists(id);
+        
+        verify(supplierRepositoryMock, times(1)).existsById(id);
+    }
+    
+    @Test
+    public void testGetContacts_returnsContacts() throws Exception {
+        Long supplierId = 1L;
+                      
+        List<SupplierContact> expectedSupplierContacts = Arrays.asList();
+       
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(true);
+        when(supplierContactRepositoryMock.findAllBySupplierId(supplierId)).thenReturn(expectedSupplierContacts);
+
+        List<SupplierContact> actualSupplierContacts = supplierService.getContacts(supplierId);
+
+        assertEquals(expectedSupplierContacts, actualSupplierContacts);
+    }
+    
+    @Test
+    public void testGetContacts_throwsEntityNotFoundException() throws Exception {
+        Long supplierId = 1L;
+ 
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(false);
+        
+        assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.getContacts(supplierId);
+        });
+    }
+    
+    @Test
+    public void testGetContact_returnsContact() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+        
+        Optional<SupplierContact> expectedSupplierContact = Optional.ofNullable(new SupplierContact());
+        
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(true);
+        when(supplierContactRepositoryMock.findById(contactId)).thenReturn(expectedSupplierContact);
+
+        SupplierContact actualSupplier = supplierService.getContact(supplierId, contactId);
+
+        assertSame(expectedSupplierContact.get(), actualSupplier);
+    }
+
+    @Test
+    public void testGetContact_throwsEntityNotFoundException() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+        
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.getContact(supplierId, contactId);
+        });
+    }
+
+    @Test
+    public void testAddContact_SavesContact() throws Exception {
+        Long supplierId = 1L;
+        
+        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
+        SupplierContact supplierContactMock = mock(SupplierContact.class);
+
+        when(supplierRepositoryMock.findById(supplierId)).thenReturn(supplier);
+          
+        supplierService.addContact(supplierId, supplierContactMock);
+        
+        verify(supplierContactMock, times(1)).setSupplier(supplier.get());
+        verify(supplierContactRepositoryMock, times(1)).save(supplierContactMock);
+    }
+    
+    @Test
+    public void testAddContact_throwsEntityNotFoundException() throws Exception {
+        Long supplierId = 1L;
+        
+        SupplierContact supplierContact = new SupplierContact();
+
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(false);
+        
+        assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.addContact(supplierId, supplierContact);
+        });
+    }
+    
+    @Test
+    public void testUpdateContact_success() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+        
+        Optional<SupplierContact> supplierContact = Optional.ofNullable(new SupplierContact());
+        SupplierContact updatedSupplierContactMock = mock(SupplierContact.class);
+        
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(true);
+        when(supplierContactRepositoryMock.findById(contactId)).thenReturn(supplierContact);
+                
+        supplierService.updateContact(supplierId, contactId, updatedSupplierContactMock);
+       
+        verify(entityHelperMock, times(1)).applyUpdate(updatedSupplierContactMock, supplierContact.get());
+        verify(supplierContactRepositoryMock, times(1)).save(updatedSupplierContactMock);
+    }
+    
+    @Test
+    public void testUpdateContact_throwsEntityNotFoundException() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+        
+        SupplierContact updatedSupplierContactMock = mock(SupplierContact.class);
+        
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(false);
+      
+        assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.updateContact(supplierId, contactId, updatedSupplierContactMock);
+            verify(supplierContactRepositoryMock, times(0)).save(Mockito.any(SupplierContact.class));
+        });
+    }
+
+    @Test
+    public void testDeleteContact_success() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(true);
+        
+        supplierService.deleteContact(supplierId, contactId);
+        
+        verify(supplierContactRepositoryMock, times(1)).deleteById(contactId);
+    }
+    
+    @Test
+    public void testDeleteContact_throwsEntityNotFoundException() throws Exception {
+        Long supplierId = 1L;
+        Long contactId = 1L;
+        
+        when(supplierRepositoryMock.existsById(supplierId)).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            supplierService.deleteContact(supplierId, contactId);
+        });
+    }   
+      
     @Test
     public void testSupplierService_classIsTransactional() throws Exception {
         Transactional transactional = supplierService.getClass().getAnnotation(Transactional.class);

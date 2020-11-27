@@ -1,74 +1,57 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-@Entity
-@Table(name="SUPPLIER_CONTACT")
-public class SupplierContact {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_contact_generator")
-    @SequenceGenerator(name="supplier_contact_generator", sequenceName = "supplier_contact_sequence", allocationSize = 1)
+public class SupplierContactWithSupplierDto {
+    
     private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name="supplier_id", referencedColumnName="id", nullable=false)
-    @JsonManagedReference
-    private Supplier supplier;
-    
-    @Column(name = "first_name")
+        
+    @NotNull
     private String firstName;
     
-    @Column(name = "last_name")
+    @NotNull
     private String lastName;
     
+    @NotNull
     private String position;
     
+    @NotNull
     private String email;
     
-    @Column(name = "phone_number")
+    @NotNull
     private String phoneNumber;
     
-    @CreationTimestamp
-    @Column(updatable = false)
+    private SupplierWithoutContactsDto supplier;
+
+    @Null
+    @JsonIgnore
     private LocalDateTime created;
     
-    @UpdateTimestamp
-    @Column(name = "last_updated")
+    @Null
+    @JsonIgnore
     private LocalDateTime lastUpdated;
     
-    @Version
     private Integer version;
-
-    public SupplierContact() {
+    
+    public SupplierContactWithSupplierDto() {
         
     }
-    
-    public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
-            String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+
+    public SupplierContactWithSupplierDto(Long id, String firstName, String lastName,
+            String position, String email, String phoneNumber, SupplierWithoutContactsDto supplier,
+            LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         this.id = id;
-        this.supplier = supplier;
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.supplier = supplier;
         this.created = created;
         this.lastUpdated = lastUpdated;
         this.version = version;
@@ -82,11 +65,11 @@ public class SupplierContact {
         this.id = id;
     }
 
-    public Supplier getSupplier() {
+    public SupplierWithoutContactsDto getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(SupplierWithoutContactsDto supplier) {
         this.supplier = supplier;
     }
 
@@ -145,13 +128,13 @@ public class SupplierContact {
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
-    
+
     public void setVersion(Integer version) {
         this.version = version;
     }
-
+    
 }

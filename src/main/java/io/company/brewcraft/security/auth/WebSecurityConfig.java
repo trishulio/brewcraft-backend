@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/public/**", "/static/**").permitAll()
+            .antMatchers("/public/**", "/static/**", "/v2/api-docs", "/swagger-ui/**", "/swagger-resources/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .oauth2ResourceServer()

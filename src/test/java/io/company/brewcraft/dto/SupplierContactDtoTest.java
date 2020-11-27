@@ -25,8 +25,9 @@ public class SupplierContactDtoTest {
         String phoneNumber = "phoneNumber";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        Integer version = 1;
         
-        SupplierContactDto supplierContactDto = new SupplierContactDto(id, firstName, lastName, position, email, phoneNumber, created, lastUpdated);
+        SupplierContactDto supplierContactDto = new SupplierContactDto(id, firstName, lastName, position, email, phoneNumber, created, lastUpdated, version);
         
         assertSame(id, supplierContactDto.getId());
         assertSame(firstName, supplierContactDto.getFirstName());
@@ -36,6 +37,7 @@ public class SupplierContactDtoTest {
         assertSame(phoneNumber, supplierContactDto.getPhoneNumber());
         assertSame(created, supplierContactDto.getCreated());
         assertSame(lastUpdated, supplierContactDto.getLastUpdated());
+        assertSame(version, supplierContactDto.getVersion());
     }
     
     @Test
