@@ -1,20 +1,17 @@
 package io.company.brewcraft.model;
 
-import javax.measure.Quantity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.joda.money.Money;
-
 @Entity(name = "INVOICE_ITEM")
-public class InvoiceItem extends BaseEntity {
+public class InvoiceItemEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_item_generator")
@@ -22,36 +19,34 @@ public class InvoiceItem extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    private Invoice invoice;
+    private InvoiceEntity invoice;
 
-    // TODO: How to persiste this?
-    @Transient
-    private Quantity<?> quantity;
-    // TODO: How to persiste this?
-    @Transient
-    private Money price;
+    @Column(name = "qty_id")
+    private QuantityEntity qty;
+
+    @Column(name = "money_id")
+    private MoneyEntity price;
 
     @Column(name = "lot")
     private String lot;
 
-//    @JoinColumn(name = "material_id")
-    @Transient
-    private Object material; // TODO: Change when materials are supported
+    @JoinColumn(name = "material_id")
+    private MaterialEntity material; // TODO: Create an Entity
 
     @Version
     private Integer version;
 
-    public InvoiceItem() {
+    public InvoiceItemEntity() {
     }
 
-    public InvoiceItem(Long id) {
+    public InvoiceItemEntity(Long id) {
         this(id, null, null, null, null, null, null);
     }
 
-    public InvoiceItem(Long id, Invoice invoice, Quantity<?> quantity, Money price, String lot, Object material, Integer version) {
+    public InvoiceItemEntity(Long id, InvoiceEntity invoice, QuantityEntity qty, MoneyEntity price, String lot, MaterialEntity material, Integer version) {
         setId(id);
         setInvoice(invoice);
-        setQuantity(quantity);
+        setQuantity(qty);
         setPrice(price);
         setLot(lot);
         setMaterial(material);
@@ -66,27 +61,27 @@ public class InvoiceItem extends BaseEntity {
         this.id = id;
     }
 
-    public Invoice getInvoice() {
+    public InvoiceEntity getInvoice() {
         return this.invoice;
     }
 
-    public void setInvoice(Invoice invoice) {
+    public void setInvoice(InvoiceEntity invoice) {
         this.invoice = invoice;
     }
 
-    public Quantity<?> getQuantity() {
-        return quantity;
+    public QuantityEntity getQuantity() {
+        return qty;
     }
 
-    public void setQuantity(Quantity<?> quantity) {
-        this.quantity = quantity;
+    public void setQuantity(QuantityEntity quantity) {
+        this.qty = quantity;
     }
 
-    public Money getPrice() {
+    public MoneyEntity getPrice() {
         return price;
     }
 
-    public void setPrice(Money price) {
+    public void setPrice(MoneyEntity price) {
         this.price = price;
     }
 
@@ -98,11 +93,11 @@ public class InvoiceItem extends BaseEntity {
         this.lot = lot;
     }
 
-    public Object getMaterial() {
+    public MaterialEntity getMaterial() {
         return material;
     }
 
-    public void setMaterial(Object material) {
+    public void setMaterial(MaterialEntity material) {
         this.material = material;
     }
 
@@ -112,18 +107,5 @@ public class InvoiceItem extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public Money getAmount() {
-        Money amount = null;
-
-        Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
-        Money price = this.getPrice() != null ? this.getPrice() : null;
-
-        if (qty != null && price != null) {
-            amount = this.getPrice().multipliedBy(qty.longValue());
-        }
-
-        return amount;
     }
 }

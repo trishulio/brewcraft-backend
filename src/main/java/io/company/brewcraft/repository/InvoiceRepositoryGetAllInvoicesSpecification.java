@@ -1,8 +1,9 @@
 package io.company.brewcraft.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,23 +12,25 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
-public class InvoiceRepositoryGetAllInvoicesSpecification implements Specification<Invoice> {
+public class InvoiceRepositoryGetAllInvoicesSpecification implements Specification<InvoiceEntity> {
     private static final long serialVersionUID = -4419077865693397354L;
 
-    private Date from;
-    private Date to;
-    private List<InvoiceStatus> statuses;
-    private List<Long> supplierIds;
+    private Set<Long> ids;
+    private LocalDateTime from;
+    private LocalDateTime to;
+    private Set<InvoiceStatus> statuses;
+    private Set<Long> supplierIds;
 
     public InvoiceRepositoryGetAllInvoicesSpecification() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
-    public InvoiceRepositoryGetAllInvoicesSpecification(Date from, Date to, List<InvoiceStatus> statuses, List<Long> supplierIds) {
+    public InvoiceRepositoryGetAllInvoicesSpecification(Set<Long> ids, LocalDateTime from, LocalDateTime to, Set<InvoiceStatus> statuses, Set<Long> supplierIds) {
+        this.ids = ids;
         this.from = from;
         this.to = to;
         this.statuses = statuses;
@@ -35,14 +38,19 @@ public class InvoiceRepositoryGetAllInvoicesSpecification implements Specificati
     }
 
     @Override
-    public Predicate toPredicate(Root<Invoice> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(Root<InvoiceEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         @SuppressWarnings("unchecked")
-        CriteriaQuery<Invoice> invoiceQuery = (CriteriaQuery<Invoice>) query;
+        CriteriaQuery<InvoiceEntity> invoiceQuery = (CriteriaQuery<InvoiceEntity>) query;
         return criteriaBuilder.and(this.getPredicates(root, invoiceQuery, criteriaBuilder));
     }
 
-    public Predicate[] getPredicates(Root<Invoice> root, CriteriaQuery<Invoice> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate[] getPredicates(Root<InvoiceEntity> root, CriteriaQuery<InvoiceEntity> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<Predicate>(10);
+        
+        if (ids != null && ids.size() > 0) {
+            query.select(root).where(root.get("id").in(ids));
+        }
+        
         if (from != null && to != null) {
             predicates.add(criteriaBuilder.and(criteriaBuilder.between(root.get("date"), this.from, this.to)));
         }

@@ -10,21 +10,21 @@ import org.junit.jupiter.api.Test;
 
 import tec.units.ri.quantity.Quantities;
 
-public class InvoiceItemTest {
+public class InvoiceItemEntityTest {
 
-    private InvoiceItem item;
+    private InvoiceItemEntity item;
 
     @BeforeEach
     public void init() {
-        item = new InvoiceItem();
+        item = new InvoiceItemEntity();
     }
 
     @Test
     public void testConstructorWithAllArgs_CallsSetForAllArgs() {
-        item = new InvoiceItem(12345L, new Invoice(67890L), Quantities.getQuantity(10, KILOGRAM), Money.parse("CAD 10"), "LOT_12345", null, 1);
+        item = new InvoiceItemEntity(12345L, new InvoiceEntity(67890L), new QuantityEntity(11L), new MoneyEntity(22L), "LOT_12345", new MaterialEntity(33L), 1);
 
         assertEquals(12345L, item.getId());
-        assertEquals(new Invoice(67890L), item.getInvoice());
+        assertEquals(new InvoiceEntity(67890L), item.getInvoice());
         assertEquals(Quantities.getQuantity(10, KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 10"), item.getPrice());
         assertEquals("LOT_12345", item.getLot());
@@ -42,21 +42,23 @@ public class InvoiceItemTest {
     @Test
     @Disabled
     public void testAccessMaterial() {
-        fail("Material objects are not yet created");
+        assertNull(item.getMaterial());
+        item.setMaterial(new MaterialEntity(11L));
+        assertEquals(new Material(11L), item.getMaterial());
     }
 
     @Test
     public void testAccessQuantity() {
         assertNull(item.getQuantity());
-        item.setQuantity(Quantities.getQuantity(10, KILOGRAM));
-        assertEquals(Quantities.getQuantity(10, KILOGRAM), item.getQuantity());
+        item.setQuantity(new QuantityEntity(111L));
+        assertEquals(new QuantityEntity(111L), item.getQuantity());
     }
 
     @Test
     public void testAccessPrice() {
         assertNull(item.getPrice());
-        item.setPrice(Money.parse("CAD 100"));
-        assertEquals(Money.parse("CAD 100"), item.getPrice());
+        item.setPrice(new MoneyEntity(222L));
+        assertEquals(new MoneyEntity(222L), item.getPrice());
     }
 
     @Test
@@ -73,18 +75,19 @@ public class InvoiceItemTest {
         assertEquals("123456789", item.getLot());
     }
 
-    @Test
-    public void testGetAmount_ReturnsProductOfPriceAndQuantity() {
-        assertNull(item.getAmount());
-
-        item.setQuantity(Quantities.getQuantity(10, KILOGRAM));
-        item.setPrice(Money.parse("CAD 100"));
-
-        assertEquals(Money.parse("CAD 1000"), item.getAmount());
-
-        item.setQuantity(Quantities.getQuantity(5, KILOGRAM));
-        item.setPrice(Money.parse("CAD 500"));
-
-        assertEquals(Money.parse("CAD 2500"), item.getAmount());
-    }
+    // TODO: Move to the POJO test when that is created.
+//    @Test
+//    public void testGetAmount_ReturnsProductOfPriceAndQuantity() {
+//        assertNull(item.getPrice());
+//
+//        item.setQuantity(Quantities.getQuantity(10, KILOGRAM));
+//        item.setPrice(Money.parse("CAD 100"));
+//
+//        assertEquals(Money.parse("CAD 1000"), item.getPrice());
+//
+//        item.setQuantity(Quantities.getQuantity(5, KILOGRAM));
+//        item.setPrice(Money.parse("CAD 500"));
+//
+//        assertEquals(Money.parse("CAD 2500"), item.getPrice());
+//    }
 }

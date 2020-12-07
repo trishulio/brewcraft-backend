@@ -1,16 +1,15 @@
 .PHONY: install run d_install
 
 install:
-	mvn clean install
-
-run:
-	mvnw spring-boot:run
-
-d_install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
-d_start:
-	docker-compose down &&\
-	docker-compose rm &&\
-	docker-compose build --no-cache &&\
-	docker-compose up
+dist:
+	source .env
+	docker rmi brewcraft:${VERSION}; true
+	docker build . -t brewcraft:${VERSION}
+
+run:
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml down &&\
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml rm &&\
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build --no-cache &&\
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up

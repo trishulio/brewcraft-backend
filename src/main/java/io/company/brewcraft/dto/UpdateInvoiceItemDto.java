@@ -1,13 +1,11 @@
 package io.company.brewcraft.dto;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-
 public class UpdateInvoiceItemDto extends BaseDto {
     private Long id;
     private QuantityDto quantity;
     private MoneyDto price;
     private String lot;
-    private Object material; // TODO: Change to MaterialDto when materials are supported
+    private MaterialDto material;
     private Integer version;
 
     public UpdateInvoiceItemDto() {
@@ -17,7 +15,7 @@ public class UpdateInvoiceItemDto extends BaseDto {
         this(id, null, null, null, null, null);
     }
 
-    public UpdateInvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, String lot, Object material, Integer version) {
+    public UpdateInvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, String lot, MaterialDto material, Integer version) {
         setId(id);
         setQuantity(quantity);
         setPrice(price);
@@ -58,11 +56,11 @@ public class UpdateInvoiceItemDto extends BaseDto {
         this.lot = lot;
     }
 
-    public Object getMaterial() {
+    public MaterialDto getMaterial() {
         return material;
     }
 
-    public void setMaterial(Object material) {
+    public void setMaterial(MaterialDto material) {
         this.material = material;
     }
 

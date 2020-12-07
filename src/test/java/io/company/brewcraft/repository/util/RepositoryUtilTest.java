@@ -2,8 +2,7 @@ package io.company.brewcraft.repository.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +24,7 @@ public class RepositoryUtilTest {
     @Test
     public void testPageRequest_ReturnsPageRequestUnsorted_WhenOrderByIsEmptyList() {
         PageRequest expected = PageRequest.of(1, 10, Sort.unsorted());
-        PageRequest req = RepositoryUtil.pageRequest(new ArrayList<String>(0), true, 1, 10);
+        PageRequest req = RepositoryUtil.pageRequest(Set.of(), true, 1, 10);
 
         assertEquals(expected, req);
     }
@@ -33,7 +32,7 @@ public class RepositoryUtilTest {
     @Test
     public void testPageRequest_ReturnsPageRequestAscending_WhenAscendingArgIsTrue() {
         PageRequest expected = PageRequest.of(1, 10, Sort.by(Direction.ASC, new String[] { "col_1" }));
-        PageRequest req = RepositoryUtil.pageRequest(List.of("col_1"), true, 1, 10);
+        PageRequest req = RepositoryUtil.pageRequest(Set.of("col_1"), true, 1, 10);
 
         assertEquals(expected, req);
     }
@@ -41,7 +40,7 @@ public class RepositoryUtilTest {
     @Test
     public void testPageRequest_ReturnsPageRequestDescending_WhenAscendingArgIsFalse() {
         PageRequest expected = PageRequest.of(1, 10, Sort.by(Direction.DESC, new String[] { "col_1" }));
-        PageRequest req = RepositoryUtil.pageRequest(List.of("col_1"), false, 1, 10);
+        PageRequest req = RepositoryUtil.pageRequest(Set.of("col_1"), false, 1, 10);
 
         assertEquals(expected, req);
     }
@@ -49,7 +48,7 @@ public class RepositoryUtilTest {
     @Test
     public void testPageRequest_ReturnsPageRequestWithAllColumns_WhenOrderByIsNotNull() {
         PageRequest expected = PageRequest.of(1, 10, Sort.by(Direction.DESC, new String[] { "col_1", "col_2" }));
-        PageRequest req = RepositoryUtil.pageRequest(List.of("col_1", "col_2"), false, 1, 10);
+        PageRequest req = RepositoryUtil.pageRequest(Set.of("col_1", "col_2"), false, 1, 10);
 
         assertEquals(expected, req);
     }

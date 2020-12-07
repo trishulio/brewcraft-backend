@@ -5,6 +5,9 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
@@ -55,6 +58,20 @@ public class ReflectionManipulator {
             String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
             handleException(msg, e);
         }
+    }
+
+    public Set<String> getPropertyNames(Class<?> clazz) {
+        Set<String> propertyNames = null;
+        try {
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+
+            propertyNames = Arrays.stream(pds).map(pd -> pd.getName()).collect(Collectors.toSet());
+        } catch (IntrospectionException e) {
+            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            handleException(msg, e);
+        }
+
+        return propertyNames;
     }
 
     private void handleException(String msg, Exception e) {

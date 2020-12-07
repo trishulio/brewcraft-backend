@@ -3,7 +3,7 @@ package io.company.brewcraft.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -17,15 +17,13 @@ import io.company.brewcraft.dto.InvoiceItemDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
-import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.service.exception.EmptyPayloadException;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.util.validator.ValidationException;
 
 @SuppressWarnings("unchecked")
 public class InvoiceControllerTest {
@@ -45,14 +43,24 @@ public class InvoiceControllerTest {
 
     @Test
     public void testGetInvoices_CallsSuppliersWithArguments_AndReturnsPageDtoOfInvoiceDtosMappedFromInvoicesPage() {
-        List<Invoice> mInvoices = List.of(new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.PENDING, List.of(new InvoiceItem(6789L)), 1));
+        List<Invoice> mInvoices = List.of(
+            new Invoice(12345L,
+                new Supplier(),
+                LocalDateTime.MAX,
+                LocalDateTime.of(1997, 1, 1, 1, 10),
+                LocalDateTime.of(1998, 2, 2, 2, 20),
+                InvoiceStatus.PENDING,
+                List.of(new InvoiceItem(6789L)),
+                1
+            )
+        );
         Page<Invoice> mPage = mock(Page.class);
         doReturn(mInvoices.stream()).when(mPage).stream();
         doReturn(100).when(mPage).getTotalPages();
         doReturn(1000L).when(mPage).getTotalElements();
-        doReturn(mPage).when(mService).getInvoices(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50);
+        doReturn(mPage).when(mService).getInvoices(Set.of(111L), LocalDateTime.MIN, LocalDateTime.MAX, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50);
 
-        PageDto<InvoiceDto> dto = controller.getInvoices(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
+        PageDto<InvoiceDto> dto = controller.getInvoices(Set.of(111L), LocalDateTime.MIN, LocalDateTime.MAX, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
 
         assertEquals(100, dto.getTotalPages());
         assertEquals(1000L, dto.getTotalElements());
@@ -60,22 +68,32 @@ public class InvoiceControllerTest {
         assertEquals(1, dto.getContent().size());
         assertEquals(12345L, dto.getContent().get(0).getId());
         assertEquals(new SupplierDto(), dto.getContent().get(0).getSupplier());
-        assertEquals(new Date(123), dto.getContent().get(0).getDate());
+        assertEquals(LocalDateTime.MAX, dto.getContent().get(0).getDate());
         assertEquals(InvoiceStatus.PENDING, dto.getContent().get(0).getStatus());
         assertEquals(1, dto.getContent().get(0).getItems().size());
         assertEquals(new InvoiceItemDto(6789L), dto.getContent().get(0).getItems().get(0));
     }
-
+    
     @Test
-    public void testGetInvoices_ReturnsInvoiceDtoPage_WhenBothDateToAndFromAreNull() {
-        List<Invoice> mInvoices = List.of(new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.PENDING, List.of(new InvoiceItem(6789L)), 1));
+    public void testGetInvoices_SetDateFromToMin_WhenToIsNotNullAndFromIsNull() {
+        List<Invoice> mInvoices = List.of(
+            new Invoice(12345L,
+                new Supplier(),
+                LocalDateTime.MAX,
+                LocalDateTime.of(1997, 1, 1, 1, 10),
+                LocalDateTime.of(1998, 2, 2, 2, 20),
+                InvoiceStatus.PENDING,
+                List.of(new InvoiceItem(6789L)),
+                1
+            )
+        );
         Page<Invoice> mPage = mock(Page.class);
         doReturn(mInvoices.stream()).when(mPage).stream();
         doReturn(100).when(mPage).getTotalPages();
         doReturn(1000L).when(mPage).getTotalElements();
-        doReturn(mPage).when(mService).getInvoices(null, null, List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50);
+        doReturn(mPage).when(mService).getInvoices(Set.of(111L), null, LocalDateTime.MAX, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50);
 
-        PageDto<InvoiceDto> dto = controller.getInvoices(null, null, List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
+        PageDto<InvoiceDto> dto = controller.getInvoices(Set.of(111L), LocalDateTime.MIN, LocalDateTime.MAX, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
 
         assertEquals(100, dto.getTotalPages());
         assertEquals(1000L, dto.getTotalElements());
@@ -83,50 +101,98 @@ public class InvoiceControllerTest {
         assertEquals(1, dto.getContent().size());
         assertEquals(12345L, dto.getContent().get(0).getId());
         assertEquals(new SupplierDto(), dto.getContent().get(0).getSupplier());
-        assertEquals(new Date(123), dto.getContent().get(0).getDate());
+        assertEquals(LocalDateTime.MAX, dto.getContent().get(0).getDate());
         assertEquals(InvoiceStatus.PENDING, dto.getContent().get(0).getStatus());
         assertEquals(1, dto.getContent().get(0).getItems().size());
-        assertEquals(new InvoiceItemDto(6789L), dto.getContent().get(0).getItems().get(0));
+        assertEquals(new InvoiceItemDto(6789L), dto.getContent().get(0).getItems().get(0));        
     }
 
     @Test
-    public void testGetInvoices_ThrowsValidationException_WhenDateFromIsNotNullButDateToIsNull() {
-        assertThrows(ValidationException.class, () -> {
-            controller.getInvoices(new Date(123), null, List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
-        }, "1.Date to and from both need to be null or non-null together\n");
+    public void testGetInvoices_SetDateToAsMax_WhenToIsNullAndFromIsNotNull() {
+        List<Invoice> mInvoices = List.of(
+            new Invoice(12345L,
+                new Supplier(),
+                LocalDateTime.MAX,
+                LocalDateTime.of(1997, 1, 1, 1, 10),
+                LocalDateTime.of(1998, 2, 2, 2, 20),
+                InvoiceStatus.PENDING,
+                List.of(new InvoiceItem(6789L)),
+                1
+            )
+        );
+        Page<Invoice> mPage = mock(Page.class);
+        doReturn(mInvoices.stream()).when(mPage).stream();
+        doReturn(100).when(mPage).getTotalPages();
+        doReturn(1000L).when(mPage).getTotalElements();
+        doReturn(mPage).when(mService).getInvoices(Set.of(111L), LocalDateTime.MIN, null, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50);
+
+        PageDto<InvoiceDto> dto = controller.getInvoices(Set.of(111L), LocalDateTime.MIN, LocalDateTime.MAX, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
+
+        assertEquals(100, dto.getTotalPages());
+        assertEquals(1000L, dto.getTotalElements());
+
+        assertEquals(1, dto.getContent().size());
+        assertEquals(12345L, dto.getContent().get(0).getId());
+        assertEquals(new SupplierDto(), dto.getContent().get(0).getSupplier());
+        assertEquals(LocalDateTime.MAX, dto.getContent().get(0).getDate());
+        assertEquals(InvoiceStatus.PENDING, dto.getContent().get(0).getStatus());
+        assertEquals(1, dto.getContent().get(0).getItems().size());
+        assertEquals(new InvoiceItemDto(6789L), dto.getContent().get(0).getItems().get(0));        
     }
 
     @Test
-    public void testGetInvoices_ThrowsValidationException_WhenDateFromIsNullButDateToIsNotNull() {
-        assertThrows(ValidationException.class, () -> {
-            controller.getInvoices(null, new Date(123), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
-        }, "1.Date to and from both need to be null or non-null together\n");
-    }
+    public void testGetInvoices_UsesDateToFromAsNull_WhenBothAreNull() {
+        List<Invoice> mInvoices = List.of(
+            new Invoice(12345L,
+                new Supplier(),
+                LocalDateTime.MAX,
+                LocalDateTime.of(1997, 1, 1, 1, 10),
+                LocalDateTime.of(1998, 2, 2, 2, 20),
+                InvoiceStatus.PENDING,
+                List.of(new InvoiceItem(6789L)),
+                1
+            )
+        );
+        Page<Invoice> mPage = mock(Page.class);
+        doReturn(mInvoices.stream()).when(mPage).stream();
+        doReturn(100).when(mPage).getTotalPages();
+        doReturn(1000L).when(mPage).getTotalElements();
+        doReturn(mPage).when(mService).getInvoices(Set.of(111L), null, null, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50);
 
-    @Test
-    public void testGetInvoices_ThrowsValidationException_WhenAttributesIsEmpty() {
-        assertThrows(ValidationException.class, () -> {
-            controller.getInvoices(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of());
-        }, "1.Attributes param cannot be empty\n");
-    }
+        PageDto<InvoiceDto> dto = controller.getInvoices(Set.of(111L), null, null, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50, Set.of("id", "supplier", "date", "status", "items"));
 
-    @Test
-    public void testGetInvoices_ThrowsValidationExceptionWithAllErrorMessages_WhenMultipleParametersAreInvalid() {
-        assertThrows(ValidationException.class, () -> {
-            controller.getInvoices(null, null, List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of());
-        }, "1.Date to and from both need to be null or non-null together\n2.Attributes param cannot be empty\n");
+        assertEquals(100, dto.getTotalPages());
+        assertEquals(1000L, dto.getTotalElements());
+
+        assertEquals(1, dto.getContent().size());
+        assertEquals(12345L, dto.getContent().get(0).getId());
+        assertEquals(new SupplierDto(), dto.getContent().get(0).getSupplier());
+        assertEquals(LocalDateTime.MAX, dto.getContent().get(0).getDate());
+        assertEquals(InvoiceStatus.PENDING, dto.getContent().get(0).getStatus());
+        assertEquals(1, dto.getContent().get(0).getItems().size());
+        assertEquals(new InvoiceItemDto(6789L), dto.getContent().get(0).getItems().get(0));     
     }
 
     @Test
     public void testGetInvoices_SetsAllInvoiceDtoFieldsNullExceptSupplierAndIdFields_WhenAttributesHasOnlySupplierAndIdField() {
-        List<Invoice> mInvoices = List.of(new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.PENDING, List.of(new InvoiceItem(6789L)), 1));
+        List<Invoice> mInvoices = List.of(
+            new Invoice(12345L,
+                new Supplier(),
+                LocalDateTime.MAX,
+                LocalDateTime.of(1997, 1, 1, 1, 10),
+                LocalDateTime.of(1998, 2, 2, 2, 20),
+                InvoiceStatus.PENDING,
+                List.of(new InvoiceItem(6789L)),
+                1
+            )
+        );
         Page<Invoice> mPage = mock(Page.class);
         doReturn(mInvoices.stream()).when(mPage).stream();
         doReturn(100).when(mPage).getTotalPages();
         doReturn(1000L).when(mPage).getTotalElements();
-        doReturn(mPage).when(mService).getInvoices(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50);
+        doReturn(mPage).when(mService).getInvoices(Set.of(111L), null, null, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50);
 
-        PageDto<InvoiceDto> dto = controller.getInvoices(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L), List.of("id"), true, 1, 50, Set.of("id", "supplier"));
+        PageDto<InvoiceDto> dto = controller.getInvoices(Set.of(111L), LocalDateTime.MAX, LocalDateTime.MIN, Set.of(InvoiceStatus.PENDING), Set.of(12345L), Set.of("id"), true, 1, 50, Set.of("id", "supplier"));
 
         assertEquals(100, dto.getTotalPages());
         assertEquals(1000L, dto.getTotalElements());
@@ -141,14 +207,22 @@ public class InvoiceControllerTest {
 
     @Test
     public void testGetInvoice_ReturnsInvoiceDto_WhenServiceReturnsInvoice() {
-        Invoice mInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.PENDING, List.of(new InvoiceItem(6789L)), 1);
+        Invoice mInvoice = new Invoice(12345L,
+            new Supplier(),
+            LocalDateTime.MAX,
+            LocalDateTime.of(1997, 1, 1, 1, 10),
+            LocalDateTime.of(1998, 2, 2, 2, 20),
+            InvoiceStatus.PENDING,
+            List.of(new InvoiceItem(6789L)),
+            1
+        );
         doReturn(mInvoice).when(mService).getInvoice(12345L);
 
         InvoiceDto dto = controller.getInvoice(12345L, Set.of("id", "supplier", "date", "status", "items"));
 
         assertEquals(12345L, dto.getId());
         assertEquals(new SupplierDto(), dto.getSupplier());
-        assertEquals(new Date(123), dto.getDate());
+        assertEquals(LocalDateTime.MAX, dto.getDate());
         assertEquals(InvoiceStatus.PENDING, dto.getStatus());
         assertEquals(1, dto.getItems().size());
         assertEquals(new InvoiceItemDto(6789L), dto.getItems().get(0));
@@ -156,7 +230,15 @@ public class InvoiceControllerTest {
 
     @Test
     public void testGetInvoice_SetsDateFieldToNull_WhenDateFieldIsMissingFromAttributes() {
-        Invoice mInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.PENDING, List.of(new InvoiceItem(6789L)), 1);
+        Invoice mInvoice = new Invoice(12345L,
+            new Supplier(),
+            LocalDateTime.MAX,
+            LocalDateTime.of(1997, 1, 1, 1, 10),
+            LocalDateTime.of(1998, 2, 2, 2, 20),
+            InvoiceStatus.PENDING,
+            List.of(new InvoiceItem(6789L)),
+            1
+        );
         doReturn(mInvoice).when(mService).getInvoice(12345L);
 
         InvoiceDto dto = controller.getInvoice(12345L, Set.of("id", "supplier", "status", "items"));
@@ -191,28 +273,28 @@ public class InvoiceControllerTest {
 
     @Test
     public void testAddInvoice_ReturnsInvoiceDtoAfterAddingToService() {
-        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        Invoice mAddInvoice = new Invoice(null, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), null);
-        doReturn(mRetInvoice).when(mService).add(mAddInvoice);
+        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), 1);
+        Invoice mAddInvoice = new Invoice(null, null, LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), null);
+        doReturn(mRetInvoice).when(mService).add(12345L, mAddInvoice);
 
-        AddInvoiceDto payload = new AddInvoiceDto(new SupplierDto(), new Date(123), InvoiceStatus.FINAL, List.of());
-        InvoiceDto dto = controller.addInvoice(payload, Set.of("id", "supplier", "date", "status", "items"));
+        AddInvoiceDto payload = new AddInvoiceDto(LocalDateTime.MIN, InvoiceStatus.FINAL, List.of());
+        InvoiceDto dto = controller.addInvoice(12345L, payload, Set.of("id", "supplier", "date", "status", "items"));
 
         assertEquals(12345L, dto.getId());
         assertEquals(new SupplierDto(), dto.getSupplier());
-        assertEquals(new Date(123), dto.getDate());
+        assertEquals(LocalDateTime.MAX, dto.getDate());
         assertEquals(InvoiceStatus.FINAL, dto.getStatus());
         assertEquals(List.of(), dto.getItems());
     }
 
     @Test
     public void testAddInvoice_SetsAllFieldsAsNullExceptId_WhenAttributeHasIdOnly() {
-        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        Invoice mAddInvoice = new Invoice(null, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), null);
-        doReturn(mRetInvoice).when(mService).add(mAddInvoice);
+        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), 1);
+        Invoice mAddInvoice = new Invoice(null, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), null);
+        doReturn(mRetInvoice).when(mService).add(12345L, mAddInvoice);
 
-        AddInvoiceDto payload = new AddInvoiceDto(new SupplierDto(), new Date(123), InvoiceStatus.FINAL, List.of());
-        InvoiceDto dto = controller.addInvoice(payload, Set.of("id"));
+        AddInvoiceDto payload = new AddInvoiceDto(LocalDateTime.MIN, InvoiceStatus.FINAL, List.of());
+        InvoiceDto dto = controller.addInvoice(12345L, payload, Set.of("id"));
 
         assertEquals(12345L, dto.getId());
         assertNull(dto.getSupplier());
@@ -222,48 +304,34 @@ public class InvoiceControllerTest {
     }
 
     @Test
-    public void testAddInvoice_ThrowsEmptyPayloadException_WhenPayloadIsNull() {
-        assertThrows(EmptyPayloadException.class, () -> controller.addInvoice(null, Set.of()));
-    }
-
-    @Test
     public void testUpdateInvoice_ReturnsUpdatedDto_WhenServiceReturnsUpdatedInvoice() {
-        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        Invoice mUpdateInvoice = new Invoice(null, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        doReturn(mRetInvoice).when(mService).update(12345L, mUpdateInvoice);
+        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), 1);
+        Invoice mUpdateInvoice = new Invoice(null, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), null);
+        doReturn(mRetInvoice).when(mService).update(12345L, 67890L, mUpdateInvoice);
 
-        UpdateInvoiceDto payload = new UpdateInvoiceDto(new SupplierDto(), new Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        controller.updateInvoice(12345L, payload, Set.of("id", "supplier", "status", "items"));
-
-        InvoiceDto dto = controller.updateInvoice(12345L, payload, Set.of("id", "supplier", "date", "status", "items"));
+        UpdateInvoiceDto payload = new UpdateInvoiceDto(LocalDateTime.MIN, InvoiceStatus.FINAL, List.of(), 1);
+        InvoiceDto dto = controller.updateInvoice(12345L, 67890L, payload, Set.of("id", "supplier", "date", "status", "items"));
 
         assertEquals(12345L, dto.getId());
         assertEquals(new SupplierDto(), dto.getSupplier());
-        assertEquals(new Date(123), dto.getDate());
+        assertEquals(LocalDateTime.MAX, dto.getDate());
         assertEquals(InvoiceStatus.FINAL, dto.getStatus());
         assertEquals(List.of(), dto.getItems());
     }
 
     @Test
     public void testUpdateInvoice_SetsAllFieldsAsNullExceptId_WhenAttributesHasId() {
-        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        Invoice mUpdateInvoice = new Invoice(null, new Supplier(), new java.sql.Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        doReturn(mRetInvoice).when(mService).update(12345L, mUpdateInvoice);
+        Invoice mRetInvoice = new Invoice(12345L, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), 1);
+        Invoice mUpdateInvoice = new Invoice(null, new Supplier(), LocalDateTime.MIN, LocalDateTime.of(1997, 1, 1, 10, 10), LocalDateTime.of(1998, 2, 2, 20, 20), InvoiceStatus.FINAL, List.of(new InvoiceItem(12345L)), null);
+        doReturn(mRetInvoice).when(mService).update(12345L, 67890L, mUpdateInvoice);
 
-        UpdateInvoiceDto payload = new UpdateInvoiceDto(new SupplierDto(), new Date(123), InvoiceStatus.FINAL, List.of(), 1);
-        controller.updateInvoice(12345L, payload, Set.of("id", "supplier", "status", "items"));
-
-        InvoiceDto dto = controller.updateInvoice(12345L, payload, Set.of("id"));
+        UpdateInvoiceDto payload = new UpdateInvoiceDto(LocalDateTime.MIN, InvoiceStatus.FINAL, List.of(), 1);
+        InvoiceDto dto = controller.updateInvoice(12345L, 67890L, payload, Set.of("id"));
 
         assertEquals(12345L, dto.getId());
         assertNull(dto.getSupplier());
         assertNull(dto.getDate());
         assertNull(dto.getStatus());
         assertNull(dto.getItems());
-    }
-
-    @Test
-    public void testUpdateInvoice_ThrowsEmptyPayloadException_WhenPayloadIsNull() {
-        assertThrows(EmptyPayloadException.class, () -> controller.updateInvoice(12345L, null, Set.of()));
     }
 }

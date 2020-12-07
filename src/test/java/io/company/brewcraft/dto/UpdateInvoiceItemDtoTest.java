@@ -17,12 +17,12 @@ public class UpdateInvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal("100.00")), "LOT", new Object(), 1);
+        dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal("100.00")), "LOT", new MaterialDto(), 1);
         assertEquals(12345L, dto.getId());
         assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getPrice());
         assertEquals("LOT", dto.getLot());
-//        assertEquals(new Object(), dto.getMaterial());
+        assertEquals(new MaterialDto(), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
 
@@ -57,8 +57,8 @@ public class UpdateInvoiceItemDtoTest {
     @Test
     public void testAccessMaterial() {
         assertNull(dto.getMaterial());
-        dto.setMaterial(new Object());
-//        assertEquals(new Object(), dto.getMaterial());
+        dto.setMaterial(new MaterialDto());
+        assertEquals(new MaterialDto(), dto.getMaterial());
     }
 
     @Test

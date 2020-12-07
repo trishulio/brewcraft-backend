@@ -1,38 +1,26 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.*;
 
 import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Entity(name = "INVOICE")
-public class Invoice extends BaseEntity {
+import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.Supplier;
+
+public class Invoice extends BaseModel {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_generator")
-    @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-    
-    @Column(name = "date")
-    private Date date;
-    
-    @Enumerated(EnumType.STRING)
+    private LocalDateTime date;
+    private LocalDateTime lastUpdated;
+    private LocalDateTime createdAt;
     private InvoiceStatus status;
-
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoiceItem> items;
-    
-    @Version
     private Integer version;
 
     public Invoice() {
@@ -40,13 +28,15 @@ public class Invoice extends BaseEntity {
     }
 
     public Invoice(Long id) {
-        this(id, null, null, null, null, null);
+        this(id, null, null, null, null, null, null, null);
     }
 
-    public Invoice(Long id, Supplier supplier, Date date, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
+    public Invoice(Long id, Supplier supplier, LocalDateTime date, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
         setId(id);
         setSupplier(supplier);
         setDate(date);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setStatus(status);
         setItems(items);
         setVersion(version);
@@ -68,12 +58,32 @@ public class Invoice extends BaseEntity {
         this.supplier = supplier;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 
     public InvoiceStatus getStatus() {
@@ -90,9 +100,6 @@ public class Invoice extends BaseEntity {
 
     public void setItems(List<InvoiceItem> items) {
         this.items = items;
-        if (this.items != null) {
-            this.items.forEach(item -> item.setInvoice(this));
-        }
     }
 
     public Integer getVersion() {

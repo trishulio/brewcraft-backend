@@ -3,8 +3,9 @@ package io.company.brewcraft.repository;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,7 +16,7 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Supplier;
 
@@ -28,8 +29,8 @@ public class InvoiceRepositoryGetAllInvoicesSpecificationTest {
     public void testToPredicate_ReturnsCriteriaBuilderWithAllPredicates() {
         specification = spy(new InvoiceRepositoryGetAllInvoicesSpecification());
 
-        Root<Invoice> mRoot = mock(Root.class);
-        CriteriaQuery<Invoice> mQuery = mock(CriteriaQuery.class);
+        Root<InvoiceEntity> mRoot = mock(Root.class);
+        CriteriaQuery<InvoiceEntity> mQuery = mock(CriteriaQuery.class);
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
 
         Predicate mPredicateWithPredicates = mock(Predicate.class);
@@ -45,19 +46,19 @@ public class InvoiceRepositoryGetAllInvoicesSpecificationTest {
 
     @Test
     public void testGetPredicates_AddsDatePredicateOnly_WhenDateToAndFromAreNotNull() {
-        Root<Invoice> mRoot = mock(Root.class);
-        Path<Date> mPath = mock(Path.class);
+        Root<InvoiceEntity> mRoot = mock(Root.class);
+        Path<LocalDateTime> mPath = mock(Path.class);
         doReturn(mPath).when(mRoot).get("date");
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
         Predicate mDatePredicate = mock(Predicate.class);
-        doReturn(mDatePredicate).when(mBuilder).between(mPath, new Date(123), new Date(456));
+        doReturn(mDatePredicate).when(mBuilder).between(mPath, LocalDateTime.MAX, LocalDateTime.MIN);
 
         Predicate mExpectedPredicate = mock(Predicate.class);
         doReturn(mExpectedPredicate).when(mBuilder).and(mDatePredicate);
 
-        CriteriaQuery<Invoice> mQuery = mock(CriteriaQuery.class);
-        specification = new InvoiceRepositoryGetAllInvoicesSpecification(new Date(123), new Date(456), null, null);
+        CriteriaQuery<InvoiceEntity> mQuery = mock(CriteriaQuery.class);
+        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, LocalDateTime.MAX, LocalDateTime.MIN, null, null);
         Predicate[] predicates = specification.getPredicates(mRoot, mQuery, mBuilder);
 
         assertSame(1, predicates.length);
@@ -70,15 +71,15 @@ public class InvoiceRepositoryGetAllInvoicesSpecificationTest {
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(List.of(InvoiceStatus.PENDING));
 
-        Root<Invoice> mRoot = mock(Root.class);
+        Root<InvoiceEntity> mRoot = mock(Root.class);
         doReturn(mPath).when(mRoot).get("status");
 
-        CriteriaQuery<Invoice> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<InvoiceEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
 
-        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, null, List.of(InvoiceStatus.PENDING), null);
+        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, null, null, Set.of(InvoiceStatus.PENDING), null);
         Predicate[] predicates = specification.getPredicates(mRoot, mQuery, mBuilder);
 
         assertSame(0, predicates.length);
@@ -96,15 +97,15 @@ public class InvoiceRepositoryGetAllInvoicesSpecificationTest {
         Path<Supplier> mSupplierPath = mock(Path.class);
         doReturn(mSupplierIdPath).when(mSupplierPath).get("id");
 
-        Root<Invoice> mRoot = mock(Root.class);
+        Root<InvoiceEntity> mRoot = mock(Root.class);
         doReturn(mSupplierPath).when(mRoot).get("supplier");
 
-        CriteriaQuery<Invoice> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<InvoiceEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
 
-        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, null, null, List.of(12345L));
+        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, null, null, null, Set.of(12345L));
         Predicate[] predicates = specification.getPredicates(mRoot, mQuery, mBuilder);
 
         assertSame(0, predicates.length);
@@ -128,24 +129,24 @@ public class InvoiceRepositoryGetAllInvoicesSpecificationTest {
         Path<Supplier> mSupplierPath = mock(Path.class);
         doReturn(mSupplierIdPath).when(mSupplierPath).get("id");
 
-        // Date Criteria Mock
+        // LocalDateTime Criteria Mock
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        Path<Date> mDatePath = mock(Path.class);
+        Path<LocalDateTime> mDatePath = mock(Path.class);
         Predicate mDatePredicate = mock(Predicate.class);
-        doReturn(mDatePredicate).when(mBuilder).between(mDatePath, new Date(123), new Date(456));
+        doReturn(mDatePredicate).when(mBuilder).between(mDatePath, LocalDateTime.MAX, LocalDateTime.MIN);
 
         Predicate mAndDatePredicate = mock(Predicate.class);
         doReturn(mAndDatePredicate).when(mBuilder).and(mDatePredicate);
 
-        Root<Invoice> mRoot = mock(Root.class);
+        Root<InvoiceEntity> mRoot = mock(Root.class);
         doReturn(mInvoiceStatusPath).when(mRoot).get("status");
         doReturn(mSupplierPath).when(mRoot).get("supplier");
         doReturn(mDatePath).when(mRoot).get("date");
 
-        CriteriaQuery<Invoice> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<InvoiceEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
-        specification = new InvoiceRepositoryGetAllInvoicesSpecification(new Date(123), new Date(456), List.of(InvoiceStatus.PENDING), List.of(12345L));
+        specification = new InvoiceRepositoryGetAllInvoicesSpecification(null, LocalDateTime.MAX, LocalDateTime.MIN, Set.of(InvoiceStatus.PENDING), Set.of(12345L));
         Predicate[] predicates = specification.getPredicates(mRoot, mQuery, mBuilder);
 
         assertSame(1, predicates.length);

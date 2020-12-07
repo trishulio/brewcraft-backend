@@ -2,28 +2,28 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class InvoiceTest {
+public class InvoiceEntityTest {
 
-    private Invoice invoice;
+    private InvoiceEntity invoice;
 
     @BeforeEach
     public void init() {
-        invoice = new Invoice();
+        invoice = new InvoiceEntity();
     }
 
     @Test
     public void testAllArgConstructor() {
-        InvoiceItem item = new InvoiceItem(12345L);
-        invoice = new Invoice(12345L, new Supplier(), new Date(12345), InvoiceStatus.FINAL, List.of(item), 1);
+        InvoiceItemEntity item = new InvoiceItemEntity(12345L);
+        invoice = new InvoiceEntity(12345L, new Supplier(), LocalDateTime.MAX, LocalDateTime.of(1998, 1, 1, 1, 1), LocalDateTime.of(1999, 2, 2, 2, 2), InvoiceStatus.FINAL, List.of(item), 1);
         assertEquals(12345L, invoice.getId());
         assertEquals(new Supplier(), invoice.getSupplier());
-        assertEquals(new Date(12345), invoice.getDate());
+        assertEquals(LocalDateTime.MAX, invoice.getDate());
         assertEquals(InvoiceStatus.FINAL, invoice.getStatus());
         assertEquals(List.of(item), invoice.getItems());
         assertEquals(1, invoice.getVersion());
@@ -46,8 +46,8 @@ public class InvoiceTest {
     @Test
     public void testAccessDate() {
         assertNull(invoice.getDate());
-        invoice.setDate(new Date(12345));
-        assertEquals(new Date(12345), invoice.getDate());
+        invoice.setDate(LocalDateTime.MAX);
+        assertEquals(LocalDateTime.MAX, invoice.getDate());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class InvoiceTest {
     @Test
     public void testAccessItems() {
         assertNull(invoice.getItems());
-        InvoiceItem item = new InvoiceItem(12345L);
+        InvoiceItemEntity item = new InvoiceItemEntity(12345L);
         invoice.setItems(List.of(item));
         assertEquals(List.of(item), invoice.getItems());
     }

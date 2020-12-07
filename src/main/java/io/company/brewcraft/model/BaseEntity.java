@@ -2,24 +2,13 @@ package io.company.brewcraft.model;
 
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
-public abstract class BaseEntity {
-
-    protected ReflectionManipulator util;
+public abstract class BaseEntity extends BaseModel {
 
     protected BaseEntity() {
-        this(ReflectionManipulator.INSTANCE);
+        super();
     }
 
     protected BaseEntity(ReflectionManipulator util) {
-        this.util = util;
-    }
-
-    public void outerJoin(BaseEntity other) {
-        util.outerJoin(this, other, (getter, setter) -> getter.invoke(this) == null);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return util.equals(this, o);
+        super(util);
     }
 }

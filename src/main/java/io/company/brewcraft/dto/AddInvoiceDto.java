@@ -1,40 +1,30 @@
 package io.company.brewcraft.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.company.brewcraft.model.InvoiceStatus;
 
 public class AddInvoiceDto extends BaseDto {
-    private SupplierDto supplier;
-    private Date date;
+    private LocalDateTime date;
     private InvoiceStatus status;
     private List<UpdateInvoiceItemDto> items;
 
     public AddInvoiceDto() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
-    public AddInvoiceDto(SupplierDto supplier, Date date, InvoiceStatus status, List<UpdateInvoiceItemDto> items) {
-        setSupplier(supplier);
+    public AddInvoiceDto(LocalDateTime date, InvoiceStatus status, List<UpdateInvoiceItemDto> items) {
         setDate(date);
         setStatus(status);
         setItems(items);
     }
 
-    public SupplierDto getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(SupplierDto supplier) {
-        this.supplier = supplier;
-    }
-
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

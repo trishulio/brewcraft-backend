@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,9 @@ public class InvoiceDto extends BaseDto {
 
     private Long id;
     private SupplierDto supplier;
-    private Date date;
+    private LocalDateTime date;
+    private LocalDateTime lastUpdated;
+    private LocalDateTime createdAt;
     private InvoiceStatus status;
     private List<InvoiceItemDto> items;
     private Integer version;
@@ -33,12 +35,28 @@ public class InvoiceDto extends BaseDto {
         this.supplier = supplier;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public InvoiceStatus getStatus() {

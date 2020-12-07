@@ -9,17 +9,37 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.QuantityDto;
+import io.company.brewcraft.model.QuantityEntity;
 import tec.units.ri.quantity.Quantities;
 
-@Mapper
-public interface QuantityMapper {
-    QuantityMapper INSTANCE = Mappers.getMapper(QuantityMapper.class);
+@Mapper(uses = { QuantityUnitMapper.class })
+public abstract class QuantityMapper {
+    
+    public static final QuantityMapper INSTANCE = Mappers.getMapper(QuantityMapper.class);
 
     @Mappings({ @Mapping(source = "unit.symbol", target = "symbol") })
-    QuantityDto toDto(Quantity<?> quantity);
+    public abstract QuantityDto toDto(Quantity<?> quantity);
 
-    default Quantity<?> fromDto(QuantityDto dto) {
-        Unit<?> unit = UnitMapper.INSTANCE.getUnit(dto.getSymbol());
-        return Quantities.getQuantity(dto.getValue(), unit);
+    @Mappings({ @Mapping(target = "id", ignore = true) })
+    public abstract QuantityEntity toEntity(Quantity<?> quantity);
+
+    public Quantity<?> fromDto(QuantityDto dto) {
+        Quantity<?> qty = null;
+        if (dto != null) {
+            Unit<?> unit = QuantityUnitMapper.INSTANCE.fromSymbol(dto.getSymbol());
+            qty = Quantities.getQuantity(dto.getValue(), unit);
+        }
+        return qty;
+    }
+
+    public Quantity<?> fromEntity(QuantityEntity entity) {
+        Quantity<?> qty = null;
+        if (entity != null) {
+            Unit<?> unit = QuantityUnitMapper.INSTANCE.fromSymbol(entity.getUnit().getSymbol());
+            Number value = entity.getValue();
+            qty = Quantities.getQuantity(value, unit);
+        }
+
+        return qty;
     }
 }

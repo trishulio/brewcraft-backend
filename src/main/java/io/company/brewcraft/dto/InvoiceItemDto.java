@@ -12,7 +12,7 @@ public class InvoiceItemDto {
     private MoneyDto price;
     private MoneyDto amount;
     private String lot;
-    private Object material; // TODO: Change to MaterialDto when materials are supported
+    private MaterialDto material;
     private Integer version;
 
     public InvoiceItemDto() {
@@ -22,7 +22,7 @@ public class InvoiceItemDto {
         this(id, null, null, null, null, null, null);
     }
 
-    public InvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, MoneyDto amount, String lot, Object material, Integer version) {
+    public InvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, MoneyDto amount, String lot, MaterialDto material, Integer version) {
         setId(id);
         setQuantity(quantity);
         setPrice(price);
@@ -64,11 +64,11 @@ public class InvoiceItemDto {
         this.lot = lot;
     }
 
-    public Object getMaterial() {
+    public MaterialDto getMaterial() {
         return material;
     }
 
-    public void setMaterial(Object material) {
+    public void setMaterial(MaterialDto material) {
         this.material = material;
     }
 

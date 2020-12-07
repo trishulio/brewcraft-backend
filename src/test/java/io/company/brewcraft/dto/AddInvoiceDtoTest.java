@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,26 +21,18 @@ public class AddInvoiceDtoTest {
 
     @Test
     public void testAllArgsConstructor() {
-        dto = new AddInvoiceDto(new SupplierDto(), new Date(123), InvoiceStatus.PENDING, List.of(new UpdateInvoiceItemDto(567L)));
-        assertEquals(new SupplierDto(), dto.getSupplier());
-        assertEquals(new Date(123), dto.getDate());
+        dto = new AddInvoiceDto(LocalDateTime.MAX, InvoiceStatus.PENDING, List.of(new UpdateInvoiceItemDto(567L)));
+        assertEquals(LocalDateTime.MAX, dto.getDate());
         assertEquals(InvoiceStatus.PENDING, dto.getStatus());
         assertEquals(1, dto.getItems().size());
         assertEquals(new UpdateInvoiceItemDto(567L), dto.getItems().get(0));
     }
 
     @Test
-    public void testAccessSupplier() {
-        assertNull(dto.getSupplier());
-        dto.setSupplier(new SupplierDto());
-        assertEquals(new SupplierDto(), dto.getSupplier());
-    }
-
-    @Test
     public void testAccessDate() {
         assertNull(dto.getDate());
-        dto.setDate(new Date(123));
-        assertEquals(new Date(123), dto.getDate());
+        dto.setDate(LocalDateTime.MAX);
+        assertEquals(LocalDateTime.MAX, dto.getDate());
     }
 
     @Test
