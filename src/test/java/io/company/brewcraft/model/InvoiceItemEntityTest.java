@@ -1,14 +1,10 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static tec.units.ri.unit.Units.*;
 
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import tec.units.ri.quantity.Quantities;
 
 public class InvoiceItemEntityTest {
 
@@ -25,11 +21,11 @@ public class InvoiceItemEntityTest {
 
         assertEquals(12345L, item.getId());
         assertEquals(new InvoiceEntity(67890L), item.getInvoice());
-        assertEquals(Quantities.getQuantity(10, KILOGRAM), item.getQuantity());
-        assertEquals(Money.parse("CAD 10"), item.getPrice());
+        assertEquals(new QuantityEntity(11L), item.getQuantity());
+        assertEquals(new MoneyEntity(22L), item.getPrice());
         assertEquals("LOT_12345", item.getLot());
         assertEquals(1, item.getVersion());
-        assertEquals(null, item.getMaterial());
+        assertEquals(new MaterialEntity(33L), item.getMaterial());
     }
 
     @Test

@@ -24,9 +24,11 @@ public class InvoiceEntity extends BaseEntity {
     private LocalDateTime date;
 
     @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)

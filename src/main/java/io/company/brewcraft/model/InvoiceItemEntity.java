@@ -1,14 +1,6 @@
 package io.company.brewcraft.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 @Entity(name = "INVOICE_ITEM")
 public class InvoiceItemEntity extends BaseEntity {
@@ -21,17 +13,17 @@ public class InvoiceItemEntity extends BaseEntity {
     @ManyToOne
     private InvoiceEntity invoice;
 
-    @Column(name = "qty_id")
+    @OneToOne(cascade = CascadeType.PERSIST)
     private QuantityEntity qty;
 
-    @Column(name = "money_id")
+    @OneToOne(cascade = CascadeType.PERSIST)
     private MoneyEntity price;
 
     @Column(name = "lot")
     private String lot;
 
-    @JoinColumn(name = "material_id")
-    private MaterialEntity material; // TODO: Create an Entity
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private MaterialEntity material;
 
     @Version
     private Integer version;

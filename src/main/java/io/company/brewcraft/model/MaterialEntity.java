@@ -5,10 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
-@Entity(name = "material")
-@Table
+@Entity(name = "MATERIAL")
 public class MaterialEntity extends BaseEntity {
 
     @Id

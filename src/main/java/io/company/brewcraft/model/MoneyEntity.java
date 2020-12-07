@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -16,7 +17,7 @@ public class MoneyEntity extends BaseEntity {
     @SequenceGenerator(name = "money_generator", sequenceName = "money_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "currency_id")
+    @ManyToOne
     private Currency currency;
 
     @Column(name = "amount")
