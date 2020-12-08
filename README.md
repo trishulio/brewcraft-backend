@@ -9,3 +9,29 @@ Run app in docker using:
 docker-compose build --no-cache && docker-compose up
 
 Note: When creating postgres server in pgadmin, use the name of the postgres container(postgresdb) as the host
+
+# How to setup a development server
+
+1. Configure the values in your .env files.
+
+2. Build a docker image and upload it to the server
+    ```
+    make source
+    source ./source.sh
+    make setup_prod
+    ```
+
+3. Start the containers in the server
+    ```
+    # The username and hostname values should be configured in your env from previous step.
+    ssh $USERNAME@$HOST
+    ```
+
+4. Inside the SSH'd session
+    ``` 
+    cd <project_root>
+    make source
+    source ./source.sh
+    # nohup and & is needed if you want to close SSH session without stopping the containers
+    nohup make start &
+    ``` 
