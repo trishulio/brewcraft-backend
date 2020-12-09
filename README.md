@@ -15,15 +15,15 @@ Note: When creating postgres server in pgadmin, use the name of the postgres con
 ## Prerequisite
 
 1. Install docker and docker-compose.
-```
-sudo apt update -y
-sudo apt install docker docker-compose -y
-sudo usermod -aG docker $USER
-reboot # For permissions to take effect
+    ```
+    sudo apt update -y
+    sudo apt install docker docker-compose -y
+    sudo usermod -aG docker $USER
+    reboot # For permissions to take effect
 
-# Validate docker is running
-docker run --rm hello-world
-```
+    # Validate docker is running
+    docker run --rm hello-world
+    ```
 
 ## Setting app
 
