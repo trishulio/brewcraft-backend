@@ -12,6 +12,21 @@ Note: When creating postgres server in pgadmin, use the name of the postgres con
 
 # How to setup a development server
 
+## Prerequisite
+
+1. Install docker and docker-compose.
+```
+sudo apt update -y
+sudo apt install docker docker-compose -y
+sudo usermod -aG docker $USER
+reboot # For permissions to take effect
+
+# Validate docker is running
+docker run --rm hello-world
+```
+
+## Setting app
+
 1. Configure the values in your .env files.
 
 2. Build a docker image and upload it to the server
