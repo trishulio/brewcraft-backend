@@ -55,4 +55,3 @@ services:
         PGADMIN_LISTEN_PORT: 443
 volumes:
     db-data:
-    db-admin-data:
