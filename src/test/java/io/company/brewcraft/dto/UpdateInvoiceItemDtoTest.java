@@ -17,9 +17,9 @@ public class UpdateInvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal("100.00")), "LOT", new MaterialDto(), 1);
+        dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal("100.00")), "LOT", new MaterialDto(), 1);
         assertEquals(12345L, dto.getId());
-        assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getPrice());
         assertEquals("LOT", dto.getLot());
         assertEquals(new MaterialDto(), dto.getMaterial());
@@ -36,8 +36,8 @@ public class UpdateInvoiceItemDtoTest {
     @Test
     public void testQuantity() {
         assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", 100));
-        assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
+        dto.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
     }
 
     @Test

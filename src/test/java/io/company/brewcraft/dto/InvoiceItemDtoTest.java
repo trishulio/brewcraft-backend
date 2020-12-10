@@ -18,10 +18,10 @@ public class InvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
-        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
+        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
+        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
         assertEquals(12345L, dto.getId());
-        assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getPrice());
         assertEquals(new MoneyDto("CAD", new BigDecimal("500.00")), dto.getAmount());
         assertEquals("LOT", dto.getLot());
@@ -39,8 +39,8 @@ public class InvoiceItemDtoTest {
     @Test
     public void testQuantity() {
         assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", 100));
-        assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
+        dto.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
     }
 
     @Test
