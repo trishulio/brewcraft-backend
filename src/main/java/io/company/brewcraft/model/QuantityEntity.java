@@ -1,10 +1,13 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -15,11 +18,12 @@ public class QuantityEntity extends BaseEntity {
     @SequenceGenerator(name = "qty_generator", sequenceName = "qty_sequence", allocationSize = 1)
     private Long id;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity unit;
     
-    @Column(name = "value")
-    private Number value;
+    @Column(name = "value", precision = 20, scale = 4)
+    private BigDecimal value;
 
     public QuantityEntity() {
         this(null);
@@ -29,7 +33,7 @@ public class QuantityEntity extends BaseEntity {
         this(id, null, null);
     }
 
-    public QuantityEntity(Long id, UnitEntity unit, Number value) {
+    public QuantityEntity(Long id, UnitEntity unit, BigDecimal value) {
         setId(id);
         setUnit(unit);
         setValue(value);
@@ -51,11 +55,11 @@ public class QuantityEntity extends BaseEntity {
         this.unit = unit;
     }
 
-    public Number getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Number value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

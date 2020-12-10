@@ -8,26 +8,27 @@ import javax.persistence.Id;
 public class Currency extends BaseEntity {
 
     @Id
-    private Integer id;
+    @Column(name = "numeric_code")
+    private Integer numericCode;
 
-    @Column(name = "code")
+    @Column(name = "code", nullable = false, length = 3)
     private String code;
 
     public Currency() {
         this(null, null);
     }
     
-    public Currency(Integer id, String code) {
-        setId(id);
+    public Currency(Integer numericCode, String code) {
+        setNumericCode(numericCode);
         setCode(code);
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getNumericCode() {
+        return numericCode;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setNumericCode(Integer numericCode) {
+        this.numericCode = numericCode;
     }
 
     public String getCode() {

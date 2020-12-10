@@ -34,7 +34,7 @@ public class InvoiceItemMapperTest {
         InvoiceItemDto dto = mapper.toDto(item);
 
         assertEquals(12345L, dto.getId());
-        assertEquals(new QuantityDto("kg", 100), dto.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("99.00")), dto.getPrice());
         assertEquals(new MoneyDto("CAD", new BigDecimal("9900.00")), dto.getAmount());
         assertEquals("LOT", dto.getLot());
@@ -44,7 +44,7 @@ public class InvoiceItemMapperTest {
 
     @Test
     public void testFromDto_ReturnsInvoice_WhenInvoiceItemDtoIsNotNull() {
-        InvoiceItemDto dto = new InvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal(101)), new MoneyDto("CAD", new BigDecimal(103)), "LOT", new MaterialDto(), 1);
+        InvoiceItemDto dto = new InvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal(101)), new MoneyDto("CAD", new BigDecimal(103)), "LOT", new MaterialDto(), 1);
         InvoiceItem item = mapper.fromDto(dto);
 
         assertEquals(12345L, item.getId());
@@ -57,7 +57,7 @@ public class InvoiceItemMapperTest {
 
     @Test
     public void testFromDto_ReturnsInvoice_WhenUpdateInvoiceItemIsNotNull() {
-        UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", 100), new MoneyDto("CAD", new BigDecimal(101)), "LOT", new MaterialDto(), 1);
+        UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal(101)), "LOT", new MaterialDto(), 1);
         InvoiceItem item = mapper.fromDto(dto);
 
         assertEquals(12345L, item.getId());

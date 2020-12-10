@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,16 +40,21 @@ public class InvoiceController {
         this.filter = filter;
     }
 
+    @GetMapping("/test")
+    public void test(@RequestParam(name="value") Number value) {
+        this.invoiceService.test(value);
+    }
+
     @GetMapping("/invoices")
     public PageDto<InvoiceDto> getInvoices(
         @RequestParam(required = false, name="ids") Set<Long> ids,
-        @RequestParam(required = false, name="from") LocalDateTime from,
-        @RequestParam(required = false, name="to") LocalDateTime to,
+        @RequestParam(required = false, name="from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+        @RequestParam(required = false, name="to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
         @RequestParam(required = false, name="status") Set<InvoiceStatus> status,
         @RequestParam(required = false, name="supplier_id") Set<Long> supplierIds,
         @RequestParam(required = false, name="sort") Set<String> sort,         
         @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
-        @RequestParam(name="page", defaultValue = "1") int page,
+        @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "10") int size,
         @RequestParam(name="attr") @Size(min = 1) @NotNull Set<String> attributes
     ) {

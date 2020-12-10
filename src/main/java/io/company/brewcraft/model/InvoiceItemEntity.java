@@ -10,19 +10,23 @@ public class InvoiceItemEntity extends BaseEntity {
     @SequenceGenerator(name = "invoice_item_generator", sequenceName = "invoice_item_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private InvoiceEntity invoice;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name = "qty_id", referencedColumnName = "id")
     private QuantityEntity qty;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name="price_id", referencedColumnName = "id")
     private MoneyEntity price;
 
     @Column(name = "lot")
     private String lot;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id")
     private MaterialEntity material;
 
     @Version

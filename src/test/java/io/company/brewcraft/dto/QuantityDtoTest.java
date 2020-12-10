@@ -2,6 +2,8 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,7 @@ public class QuantityDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        dto = new QuantityDto("kg", 100);
+        dto = new QuantityDto("kg", new BigDecimal(100));
         assertEquals("kg", dto.getSymbol());
         assertEquals(100, dto.getValue());
     }
@@ -37,7 +39,7 @@ public class QuantityDtoTest {
     @Test
     public void testAccessValue() {
         assertNull(dto.getValue());
-        dto.setValue(100);
-        assertEquals(100, dto.getValue());
+        dto.setValue(new BigDecimal(100));
+        assertEquals(new BigDecimal(100), dto.getValue());
     }
 }

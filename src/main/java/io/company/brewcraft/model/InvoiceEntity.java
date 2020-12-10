@@ -16,7 +16,7 @@ public class InvoiceEntity extends BaseEntity {
     @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
@@ -32,6 +32,7 @@ public class InvoiceEntity extends BaseEntity {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private InvoiceStatus status;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)

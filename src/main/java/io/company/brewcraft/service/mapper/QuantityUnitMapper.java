@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import javax.measure.Unit;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +48,6 @@ public abstract class QuantityUnitMapper {
 
     public abstract String toSymbol(Unit<?> unit);
 
-    @Mappings({ @Mapping(target = "id", ignore = true) })
     public abstract UnitEntity toEntity(Unit<?> unit);
 
     private Map<String, Unit<?>> getAllUnits() {

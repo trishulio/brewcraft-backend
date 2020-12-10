@@ -1,18 +1,20 @@
 package io.company.brewcraft.dto;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuantityDto extends BaseDto {
 
     private String symbol;
-    private Number value;
+    private BigDecimal value;
 
     public QuantityDto() {
         this(null, null);
     }
 
-    public QuantityDto(String symbol, Number value) {
+    public QuantityDto(String symbol, BigDecimal value) {
         setSymbol(symbol);
         setValue(value);
     }
@@ -21,7 +23,7 @@ public class QuantityDto extends BaseDto {
         return value;
     }
 
-    public void setValue(Number value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

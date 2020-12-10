@@ -48,7 +48,7 @@ public class InvoiceRepositoryGetAllInvoicesSpecification implements Specificati
         List<Predicate> predicates = new ArrayList<Predicate>(10);
         
         if (ids != null && ids.size() > 0) {
-            query.select(root).where(root.get("id").in(ids));
+            predicates.add(criteriaBuilder.and(root.get("id").in(ids)));
         }
         
         if (from != null && to != null) {
@@ -56,11 +56,11 @@ public class InvoiceRepositoryGetAllInvoicesSpecification implements Specificati
         }
 
         if (statuses != null) {
-            query.select(root).where(root.get("status").in(statuses));
+            predicates.add(criteriaBuilder.and(root.get("status").in(statuses)));
         }
 
         if (supplierIds != null) {
-            query.select(root).where(root.get("supplier").get("id").in(supplierIds));
+            predicates.add(criteriaBuilder.and(root.get("supplier").get("id").in(supplierIds)));
         }
 
         return predicates.toArray(new Predicate[predicates.size()]);

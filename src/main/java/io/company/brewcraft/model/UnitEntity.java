@@ -2,40 +2,28 @@ package io.company.brewcraft.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 @Entity(name = "QTY_UNIT")
 public class UnitEntity extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quantity_unit_generator")
-    @SequenceGenerator(name = "quantity_unit_generator", sequenceName = "quantity_unit_sequence", allocationSize = 1)
-    private Long id;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "symbol")
+    @Column(name = "symbol", unique = true, updatable = false, length = 4)
     private String symbol;
 
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
+
     public UnitEntity() {
-        this(null, null, null);
+        this(null, null);
+    }
+    
+    public UnitEntity(String symbol) {
+        this(symbol, null);
     }
 
-    public UnitEntity(Long id, String name, String symbol) {
-        setId(id);
+    public UnitEntity(String symbol, String name) {
         setName(name);
         setSymbol(symbol);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
