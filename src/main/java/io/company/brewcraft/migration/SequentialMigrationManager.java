@@ -25,7 +25,6 @@ public class SequentialMigrationManager implements MigrationManager {
         // Mock data
         List<String> testTenants = new ArrayList<String>();
         testTenants.add("eae07f11_4c9a_4a3b_8b23_9c05d695ab67");
-        testTenants.add("eae07f11_4c9a_4a3b_8b23_9c05d695ab68");
 
         migrateAll(new SequentialTaskSet(), testTenants);
     }

@@ -15,9 +15,10 @@ public class HikariDataSourceBuilder extends AbstractDataSourceBuilder {
     public static final String KEY_URL = "jdbcUrl";
     public static final String KEY_AUTO_COMMIT = "autoCommit";
     public static final String KEY_SCHEMA = "schema";
+    public static final String POOL_SIZE = "maximumPoolSize";
 
     public HikariDataSourceBuilder() {
-        super(KEY_USERNAME, KEY_PASSWORD, KEY_URL, KEY_AUTO_COMMIT, KEY_SCHEMA);
+        super(KEY_USERNAME, KEY_PASSWORD, KEY_URL, KEY_AUTO_COMMIT, KEY_SCHEMA, POOL_SIZE);
     }
 
     @Override

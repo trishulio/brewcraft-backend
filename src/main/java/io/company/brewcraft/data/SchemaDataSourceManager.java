@@ -38,6 +38,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          .schema(key)
                                          .username(key)
                                          .password(password)
+                                         .poolSize(1)
                                          .build();
 
                 return ds;
