@@ -54,6 +54,7 @@ services:
         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         PGADMIN_LISTEN_PORT: 443
+
 volumes:
   db-data:
   db-admin-data:
