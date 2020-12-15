@@ -7,7 +7,6 @@ install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
 dist:
-	# source .env
 	docker rmi brewcraft:${VERSION}; true
 	docker build . -t brewcraft:${VERSION}
 

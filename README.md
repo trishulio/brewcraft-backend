@@ -1,12 +1,40 @@
 # brewery-backend
 Backend for the brewery business management app
 
-Run app using:
-./mvnw spring-boot:run (MacOS/Linux:)
-mvnw spring-boot:run (Windows)
+We are using Makefiles to abstract the tasks to build, start, and test, etc.
 
-Run app in docker using:
-docker-compose build --no-cache && docker-compose up
+
+Build the project using
+```
+make install
+```
+
+This command expects that there is a `PWD` variable available in your ENV that corresponds to the root directory of this project. Most UNIX based systems like Mac or Linux automatically set this variable to point to the current directory. However in case this variable is not available in your host os, then you can set this varilable in your `.env` file to point to the root directory of this project, like,
+
+```
+PWD=/c/Users/<username>/code/brewcraft/
+```
+
+
+
+Run app (development mode) in docker using:
+```
+make run
+```
+Development mode:
+    1. Set JVM option to profile the application using VisualVM
+    2. Builds docker-image at run time
+    3. Doesn't persist data in localstack's Secret Manager
+
+Alternatively, you can run app using:
+
+
+Run app (production mode) in docker using:
+```
+make start
+```
+Prod-test mode loads an existing application image and creates a container from it.
+
 
 Note: When creating postgres server in pgadmin, use the name of the postgres container(postgresdb) as the host
 

@@ -8,9 +8,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+import io.company.brewcraft.dto.BaseDto;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class SupplierDto {
+public class SupplierDto extends BaseDto {
     
     @Null
     private Long id;

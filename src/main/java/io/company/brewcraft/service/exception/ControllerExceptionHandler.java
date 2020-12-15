@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-    
+
     public static final Logger log = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorResponse entityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-        
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
         log.debug("Entity Not Found Exception", e);
         return message;
     }
@@ -32,39 +31,45 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = { DataIntegrityViolationException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse constraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
-           ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
-             HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-           
-           log.debug("Data Integrity Violaton Exception", e);
-           return message;
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        log.debug("Data Integrity Violaton Exception", e);
+        return message;
     }
-    
+
     @ExceptionHandler(value = { EmptyResultDataAccessException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorResponse emptyResultDataAccessException(EmptyResultDataAccessException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         log.debug("Empty Result Exception", e);
         return message;
     }
-    
+
     @ExceptionHandler(value = { ObjectOptimisticLockingFailureException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse objectOptimisticLockingFailureException(ObjectOptimisticLockingFailureException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         log.debug("Optimistic Locking Failure Exception", e);
+        return message;
+    }
+
+    @ExceptionHandler(value = { EmptyPayloadException.class })
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse emptyPayloadException(EmptyPayloadException e, HttpServletRequest request) {
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        log.debug("Empty payload received", e);
+        
         return message;
     }
 
     @ExceptionHandler(value = { RuntimeException.class })
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse runtimeException(RuntimeException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-        
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
         log.error("Runtime Exception", e);
         return message;
     }

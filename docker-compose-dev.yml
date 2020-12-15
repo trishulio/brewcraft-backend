@@ -23,7 +23,7 @@ services:
       PORT_WEB_UI: ${LS_WEB_UI}
       SERVICES: secretsmanager
     volumes:
-      - './.localstack:/tmp/localstack'
+      - localstack-data:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
   postgresdb:
@@ -31,7 +31,6 @@ services:
     restart: always
     volumes:
       - ./db-init-scripts:/docker-entrypoint-initdb.d
-      - db-data:/var/lib/postgresql/data
     container_name: postgresdb
     ports:
       - "54321:${POSTGRES_PORT}"
@@ -47,6 +46,8 @@ services:
     restart: always
     depends_on: 
       - postgresdb
+    volumes:
+      - db-admin-data:/var/lib/pgadmin
     container_name: pgadmin
     ports:
         - "8443:443"
@@ -60,3 +61,4 @@ services:
 volumes:
   db-data:
   db-admin-data:
+  localstack-data:
