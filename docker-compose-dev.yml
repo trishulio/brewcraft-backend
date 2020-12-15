@@ -4,6 +4,8 @@ services:
     build:
       context: .
     container_name: brewcraftapp
+    ports:
+      - 9010:9010
     depends_on:
       - localstack
       - postgresdb
@@ -57,4 +59,5 @@ services:
         PGADMIN_LISTEN_PORT: 443
 
 volumes:
-    db-admin-data:
+  db-data:
+  db-admin-data:
