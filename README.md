@@ -1,14 +1,12 @@
 # brewery-backend
 Backend for the brewery business management app
 
-We are using Makefiles to abstract the tasks to build, start, and test, etc. For all the dockerized processes the name starts with prefix `d_`.
-
-Some commands have alternative native targets available, like, `make d_install` uses dockerized maven to build the project whereas `make install` uses the host machine's maven (if available on path).
+We are using Makefiles to abstract the tasks to build, start, and test, etc.
 
 
 Build the project using
 ```
-make d_install
+make install
 ```
 
 This command expects that there is a `PWD` variable available in your ENV that corresponds to the root directory of this project. Most UNIX based systems like Mac or Linux automatically set this variable to point to the current directory. However in case this variable is not available in your host os, then you can set this varilable in your `.env` file to point to the root directory of this project, like,
@@ -17,24 +15,26 @@ This command expects that there is a `PWD` variable available in your ENV that c
 PWD=/c/Users/<username>/code/brewcraft/
 ```
 
-_Note: The non-docker version of the build can be executed using `make install`_
 
-Run app in docker using:
-```
-make d_start
-```
 
-Alternatively, you can run app using:
+Run app (development mode) in docker using:
 ```
 make run
 ```
-_Note: mvnw should be available on the path_
+Development mode:
+    1. Set JVM option to profile the application using VisualVM
+    2. Builds docker-image at run time
+    3. Doesn't persist data in localstack's Secret Manager
+
+Alternatively, you can run app using:
 
 
-To combine the build and start tasks, use:
+Run app (production mode) in docker using:
 ```
-make d_install d_start
+make start
 ```
+Prod-test mode loads an existing application image and creates a container from it.
+
 
 Note: When creating postgres server in pgadmin, use the name of the postgres container(postgresdb) as the host
 
