@@ -40,6 +40,11 @@ public class InvoiceController {
         this.filter = filter;
     }
 
+    @GetMapping("/test")
+    public void test(@RequestParam(name="value") Number value) {
+        this.invoiceService.test(value);
+    }
+
     @GetMapping("/invoices")
     public PageDto<InvoiceDto> getInvoices(
         @RequestParam(required = false, name="ids") Set<Long> ids,
