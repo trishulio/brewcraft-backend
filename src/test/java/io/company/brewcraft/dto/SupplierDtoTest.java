@@ -20,7 +20,7 @@ public class SupplierDtoTest {
     public void testConstructor() {
         Long id = 1L;
         String name = "Supplier1";
-        SupplierAddressDto address = new SupplierAddressDto();
+        AddressDto address = new AddressDto();
         List<SupplierContactDto> contacts = new ArrayList<>();
         int version = 1;
 
@@ -55,7 +55,7 @@ public class SupplierDtoTest {
     
     @Test
     public void testGetSetAddress() {
-        SupplierAddressDto address = new SupplierAddressDto();
+        AddressDto address = new AddressDto();
         supplierDto.setAddress(address);
         assertSame(address, supplierDto.getAddress());
     }

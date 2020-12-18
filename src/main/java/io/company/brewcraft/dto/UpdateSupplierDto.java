@@ -15,7 +15,7 @@ public class UpdateSupplierDto {
     private List<SupplierContactDto> contacts;
     
     @Valid
-    private SupplierAddressDto address;
+    private AddressDto address;
     
     @NotNull
     private Integer version;
@@ -24,7 +24,7 @@ public class UpdateSupplierDto {
         
     }
     
-    public UpdateSupplierDto(String name, List<SupplierContactDto> contacts, SupplierAddressDto address, Integer version) {
+    public UpdateSupplierDto(String name, List<SupplierContactDto> contacts, AddressDto address, Integer version) {
         this.name = name;
         this.contacts = contacts;
         this.address = address;
@@ -47,11 +47,11 @@ public class UpdateSupplierDto {
         this.contacts = contacts;
     }
 
-    public SupplierAddressDto getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    public void setAddress(SupplierAddressDto address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 

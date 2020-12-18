@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.exception;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -55,12 +57,16 @@ public class ControllerExceptionHandler {
         return message;
     }
 
-    @ExceptionHandler(value = { EmptyPayloadException.class })
+    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse emptyPayloadException(EmptyPayloadException e, HttpServletRequest request) {
-        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-
-        log.debug("Empty payload received", e);
+    public ErrorResponse methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        log.debug("Method argument not valid", e);
+        
+        String fieldErrors = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining(", "));        
+        
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), fieldErrors, request.getRequestURI());
         
         return message;
     }

@@ -1,30 +1,31 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-public class SupplierDto extends BaseDto {
-    
+public class FacilityDto extends BaseDto {
+
     private Long id;
     
     private String name;
-
-    private List<SupplierContactDto> contacts;
     
     private AddressDto address;
     
+    private List<FacilityEquipmentDto> equipment;
+    
+    private List<FacilityStorageDto> storages;
+    
     private Integer version;
     
-    public SupplierDto() {
+    public FacilityDto() {
         
     }
     
-    public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            AddressDto address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public FacilityDto(Long id, String name, AddressDto address, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages, Integer version) {
         this.id = id;
         this.name = name;
-        this.contacts = contacts;
         this.address = address;
+        this.equipment = equipment;
+        this.storages = storages;
         this.version = version;
     }
 
@@ -43,15 +44,7 @@ public class SupplierDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<SupplierContactDto> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<SupplierContactDto> contacts) {
-        this.contacts = contacts;
-    }
-
+    
     public AddressDto getAddress() {
         return address;
     }
@@ -59,7 +52,23 @@ public class SupplierDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
+
+    public List<FacilityEquipmentDto> getEquipment() {
+        return equipment;
+    }
     
+    public void setEquipment(List<FacilityEquipmentDto> equipment) {
+        this.equipment = equipment;
+    }
+    
+    public List<FacilityStorageDto> getStorages() {
+        return storages;
+    }
+    
+    public void setStorages(List<FacilityStorageDto> storages) {
+        this.storages = storages;
+    }
+
     public Integer getVersion() {
         return version;
     }
@@ -67,5 +76,4 @@ public class SupplierDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

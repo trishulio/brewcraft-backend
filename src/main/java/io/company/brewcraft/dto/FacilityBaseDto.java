@@ -1,29 +1,22 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
+public class FacilityBaseDto extends BaseDto {
 
-public class SupplierDto extends BaseDto {
-    
     private Long id;
     
     private String name;
-
-    private List<SupplierContactDto> contacts;
     
     private AddressDto address;
-    
+        
     private Integer version;
     
-    public SupplierDto() {
+    public FacilityBaseDto() {
         
     }
     
-    public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            AddressDto address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public FacilityBaseDto(Long id, String name, AddressDto address, Integer version) {
         this.id = id;
         this.name = name;
-        this.contacts = contacts;
         this.address = address;
         this.version = version;
     }
@@ -43,15 +36,7 @@ public class SupplierDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<SupplierContactDto> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<SupplierContactDto> contacts) {
-        this.contacts = contacts;
-    }
-
+    
     public AddressDto getAddress() {
         return address;
     }
@@ -59,7 +44,7 @@ public class SupplierDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
@@ -67,5 +52,4 @@ public class SupplierDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

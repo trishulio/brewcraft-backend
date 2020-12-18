@@ -8,13 +8,22 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SupplierContactRepository;
+import io.company.brewcraft.repository.EquipmentRepository;
+import io.company.brewcraft.repository.FacilityRepository;
+import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.SupplierContactService;
+import io.company.brewcraft.service.EquipmentService;
+import io.company.brewcraft.service.FacilityService;
+import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
+import io.company.brewcraft.service.impl.EquipmentServiceImpl;
+import io.company.brewcraft.service.impl.FacilityServiceImpl;
+import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -50,10 +59,31 @@ public class ServiceAutoConfiguration {
         return new InvoiceService(invoiceRepo, supplierService);
     }
 
-
     @Bean
     @ConditionalOnMissingBean(AttributeFilter.class)
     public AttributeFilter attributeFilter() {
         return new AttributeFilter();
     }
+
+    @Bean
+    @ConditionalOnMissingBean(FacilityService.class)
+    public FacilityService facilityService(FacilityRepository facilityRepository) {
+        FacilityService facilityService = new FacilityServiceImpl(facilityRepository);
+        return facilityService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(EquipmentService.class)
+    public EquipmentService equipmentService(EquipmentRepository equipmentRepository, FacilityRepository facilityRepository) {
+        EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityRepository);
+        return equipmentService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(StorageService.class)
+    public StorageService storageService(StorageRepository storageRepository, FacilityRepository facilityRepository) {
+        StorageService storageService = new StorageServiceImpl(storageRepository, facilityRepository);
+        return storageService;
+    }
+    
 }

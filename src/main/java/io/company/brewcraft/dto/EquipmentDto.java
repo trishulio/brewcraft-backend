@@ -1,0 +1,92 @@
+package io.company.brewcraft.dto;
+
+import io.company.brewcraft.model.EquipmentType;
+
+public class EquipmentDto extends BaseDto {
+    
+    private Long id;
+    
+    private FacilityBaseDto facility;
+    
+    private String name;
+    
+    private EquipmentType type;
+    
+    private String status;
+    
+    private QuantityDto maxCapacity;
+    
+    private Integer version;
+    
+    public EquipmentDto() {
+        
+    }
+
+    public EquipmentDto(Long id, FacilityBaseDto facility, String name, EquipmentType type, String status, 
+            QuantityDto maxCapacity, Integer version) {
+        this.id = id;
+        this.facility = facility;
+        this.name = name;
+        this.type = type;
+        this.status = status;
+        this.maxCapacity = maxCapacity;
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public FacilityBaseDto getFacility() {
+        return facility;
+    }
+
+    public void setFacility(FacilityBaseDto facility) {
+        this.facility = facility;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public EquipmentType getType() {
+        return type;
+    }
+
+    public void setType(EquipmentType type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public QuantityDto getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(QuantityDto maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+    
+}

@@ -10,19 +10,19 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SUPPLIER_ADDRESS")
-public class SupplierAddress extends Address {
+@Table(name="FACILITY_ADDRESS")
+public class FacilityAddress extends Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_address_generator")
-    @SequenceGenerator(name="supplier_address_generator", sequenceName = "supplier_address_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facility_address_generator")
+    @SequenceGenerator(name="facility_address_generator", sequenceName = "facility_address_sequence", allocationSize = 1)
     private Long id;
     
-    public SupplierAddress() {
+    public FacilityAddress() {
         
     }
-    
-    public SupplierAddress(Long id, String addressLine1, String addressLine2, String country, String province, String city,
+
+    public FacilityAddress(Long id, String addressLine1, String addressLine2, String country, String province, String city,
             String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
         super(addressLine1, addressLine2, country, province, city, postalCode, created, lastUpdated);
         this.id = id;
@@ -35,4 +35,5 @@ public class SupplierAddress extends Address {
     public void setId(Long id) {
         this.id = id;
     }
+    
 }
