@@ -38,7 +38,7 @@ public class StorageServiceImpl implements StorageService {
     
     @Override
     public Storage getStorage(Long storageId) {
-        Storage storage = storageRepository.findById(storageId).get();
+        Storage storage = storageRepository.findById(storageId).orElse(null);
         
         return storage;
     }

@@ -41,7 +41,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     
     @Override
     public Equipment getEquipment(Long equipmentId) {       
-        Equipment equipment = equipmentRepository.findById(equipmentId).get();
+        Equipment equipment = equipmentRepository.findById(equipmentId).orElse(null);
 
         return equipment;
     }
