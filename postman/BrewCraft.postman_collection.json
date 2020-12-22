@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bdddd639-8a7b-4ad0-9d42-f9acabc28f2f",
+		"_postman_id": "3b1e7126-bc32-41d0-bab6-054385100d86",
 		"name": "BrewCraft",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -540,14 +540,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}",
+							"raw": "{{url}}/api/suppliers/1",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{supplierId}}"
+								"1"
 							]
 						}
 					},
@@ -570,7 +570,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"version\": 0\r\n}",
+							"raw": "{\r\n    \"name\": \"tests323ts\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -619,9 +619,15 @@
 						}
 					},
 					"response": []
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "SupplierContactService",
+			"item": [
 				{
-					"name": "Get Contacts",
+					"name": "Get All Supplier Contacts",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -636,15 +642,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts",
+							"raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{supplierId}}",
 								"contacts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "100"
+								},
+								{
+									"key": "sort",
+									"value": "id"
+								},
+								{
+									"key": "order_asc",
+									"value": "true"
+								}
 							]
 						}
 					},
@@ -666,14 +689,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+							"raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{supplierId}}",
 								"contacts",
 								"{{contactId}}"
 							]
@@ -785,14 +807,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+							"raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
 								"suppliers",
-								"{{supplierId}}",
 								"contacts",
 								"{{contactId}}"
 							]
@@ -826,59 +847,6 @@
 								"{{supplierId}}",
 								"contacts",
 								"{{contactId}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "SupplierContactService",
-			"item": [
-				{
-					"name": "Get All Supplier Contacts",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"contacts"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "100"
-								},
-								{
-									"key": "sort",
-									"value": "id"
-								},
-								{
-									"key": "order_asc",
-									"value": "true"
-								}
 							]
 						}
 					},

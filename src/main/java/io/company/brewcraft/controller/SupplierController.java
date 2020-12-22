@@ -19,14 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.company.brewcraft.dto.AddSupplierDto;
 import io.company.brewcraft.dto.GetSuppliersDto;
-import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierDto;
-import io.company.brewcraft.dto.UpdateSupplierContactDto;
 import io.company.brewcraft.dto.UpdateSupplierDto;
 import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierContact;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierMapper;
 
 @RestController
@@ -53,74 +52,45 @@ public class SupplierController {
     @GetMapping("/suppliers/{supplierId}")
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getSupplier(supplierId);
-
-        return supplierMapper.supplierToSupplierDto(supplier);   
+        
+        if (supplier == null) {
+            throw new EntityNotFoundException("Supplier", supplierId.toString());
+        } else {
+            return supplierMapper.supplierToSupplierDto(supplier);   
+        }
     }
 
     @PostMapping("/suppliers")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addSupplier(@Valid @RequestBody SupplierDto newSupplier) {
-        Supplier supplier = supplierMapper.supplierDtoToSupplier(newSupplier);    
-        supplierService.addSupplier(supplier);
+    public SupplierDto addSupplier(@Valid @RequestBody AddSupplierDto supplierDto) {
+        Supplier supplier = supplierMapper.supplierDtoToSupplier(supplierDto);    
+        
+        Supplier addedSupplier = supplierService.addSupplier(supplier);
+       
+        return supplierMapper.supplierToSupplierDto(addedSupplier);   
     }
     
     @PutMapping("/suppliers/{supplierId}")
-    public void updateSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
-        Supplier updatedSupplier = supplierMapper.updateSupplierDtoToSupplier(supplierDto);
-        supplierService.updateSupplier(supplierId, updatedSupplier);
+    public SupplierDto putSupplier(@Valid @RequestBody AddSupplierDto supplierDto, @PathVariable Long supplierId) {
+        Supplier supplier = supplierMapper.supplierDtoToSupplier(supplierDto);
+        
+        Supplier putSupplier = supplierService.putSupplier(supplierId, supplier);
+        
+        return supplierMapper.supplierToSupplierDto(putSupplier);   
     }
 
     @PatchMapping("/suppliers/{supplierId}")
-    public void patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
-        Supplier updatedSupplier = supplierMapper.updateSupplierDtoToSupplier(supplierDto);
+    public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
+        Supplier supplier = supplierMapper.updateSupplierDtoToSupplier(supplierDto);
         
-        supplierService.updateSupplier(supplierId, updatedSupplier);
+        Supplier patchedSupplier = supplierService.patchSupplier(supplierId, supplier);
+        
+        return supplierMapper.supplierToSupplierDto(patchedSupplier);   
     }
     
     @DeleteMapping("/suppliers/{supplierId}")
     public void deleteSupplier(@PathVariable Long supplierId) {
         supplierService.deleteSupplier(supplierId);
-    }
-     
-    @GetMapping("/suppliers/{supplierId}/contacts")
-    public List<SupplierContactDto> getContacts(@PathVariable Long supplierId) {
-        List<SupplierContact> supplierContacts = supplierService.getContacts(supplierId);
-       
-        return supplierContacts.stream().map(supplierContact -> supplierMapper.contactToContactDto(supplierContact)).collect(Collectors.toList());
-    }
-    
-    @GetMapping("/suppliers/{supplierId}/contacts/{contactId}")
-    public SupplierContactDto getContact(@PathVariable Long supplierId, @PathVariable Long contactId) {
-        SupplierContact supplierContact = supplierService.getContact(supplierId, contactId);
-        
-        return supplierMapper.contactToContactDto(supplierContact);
-    }
-
-    @PostMapping("/suppliers/{supplierId}/contacts")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addContact(@PathVariable Long supplierId, @Valid @RequestBody SupplierContactDto newSupplierContact) {
-        SupplierContact supplierContact = supplierMapper.contactDtoToContact(newSupplierContact);    
-        
-        supplierService.addContact(supplierId, supplierContact);
-    }
-    
-    @PutMapping("/suppliers/{supplierId}/contacts/{contactId}")
-    public void updateContact(@PathVariable Long supplierId, @PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
-        SupplierContact updatedSupplierContact = supplierMapper.updateContactDtoToContact(supplierContactDto);
-        
-        supplierService.updateContact(supplierId, contactId, updatedSupplierContact);
-    }
-    
-    @PatchMapping("/suppliers/{supplierId}/contacts/{contactId}")
-    public void patchContact(@PathVariable Long supplierId, @PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
-        SupplierContact updatedSupplierContact = supplierMapper.updateContactDtoToContact(supplierContactDto);
-        
-        supplierService.updateContact(supplierId, contactId, updatedSupplierContact);
-    }
-
-    @DeleteMapping("/suppliers/{supplierId}/contacts/{contactId}")
-    public void deleteContact(@PathVariable Long supplierId, @PathVariable Long contactId) {
-        supplierService.deleteContact(supplierId, contactId);
     }
 
 }
