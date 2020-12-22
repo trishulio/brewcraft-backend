@@ -1,42 +1,34 @@
 package io.company.brewcraft.dto;
 
-public class SupplierContactDto {
-    
-    private Long id;
-    
+import javax.validation.constraints.NotNull;
+
+public class AddSupplierContactDto {
+    @NotNull    
     private String firstName;
     
+    @NotNull
     private String lastName;
     
+    @NotNull
     private String position;
-    
+  
+    @NotNull
     private String email;
-    
+
+    @NotNull
     private String phoneNumber;
     
-    private Integer version;
-    
-    public SupplierContactDto() {
+    public AddSupplierContactDto() {
         
     }
     
-    public SupplierContactDto(Long id, String firstName, String lastName, String position, String email,
-            String phoneNumber, Integer version) {
-        this.id = id;
+    public AddSupplierContactDto(String firstName, String lastName, String position, String email,
+            String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.version = version;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -78,13 +70,4 @@ public class SupplierContactDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
-    public Integer getVersion() {
-        return version;
-    }
-    
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
 }

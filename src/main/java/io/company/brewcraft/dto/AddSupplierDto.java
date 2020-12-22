@@ -2,37 +2,31 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
-public class SupplierDto extends BaseDto {
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+public class AddSupplierDto extends BaseDto {
     
-    private Long id;
-    
+    @NotEmpty
     private String name;
 
+    @NotNull
+    @Valid
     private List<SupplierContactDto> contacts;
     
+    @NotNull
+    @Valid
     private SupplierAddressDto address;
     
-    private Integer version;
-    
-    public SupplierDto() {
+    public AddSupplierDto() {
         
     }
     
-    public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            SupplierAddressDto address, Integer version) {
-        this.id = id;
+    public AddSupplierDto(String name, List<SupplierContactDto> contacts, SupplierAddressDto address) {
         this.name = name;
         this.contacts = contacts;
         this.address = address;
-        this.version = version;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -57,14 +51,6 @@ public class SupplierDto extends BaseDto {
 
     public void setAddress(SupplierAddressDto address) {
         this.address = address;
-    }
-    
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
 }

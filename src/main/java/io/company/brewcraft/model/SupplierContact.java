@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="SUPPLIER_CONTACT")
-public class SupplierContact {
+public class SupplierContact extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_contact_generator")
@@ -62,16 +62,16 @@ public class SupplierContact {
     
     public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
             String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
-        this.id = id;
-        this.supplier = supplier;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.position = position;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
-        this.version = version;
+        setId(id);
+        setSupplier(supplier);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setPosition(position);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setCreated(created);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     public Long getId() {

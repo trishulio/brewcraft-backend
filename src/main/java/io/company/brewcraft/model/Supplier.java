@@ -46,13 +46,13 @@ public class Supplier extends BaseEntity {
     }
 
     public Supplier(Long id, String name, List<SupplierContact> contacts, SupplierAddress address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
-        this.id = id;
-        this.name = name;
-        this.contacts = contacts;
-        this.address = address;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
-        this.version = version;
+        setId(id);
+        setName(name);
+        setContacts(contacts);
+        setAddress(address);
+        setCreated(created);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     public Long getId() {
