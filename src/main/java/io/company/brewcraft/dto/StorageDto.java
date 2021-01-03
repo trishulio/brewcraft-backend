@@ -1,5 +1,7 @@
 package io.company.brewcraft.dto;
 
+import io.company.brewcraft.model.StorageType;
+
 public class StorageDto extends BaseDto {
 
     private Long id;
@@ -8,15 +10,16 @@ public class StorageDto extends BaseDto {
     
     private String name;
     
-    private String type;
+    private StorageType type;
     
     private Integer version;
     
     public StorageDto() {
-        
+        super();
     }
     
-    public StorageDto(Long id, FacilityBaseDto facility, String name, String type, Integer version) {
+    public StorageDto(Long id, FacilityBaseDto facility, String name, StorageType type, Integer version) {
+        super();
         this.id = id;
         this.facility = facility;
         this.name = name;
@@ -48,11 +51,11 @@ public class StorageDto extends BaseDto {
         this.name = name;
     }
 
-    public String getType() {
+    public StorageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(StorageType type) {
         this.type = type;
     }
 

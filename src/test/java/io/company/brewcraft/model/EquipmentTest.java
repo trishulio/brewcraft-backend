@@ -21,7 +21,7 @@ public class EquipmentTest {
         Facility facility = new Facility();
         String name = "equipment1";
         EquipmentType type = EquipmentType.BARREL;
-        String status = "status";
+        EquipmentStatus status = EquipmentStatus.ACTIVE;
         QuantityEntity maxCapacity = new QuantityEntity();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -70,7 +70,7 @@ public class EquipmentTest {
     
     @Test
     public void testGetSetStatus() {
-        String status = "testStatus";
+        EquipmentStatus status = EquipmentStatus.ACTIVE;
         equipment.setStatus(status);
         assertSame(status, equipment.getStatus());
     }

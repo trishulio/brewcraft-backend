@@ -1,12 +1,12 @@
 package io.company.brewcraft.service.impl;
 
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Facility;
@@ -25,10 +25,8 @@ public class FacilityServiceImpl implements FacilityService {
     }
     
     @Override
-    public Page<Facility> getAllFacilities(int page, int size, String[] sort, boolean order_asc) {
-        Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
-        
-        return facilityRepository.findAll(paging);
+    public Page<Facility> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending) {        
+        return facilityRepository.findAll(pageRequest(sort, orderAscending, page, size));
     }
 
     @Override
@@ -39,12 +37,12 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public void addFacility(Facility facility) {        
-        facilityRepository.save(facility);
+    public Facility addFacility(Facility facility) {        
+        return facilityRepository.save(facility);
     }
     
     @Override
-    public void putFacility(Long facilityId, Facility updatedFacility) {        
+    public Facility putFacility(Long facilityId, Facility updatedFacility) {        
         Facility facility = facilityRepository.findById(facilityId).orElse(null);
         
         if (facility != null) {
@@ -53,16 +51,16 @@ public class FacilityServiceImpl implements FacilityService {
 
         updatedFacility.setId(facilityId);
       
-        facilityRepository.save(updatedFacility);
+        return facilityRepository.save(updatedFacility);
     }
     
     @Override
-    public void patchFacility(Long facilityId, Facility updatedFacility) {
+    public Facility patchFacility(Long facilityId, Facility updatedFacility) {
         Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
      
         updatedFacility.outerJoin(facility);
         
-        facilityRepository.save(updatedFacility);
+        return facilityRepository.save(updatedFacility);
     }
 
     @Override

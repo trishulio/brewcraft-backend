@@ -854,14 +854,159 @@
 				}
 			],
 			"protocolProfileBehavior": {}
-<<<<<<< HEAD
-=======
 		},
 		{
-			"name": "SupplierContactService",
+			"name": "FacilityService",
 			"item": [
 				{
-					"name": "Get All Supplier Contacts",
+					"name": "Add Facility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Main facility 1\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Boil Kettle\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"Eqpt2\",\r\n            \"type\": \"Mix Tank\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 120.0\r\n            }\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"name\": \"storage 1\",\r\n            \"type\": \"General\"\r\n        },\r\n        {\r\n            \"name\": \"storage 2\",\r\n            \"type\": \"General\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/v1/facilities/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"facilities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Facility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"updatedFacilit2y\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"e4\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"s1\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"s2\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/v1/facilities/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"facilities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Facility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"testn\",\r\n            \"type\": \"Fermenter\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"testm\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"facilities",
+								"{{facility-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Facility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"facilities",
+								"{{facility-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Facility",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -876,14 +1021,44 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
+							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
-								"suppliers",
-								"contacts"
+								"v1",
+								"facilities",
+								"{{facility-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Facilities",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/facilities?page=0&size=100&sort=id,name&order_asc=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"facilities"
 							],
 							"query": [
 								{
@@ -896,7 +1071,7 @@
 								},
 								{
 									"key": "sort",
-									"value": "id"
+									"value": "id,name"
 								},
 								{
 									"key": "order_asc",
@@ -911,7 +1086,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "FacilityService",
+			"name": "EquipmentService",
 			"item": [
 				{
 					"name": "Add Equiptment",
@@ -930,7 +1105,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"volume\":\"\",\r\n    \"volumeCode\":\"\"\r\n}",
+							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -938,22 +1113,23 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment",
+							"raw": "{{url}}/api/v1/facilities/{{facility-id}}/equipment",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
 								"{{facility-id}}",
-								"equiptment"
+								"equipment"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Add Facility",
+					"name": "Get All Equiptment",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -965,33 +1141,25 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equiptment\": [\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\"\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\"\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\"\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{url}}/api/facilities/",
+							"raw": "{{url}}/api/v1/facilities/equipment",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								""
+								"equipment"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Add Storage",
+					"name": "Get Equiptment",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1003,27 +1171,19 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"type\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages",
+							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
-								"storages"
+								"equipment",
+								"{{equipment-id}}"
 							]
 						}
 					},
@@ -1046,7 +1206,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"volume\":\"\",\r\n    \"volumeCode\":\"\",\r\n    \"version\": 0\r\n}",
+							"raw": "{\r\n    \"name\": \"e1\",\r\n    \"type\": \"Barrel\",\r\n    \"status\": \"Active\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0000\r\n    },\r\n    \"version\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1054,23 +1214,23 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
+							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
+								"equipment",
+								"{{equipment-id}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Facility",
+					"name": "Update Equiptment",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1082,11 +1242,11 @@
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equiptment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
+							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    },\r\n    \"version\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1094,54 +1254,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}",
+							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"type\": \"\",\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"storages",
-								"{{storage-id}}"
+								"equipment",
+								"{{equipment-id}}"
 							]
 						}
 					},
@@ -1163,258 +1285,16 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
+							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Facilities",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Equiptment By Facility Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Storage By Facility Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"storages",
-								""
+								"equipment",
+								"{{equipment-id}}"
 							]
 						}
 					},
@@ -1424,85 +1304,8 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "FacilityService",
+			"name": "StorageService",
 			"item": [
-				{
-					"name": "Add Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"volume\":\"\",\r\n    \"volumeCode\":\"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equiptment\": [\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\"\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\"\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\"\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/facilities/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								""
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Add Storage",
 					"request": {
@@ -1520,7 +1323,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"type\": \"\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Storage 1\",\r\n    \"type\": \"General\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1528,93 +1331,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages",
+							"raw": "{{url}}/api/v1/facilities/{{facility-id}}/storages",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
 								"{{facility-id}}",
 								"storages"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"volume\":\"\",\r\n    \"volumeCode\":\"\",\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equiptment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"status\": \"\",\r\n            \"volume\": \"\",\r\n            \"volumeCode\": \"\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"\",\r\n            \"type\": \"\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}"
 							]
 						}
 					},
@@ -1637,7 +1363,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"type\": \"\",\r\n    \"version\": 0\r\n}",
+							"raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1645,14 +1371,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
+							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
 								"storages",
 								"{{storage-id}}"
 							]
@@ -1661,7 +1387,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Equiptment",
+					"name": "Update Storage",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1673,48 +1399,28 @@
 								}
 							]
 						},
-						"method": "DELETE",
+						"method": "PATCH",
 						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
-						"method": "DELETE",
-						"header": [],
 						"url": {
-							"raw": "{{url}}/api/facilities/{{id}}",
+							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{id}}"
+								"storages",
+								"{{storage-id}}"
 							]
 						}
 					},
@@ -1736,47 +1442,16 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
+							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
 								"storages",
 								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/{{equiptment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								"{{equiptment-id}}"
 							]
 						}
 					},
@@ -1798,14 +1473,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/{{storage-id}}",
+							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{facility-id}}",
 								"storages",
 								"{{storage-id}}"
 							]
@@ -1814,7 +1489,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Facility",
+					"name": "Get All Storage",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1829,103 +1504,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/facilities/{{id}}",
+							"raw": "{{url}}/api/v1/facilities/storages/",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"api",
+								"v1",
 								"facilities",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Facilities",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Equiptment By Facility Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/equiptment/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
-								"equiptment",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Storage By Facility Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/facilities/{{facility-id}}/storages/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"facilities",
-								"{{facility-id}}",
 								"storages",
 								""
 							]
@@ -1935,7 +1521,6 @@
 				}
 			],
 			"protocolProfileBehavior": {}
->>>>>>> ae6e75a... Added Facility Rest API
 		}
 	],
 	"protocolProfileBehavior": {}

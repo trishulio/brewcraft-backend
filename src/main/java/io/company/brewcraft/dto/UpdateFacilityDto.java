@@ -15,10 +15,11 @@ public class UpdateFacilityDto extends BaseDto {
     private Integer version;
     
     public UpdateFacilityDto() {
-        
+        super();
     }
     
     public UpdateFacilityDto(String name, AddressDto address, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages, Integer version) {
+        super();
         this.name = name;
         this.address = address;
         this.equipment = equipment;

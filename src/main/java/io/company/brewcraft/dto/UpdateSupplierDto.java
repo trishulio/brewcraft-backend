@@ -21,10 +21,11 @@ public class UpdateSupplierDto {
     private Integer version;
     
     public UpdateSupplierDto() {
-        
+        super();
     }
     
     public UpdateSupplierDto(String name, List<SupplierContactDto> contacts, AddressDto address, Integer version) {
+        super();
         this.name = name;
         this.contacts = contacts;
         this.address = address;

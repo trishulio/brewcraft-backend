@@ -44,8 +44,9 @@ public class FacilityDtoTest {
 
     @Test
     public void testGetSetName() {
-        facilityDto.setName("testName");
-        assertSame("testName", facilityDto.getName());
+        String name = "testName";
+        facilityDto.setName(name);
+        assertSame(name, facilityDto.getName());
     }
     
     @Test

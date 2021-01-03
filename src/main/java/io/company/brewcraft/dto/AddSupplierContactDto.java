@@ -19,11 +19,12 @@ public class AddSupplierContactDto {
     private String phoneNumber;
     
     public AddSupplierContactDto() {
-        
+        super();
     }
     
     public AddSupplierContactDto(String firstName, String lastName, String position, String email,
             String phoneNumber) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;

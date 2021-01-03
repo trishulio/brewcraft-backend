@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class FacilityServiceImplTest {
     }
 
     @Test
-    public void testGetFacilities_returnsFacilities() throws Exception {
+    public void testGetAllFacilities_returnsFacilities() throws Exception {
         Facility facility1 = new Facility();
         Facility facility2 = new Facility();
                 
@@ -58,7 +59,7 @@ public class FacilityServiceImplTest {
 
         when(facilityRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedFacilities);
 
-        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, new String[]{"id"}, true);
+        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -89,17 +90,46 @@ public class FacilityServiceImplTest {
     }
     
     @Test
-    public void testPutFacility_success() throws Exception {
+    public void testPutFacility_DoesNotOuterJoinWhenThereIsNoExistingFacility() throws Exception {
         Long id = 1L;
-        Facility facility = new Facility(id, "Facility 1", new FacilityAddress(), Arrays.asList(), Arrays.asList(), null, null, null);
+        Facility facility = mock(Facility.class);
         
-        when(facilityRepositoryMock.existsById(id)).thenReturn(true);
+        when(facilityRepositoryMock.findById(id)).thenReturn(Optional.empty());
                 
         facilityService.putFacility(id, facility);
        
-        ArgumentCaptor<Facility> facilityArgument = ArgumentCaptor.forClass(Facility.class);
-        verify(facilityRepositoryMock, times(1)).save(facilityArgument.capture());
-        assertSame(id, facilityArgument.getValue().getId());
+        verify(facility, times(0)).outerJoin(Mockito.any(Facility.class));
+        verify(facility, times(1)).setId(id);
+        verify(facilityRepositoryMock, times(1)).save(facility);
+    }
+    
+    @Test
+    public void testPutFacility_DoesOuterJoinWhenThereIsAnExistingFacility() throws Exception {
+        Long id = 1L;
+        Facility facility = mock(Facility.class);
+        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), Arrays.asList(), Arrays.asList(), null, null, null);
+        
+        when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
+                
+        facilityService.putFacility(id, facility);
+       
+        verify(facility, times(1)).outerJoin(existingFacility);
+        verify(facility, times(1)).setId(id);
+        verify(facilityRepositoryMock, times(1)).save(facility);
+    }
+    
+    @Test
+    public void testPatchFacility_success() throws Exception {
+        Long id = 1L;
+        Facility updatedFacilityMock = mock(Facility.class);
+        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), Arrays.asList(), Arrays.asList(), null, null, null);
+        
+        when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
+ 
+        facilityService.patchFacility(id, updatedFacilityMock);
+       
+        verify(updatedFacilityMock, times(1)).outerJoin(existingFacility);
+        verify(facilityRepositoryMock, times(1)).save(updatedFacilityMock);
     }
     
     @Test
@@ -121,6 +151,14 @@ public class FacilityServiceImplTest {
         facilityService.deleteFacility(id);
         
         verify(facilityRepositoryMock, times(1)).deleteById(id);
+    }
+    
+    @Test
+    public void testFacilityExists_success() throws Exception {
+        Long id = 1L;
+        facilityService.facilityExists(id);
+        
+        verify(facilityRepositoryMock, times(1)).existsById(id);
     }
     
     @Test

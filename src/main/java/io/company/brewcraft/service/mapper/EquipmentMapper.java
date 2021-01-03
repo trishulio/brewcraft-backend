@@ -4,11 +4,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddEquipmentDto;
+import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.FacilityBaseDto;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityAddress;
 
 @Mapper(uses = { QuantityMapper.class})
 public interface EquipmentMapper {
@@ -18,6 +20,8 @@ public interface EquipmentMapper {
     EquipmentDto equipmentToEquipmentDto(Equipment equipment);
     
     FacilityBaseDto facilityToFacilityDto(Facility facility);
+    
+    AddressDto addressToAddressDto(FacilityAddress facilityAddress);
 
     Equipment equipmentDtoToEquipment(EquipmentDto equipmentDto);
     

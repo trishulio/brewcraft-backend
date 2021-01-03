@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class EquipmentDtoTest {
@@ -23,19 +24,19 @@ public class EquipmentDtoTest {
         FacilityBaseDto facility = new FacilityBaseDto();
         String name = "equipment1";
         EquipmentType type = EquipmentType.BARREL;
-        String status = "status";
+        EquipmentStatus status = EquipmentStatus.ACTIVE;
         QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
         int version = 1;
 
-        EquipmentDto equipment = new EquipmentDto(id, facility, name, type, status, maxCapacity, version);
+        EquipmentDto equipmentDto = new EquipmentDto(id, facility, name, type, status, maxCapacity, version);
         
-        assertSame(id, equipment.getId());
-        assertSame(facility, equipment.getFacility());
-        assertSame(name, equipment.getName());
-        assertSame(type, equipment.getType());
-        assertSame(status, equipment.getStatus());
-        assertSame(maxCapacity, equipment.getMaxCapacity());
-        assertSame(version, equipment.getVersion());        
+        assertSame(id, equipmentDto.getId());
+        assertSame(facility, equipmentDto.getFacility());
+        assertSame(name, equipmentDto.getName());
+        assertSame(type, equipmentDto.getType());
+        assertSame(status, equipmentDto.getStatus());
+        assertSame(maxCapacity, equipmentDto.getMaxCapacity());
+        assertSame(version, equipmentDto.getVersion());        
     }
     
     @Test
@@ -68,7 +69,7 @@ public class EquipmentDtoTest {
     
     @Test
     public void testGetSetStatus() {
-        String status = "testStatus";
+        EquipmentStatus status = EquipmentStatus.ACTIVE;
         equipmentDto.setStatus(status);
         assertSame(status, equipmentDto.getStatus());
     }

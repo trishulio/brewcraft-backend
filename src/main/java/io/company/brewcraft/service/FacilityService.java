@@ -1,20 +1,22 @@
 package io.company.brewcraft.service;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.model.Facility;
 
 public interface FacilityService {
 
-    public Page<Facility> getAllFacilities(int page, int size, String[] sort, boolean order_asc);
+    public Page<Facility> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending);
     
     public Facility getFacility(Long id);
 
-    public void addFacility(Facility facility);
+    public Facility addFacility(Facility facility);
     
-    public void putFacility(Long id, Facility facility);
+    public Facility putFacility(Long id, Facility facility);
     
-    public void patchFacility(Long id, Facility facility);
+    public Facility patchFacility(Long id, Facility facility);
 
     public void deleteFacility(Long id);
     

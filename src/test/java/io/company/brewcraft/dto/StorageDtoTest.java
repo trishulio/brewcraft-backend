@@ -4,47 +4,60 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.StorageType;
+
 public class StorageDtoTest {
 
-    private FacilityStorageDto storageDto;
+    private StorageDto storageDto;
 
     @BeforeEach
     public void init() {
-        storageDto = new FacilityStorageDto();
+        storageDto = new StorageDto();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
+        FacilityBaseDto facilityBaseDto = new FacilityBaseDto();
         String name = "storage1";
-        String type = "type";
-        int version = 1;
+        StorageType type = StorageType.GENERAL;
+        Integer version = 1;      
 
-        FacilityStorageDto storageDto = new FacilityStorageDto(id, name, type, version);
+        StorageDto storageDto = new StorageDto(id, facilityBaseDto, name, type, version);
         
         assertSame(id, storageDto.getId());
+        assertSame(facilityBaseDto, storageDto.getFacility());
         assertSame(name, storageDto.getName());
         assertSame(type, storageDto.getType());
-        assertSame(version, storageDto.getVersion());        
+        assertSame(version, storageDto.getVersion());
     }
-
+    
     @Test
     public void testGetSetId() {
         Long id = 1L;
         storageDto.setId(id);
         assertSame(id, storageDto.getId());
     }
+    
+    @Test
+    public void testGetSetFacility() {
+        FacilityBaseDto facilityBaseDto = new FacilityBaseDto();
+        storageDto.setFacility(facilityBaseDto);
+        assertSame(facilityBaseDto, storageDto.getFacility());
+    }
 
     @Test
     public void testGetSetName() {
-        storageDto.setName("testName");
-        assertSame("testName", storageDto.getName());
+        String name = "testName";
+        storageDto.setName(name);
+        assertSame(name, storageDto.getName());
     }
     
     @Test
     public void testGetSetType() {
-        storageDto.setType("testType");
-        assertSame("testType", storageDto.getType());
+        StorageType type = StorageType.GENERAL;
+        storageDto.setType(type);
+        assertSame(type, storageDto.getType());
     }
     
     @Test

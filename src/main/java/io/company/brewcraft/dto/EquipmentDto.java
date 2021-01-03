@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class EquipmentDto extends BaseDto {
@@ -12,18 +13,19 @@ public class EquipmentDto extends BaseDto {
     
     private EquipmentType type;
     
-    private String status;
+    private EquipmentStatus status;
     
     private QuantityDto maxCapacity;
     
     private Integer version;
     
     public EquipmentDto() {
-        
+        super();
     }
 
-    public EquipmentDto(Long id, FacilityBaseDto facility, String name, EquipmentType type, String status, 
+    public EquipmentDto(Long id, FacilityBaseDto facility, String name, EquipmentType type, EquipmentStatus status, 
             QuantityDto maxCapacity, Integer version) {
+        super();
         this.id = id;
         this.facility = facility;
         this.name = name;
@@ -65,11 +67,11 @@ public class EquipmentDto extends BaseDto {
         this.type = type;
     }
 
-    public String getStatus() {
+    public EquipmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 

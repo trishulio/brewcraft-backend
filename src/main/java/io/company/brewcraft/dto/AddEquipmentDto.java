@@ -3,6 +3,7 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class AddEquipmentDto extends BaseDto {
@@ -10,20 +11,21 @@ public class AddEquipmentDto extends BaseDto {
     @NotEmpty
     private String name;
     
-    @NotEmpty
+    @NotNull
     private EquipmentType type;
     
     @NotNull
-    private String status;
+    private EquipmentStatus status;
     
     @NotNull
     private QuantityDto maxCapacity;
         
     public AddEquipmentDto() {
-        
+        super();
     }
 
-    public AddEquipmentDto(String name, EquipmentType type, String status, QuantityDto maxCapacity) {
+    public AddEquipmentDto(String name, EquipmentType type, EquipmentStatus status, QuantityDto maxCapacity) {
+        super();
         this.name = name;
         this.type = type;
         this.status = status;
@@ -46,11 +48,11 @@ public class AddEquipmentDto extends BaseDto {
         this.type = type;
     }
 
-    public String getStatus() {
+    public EquipmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 

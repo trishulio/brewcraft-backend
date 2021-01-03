@@ -18,11 +18,12 @@ public class UpdateSupplierContactDto {
     private Integer version;
     
     public UpdateSupplierContactDto() {
-        
+        super();
     }
     
     public UpdateSupplierContactDto(String firstName, String lastName, String position, String email,
             String phoneNumber, Integer version) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;

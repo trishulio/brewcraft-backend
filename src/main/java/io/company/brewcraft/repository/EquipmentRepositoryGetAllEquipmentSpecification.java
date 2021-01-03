@@ -47,15 +47,15 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
             predicates.add(criteriaBuilder.and(root.get("id").in(ids)));
         }
 
-        if (types != null) {
+        if (types != null && types.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get("type").in(types)));
         }
         
-        if (statuses != null) {
+        if (statuses != null && statuses.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get("status").in(statuses)));
         }
 
-        if (facilityIds != null) {
+        if (facilityIds != null && facilityIds.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get("facility").get("id").in(facilityIds)));
         }
 

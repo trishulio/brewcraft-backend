@@ -1,14 +1,12 @@
 package io.company.brewcraft.service.impl;
 
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Equipment;
@@ -29,14 +27,14 @@ public class EquipmentServiceImpl implements EquipmentService {
             
     public EquipmentServiceImpl(EquipmentRepository equipmentRepository, FacilityRepository facilityRepository) {
         this.equipmentRepository = equipmentRepository;
+        this.facilityRepository = facilityRepository;
     }
 
     @Override
-    public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types, Set<String> statuses, 
-            Set<Long> facilityIds, int page, int size, String[] sort, boolean order_asc) {
-        Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
+    public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types, Set<String> statuses, Set<Long> facilityIds,
+            int page, int size, Set<String> sort, boolean orderAscending) {
         
-        return equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), paging);
+        return equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), pageRequest(sort, orderAscending, page, size));
     }
     
     @Override
@@ -47,16 +45,16 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public void addEquipment(Long facilityId, Equipment equipment) {        
+    public Equipment addEquipment(Long facilityId, Equipment equipment) {        
         Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
         
         equipment.setFacility(facility);
         
-        equipmentRepository.save(equipment);  
+        return equipmentRepository.save(equipment);  
     }
 
     @Override
-    public void putEquipment(Long equipmentId, Equipment updatedEquipment) {        
+    public Equipment putEquipment(Long equipmentId, Equipment updatedEquipment) {        
         Equipment equipment = equipmentRepository.findById(equipmentId).orElse(null);
         
         if (equipment != null) {
@@ -65,16 +63,16 @@ public class EquipmentServiceImpl implements EquipmentService {
         
         updatedEquipment.setId(equipmentId);
         
-        equipmentRepository.save(updatedEquipment);
+        return equipmentRepository.save(updatedEquipment);
     }
     
     @Override
-    public void patchEquipment(Long equipmentId, Equipment updatedEquipment) {
+    public Equipment patchEquipment(Long equipmentId, Equipment updatedEquipment) {
         Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new EntityNotFoundException("Equipment", equipmentId.toString()));
      
         updatedEquipment.outerJoin(equipment);
         
-        equipmentRepository.save(updatedEquipment);
+        return equipmentRepository.save(updatedEquipment);
     }
 
     @Override

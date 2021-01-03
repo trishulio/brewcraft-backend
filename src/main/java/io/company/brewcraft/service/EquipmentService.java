@@ -9,15 +9,15 @@ import io.company.brewcraft.model.Equipment;
 public interface EquipmentService {
 
     public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types,
-            Set<String> statuses, Set<Long> facilityIds, int page, int size, String[] sort, boolean order_asc);
+            Set<String> statuses, Set<Long> facilityIds, int page, int size, Set<String> sort, boolean orderAscending);
     
     public Equipment getEquipment(Long equipmentId);
 
-    public void addEquipment(Long facilityId, Equipment equipment);
+    public Equipment addEquipment(Long facilityId, Equipment equipment);
     
-    public void putEquipment(Long equipmentId, Equipment equipment);
+    public Equipment putEquipment(Long equipmentId, Equipment equipment);
     
-    public void patchEquipment(Long equipmentId, Equipment equipment);
+    public Equipment patchEquipment(Long equipmentId, Equipment equipment);
 
     public void deleteEquipment(Long equipmentId);
     

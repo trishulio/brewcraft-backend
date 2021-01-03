@@ -1,12 +1,12 @@
 package io.company.brewcraft.service.impl;
 
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Facility;
@@ -30,10 +30,8 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Page<Storage> getAllStorages(int page, int size, String[] sort, boolean order_asc) {
-        Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
-        
-        return storageRepository.findAll(paging);
+    public Page<Storage> getAllStorages(int page, int size, Set<String> sort, boolean orderAscending) {        
+        return storageRepository.findAll(pageRequest(sort, orderAscending, page, size));
     }
     
     @Override
@@ -44,16 +42,16 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void addStorage(Long facilityId, Storage storage) {         
+    public Storage addStorage(Long facilityId, Storage storage) {         
         Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
         
         storage.setFacility(facility);
         
-        storageRepository.save(storage);
+        return storageRepository.save(storage);
     }
 
     @Override
-    public void putStorage(Long storageId, Storage updatedStorage) {   
+    public Storage putStorage(Long storageId, Storage updatedStorage) {   
         Storage storage = storageRepository.findById(storageId).orElse(null);
         
         if (storage != null) {
@@ -62,16 +60,16 @@ public class StorageServiceImpl implements StorageService {
         
         updatedStorage.setId(storageId);
 
-        storageRepository.save(updatedStorage);
+        return storageRepository.save(updatedStorage);
     }
     
     @Override
-    public void patchStorage(Long storageId, Storage updatedStorage) {        
+    public Storage patchStorage(Long storageId, Storage updatedStorage) {        
         Storage storage = storageRepository.findById(storageId).orElseThrow(() -> new EntityNotFoundException("Storage", storageId.toString()));      
         
         updatedStorage.outerJoin(storage);
 
-        storageRepository.save(updatedStorage);
+        return storageRepository.save(updatedStorage);
     }
 
     @Override

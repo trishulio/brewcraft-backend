@@ -20,10 +20,11 @@ public class AddFacilityDto extends BaseDto {
     private List<FacilityStorageDto> storages;
     
     public AddFacilityDto() {
-        
+        super();
     }
     
     public AddFacilityDto(String name, AddressDto address, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages) {
+        super();
         this.name = name;
         this.address = address;
         this.equipment = equipment;

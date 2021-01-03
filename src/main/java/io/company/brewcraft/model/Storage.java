@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +36,8 @@ public class Storage extends BaseEntity {
     
     private String name;
     
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private StorageType type;
     
     @CreationTimestamp
     @Column(updatable = false)
@@ -51,7 +54,7 @@ public class Storage extends BaseEntity {
         
     }
     
-    public Storage(Long id, Facility facility, String name, String type, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public Storage(Long id, Facility facility, String name, StorageType type, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
         setName(name);
@@ -85,11 +88,11 @@ public class Storage extends BaseEntity {
         this.name = name;
     }
 
-    public String getType() {
+    public StorageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(StorageType type) {
         this.type = type;
     }
 

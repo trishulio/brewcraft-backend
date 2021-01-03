@@ -3,7 +3,9 @@ package io.company.brewcraft.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import io.company.brewcraft.dto.AddEquipmentDto;
 import io.company.brewcraft.dto.AddFacilityDto;
+import io.company.brewcraft.dto.AddStorageDto;
 import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.FacilityEquipmentDto;
@@ -35,8 +37,12 @@ public interface FacilityMapper {
 
     Equipment equipmentDtoToEquipment(FacilityEquipmentDto equipmentDto);
     
+    Equipment equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
+    
     FacilityStorageDto storageToStorageDto(Storage storage);
 
     Storage storageDtoToStorage(FacilityStorageDto storageDto);
+    
+    Storage storageDtoToStorage(AddStorageDto storageDto);
     
 }

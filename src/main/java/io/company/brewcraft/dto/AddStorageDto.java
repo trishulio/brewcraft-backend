@@ -1,19 +1,24 @@
 package io.company.brewcraft.dto;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import io.company.brewcraft.model.StorageType;
 
 public class AddStorageDto extends BaseDto {
    
     @NotEmpty
     private String name;
     
-    private String type;
+    @NotNull
+    private StorageType type;
         
     public AddStorageDto() {
-        
+        super();
     }
     
-    public AddStorageDto(Long id, String name, String type) {
+    public AddStorageDto(String name, StorageType type) {
+        super();
         this.name = name;
         this.type = type;
     }
@@ -26,11 +31,11 @@ public class AddStorageDto extends BaseDto {
         this.name = name;
     }
 
-    public String getType() {
+    public StorageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(StorageType type) {
         this.type = type;
     }
 

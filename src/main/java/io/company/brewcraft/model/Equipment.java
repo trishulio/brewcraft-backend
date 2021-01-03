@@ -41,7 +41,8 @@ public class Equipment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EquipmentType type;
     
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private EquipmentStatus status;
     
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     @JoinColumn(name = "qty_id", referencedColumnName = "id")
@@ -62,7 +63,7 @@ public class Equipment extends BaseEntity {
         
     }
     
-    public Equipment(Long id, Facility facility, String name, EquipmentType type, String status, QuantityEntity maxCapacity,
+    public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, QuantityEntity maxCapacity,
             LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
@@ -107,11 +108,11 @@ public class Equipment extends BaseEntity {
         this.type = type;
     }
 
-    public String getStatus() {
+    public EquipmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 

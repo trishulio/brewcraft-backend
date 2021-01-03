@@ -1,18 +1,21 @@
 package io.company.brewcraft.dto;
 
+import io.company.brewcraft.model.StorageType;
+
 public class UpdateStorageDto extends BaseDto {
    
     private String name;
     
-    private String type;
+    private StorageType type;
     
     private Integer version;
     
     public UpdateStorageDto() {
-        
+        super();
     }
     
-    public UpdateStorageDto(String name, String type, Integer version) {
+    public UpdateStorageDto(String name, StorageType type, Integer version) {
+        super();
         this.name = name;
         this.type = type;
         this.version = version;
@@ -26,11 +29,11 @@ public class UpdateStorageDto extends BaseDto {
         this.name = name;
     }
 
-    public String getType() {
+    public StorageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(StorageType type) {
         this.type = type;
     }
 

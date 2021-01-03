@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import javax.validation.constraints.NotEmpty;
 
+import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class FacilityEquipmentDto extends BaseDto {
@@ -13,7 +14,7 @@ public class FacilityEquipmentDto extends BaseDto {
     
     private EquipmentType type;
     
-    private String status;
+    private EquipmentStatus status;
     
     private QuantityDto maxCapacity;
     
@@ -23,7 +24,7 @@ public class FacilityEquipmentDto extends BaseDto {
         
     }
 
-    public FacilityEquipmentDto(Long id, Long facilityId, String name, EquipmentType type, String status, 
+    public FacilityEquipmentDto(Long id, String name, EquipmentType type, EquipmentStatus status, 
             QuantityDto maxCapacity, Integer version) {
         this.id = id;
         this.name = name;
@@ -57,11 +58,11 @@ public class FacilityEquipmentDto extends BaseDto {
         this.type = type;
     }
 
-    public String getStatus() {
+    public EquipmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 

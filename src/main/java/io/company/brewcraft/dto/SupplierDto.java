@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SupplierDto extends BaseDto {
@@ -16,11 +15,12 @@ public class SupplierDto extends BaseDto {
     private Integer version;
     
     public SupplierDto() {
-        
+        super();
     }
     
     public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            AddressDto address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            AddressDto address, Integer version) {
+        super();
         this.id = id;
         this.name = name;
         this.contacts = contacts;

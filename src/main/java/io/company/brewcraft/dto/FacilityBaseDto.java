@@ -11,10 +11,11 @@ public class FacilityBaseDto extends BaseDto {
     private Integer version;
     
     public FacilityBaseDto() {
-        
+        super();
     }
     
     public FacilityBaseDto(Long id, String name, AddressDto address, Integer version) {
+        super();
         this.id = id;
         this.name = name;
         this.address = address;

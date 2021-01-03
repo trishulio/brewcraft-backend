@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class StorageServiceImplTest {
 
         when(storageRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedStorages);
 
-        Page<Storage> actualStorages = storageService.getAllStorages(0, 100, new String[]{"id"}, true);
+        Page<Storage> actualStorages = storageService.getAllStorages(0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -84,16 +85,16 @@ public class StorageServiceImplTest {
 
     @Test
     public void testAddStorage_SavesStorage() throws Exception {
-        Storage storage = new Storage();
-        Facility facilityMock = mock(Facility.class);
-        Optional<Facility> facilityMockOpt = Optional.ofNullable(facilityMock);
+        Long facilityId = 1L;
+        Facility facility = new Facility();
+        Storage storageMock = Mockito.mock(Storage.class);
         
-        when(facilityRepositoryMock.findById(1L)).thenReturn(facilityMockOpt);
-
-        storageService.addStorage(1L, storage);
+        when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
         
-        verify(facilityMock, times(1)).addStorage(storage);
-        verify(facilityRepositoryMock, times(1)).save(facilityMock);
+        storageService.addStorage(facilityId, storageMock);
+        
+        verify(storageMock, times(1)).setFacility(facility);
+        verify(storageRepositoryMock, times(1)).save(storageMock);
     }
     
     @Test
@@ -109,35 +110,60 @@ public class StorageServiceImplTest {
     }
     
     @Test
-    public void testUpdateStorage_success() throws Exception {
+    public void testPutStorage_doesNotOuterJoinWhenThereIsNoExistingStorage() throws Exception {
         Long id = 1L;
-        Optional<Storage> storage = Optional.ofNullable(new Storage(id, new Facility(), "Storage 1", null, null, null, null));
-        Storage updatedStorage = new Storage(id, null, "Storage new 1", null, null, null, null);
-
-        when(storageRepositoryMock.findById(id)).thenReturn(storage);
+        Storage storage = mock(Storage.class);
+        
+        when(storageRepositoryMock.findById(id)).thenReturn(Optional.empty());
                 
-        storageService.putStorage(id, storage.get());
+        storageService.putStorage(id, storage);
        
-        ArgumentCaptor<Storage> storageArgument = ArgumentCaptor.forClass(Storage.class);
-        verify(storageRepositoryMock, times(1)).save(updatedStorage);
-        verify(storageRepositoryMock, times(1)).save(storageArgument.capture());
-        assertSame(id, storageArgument.getValue().getId());
-        assertSame(storage.get().getFacility(), storageArgument.getValue().getFacility());
+        verify(storage, times(0)).outerJoin(Mockito.any(Storage.class));
+        verify(storage, times(1)).setId(id);
+        verify(storageRepositoryMock, times(1)).save(storage);
     }
     
     @Test
-    public void testUpdateStorage_throwsEntityNotFoundException() throws Exception {
+    public void testPutStorage_doesOuterJoinWhenThereIsAnExistingStorage() throws Exception {
+        Long id = 1L;
+        Storage storage = mock(Storage.class);
+        Storage existingStorage = new Storage(id, new Facility(), null, null, null, null, null);
+        
+        when(storageRepositoryMock.findById(id)).thenReturn(Optional.of(existingStorage));
+                
+        storageService.putStorage(id, storage);
+       
+        verify(storage, times(1)).outerJoin(existingStorage);
+        verify(storage, times(1)).setId(id);
+        verify(storageRepositoryMock, times(1)).save(storage);
+    }
+    
+    @Test
+    public void testPatchStorage_success() throws Exception {
+        Long id = 1L;
+        Storage updatedStorageMock = mock(Storage.class);
+        Storage existingStorage = new Storage(id, new Facility(), null, null, null, null, null);
+        
+        when(storageRepositoryMock.findById(id)).thenReturn(Optional.of(existingStorage));
+ 
+        storageService.patchStorage(id, updatedStorageMock);
+       
+        verify(updatedStorageMock, times(1)).outerJoin(existingStorage);
+        verify(storageRepositoryMock, times(1)).save(updatedStorageMock);
+    }
+    
+    @Test
+    public void testPatchStorage_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
         Storage storage = new Storage();
         
         when(storageRepositoryMock.existsById(id)).thenReturn(false);
       
         assertThrows(EntityNotFoundException.class, () -> {
-            storageService.putStorage(id, storage);
+            storageService.patchStorage(id, storage);
             verify(storageRepositoryMock, times(0)).save(Mockito.any(Storage.class));
         });
     }
-
     @Test
     public void testDeleteStorage_success() throws Exception {
         Long id = 1L;

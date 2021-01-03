@@ -20,7 +20,7 @@ public class StorageTest {
         Long id = 1L;
         Facility facility = new Facility();
         String name = "storage1";
-        String type = "type";
+        StorageType type = StorageType.GENERAL;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
@@ -58,8 +58,8 @@ public class StorageTest {
     
     @Test
     public void testGetSetType() {
-        storage.setType("testType");
-        assertSame("testType", storage.getType());
+        storage.setType(StorageType.GENERAL);
+        assertSame(StorageType.GENERAL, storage.getType());
     }
     
     @Test

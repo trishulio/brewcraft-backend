@@ -17,10 +17,11 @@ public class FacilityDto extends BaseDto {
     private Integer version;
     
     public FacilityDto() {
-        
+        super();
     }
     
     public FacilityDto(Long id, String name, AddressDto address, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages, Integer version) {
+        super();
         this.id = id;
         this.name = name;
         this.address = address;

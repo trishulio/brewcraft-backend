@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,9 +29,10 @@ import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
+import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/facilities")
+@RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EquipmentController {
     
     private EquipmentService equipmentService;
@@ -41,58 +43,65 @@ public class EquipmentController {
         this.equipmentService = equipmentService;
     }
     
-    @GetMapping("/equipment")
+    @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
-            @RequestParam(required = false, name = "ids") Set<Long> ids,
-            @RequestParam(required = false, name = "type") Set<String> types,
-            @RequestParam(required = false, name = "status") Set<String> statuses,
-            @RequestParam(required = false, name = "facility_id") Set<Long> facilityIds,
+            @RequestParam(required = false) Set<Long> ids,
+            @RequestParam(required = false) Set<String> types,
+            @RequestParam(required = false) Set<String> statuses,
+            @RequestParam(required = false) Set<Long> facilityIds,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") String[] sort, @RequestParam(defaultValue = "true") boolean order_asc) {
+            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
         
-        Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, order_asc);
+        Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()
                 .map(equipment -> equipmentMapper.equipmentToEquipmentDto(equipment)).collect(Collectors.toList());
 
         PageDto<EquipmentDto> dto = new PageDto<EquipmentDto>(equipmentList, equipmentPage.getTotalPages(), equipmentPage.getTotalElements());
+        
         return dto;
     }
         
-    @GetMapping("/equipment/{equipmentId}")
+    @GetMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE)
     public EquipmentDto getEquipment(@PathVariable Long equipmentId) {
+        Validator validator = new Validator();
+
         Equipment equipment = equipmentService.getEquipment(equipmentId);
         
-        if (equipment != null) {
-            return equipmentMapper.equipmentToEquipmentDto(equipment);
-        } else {
-            throw new EntityNotFoundException("Equipment", equipmentId.toString());
-        }
+        validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
+
+        return equipmentMapper.equipmentToEquipmentDto(equipment);
     }
 
     @PostMapping("/{facilityId}/equipment")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
+    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
         Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        equipmentService.addEquipment(facilityId, equipment);
+        Equipment addedEquipment = equipmentService.addEquipment(facilityId, equipment);
+        
+        return equipmentMapper.equipmentToEquipmentDto(addedEquipment);
     }
     
     @PutMapping("/equipment/{equipmentId}")
-    public void putEquipment(@Valid @RequestBody AddEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
+    public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        equipmentService.putEquipment(equipmentId, equipment);
+        Equipment putEquipment = equipmentService.putEquipment(equipmentId, equipment);
+
+        return equipmentMapper.equipmentToEquipmentDto(putEquipment);
     }
     
     @PatchMapping("/equipment/{equipmentId}")
-    public void patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
+    public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        equipmentService.patchEquipment(equipmentId, equipment);
+        Equipment patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);
+        
+        return equipmentMapper.equipmentToEquipmentDto(patchedEquipment);
     }
 
-    @DeleteMapping("/equipment/{equipmentId}")
+    @DeleteMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE)
     public void deleteEquipment(@PathVariable Long equipmentId) {
         equipmentService.deleteEquipment(equipmentId);
     }
