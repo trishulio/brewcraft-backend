@@ -111,30 +111,36 @@ public class StorageServiceImplTest {
     
     @Test
     public void testPutStorage_doesNotOuterJoinWhenThereIsNoExistingStorage() throws Exception {
-        Long id = 1L;
+        Long facilityId = 1L;
+        Facility facility = new Facility();
+        Long storageId = 1L;
         Storage storage = mock(Storage.class);
         
-        when(storageRepositoryMock.findById(id)).thenReturn(Optional.empty());
+        when(storageRepositoryMock.findById(storageId)).thenReturn(Optional.empty());
+        when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
                 
-        storageService.putStorage(id, storage);
+        storageService.putStorage(facilityId, storageId, storage);
        
         verify(storage, times(0)).outerJoin(Mockito.any(Storage.class));
-        verify(storage, times(1)).setId(id);
+        verify(storage, times(1)).setId(storageId);
         verify(storageRepositoryMock, times(1)).save(storage);
     }
     
     @Test
     public void testPutStorage_doesOuterJoinWhenThereIsAnExistingStorage() throws Exception {
-        Long id = 1L;
+        Long facilityId = 1L;
+        Facility facility = new Facility();
+        Long storageId = 1L;
         Storage storage = mock(Storage.class);
-        Storage existingStorage = new Storage(id, new Facility(), null, null, null, null, null);
+        Storage existingStorage = new Storage(storageId, new Facility(), null, null, null, null, null);
         
-        when(storageRepositoryMock.findById(id)).thenReturn(Optional.of(existingStorage));
+        when(storageRepositoryMock.findById(storageId)).thenReturn(Optional.of(existingStorage));
+        when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
                 
-        storageService.putStorage(id, storage);
+        storageService.putStorage(facilityId, storageId, storage);
        
         verify(storage, times(1)).outerJoin(existingStorage);
-        verify(storage, times(1)).setId(id);
+        verify(storage, times(1)).setId(storageId);
         verify(storageRepositoryMock, times(1)).save(storage);
     }
     

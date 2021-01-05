@@ -37,7 +37,7 @@ public class FacilityController {
     
     private FacilityService facilityService;
     
-    FacilityMapper facilityMapper = FacilityMapper.INSTANCE;
+    private FacilityMapper facilityMapper = FacilityMapper.INSTANCE;
 
     public FacilityController(FacilityService facilityService) {
         this.facilityService = facilityService;

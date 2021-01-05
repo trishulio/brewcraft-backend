@@ -20,14 +20,18 @@ public class UpdateFacilityDtoTest {
     public void testConstructor() {
         String name = "testName";
         AddressDto address = new AddressDto();
+        String phoneNumber = "6045555555";
+        String faxNumber = "6045555555";
         List<FacilityEquipmentDto> equipment = new ArrayList<FacilityEquipmentDto>();
         List<FacilityStorageDto> storages = new ArrayList<FacilityStorageDto>();
         int version = 1;
 
-        UpdateFacilityDto updateFacilityDto = new UpdateFacilityDto(name, address, equipment, storages, version);
+        UpdateFacilityDto updateFacilityDto = new UpdateFacilityDto(name, address, phoneNumber, faxNumber, equipment, storages, version);
         
         assertSame(name, updateFacilityDto.getName());
         assertSame(address, updateFacilityDto.getAddress());
+        assertSame(phoneNumber, updateFacilityDto.getPhoneNumber());
+        assertSame(faxNumber, updateFacilityDto.getFaxNumber());
         assertSame(equipment, updateFacilityDto.getEquipment());
         assertSame(storages, updateFacilityDto.getStorages());
         assertSame(version, updateFacilityDto.getVersion());        
@@ -45,6 +49,20 @@ public class UpdateFacilityDtoTest {
         AddressDto address = new AddressDto();
         updateFacilityDto.setAddress(address);
         assertSame(address, updateFacilityDto.getAddress());
+    }
+    
+    @Test
+    public void testGetSetPhoneNumber() {
+        String phoneNumber = "6045555555";
+        updateFacilityDto.setPhoneNumber(phoneNumber);
+        assertSame(phoneNumber, updateFacilityDto.getPhoneNumber());
+    }
+    
+    @Test
+    public void testGetSetFaxNumber() {
+        String faxNumber = "6045555555";
+        updateFacilityDto.setFaxNumber(faxNumber);
+        assertSame(faxNumber, updateFacilityDto.getFaxNumber());
     }
     
     @Test

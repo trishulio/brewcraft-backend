@@ -42,16 +42,17 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Storage addStorage(Long facilityId, Storage storage) {         
-        Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
-        
-        storage.setFacility(facility);
+    public Storage addStorage(Long facilityId, Storage storage) {    
+        if (facilityId != null) {
+            Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
+            storage.setFacility(facility);
+        }
         
         return storageRepository.save(storage);
     }
 
     @Override
-    public Storage putStorage(Long storageId, Storage updatedStorage) {   
+    public Storage putStorage(Long facilityId, Long storageId, Storage updatedStorage) {   
         Storage storage = storageRepository.findById(storageId).orElse(null);
         
         if (storage != null) {
@@ -60,7 +61,7 @@ public class StorageServiceImpl implements StorageService {
         
         updatedStorage.setId(storageId);
 
-        return storageRepository.save(updatedStorage);
+        return addStorage(facilityId, updatedStorage);
     }
     
     @Override

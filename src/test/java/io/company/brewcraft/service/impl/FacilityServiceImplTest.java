@@ -107,7 +107,7 @@ public class FacilityServiceImplTest {
     public void testPutFacility_DoesOuterJoinWhenThereIsAnExistingFacility() throws Exception {
         Long id = 1L;
         Facility facility = mock(Facility.class);
-        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), Arrays.asList(), Arrays.asList(), null, null, null);
+        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
                 
@@ -122,7 +122,7 @@ public class FacilityServiceImplTest {
     public void testPatchFacility_success() throws Exception {
         Long id = 1L;
         Facility updatedFacilityMock = mock(Facility.class);
-        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), Arrays.asList(), Arrays.asList(), null, null, null);
+        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(),  null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
  

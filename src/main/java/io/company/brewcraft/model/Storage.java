@@ -30,7 +30,7 @@ public class Storage extends BaseEntity {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name="facility_id", referencedColumnName="id", nullable=false)
+    @JoinColumn(name="facility_id", referencedColumnName="id", nullable = false)
     @JsonManagedReference
     private Facility facility;
     

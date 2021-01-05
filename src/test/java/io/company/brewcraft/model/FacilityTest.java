@@ -22,17 +22,21 @@ public class FacilityTest {
         Long id = 1L;
         String name = "testName";
         FacilityAddress address = new FacilityAddress();
+        String phoneNumber = "testPhoneNumber";
+        String faxNumber = "testFaxNumber";
         List<Equipment> equipment = new ArrayList<Equipment>();
         List<Storage> storages = new ArrayList<Storage>();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Facility facility = new Facility(id, name, address, equipment, storages, created, lastUpdated, version);
+        Facility facility = new Facility(id, name, address, phoneNumber, faxNumber, equipment, storages, created, lastUpdated, version);
         
         assertSame(id, facility.getId());
         assertSame(name, facility.getName());
         assertSame(address, facility.getAddress());
+        assertSame(phoneNumber, facility.getPhoneNumber());
+        assertSame(faxNumber, facility.getFaxNumber());
         assertSame(equipment, facility.getEquipment());
         assertSame(storages, facility.getStorages());
         assertSame(created, facility.getCreated());
@@ -58,6 +62,18 @@ public class FacilityTest {
         FacilityAddress address = new FacilityAddress();
         facility.setAddress(address);
         assertSame(address, facility.getAddress());
+    }
+    
+    @Test
+    public void testGetSetPhoneNumber() {
+        facility.setPhoneNumber("phoneNumber");
+        assertSame("phoneNumber", facility.getPhoneNumber());
+    }
+    
+    @Test
+    public void testGetSetFaxNumber() {
+        facility.setFaxNumber("faxNumber");
+        assertSame("faxNumber", facility.getFaxNumber());
     }
     
     @Test

@@ -14,7 +14,7 @@ public interface StorageService {
 
     public Storage addStorage(Long facilityId, Storage storage);
     
-    public Storage putStorage(Long storageId, Storage storage);
+    public Storage putStorage(Long facilityId, Long storageId, Storage storage);
     
     public Storage patchStorage(Long storageId, Storage storage);
 

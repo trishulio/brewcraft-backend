@@ -45,16 +45,15 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public Equipment addEquipment(Long facilityId, Equipment equipment) {        
+    public Equipment addEquipment(Long facilityId, Equipment equipment) { 
         Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
-        
         equipment.setFacility(facility);
         
         return equipmentRepository.save(equipment);  
     }
 
     @Override
-    public Equipment putEquipment(Long equipmentId, Equipment updatedEquipment) {        
+    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment updatedEquipment) {        
         Equipment equipment = equipmentRepository.findById(equipmentId).orElse(null);
         
         if (equipment != null) {
@@ -63,11 +62,11 @@ public class EquipmentServiceImpl implements EquipmentService {
         
         updatedEquipment.setId(equipmentId);
         
-        return equipmentRepository.save(updatedEquipment);
+        return addEquipment(facilityId, updatedEquipment);
     }
     
     @Override
-    public Equipment patchEquipment(Long equipmentId, Equipment updatedEquipment) {
+    public Equipment patchEquipment(Long equipmentId, Equipment updatedEquipment) {         
         Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new EntityNotFoundException("Equipment", equipmentId.toString()));
      
         updatedEquipment.outerJoin(equipment);

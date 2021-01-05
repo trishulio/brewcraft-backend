@@ -1,6 +1,5 @@
 package io.company.brewcraft.controller;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -53,7 +52,7 @@ public class EquipmentControllerTest {
     
     @Test
     public void testGetAllEquipment_ReturnsListOfEquipment() throws Exception {
-       Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), null, null, null, null, 1);
+       Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null),"6045555555", "6045555555", null, null, null, null, 1);
 
        Equipment equipment1 = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        Equipment equipment2 = new Equipment(2L, facility, "testName2", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
@@ -65,7 +64,7 @@ public class EquipmentControllerTest {
        Page<Equipment> pagedResponse = new PageImpl<>(equipmentList);
         
        when(equipmentServiceMock.getAllEquipment(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true)).thenReturn(pagedResponse);
-        
+           
        this.mockMvc.perform(get("/api/v1/facilities/equipment").header("Authorization", "Bearer " + "test"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -85,6 +84,8 @@ public class EquipmentControllerTest {
                 + "                 'city': 'city',"
                 + "                 'postalCode': 'postalCode'"
                 + "             },"
+                + "             'phoneNumber': '6045555555',"
+                + "             'faxNumber': '6045555555',"
                 + "             'version': 1"
                 + "         },"
                 + "        'name': 'testName',"
@@ -110,6 +111,8 @@ public class EquipmentControllerTest {
                 + "                 'city': 'city',"
                 + "                 'postalCode': 'postalCode'"
                 + "             },"
+                + "             'phoneNumber': '6045555555',"
+                + "             'faxNumber': '6045555555',"
                 + "             'version': 1"
                 + "         },"
                 + "        'name': 'testName2',"
@@ -131,10 +134,9 @@ public class EquipmentControllerTest {
     
     @Test
     public void testGetEquipment_ReturnsEquipment() throws Exception {
-        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), null, null, null, null, 1);
+        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        Equipment equipment = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);  
 
-        Equipment equipment = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
         when(equipmentServiceMock.getEquipment(1L)).thenReturn(equipment);
          
         this.mockMvc.perform(get("/api/v1/facilities/equipment/1"))
@@ -154,6 +156,8 @@ public class EquipmentControllerTest {
                  + "                 'city': 'city',"
                  + "                 'postalCode': 'postalCode'"
                  + "             },"
+                 + "             'phoneNumber': '6045555555',"
+                 + "             'faxNumber': '6045555555',"
                  + "             'version': 1"
                  + "         },"
                  + "        'name': 'testName',"
@@ -182,12 +186,11 @@ public class EquipmentControllerTest {
         
         payload.put("maxCapacity", maxCapacity);    
         
-        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), null, null, null, null, 1);
-
+        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         Equipment equipment = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                      
         when(equipmentServiceMock.addEquipment(eq(1L), any(Equipment.class))).thenReturn(equipment);
-        
+         
         this.mockMvc.perform(post("/api/v1/facilities/1/equipment")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
          .content(payload.toString()))
@@ -207,6 +210,8 @@ public class EquipmentControllerTest {
                  + "                 'city': 'city',"
                  + "                 'postalCode': 'postalCode'"
                  + "             },"
+                 + "             'phoneNumber': '6045555555',"
+                 + "             'faxNumber': '6045555555',"
                  + "             'version': 1"
                  + "         },"
                  + "        'name': 'testName',"
@@ -236,13 +241,12 @@ public class EquipmentControllerTest {
         payload.put("maxCapacity", maxCapacity);         
         payload.put("version", "1");
                   
-        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), null, null, null, null, 1);
-
+        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         Equipment equipment = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        when(equipmentServiceMock.putEquipment(eq(1L), any(Equipment.class))).thenReturn(equipment);
-             
-        this.mockMvc.perform(put("/api/v1/facilities/equipment/1")
+        when(equipmentServiceMock.putEquipment(eq(1L), eq(1L), any(Equipment.class))).thenReturn(equipment);
+                     
+        this.mockMvc.perform(put("/api/v1/facilities/1/equipment/1")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
          .content(payload.toString()))
          .andExpect(status().isOk())
@@ -261,6 +265,8 @@ public class EquipmentControllerTest {
                  + "                 'city': 'city',"
                  + "                 'postalCode': 'postalCode'"
                  + "             },"
+                 + "             'phoneNumber': '6045555555',"
+                 + "             'faxNumber': '6045555555',"
                  + "             'version': 1"
                  + "         },"
                  + "        'name': 'testName',"
@@ -273,7 +279,7 @@ public class EquipmentControllerTest {
                  + "        'version': 1"
                  + "    }"));
         
-        verify(equipmentServiceMock, times(1)).putEquipment(eq(1L), any(Equipment.class));
+        verify(equipmentServiceMock, times(1)).putEquipment(eq(1L), eq(1L), any(Equipment.class));
     }
     
     @Test
@@ -282,12 +288,11 @@ public class EquipmentControllerTest {
         payload.put("name", "testName");   
         payload.put("version", "1");
                   
-        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), null, null, null, null, 1);
-
+        Facility facility = new Facility(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         Equipment equipment = new Equipment(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(equipmentServiceMock.patchEquipment(eq(1L), any(Equipment.class))).thenReturn(equipment);
-             
+                            
         this.mockMvc.perform(patch("/api/v1/facilities/equipment/1")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
          .content(payload.toString()))
@@ -307,6 +312,8 @@ public class EquipmentControllerTest {
                  + "                 'city': 'city',"
                  + "                 'postalCode': 'postalCode'"
                  + "             },"
+                 + "             'phoneNumber': '6045555555',"
+                 + "             'faxNumber': '6045555555',"
                  + "             'version': 1"
                  + "         },"
                  + "        'name': 'testName',"

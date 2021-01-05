@@ -21,15 +21,19 @@ public class FacilityDtoTest {
         Long id = 1L;
         String name = "testName";
         AddressDto address = new AddressDto();
+        String phoneNumber = "6045555555";
+        String faxNumber = "6045555555";
         List<FacilityEquipmentDto> equipment = new ArrayList<FacilityEquipmentDto>();
         List<FacilityStorageDto> storages = new ArrayList<FacilityStorageDto>();
         int version = 1;
 
-        FacilityDto facilityDto = new FacilityDto(id, name, address, equipment, storages, version);
+        FacilityDto facilityDto = new FacilityDto(id, name, address, phoneNumber, faxNumber, equipment, storages, version);
         
         assertSame(id, facilityDto.getId());
         assertSame(name, facilityDto.getName());
         assertSame(address, facilityDto.getAddress());
+        assertSame(phoneNumber, facilityDto.getPhoneNumber());
+        assertSame(faxNumber, facilityDto.getFaxNumber());
         assertSame(equipment, facilityDto.getEquipment());
         assertSame(storages, facilityDto.getStorages());
         assertSame(version, facilityDto.getVersion());        

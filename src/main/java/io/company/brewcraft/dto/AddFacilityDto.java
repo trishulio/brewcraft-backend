@@ -12,6 +12,10 @@ public class AddFacilityDto extends BaseDto {
     
     @NotNull
     private AddressDto address;
+
+    private String phoneNumber;
+    
+    private String faxNumber;
     
     @NotNull
     private List<FacilityEquipmentDto> equipment;
@@ -23,10 +27,12 @@ public class AddFacilityDto extends BaseDto {
         super();
     }
     
-    public AddFacilityDto(String name, AddressDto address, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages) {
+    public AddFacilityDto(String name, AddressDto address, String phoneNumber, String faxNumber, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages) {
         super();
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.faxNumber = faxNumber;
         this.equipment = equipment;
         this.storages = storages;
     }
@@ -45,6 +51,22 @@ public class AddFacilityDto extends BaseDto {
 
     public void setAddress(AddressDto address) {
         this.address = address;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
     }
 
     public List<FacilityEquipmentDto> getEquipment() {

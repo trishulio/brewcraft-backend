@@ -78,11 +78,11 @@ public class StorageController {
         return storageMapper.storageToStorageDto(addedStorage);
     }
     
-    @PutMapping("/storages/{storageId}")
-    public StorageDto putStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long storageId) {      
+    @PutMapping("/{facilityId}/storages/{storageId}")
+    public StorageDto putStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long facilityId, @PathVariable Long storageId) {      
         Storage storage = storageMapper.storageDtoToStorage(storageDto);
         
-        Storage putStorage = storageService.putStorage(storageId, storage);
+        Storage putStorage = storageService.putStorage(facilityId, storageId, storage);
         
         return storageMapper.storageToStorageDto(putStorage);
     }

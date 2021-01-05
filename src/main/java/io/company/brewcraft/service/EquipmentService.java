@@ -15,7 +15,7 @@ public interface EquipmentService {
 
     public Equipment addEquipment(Long facilityId, Equipment equipment);
     
-    public Equipment putEquipment(Long equipmentId, Equipment equipment);
+    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment equipment);
     
     public Equipment patchEquipment(Long equipmentId, Equipment equipment);
 

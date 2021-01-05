@@ -37,6 +37,12 @@ public class Facility extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private FacilityAddress address;
     
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    
+    @Column(name = "fax_number")
+    private String faxNumber;
+    
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Equipment> equipment;
@@ -60,10 +66,12 @@ public class Facility extends BaseEntity {
         
     }
     
-    public Facility(Long id, String name, FacilityAddress address, List<Equipment> equipment, List<Storage> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public Facility(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<Equipment> equipment, List<Storage> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setAddress(address);
+        setPhoneNumber(phoneNumber);
+        setFaxNumber(faxNumber);
         setEquipment(equipment);
         setStorages(storages);
         setCreated(created);
@@ -94,7 +102,23 @@ public class Facility extends BaseEntity {
     public void setAddress(FacilityAddress address) {
         this.address = address;
     }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
+    
     public List<Equipment> getEquipment() {
         return equipment;
     }

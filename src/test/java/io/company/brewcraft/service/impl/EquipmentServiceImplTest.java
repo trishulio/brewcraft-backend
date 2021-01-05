@@ -116,30 +116,36 @@ public class EquipmentServiceImplTest {
     
     @Test
     public void testPutEquipment_doesNotOuterJoinWhenThereIsNoExistingEquipment() throws Exception {
-        Long id = 1L;
+        Long facilityId = 1L;
+        Facility facility = new Facility();
+        Long equipmentId = 1L;
         Equipment equipment = mock(Equipment.class);
         
-        when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.empty());
+        when(equipmentRepositoryMock.findById(equipmentId)).thenReturn(Optional.empty());
+        when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
                 
-        equipmentService.putEquipment(id, equipment);
+        equipmentService.putEquipment(facilityId, equipmentId, equipment);
        
         verify(equipment, times(0)).outerJoin(Mockito.any(Equipment.class));
-        verify(equipment, times(1)).setId(id);
+        verify(equipment, times(1)).setId(equipmentId);
         verify(equipmentRepositoryMock, times(1)).save(equipment);
     }
     
     @Test
     public void testPutEquipment_doesOuterJoinWhenThereIsAnExistingEquipment() throws Exception {
-        Long id = 1L;
+        Long facilityId = 1L;
+        Facility facility = new Facility();
+        Long equipmentId = 1L;
         Equipment equipment = mock(Equipment.class);
-        Equipment existingEquipment = new Equipment(id, new Facility(), null, null, null, null, null, null, null);
+        Equipment existingEquipment = new Equipment(equipmentId, new Facility(), null, null, null, null, null, null, null);
         
-        when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.of(existingEquipment));
+        when(equipmentRepositoryMock.findById(equipmentId)).thenReturn(Optional.of(existingEquipment));
+        when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
                 
-        equipmentService.putEquipment(id, equipment);
+        equipmentService.putEquipment(facilityId, equipmentId, equipment);
        
         verify(equipment, times(1)).outerJoin(existingEquipment);
-        verify(equipment, times(1)).setId(id);
+        verify(equipment, times(1)).setId(equipmentId);
         verify(equipmentRepositoryMock, times(1)).save(equipment);
     }
     

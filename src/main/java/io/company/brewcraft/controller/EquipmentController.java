@@ -83,17 +83,17 @@ public class EquipmentController {
         return equipmentMapper.equipmentToEquipmentDto(addedEquipment);
     }
     
-    @PutMapping("/equipment/{equipmentId}")
-    public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
+    @PutMapping("/{facilityId}/equipment/{equipmentId}")
+    public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long facilityId,  @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        Equipment putEquipment = equipmentService.putEquipment(equipmentId, equipment);
+        Equipment putEquipment = equipmentService.putEquipment(facilityId, equipmentId, equipment);
 
         return equipmentMapper.equipmentToEquipmentDto(putEquipment);
     }
     
     @PatchMapping("/equipment/{equipmentId}")
-    public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto,  @PathVariable Long equipmentId) {
+    public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
         Equipment patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);

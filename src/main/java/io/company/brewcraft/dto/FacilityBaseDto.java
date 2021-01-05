@@ -7,6 +7,10 @@ public class FacilityBaseDto extends BaseDto {
     private String name;
     
     private AddressDto address;
+    
+    private String phoneNumber;
+    
+    private String faxNumber;
         
     private Integer version;
     
@@ -14,11 +18,13 @@ public class FacilityBaseDto extends BaseDto {
         super();
     }
     
-    public FacilityBaseDto(Long id, String name, AddressDto address, Integer version) {
+    public FacilityBaseDto(Long id, String name, AddressDto address, String phoneNumber, String faxNumber, Integer version) {
         super();
         this.id = id;
         this.name = name;
         this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.faxNumber = faxNumber;
         this.version = version;
     }
 
@@ -44,6 +50,22 @@ public class FacilityBaseDto extends BaseDto {
 
     public void setAddress(AddressDto address) {
         this.address = address;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
     }
 
     public Integer getVersion() {
