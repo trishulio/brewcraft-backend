@@ -50,11 +50,11 @@ services:
         - "8443:443"
     logging:
         driver: none
-    environment: 
+    environment:
         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         PGADMIN_LISTEN_PORT: 443
 volumes:
-    db-data:
-    db-admin-data:
-    localstack-data: 
+  db-data:
+  db-admin-data:
+  localstack-data:

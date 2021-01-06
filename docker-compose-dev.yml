@@ -4,6 +4,8 @@ services:
     build:
       context: .
     container_name: brewcraftapp
+    ports:
+      - 9010:9010
     depends_on:
       - localstack
       - postgresdb
@@ -30,7 +32,6 @@ services:
     restart: always
     volumes:
       - ./db-init-scripts:/docker-entrypoint-initdb.d
-      - db-data:/var/lib/postgresql/data
     container_name: postgresdb
     ports:
       - "54321:${POSTGRES_PORT}"
@@ -46,6 +47,8 @@ services:
     restart: always
     depends_on: 
       - postgresdb
+    volumes:
+      - db-admin-data:/var/lib/pgadmin
     container_name: pgadmin
     ports:
         - "8443:443"
@@ -57,5 +60,6 @@ services:
         PGADMIN_LISTEN_PORT: 443
 
 volumes:
-    db-admin-data:
-    localstack-data: 
+  db-data:
+  db-admin-data:
+  localstack-data:

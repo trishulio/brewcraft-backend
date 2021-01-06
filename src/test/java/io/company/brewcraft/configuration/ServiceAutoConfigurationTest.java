@@ -29,13 +29,13 @@ public class ServiceAutoConfigurationTest {
     
     @Test
     public void testSupplierService_returnsInstanceOfSupplierServiceImpl() {
-        SupplierService supplierService = serviceAutoConfiguration.supplierService(null, null);
+        SupplierService supplierService = serviceAutoConfiguration.supplierService(null);
         assertTrue(supplierService instanceof SupplierServiceImpl);
     }
     
     @Test
     public void testSupplierContactService_returnsInstanceOfSupplierContactServiceImpl() {
-        SupplierContactService supplierContactService = serviceAutoConfiguration.supplierContactService(null);
+        SupplierContactService supplierContactService = serviceAutoConfiguration.supplierContactService(null, null);
         assertTrue(supplierContactService instanceof SupplierContactServiceImpl);
     }
 }

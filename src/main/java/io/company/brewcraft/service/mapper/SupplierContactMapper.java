@@ -3,8 +3,11 @@ package io.company.brewcraft.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import io.company.brewcraft.dto.AddSupplierContactDto;
+import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.SupplierWithoutContactsDto;
+import io.company.brewcraft.dto.UpdateSupplierContactDto;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierContact;
 
@@ -16,5 +19,13 @@ public interface SupplierContactMapper {
     SupplierContactWithSupplierDto supplierContactToSupplierContactWithSupplierDto(SupplierContact contact);
     
     SupplierWithoutContactsDto supplierToSupplierWithoutContactsDto(Supplier supplier);
+    
+    SupplierContactDto contactToContactDto(SupplierContact contact);
+
+    SupplierContact contactDtoToContact(SupplierContactDto contactDto);
+    
+    SupplierContact contactDtoToContact(AddSupplierContactDto contactDto);
+    
+    SupplierContact updateContactDtoToContact(UpdateSupplierContactDto contactDto);
 
 }

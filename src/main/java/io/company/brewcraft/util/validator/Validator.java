@@ -1,0 +1,80 @@
+package io.company.brewcraft.util.validator;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Validator {
+    private static final Logger logger = LoggerFactory.getLogger(Validator.class);
+
+    private List<String> errors;
+
+    public Validator() {
+        this.errors = new ArrayList<String>(0);
+    }
+
+//    public void rule(Supplier<Boolean> test, String err) {
+//        rule(test.get(), err);
+//    }
+
+    public void rule(boolean pass, String err) {
+        if (!pass) {
+            this.errors.add(err);
+        }
+    }
+
+    public void raiseErrors() {
+        String err = concatIntoNumberedList(this.errors);
+        assertion(this.errors.size() == 0, ValidationException.class, err);
+    }
+
+    public void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
+        if (!pass) {
+            try {
+                if (args == null) {
+                    args = new Object[0];
+                }
+
+                Class<?>[] argClasses = new Class[args.length];
+                argClasses = Arrays.stream(args).map(arg -> arg.getClass()).collect(Collectors.toList()).toArray(argClasses);
+
+                Constructor<? extends RuntimeException> constructor = clazz.getDeclaredConstructor(argClasses);
+                RuntimeException e = constructor.newInstance(args);
+                throw e;
+
+            } catch (NoSuchMethodException | SecurityException e) {
+                String err = String.format("Failed to load the constructor with String parameter for class: '%s' because '%s'", clazz.getName(), e.getMessage());
+                logger.error(err);
+                throw new IllegalStateException(err, e);
+
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                String err = String.format("Failed to instantiate class: '%s' because '%s'", clazz.getName(), e.getMessage());
+                logger.error(err);
+                throw new IllegalStateException(err, e);
+            }
+        }
+    }
+
+//    public void assertion(Supplier<Boolean> test, Class<? extends RuntimeException> clazz, Object... args) {
+//        boolean pass = test.get();
+//        assertion(pass, clazz, args);
+//    }
+
+    private static String concatIntoNumberedList(List<String> msgs) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < msgs.size(); i++) {
+            sb.append(i + 1);
+            sb.append(". ");
+            sb.append(msgs.get(i));
+            sb.append(System.lineSeparator());
+        }
+
+        return sb.toString();
+    }
+}

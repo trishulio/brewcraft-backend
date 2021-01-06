@@ -7,7 +7,6 @@ install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
 dist:
-	# source .env
 	docker rmi brewcraft:${VERSION}; true
 	docker build . -t brewcraft:${VERSION}
 
@@ -35,6 +34,6 @@ start:
 	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml rm &&\
 	docker rmi brewcraft:${VERSION}; true &&\
 	docker load -i brewcraft_${VERSION}.image &&\
-	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml up
+	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml up -d
 
 setup_prod: install dist export upload
