@@ -17,8 +17,9 @@ import com.google.common.cache.LoadingCache;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class SchemaDataSourceManager implements DataSourceManager {
-
     private static final Logger log = LoggerFactory.getLogger(SchemaDataSourceManager.class);
+
+    public static final int POOL_SIZE = 1;
 
     private LoadingCache<String, DataSource> cache;
     private DataSource adminDs;
@@ -38,7 +39,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          .schema(key)
                                          .username(key)
                                          .password(password)
-                                         .poolSize(1)
+                                         .poolSize(POOL_SIZE)
                                          .build();
 
                 return ds;

@@ -54,7 +54,7 @@ public class SchemaDataSourceManagerTest {
     @Test
     @Disabled
     // Disabled because data-source can be created without having schema. This is
-    // needed in case data-source is used to create the schema)
+    // needed in case data-source is used itself to create the schema)
     public void testGetDataSource_ThrowsSQLException_WhenSchemaDoesNotExists() throws SQLException, IOException {
         Connection mConn = mDs.getConnection();
         doReturn(false).when(mDialect).schemaExists(mConn, "ABC_123");
@@ -77,9 +77,9 @@ public class SchemaDataSourceManagerTest {
         assertEquals("jdbc:db://localhost:port/db_name", conn.getMetaData().getURL());
 
         verify(mDsBuilder, times(1)).clear();
-
-        // Hack: Cannot get password from DataSource itself. Hence verifying like this.
+        // Hack: Cannot get these values from DataSource itself. Hence verifying using builder getters.
         assertEquals("ABCDE", mDsBuilder.password());
+        assertEquals(SchemaDataSourceManager.POOL_SIZE, mDsBuilder.poolSize());
     }
 
     @Test
