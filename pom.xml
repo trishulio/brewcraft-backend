@@ -177,6 +177,7 @@
                     <excludes>
                         <exclude>**/*Invoice*Test.java</exclude>
                         <exclude>**/*Quantity*Test.java</exclude>
+                        <exclude>**/*RepositoryUtil*Test.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
