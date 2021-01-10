@@ -17,13 +17,12 @@ import com.google.common.cache.LoadingCache;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class SchemaDataSourceManager implements DataSourceManager {
-
     private static final Logger log = LoggerFactory.getLogger(SchemaDataSourceManager.class);
 
     private LoadingCache<String, DataSource> cache;
     private DataSource adminDs;
 
-    public SchemaDataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect dialect, SecretsManager<String, String> secretsMgr) {
+    public SchemaDataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect dialect, SecretsManager<String, String> secretsMgr, int poolSize) {
         this.adminDs = adminDs;
         this.cache = CacheBuilder.newBuilder().build(new CacheLoader<String, DataSource>() {
             @Override
@@ -38,6 +37,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          .schema(key)
                                          .username(key)
                                          .password(password)
+                                         .poolSize(poolSize)
                                          .build();
 
                 return ds;

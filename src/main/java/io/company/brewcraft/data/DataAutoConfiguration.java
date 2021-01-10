@@ -34,8 +34,8 @@ public class DataAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DataSourceManager.class)
-    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect, SecretsManager<String, String> secretsMgr) {
-        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, dsBuilder, jdbcDialect, secretsMgr);
+    public DataSourceManager dataSourceManager(DataSource adminDs, DataSourceBuilder dsBuilder, JdbcDialect jdbcDialect, SecretsManager<String, String> secretsMgr, @Value("${app.config.datasource.pool.size}") int poolSize) {
+        DataSourceManager mgr = new SchemaDataSourceManager(adminDs, dsBuilder, jdbcDialect, secretsMgr, poolSize);
         return mgr;
     }
 

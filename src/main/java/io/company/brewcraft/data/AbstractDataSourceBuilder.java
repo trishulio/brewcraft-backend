@@ -11,8 +11,9 @@ public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
     private String keyUrl;
     private String keyAutoCommit;
     private String keySchema;
+    private String poolSize;
 
-    public AbstractDataSourceBuilder(String keyUsername, String keyPassword, String keyUrl, String keyAutoCommit, String keySchema) {
+    public AbstractDataSourceBuilder(String keyUsername, String keyPassword, String keyUrl, String keyAutoCommit, String keySchema, String poolSize) {
         this.props = new Properties(5);
 
         this.keyUsername = keyUsername;
@@ -20,6 +21,7 @@ public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
         this.keyUrl = keyUrl;
         this.keyAutoCommit = keyAutoCommit;
         this.keySchema = keySchema;
+        this.poolSize = poolSize;
     }
 
     @Override
@@ -47,6 +49,12 @@ public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
     }
 
     @Override
+    public DataSourceBuilder poolSize(int size) {
+        props.put(poolSize, size);
+        return this;
+    }
+
+    @Override
     public DataSourceBuilder autoCommit(boolean autoCommit) {
         props.put(keyAutoCommit, autoCommit);
         return this;
@@ -70,6 +78,18 @@ public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
     @Override
     public String schema() {
         return props.getProperty(keySchema);
+    }
+
+    @Override
+    public int poolSize() {
+        int size = -1;
+        Object o = null;
+        o = props.get(poolSize);
+        if (o != null) {
+            size = (int) o; 
+        }
+
+        return size;
     }
 
     @Override

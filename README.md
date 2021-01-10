@@ -63,6 +63,17 @@ Note: When creating postgres server in pgadmin, use the name of the postgres con
     source ./source.sh
     make setup_prod
     ```
+    Note: This step has prerequisites:
+        a. The value set for `APP_DIR` in your .env should refer to an "existing" directory, on the remote server, to which the remote user (used in `USERNAME`) should have read-write permissions to.
+            ```
+            ssh $USERNAME@HOST
+            sudo mkdir $APP_DIR
+            sudo chown $USERNAME:$USERNAME $APP_DIR
+            ```
+        b. The authentication (private) key should already be configured in your local system. It will be used by `rsync` to authenticate with the remote server for uploading the files
+            ```
+            ssh-add /path/to/private/key
+            ```
 
 3. Start the containers in the server
     ```

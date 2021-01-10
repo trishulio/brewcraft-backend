@@ -14,6 +14,8 @@ public interface DataSourceBuilder {
 
     DataSourceBuilder schema(String schema);
 
+    DataSourceBuilder poolSize(int size);
+
     DataSourceBuilder autoCommit(boolean autoCommit);
 
     DataSourceBuilder copy(DataSource ds);
@@ -25,6 +27,8 @@ public interface DataSourceBuilder {
     String url();
 
     String schema();
+
+    int poolSize();
 
     boolean autoCommit();
 

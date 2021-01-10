@@ -112,12 +112,12 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        
-       <dependency>
-           <groupId>org.springdoc</groupId>
-           <artifactId>springdoc-openapi-ui</artifactId>
-           <version>1.5.0</version>
-       </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.measure/unit-api -->
         <dependency>
@@ -169,6 +169,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Invoice*Test.java</exclude>
+                        <exclude>**/*Quantity*Test.java</exclude>
+                        <exclude>**/*RepositoryUtil*Test.java</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

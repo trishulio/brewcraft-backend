@@ -81,18 +81,27 @@ public class HikariDataSourceBuilderTest {
     }
 
     @Test
+    public void testPoolSize_SetsPoolSize() {
+        builder.poolSize(123);
+        int poolSize = builder.poolSize();
+        assertEquals(123, poolSize);
+    }
+
+    @Test
     public void testClear_ClearsAllValues() {
         builder.username("username")
                .password("password")
                .schema("schema")
                .autoCommit(true)
                .url("url")
+               .poolSize(99)
                .clear();
         assertNull(builder.username());
         assertNull(builder.password());
         assertNull(builder.schema());
         assertNull(builder.url());
         assertFalse(builder.autoCommit());
+        assertEquals(-1, builder.poolSize());
     }
 
     @Test
