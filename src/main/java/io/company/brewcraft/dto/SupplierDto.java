@@ -10,16 +10,17 @@ public class SupplierDto extends BaseDto {
 
     private List<SupplierContactDto> contacts;
     
-    private SupplierAddressDto address;
+    private AddressDto address;
     
     private Integer version;
     
     public SupplierDto() {
-        
+        super();
     }
     
     public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
-            SupplierAddressDto address, Integer version) {
+            AddressDto address, Integer version) {
+        super();
         this.id = id;
         this.name = name;
         this.contacts = contacts;
@@ -51,11 +52,11 @@ public class SupplierDto extends BaseDto {
         this.contacts = contacts;
     }
 
-    public SupplierAddressDto getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    public void setAddress(SupplierAddressDto address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
     

@@ -6,7 +6,7 @@ import javax.validation.constraints.Null;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class SupplierAddressDto {
+public class AddressDto {
     
     private Long id;
     
@@ -30,12 +30,12 @@ public class SupplierAddressDto {
     @JsonIgnore
     private LocalDateTime lastUpdated;
     
-    public SupplierAddressDto() {
+    public AddressDto() {
         
     }
     
-    public SupplierAddressDto(Long id, String addressLine1, String addressLine2, String country, String province,
-            String city, String postalCode, @Null LocalDateTime created, @Null LocalDateTime lastUpdated) {
+    public AddressDto(Long id, String addressLine1, String addressLine2, String country, String province,
+            String city, String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
         this.id = id;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;

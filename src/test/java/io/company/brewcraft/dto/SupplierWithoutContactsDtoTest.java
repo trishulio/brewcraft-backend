@@ -19,7 +19,7 @@ public class SupplierWithoutContactsDtoTest {
     public void testConstructor() {
         Long id = 1L;
         String name = "Supplier1";
-        SupplierAddressDto address = new SupplierAddressDto();
+        AddressDto address = new AddressDto();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
@@ -48,7 +48,7 @@ public class SupplierWithoutContactsDtoTest {
     
     @Test
     public void testGetSetAddress() {
-        SupplierAddressDto address = new SupplierAddressDto();
+        AddressDto address = new AddressDto();
         supplierWithoutContactsDto.setAddress(address);
         assertSame(address, supplierWithoutContactsDto.getAddress());
     }

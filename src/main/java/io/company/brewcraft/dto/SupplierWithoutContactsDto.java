@@ -19,7 +19,7 @@ public class SupplierWithoutContactsDto {
     
     @NotNull
     @Valid
-    private SupplierAddressDto address;
+    private AddressDto address;
     
     @Null
     @JsonIgnore
@@ -36,7 +36,7 @@ public class SupplierWithoutContactsDto {
         
     }
     
-    public SupplierWithoutContactsDto(Long id, String name, SupplierAddressDto address, LocalDateTime created,
+    public SupplierWithoutContactsDto(Long id, String name, AddressDto address, LocalDateTime created,
             LocalDateTime lastUpdated, Integer version) {
         this.id = id;
         this.name = name;
@@ -62,11 +62,11 @@ public class SupplierWithoutContactsDto {
         this.name = name;
     }
 
-    public SupplierAddressDto getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    public void setAddress(SupplierAddressDto address) {
+    public void setAddress(AddressDto address) {
         this.address = address;
     }
 

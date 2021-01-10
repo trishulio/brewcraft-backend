@@ -6,9 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.SupplierContactService;
+import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
+import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
 
@@ -38,4 +40,11 @@ public class ServiceAutoConfigurationTest {
         SupplierContactService supplierContactService = serviceAutoConfiguration.supplierContactService(null, null);
         assertTrue(supplierContactService instanceof SupplierContactServiceImpl);
     }
+    
+    @Test
+    public void testFacilityService_returnsInstanceOfFacilityServiceImpl() {
+        FacilityService facilityService = serviceAutoConfiguration.facilityService(null);
+        assertTrue(facilityService instanceof FacilityServiceImpl);
+    }
+        
 }

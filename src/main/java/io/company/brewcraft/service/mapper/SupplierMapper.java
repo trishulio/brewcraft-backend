@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddSupplierDto;
-import io.company.brewcraft.dto.SupplierAddressDto;
+import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
@@ -32,8 +32,8 @@ public interface SupplierMapper {
     
     SupplierContact updateContactDtoToContact(UpdateSupplierContactDto contactDto);
     
-    SupplierAddressDto addressToAddressDto(SupplierAddress address);
+    AddressDto addressToAddressDto(SupplierAddress address);
 
-    SupplierAddress addressDtoToAddress(SupplierAddressDto addressDto);
+    SupplierAddress addressDtoToAddress(AddressDto addressDto);
     
 }

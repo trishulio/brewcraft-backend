@@ -246,7 +246,7 @@ public class SupplierContactControllerTest {
 
     @Test
     public void testDeleteContact_DeletesContact() throws Exception {         
-        this.mockMvc.perform(delete("/api/suppliers/1/contacts/2"))
+        this.mockMvc.perform(delete("/api/suppliers/contacts/2"))
          .andExpect(status().isOk());
          
          verify(supplierContactServiceMock, times(1)).deleteContact(2L);

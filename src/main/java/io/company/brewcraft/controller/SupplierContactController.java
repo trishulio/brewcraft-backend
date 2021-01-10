@@ -91,7 +91,7 @@ public class SupplierContactController {
         return supplierContactMapper.contactToContactDto(patchedContact);
     }
 
-    @DeleteMapping("/{supplierId}/contacts/{contactId}")
+    @DeleteMapping("/contacts/{contactId}")
     public void deleteContact(@PathVariable Long contactId) {
         supplierContactService.deleteContact(contactId);
     }

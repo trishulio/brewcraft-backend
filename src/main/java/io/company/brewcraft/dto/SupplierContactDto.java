@@ -17,11 +17,12 @@ public class SupplierContactDto {
     private Integer version;
     
     public SupplierContactDto() {
-        
+        super();
     }
     
     public SupplierContactDto(Long id, String firstName, String lastName, String position, String email,
             String phoneNumber, Integer version) {
+        super();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
