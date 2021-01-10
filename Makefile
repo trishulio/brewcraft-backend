@@ -25,17 +25,19 @@ export:
 	mkdir -p dist
 	docker save -o ${TARGET}/${APP_NAME}_${VERSION}.image ${APP_NAME}:${VERSION}
 
-upload:
+pack:
 	cp -r ./db-init-scripts ${TARGET}
 	cp ./docker-compose.yml ${TARGET}
 	cp ./docker-compose-prod-test.yml ${TARGET}
 	cp ./Makefile ${TARGET}
 	cp .env ${TARGET}
-	ssh ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR}"
-	rsync -a ${TARGET}/.??* ${USERNAME}@${HOST}:${HOST_APP_DIR}
 
 clean:
 	rm -rf {TARGET}
+
+upload:
+	ssh ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR}"
+	rsync -a ${TARGET}/.??* ${USERNAME}@${HOST}:${HOST_APP_DIR}
 
 start:
 	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml up -d
@@ -48,9 +50,9 @@ reload:
 	docker rmi ${APP_NAME}:${VERSION}; true &&\
 	docker load -i ${APP_NAME}_${VERSION}.image &&\
 
+restart: stop reload start
+
 deploy:
 	ssh ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && make restart"
 
-restart: stop reload start
-
-setup_prod: install dist export upload deploy
+setup: clean install dist export pack upload
