@@ -24,6 +24,7 @@ import io.company.brewcraft.security.store.SecretsManager;
 
 @SuppressWarnings("unchecked")
 public class SchemaDataSourceManagerTest {
+    public static final int POOL_SIZE = 123;
 
     private DataSourceManager mgr;
 
@@ -42,7 +43,7 @@ public class SchemaDataSourceManagerTest {
         mSecretsMgr = mock(SecretsManager.class);
         mDialect = mock(JdbcDialect.class);
 
-        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, mDialect, mSecretsMgr);
+        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, mDialect, mSecretsMgr, POOL_SIZE);
     }
 
     @Test
@@ -79,7 +80,7 @@ public class SchemaDataSourceManagerTest {
         verify(mDsBuilder, times(1)).clear();
         // Hack: Cannot get these values from DataSource itself. Hence verifying using builder getters.
         assertEquals("ABCDE", mDsBuilder.password());
-        assertEquals(SchemaDataSourceManager.POOL_SIZE, mDsBuilder.poolSize());
+        assertEquals(POOL_SIZE, mDsBuilder.poolSize());
     }
 
     @Test
