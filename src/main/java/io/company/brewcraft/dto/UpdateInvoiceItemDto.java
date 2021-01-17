@@ -4,24 +4,13 @@ public class UpdateInvoiceItemDto extends BaseDto {
     private Long id;
     private QuantityDto quantity;
     private MoneyDto price;
+    private TaxDto tax;
+    private MoneyDto amount;
     private String lot;
     private MaterialDto material;
     private Integer version;
 
     public UpdateInvoiceItemDto() {
-    }
-
-    public UpdateInvoiceItemDto(Long id) {
-        this(id, null, null, null, null, null);
-    }
-
-    public UpdateInvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, String lot, MaterialDto material, Integer version) {
-        setId(id);
-        setQuantity(quantity);
-        setPrice(price);
-        setLot(lot);
-        setMaterial(material);
-        setVersion(version);
     }
 
     public Long getId() {
@@ -48,6 +37,22 @@ public class UpdateInvoiceItemDto extends BaseDto {
         this.price = price;
     }
 
+    public TaxDto getTax() {
+        return tax;
+    }
+
+    public void setTax(TaxDto tax) {
+        this.tax = tax;
+    }
+
+    public MoneyDto getAmount() {
+        return amount;
+    }
+
+    public void setAmount(MoneyDto amount) {
+        this.amount = amount;
+    }
+
     public String getLot() {
         return lot;
     }
@@ -65,10 +70,11 @@ public class UpdateInvoiceItemDto extends BaseDto {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
     }
+
 }

@@ -1,4 +1,6 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
+
+import io.company.brewcraft.model.BaseModel;
 
 public class Material extends BaseModel {
     private Long id;

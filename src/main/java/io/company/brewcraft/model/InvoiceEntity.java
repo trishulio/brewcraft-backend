@@ -11,17 +11,45 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity(name = "INVOICE")
 @Table
 public class InvoiceEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_INVOICE_NUMBER = "invoiceNumber";
+    public static final String FIELD_SUPPLIER = "supplier";
+    public static final String FIELD_GENERATED_ON = "generatedOn";
+    public static final String FIELD_RECEIVED_ON = "receivedOn";
+    public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
+    public static final String FIELD_FREIGHT = "freight";
+    public static final String FIELD_PURCHASE_ORDER = "purchaseOrder";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_ITEMS = "items";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_generator")
     @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
     private Long id;
 
+    @Column(name = "invoice_number", nullable = false, unique = true)
+    private String invoiceNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 
-    @Column(name = "date")
-    private LocalDateTime date;
+    @Column(name = "generated_on")
+    private LocalDateTime generatedOn;
+
+    @Column(name = "received_on")
+    private LocalDateTime receivedOn;
+
+    @Column(name = "payment_due_date")
+    private LocalDateTime paymentDueDate;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "freight_id", referencedColumnName = "id")
+    private FreightEntity freight;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_order_id", referencedColumnName = "id")
+    private PurchaseOrderEntity purchaseOrder;
 
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -31,9 +59,9 @@ public class InvoiceEntity extends BaseEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private InvoiceStatus status;
+    @ManyToOne
+    @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
+    private InvoiceStatusEntity status;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoiceItemEntity> items;
@@ -42,17 +70,21 @@ public class InvoiceEntity extends BaseEntity {
     private Integer version;
 
     public InvoiceEntity() {
-        this(null);
     }
 
     public InvoiceEntity(Long id) {
-        this(id, null, null, null, null, null, null, null);
+        setId(id);
     }
 
-    public InvoiceEntity(Long id, Supplier supplier, LocalDateTime date, LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatus status, List<InvoiceItemEntity> items, Integer version) {
-        setId(id);
+    public InvoiceEntity(Long id, String invoiceNumber, Supplier supplier, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, FreightEntity freight, PurchaseOrderEntity purchaseOrder,
+            LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusEntity status, List<InvoiceItemEntity> items, Integer version) {
+        this(id);
+        setInvoiceNumber(invoiceNumber);
         setSupplier(supplier);
-        setDate(date);
+        setGeneratedOn(generatedOn);
+        setPaymentDueDate(paymentDueDate);
+        setFreight(freight);
+        setPurchaseOrder(purchaseOrder);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setStatus(status);
@@ -68,6 +100,14 @@ public class InvoiceEntity extends BaseEntity {
         this.id = id;
     }
 
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
@@ -76,12 +116,44 @@ public class InvoiceEntity extends BaseEntity {
         this.supplier = supplier;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getGeneratedOn() {
+        return generatedOn;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setGeneratedOn(LocalDateTime generatedOn) {
+        this.generatedOn = generatedOn;
+    }
+
+    public LocalDateTime getReceivedOn() {
+        return receivedOn;
+    }
+
+    public void setReceivedOn(LocalDateTime receivedOn) {
+        this.receivedOn = receivedOn;
+    }
+
+    public LocalDateTime getPaymentDueDate() {
+        return paymentDueDate;
+    }
+
+    public void setPaymentDueDate(LocalDateTime paymentDueDate) {
+        this.paymentDueDate = paymentDueDate;
+    }
+
+    public FreightEntity getFreight() {
+        return freight;
+    }
+
+    public void setFreight(FreightEntity freight) {
+        this.freight = freight;
+    }
+
+    public PurchaseOrderEntity getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrderEntity purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -100,11 +172,11 @@ public class InvoiceEntity extends BaseEntity {
         this.createdAt = createdAt;
     }
 
-    public InvoiceStatus getStatus() {
+    public InvoiceStatusEntity getStatus() {
         return status;
     }
 
-    public void setStatus(InvoiceStatus status) {
+    public void setStatus(InvoiceStatusEntity status) {
         this.status = status;
     }
 
@@ -116,10 +188,10 @@ public class InvoiceEntity extends BaseEntity {
         if (this.getItems() != null) {
             this.getItems().clear();
             this.getItems().addAll(items);
-        } else {            
+        } else {
             this.items = items;
         }
-        
+
         if (this.getItems() != null) {
             this.getItems().forEach(item -> item.setInvoice(this));
         }

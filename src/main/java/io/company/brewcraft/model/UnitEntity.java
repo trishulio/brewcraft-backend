@@ -6,6 +6,9 @@ import javax.persistence.Id;
 
 @Entity(name = "QTY_UNIT")
 public class UnitEntity extends BaseEntity {
+    public static final String FIELD_SYMBOL = "symbol";
+    public static final String FIELD_NAME = "name";
+
     @Id
     @Column(name = "symbol", unique = true, updatable = false, length = 4)
     private String symbol;

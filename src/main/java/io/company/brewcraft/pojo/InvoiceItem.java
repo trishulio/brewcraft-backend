@@ -5,12 +5,12 @@ import javax.measure.Quantity;
 import org.joda.money.Money;
 
 import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Material;
 
 public class InvoiceItem extends BaseModel {
     private Long id;
     private Quantity<?> quantity;
     private Money price;
+    private Tax tax;
     private String lot;
     private Material material;
     private Integer version;
@@ -19,14 +19,15 @@ public class InvoiceItem extends BaseModel {
     }
 
     public InvoiceItem(Long id) {
-        this(id, null, null, null, null, null);
+        this();
+        setId(id);
     }
 
-    public InvoiceItem(Long id, Quantity<?> quantity, Money price, String lot, Material material, Integer version) {
-        setId(id);
+    public InvoiceItem(Long id, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
+        this(id);
         setQuantity(quantity);
         setPrice(price);
-        setLot(lot);
+        setTax(tax);
         setMaterial(material);
         setVersion(version);
     }
@@ -43,8 +44,8 @@ public class InvoiceItem extends BaseModel {
         return quantity;
     }
 
-    public void setQuantity(Quantity<?> qty) {
-        this.quantity = qty;
+    public void setQuantity(Quantity<?> quantity) {
+        this.quantity = quantity;
     }
 
     public Money getPrice() {
@@ -53,6 +54,14 @@ public class InvoiceItem extends BaseModel {
 
     public void setPrice(Money price) {
         this.price = price;
+    }
+
+    public Tax getTax() {
+        return tax;
+    }
+
+    public void setTax(Tax tax) {
+        this.tax = tax;
     }
 
     public String getLot() {
@@ -72,7 +81,7 @@ public class InvoiceItem extends BaseModel {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {

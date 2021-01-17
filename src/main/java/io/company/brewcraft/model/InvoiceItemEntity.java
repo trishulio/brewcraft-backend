@@ -4,6 +4,11 @@ import javax.persistence.*;
 
 @Entity(name = "INVOICE_ITEM")
 public class InvoiceItemEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_QUANTITY = "quantity";
+    public static final String FIELD_PRICE = "price";
+    public static final String FIELD_TAX = "tax";
+    public static final String FIELD_MATERIAL = "material";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_item_generator")
@@ -16,16 +21,17 @@ public class InvoiceItemEntity extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     @JoinColumn(name = "qty_id", referencedColumnName = "id")
-    private QuantityEntity qty;
+    private QuantityEntity quantity;
 
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name="price_id", referencedColumnName = "id")
+    @JoinColumn(name = "price_id", referencedColumnName = "id")
     private MoneyEntity price;
 
-    @Column(name = "lot")
-    private String lot;
+    @OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+    @JoinColumn(name = "tax_id", referencedColumnName = "id")
+    private TaxEntity tax;
 
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    @OneToOne
     @JoinColumn(name = "material_id", referencedColumnName = "id")
     private MaterialEntity material;
 
@@ -36,15 +42,15 @@ public class InvoiceItemEntity extends BaseEntity {
     }
 
     public InvoiceItemEntity(Long id) {
-        this(id, null, null, null, null, null, null);
+        this();
+        setId(id);
     }
 
-    public InvoiceItemEntity(Long id, InvoiceEntity invoice, QuantityEntity qty, MoneyEntity price, String lot, MaterialEntity material, Integer version) {
-        setId(id);
+    public InvoiceItemEntity(Long id, InvoiceEntity invoice, QuantityEntity quantity, MoneyEntity price, MaterialEntity material, Integer version) {
+        this(id);
         setInvoice(invoice);
-        setQuantity(qty);
+        setQuantity(quantity);
         setPrice(price);
-        setLot(lot);
         setMaterial(material);
         setVersion(version);
     }
@@ -58,7 +64,7 @@ public class InvoiceItemEntity extends BaseEntity {
     }
 
     public InvoiceEntity getInvoice() {
-        return this.invoice;
+        return invoice;
     }
 
     public void setInvoice(InvoiceEntity invoice) {
@@ -66,11 +72,11 @@ public class InvoiceItemEntity extends BaseEntity {
     }
 
     public QuantityEntity getQuantity() {
-        return qty;
+        return quantity;
     }
 
     public void setQuantity(QuantityEntity quantity) {
-        this.qty = quantity;
+        this.quantity = quantity;
     }
 
     public MoneyEntity getPrice() {
@@ -81,12 +87,12 @@ public class InvoiceItemEntity extends BaseEntity {
         this.price = price;
     }
 
-    public String getLot() {
-        return lot;
+    public TaxEntity getTax() {
+        return tax;
     }
 
-    public void setLot(String lot) {
-        this.lot = lot;
+    public void setTax(TaxEntity tax) {
+        this.tax = tax;
     }
 
     public MaterialEntity getMaterial() {
@@ -98,7 +104,7 @@ public class InvoiceItemEntity extends BaseEntity {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.InvoiceRepository;
+import io.company.brewcraft.repository.InvoiceStatusRepository;
+import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
@@ -14,6 +16,8 @@ import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.service.InvoiceService;
+import io.company.brewcraft.service.InvoiceStatusService;
+import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
@@ -38,25 +42,37 @@ public class ServiceAutoConfiguration {
         TenantManagementService tenantService = new TenantManagementServiceImpl(tenantRepository, migrationManager, TenantMapper.INSTANCE);
         return tenantService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(SupplierService.class)
     public SupplierService supplierService(SupplierRepository supplierRepository) {
         SupplierService supplierService = new SupplierServiceImpl(supplierRepository);
         return supplierService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(SupplierContactService.class)
     public SupplierContactService supplierContactService(SupplierContactRepository supplierContactRepository, SupplierRepository supplierRepository) {
         SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository, supplierRepository);
         return supplierContactService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, SupplierService supplierService) {
-        return new InvoiceService(invoiceRepo, supplierService);
+    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceStatusService invoiceStatusService, PurchaseOrderService purchaseOrderService, SupplierService supplierService) {
+        return new InvoiceService(invoiceRepo, invoiceStatusService, purchaseOrderService, supplierService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(PurchaseOrderService.class)
+    public PurchaseOrderService purchaseOrderService(PurchaseOrderRepository purchaseOrderRepository) {
+        return new PurchaseOrderService(purchaseOrderRepository);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(InvoiceStatusService.class)
+    public InvoiceStatusService invoiceStatusService(InvoiceStatusRepository invoiceStatusRepository) {
+        return new InvoiceStatusService(invoiceStatusRepository);
     }
 
     @Bean

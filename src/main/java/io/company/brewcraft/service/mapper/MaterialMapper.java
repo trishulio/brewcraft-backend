@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.MaterialDto;
-import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.pojo.Material;
 
 @Mapper
 public interface MaterialMapper {

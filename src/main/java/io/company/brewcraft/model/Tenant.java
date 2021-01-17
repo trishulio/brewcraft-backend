@@ -15,7 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="TENANT")
-public class Tenant {
+public class Tenant extends BaseEntity {
 
     @Id
     @GeneratedValue()

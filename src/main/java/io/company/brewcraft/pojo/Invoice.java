@@ -9,32 +9,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Supplier;
 
 public class Invoice extends BaseModel {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
     private Long id;
+    private String invoiceNumber;
     private Supplier supplier;
-    private LocalDateTime date;
+    private PurchaseOrder purchaseOrder;
+    private LocalDateTime generatedOn;
+    private LocalDateTime receivedOn;
+    private LocalDateTime paymentDueDate;
     private LocalDateTime lastUpdated;
     private LocalDateTime createdAt;
     private InvoiceStatus status;
     private List<InvoiceItem> items;
+    private Freight freight;
     private Integer version;
 
     public Invoice() {
-        this(null);
     }
 
     public Invoice(Long id) {
-        this(id, null, null, null, null, null, null, null);
+        setId(id);
     }
 
-    public Invoice(Long id, Supplier supplier, LocalDateTime date, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
-        setId(id);
+    public Invoice(Long id, String invoiceNumber, Supplier supplier, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime date, LocalDateTime createdAt,
+            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
+        this(id);
+        setInvoiceNumber(invoiceNumber);
         setSupplier(supplier);
-        setDate(date);
+        setPurchaseOrder(purchaseOrder);
+        setGeneratedOn(generatedOn);
+        setReceivedOn(receivedOn);
+        setPaymentDueDate(paymentDueDate);
+        setFreight(freight);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setStatus(status);
@@ -50,6 +59,14 @@ public class Invoice extends BaseModel {
         this.id = id;
     }
 
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
@@ -58,12 +75,36 @@ public class Invoice extends BaseModel {
         this.supplier = supplier;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public LocalDateTime getGeneratedOn() {
+        return generatedOn;
+    }
+
+    public void setGeneratedOn(LocalDateTime generatedOn) {
+        this.generatedOn = generatedOn;
+    }
+
+    public LocalDateTime getReceivedOn() {
+        return receivedOn;
+    }
+
+    public void setReceivedOn(LocalDateTime receivedOn) {
+        this.receivedOn = receivedOn;
+    }
+
+    public LocalDateTime getPaymentDueDate() {
+        return paymentDueDate;
+    }
+
+    public void setPaymentDueDate(LocalDateTime paymentDueDate) {
+        this.paymentDueDate = paymentDueDate;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -82,10 +123,6 @@ public class Invoice extends BaseModel {
         this.createdAt = createdAt;
     }
 
-    public static Logger getLogger() {
-        return logger;
-    }
-
     public InvoiceStatus getStatus() {
         return status;
     }
@@ -102,6 +139,14 @@ public class Invoice extends BaseModel {
         this.items = items;
     }
 
+    public Freight getFreight() {
+        return freight;
+    }
+
+    public void setFreight(Freight freight) {
+        this.freight = freight;
+    }
+
     public Integer getVersion() {
         return version;
     }
@@ -110,14 +155,28 @@ public class Invoice extends BaseModel {
         this.version = version;
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
+
     public Money getAmount() {
         Money amount = null;
 
-        if (items != null) {
-            List<Money> monies = items.stream().map(i -> i.getAmount()).collect(Collectors.toList());
+        if (getItems() != null) {
+            List<Money> monies = getItems().stream().map(i -> i.getAmount()).collect(Collectors.toList());
             amount = Money.total(monies);
         }
 
         return amount;
+    }
+    
+    public Tax getTax() {
+        Tax tax = null;
+        if (getItems() != null) {
+            List<Tax> taxes = getItems().stream().map(i -> i.getTax()).collect(Collectors.toList());
+            tax = Tax.total(taxes);
+        }
+        
+        return tax;
     }
 }

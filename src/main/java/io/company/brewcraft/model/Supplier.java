@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "SUPPLIER")
 public class Supplier extends BaseEntity {
+    public static final String FIELD_ID = "id";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_generator")
