@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface SpecificationBuilder {
     static SpecificationBuilder builder() {
-        return EnhancedSpecBuilder.builder();
+        return BasicSpecBuilder.builder();
     }
 
     SpecificationBuilder in(String[] paths, Collection<?> collection);

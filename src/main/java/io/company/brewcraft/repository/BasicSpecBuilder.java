@@ -31,8 +31,12 @@ public class BasicSpecBuilder implements SpecificationBuilder {
 
     @Override
     public BasicSpecBuilder in(String[] paths, Collection<?> collection) {
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> get(root, paths).in(collection);
-        add(func);
+        if (collection != null) {
+            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> get(root, paths).in(collection);
+            add(func);            
+        }
+        
+        resetNot();
         return this;
     }
 
@@ -54,6 +58,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
             add(func);
         }
 
+        resetNot();
         return this;
     }
 
@@ -75,9 +80,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     private void add(TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func) {
         if (this.isNot) {
             TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> orig = func;
-
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.not(criteriaBuilder.and(orig.apply(root, query, criteriaBuilder)));
-            this.isNot = false;
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.not(orig.apply(root, query, criteriaBuilder));
         }
 
         final TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> ref = func;
@@ -99,5 +102,12 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         }
 
         return path;
+    }
+    public static SpecificationBuilder builder() {
+        return new BasicSpecBuilder();
+    }
+    
+    private void resetNot() {
+        this.isNot = false;
     }
 }
