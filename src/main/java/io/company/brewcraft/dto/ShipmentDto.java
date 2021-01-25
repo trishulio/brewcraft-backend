@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ShipmentDto {
     private Long id;
     private String shipmentNumber;
-    private String lotNumber;
 
     public ShipmentDto() {
     }
@@ -16,10 +15,9 @@ public class ShipmentDto {
         setId(id);
     }
 
-    public ShipmentDto(Long id, String shipmentNumber, String lotNumber) {
+    public ShipmentDto(Long id, String shipmentNumber) {
         this(id);
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
     }
 
     public Long getId() {
@@ -36,13 +34,5 @@ public class ShipmentDto {
 
     public void setShipmentNumber(String shipmentNumber) {
         this.shipmentNumber = shipmentNumber;
-    }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
     }
 }

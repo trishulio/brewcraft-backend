@@ -24,25 +24,21 @@ public class ShipmentEntity extends BaseEntity {
 
     @Column(name = "shipment_number", unique = true, nullable = false)
     private String shipmentNumber;
-    
-    @Column(name = "lot_number")
-    private String lotNumber;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private InvoiceEntity invoice;
 
     public ShipmentEntity() {
     }
-    
+
     public ShipmentEntity(Long id) {
         this();
         setId(id);
     }
-    
-    public ShipmentEntity(Long id, String shipmentNumber, String lotNumber, InvoiceEntity invoice) {
+
+    public ShipmentEntity(Long id, String shipmentNumber, InvoiceEntity invoice) {
         this(id);
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
         setInvoice(invoice);
     }
 
@@ -60,14 +56,6 @@ public class ShipmentEntity extends BaseEntity {
 
     public void setShipmentNumber(String shipmentNumber) {
         this.shipmentNumber = shipmentNumber;
-    }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
     }
 
     public InvoiceEntity getInvoice() {

@@ -19,9 +19,6 @@ public class AddInvoiceDto extends BaseDto {
     private MoneyDto amount;
 
     @NotNull
-    private TaxDto tax;
-
-    @NotNull
     private LocalDateTime generatedOn;
 
     @NotNull
@@ -75,14 +72,6 @@ public class AddInvoiceDto extends BaseDto {
 
     public void setAmount(MoneyDto amount) {
         this.amount = amount;
-    }
-
-    public TaxDto getTax() {
-        return tax;
-    }
-
-    public void setTax(TaxDto tax) {
-        this.tax = tax;
     }
 
     public LocalDateTime getGeneratedOn() {

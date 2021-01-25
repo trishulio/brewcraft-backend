@@ -6,6 +6,7 @@ import javax.persistence.*;
 public class InvoiceItemEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_QUANTITY = "quantity";
+    public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_PRICE = "price";
     public static final String FIELD_TAX = "tax";
     public static final String FIELD_MATERIAL = "material";
@@ -15,6 +16,9 @@ public class InvoiceItemEntity extends BaseEntity {
     @SequenceGenerator(name = "invoice_item_generator", sequenceName = "invoice_item_sequence", allocationSize = 1)
     private Long id;
 
+    @Column(name = "lot_number", nullable=true)
+    private String lotNumber;
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private InvoiceEntity invoice;
@@ -46,9 +50,10 @@ public class InvoiceItemEntity extends BaseEntity {
         setId(id);
     }
 
-    public InvoiceItemEntity(Long id, InvoiceEntity invoice, QuantityEntity quantity, MoneyEntity price, MaterialEntity material, Integer version) {
+    public InvoiceItemEntity(Long id, String lotNumber, InvoiceEntity invoice, QuantityEntity quantity, MoneyEntity price, MaterialEntity material, Integer version) {
         this(id);
         setInvoice(invoice);
+        setLotNumber(lotNumber);
         setQuantity(quantity);
         setPrice(price);
         setMaterial(material);
@@ -61,6 +66,14 @@ public class InvoiceItemEntity extends BaseEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLotNumber() {
+        return lotNumber;
+    }
+
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
     }
 
     public InvoiceEntity getInvoice() {

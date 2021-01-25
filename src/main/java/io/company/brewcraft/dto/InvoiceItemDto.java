@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InvoiceItemDto {
-
     private Long id;
+    private String lotNumber;
     private QuantityDto quantity;
     private MoneyDto price;
     private TaxDto tax;
@@ -20,6 +20,14 @@ public class InvoiceItemDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLotNumber() {
+        return lotNumber;
+    }
+
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
     }
 
     public QuantityDto getQuantity() {
