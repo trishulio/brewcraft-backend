@@ -22,7 +22,10 @@ public interface InvoiceMapper {
 
     Invoice fromDto(InvoiceDto dto);
 
-    @Mappings({ @Mapping(target = "id", ignore = true) })
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "purchaseOrder", ignore = true)
+    })
     Invoice fromDto(UpdateInvoiceDto dto);
 
     @Mappings({

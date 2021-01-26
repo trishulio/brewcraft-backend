@@ -7,17 +7,31 @@ public class UpdateInvoiceDto {
     private String invoiceNumber;
     private FreightDto freight;
     private MoneyDto amount;
-    private TaxDto tax;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
-    private LocalDateTime lastUpdated;
     private LocalDateTime createdAt;
+    private LocalDateTime lastUpdated;
     private InvoiceStatusDto status;
     private List<UpdateInvoiceItemDto> items;
     private Integer version;
 
     public UpdateInvoiceDto() {
+    }
+
+    public UpdateInvoiceDto(String invoiceNumber, FreightDto freight, MoneyDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto status,
+            List<UpdateInvoiceItemDto> items, Integer version) {
+        setInvoiceNumber(invoiceNumber);
+        setFreight(freight);
+        setAmount(amount);
+        setGeneratedOn(generatedOn);
+        setReceivedOn(receivedOn);
+        setPaymentDueDate(paymentDueDate);
+        setLastUpdated(lastUpdated);
+        setCreatedAt(createdAt);
+        setStatus(status);
+        setItems(items);
+        setVersion(version);
     }
 
     public String getInvoiceNumber() {
@@ -44,14 +58,6 @@ public class UpdateInvoiceDto {
         this.amount = amount;
     }
 
-    public TaxDto getTax() {
-        return tax;
-    }
-
-    public void setTax(TaxDto tax) {
-        this.tax = tax;
-    }
-
     public LocalDateTime getGeneratedOn() {
         return generatedOn;
     }
@@ -76,20 +82,20 @@ public class UpdateInvoiceDto {
         this.paymentDueDate = paymentDueDate;
     }
 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public InvoiceStatusDto getStatus() {

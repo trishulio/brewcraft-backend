@@ -10,7 +10,7 @@ import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItemEntity;
 import io.company.brewcraft.pojo.InvoiceItem;
 
-@Mapper(uses = { QuantityMapper.class, MoneyMapper.class, MaterialMapper.class })
+@Mapper(uses = { QuantityMapper.class, MoneyMapper.class, MaterialMapper.class, TaxMapper.class })
 public interface InvoiceItemMapper {
     InvoiceItemMapper INSTANCE = Mappers.getMapper(InvoiceItemMapper.class);
 

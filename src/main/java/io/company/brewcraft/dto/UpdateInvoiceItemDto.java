@@ -13,6 +13,17 @@ public class UpdateInvoiceItemDto extends BaseDto {
     public UpdateInvoiceItemDto() {
     }
 
+    public UpdateInvoiceItemDto(Long id, String lotNumber, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
+        setId(id);
+        setLotNumber(lotNumber);
+        setQuantity(quantity);
+        setPrice(price);
+        setTax(tax);
+        setAmount(amount);
+        setMaterial(material);
+        setVersion(version);
+    }
+
     public Long getId() {
         return id;
     }

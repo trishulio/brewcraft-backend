@@ -131,9 +131,9 @@ public class InvoiceService {
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);
 
-        InvoiceEntity entity = InvoiceMapper.INSTANCE.toEntity(invoice);
+        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
         InvoiceEntity added = repo.save(entity);
 
-        return InvoiceMapper.INSTANCE.fromEntity(added);
+        return INVOICE_MAPPER.fromEntity(added);
     }
 }

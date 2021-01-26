@@ -10,9 +10,6 @@ public class AddInvoiceDto extends BaseDto {
     private String invoiceNumber;
 
     @NotNull
-    private Long purchaseOrderId;
-
-    @NotNull
     private FreightDto freight;
 
     @NotNull
@@ -28,10 +25,10 @@ public class AddInvoiceDto extends BaseDto {
     private LocalDateTime paymentDueDate;
 
     @NotNull
-    private LocalDateTime lastUpdated;
+    private LocalDateTime createdAt;
 
     @NotNull
-    private LocalDateTime createdAt;
+    private LocalDateTime lastUpdated;
 
     @NotNull
     private InvoiceStatusDto status;
@@ -42,20 +39,26 @@ public class AddInvoiceDto extends BaseDto {
     public AddInvoiceDto() {
     }
 
+    public AddInvoiceDto(@NotNull String invoiceNumber, @NotNull FreightDto freight, @NotNull MoneyDto amount, @NotNull LocalDateTime generatedOn, @NotNull LocalDateTime receivedOn,
+            @NotNull LocalDateTime paymentDueDate, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime lastUpdated, @NotNull InvoiceStatusDto status, @NotNull List<UpdateInvoiceItemDto> items) {
+        setInvoiceNumber(invoiceNumber);
+        setFreight(freight);
+        setAmount(amount);
+        setGeneratedOn(generatedOn);
+        setReceivedOn(receivedOn);
+        setPaymentDueDate(paymentDueDate);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setStatus(status);
+        setItems(items);
+    }
+
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
-    }
-
-    public Long getPurchaseOrderId() {
-        return purchaseOrderId;
-    }
-
-    public void setPurchaseOrderId(Long purchaseOrderId) {
-        this.purchaseOrderId = purchaseOrderId;
     }
 
     public FreightDto getFreight() {
@@ -102,16 +105,16 @@ public class AddInvoiceDto extends BaseDto {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public InvoiceStatusDto getStatus() {

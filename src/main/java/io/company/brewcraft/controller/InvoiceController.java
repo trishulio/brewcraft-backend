@@ -116,7 +116,7 @@ public class InvoiceController extends BaseController {
 
     @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @NotNull @RequestBody UpdateInvoiceDto payload) {
+    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload) {
         Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
         Invoice updated = invoiceService.update(purchaseOrderId, invoiceId, invoice);
 
