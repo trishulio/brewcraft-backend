@@ -6,6 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class MaterialDto extends BaseDto {
     private Long id;
 
+    public MaterialDto() {
+    }
+
+    public MaterialDto(Long id) {
+        this();
+        setId(id);
+    }
+
     public Long getId() {
         return id;
     }

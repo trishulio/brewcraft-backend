@@ -5,8 +5,6 @@ import java.util.List;
 
 public class UpdateInvoiceDto {
     private String invoiceNumber;
-    private SupplierDto supplier;
-    private PurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private MoneyDto amount;
     private TaxDto tax;
@@ -28,22 +26,6 @@ public class UpdateInvoiceDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
-    }
-
-    public SupplierDto getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(SupplierDto supplier) {
-        this.supplier = supplier;
-    }
-
-    public PurchaseOrderDto getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(PurchaseOrderDto purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
     }
 
     public FreightDto getFreight() {

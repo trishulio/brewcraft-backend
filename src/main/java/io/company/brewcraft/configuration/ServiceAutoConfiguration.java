@@ -6,28 +6,28 @@ import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.repository.EquipmentRepository;
+import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
-import io.company.brewcraft.repository.SupplierContactRepository;
-import io.company.brewcraft.repository.EquipmentRepository;
-import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.StorageRepository;
+import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
+import io.company.brewcraft.service.EquipmentService;
+import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
 import io.company.brewcraft.service.PurchaseOrderService;
-import io.company.brewcraft.service.SupplierContactService;
-import io.company.brewcraft.service.EquipmentService;
-import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.StorageService;
+import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
-import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
+import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -59,8 +59,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceStatusService invoiceStatusService, PurchaseOrderService purchaseOrderService, SupplierService supplierService) {
-        return new InvoiceService(invoiceRepo, invoiceStatusService, purchaseOrderService, supplierService);
+    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceStatusService invoiceStatusService, PurchaseOrderService purchaseOrderService) {
+        return new InvoiceService(invoiceRepo, invoiceStatusService, purchaseOrderService);
     }
 
     @Bean

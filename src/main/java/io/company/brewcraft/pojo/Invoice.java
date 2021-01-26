@@ -9,13 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Supplier;
 
 public class Invoice extends BaseModel {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
     private Long id;
     private String invoiceNumber;
-    private Supplier supplier;
     private PurchaseOrder purchaseOrder;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
@@ -34,11 +32,10 @@ public class Invoice extends BaseModel {
         setId(id);
     }
 
-    public Invoice(Long id, String invoiceNumber, Supplier supplier, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime date, LocalDateTime createdAt,
+    public Invoice(Long id, String invoiceNumber, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
             LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
-        setSupplier(supplier);
         setPurchaseOrder(purchaseOrder);
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
@@ -65,14 +62,6 @@ public class Invoice extends BaseModel {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
     }
 
     public PurchaseOrder getPurchaseOrder() {

@@ -12,7 +12,6 @@ public class InvoiceItem extends BaseModel {
     private Quantity<?> quantity;
     private Money price;
     private Tax tax;
-    private String lot;
     private Material material;
     private Integer version;
 
@@ -72,14 +71,6 @@ public class InvoiceItem extends BaseModel {
 
     public void setTax(Tax tax) {
         this.tax = tax;
-    }
-
-    public String getLot() {
-        return lot;
-    }
-
-    public void setLot(String lot) {
-        this.lot = lot;
     }
 
     public Material getMaterial() {

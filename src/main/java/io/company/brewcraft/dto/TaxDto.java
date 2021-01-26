@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(value = Include.NON_NULL)
-public class TaxDto {
+public class TaxDto extends BaseDto {
     private MoneyDto amount;
 
     public TaxDto() {

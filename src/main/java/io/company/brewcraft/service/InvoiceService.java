@@ -18,11 +18,13 @@ import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrderEntity;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceStatus;
 import io.company.brewcraft.pojo.PurchaseOrder;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
+import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
 public class InvoiceService {
@@ -33,16 +35,13 @@ public class InvoiceService {
     private PurchaseOrderService poService;
     private InvoiceStatusService statusService;
 
-    private SupplierService supplierService;
-
     public InvoiceService() {
     }
 
-    public InvoiceService(InvoiceRepository repo, InvoiceStatusService statusService, PurchaseOrderService poService, SupplierService supplierService) {
+    public InvoiceService(InvoiceRepository repo, InvoiceStatusService statusService, PurchaseOrderService poService) {
         this();
         this.repo = repo;
         this.poService = poService;
-        this.supplierService = supplierService;
         this.statusService = statusService;
     }
 
@@ -66,16 +65,6 @@ public class InvoiceService {
             int page,
             int size
          ) {
-//        if (from != null || to != null) {
-//            if (from == null) {
-//                from = LocalDateTime.MIN;
-//            }
-//
-//            if (to == null) {
-//                to = LocalDateTime.MAX;
-//            }
-//        }
-
         Specification<InvoiceEntity> spec = SpecificationBuilder
                                             .builder()
                                             .in(InvoiceEntity.FIELD_ID, ids)
@@ -87,7 +76,7 @@ public class InvoiceService {
                                             .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_ID }, purchaseOrderIds)
                                             .between(new String[] { InvoiceEntity.FIELD_FREIGHT, FreightEntity.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { InvoiceEntity.FIELD_STATUS, InvoiceStatusEntity.FIELD_NAME }, status)
-                                            .in(new String[] { InvoiceEntity.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
+                                            .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
         Page<InvoiceEntity> entityPage = repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
@@ -115,44 +104,36 @@ public class InvoiceService {
         repo.deleteById(id);
     }
 
-    public Invoice update(Long supplierId, Long invoiceId, Invoice invoice) {
-        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
+    public Invoice update(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
+        Validator validator = new Validator();
+        Invoice existing = getInvoice(invoiceId);
+        validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
+        invoice.outerJoin(existing);
 
-        InvoiceEntity existing = repo.findById(invoiceId).orElse(null);
-        if (existing != null) {
-            entity.outerJoin(existing);
-        }
+        invoice.setId(invoiceId);
 
-        entity.setId(invoiceId);
-
-        return add(supplierId, entity);
+        return add(purchaseOrderId, invoice);
     }
 
-    public Invoice add(Long supplierId, Invoice invoice) {
-        if (invoice.getPurchaseOrder().getId() != null) {
-            PurchaseOrder po = poService.getPurchaseOrder(invoice.getPurchaseOrder().getId());
-            invoice.setPurchaseOrder(po);
-        }
+    public Invoice add(Long purchaseOrderId, Invoice invoice) {
+        Validator validator = new Validator();
+        validator.rule(invoice.getPurchaseOrder() == null, "New Invoice cannot have an existing Purchase Order");
 
-        String status = invoice.getStatus().getName() == null ? InvoiceStatusEntity.DEFAULT_STATUS_NAME : invoice.getStatus().getName();
-        invoice.setStatus(statusService.getInvoiceStatus(status));
+        PurchaseOrder po = poService.getPurchaseOrder(purchaseOrderId);
+        validator.assertion(po != null, EntityNotFoundException.class, "Purchase Order", purchaseOrderId.toString());
 
-        return add(supplierId, INVOICE_MAPPER.toEntity(invoice));
-    }
+        String statusName = invoice.getStatus().getName();
+        statusName = statusName != null ? statusName : InvoiceStatusEntity.DEFAULT_STATUS_NAME;
+        InvoiceStatus status = statusService.getInvoiceStatus(statusName);
+        validator.rule(status != null, String.format("Invalid Status Name: %s", statusName));
+        validator.raiseErrors();
 
-    private Invoice add(Long supplierId, InvoiceEntity invoice) {
-        if (invoice.getSupplier() == null || invoice.getSupplier().getId() != supplierId) {
-            Supplier supplier = supplierService.getSupplier(supplierId);
-            if (supplier == null) {
-                // SupplierService takes care of throwing exception but just in
-                // case that changes, this will act as a safeguard
-                throw new EntityNotFoundException("Supplier", supplierId.toString());
-            }
-            invoice.setSupplier(supplier);
-        }
+        invoice.setPurchaseOrder(po);
+        invoice.setStatus(status);
 
-        InvoiceEntity saved = repo.save(invoice);
+        InvoiceEntity entity = InvoiceMapper.INSTANCE.toEntity(invoice);
+        InvoiceEntity added = repo.save(entity);
 
-        return INVOICE_MAPPER.fromEntity(saved);
+        return InvoiceMapper.INSTANCE.fromEntity(added);
     }
 }

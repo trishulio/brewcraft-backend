@@ -1,11 +1,12 @@
 package io.company.brewcraft.pojo;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Supplier;
 
 public class PurchaseOrder extends BaseModel {
     private Long id;
-
     private String orderNumber;
+    private Supplier supplier;
 
     public PurchaseOrder() {
     }
@@ -33,5 +34,13 @@ public class PurchaseOrder extends BaseModel {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

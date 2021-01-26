@@ -3,14 +3,13 @@ package io.company.brewcraft.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InvoiceItemDto {
+public class InvoiceItemDto extends BaseDto {
     private Long id;
     private String lotNumber;
     private QuantityDto quantity;
     private MoneyDto price;
     private TaxDto tax;
     private MoneyDto amount;
-    private String lot;
     private MaterialDto material;
     private Integer version;
 
@@ -60,14 +59,6 @@ public class InvoiceItemDto {
 
     public void setAmount(MoneyDto amount) {
         this.amount = amount;
-    }
-
-    public String getLot() {
-        return lot;
-    }
-
-    public void setLot(String lot) {
-        this.lot = lot;
     }
 
     public MaterialDto getMaterial() {

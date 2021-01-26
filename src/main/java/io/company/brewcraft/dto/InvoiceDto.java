@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class InvoiceDto extends BaseDto {
     private Long id;
     private String invoiceNumber;
-    private SupplierDto supplier;
     private PurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private MoneyDto amount;
@@ -37,14 +36,6 @@ public class InvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
-    }
-
-    public SupplierDto getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(SupplierDto supplier) {
-        this.supplier = supplier;
     }
 
     public PurchaseOrderDto getPurchaseOrder() {

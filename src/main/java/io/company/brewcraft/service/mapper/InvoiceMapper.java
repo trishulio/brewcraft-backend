@@ -20,17 +20,15 @@ public interface InvoiceMapper {
     
     InvoiceEntity toEntity(Invoice invoice);
 
-    @Mappings({ @Mapping(target = "supplier", ignore = true) })
     Invoice fromDto(InvoiceDto dto);
 
-    @Mappings({ @Mapping(target = "id", ignore = true), @Mapping(target = "supplier", ignore = true) })
+    @Mappings({ @Mapping(target = "id", ignore = true) })
     Invoice fromDto(UpdateInvoiceDto dto);
 
     @Mappings({
         @Mapping(target = "id", ignore = true),
         @Mapping(target = "version", ignore = true),
-        @Mapping(target = "supplier", ignore = true),
-        @Mapping(source = "purchaseOrderId", target = "purchaseOrder.id")
+        @Mapping(target = "purchaseOrder", ignore = true)
     })
     Invoice fromDto(AddInvoiceDto dto);
 

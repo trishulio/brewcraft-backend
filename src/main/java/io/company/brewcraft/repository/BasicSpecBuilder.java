@@ -53,8 +53,16 @@ public class BasicSpecBuilder implements SpecificationBuilder {
 
     @Override
     public <C extends Comparable<C>> BasicSpecBuilder between(String[] paths, C start, C end) {
+        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = null;
         if (start != null && end != null) {
-            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.between(get(root, paths), start, end);
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.between(get(root, paths), start, end);
+        } else if (start != null) {
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(get(root, paths), start);
+        } else if (end != null) {
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(get(root, paths), end);
+        }
+
+        if (func != null) {
             add(func);
         }
 

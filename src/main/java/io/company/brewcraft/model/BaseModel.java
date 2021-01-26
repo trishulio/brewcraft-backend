@@ -13,7 +13,7 @@ public abstract class BaseModel {
         this.util = util;
     }
 
-    public void outerJoin(BaseEntity other) {
+    public void outerJoin(BaseModel other) {
         util.outerJoin(this, other, (getter, setter) -> getter.invoke(this) == null);
     }
 

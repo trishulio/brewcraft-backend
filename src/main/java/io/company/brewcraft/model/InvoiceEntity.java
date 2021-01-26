@@ -13,7 +13,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class InvoiceEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_INVOICE_NUMBER = "invoiceNumber";
-    public static final String FIELD_SUPPLIER = "supplier";
     public static final String FIELD_GENERATED_ON = "generatedOn";
     public static final String FIELD_RECEIVED_ON = "receivedOn";
     public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
@@ -29,10 +28,6 @@ public class InvoiceEntity extends BaseEntity {
 
     @Column(name = "invoice_number", nullable = false, unique = true)
     private String invoiceNumber;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
 
     @Column(name = "generated_on")
     private LocalDateTime generatedOn;
@@ -76,11 +71,10 @@ public class InvoiceEntity extends BaseEntity {
         setId(id);
     }
 
-    public InvoiceEntity(Long id, String invoiceNumber, Supplier supplier, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, FreightEntity freight, PurchaseOrderEntity purchaseOrder,
+    public InvoiceEntity(Long id, String invoiceNumber, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, FreightEntity freight, PurchaseOrderEntity purchaseOrder,
             LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusEntity status, List<InvoiceItemEntity> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
-        setSupplier(supplier);
         setGeneratedOn(generatedOn);
         setPaymentDueDate(paymentDueDate);
         setFreight(freight);
@@ -106,14 +100,6 @@ public class InvoiceEntity extends BaseEntity {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
     }
 
     public LocalDateTime getGeneratedOn() {

@@ -27,7 +27,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/suppliers")
+@RequestMapping(path = "/api/purchases")
 public class InvoiceController extends BaseController {
     private static InvoiceMapper mapper = InvoiceMapper.INSTANCE;
 
@@ -103,28 +103,24 @@ public class InvoiceController extends BaseController {
         invoiceService.delete(invoiceId);
     }
 
-    @PostMapping("/{supplierId}/invoices/")
+    @PostMapping("/{purchaseOrderId}/invoices/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@PathVariable(required = true, name = "supplierId") Long supplierId, @RequestBody @NotNull AddInvoiceDto payload, @RequestParam(required = false, name = "attr") Set<String> attributes) {
-        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice added = invoiceService.add(supplierId, invoice);
+    public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @RequestBody @NotNull AddInvoiceDto payload) {
+        Invoice addition = InvoiceMapper.INSTANCE.fromDto(payload);
+        Invoice added = invoiceService.add(purchaseOrderId, addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
-        filter(dto, attributes);
 
         return dto;
     }
 
-    @PutMapping("/{supplierId}/invoices/{invoiceId}")
+    @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "supplierId") Long supplierId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload,
-            @RequestParam(name = "attr") Set<String> attributes) {
+    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @NotNull @RequestBody UpdateInvoiceDto payload) {
         Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice updated = invoiceService.update(supplierId, invoiceId, invoice);
+        Invoice updated = invoiceService.update(purchaseOrderId, invoiceId, invoice);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
-        filter(dto, attributes);
-
         return dto;
     }
 

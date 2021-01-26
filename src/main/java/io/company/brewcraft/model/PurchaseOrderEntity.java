@@ -1,18 +1,13 @@
 package io.company.brewcraft.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(name = "purchase_order")
 @Table
 public class PurchaseOrderEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";
+    public static final String FIELD_SUPPLIER = "supplier";    
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_order_generator")
@@ -21,6 +16,10 @@ public class PurchaseOrderEntity extends BaseEntity {
 
     @Column(name = "order_number", nullable = false, unique = true)
     private String orderNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplier;
 
     public PurchaseOrderEntity() {
     }
@@ -48,5 +47,13 @@ public class PurchaseOrderEntity extends BaseEntity {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

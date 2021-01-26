@@ -1,9 +1,9 @@
 package io.company.brewcraft.dto;
 
-public class PurchaseOrderDto {
+public class PurchaseOrderDto extends BaseDto {
     private Long id;
-
     private String orderNumber;
+    private SupplierDto supplier;
 
     public PurchaseOrderDto() {
     }
@@ -31,5 +31,13 @@ public class PurchaseOrderDto {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public SupplierDto getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
     }
 }
