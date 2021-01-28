@@ -1,9 +1,6 @@
 package io.company.brewcraft.repository;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,25 +15,26 @@ import org.springframework.data.jpa.domain.Specification;
 import io.company.brewcraft.data.TriFunction;
 
 public class BasicSpecBuilder implements SpecificationBuilder {
-    // TODO: Can the Trifunction interface be replaced with Specification interface?
     private static final Logger log = LoggerFactory.getLogger(BasicSpecBuilder.class);
 
-    private List<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> funcs;
-    private boolean isNot;
+    private SpecAccumulator accumulator;
 
     public BasicSpecBuilder() {
-        this.funcs = new ArrayList<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>>();
-        this.isNot = false;
+        this(new SpecAccumulator());
+    }
+
+    protected BasicSpecBuilder(SpecAccumulator accumulator) {
+        this.accumulator = accumulator;
     }
 
     @Override
     public BasicSpecBuilder in(String[] paths, Collection<?> collection) {
         if (collection != null) {
             TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> get(root, paths).in(collection);
-            add(func);            
+            accumulator.add(func);
         }
-        
-        resetNot();
+
+        accumulator.setIsNot(false);
         return this;
     }
 
@@ -47,7 +45,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
 
     @Override
     public BasicSpecBuilder not() {
-        this.isNot = true;
+        accumulator.setIsNot(true);
         return this;
     }
 
@@ -63,10 +61,10 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         }
 
         if (func != null) {
-            add(func);
+            accumulator.add(func);
         }
 
-        resetNot();
+        accumulator.setIsNot(false);
         return this;
     }
 
@@ -78,26 +76,13 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     @Override
     public <T> Specification<T> build() {
         return (root, query, criteriaBuilder) -> {
-            Predicate[] predicates = new Predicate[this.funcs.size()];
-            predicates = this.funcs.stream().map(func -> func.apply(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
-
+            Predicate[] predicates = this.accumulator.getPredicates(root, query, criteriaBuilder);
             return criteriaBuilder.and(predicates);
         };
     }
 
-    private void add(TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func) {
-        if (this.isNot) {
-            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> orig = func;
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.not(orig.apply(root, query, criteriaBuilder));
-        }
-
-        final TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> ref = func;
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> combined = (root, query, criteriaBuilder) -> criteriaBuilder.and(ref.apply(root, query, criteriaBuilder));
-        this.funcs.add(combined);
-    }
-
     private <C> Path<C> get(Root<?> root, String[] fieldNames) {
-        if (fieldNames.length <= 0) {
+        if (fieldNames == null || fieldNames.length <= 0) {
             String msg = String.format("No field names provided: %s", fieldNames.toString());
             log.error(msg);
             throw new IllegalArgumentException(msg);
@@ -110,12 +95,5 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         }
 
         return path;
-    }
-    public static SpecificationBuilder builder() {
-        return new BasicSpecBuilder();
-    }
-    
-    private void resetNot() {
-        this.isNot = false;
     }
 }
