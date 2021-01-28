@@ -26,6 +26,7 @@ public class SpecAccumulator {
     }
 
     public void add(TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func) {
+        log.info("Not = {}", isNot);
         if (this.isNot) {
             TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> orig = func;
             func = (root, query, criteriaBuilder) -> criteriaBuilder.not(orig.apply(root, query, criteriaBuilder));
@@ -42,6 +43,7 @@ public class SpecAccumulator {
 
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate[] predicates = new Predicate[this.funcs.size()];
+        log.info("Total Predicates = {}", predicates.length);
         predicates = this.funcs.stream().map(func -> func.apply(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
 
         return predicates;
