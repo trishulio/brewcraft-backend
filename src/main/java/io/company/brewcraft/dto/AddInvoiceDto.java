@@ -10,6 +10,9 @@ public class AddInvoiceDto extends BaseDto {
     private String invoiceNumber;
 
     @NotNull
+    private String description;
+
+    @NotNull
     private FreightDto freight;
 
     @NotNull
@@ -25,12 +28,6 @@ public class AddInvoiceDto extends BaseDto {
     private LocalDateTime paymentDueDate;
 
     @NotNull
-    private LocalDateTime createdAt;
-
-    @NotNull
-    private LocalDateTime lastUpdated;
-
-    @NotNull
     private InvoiceStatusDto status;
 
     @NotNull
@@ -39,16 +36,14 @@ public class AddInvoiceDto extends BaseDto {
     public AddInvoiceDto() {
     }
 
-    public AddInvoiceDto(@NotNull String invoiceNumber, @NotNull FreightDto freight, @NotNull MoneyDto amount, @NotNull LocalDateTime generatedOn, @NotNull LocalDateTime receivedOn,
-            @NotNull LocalDateTime paymentDueDate, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime lastUpdated, @NotNull InvoiceStatusDto status, @NotNull List<UpdateInvoiceItemDto> items) {
+    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, MoneyDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items) {
         setInvoiceNumber(invoiceNumber);
+        setDescription(description);
         setFreight(freight);
         setAmount(amount);
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
-        setCreatedAt(createdAt);
-        setLastUpdated(lastUpdated);
         setStatus(status);
         setItems(items);
     }
@@ -59,6 +54,14 @@ public class AddInvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String desription) {
+        this.description = desription;
     }
 
     public FreightDto getFreight() {
@@ -99,22 +102,6 @@ public class AddInvoiceDto extends BaseDto {
 
     public void setPaymentDueDate(LocalDateTime paymentDueDate) {
         this.paymentDueDate = paymentDueDate;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     public InvoiceStatusDto getStatus() {

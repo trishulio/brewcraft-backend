@@ -3,7 +3,6 @@ package io.company.brewcraft.service;
 import io.company.brewcraft.model.InvoiceStatusEntity;
 import io.company.brewcraft.pojo.InvoiceStatus;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.InvoiceStatusMapper;
 
 public class InvoiceStatusService {
@@ -15,8 +14,13 @@ public class InvoiceStatusService {
         this.repo = repo;
     }
 
-    InvoiceStatus getInvoiceStatus(String name) {
-        InvoiceStatusEntity entity = this.repo.findByName(name).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", name));
-        return mapper.fromEntity(entity);
+    public InvoiceStatus getInvoiceStatus(String name) {
+        InvoiceStatus status = null;
+        InvoiceStatusEntity entity = this.repo.findByName(name).orElse(null);
+        if (entity != null) {
+            status = mapper.fromEntity(entity);
+        }
+        
+        return status;
     }
 }

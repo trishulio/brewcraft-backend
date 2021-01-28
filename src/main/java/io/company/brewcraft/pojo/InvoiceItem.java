@@ -5,15 +5,17 @@ import javax.measure.Quantity;
 import org.joda.money.Money;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.service.MoneySupplier;
 
-public class InvoiceItem extends BaseModel {
+public class InvoiceItem extends BaseModel implements MoneySupplier {
     private Long id;
     private String lotNumber;
+    private String description;
     private Quantity<?> quantity;
     private Money price;
     private Tax tax;
     private Material material;
-    private Integer version;
+    private Integer version; // TODO: Do I need a version for items?
 
     public InvoiceItem() {
     }
@@ -23,9 +25,10 @@ public class InvoiceItem extends BaseModel {
         setId(id);
     }
 
-    public InvoiceItem(Long id, String lotNumber, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
+    public InvoiceItem(Long id, String lotNumber, String description, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
         this(id);
         setLotNumber(lotNumber);
+        setDescription(description);
         setQuantity(quantity);
         setPrice(price);
         setTax(tax);
@@ -47,6 +50,14 @@ public class InvoiceItem extends BaseModel {
 
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Quantity<?> getQuantity() {
@@ -89,14 +100,15 @@ public class InvoiceItem extends BaseModel {
         this.version = version;
     }
 
+    @Override
     public Money getAmount() {
         Money amount = null;
 
         Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
         Money price = this.getPrice() != null ? this.getPrice() : null;
 
-        if (qty != null && price != null) {
-            amount = this.getPrice().multipliedBy(qty.longValue());
+        if (qty != null && price != null) {            
+            amount = price.multipliedBy(qty.longValue());
         }
 
         return amount;

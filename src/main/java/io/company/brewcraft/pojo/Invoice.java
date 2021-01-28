@@ -9,12 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.service.MoneyService;
 
 public class Invoice extends BaseModel {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
     private Long id;
     private String invoiceNumber;
     private PurchaseOrder purchaseOrder;
+    private String description;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
@@ -32,10 +34,11 @@ public class Invoice extends BaseModel {
         setId(id);
     }
 
-    public Invoice(Long id, String invoiceNumber, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
+    public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
             LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
+        setDescription(description);
         setPurchaseOrder(purchaseOrder);
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
@@ -62,6 +65,14 @@ public class Invoice extends BaseModel {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public PurchaseOrder getPurchaseOrder() {
@@ -144,25 +155,14 @@ public class Invoice extends BaseModel {
         this.version = version;
     }
 
-    public static Logger getLogger() {
-        return logger;
-    }
-
     public Money getAmount() {
-        Money amount = null;
-
-        if (getItems() != null) {
-            List<Money> monies = getItems().stream().map(i -> i.getAmount()).collect(Collectors.toList());
-            amount = Money.total(monies);
-        }
-
-        return amount;
+        return MoneyService.total(this.getItems());
     }
     
     public Tax getTax() {
         Tax tax = null;
         if (getItems() != null) {
-            List<Tax> taxes = getItems().stream().map(i -> i.getTax()).collect(Collectors.toList());
+            List<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toList());
             tax = Tax.total(taxes);
         }
         

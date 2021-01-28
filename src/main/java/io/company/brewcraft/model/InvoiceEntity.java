@@ -13,11 +13,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class InvoiceEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_INVOICE_NUMBER = "invoiceNumber";
+    public static final String FIELD_DESCRITION = "description";
+    public static final String FIELD_PURCHASE_ORDER = "purchaseOrder";
     public static final String FIELD_GENERATED_ON = "generatedOn";
     public static final String FIELD_RECEIVED_ON = "receivedOn";
     public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
     public static final String FIELD_FREIGHT = "freight";
-    public static final String FIELD_PURCHASE_ORDER = "purchaseOrder";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_ITEMS = "items";
 
@@ -28,6 +29,13 @@ public class InvoiceEntity extends BaseEntity {
 
     @Column(name = "invoice_number", nullable = false, unique = true)
     private String invoiceNumber;
+
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_order_id", referencedColumnName = "id")
+    private PurchaseOrderEntity purchaseOrder;
 
     @Column(name = "generated_on")
     private LocalDateTime generatedOn;
@@ -42,17 +50,13 @@ public class InvoiceEntity extends BaseEntity {
     @JoinColumn(name = "freight_id", referencedColumnName = "id")
     private FreightEntity freight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_order_id", referencedColumnName = "id")
-    private PurchaseOrderEntity purchaseOrder;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
@@ -71,14 +75,15 @@ public class InvoiceEntity extends BaseEntity {
         setId(id);
     }
 
-    public InvoiceEntity(Long id, String invoiceNumber, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, FreightEntity freight, PurchaseOrderEntity purchaseOrder,
-            LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusEntity status, List<InvoiceItemEntity> items, Integer version) {
+    public InvoiceEntity(Long id, String invoiceNumber, String description, PurchaseOrderEntity purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, FreightEntity freight, LocalDateTime createdAt,
+            LocalDateTime lastUpdated, InvoiceStatusEntity status, List<InvoiceItemEntity> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
+        setPurchaseOrder(purchaseOrder);
+        setDescription(description);
         setGeneratedOn(generatedOn);
         setPaymentDueDate(paymentDueDate);
         setFreight(freight);
-        setPurchaseOrder(purchaseOrder);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setStatus(status);
@@ -100,6 +105,22 @@ public class InvoiceEntity extends BaseEntity {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public PurchaseOrderEntity getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrderEntity purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public LocalDateTime getGeneratedOn() {
@@ -134,12 +155,12 @@ public class InvoiceEntity extends BaseEntity {
         this.freight = freight;
     }
 
-    public PurchaseOrderEntity getPurchaseOrder() {
-        return purchaseOrder;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPurchaseOrder(PurchaseOrderEntity purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -148,14 +169,6 @@ public class InvoiceEntity extends BaseEntity {
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public InvoiceStatusEntity getStatus() {

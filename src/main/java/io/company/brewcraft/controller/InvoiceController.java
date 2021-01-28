@@ -44,6 +44,7 @@ public class InvoiceController extends BaseController {
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "invoice_numbers") Set<String> invoiceNumbers,
+        @RequestParam(required = false, name = "description") Set<String> descriptions,        
         @RequestParam(required = false, name = "generated_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnFrom,
         @RequestParam(required = false, name = "generated_on_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnTo,
         @RequestParam(required = false, name = "received_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime receivedOnFrom,
@@ -65,6 +66,7 @@ public class InvoiceController extends BaseController {
             ids,
             excludeIds,
             invoiceNumbers,
+            descriptions,
             generatedOnFrom,
             generatedOnTo,
             receivedOnFrom,
@@ -118,10 +120,20 @@ public class InvoiceController extends BaseController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload) {
         Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice updated = invoiceService.update(purchaseOrderId, invoiceId, invoice);
+        Invoice updated = invoiceService.put(purchaseOrderId, invoiceId, invoice);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
         return dto;
+    }
+    
+    @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload) {
+        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
+        Invoice updated = invoiceService.patch(purchaseOrderId, invoiceId, invoice);
+
+        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
+        return dto;        
     }
 
     private PageDto<InvoiceDto> response(Page<Invoice> invoices, Set<String> attributes) {

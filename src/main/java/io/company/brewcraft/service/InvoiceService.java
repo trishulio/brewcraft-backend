@@ -49,6 +49,7 @@ public class InvoiceService {
             Set<Long> ids,
             Set<Long> excludeIds,
             Set<String> invoiceNumbers,
+            Set<String> descriptions,
             LocalDateTime generatedOnFrom,
             LocalDateTime generatedOnTo,
             LocalDateTime receivedOnFrom,
@@ -65,6 +66,8 @@ public class InvoiceService {
             int page,
             int size
          ) {
+        // TODO: Elaborate and search over the descriptions for invoices and the items.
+        // TODO: Should the search input for invoices and items be separate?
         Specification<InvoiceEntity> spec = SpecificationBuilder
                                             .builder()
                                             .in(InvoiceEntity.FIELD_ID, ids)
@@ -104,12 +107,18 @@ public class InvoiceService {
         repo.deleteById(id);
     }
 
-    public Invoice update(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
+    public Invoice put(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
+        invoice.setId(invoiceId);
+        return add(purchaseOrderId, invoice);
+    }
+
+    public Invoice patch(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
         Validator validator = new Validator();
+
         Invoice existing = getInvoice(invoiceId);
         validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
-        invoice.outerJoin(existing);
 
+        invoice.outerJoin(existing);
         invoice.setId(invoiceId);
 
         return add(purchaseOrderId, invoice);
@@ -117,19 +126,22 @@ public class InvoiceService {
 
     public Invoice add(Long purchaseOrderId, Invoice invoice) {
         Validator validator = new Validator();
-        validator.rule(invoice.getPurchaseOrder() == null, "New Invoice cannot have an existing Purchase Order");
 
         PurchaseOrder po = poService.getPurchaseOrder(purchaseOrderId);
         validator.assertion(po != null, EntityNotFoundException.class, "Purchase Order", purchaseOrderId.toString());
 
-        String statusName = invoice.getStatus().getName();
+        String statusName = invoice.getStatus() != null ? invoice.getStatus().getName() : null;
         statusName = statusName != null ? statusName : InvoiceStatusEntity.DEFAULT_STATUS_NAME;
         InvoiceStatus status = statusService.getInvoiceStatus(statusName);
         validator.rule(status != null, String.format("Invalid Status Name: %s", statusName));
         validator.raiseErrors();
-
+        
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);
+        invoice.setCreatedAt(null);
+        invoice.setLastUpdated(null);
+        // TODO: Do I need to replace the Empty Material objects with the material objects from the DB?
+        // or should it just reference the ID since I am not cascading the changes to the Material Entity.
 
         InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
         InvoiceEntity added = repo.save(entity);

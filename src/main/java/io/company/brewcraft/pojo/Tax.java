@@ -1,19 +1,17 @@
 package io.company.brewcraft.pojo;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.joda.money.Money;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.service.MoneyService;
+import io.company.brewcraft.service.MoneySupplier;
 
-public class Tax extends BaseModel {
-
+public class Tax extends BaseModel implements MoneySupplier {
     private Money amount;
 
     public Tax() {
-
     }
 
     public Tax(Money amount) {
@@ -21,6 +19,7 @@ public class Tax extends BaseModel {
         setAmount(amount);
     }
 
+    @Override
     public Money getAmount() {
         return amount;
     }
@@ -30,10 +29,11 @@ public class Tax extends BaseModel {
     }
 
     public static Tax total(Collection<Tax> taxes) {
-        // TODO: Should tax be null or resolve to 0?
-        List<Money> monies = taxes.stream().map(t -> t == null ? null : t.getAmount()).collect(Collectors.toList());
-        Tax tax = new Tax(Money.total(monies));
-
-        return tax;
+        Tax combined = null;
+        Money total = MoneyService.total(taxes);
+        if (total != null) {
+            combined = new Tax(total);
+        }
+        return combined;
     }
 }

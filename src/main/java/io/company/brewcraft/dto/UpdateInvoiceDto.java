@@ -5,13 +5,12 @@ import java.util.List;
 
 public class UpdateInvoiceDto {
     private String invoiceNumber;
+    private String description;
     private FreightDto freight;
     private MoneyDto amount;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastUpdated;
     private InvoiceStatusDto status;
     private List<UpdateInvoiceItemDto> items;
     private Integer version;
@@ -19,16 +18,15 @@ public class UpdateInvoiceDto {
     public UpdateInvoiceDto() {
     }
 
-    public UpdateInvoiceDto(String invoiceNumber, FreightDto freight, MoneyDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto status,
-            List<UpdateInvoiceItemDto> items, Integer version) {
+    public UpdateInvoiceDto(String invoiceNumber, String description, FreightDto freight, MoneyDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items,
+            Integer version) {
         setInvoiceNumber(invoiceNumber);
+        setDescription(description);
         setFreight(freight);
         setAmount(amount);
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
-        setLastUpdated(lastUpdated);
-        setCreatedAt(createdAt);
         setStatus(status);
         setItems(items);
         setVersion(version);
@@ -40,6 +38,14 @@ public class UpdateInvoiceDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public FreightDto getFreight() {
@@ -80,22 +86,6 @@ public class UpdateInvoiceDto {
 
     public void setPaymentDueDate(LocalDateTime paymentDueDate) {
         this.paymentDueDate = paymentDueDate;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     public InvoiceStatusDto getStatus() {

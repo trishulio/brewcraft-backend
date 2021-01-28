@@ -16,6 +16,10 @@ public abstract class BaseModel {
     public void outerJoin(BaseModel other) {
         util.outerJoin(this, other, (getter, setter) -> getter.invoke(this) == null);
     }
+    
+    public void override(BaseModel other) {
+        util.outerJoin(this, other, (getter, setter) -> true);
+    }
 
     @Override
     public boolean equals(Object o) {

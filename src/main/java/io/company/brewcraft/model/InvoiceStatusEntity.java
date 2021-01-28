@@ -14,7 +14,7 @@ public class InvoiceStatusEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     
-    public static final String DEFAULT_STATUS_NAME = "Pending";
+    public static final String DEFAULT_STATUS_NAME = "PENDING";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_status_generator")

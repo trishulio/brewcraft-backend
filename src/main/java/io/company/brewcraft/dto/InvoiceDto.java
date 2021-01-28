@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class InvoiceDto extends BaseDto {
     private Long id;
     private String invoiceNumber;
+    private String description;
     private PurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private MoneyDto amount;
@@ -36,6 +37,14 @@ public class InvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public PurchaseOrderDto getPurchaseOrder() {
