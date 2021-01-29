@@ -54,13 +54,14 @@ public class InvoiceItemEntity extends BaseEntity {
         setId(id);
     }
 
-    public InvoiceItemEntity(Long id, String lotNumber, String description, InvoiceEntity invoice, QuantityEntity quantity, MoneyEntity price, MaterialEntity material, Integer version) {
+    public InvoiceItemEntity(Long id, String lotNumber, String description, InvoiceEntity invoice, QuantityEntity quantity, MoneyEntity price, TaxEntity tax, MaterialEntity material, Integer version) {
         this(id);
         setInvoice(invoice);
         setLotNumber(lotNumber);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
+        setTax(tax);
         setMaterial(material);
         setVersion(version);
     }

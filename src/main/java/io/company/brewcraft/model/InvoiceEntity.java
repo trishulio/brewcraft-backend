@@ -82,6 +82,7 @@ public class InvoiceEntity extends BaseEntity {
         setPurchaseOrder(purchaseOrder);
         setDescription(description);
         setGeneratedOn(generatedOn);
+        setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
         setFreight(freight);
         setCreatedAt(createdAt);
