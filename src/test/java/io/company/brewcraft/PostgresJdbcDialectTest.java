@@ -118,6 +118,17 @@ public class PostgresJdbcDialectTest {
     }
 
     @Test
+    public void testDropSchema_RunsDropSchemaSql() throws Exception {
+        Connection mConn = mock(Connection.class);
+        PreparedStatement mPs = mockPs(mConn, sql.dropSchema("SCHEMA_1"), 1);
+
+        dialect.dropSchema(mConn, "SCHEMA_1");
+
+        verify(mPs, times(1)).executeUpdate();
+        verify(mPs, times(1)).close();
+    }
+
+    @Test
     public void testDropUser_RunsDropUserSql() throws SQLException {
         Connection mConn = mock(Connection.class);
         PreparedStatement mPs = mockPs(mConn, sql.dropUser("USER_1"), 1);

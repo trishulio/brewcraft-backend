@@ -28,9 +28,10 @@ public class PurchaseOrderEntity extends BaseEntity {
         setId(id);
     }
 
-    public PurchaseOrderEntity(Long id, String orderNumber) {
+    public PurchaseOrderEntity(Long id, String orderNumber, Supplier supplier) {
         this(id);
-        this.orderNumber = orderNumber;
+        setOrderNumber(orderNumber);
+        setSupplier(supplier);
     }
 
     public Long getId() {
