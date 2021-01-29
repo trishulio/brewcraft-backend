@@ -40,7 +40,6 @@ public class InvoiceEntityTest {
             List.of(invoiceItem),
             1
         );
-        invoiceItem.setInvoice(invoice);
 
         assertEquals(1L, invoice.getId());
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
@@ -59,6 +58,7 @@ public class InvoiceEntityTest {
         assertEquals(3L, item.getId());
         assertEquals("LOT-123", item.getLotNumber());
         assertEquals("desc2", item.getDescription());
+        assertEquals(invoice, item.getInvoice());
         assertEquals(new QuantityEntity(8L), item.getQuantity());
         assertEquals(new MoneyEntity(9L), item.getPrice());
         assertEquals(new TaxEntity(10L), item.getTax());
