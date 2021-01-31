@@ -1,6 +1,7 @@
 package io.company.brewcraft.pojo;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -52,6 +53,8 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
         assertEquals(new InvoiceStatus(4L, "FINAL"), invoice.getStatus());
+        assertEquals(Money.parse("CAD 20"), invoice.getAmount());
+        assertEquals(new Tax(Money.parse("CAD 6")), invoice.getTax());
         assertEquals(1, invoice.getItems().size());
         InvoiceItem item = invoice.getItems().get(0);
         assertEquals(2L, item.getId());
@@ -60,6 +63,7 @@ public class InvoiceTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
         assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
+        assertEquals(Money.parse("CAD 20"), item.getAmount());
         assertEquals(new Material(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
@@ -153,5 +157,29 @@ public class InvoiceTest {
         assertNull(invoice.getItems());
         invoice.setItems(List.of(new InvoiceItem(2L)));
         assertEquals(List.of(new InvoiceItem(2L)), invoice.getItems());
+    }
+
+    @Test
+    public void testGetAmount_ReturnsTotalOfAllItemsAmount() {
+        InvoiceItem item1 = spy(new InvoiceItem());
+        doReturn(Money.parse("CAD 100")).when(item1).getAmount();
+
+        InvoiceItem item2 = spy(new InvoiceItem());
+        doReturn(Money.parse("CAD 200")).when(item2).getAmount();
+
+        invoice.setItems(List.of(item1, item2));
+        assertEquals(Money.parse("CAD 300"), invoice.getAmount());
+    }
+
+    @Test
+    public void testGetTax_ReturnsTotalOfAllItemsTax() {
+        InvoiceItem item1 = spy(new InvoiceItem());
+        doReturn(new Tax(Money.parse("CAD 100"))).when(item1).getTax();
+
+        InvoiceItem item2 = spy(new InvoiceItem());
+        doReturn(new Tax(Money.parse("CAD 200"))).when(item2).getTax();
+
+        invoice.setItems(List.of(item1, item2));
+        assertEquals(new Tax(Money.parse("CAD 300")), invoice.getTax());
     }
 }
