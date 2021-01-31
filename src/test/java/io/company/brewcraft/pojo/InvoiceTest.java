@@ -12,9 +12,6 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
-
 public class InvoiceTest {
 
     private Invoice invoice;
@@ -38,7 +35,7 @@ public class InvoiceTest {
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
             new InvoiceStatus(4L, "FINAL"),
-            List.of(new InvoiceItem(2L, "LOT-123", "desc2", Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), 1)),
+            List.of(new InvoiceItem()),
             1
         );
 
@@ -56,16 +53,7 @@ public class InvoiceTest {
         assertEquals(Money.parse("CAD 20"), invoice.getAmount());
         assertEquals(new Tax(Money.parse("CAD 6")), invoice.getTax());
         assertEquals(1, invoice.getItems().size());
-        InvoiceItem item = invoice.getItems().get(0);
-        assertEquals(2L, item.getId());
-        assertEquals("LOT-123", item.getLotNumber());
-        assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
-        assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
-        assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
-        assertEquals(Money.parse("CAD 20"), item.getAmount());
-        assertEquals(new Material(7L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(new InvoiceItem(), invoice.getItems().get(0));
     }
 
     @Test
