@@ -90,19 +90,17 @@ public class InvoiceItemMapperTest {
     @Test
     public void testFromDto_ReturnsInvoice_WhenUpdateInvoiceItemIsNotNull() {
         UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(
-            2L,
             "LOT-123",
             "desc2",
             new QuantityDto("KG", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
-            new MoneyDto("CAD", new BigDecimal("20")),
             new MaterialDto(7L),
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
 
-        assertEquals(2L, item.getId());
+        assertNull(item.getId());
         assertEquals("LOT-123", item.getLotNumber());
         assertEquals("desc2", item.getDescription());
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.KILOGRAM), item.getQuantity());

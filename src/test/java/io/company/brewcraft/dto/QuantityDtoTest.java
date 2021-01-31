@@ -24,9 +24,9 @@ public class QuantityDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        dto = new QuantityDto("kg", new BigDecimal(100));
+        dto = new QuantityDto("kg", new BigDecimal("100"));
         assertEquals("kg", dto.getSymbol());
-        assertEquals(100, dto.getValue());
+        assertEquals(new BigDecimal("100"), dto.getValue());
     }
 
     @Test

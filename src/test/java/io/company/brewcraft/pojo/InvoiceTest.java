@@ -50,8 +50,8 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
         assertEquals(new InvoiceStatus(4L, "FINAL"), invoice.getStatus());
-        assertEquals(Money.parse("CAD 20"), invoice.getAmount());
-        assertEquals(new Tax(Money.parse("CAD 6")), invoice.getTax());
+        assertNull(invoice.getAmount());
+        assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
         assertEquals(new InvoiceItem(), invoice.getItems().get(0));
     }

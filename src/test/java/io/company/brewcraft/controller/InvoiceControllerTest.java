@@ -329,12 +329,11 @@ public class InvoiceControllerTest {
            "ABCDE-12345",
            "desc1",
            new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))),
-           new MoneyDto("CAD", new BigDecimal("10.00")),
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
            new InvoiceStatusDto("FINAL"),
-           List.of(new UpdateInvoiceItemDto(3L, "LOT-123", "desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MoneyDto("CAD", new BigDecimal("7.00")), new MaterialDto(7L), 1))
+           List.of(new UpdateInvoiceItemDto("LOT-123", "desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MaterialDto(7L), 1))
        );
        Invoice mAddInvoice = new Invoice(
            null,
@@ -348,7 +347,7 @@ public class InvoiceControllerTest {
            null,
            null,
            new InvoiceStatus(null, "FINAL"),
-           List.of(new InvoiceItem(3L, "LOT-123", "desc2", Quantities.getQuantity(new BigDecimal("1.00"), Units.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L), 1)),
+           List.of(new InvoiceItem(null, "LOT-123", "desc2", Quantities.getQuantity(new BigDecimal("1.00"), Units.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L), 1)),
            null
        );
        Invoice mRetInvoice = new Invoice(
@@ -398,12 +397,11 @@ public class InvoiceControllerTest {
            "ABCDE-12345",
            "desc1",
            new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))),
-           new MoneyDto("CAD", new BigDecimal("10.00")),
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
            new InvoiceStatusDto("FINAL"),
-           List.of(new UpdateInvoiceItemDto(3L, "LOT-123", "desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MoneyDto("CAD", new BigDecimal("7.00")), new MaterialDto(7L), 1)),
+           List.of(new UpdateInvoiceItemDto("LOT-123", "desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MaterialDto(7L), 1)),
            1
        );
        Invoice mUpdateInvoice = new Invoice(
@@ -418,7 +416,7 @@ public class InvoiceControllerTest {
            null,
            null,
            new InvoiceStatus(null, "FINAL"),
-           List.of(new InvoiceItem(3L, "LOT-123", "desc2", Quantities.getQuantity(new BigDecimal("1.00"), Units.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L), 1)),
+           List.of(new InvoiceItem(null, "LOT-123", "desc2", Quantities.getQuantity(new BigDecimal("1.00"), Units.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L), 1)),
            1
        );
        Invoice mRetInvoice = new Invoice(
