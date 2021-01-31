@@ -16,9 +16,6 @@ public class AddInvoiceDto extends BaseDto {
     private FreightDto freight;
 
     @NotNull
-    private MoneyDto amount;
-
-    @NotNull
     private LocalDateTime generatedOn;
 
     @NotNull
@@ -36,11 +33,10 @@ public class AddInvoiceDto extends BaseDto {
     public AddInvoiceDto() {
     }
 
-    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, MoneyDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items) {
+    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items) {
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
         setFreight(freight);
-        setAmount(amount);
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
@@ -70,14 +66,6 @@ public class AddInvoiceDto extends BaseDto {
 
     public void setFreight(FreightDto freight) {
         this.freight = freight;
-    }
-
-    public MoneyDto getAmount() {
-        return amount;
-    }
-
-    public void setAmount(MoneyDto amount) {
-        this.amount = amount;
     }
 
     public LocalDateTime getGeneratedOn() {

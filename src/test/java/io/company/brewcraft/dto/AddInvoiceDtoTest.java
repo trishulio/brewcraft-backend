@@ -2,50 +2,99 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.InvoiceStatus;
-
 public class AddInvoiceDtoTest {
 
-    AddInvoiceDto dto;
+    AddInvoiceDto invoice;
 
     @BeforeEach
     public void init() {
-        dto = new AddInvoiceDto();
+        invoice = new AddInvoiceDto();
     }
 
     @Test
     public void testAllArgsConstructor() {
-        dto = new AddInvoiceDto(LocalDateTime.MAX, InvoiceStatus.PENDING, List.of(new UpdateInvoiceItemDto(567L)));
-        assertEquals(LocalDateTime.MAX, dto.getDate());
-        assertEquals(InvoiceStatus.PENDING, dto.getStatus());
-        assertEquals(1, dto.getItems().size());
-        assertEquals(new UpdateInvoiceItemDto(567L), dto.getItems().get(0));
+        invoice = new AddInvoiceDto(
+            "ABCDE-12345",
+            "desc1",
+            new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            new InvoiceStatusDto("FINAL"),
+            List.of(new UpdateInvoiceItemDto())
+        );
+
+        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+        assertEquals("desc1", invoice.getDescription());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
+        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
+        assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
+        assertEquals(1, invoice.getItems().size());
+        assertEquals(new UpdateInvoiceItemDto(), invoice.getItems().get(0));
     }
 
     @Test
-    public void testAccessDate() {
-        assertNull(dto.getDate());
-        dto.setDate(LocalDateTime.MAX);
-        assertEquals(LocalDateTime.MAX, dto.getDate());
+    public void testAccessInvoiceNumber() {
+        assertNull(invoice.getInvoiceNumber());
+        invoice.setInvoiceNumber("ABCDE-12345");
+        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+    }
+
+    @Test
+    public void testAccessDescription() {
+        assertNull(invoice.getDescription());
+        invoice.setDescription("desc1");
+        assertEquals("desc1", invoice.getDescription());
+    }
+
+    @Test
+    public void testAccessFreight() {
+        assertNull(invoice.getFreight());
+        invoice.setFreight(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))));
+        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
+    }
+
+    @Test
+    public void testAccessGeneratedOn() {
+        assertNull(invoice.getGeneratedOn());
+        invoice.setGeneratedOn(LocalDateTime.of(1999, 1, 1, 12, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
+    }
+
+    @Test
+    public void testAccessReceivedOn() {
+        assertNull(invoice.getReceivedOn());
+        invoice.setReceivedOn(LocalDateTime.of(2000, 1, 1, 12, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
+    }
+
+    @Test
+    public void testAccessPaymentDueDate() {
+        assertNull(invoice.getPaymentDueDate());
+        invoice.setPaymentDueDate(LocalDateTime.of(2001, 1, 1, 12, 0));
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
     }
 
     @Test
     public void testAccessStatus() {
-        assertNull(dto.getStatus());
-        dto.setStatus(InvoiceStatus.PENDING);
-        assertEquals(InvoiceStatus.PENDING, dto.getStatus());
+        assertNull(invoice.getStatus());
+        invoice.setStatus(new InvoiceStatusDto("FINAL"));
+        assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
     }
 
     @Test
     public void testAccessItems() {
-        assertNull(dto.getItems());
-        dto.setItems(List.of(new UpdateInvoiceItemDto(12345L)));
-        assertEquals(List.of(new UpdateInvoiceItemDto(12345L)), dto.getItems());
+        assertNull(invoice.getItems());
+        invoice.setItems(List.of(new UpdateInvoiceItemDto()));
+        assertEquals(List.of(new UpdateInvoiceItemDto()), invoice.getItems());
     }
 }
