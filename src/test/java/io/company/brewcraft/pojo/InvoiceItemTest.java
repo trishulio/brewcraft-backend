@@ -100,4 +100,12 @@ public class InvoiceItemTest {
         item.setVersion(1);
         assertEquals(1, item.getVersion());
     }
+
+    @Test
+    public void testGetAmount_ReturnsProductOfQuantityAndPrice() {
+        item.setQuantity(Quantities.getQuantity(11, Units.KILOGRAM));
+        item.setPrice(Money.parse("CAD 10"));
+
+        assertEquals(Money.parse("CAD 110"), item.getAmount());
+    }
 }
