@@ -26,10 +26,9 @@ public class InvoiceItemEntityTest {
     @Test
     public void testConstructorWithAllArgs_CallsSetForAllArgs() {
         InvoiceEntity invoice = new InvoiceEntity(2L);
-        item = new InvoiceItemEntity(1L, "LOT-123", "desc2", invoice, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L), 1);
+        item = new InvoiceItemEntity(1L, "desc2", invoice, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L), 1);
 
         assertEquals(1L, item.getId());
-        assertEquals("LOT-123", item.getLotNumber());
         assertEquals("desc2", item.getDescription());
         assertEquals(new InvoiceEntity(2L), item.getInvoice());
         assertEquals(new QuantityEntity(8L), item.getQuantity());
@@ -94,12 +93,5 @@ public class InvoiceItemEntityTest {
         assertNull(item.getVersion());
         item.setVersion(12345);
         assertEquals(12345, item.getVersion());
-    }
-
-    @Test
-    public void testAccessLotNumber() {
-        assertNull(item.getLotNumber());
-        item.setLotNumber("123456789");
-        assertEquals("123456789", item.getLotNumber());
     }
 }

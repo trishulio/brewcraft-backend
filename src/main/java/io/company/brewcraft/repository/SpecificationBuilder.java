@@ -1,6 +1,7 @@
 package io.company.brewcraft.repository;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,6 +15,10 @@ public interface SpecificationBuilder {
     SpecificationBuilder in(String path, Collection<?> collection);
 
     SpecificationBuilder not();
+
+    SpecificationBuilder like(String[] paths, Set<String> queries);
+
+    SpecificationBuilder like(String path, Set<String> queries);
 
     <C extends Comparable<C>> SpecificationBuilder between(String[] paths, C start, C end);
 

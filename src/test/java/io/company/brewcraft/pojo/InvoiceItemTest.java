@@ -25,7 +25,6 @@ public class InvoiceItemTest {
     public void testAllArgsConstructor_SetsValues() {
         InvoiceItem item = new InvoiceItem(
             2L,
-            "LOT-123",
             "desc2",
             Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
@@ -35,7 +34,6 @@ public class InvoiceItemTest {
         );
 
         assertEquals(2L, item.getId());
-        assertEquals("LOT-123", item.getLotNumber());
         assertEquals("desc2", item.getDescription());
         assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
@@ -50,13 +48,6 @@ public class InvoiceItemTest {
         assertNull(item.getId());
         item.setId(1L);
         assertEquals(1L, item.getId());
-    }
-
-    @Test
-    public void testAccessLotNumber() {
-        assertNull(item.getLotNumber());
-        item.setLotNumber("ABC-123");
-        assertEquals("ABC-123", item.getLotNumber());
     }
 
     @Test

@@ -18,7 +18,6 @@ public class UpdateInvoiceItemDtoTest {
     @Test
     public void testAllArgs() {
         item = new UpdateInvoiceItemDto(
-            "LOT-123",
             "desc2",
             new QuantityDto("kg", new BigDecimal("4")),
             new MoneyDto("CAD", new BigDecimal("5")),
@@ -27,20 +26,12 @@ public class UpdateInvoiceItemDtoTest {
             1
         );
 
-        assertEquals("LOT-123", item.getLotNumber());
         assertEquals("desc2", item.getDescription());
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
         assertEquals(new MaterialDto(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
-    }
-
-    @Test
-    public void testAccessLotNumber() {
-        assertNull(item.getLotNumber());
-        item.setLotNumber("LOT");
-        assertEquals("LOT", item.getLotNumber());
     }
 
     @Test

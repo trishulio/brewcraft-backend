@@ -1,6 +1,7 @@
 package io.company.brewcraft.repository;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -95,5 +96,24 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         }
 
         return path;
+    }
+
+    @Override
+    public SpecificationBuilder like(String[] paths, Set<String> queries) {
+        if (queries != null) {
+            for (String text : queries) {
+                if (text != null) {
+                    TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.like(get(root, paths), String.format("%%%s%%", text));
+                    accumulator.add(func);
+                }
+            }
+        }
+
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder like(String path, Set<String> queries) {
+        return like(new String[] { path }, queries);
     }
 }

@@ -49,7 +49,8 @@ public class InvoiceService {
             Set<Long> ids,
             Set<Long> excludeIds,
             Set<String> invoiceNumbers,
-            Set<String> descriptions,
+            Set<String> invoiceDescriptions,
+            Set<String> invoiceItemDescriptions,
             LocalDateTime generatedOnFrom,
             LocalDateTime generatedOnTo,
             LocalDateTime receivedOnFrom,
@@ -66,13 +67,13 @@ public class InvoiceService {
             int page,
             int size
          ) {
-        // TODO: Elaborate and search over the descriptions for invoices and the items.
-        // TODO: Should the search input for invoices and items be separate?
         Specification<InvoiceEntity> spec = SpecificationBuilder
                                             .builder()
                                             .in(InvoiceEntity.FIELD_ID, ids)
                                             .not().in(InvoiceEntity.FIELD_ID, excludeIds)
                                             .in(InvoiceEntity.FIELD_INVOICE_NUMBER, invoiceNumbers)
+                                            .like(InvoiceEntity.FIELD_DESCRITION, invoiceDescriptions)
+//                                            .like(new String[] { InvoiceEntity.FIELD_ITEMS, InvoiceItemEntity.FIELD_DESCRIPTION }, invoiceItemDescriptions)
                                             .between(InvoiceEntity.FIELD_GENERATED_ON, generatedOnFrom, generatedOnTo)
                                             .between(InvoiceEntity.FIELD_RECEIVED_ON, receivedOnFrom, receivedOnTo)
                                             .between(InvoiceEntity.FIELD_PAYMENT_DUE_DATE, paymentDueDateFrom, paymentDueDateTo)

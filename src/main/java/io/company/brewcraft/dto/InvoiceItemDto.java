@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InvoiceItemDto extends BaseDto {
     private Long id;
-    private String lotNumber;
     private String description;
     private QuantityDto quantity;
     private MoneyDto price;
@@ -17,9 +16,8 @@ public class InvoiceItemDto extends BaseDto {
     public InvoiceItemDto() {
     }
 
-    public InvoiceItemDto(Long id, String lotNumber, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
+    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
         setId(id);
-        setLotNumber(lotNumber);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
@@ -35,14 +33,6 @@ public class InvoiceItemDto extends BaseDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
     }
 
     public String getDescription() {

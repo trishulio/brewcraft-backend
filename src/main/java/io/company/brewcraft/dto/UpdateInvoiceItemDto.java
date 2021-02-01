@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class UpdateInvoiceItemDto extends BaseDto {
-    private String lotNumber;
     private String description;
     private QuantityDto quantity;
     private MoneyDto price;
@@ -12,23 +11,14 @@ public class UpdateInvoiceItemDto extends BaseDto {
     public UpdateInvoiceItemDto() {
     }
 
-    public UpdateInvoiceItemDto(String lotNumber, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MaterialDto material, Integer version) {
+    public UpdateInvoiceItemDto(String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MaterialDto material, Integer version) {
         this();
-        setLotNumber(lotNumber);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
         setTax(tax);
         setMaterial(material);
         setVersion(version);
-    }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
     }
 
     public String getDescription() {

@@ -1,9 +1,12 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -194,6 +197,81 @@ public class BasicSpecBuilderTest {
         builder.between("layer-1", 0, 1);
 
         verify(builder, times(1)).between(new String[] { "layer-1" }, 0, 1);
+    }
+
+    @Test
+    public void testLike_AddLikeCriteriaQuery_WhenQueriesAreNotNull() {
+        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        doNothing().when(mAccumulator).add(captor.capture());
+
+        builder.like(new String[] { "layer-1" }, Set.of("HELLO"));
+
+        Root<String> mRoot = mock(Root.class);
+        Path<String> mLayer1 = mock(Path.class);
+        doReturn(mLayer1).when(mRoot).get("layer-1");
+
+        CriteriaBuilder mCriteriaBuilder = mock(CriteriaBuilder.class);
+        Predicate mInCollectionPredicate = mock(Predicate.class);
+        doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(mLayer1, "%HELLO%");
+
+        captor.getValue().apply(mRoot, null, mCriteriaBuilder);
+
+        assertEquals(1, captor.getAllValues().size());
+    }
+
+    @Test
+    public void testLike_AddLikeCriteriaForMultipleQuery_WhenQueriesAreNotNull() {
+        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        doNothing().when(mAccumulator).add(captor.capture());
+
+        builder.like(new String[] { "layer-1" }, Set.of("HELLO", "BYE", "FOO"));
+
+        Root<String> mRoot = mock(Root.class);
+        Path<String> mLayer1 = mock(Path.class);
+        doReturn(mLayer1).when(mRoot).get("layer-1");
+
+        CriteriaBuilder mCriteriaBuilder = mock(CriteriaBuilder.class);
+        Predicate mInCollectionPredicate = mock(Predicate.class);
+        doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(eq(mLayer1), anyString());
+
+        captor.getAllValues().forEach(func -> func.apply(mRoot, null, mCriteriaBuilder));
+
+        assertEquals(3, captor.getAllValues().size());
+        verify(mCriteriaBuilder, times(1)).like(mLayer1, "%HELLO%");
+        verify(mCriteriaBuilder, times(1)).like(mLayer1, "%BYE%");
+        verify(mCriteriaBuilder, times(1)).like(mLayer1, "%FOO%");
+    }
+
+    @Test
+    public void testLike_AddLikeCriteriaIgnoresNullQueries_WhenQueriesAreNotNull() {
+        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        doNothing().when(mAccumulator).add(captor.capture());
+
+        Set<String> queries = new HashSet<String>();
+        queries.add("HELLO");
+        queries.add(null);
+        queries.add("FOO");
+        builder.like(new String[] { "layer-1" }, queries);
+
+        Root<String> mRoot = mock(Root.class);
+        Path<String> mLayer1 = mock(Path.class);
+        doReturn(mLayer1).when(mRoot).get("layer-1");
+
+        CriteriaBuilder mCriteriaBuilder = mock(CriteriaBuilder.class);
+        Predicate mInCollectionPredicate = mock(Predicate.class);
+        doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(eq(mLayer1), anyString());
+
+        captor.getAllValues().forEach(func -> func.apply(mRoot, null, mCriteriaBuilder));
+
+        assertEquals(2, captor.getAllValues().size());
+        verify(mCriteriaBuilder, times(1)).like(mLayer1, "%HELLO%");
+        verify(mCriteriaBuilder, times(1)).like(mLayer1, "%FOO%");
+    }
+
+    @Test
+    public void testLike_DoesNotAddLikeCriteria_WhenQueriesAreNull() {
+        builder.like(new String[] { "layer-1" }, null);
+        verifyNoInteractions(mAccumulator);
     }
 
     @Test

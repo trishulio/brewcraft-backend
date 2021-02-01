@@ -9,7 +9,6 @@ import io.company.brewcraft.service.MoneySupplier;
 
 public class InvoiceItem extends BaseModel implements MoneySupplier {
     private Long id;
-    private String lotNumber;
     private String description;
     private Quantity<?> quantity;
     private Money price;
@@ -25,9 +24,8 @@ public class InvoiceItem extends BaseModel implements MoneySupplier {
         setId(id);
     }
 
-    public InvoiceItem(Long id, String lotNumber, String description, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
+    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
         this(id);
-        setLotNumber(lotNumber);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
@@ -42,14 +40,6 @@ public class InvoiceItem extends BaseModel implements MoneySupplier {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
     }
 
     public String getDescription() {
