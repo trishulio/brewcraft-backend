@@ -47,17 +47,17 @@ public class ReflectionManipulatorTest {
 
     @Test
     public void testOuterJoin_ThrowsException_WhenEitherObjectIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(null, null, (a, b) -> true), "Outer Joins can not be on null objects or objects of different classes");
-        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(null, new Dummy(), (a, b) -> true), "Outer Joins can not be on null objects or objects of different classes");
-        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Dummy(), null, (a, b) -> true), "Outer Joins can not be on null objects or objects of different classes");
+        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(null, null, pd -> true), "Outer Joins can not be on null objects or objects of different classes");
+        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(null, new Dummy(), pd -> true), "Outer Joins can not be on null objects or objects of different classes");
+        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Dummy(), null, pd -> true), "Outer Joins can not be on null objects or objects of different classes");
     }
 
     @Test
     public void testOuterJoin_ThrowsException_WhenObjectsAreNotOfTheSameClass() {
         class Other {
         }
-        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Dummy(), new Other(), (a, b) -> true), "Outer Joins can not be on null objects or objects of different classes");
-        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Other(), new Dummy(), (a, b) -> true), "Outer Joins can not be on null objects or objects of different classes");
+        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Dummy(), new Other(), pd -> true), "Outer Joins can not be on null objects or objects of different classes");
+        assertThrows(IllegalArgumentException.class, () -> util.outerJoin(new Other(), new Dummy(), pd -> true), "Outer Joins can not be on null objects or objects of different classes");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ReflectionManipulatorTest {
         Other o1 = new Other(10);
         Other o2 = new Other(20);
 
-        util.outerJoin(o1, o2, (a, b) -> true);
+        util.outerJoin(o1, o2, pd -> true);
 
         assertEquals(10, o1.x);
         assertEquals(20, o2.x);
@@ -100,7 +100,7 @@ public class ReflectionManipulatorTest {
         Other o1 = new Other(10);
         Other o2 = new Other(20);
 
-        util.outerJoin(o1, o2, (a, b) -> true);
+        util.outerJoin(o1, o2, pd -> true);
 
         assertEquals(10, o1.getX());
         assertEquals(20, o2.getX());
@@ -127,7 +127,7 @@ public class ReflectionManipulatorTest {
         Other o1 = new Other(10);
         Other o2 = new Other(20);
 
-        util.outerJoin(o1, o2, (a, b) -> false);
+        util.outerJoin(o1, o2, pd -> false);
 
         assertEquals(10, o1.getX());
         assertEquals(20, o2.getX());
@@ -154,7 +154,7 @@ public class ReflectionManipulatorTest {
         Other o1 = new Other(10);
         Other o2 = new Other(20);
 
-        util.outerJoin(o1, o2, (a, b) -> true);
+        util.outerJoin(o1, o2, pd -> true);
 
         assertEquals(20, o1.getX());
         assertEquals(20, o2.getX());

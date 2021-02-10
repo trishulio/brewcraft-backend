@@ -109,8 +109,14 @@ public class InvoiceService {
     }
 
     public Invoice put(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
-        invoice.setId(invoiceId);
-        return add(purchaseOrderId, invoice);
+        Invoice existing = getInvoice(invoiceId);
+
+        Validator validator = new Validator();
+        validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
+
+        existing.override(invoice, Set.of(Invoice.FIELD_CREATED_AT));
+
+        return add(purchaseOrderId, existing);
     }
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
@@ -136,11 +142,9 @@ public class InvoiceService {
         InvoiceStatus status = statusService.getInvoiceStatus(statusName);
         validator.rule(status != null, String.format("Invalid Status Name: %s", statusName));
         validator.raiseErrors();
-        
+
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);
-        invoice.setCreatedAt(null);
-        invoice.setLastUpdated(null);
         // TODO: Do I need to replace the Empty Material objects with the material objects from the DB?
         // or should it just reference the ID since I am not cascading the changes to the Material Entity.
 

@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.data.CheckedBiFunction;
+import io.company.brewcraft.data.CheckedFunction;
 
 public class ReflectionManipulator {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionManipulator.class);
@@ -24,7 +24,7 @@ public class ReflectionManipulator {
 
     public static final ReflectionManipulator INSTANCE = new ReflectionManipulator();
 
-    public void outerJoin(Object o1, Object o2, CheckedBiFunction<Boolean, Method, Method, ReflectiveOperationException> predicate) {
+    public void outerJoin(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
         if (o1 == null || o2 == null || o1.getClass() != o2.getClass()) {
             throw new IllegalArgumentException("Outer Joins can not be on null objects or objects of different classes");
         }
@@ -40,7 +40,7 @@ public class ReflectionManipulator {
                     continue;
                 }
 
-                boolean pass = predicate.apply(getter, setter);
+                boolean pass = predicate.apply(pd);
 
                 if (pass) {
                     Object value = getter.invoke(o2);

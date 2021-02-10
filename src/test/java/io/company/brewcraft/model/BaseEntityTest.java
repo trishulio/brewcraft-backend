@@ -4,13 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import io.company.brewcraft.data.CheckedBiFunction;
+import io.company.brewcraft.data.CheckedFunction;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 public class BaseEntityTest {
@@ -58,23 +59,27 @@ public class BaseEntityTest {
 
     @Test
     public void testOuterJoin_CallsUtilOuterJoinWithTrueReturningPredicate_WhenGetterReturnsNull() throws ReflectiveOperationException {
-        ArgumentCaptor<CheckedBiFunction<Boolean, Method, Method, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedBiFunction.class);
+        ArgumentCaptor<CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedFunction.class);
         doNothing().when(util).outerJoin(eq(entity), eq(other), captor.capture());
         entity.outerJoin(other);
 
         Method idGetter = TestBaseEntity.class.getDeclaredMethod("getX");
+        PropertyDescriptor mPd = mock(PropertyDescriptor.class);
+        doReturn(idGetter).when(mPd).getReadMethod();
         entity.setX(null);
-        assertTrue(captor.getValue().apply(idGetter, null));
+        assertTrue(captor.getValue().apply(mPd));
     }
 
     @Test
     public void testOuterJoin_CallsUtilOuterJoinWithFalseReturningPredicate_WhenGetterReturnsNonNull() throws ReflectiveOperationException {
-        ArgumentCaptor<CheckedBiFunction<Boolean, Method, Method, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedBiFunction.class);
+        ArgumentCaptor<CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedFunction.class);
         doNothing().when(util).outerJoin(eq(entity), eq(other), captor.capture());
         entity.outerJoin(other);
 
         Method idGetter = TestBaseEntity.class.getDeclaredMethod("getX");
+        PropertyDescriptor mPd = mock(PropertyDescriptor.class);
+        doReturn(idGetter).when(mPd).getReadMethod();
         entity.setX(12345);
-        assertFalse(captor.getValue().apply(idGetter, null));
+        assertFalse(captor.getValue().apply(mPd));
     }
 }

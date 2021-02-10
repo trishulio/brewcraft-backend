@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -109,8 +110,7 @@ public class InvoiceController extends BaseController {
 
     @PostMapping("/{purchaseOrderId}/invoices/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @RequestBody @NotNull AddInvoiceDto payload) {
-        Invoice addition = InvoiceMapper.INSTANCE.fromDto(payload);
+    public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @Valid @RequestBody @NotNull AddInvoiceDto payload) {
         Invoice added = invoiceService.add(purchaseOrderId, addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
@@ -120,8 +120,7 @@ public class InvoiceController extends BaseController {
 
     @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
+    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         Invoice updated = invoiceService.put(purchaseOrderId, invoiceId, invoice);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
@@ -130,8 +129,7 @@ public class InvoiceController extends BaseController {
     
     @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
+    public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         Invoice updated = invoiceService.patch(purchaseOrderId, invoiceId, invoice);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);

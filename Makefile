@@ -14,9 +14,7 @@ dist:
 	docker rmi ${APP_NAME}:${VERSION}; true
 	docker build . -t ${APP_NAME}:${VERSION}
 
-run:
-	docker-compose -f docker-compose.yml -f docker-compose-dev.yml down &&\
-	docker-compose -f docker-compose.yml -f docker-compose-dev.yml rm &&\
+run: stop
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build --no-cache &&\
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 
@@ -44,7 +42,7 @@ start:
 
 stop:
 	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml down &&\
-	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml rm &&\
+	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml rm
 
 reload:
 	docker rmi ${APP_NAME}:${VERSION}; true &&\

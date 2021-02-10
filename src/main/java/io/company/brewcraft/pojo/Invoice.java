@@ -13,6 +13,9 @@ import io.company.brewcraft.service.MoneyService;
 
 public class Invoice extends BaseModel {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
+
+    public static final String FIELD_CREATED_AT = "createdAt";
+    
     private Long id;
     private String invoiceNumber;
     private PurchaseOrder purchaseOrder;

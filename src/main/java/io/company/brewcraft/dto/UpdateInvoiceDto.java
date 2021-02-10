@@ -3,6 +3,8 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateInvoiceDto {
     private String invoiceNumber;
     private String description;
@@ -12,6 +14,8 @@ public class UpdateInvoiceDto {
     private LocalDateTime paymentDueDate;
     private InvoiceStatusDto status;
     private List<UpdateInvoiceItemDto> items;
+    
+    @NotNull
     private Integer version;
 
     public UpdateInvoiceDto() {

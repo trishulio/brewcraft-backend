@@ -3,31 +3,14 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
 public class AddInvoiceDto extends BaseDto {
-    @NotNull
     private String invoiceNumber;
-
-    @NotNull
     private String description;
-
-    @NotNull
     private FreightDto freight;
-
-    @NotNull
     private LocalDateTime generatedOn;
-
-    @NotNull
     private LocalDateTime receivedOn;
-
-    @NotNull
     private LocalDateTime paymentDueDate;
-
-    @NotNull
     private InvoiceStatusDto status;
-
-    @NotNull
     private List<UpdateInvoiceItemDto> items;
 
     public AddInvoiceDto() {

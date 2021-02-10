@@ -1,0 +1,151 @@
+/api/v1/accounting/orders/purchases
+
+GET /api/v1/accounting/orders/purchases
+{
+    "id": '123',
+    "createdBy": "USER_1",
+    "revisions": [
+        {
+            "vendor": {
+                ...
+            },
+            "modifiedBy": "USER_1",
+            "createdAt": "2020-01-01T05:05:01",
+            "department": "",
+            "subtotal": {
+                "currency": "CAD",
+                "amount": 1000.00
+            },
+            "taxes": {
+                "gst": {
+                    "currency": "CAD",
+                    "amount": 50.00
+                },
+                "pst": {
+                    "currency": "CAD",
+                    "amount": 50.00
+                },
+                "total": {
+                    "currency": "CAD",
+                    "amount": 100.00
+                },
+            },
+            "freight": {
+                    "currency": "CAD",
+                    "amount": 100.00
+                },
+            "total": {
+                    "currency": "CAD",
+                    "amount": 1200.00
+                },,
+            "expectedDeliveryDate": "2020-01-01T05:05:05"
+            "deliveryAddress": {
+                ...
+            },
+            "instructions": "Will be sent to the vendor",
+            "notes": "Private notes on the purchase order object",
+            "items": [
+                {
+                    "sku": "ITEM-123",
+                    "qty": 3,
+                    "unit price": {
+                        "currency": "CAD",
+                        "amount": 10.00
+                    },
+                    "subtotal": {
+                        "currency": "CAD",
+                        "amount": 30.00
+                    },
+                    "tax": {
+                        "gst": {
+                            "currency": "CAD",
+                            "amount": 5.00
+                        },
+                        "pst": {
+                            "currency": "CAD",
+                            "amount": 5.00
+                        },
+                        "total": {
+                            "currency": "CAD",
+                            "amount": 10.00
+                        },
+                    "total": 40.00,
+                    "instructions": "Please pack this item in a blue box"
+                }
+            ],
+            "status": "sent", "approved", "saved", "void", "billed", "awaiting", "rejected",
+            "comments": [
+                ...
+            ]
+        },
+        "status": "sent",
+        "comments": [
+            ...
+        ], 
+        "attachments": [
+            ...
+        ],
+        "invoices": [
+            "INVOICE-123",
+            "INVOICE-456"
+        ]
+    ]
+}
+
+"GET /api/v1/accounting/orders/purchases/bills"
+
+{
+    "id": '123',
+    "billingAddress": {
+        ...
+    },
+    "deliveryAddress": {
+        ...
+    },
+    "vendorAddress": {
+        ...
+    },
+    "orderDate": "2020-05-01T05:05:05",
+    "shipmentDate": "2020-05-01T05:05:05",
+    "shipments": [
+        "SHIPMENT_1"
+    ],
+    "items": [
+        {
+            "sku": "SKU-1",
+            "itemDescription": "description for sku-1",
+            "qty": {
+                "unit": null,
+                "value": 5
+            },
+
+        }
+    ]
+}
+
+
+
+1. Brewery -> PO -> Vendor (items, qty, price, )
+2. PO ->> Invoice
+3. Invoice -> Shipments (Qty received)
+
+
+MATERIAL_TABLE:
+Material ID, SKU
+1. SUGAR
+
+SHIPMENT
+MATERIAL_ID-1, QTY_3
+
+
+INVENTORY
+SHIPMENT_ID, QTY_USED 0
+
+SELECT SUM(QTY) - QTY_USED FROM INVENTORY JOIN SHIPMENT
+
+BREW-
+SUGAR - 5kg
+
+BREW-1234
+CAR-12345
+
