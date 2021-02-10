@@ -24,13 +24,13 @@ public class ReflectionManipulator {
 
     public static final ReflectionManipulator INSTANCE = new ReflectionManipulator();
 
-    public void outerJoin(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
-        if (o1 == null || o2 == null || o1.getClass() != o2.getClass()) {
-            throw new IllegalArgumentException("Outer Joins can not be on null objects or objects of different classes");
+    public void copy(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Outer Joins can not be on null objects");
         }
 
         try {
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(o1.getClass(), Object.class).getPropertyDescriptors();
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(o2.getClass(), Object.class).getPropertyDescriptors();
 
             for (PropertyDescriptor pd : pds) {
                 Method getter = pd.getReadMethod();
@@ -60,16 +60,33 @@ public class ReflectionManipulator {
         }
     }
 
-    public Set<String> getPropertyNames(Class<?> clazz) {
+    public Set<String> getPropertyNames(Object o) {
         Set<String> propertyNames = null;
         try {
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(o.getClass(), Object.class).getPropertyDescriptors();
 
             propertyNames = Arrays.stream(pds).map(pd -> pd.getName()).collect(Collectors.toSet());
         } catch (IntrospectionException e) {
             String msg = String.format("Failed to introspect object because: %s", e.getMessage());
             handleException(msg, e);
         }
+
+        return propertyNames;
+    }
+
+    public Set<String> getPropertyNames(Class<?> clazz) {
+        Set<String> propertyNames = null;
+
+        Method[] methods = clazz.getMethods();
+        propertyNames = Arrays.stream(methods)
+                .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
+                .map(method -> method.getName().replaceFirst("get|set", ""))
+                .map(prop -> {
+                    char c = Character.toLowerCase(prop.charAt(0));
+                    String l = Character.toString(c);
+                    return prop.replaceFirst("\\w", l);
+                })
+                .collect(Collectors.toSet());
 
         return propertyNames;
     }

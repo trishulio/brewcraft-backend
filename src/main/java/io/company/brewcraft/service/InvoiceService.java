@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.FreightEntity;
 import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceStatusEntity;
@@ -27,7 +29,7 @@ import io.company.brewcraft.service.mapper.InvoiceMapper;
 import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
-public class InvoiceService {
+public class InvoiceService extends BaseService {
 
     private static final InvoiceMapper INVOICE_MAPPER = InvoiceMapper.INSTANCE;
 
@@ -36,6 +38,7 @@ public class InvoiceService {
     private InvoiceStatusService statusService;
 
     public InvoiceService() {
+        super();
     }
 
     public InvoiceService(InvoiceRepository repo, InvoiceStatusService statusService, PurchaseOrderService poService) {
@@ -108,30 +111,37 @@ public class InvoiceService {
         repo.deleteById(id);
     }
 
-    public Invoice put(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
+    public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice update) {
         Invoice existing = getInvoice(invoiceId);
 
-        Validator validator = new Validator();
-        validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
+        if (existing == null) {
+            existing = new Invoice();
+        }
 
-        existing.override(invoice, Set.of(Invoice.FIELD_CREATED_AT));
+        existing.override(update, getPropertyNames(UpdateInvoice.class));
 
         return add(purchaseOrderId, existing);
     }
 
-    public Invoice patch(Long purchaseOrderId, Long invoiceId, Invoice invoice) {
+    public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice patch) {
         Validator validator = new Validator();
 
         Invoice existing = getInvoice(invoiceId);
         validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
-        invoice.outerJoin(existing);
-        invoice.setId(invoiceId);
+        existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
+
+        return add(purchaseOrderId, existing);
+    }
+
+    public Invoice add(Long purchaseOrderId, BaseInvoice addition) {
+        Invoice invoice = new Invoice();
+        invoice.override(addition, getPropertyNames(BaseInvoice.class));
 
         return add(purchaseOrderId, invoice);
     }
 
-    public Invoice add(Long purchaseOrderId, Invoice invoice) {
+    private Invoice add(Long purchaseOrderId, Invoice invoice) {
         Validator validator = new Validator();
 
         PurchaseOrder po = poService.getPurchaseOrder(purchaseOrderId);
@@ -145,8 +155,9 @@ public class InvoiceService {
 
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);
-        // TODO: Do I need to replace the Empty Material objects with the material objects from the DB?
-        // or should it just reference the ID since I am not cascading the changes to the Material Entity.
+        // TODO: Do I need to replace the Empty Material objects with the material
+        // objects from the DB?  or should it just reference the ID since I am not
+        // cascading the changes to the Material Entity.
 
         InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
         InvoiceEntity added = repo.save(entity);

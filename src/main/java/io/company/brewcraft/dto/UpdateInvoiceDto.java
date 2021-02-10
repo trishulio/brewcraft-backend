@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-public class UpdateInvoiceDto {
+public class UpdateInvoiceDto extends BaseDto {
     private String invoiceNumber;
     private String description;
     private FreightDto freight;

@@ -8,10 +8,13 @@ import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.dto.Identified;
+import io.company.brewcraft.dto.Versioned;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.service.MoneyService;
 
-public class Invoice extends BaseModel {
+public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Identified {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_CREATED_AT = "createdAt";
@@ -54,26 +57,32 @@ public class Invoice extends BaseModel {
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
 
+    @Override
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -86,46 +95,57 @@ public class Invoice extends BaseModel {
         this.purchaseOrder = purchaseOrder;
     }
 
+    @Override
     public LocalDateTime getGeneratedOn() {
         return generatedOn;
     }
 
+    @Override
     public void setGeneratedOn(LocalDateTime generatedOn) {
         this.generatedOn = generatedOn;
     }
 
+    @Override
     public LocalDateTime getReceivedOn() {
         return receivedOn;
     }
 
+    @Override
     public void setReceivedOn(LocalDateTime receivedOn) {
         this.receivedOn = receivedOn;
     }
 
+    @Override
     public LocalDateTime getPaymentDueDate() {
         return paymentDueDate;
     }
 
+    @Override
     public void setPaymentDueDate(LocalDateTime paymentDueDate) {
         this.paymentDueDate = paymentDueDate;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public InvoiceStatus getStatus() {
         return status;
     }
@@ -134,6 +154,7 @@ public class Invoice extends BaseModel {
         this.status = status;
     }
 
+    @Override
     public List<InvoiceItem> getItems() {
         return items;
     }
@@ -142,6 +163,7 @@ public class Invoice extends BaseModel {
         this.items = items;
     }
 
+    @Override
     public Freight getFreight() {
         return freight;
     }
@@ -150,10 +172,12 @@ public class Invoice extends BaseModel {
         this.freight = freight;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }
