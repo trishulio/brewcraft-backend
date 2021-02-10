@@ -14,7 +14,7 @@ dist:
 	docker rmi ${APP_NAME}:${VERSION}; true
 	docker build . -t ${APP_NAME}:${VERSION}
 
-run: stop
+run:
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build --no-cache &&\
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 

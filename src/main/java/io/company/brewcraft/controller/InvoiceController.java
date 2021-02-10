@@ -111,6 +111,7 @@ public class InvoiceController extends BaseController {
     @PostMapping("/{purchaseOrderId}/invoices/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @Valid @RequestBody @NotNull AddInvoiceDto payload) {
+        Invoice addition = InvoiceMapper.INSTANCE.fromDto(payload);
         Invoice added = invoiceService.add(purchaseOrderId, addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
@@ -121,18 +122,22 @@ public class InvoiceController extends BaseController {
     @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice updated = invoiceService.put(purchaseOrderId, invoiceId, invoice);
+        Invoice update = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
+        Invoice invoice = invoiceService.put(purchaseOrderId, invoiceId, update);
+        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+
         return dto;
     }
     
     @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice updated = invoiceService.patch(purchaseOrderId, invoiceId, invoice);
+        Invoice patch = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
+        Invoice invoice = invoiceService.patch(purchaseOrderId, invoiceId, patch);
+        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+
         return dto;        
     }
 
