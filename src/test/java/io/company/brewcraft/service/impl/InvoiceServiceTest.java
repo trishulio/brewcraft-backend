@@ -13,14 +13,22 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Currency;
 import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceItemEntity;
 import io.company.brewcraft.model.InvoiceStatusEntity;
+import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.model.MoneyEntity;
+import io.company.brewcraft.model.QuantityEntity;
+import io.company.brewcraft.model.TaxEntity;
+import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.Freight;
 import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.pojo.Tax;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
@@ -108,19 +116,20 @@ public class InvoiceServiceTest {
        InvoiceStatus mStatus = new InvoiceStatus(2L, "FINAL");
        doReturn(mStatus).when(mStatusService).getInvoiceStatus("FINAL");
        
+       InvoiceItem itemUpdate = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice update = new Invoice(
-           null,
+           9L,
            "ABCDE-12345",
            "desc1",
-           null,
+           new PurchaseOrder(2L),
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
            new Freight(Money.parse("CAD 4.00")),
-           null,
-           null,
+           LocalDateTime.of(2002, 1, 1, 12, 0),
+           LocalDateTime.of(2003, 1, 1, 12, 0),
            new InvoiceStatus(null, "FINAL"),
-           List.of(new InvoiceItem(3L)),
+           List.of(itemUpdate),
            1
        );
        Invoice invoice = service.put(3L, 1L, update);
@@ -139,8 +148,13 @@ public class InvoiceServiceTest {
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
        InvoiceItem item = invoice.getItems().get(0);
-       assertEquals(3L, item.getId());
-       assertEquals(null, item.getVersion());
+       assertEquals(null, item.getId());
+       assertEquals("Item description", item.getDescription());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Money.parse("CAD 10"), item.getPrice());
+       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
+       assertEquals(new Material(7L), item.getMaterial());
+       assertEquals(1, item.getVersion());
    }
 
    @Test
@@ -167,32 +181,44 @@ public class InvoiceServiceTest {
 
        doReturn(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME)).when(mStatusService).getInvoiceStatus(InvoiceStatusEntity.DEFAULT_STATUS_NAME);
        doReturn(new PurchaseOrder(3L)).when(mPoService).getPurchaseOrder(3L);
-       
-       InvoiceEntity mExisting = new InvoiceEntity();
+
+       InvoiceItemEntity mExistingItem = new InvoiceItemEntity(2L, "Item description", null, new QuantityEntity(5L, new UnitEntity("kg"), new BigDecimal("10")), new MoneyEntity(6L, new Currency(124, "CAD"), new BigDecimal("20")), new TaxEntity(7L), new MaterialEntity(8L), 1);
+       InvoiceEntity mExisting = new InvoiceEntity(1L);
        mExisting.setDescription("existing description");
-       mExisting.setItems(List.of(new InvoiceItemEntity(2L)));
+       mExisting.setItems(List.of(mExistingItem));
        mExisting.setInvoiceNumber("ABCDE-12345");
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
        Invoice patch = new Invoice();
        patch.setDescription("New description");
        patch.setGeneratedOn(LocalDateTime.of(2020, 1, 1, 12, 0));
+       // These fields are ignored during patch Ignored.
+       patch.setPurchaseOrder(new PurchaseOrder(99L));
+       patch.setCreatedAt(LocalDateTime.of(2002, 1, 1, 12, 0));
+       patch.setLastUpdated(LocalDateTime.of(2003, 1, 1, 12, 0));
 
        Invoice invoice = service.patch(3L, 1L, patch);
 
        assertEquals(1L, invoice.getId());
        assertEquals("New description", invoice.getDescription());
-       assertEquals(new InvoiceItem(2L), invoice.getItems().get(0));
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals(LocalDateTime.of(2020, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
        assertEquals(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME), invoice.getStatus());
-       assertNull(invoice.getAmount());
-       assertNull(invoice.getCreatedAt());
-       assertNull(invoice.getFreight());
+       assertEquals(1, invoice.getItems().size());
        assertNull(invoice.getPaymentDueDate());
        assertNull(invoice.getReceivedOn());
+       assertNull(invoice.getFreight());
        assertNull(invoice.getTax());
+       InvoiceItem item = invoice.getItems().get(0);
+       assertNull(item.getId()); // Ignored
+       assertEquals("Item description", item.getDescription());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Money.parse("CAD 20"), item.getPrice());
+       assertEquals(new Tax(), item.getTax());
+       // Ignored in update
+       assertNull(invoice.getCreatedAt());
+       assertNull(invoice.getLastUpdated());
    }
 
    @Test
@@ -230,28 +256,46 @@ public class InvoiceServiceTest {
        doReturn(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME)).when(mStatusService).getInvoiceStatus(InvoiceStatusEntity.DEFAULT_STATUS_NAME);
        doReturn(new PurchaseOrder(3L)).when(mPoService).getPurchaseOrder(3L);
        
-       Invoice addition = new Invoice();
-       addition.setDescription("description");
-       addition.setGeneratedOn(LocalDateTime.of(2020, 1, 1, 12, 0));
-       InvoiceItem item = new InvoiceItem(5L);
-       item.setPrice(Money.parse("CAD 10"));
-       item.setQuantity(Quantities.getQuantity(new BigDecimal("5"), Units.KILOGRAM));
-       addition.setItems(List.of(item));
+       InvoiceItem itemAdded = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       Invoice addition = new Invoice(
+           9L,
+           "ABCDE-12345",
+           "desc1",
+           new PurchaseOrder(2L),
+           LocalDateTime.of(1999, 1, 1, 12, 0),
+           LocalDateTime.of(2000, 1, 1, 12, 0),
+           LocalDateTime.of(2001, 1, 1, 12, 0),
+           new Freight(Money.parse("CAD 4.00")),
+           LocalDateTime.of(2002, 1, 1, 12, 0),
+           LocalDateTime.of(2003, 1, 1, 12, 0),
+           null,
+           List.of(itemAdded),
+           1
+       );
 
        Invoice invoice = service.add(3L, addition);
 
-       assertEquals(null, invoice.getId());
-       assertEquals("description", invoice.getDescription());
-       assertEquals(item, invoice.getItems().get(0));
-       assertEquals(LocalDateTime.of(2020, 1, 1, 12, 0), invoice.getGeneratedOn());
+       assertNull(invoice.getId());
+       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+       assertEquals("desc1", invoice.getDescription());
        assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
-       assertEquals(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME), invoice.getStatus());
-       assertEquals(Money.parse("CAD 50.00"), invoice.getAmount());
+       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
+       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
+       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
+       assertEquals(new Freight(Money.parse("CAD 4.00")), invoice.getFreight());
        assertNull(invoice.getCreatedAt());
-       assertNull(invoice.getFreight());
-       assertNull(invoice.getPaymentDueDate());
-       assertNull(invoice.getReceivedOn());
-       assertNull(invoice.getTax());
+       assertNull(invoice.getLastUpdated());
+       assertEquals(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME), invoice.getStatus());
+       assertNull(invoice.getVersion());
+       assertEquals(1, invoice.getItems().size());
+       InvoiceItem item = invoice.getItems().get(0);
+       assertNull(item.getId());
+       assertEquals("Item description", item.getDescription());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Money.parse("CAD 10"), item.getPrice());
+       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
+       assertEquals(new Material(7L), item.getMaterial());
+       assertNull(item.getVersion());
    }
 
    @Test

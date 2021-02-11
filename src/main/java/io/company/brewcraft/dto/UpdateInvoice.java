@@ -1,4 +1,6 @@
 package io.company.brewcraft.dto;
 
-public interface UpdateInvoice extends BaseInvoice, Versioned {
+import io.company.brewcraft.pojo.UpdateInvoiceItem;
+
+public interface UpdateInvoice<T extends UpdateInvoiceItem> extends BaseInvoice<T>, Versioned {
 }

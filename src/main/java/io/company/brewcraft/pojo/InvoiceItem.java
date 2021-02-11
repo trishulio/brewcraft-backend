@@ -4,10 +4,11 @@ import javax.measure.Quantity;
 
 import org.joda.money.Money;
 
+import io.company.brewcraft.dto.Identified;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.service.MoneySupplier;
 
-public class InvoiceItem extends BaseModel implements MoneySupplier {
+public class InvoiceItem extends BaseModel implements MoneySupplier, UpdateInvoiceItem, Identified {
     private Long id;
     private String description;
     private Quantity<?> quantity;
@@ -34,58 +35,72 @@ public class InvoiceItem extends BaseModel implements MoneySupplier {
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public Quantity<?> getQuantity() {
         return quantity;
     }
 
+    @Override
     public void setQuantity(Quantity<?> quantity) {
         this.quantity = quantity;
     }
 
+    @Override
     public Money getPrice() {
         return price;
     }
 
+    @Override
     public void setPrice(Money price) {
         this.price = price;
     }
 
+    @Override
     public Tax getTax() {
         return tax;
     }
 
+    @Override
     public void setTax(Tax tax) {
         this.tax = tax;
     }
 
+    @Override
     public Material getMaterial() {
         return material;
     }
 
+    @Override
     public void setMaterial(Material material) {
         this.material = material;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

@@ -8,17 +8,16 @@ import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.dto.Audited;
 import io.company.brewcraft.dto.Identified;
-import io.company.brewcraft.dto.Versioned;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.service.MoneyService;
+import io.company.brewcraft.service.MoneySupplier;
 
-public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Identified {
+public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
 
-    public static final String FIELD_CREATED_AT = "createdAt";
-    
     private Long id;
     private String invoiceNumber;
     private PurchaseOrder purchaseOrder;
@@ -150,6 +149,7 @@ public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Iden
         return status;
     }
 
+    @Override
     public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
@@ -159,6 +159,7 @@ public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Iden
         return items;
     }
 
+    @Override
     public void setItems(List<InvoiceItem> items) {
         this.items = items;
     }
@@ -168,6 +169,7 @@ public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Iden
         return freight;
     }
 
+    @Override
     public void setFreight(Freight freight) {
         this.freight = freight;
     }
@@ -182,6 +184,7 @@ public class Invoice extends BaseModel implements UpdateInvoice, Versioned, Iden
         this.version = version;
     }
 
+    @Override
     public Money getAmount() {
         return MoneyService.total(this.getItems());
     }

@@ -4,8 +4,10 @@ import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,9 +21,12 @@ import io.company.brewcraft.model.InvoiceStatusEntity;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrderEntity;
 import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.pojo.BaseInvoiceItem;
 import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.InvoiceStatus;
 import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -111,32 +116,60 @@ public class InvoiceService extends BaseService {
         repo.deleteById(id);
     }
 
-    public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice update) {
+    public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
         Invoice existing = getInvoice(invoiceId);
 
         if (existing == null) {
-            existing = new Invoice();
+            existing = new Invoice(invoiceId);
+            existing.setCreatedAt(LocalDateTime.now()); // TODO: This is a hack. Need a fix at hibernate level to avoid any hibernate issues.
         }
 
         existing.override(update, getPropertyNames(UpdateInvoice.class));
+        // TODO: this logic needs to exist in the Mapper. When DTOs are following the same pattern then this can be achived by calling the override method in the Mapper.
+        if (existing.getItems() != null) {
+            List<InvoiceItem> items = existing.getItems().stream().map(i -> {
+                InvoiceItem item = new InvoiceItem();
+                item.override(i, getPropertyNames(UpdateInvoiceItem.class));
+                return item;
+            }).collect(Collectors.toList());
+            existing.setItems(items);   
+        }
 
         return add(purchaseOrderId, existing);
     }
 
-    public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice patch) {
+    public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
         Validator validator = new Validator();
 
         Invoice existing = getInvoice(invoiceId);
         validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
         existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
+        
+        if (existing.getItems() != null) {
+            List<InvoiceItem> items = existing.getItems().stream().map(i -> {
+                InvoiceItem item = new InvoiceItem();
+                item.override(i, getPropertyNames(UpdateInvoiceItem.class));
+                return item;
+            }).collect(Collectors.toList());
+            existing.setItems(items);            
+        }
 
         return add(purchaseOrderId, existing);
     }
 
-    public Invoice add(Long purchaseOrderId, BaseInvoice addition) {
+    public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
         Invoice invoice = new Invoice();
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
+        
+        if (invoice.getItems() != null) {
+            List<InvoiceItem> items = invoice.getItems().stream().map(i -> {
+                InvoiceItem item = new InvoiceItem();
+                item.override(i, getPropertyNames(BaseInvoiceItem.class));
+                return item;
+            }).collect(Collectors.toList());
+            invoice.setItems(items);            
+        }
 
         return add(purchaseOrderId, invoice);
     }
@@ -150,13 +183,14 @@ public class InvoiceService extends BaseService {
         String statusName = invoice.getStatus() != null ? invoice.getStatus().getName() : null;
         statusName = statusName != null ? statusName : InvoiceStatusEntity.DEFAULT_STATUS_NAME;
         InvoiceStatus status = statusService.getInvoiceStatus(statusName);
+
         validator.rule(status != null, String.format("Invalid Status Name: %s", statusName));
         validator.raiseErrors();
 
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);
         // TODO: Do I need to replace the Empty Material objects with the material
-        // objects from the DB?  or should it just reference the ID since I am not
+        // objects from the DB? or should it just reference the ID since I am not
         // cascading the changes to the Material Entity.
 
         InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);

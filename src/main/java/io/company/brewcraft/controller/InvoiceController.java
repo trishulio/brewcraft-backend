@@ -17,10 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddInvoiceDto;
+import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
 import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
@@ -111,7 +114,7 @@ public class InvoiceController extends BaseController {
     @PostMapping("/{purchaseOrderId}/invoices/")
     @ResponseStatus(value = HttpStatus.CREATED)
     public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @Valid @RequestBody @NotNull AddInvoiceDto payload) {
-        Invoice addition = InvoiceMapper.INSTANCE.fromDto(payload);
+        BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
         Invoice added = invoiceService.add(purchaseOrderId, addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
@@ -122,7 +125,7 @@ public class InvoiceController extends BaseController {
     @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice update = InvoiceMapper.INSTANCE.fromDto(payload);
+        UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
 
         Invoice invoice = invoiceService.put(purchaseOrderId, invoiceId, update);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
@@ -133,7 +136,7 @@ public class InvoiceController extends BaseController {
     @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        Invoice patch = InvoiceMapper.INSTANCE.fromDto(payload);
+        UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
 
         Invoice invoice = invoiceService.patch(purchaseOrderId, invoiceId, patch);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);

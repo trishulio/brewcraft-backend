@@ -3,11 +3,11 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import io.company.brewcraft.pojo.BaseInvoiceItem;
 import io.company.brewcraft.pojo.Freight;
-import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.InvoiceStatus;
 
-public interface BaseInvoice {
+public interface BaseInvoice<T extends BaseInvoiceItem> {
     String getInvoiceNumber();
 
     void setInvoiceNumber(String invoiceNumber);
@@ -28,23 +28,15 @@ public interface BaseInvoice {
 
     void setPaymentDueDate(LocalDateTime paymentDueDate);
 
-    LocalDateTime getLastUpdated();
-
-    void setLastUpdated(LocalDateTime lastUpdated);
-
-    LocalDateTime getCreatedAt();
-
-    void setCreatedAt(LocalDateTime createdAt);
-
     InvoiceStatus getStatus();
 
-    public void setStatus(InvoiceStatus status);
+    void setStatus(InvoiceStatus status);
 
-    List<InvoiceItem> getItems();
+    List<T> getItems();
 
-    public void setItems(List<InvoiceItem> items);
+    void setItems(List<T> items);
 
     Freight getFreight();
 
-    public void setFreight(Freight freight);
+    void setFreight(Freight freight);
 }

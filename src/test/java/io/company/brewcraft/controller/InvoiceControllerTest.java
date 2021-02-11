@@ -269,7 +269,7 @@ public class InvoiceControllerTest {
        assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
-   
+
    @Test
    public void testGetInvoice_FiltersOutAllAttributesExceptId_WhenAttributeSetOnlyContainsId() {
        Invoice mInvoice = new Invoice(
@@ -337,7 +337,7 @@ public class InvoiceControllerTest {
            new InvoiceStatusDto("FINAL"),
            List.of(new UpdateInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MaterialDto(7L), 1))
        );
-       Invoice mAddInvoice = new Invoice(
+       BaseInvoice<InvoiceItem> mAddInvoice = new Invoice(
            null,
            "ABCDE-12345",
            "desc1",
@@ -405,7 +405,7 @@ public class InvoiceControllerTest {
            List.of(new UpdateInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MaterialDto(7L), 1)),
            1
        );
-       Invoice mUpdateInvoice = new Invoice(
+       UpdateInvoice<InvoiceItem> mUpdateInvoice = new Invoice(
            null,
            "ABCDE-12345",
            "desc1",

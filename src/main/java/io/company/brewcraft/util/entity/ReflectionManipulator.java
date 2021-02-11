@@ -79,14 +79,13 @@ public class ReflectionManipulator {
 
         Method[] methods = clazz.getMethods();
         propertyNames = Arrays.stream(methods)
-                .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
-                .map(method -> method.getName().replaceFirst("get|set", ""))
-                .map(prop -> {
-                    char c = Character.toLowerCase(prop.charAt(0));
-                    String l = Character.toString(c);
-                    return prop.replaceFirst("\\w", l);
-                })
-                .collect(Collectors.toSet());
+                        .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
+                        .map(method -> method.getName().replaceFirst("get|set", ""))
+                        .map(prop -> {
+                            char c = Character.toLowerCase(prop.charAt(0));
+                            String l = Character.toString(c);
+                            return prop.replaceFirst("\\w", l);
+                        }).collect(Collectors.toSet());
 
         return propertyNames;
     }
