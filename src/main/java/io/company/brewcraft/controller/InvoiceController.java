@@ -1,10 +1,12 @@
 package io.company.brewcraft.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,11 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddInvoiceDto;
+import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
-import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
@@ -27,33 +31,64 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/suppliers")
-public class InvoiceController {
+@RequestMapping(path = "/api/purchases")
+public class InvoiceController extends BaseController {
     private static InvoiceMapper mapper = InvoiceMapper.INSTANCE;
 
     private InvoiceService invoiceService;
-    private AttributeFilter filter;
 
     @Autowired
     public InvoiceController(InvoiceService invoiceService, AttributeFilter filter) {
+        super(filter);
         this.invoiceService = invoiceService;
-        this.filter = filter;
     }
 
     @GetMapping("/invoices")
     public PageDto<InvoiceDto> getInvoices(
-        @RequestParam(required = false, name="ids") Set<Long> ids,
-        @RequestParam(required = false, name="from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
-        @RequestParam(required = false, name="to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
-        @RequestParam(required = false, name="status") Set<InvoiceStatus> status,
-        @RequestParam(required = false, name="supplier_id") Set<Long> supplierIds,
-        @RequestParam(required = false, name="sort") Set<String> sort,         
+        @RequestParam(required = false, name = "ids") Set<Long> ids,
+        @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
+        @RequestParam(required = false, name = "invoice_numbers") Set<String> invoiceNumbers,
+        @RequestParam(required = false, name = "invoice_desc") Set<String> invoiceDescriptions,        
+        @RequestParam(required = false, name = "invoice_item_desc") Set<String> invoiceItemDescriptions,        
+        @RequestParam(required = false, name = "generated_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnFrom,
+        @RequestParam(required = false, name = "generated_on_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnTo,
+        @RequestParam(required = false, name = "received_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime receivedOnFrom,
+        @RequestParam(required = false, name = "received_on_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime receivedOnTo,
+        @RequestParam(required = false, name = "payment_due_date_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime paymentDueDateFrom,
+        @RequestParam(required = false, name = "payment_due_date_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime paymentDueDateTo,
+        @RequestParam(required = false, name = "purchase_order_ids") Set<Long> purchaseOrderIds,
+        @RequestParam(required = false, name = "freightAmtFrom") BigDecimal freightAmtFrom,
+        @RequestParam(required = false, name = "freightAmtTo") BigDecimal freightAmtTo,
+        @RequestParam(required = false, name = "status") Set<String> status,
+        @RequestParam(required = false, name = "supplier_id") Set<Long> supplierIds,
+        @RequestParam(required = false, name = "sort") Set<String> sort,         
         @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "10") int size,
-        @RequestParam(name="attr") @Size(min = 1) @NotNull Set<String> attributes
+        @RequestParam(name="attr") Set<String> attributes
     ) {
-        Page<Invoice> invoices = invoiceService.getInvoices(ids, from, to, status, supplierIds, sort, orderAscending, page, size);
+        Page<Invoice> invoices = invoiceService.getInvoices(
+            ids,
+            excludeIds,
+            invoiceNumbers,
+            invoiceDescriptions,
+            invoiceItemDescriptions,
+            generatedOnFrom,
+            generatedOnTo,
+            receivedOnFrom,
+            receivedOnTo,
+            paymentDueDateFrom,
+            paymentDueDateTo,
+            purchaseOrderIds,
+            freightAmtFrom,
+            freightAmtTo,
+            status,
+            supplierIds,
+            sort,
+            orderAscending,
+            page,
+            size
+        );
         return response(invoices, attributes);
     }
 
@@ -65,7 +100,7 @@ public class InvoiceController {
         validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
-        filter.retain(dto, attributes);
+        filter(dto, attributes);
 
         return dto;
     }
@@ -76,33 +111,42 @@ public class InvoiceController {
         invoiceService.delete(invoiceId);
     }
 
-    @PostMapping("/{supplierId}/invoices/")
+    @PostMapping("/{purchaseOrderId}/invoices/")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@PathVariable(required=true, name="supplierId") Long supplierId, @RequestBody @NotNull AddInvoiceDto payload, @RequestParam(required = false, name = "attr") Set<String> attributes) {
-        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice added = invoiceService.add(supplierId, invoice);
+    public InvoiceDto addInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @Valid @RequestBody @NotNull AddInvoiceDto payload) {
+        BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
+        Invoice added = invoiceService.add(purchaseOrderId, addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
-        filter.retain(dto, attributes);
 
         return dto;
     }
 
-    @PutMapping("/{supplierId}/invoices/{invoiceId}")
+    @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto updateInvoice(@PathVariable(required=true, name="supplierId") Long supplierId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @NotNull @RequestBody UpdateInvoiceDto payload, @RequestParam(name = "attr") Set<String> attributes) {
-        Invoice invoice = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice updated = invoiceService.update(supplierId, invoiceId, invoice);
+    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
+        UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(updated);
-        filter.retain(dto, attributes);
+        Invoice invoice = invoiceService.put(purchaseOrderId, invoiceId, update);
+        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;
+    }
+    
+    @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public InvoiceDto patchInvoice(@PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
+        UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
+
+        Invoice invoice = invoiceService.patch(purchaseOrderId, invoiceId, patch);
+        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+
+        return dto;        
     }
 
     private PageDto<InvoiceDto> response(Page<Invoice> invoices, Set<String> attributes) {
         List<InvoiceDto> content = invoices.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
-        content.forEach(invoice -> filter.retain(invoice, attributes));
+        content.forEach(invoice -> filter(invoice, attributes));
 
         PageDto<InvoiceDto> dto = new PageDto<InvoiceDto>();
         dto.setContent(content);

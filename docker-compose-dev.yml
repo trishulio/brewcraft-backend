@@ -22,9 +22,7 @@ services:
       USE_SSL: "false"
       PORT_WEB_UI: ${LS_WEB_UI}
       SERVICES: secretsmanager
-      DATA_DIR: /tmp/localstack/data
     volumes:
-      - localstack-data:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
   postgresdb:
@@ -60,6 +58,4 @@ services:
         PGADMIN_LISTEN_PORT: 443
 
 volumes:
-  db-data:
   db-admin-data:
-  localstack-data:

@@ -7,6 +7,9 @@ import javax.persistence.Id;
 @Entity(name = "currency")
 public class Currency extends BaseEntity {
 
+    public static final String FIELD_NUMERIC_CODE = "numericCode";
+    public static final String FIELD_CODE = "code";
+
     @Id
     @Column(name = "numeric_code")
     private Integer numericCode;
@@ -17,7 +20,7 @@ public class Currency extends BaseEntity {
     public Currency() {
         this(null, null);
     }
-    
+
     public Currency(Integer numericCode, String code) {
         setNumericCode(numericCode);
         setCode(code);

@@ -1,35 +1,32 @@
 package io.company.brewcraft.dto;
 
 public class UpdateInvoiceItemDto extends BaseDto {
-    private Long id;
+    private String description;
     private QuantityDto quantity;
     private MoneyDto price;
-    private String lot;
+    private TaxDto tax;
     private MaterialDto material;
     private Integer version;
 
     public UpdateInvoiceItemDto() {
     }
 
-    public UpdateInvoiceItemDto(Long id) {
-        this(id, null, null, null, null, null);
-    }
-
-    public UpdateInvoiceItemDto(Long id, QuantityDto quantity, MoneyDto price, String lot, MaterialDto material, Integer version) {
-        setId(id);
+    public UpdateInvoiceItemDto(String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MaterialDto material, Integer version) {
+        this();
+        setDescription(description);
         setQuantity(quantity);
         setPrice(price);
-        setLot(lot);
+        setTax(tax);
         setMaterial(material);
         setVersion(version);
     }
 
-    public Long getId() {
-        return id;
+    public String getDescription() {
+        return description;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public QuantityDto getQuantity() {
@@ -48,12 +45,12 @@ public class UpdateInvoiceItemDto extends BaseDto {
         this.price = price;
     }
 
-    public String getLot() {
-        return lot;
+    public TaxDto getTax() {
+        return tax;
     }
 
-    public void setLot(String lot) {
-        this.lot = lot;
+    public void setTax(TaxDto tax) {
+        this.tax = tax;
     }
 
     public MaterialDto getMaterial() {
@@ -65,10 +62,11 @@ public class UpdateInvoiceItemDto extends BaseDto {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
     }
+
 }

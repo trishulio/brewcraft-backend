@@ -8,6 +8,7 @@ import javax.persistence.SequenceGenerator;
 
 @Entity(name = "MATERIAL")
 public class MaterialEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_generator")

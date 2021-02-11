@@ -1,0 +1,62 @@
+{
+    "id": 1,
+    "invoiceNumber": "12345-XYZABCD",
+    "purchaseOrder": {
+        "id": 1,
+        "orderNumber": "ABCDE-12345",
+        "supplier": {
+            "id": 1,
+            "name": "RISHAB_SUPPLIER",
+            "contacts": [],
+            "version": 1
+        }
+    },
+    "freight": {
+        "amount": {
+            "currency": "CAD",
+            "amount": 9876.00
+        }
+    },
+    "amount": {
+        "currency": "CAD",
+        "amount": 408.00
+    },
+    "tax": {
+        "amount": {
+            "currency": "CAD",
+            "amount": 53.00
+        }
+    },
+    "generatedOn": "2021-11-11T06:30:05.1234",
+    "receivedOn": "1992-10-10T06:30:05.1234",
+    "paymentDueDate": "1992-10-10T06:30:05.1234",
+    "status": {
+        "name": "PENDING"
+    },
+    "items": [
+        {
+            "id": 1,
+            "description": "Item 1 description",
+            "quantity": {
+                "symbol": "kg",
+                "value": 12
+            },
+            "price": {
+                "currency": "CAD",
+                "amount": 34.00
+            },
+            "tax": {
+                "amount": {
+                    "currency": "CAD",
+                    "amount": 53.00
+                }
+            },
+            "amount": {
+                "currency": "CAD",
+                "amount": 408.00
+            },
+            "version": 0
+        }
+    ],
+    "version": 0
+}

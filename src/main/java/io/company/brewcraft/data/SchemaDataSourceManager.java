@@ -39,7 +39,6 @@ public class SchemaDataSourceManager implements DataSourceManager {
                                          .password(password)
                                          .poolSize(poolSize)
                                          .build();
-
                 return ds;
             }
         });
@@ -51,6 +50,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
         try {
             ds = this.cache.get(id);
         } catch (ExecutionException e) {
+            // TODO: These checks are buggy.
             log.error("Error loading the datasource from the cache");
             Throwable cause = e.getCause();
             if (cause instanceof SQLException) {

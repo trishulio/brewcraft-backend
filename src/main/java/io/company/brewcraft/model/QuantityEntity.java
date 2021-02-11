@@ -13,6 +13,10 @@ import javax.persistence.SequenceGenerator;
 
 @Entity(name = "QTY")
 public class QuantityEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_UNIT = "unit";
+    public static final String FIELD_VALUE = "value";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "qty_generator")
     @SequenceGenerator(name = "qty_generator", sequenceName = "qty_sequence", allocationSize = 1)

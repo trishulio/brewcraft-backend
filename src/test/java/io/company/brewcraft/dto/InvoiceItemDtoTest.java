@@ -9,72 +9,89 @@ import org.junit.jupiter.api.Test;
 
 public class InvoiceItemDtoTest {
 
-    InvoiceItemDto dto;
+    InvoiceItemDto item;
 
     @BeforeEach
     public void init() {
-        dto = new InvoiceItemDto();
+        item = new InvoiceItemDto();
     }
 
     @Test
     public void testAllArgs() {
-        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
-        dto = new InvoiceItemDto(12345L, new QuantityDto("kg", new BigDecimal(100)), new MoneyDto("CAD", new BigDecimal("100.00")), new MoneyDto("CAD", new BigDecimal("500.00")), "LOT", new MaterialDto(), 1);
-        assertEquals(12345L, dto.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getPrice());
-        assertEquals(new MoneyDto("CAD", new BigDecimal("500.00")), dto.getAmount());
-        assertEquals("LOT", dto.getLot());
-        assertEquals(new MaterialDto(), dto.getMaterial());
-        assertEquals(1, dto.getVersion());
+        item = new InvoiceItemDto(
+            2L,
+            "desc2",
+            new QuantityDto("kg", new BigDecimal("4")),
+            new MoneyDto("CAD", new BigDecimal("5")),
+            new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
+            new MoneyDto("CAD", new BigDecimal("8")),
+            new MaterialDto(7L),
+            1
+        );
+
+        assertEquals(2L, item.getId());
+        assertEquals("desc2", item.getDescription());
+        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
+        assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
+        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
+        assertEquals(new MoneyDto("CAD", new BigDecimal("8")), item.getAmount());
+        assertEquals(new MaterialDto(7L), item.getMaterial());
+        assertEquals(1, item.getVersion());
     }
 
     @Test
     public void testAccessId() {
-        assertNull(dto.getId());
-        dto.setId(12345L);
-        assertEquals(12345L, dto.getId());
+        assertNull(item.getId());
+        item.setId(12345L);
+        assertEquals(12345L, item.getId());
+    }
+
+    @Test
+    public void testDescription() {
+        assertNull(item.getDescription());
+        item.setDescription("Description ABC");
+        assertEquals("Description ABC", item.getDescription());
     }
 
     @Test
     public void testQuantity() {
-        assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
-        assertEquals(new QuantityDto("kg", new BigDecimal(100)), dto.getQuantity());
+        assertNull(item.getQuantity());
+        item.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), item.getQuantity());
     }
 
     @Test
     public void testAccessPrice() {
-        assertNull(dto.getPrice());
-        dto.setPrice(new MoneyDto("CAD", new BigDecimal("100.00")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getPrice());
+        assertNull(item.getPrice());
+        item.setPrice(new MoneyDto("CAD", new BigDecimal("100.00")));
+        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), item.getPrice());
     }
 
     @Test
-    public void testAccessLot() {
-        assertNull(dto.getLot());
-        dto.setLot("LOT");
-        assertEquals("LOT", dto.getLot());
-    }
-
-    @Test
-    public void testAccessMaterial() {
-        assertNull(dto.getMaterial());
-        dto.setMaterial(new MaterialDto());
-        assertEquals(new MaterialDto(), dto.getMaterial());
-    }
-
-    @Test
-    public void testAccessVersion() {
-        assertNull(dto.getVersion());
-        dto.setVersion(1);
-        assertEquals(1, dto.getVersion());
+    public void testAccessTax() {
+        assertNull(item.getTax());
+        item.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100.00"))));
+        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100.00"))), item.getTax());
     }
 
     @Test
     public void testAccessAmount() {
-        assertNull(dto.getAmount());
-        dto.setAmount(new MoneyDto("CAD", new BigDecimal("100.00")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), dto.getAmount());
+        assertNull(item.getAmount());
+        item.setAmount(new MoneyDto("CAD", new BigDecimal("100.00")));
+        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), item.getAmount());
+    }
+
+    @Test
+    public void testAccessMaterial() {
+        assertNull(item.getMaterial());
+        item.setMaterial(new MaterialDto());
+        assertEquals(new MaterialDto(), item.getMaterial());
+    }
+
+    @Test
+    public void testAccessVersion() {
+        assertNull(item.getVersion());
+        item.setVersion(1);
+        assertEquals(1, item.getVersion());
     }
 }

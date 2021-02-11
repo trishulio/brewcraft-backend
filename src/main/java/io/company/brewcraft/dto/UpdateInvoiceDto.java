@@ -3,39 +3,90 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import io.company.brewcraft.model.InvoiceStatus;
+import javax.validation.constraints.NotNull;
 
-public class UpdateInvoiceDto {
-
-    private LocalDateTime date;
-    private InvoiceStatus status;
+public class UpdateInvoiceDto extends BaseDto {
+    private String invoiceNumber;
+    private String description;
+    private FreightDto freight;
+    private LocalDateTime generatedOn;
+    private LocalDateTime receivedOn;
+    private LocalDateTime paymentDueDate;
+    private InvoiceStatusDto status;
     private List<UpdateInvoiceItemDto> items;
+    
+    @NotNull
     private Integer version;
 
     public UpdateInvoiceDto() {
-        this(null, null, null, null);
     }
 
-    public UpdateInvoiceDto(LocalDateTime date, InvoiceStatus status, List<UpdateInvoiceItemDto> items, Integer version) {
-        setDate(date);
+    public UpdateInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items,
+            Integer version) {
+        setInvoiceNumber(invoiceNumber);
+        setDescription(description);
+        setFreight(freight);
+        setGeneratedOn(generatedOn);
+        setReceivedOn(receivedOn);
+        setPaymentDueDate(paymentDueDate);
         setStatus(status);
         setItems(items);
         setVersion(version);
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
-    public InvoiceStatus getStatus() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public FreightDto getFreight() {
+        return freight;
+    }
+
+    public void setFreight(FreightDto freight) {
+        this.freight = freight;
+    }
+
+    public LocalDateTime getGeneratedOn() {
+        return generatedOn;
+    }
+
+    public void setGeneratedOn(LocalDateTime generatedOn) {
+        this.generatedOn = generatedOn;
+    }
+
+    public LocalDateTime getReceivedOn() {
+        return receivedOn;
+    }
+
+    public void setReceivedOn(LocalDateTime receivedOn) {
+        this.receivedOn = receivedOn;
+    }
+
+    public LocalDateTime getPaymentDueDate() {
+        return paymentDueDate;
+    }
+
+    public void setPaymentDueDate(LocalDateTime paymentDueDate) {
+        this.paymentDueDate = paymentDueDate;
+    }
+
+    public InvoiceStatusDto getStatus() {
         return status;
     }
 
-    public void setStatus(InvoiceStatus status) {
+    public void setStatus(InvoiceStatusDto status) {
         this.status = status;
     }
 
@@ -48,7 +99,7 @@ public class UpdateInvoiceDto {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {
