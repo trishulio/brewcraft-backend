@@ -4,8 +4,8 @@ import javax.measure.Quantity;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.dto.Identified;
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.MoneySupplier;
 
 public class InvoiceItem extends BaseModel implements MoneySupplier, UpdateInvoiceItem, Identified {

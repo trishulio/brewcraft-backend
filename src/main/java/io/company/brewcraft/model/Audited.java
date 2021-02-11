@@ -1,4 +1,4 @@
-package io.company.brewcraft.dto;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
