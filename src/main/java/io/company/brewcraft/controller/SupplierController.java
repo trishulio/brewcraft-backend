@@ -23,7 +23,7 @@ import io.company.brewcraft.dto.AddSupplierDto;
 import io.company.brewcraft.dto.GetSuppliersDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierDto;
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierMapper;
@@ -42,7 +42,7 @@ public class SupplierController {
 
     @GetMapping("/suppliers")
     public GetSuppliersDto getSuppliers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, @RequestParam(defaultValue = "id") String[] sort, @RequestParam(defaultValue = "true") boolean order_asc) {        
-        Page<Supplier> suppliers = supplierService.getSuppliers(page, size, sort, order_asc);
+        Page<SupplierEntity> suppliers = supplierService.getSuppliers(page, size, sort, order_asc);
       
         List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.supplierToSupplierDto(supplier)).collect(Collectors.toList());
     
@@ -51,7 +51,7 @@ public class SupplierController {
     
     @GetMapping("/suppliers/{supplierId}")
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
-        Supplier supplier = supplierService.getSupplier(supplierId);
+        SupplierEntity supplier = supplierService.getSupplier(supplierId);
         
         if (supplier == null) {
             throw new EntityNotFoundException("Supplier", supplierId.toString());
@@ -63,27 +63,27 @@ public class SupplierController {
     @PostMapping("/suppliers")
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierDto addSupplier(@Valid @RequestBody AddSupplierDto supplierDto) {
-        Supplier supplier = supplierMapper.supplierDtoToSupplier(supplierDto);    
+        SupplierEntity supplier = supplierMapper.supplierDtoToSupplier(supplierDto);    
         
-        Supplier addedSupplier = supplierService.addSupplier(supplier);
+        SupplierEntity addedSupplier = supplierService.addSupplier(supplier);
        
         return supplierMapper.supplierToSupplierDto(addedSupplier);   
     }
     
     @PutMapping("/suppliers/{supplierId}")
     public SupplierDto putSupplier(@Valid @RequestBody AddSupplierDto supplierDto, @PathVariable Long supplierId) {
-        Supplier supplier = supplierMapper.supplierDtoToSupplier(supplierDto);
+        SupplierEntity supplier = supplierMapper.supplierDtoToSupplier(supplierDto);
         
-        Supplier putSupplier = supplierService.putSupplier(supplierId, supplier);
+        SupplierEntity putSupplier = supplierService.putSupplier(supplierId, supplier);
         
         return supplierMapper.supplierToSupplierDto(putSupplier);   
     }
 
     @PatchMapping("/suppliers/{supplierId}")
     public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
-        Supplier supplier = supplierMapper.updateSupplierDtoToSupplier(supplierDto);
+        SupplierEntity supplier = supplierMapper.updateSupplierDtoToSupplier(supplierDto);
         
-        Supplier patchedSupplier = supplierService.patchSupplier(supplierId, supplier);
+        SupplierEntity patchedSupplier = supplierService.patchSupplier(supplierId, supplier);
         
         return supplierMapper.supplierToSupplierDto(patchedSupplier);   
     }

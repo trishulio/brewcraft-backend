@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddStorageDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.UpdateStorageDto;
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.StorageMapper;
@@ -46,7 +46,7 @@ public class StorageController {
     @GetMapping(value = "/storages" , consumes = MediaType.ALL_VALUE)
     public PageDto<StorageDto> getAllStorages(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, 
             @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {        
-        Page<Storage> storagePage = storageService.getAllStorages(page, size, sort, orderAscending);
+        Page<StorageEntity> storagePage = storageService.getAllStorages(page, size, sort, orderAscending);
         
         List<StorageDto> storageList = storagePage.stream().map(storage -> storageMapper.storageToStorageDto(storage)).collect(Collectors.toList());
     
@@ -59,7 +59,7 @@ public class StorageController {
     public StorageDto getStorage(@PathVariable Long storageId) {
         Validator validator = new Validator();
 
-        Storage storage = storageService.getStorage(storageId);
+        StorageEntity storage = storageService.getStorage(storageId);
         
         validator.assertion(storage != null, EntityNotFoundException.class, "Storage", storageId.toString());
         
@@ -71,27 +71,27 @@ public class StorageController {
     @PostMapping("/{facilityId}/storages")
     @ResponseStatus(HttpStatus.CREATED)
     public StorageDto addStorage(@PathVariable Long facilityId, @Valid @RequestBody AddStorageDto storageDto) {
-        Storage storage = storageMapper.storageDtoToStorage(storageDto);          
+        StorageEntity storage = storageMapper.storageDtoToStorage(storageDto);          
         
-        Storage addedStorage = storageService.addStorage(facilityId, storage);
+        StorageEntity addedStorage = storageService.addStorage(facilityId, storage);
         
         return storageMapper.storageToStorageDto(addedStorage);
     }
     
     @PutMapping("/{facilityId}/storages/{storageId}")
     public StorageDto putStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long facilityId, @PathVariable Long storageId) {      
-        Storage storage = storageMapper.storageDtoToStorage(storageDto);
+        StorageEntity storage = storageMapper.storageDtoToStorage(storageDto);
         
-        Storage putStorage = storageService.putStorage(facilityId, storageId, storage);
+        StorageEntity putStorage = storageService.putStorage(facilityId, storageId, storage);
         
         return storageMapper.storageToStorageDto(putStorage);
     }
     
     @PatchMapping("/storages/{storageId}")
     public StorageDto patchStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long storageId) {      
-        Storage storage = storageMapper.storageDtoToStorage(storageDto);
+        StorageEntity storage = storageMapper.storageDtoToStorage(storageDto);
         
-        Storage patchedStorage = storageService.patchStorage(storageId, storage);
+        StorageEntity patchedStorage = storageService.patchStorage(storageId, storage);
         
         return storageMapper.storageToStorageDto(patchedStorage);
     }

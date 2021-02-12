@@ -25,9 +25,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierAddress;
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.SupplierAddressEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.SupplierService;
 
@@ -47,19 +47,19 @@ public class SupplierControllerTest {
 
     @Test
     public void testGetAll_ReturnsListOfAllSuppliers() throws Exception {
-       Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       supplier1.getContacts().add(new SupplierContact(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
-       supplier1.getContacts().add(new SupplierContact(2L, supplier1, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
+       SupplierEntity supplier1 = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       supplier1.getContacts().add(new SupplierContactEntity(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+       supplier1.getContacts().add(new SupplierContactEntity(2L, supplier1, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
        
-       Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new SupplierAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
-       supplier2.getContacts().add(new SupplierContact(3L, supplier2, "name3", "lastName3", "position3", "email3", "phoneNumber3", null, null, 1));
-       supplier2.getContacts().add(new SupplierContact(4L, supplier2, "name4", "lastName4", "position4", "email4", "phoneNumber4", null, null, 1));
+       SupplierEntity supplier2 = new SupplierEntity(2L, "testName2", new ArrayList<>(), new SupplierAddressEntity(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
+       supplier2.getContacts().add(new SupplierContactEntity(3L, supplier2, "name3", "lastName3", "position3", "email3", "phoneNumber3", null, null, 1));
+       supplier2.getContacts().add(new SupplierContactEntity(4L, supplier2, "name4", "lastName4", "position4", "email4", "phoneNumber4", null, null, 1));
 
-       List<Supplier> suppliers = new ArrayList<>();
+       List<SupplierEntity> suppliers = new ArrayList<>();
        suppliers.add(supplier1);
        suppliers.add(supplier2);
        
-       Page<Supplier> pagedResponse = new PageImpl<>(suppliers);
+       Page<SupplierEntity> pagedResponse = new PageImpl<>(suppliers);
         
        when(supplierServiceMock.getSuppliers(0, 100, new String[]{"id"}, true)).thenReturn(pagedResponse);
         
@@ -147,9 +147,9 @@ public class SupplierControllerTest {
     
     @Test
     public void testGetSupplier_ReturnsSupplier() throws Exception {
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
-        supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
+        SupplierEntity supplier = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        supplier.getContacts().add(new SupplierContactEntity(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+        supplier.getContacts().add(new SupplierContactEntity(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
         
         when(supplierServiceMock.getSupplier(1L)).thenReturn(supplier);
          
@@ -227,11 +227,11 @@ public class SupplierControllerTest {
         payload.put("address", address);        
         payload.put("contacts", contacts);
                      
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
-        supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
+        SupplierEntity supplier = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        supplier.getContacts().add(new SupplierContactEntity(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+        supplier.getContacts().add(new SupplierContactEntity(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
         
-        when(supplierServiceMock.addSupplier(any(Supplier.class))).thenReturn(supplier);
+        when(supplierServiceMock.addSupplier(any(SupplierEntity.class))).thenReturn(supplier);
         
         this.mockMvc.perform(post("/api/suppliers")
          .contentType(MediaType.APPLICATION_JSON)
@@ -272,7 +272,7 @@ public class SupplierControllerTest {
                  + "        'version': 1"
                  + "    }"));
         
-        verify(supplierServiceMock, times(1)).addSupplier(any(Supplier.class));
+        verify(supplierServiceMock, times(1)).addSupplier(any(SupplierEntity.class));
     }
     
     @Test
@@ -313,11 +313,11 @@ public class SupplierControllerTest {
         payload.put("version", "1");
         
         
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
-        supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
+        SupplierEntity supplier = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        supplier.getContacts().add(new SupplierContactEntity(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+        supplier.getContacts().add(new SupplierContactEntity(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
         
-        when(supplierServiceMock.putSupplier(eq(1L), any(Supplier.class))).thenReturn(supplier);
+        when(supplierServiceMock.putSupplier(eq(1L), any(SupplierEntity.class))).thenReturn(supplier);
                                           
         this.mockMvc.perform(put("/api/suppliers/1")
          .contentType(MediaType.APPLICATION_JSON)
@@ -358,7 +358,7 @@ public class SupplierControllerTest {
                  + "        'version': 1"
                  + "    }"));
         
-        verify(supplierServiceMock, times(1)).putSupplier(eq(1L), any(Supplier.class));
+        verify(supplierServiceMock, times(1)).putSupplier(eq(1L), any(SupplierEntity.class));
     }
     
     @Test
@@ -376,11 +376,11 @@ public class SupplierControllerTest {
         payload.put("address", address);        
         payload.put("version", "1");
         
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
-        supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
+        SupplierEntity supplier = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        supplier.getContacts().add(new SupplierContactEntity(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
+        supplier.getContacts().add(new SupplierContactEntity(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
         
-        when(supplierServiceMock.patchSupplier(eq(1L), any(Supplier.class))).thenReturn(supplier);
+        when(supplierServiceMock.patchSupplier(eq(1L), any(SupplierEntity.class))).thenReturn(supplier);
                                           
         this.mockMvc.perform(patch("/api/suppliers/1")
          .contentType(MediaType.APPLICATION_JSON)
@@ -421,7 +421,7 @@ public class SupplierControllerTest {
                  + "        'version': 1"
                  + "    }"));
         
-        verify(supplierServiceMock, times(1)).patchSupplier(eq(1L), any(Supplier.class));
+        verify(supplierServiceMock, times(1)).patchSupplier(eq(1L), any(SupplierEntity.class));
     }
 
 

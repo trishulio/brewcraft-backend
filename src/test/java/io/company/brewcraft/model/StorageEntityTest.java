@@ -6,26 +6,26 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class StorageTest {
+public class StorageEntityTest {
 
-    private Storage storage;
+    private StorageEntity storage;
 
     @BeforeEach
     public void init() {
-        storage = new Storage();
+        storage = new StorageEntity();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         String name = "storage1";
         StorageType type = StorageType.GENERAL;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Storage storage = new Storage(id, facility, name, type, created, lastUpdated, version);
+        StorageEntity storage = new StorageEntity(id, facility, name, type, created, lastUpdated, version);
         
         assertSame(id, storage.getId());
         assertSame(facility, storage.getFacility());
@@ -45,7 +45,7 @@ public class StorageTest {
     
     @Test
     public void testGetSetFacility() {
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         storage.setFacility(facility);
         assertSame(facility, storage.getFacility());
     }

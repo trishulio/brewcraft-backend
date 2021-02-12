@@ -9,31 +9,31 @@ import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
 import io.company.brewcraft.dto.UpdateSupplierDto;
-import io.company.brewcraft.model.SupplierAddress;
-import io.company.brewcraft.model.SupplierContact;
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierAddressEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
+import io.company.brewcraft.model.SupplierEntity;
 
 @Mapper
 public interface SupplierMapper {
     
     SupplierMapper INSTANCE = Mappers.getMapper(SupplierMapper.class);
 
-    SupplierDto supplierToSupplierDto(Supplier supplier);
+    SupplierDto supplierToSupplierDto(SupplierEntity supplier);
 
-    Supplier supplierDtoToSupplier(SupplierDto supplierDto);
+    SupplierEntity supplierDtoToSupplier(SupplierDto supplierDto);
     
-    Supplier supplierDtoToSupplier(AddSupplierDto supplierDto);
+    SupplierEntity supplierDtoToSupplier(AddSupplierDto supplierDto);
     
-    Supplier updateSupplierDtoToSupplier(UpdateSupplierDto supplierDto);
+    SupplierEntity updateSupplierDtoToSupplier(UpdateSupplierDto supplierDto);
     
-    SupplierContactDto contactToContactDto(SupplierContact contact);
+    SupplierContactDto contactToContactDto(SupplierContactEntity contact);
 
-    SupplierContact contactDtoToContact(SupplierContactDto contactDto);
+    SupplierContactEntity contactDtoToContact(SupplierContactDto contactDto);
     
-    SupplierContact updateContactDtoToContact(UpdateSupplierContactDto contactDto);
+    SupplierContactEntity updateContactDtoToContact(UpdateSupplierContactDto contactDto);
     
-    AddressDto addressToAddressDto(SupplierAddress address);
+    AddressDto addressToAddressDto(SupplierAddressEntity address);
 
-    SupplierAddress addressDtoToAddress(AddressDto addressDto);
+    SupplierAddressEntity addressDtoToAddress(AddressDto addressDto);
     
 }

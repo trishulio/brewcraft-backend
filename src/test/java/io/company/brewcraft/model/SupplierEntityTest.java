@@ -13,26 +13,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class SupplierTest {
+public class SupplierEntityTest {
 
-    private Supplier supplier;
+    private SupplierEntity supplier;
 
     @BeforeEach
     public void init() {
-        supplier = new Supplier();
+        supplier = new SupplierEntity();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
         String name = "Supplier1";
-        SupplierAddress address = new SupplierAddress();
-        List<SupplierContact> contacts = new ArrayList<>();
+        SupplierAddressEntity address = new SupplierAddressEntity();
+        List<SupplierContactEntity> contacts = new ArrayList<>();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Supplier supplier = new Supplier(id, name, contacts, address, created, lastUpdated, version);
+        SupplierEntity supplier = new SupplierEntity(id, name, contacts, address, created, lastUpdated, version);
         
         assertSame(id, supplier.getId());
         assertSame(name, supplier.getName());
@@ -58,14 +58,14 @@ public class SupplierTest {
 
     @Test
     public void testGetSetContacts() {
-        List<SupplierContact> contacts = new ArrayList<>();
+        List<SupplierContactEntity> contacts = new ArrayList<>();
         supplier.setContacts(contacts);
         assertSame(contacts, supplier.getContacts());
     }
     
     @Test
     public void testGetSetAddress() {
-        SupplierAddress address = new SupplierAddress();
+        SupplierAddressEntity address = new SupplierAddressEntity();
         supplier.setAddress(address);
         assertSame(address, supplier.getAddress());
     }
@@ -93,10 +93,10 @@ public class SupplierTest {
     
     @Test
     public void testSetContacts_setsSupplierToEachContact() {
-        List<SupplierContact> contacts = Arrays.asList(new SupplierContact(), new SupplierContact());
+        List<SupplierContactEntity> contacts = Arrays.asList(new SupplierContactEntity(), new SupplierContactEntity());
         supplier.setContacts(contacts);
         
-        for (SupplierContact contact : supplier.getContacts()) {
+        for (SupplierContactEntity contact : supplier.getContacts()) {
             assertSame(supplier, contact.getSupplier());
         }
     }
@@ -104,10 +104,10 @@ public class SupplierTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testSetContacts_clearsAndAddsToExistingListIfExistingListIsNotNull() {
-        List<SupplierContact> contactsMock = Mockito.mock(ArrayList.class);
+        List<SupplierContactEntity> contactsMock = Mockito.mock(ArrayList.class);
         supplier.setContacts(contactsMock);
 
-        List<SupplierContact> newContactsMock = Mockito.mock(ArrayList.class);
+        List<SupplierContactEntity> newContactsMock = Mockito.mock(ArrayList.class);
         supplier.setContacts(newContactsMock);
         
         verify(contactsMock, times(1)).clear();

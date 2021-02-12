@@ -2,19 +2,19 @@ package io.company.brewcraft.service;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierContactEntity;
 
 public interface SupplierContactService {
     
-    public Page<SupplierContact> getSupplierContacts(int page, int size, String[] sort, boolean order_asc);
+    public Page<SupplierContactEntity> getSupplierContacts(int page, int size, String[] sort, boolean order_asc);
     
-    public SupplierContact getContact(Long contactId);
+    public SupplierContactEntity getContact(Long contactId);
     
-    public SupplierContact addContact(Long supplierId, SupplierContact supplierContact);
+    public SupplierContactEntity addContact(Long supplierId, SupplierContactEntity supplierContact);
     
-    public SupplierContact putContact(Long supplierId, Long contactId, SupplierContact supplierContact);
+    public SupplierContactEntity putContact(Long supplierId, Long contactId, SupplierContactEntity supplierContact);
     
-    public SupplierContact patchContact(Long contactId, SupplierContact updatedContact);
+    public SupplierContactEntity patchContact(Long contactId, SupplierContactEntity updatedContact);
     
     public void deleteContact(Long contactId);
 

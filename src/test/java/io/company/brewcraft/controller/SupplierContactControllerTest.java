@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierAddress;
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.SupplierAddressEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.SupplierContactService;
@@ -49,17 +49,17 @@ public class SupplierContactControllerTest {
 
     @Test
     public void testGetAll_ReturnsListOfAllSuppliers() throws Exception {
-       Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new SupplierAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
+       SupplierEntity supplier1 = new SupplierEntity(1L, "testName", new ArrayList<>(), new SupplierAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       SupplierEntity supplier2 = new SupplierEntity(2L, "testName2", new ArrayList<>(), new SupplierAddressEntity(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
 
-       SupplierContact contact1 = new SupplierContact(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
-       SupplierContact contact2 = new SupplierContact(2L, supplier2, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1);
+       SupplierContactEntity contact1 = new SupplierContactEntity(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+       SupplierContactEntity contact2 = new SupplierContactEntity(2L, supplier2, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1);
        
-       List<SupplierContact> contacts = new ArrayList<>();
+       List<SupplierContactEntity> contacts = new ArrayList<>();
        contacts.add(contact1);
        contacts.add(contact2);
        
-       Page<SupplierContact> pagedResponse = new PageImpl<>(contacts);
+       Page<SupplierContactEntity> pagedResponse = new PageImpl<>(contacts);
         
        when(supplierContactServiceMock.getSupplierContacts(0, 100, new String[]{"id"}, true)).thenReturn(pagedResponse);
         
@@ -126,7 +126,7 @@ public class SupplierContactControllerTest {
     
     @Test
     public void testGetContact_ReturnsContact() throws Exception {
-        SupplierContact supplierContact = new SupplierContact(2L, null, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+        SupplierContactEntity supplierContact = new SupplierContactEntity(2L, null, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
         
         when(supplierContactServiceMock.getContact(2L)).thenReturn(supplierContact);
          
@@ -156,9 +156,9 @@ public class SupplierContactControllerTest {
         payload.put("email", "email1");
         payload.put("phoneNumber", "phoneNumber1");
         
-        SupplierContact supplierContact = new SupplierContact(2L, new Supplier(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+        SupplierContactEntity supplierContact = new SupplierContactEntity(2L, new SupplierEntity(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
         
-        when(supplierContactServiceMock.addContact(eq(1L), any(SupplierContact.class))).thenReturn(supplierContact);
+        when(supplierContactServiceMock.addContact(eq(1L), any(SupplierContactEntity.class))).thenReturn(supplierContact);
         
         this.mockMvc.perform(post("/api/suppliers/1/contacts/")
          .contentType(MediaType.APPLICATION_JSON)
@@ -175,7 +175,7 @@ public class SupplierContactControllerTest {
                  + "  'version': 1"
                  + " }"));
         
-        verify(supplierContactServiceMock, times(1)).addContact(eq(1L), any(SupplierContact.class));
+        verify(supplierContactServiceMock, times(1)).addContact(eq(1L), any(SupplierContactEntity.class));
     }
     
     @Test
@@ -188,9 +188,9 @@ public class SupplierContactControllerTest {
         payload.put("phoneNumber", "phoneNumber1");
         payload.put("version", "1");
         
-        SupplierContact supplierContact = new SupplierContact(2L, new Supplier(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+        SupplierContactEntity supplierContact = new SupplierContactEntity(2L, new SupplierEntity(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
                      
-        when(supplierContactServiceMock.putContact(eq(1L), eq(2L), any(SupplierContact.class))).thenReturn(supplierContact);
+        when(supplierContactServiceMock.putContact(eq(1L), eq(2L), any(SupplierContactEntity.class))).thenReturn(supplierContact);
              
         this.mockMvc.perform(put("/api/suppliers/1/contacts/2")
          .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +207,7 @@ public class SupplierContactControllerTest {
                  + "  'version': 1"
                  + " }"));
                
-        verify(supplierContactServiceMock, times(1)).putContact(eq(1L), eq(2L), any(SupplierContact.class));
+        verify(supplierContactServiceMock, times(1)).putContact(eq(1L), eq(2L), any(SupplierContactEntity.class));
     }
     
     @Test
@@ -221,9 +221,9 @@ public class SupplierContactControllerTest {
         payload.put("version", "1");
         
         
-        SupplierContact supplierContact = new SupplierContact(2L, new Supplier(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
+        SupplierContactEntity supplierContact = new SupplierContactEntity(2L, new SupplierEntity(), "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
                      
-        when(supplierContactServiceMock.patchContact(eq(2L), any(SupplierContact.class))).thenReturn(supplierContact);
+        when(supplierContactServiceMock.patchContact(eq(2L), any(SupplierContactEntity.class))).thenReturn(supplierContact);
              
         this.mockMvc.perform(patch("/api/suppliers/contacts/2")
          .contentType(MediaType.APPLICATION_JSON)
@@ -241,7 +241,7 @@ public class SupplierContactControllerTest {
                  + " }"));
         
         
-        verify(supplierContactServiceMock, times(1)).patchContact(eq(2L), any(SupplierContact.class));
+        verify(supplierContactServiceMock, times(1)).patchContact(eq(2L), any(SupplierContactEntity.class));
     }
 
     @Test

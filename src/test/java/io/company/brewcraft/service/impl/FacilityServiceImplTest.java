@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.FacilityAddress;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.FacilityService;
@@ -48,18 +48,18 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testGetAllFacilities_returnsFacilities() throws Exception {
-        Facility facility1 = new Facility();
-        Facility facility2 = new Facility();
+        FacilityEntity facility1 = new FacilityEntity();
+        FacilityEntity facility2 = new FacilityEntity();
                 
-        List<Facility> facilities = Arrays.asList(facility1, facility2);
+        List<FacilityEntity> facilities = Arrays.asList(facility1, facility2);
         
-        Page<Facility> expectedFacilities = new PageImpl<>(facilities);
+        Page<FacilityEntity> expectedFacilities = new PageImpl<>(facilities);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(facilityRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedFacilities);
 
-        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<FacilityEntity> actualFacilities = facilityService.getAllFacilities(0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -71,18 +71,18 @@ public class FacilityServiceImplTest {
     @Test
     public void testGetFacility_returnsFacility() throws Exception {
         Long id = 1L;
-        Optional<Facility> expectedFacility = Optional.ofNullable(new Facility());
+        Optional<FacilityEntity> expectedFacility = Optional.ofNullable(new FacilityEntity());
 
         when(facilityRepositoryMock.findById(id)).thenReturn(expectedFacility);
 
-        Facility actualFacility = facilityService.getFacility(id);
+        FacilityEntity actualFacility = facilityService.getFacility(id);
 
         assertSame(expectedFacility.get(), actualFacility);
     }
 
     @Test
     public void testAddFacility_SavesFacility() throws Exception {
-        Facility Facility = new Facility();
+        FacilityEntity Facility = new FacilityEntity();
         
         facilityService.addFacility(Facility);
         
@@ -92,13 +92,13 @@ public class FacilityServiceImplTest {
     @Test
     public void testPutFacility_DoesNotOuterJoinWhenThereIsNoExistingFacility() throws Exception {
         Long id = 1L;
-        Facility facility = mock(Facility.class);
+        FacilityEntity facility = mock(FacilityEntity.class);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.empty());
                 
         facilityService.putFacility(id, facility);
        
-        verify(facility, times(0)).outerJoin(Mockito.any(Facility.class));
+        verify(facility, times(0)).outerJoin(Mockito.any(FacilityEntity.class));
         verify(facility, times(1)).setId(id);
         verify(facilityRepositoryMock, times(1)).save(facility);
     }
@@ -106,8 +106,8 @@ public class FacilityServiceImplTest {
     @Test
     public void testPutFacility_DoesOuterJoinWhenThereIsAnExistingFacility() throws Exception {
         Long id = 1L;
-        Facility facility = mock(Facility.class);
-        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(), null, null, Arrays.asList(), Arrays.asList(), null, null, null);
+        FacilityEntity facility = mock(FacilityEntity.class);
+        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddress(), null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
                 
@@ -121,8 +121,8 @@ public class FacilityServiceImplTest {
     @Test
     public void testPatchFacility_success() throws Exception {
         Long id = 1L;
-        Facility updatedFacilityMock = mock(Facility.class);
-        Facility existingFacility = new Facility(id, "Facility 1", new FacilityAddress(),  null, null, Arrays.asList(), Arrays.asList(), null, null, null);
+        FacilityEntity updatedFacilityMock = mock(FacilityEntity.class);
+        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddress(),  null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
  
@@ -135,13 +135,13 @@ public class FacilityServiceImplTest {
     @Test
     public void testPatchFacility_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         
         when(facilityRepositoryMock.existsById(id)).thenReturn(false);
       
         assertThrows(EntityNotFoundException.class, () -> {
             facilityService.patchFacility(id, facility);
-            verify(facilityRepositoryMock, times(0)).save(Mockito.any(Facility.class));
+            verify(facilityRepositoryMock, times(0)).save(Mockito.any(FacilityEntity.class));
         });
     }
 

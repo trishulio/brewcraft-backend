@@ -11,38 +11,38 @@ import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.FacilityEquipmentDto;
 import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.UpdateFacilityDto;
-import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.EquipmentEntity;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.FacilityAddress;
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 
 @Mapper(uses = { QuantityMapper.class})
 public interface FacilityMapper {
     
     FacilityMapper INSTANCE = Mappers.getMapper(FacilityMapper.class);
 
-    FacilityDto facilityToFacilityDto(Facility facility);
+    FacilityDto facilityToFacilityDto(FacilityEntity facility);
 
-    Facility facilityDtoToFacility(FacilityDto facilityDto);
+    FacilityEntity facilityDtoToFacility(FacilityDto facilityDto);
     
-    Facility facilityDtoToFacility(AddFacilityDto facilityDto);
+    FacilityEntity facilityDtoToFacility(AddFacilityDto facilityDto);
 
-    Facility facilityDtoToFacility(UpdateFacilityDto facilityDto);
+    FacilityEntity facilityDtoToFacility(UpdateFacilityDto facilityDto);
         
     AddressDto addressToAddressDto(FacilityAddress address);
 
     FacilityAddress addressDtoToAddress(AddressDto addressDto);
     
-    FacilityEquipmentDto equipmentToEquipmentDto(Equipment equipment);
+    FacilityEquipmentDto equipmentToEquipmentDto(EquipmentEntity equipment);
 
-    Equipment equipmentDtoToEquipment(FacilityEquipmentDto equipmentDto);
+    EquipmentEntity equipmentDtoToEquipment(FacilityEquipmentDto equipmentDto);
     
-    Equipment equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
+    EquipmentEntity equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
     
-    FacilityStorageDto storageToStorageDto(Storage storage);
+    FacilityStorageDto storageToStorageDto(StorageEntity storage);
 
-    Storage storageDtoToStorage(FacilityStorageDto storageDto);
+    StorageEntity storageDtoToStorage(FacilityStorageDto storageDto);
     
-    Storage storageDtoToStorage(AddStorageDto storageDto);
+    StorageEntity storageDtoToStorage(AddStorageDto storageDto);
     
 }

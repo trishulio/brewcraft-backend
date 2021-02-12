@@ -4,20 +4,20 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentEntity;
 
 public interface EquipmentService {
 
-    public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types,
+    public Page<EquipmentEntity> getAllEquipment(Set<Long> ids, Set<String> types,
             Set<String> statuses, Set<Long> facilityIds, int page, int size, Set<String> sort, boolean orderAscending);
     
-    public Equipment getEquipment(Long equipmentId);
+    public EquipmentEntity getEquipment(Long equipmentId);
 
-    public Equipment addEquipment(Long facilityId, Equipment equipment);
+    public EquipmentEntity addEquipment(Long facilityId, EquipmentEntity equipment);
     
-    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment equipment);
+    public EquipmentEntity putEquipment(Long facilityId, Long equipmentId, EquipmentEntity equipment);
     
-    public Equipment patchEquipment(Long equipmentId, Equipment equipment);
+    public EquipmentEntity patchEquipment(Long equipmentId, EquipmentEntity equipment);
 
     public void deleteEquipment(Long equipmentId);
     

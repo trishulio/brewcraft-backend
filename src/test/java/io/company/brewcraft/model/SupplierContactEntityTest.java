@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SupplierContactTest {
+public class SupplierContactEntityTest {
 
-    private SupplierContact supplierContact;
+    private SupplierContactEntity supplierContact;
 
     @BeforeEach
     public void init() {
-        supplierContact = new SupplierContact();
+        supplierContact = new SupplierContactEntity();
     }
 
     @Test

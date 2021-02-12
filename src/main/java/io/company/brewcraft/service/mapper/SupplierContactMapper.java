@@ -8,24 +8,24 @@ import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.SupplierWithoutContactsDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
-import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
 
 @Mapper
 public interface SupplierContactMapper {
     
     SupplierContactMapper INSTANCE = Mappers.getMapper(SupplierContactMapper.class);   
     
-    SupplierContactWithSupplierDto supplierContactToSupplierContactWithSupplierDto(SupplierContact contact);
+    SupplierContactWithSupplierDto supplierContactToSupplierContactWithSupplierDto(SupplierContactEntity contact);
     
-    SupplierWithoutContactsDto supplierToSupplierWithoutContactsDto(Supplier supplier);
+    SupplierWithoutContactsDto supplierToSupplierWithoutContactsDto(SupplierEntity supplier);
     
-    SupplierContactDto contactToContactDto(SupplierContact contact);
+    SupplierContactDto contactToContactDto(SupplierContactEntity contact);
 
-    SupplierContact contactDtoToContact(SupplierContactDto contactDto);
+    SupplierContactEntity contactDtoToContact(SupplierContactDto contactDto);
     
-    SupplierContact contactDtoToContact(AddSupplierContactDto contactDto);
+    SupplierContactEntity contactDtoToContact(AddSupplierContactDto contactDto);
     
-    SupplierContact updateContactDtoToContact(UpdateSupplierContactDto contactDto);
+    SupplierContactEntity updateContactDtoToContact(UpdateSupplierContactDto contactDto);
 
 }

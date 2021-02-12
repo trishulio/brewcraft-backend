@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -45,17 +45,17 @@ public class SupplierServiceImplTest {
 
     @Test
     public void testGetSuppliers_returnsSuppliers() throws Exception {
-        Supplier supplier1 = new Supplier();
-        Supplier supplier2 = new Supplier();                
-        List<Supplier> suppliersList = Arrays.asList(supplier1, supplier2);
+        SupplierEntity supplier1 = new SupplierEntity();
+        SupplierEntity supplier2 = new SupplierEntity();                
+        List<SupplierEntity> suppliersList = Arrays.asList(supplier1, supplier2);
         
-        Page<Supplier> expectedSuppliers = new PageImpl<>(suppliersList);
+        Page<SupplierEntity> expectedSuppliers = new PageImpl<>(suppliersList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(supplierRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedSuppliers);
 
-        Page<Supplier> actualSuppliers = supplierService.getSuppliers(0, 100, new String[]{"id"}, true);
+        Page<SupplierEntity> actualSuppliers = supplierService.getSuppliers(0, 100, new String[]{"id"}, true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -67,18 +67,18 @@ public class SupplierServiceImplTest {
     @Test
     public void testGetSupplier_returnsSupplier() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
+        Optional<SupplierEntity> supplier = Optional.ofNullable(new SupplierEntity());
 
         when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
 
-        Supplier actualSupplier = supplierService.getSupplier(id);
+        SupplierEntity actualSupplier = supplierService.getSupplier(id);
 
         assertSame(supplier.get(), actualSupplier);
     }
 
     @Test
     public void testAddSupplier_SavesSupplier() throws Exception {
-        Supplier supplier = new Supplier();
+        SupplierEntity supplier = new SupplierEntity();
         
         supplierService.addSupplier(supplier);
         
@@ -88,8 +88,8 @@ public class SupplierServiceImplTest {
     @Test
     public void testPutSupplier_success() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        Supplier updatedSupplierMock = mock(Supplier.class);
+        Optional<SupplierEntity> supplier = Optional.ofNullable(new SupplierEntity());
+        SupplierEntity updatedSupplierMock = mock(SupplierEntity.class);
         
         when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
                 
@@ -101,8 +101,8 @@ public class SupplierServiceImplTest {
     @Test
     public void testPatchSupplier_success() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        Supplier updatedSupplierMock = mock(Supplier.class);
+        Optional<SupplierEntity> supplier = Optional.ofNullable(new SupplierEntity());
+        SupplierEntity updatedSupplierMock = mock(SupplierEntity.class);
         
         when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
                 
@@ -114,7 +114,7 @@ public class SupplierServiceImplTest {
     @Test
     public void testPatchSupplier_throwsWhenSupplierDoesNotExist() throws Exception {
         Long id = 1L;
-        Supplier updatedSupplierMock = mock(Supplier.class);
+        SupplierEntity updatedSupplierMock = mock(SupplierEntity.class);
         
         when(supplierRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
 

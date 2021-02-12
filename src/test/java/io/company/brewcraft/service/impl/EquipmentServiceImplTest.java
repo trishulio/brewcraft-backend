@@ -27,8 +27,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.EquipmentEntity;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.EquipmentRepositoryGetAllEquipmentSpecification;
 import io.company.brewcraft.repository.FacilityRepository;
@@ -53,12 +53,12 @@ public class EquipmentServiceImplTest {
 
     @Test
     public void testGetAllEquipment_returnsEquipment() throws Exception {
-        Equipment equipment1 = new Equipment();
-        Equipment equipment2 = new Equipment();
+        EquipmentEntity equipment1 = new EquipmentEntity();
+        EquipmentEntity equipment2 = new EquipmentEntity();
                 
-        List<Equipment> equipment = Arrays.asList(equipment1, equipment2);
+        List<EquipmentEntity> equipment = Arrays.asList(equipment1, equipment2);
         
-        Page<Equipment> expectedEquipment = new PageImpl<>(equipment);
+        Page<EquipmentEntity> expectedEquipment = new PageImpl<>(equipment);
         
         ArgumentCaptor<EquipmentRepositoryGetAllEquipmentSpecification> equipmentRepositoryGetAllEquipmentSpecificationArgument = ArgumentCaptor.forClass(EquipmentRepositoryGetAllEquipmentSpecification.class);
 
@@ -66,7 +66,7 @@ public class EquipmentServiceImplTest {
 
         when(equipmentRepositoryMock.findAll(equipmentRepositoryGetAllEquipmentSpecificationArgument.capture(), pageableArgument.capture())).thenReturn(expectedEquipment);
 
-        Page<Equipment> actualEquipment = equipmentService.getAllEquipment(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<EquipmentEntity> actualEquipment = equipmentService.getAllEquipment(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -78,11 +78,11 @@ public class EquipmentServiceImplTest {
     @Test
     public void testGetEquipment_returnsEquipment() throws Exception {
         Long id = 1L;
-        Optional<Equipment> expectedEquipment = Optional.ofNullable(new Equipment());
+        Optional<EquipmentEntity> expectedEquipment = Optional.ofNullable(new EquipmentEntity());
 
         when(equipmentRepositoryMock.findById(id)).thenReturn(expectedEquipment);
 
-        Equipment actualEquipment = equipmentService.getEquipment(id);
+        EquipmentEntity actualEquipment = equipmentService.getEquipment(id);
 
         assertSame(expectedEquipment.get(), actualEquipment);
     }
@@ -90,8 +90,8 @@ public class EquipmentServiceImplTest {
     @Test
     public void testAddEquipment_savesEquipment() throws Exception {
         Long facilityId = 1L;
-        Facility facility = new Facility();
-        Equipment equipmentMock = Mockito.mock(Equipment.class);
+        FacilityEntity facility = new FacilityEntity();
+        EquipmentEntity equipmentMock = Mockito.mock(EquipmentEntity.class);
         
         when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
         
@@ -104,7 +104,7 @@ public class EquipmentServiceImplTest {
     @Test
     public void testAddEquipment_throwsWhenNoFacilityExists() throws Exception {
         Long facilityId = 1L;
-        Equipment equipmentMock = Mockito.mock(Equipment.class);
+        EquipmentEntity equipmentMock = Mockito.mock(EquipmentEntity.class);
         
         when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.empty());
         
@@ -117,16 +117,16 @@ public class EquipmentServiceImplTest {
     @Test
     public void testPutEquipment_doesNotOuterJoinWhenThereIsNoExistingEquipment() throws Exception {
         Long facilityId = 1L;
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         Long equipmentId = 1L;
-        Equipment equipment = mock(Equipment.class);
+        EquipmentEntity equipment = mock(EquipmentEntity.class);
         
         when(equipmentRepositoryMock.findById(equipmentId)).thenReturn(Optional.empty());
         when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
                 
         equipmentService.putEquipment(facilityId, equipmentId, equipment);
        
-        verify(equipment, times(0)).outerJoin(Mockito.any(Equipment.class));
+        verify(equipment, times(0)).outerJoin(Mockito.any(EquipmentEntity.class));
         verify(equipment, times(1)).setId(equipmentId);
         verify(equipmentRepositoryMock, times(1)).save(equipment);
     }
@@ -134,10 +134,10 @@ public class EquipmentServiceImplTest {
     @Test
     public void testPutEquipment_doesOuterJoinWhenThereIsAnExistingEquipment() throws Exception {
         Long facilityId = 1L;
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         Long equipmentId = 1L;
-        Equipment equipment = mock(Equipment.class);
-        Equipment existingEquipment = new Equipment(equipmentId, new Facility(), null, null, null, null, null, null, null);
+        EquipmentEntity equipment = mock(EquipmentEntity.class);
+        EquipmentEntity existingEquipment = new EquipmentEntity(equipmentId, new FacilityEntity(), null, null, null, null, null, null, null);
         
         when(equipmentRepositoryMock.findById(equipmentId)).thenReturn(Optional.of(existingEquipment));
         when(facilityRepositoryMock.findById(facilityId)).thenReturn(Optional.of(facility));
@@ -152,8 +152,8 @@ public class EquipmentServiceImplTest {
     @Test
     public void testPatchEquipment_success() throws Exception {
         Long id = 1L;
-        Equipment updatedEquipmentMock = mock(Equipment.class);
-        Equipment existingEquipment = new Equipment(id, new Facility(), null, null, null, null, null, null, null);
+        EquipmentEntity updatedEquipmentMock = mock(EquipmentEntity.class);
+        EquipmentEntity existingEquipment = new EquipmentEntity(id, new FacilityEntity(), null, null, null, null, null, null, null);
         
         when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.of(existingEquipment));
  
@@ -166,13 +166,13 @@ public class EquipmentServiceImplTest {
     @Test
     public void testPatchEquipment_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
-        Equipment equipment = new Equipment();
+        EquipmentEntity equipment = new EquipmentEntity();
         
         when(equipmentRepositoryMock.existsById(id)).thenReturn(false);
       
         assertThrows(EntityNotFoundException.class, () -> {
             equipmentService.patchEquipment(id, equipment);
-            verify(equipmentRepositoryMock, times(0)).save(Mockito.any(Equipment.class));
+            verify(equipmentRepositoryMock, times(0)).save(Mockito.any(EquipmentEntity.class));
         });
     }
 

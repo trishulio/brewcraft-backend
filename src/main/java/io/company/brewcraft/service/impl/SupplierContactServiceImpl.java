@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierContactService;
@@ -29,22 +29,22 @@ public class SupplierContactServiceImpl implements SupplierContactService {
         this.supplierRepository = supplierRepository;
     }
     
-    public Page<SupplierContact> getSupplierContacts(int page, int size, String[] sort, boolean order_asc) {
+    public Page<SupplierContactEntity> getSupplierContacts(int page, int size, String[] sort, boolean order_asc) {
         Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
 
-        Page<SupplierContact> supplierContacts = supplierContactRepository.findAll(paging);
+        Page<SupplierContactEntity> supplierContacts = supplierContactRepository.findAll(paging);
 
         return supplierContacts; 
     }
     
     @Override
-    public SupplierContact getContact(Long contactId) {        
+    public SupplierContactEntity getContact(Long contactId) {        
         return supplierContactRepository.findById(contactId).orElse(null);
     }
 
     @Override
-    public SupplierContact addContact(Long supplierId, SupplierContact supplierContact) {
-        Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
+    public SupplierContactEntity addContact(Long supplierId, SupplierContactEntity supplierContact) {
+        SupplierEntity supplier = supplierRepository.findById(supplierId).orElse(null);
         
         supplierContact.setSupplier(supplier);
         
@@ -52,8 +52,8 @@ public class SupplierContactServiceImpl implements SupplierContactService {
     }
 
     @Override
-    public SupplierContact putContact(Long supplierId, Long contactId, SupplierContact updatedSupplierContact) {
-        SupplierContact supplierContact = supplierContactRepository.findById(contactId).orElse(null);
+    public SupplierContactEntity putContact(Long supplierId, Long contactId, SupplierContactEntity updatedSupplierContact) {
+        SupplierContactEntity supplierContact = supplierContactRepository.findById(contactId).orElse(null);
         
         if (supplierContact != null) {
             updatedSupplierContact.outerJoin(supplierContact);
@@ -65,8 +65,8 @@ public class SupplierContactServiceImpl implements SupplierContactService {
     }
     
     @Override
-    public SupplierContact patchContact(Long contactId, SupplierContact updatedContact) {
-        SupplierContact contact = supplierContactRepository.findById(contactId).orElseThrow(() -> new EntityNotFoundException("SupplierContact", contactId.toString()));
+    public SupplierContactEntity patchContact(Long contactId, SupplierContactEntity updatedContact) {
+        SupplierContactEntity contact = supplierContactRepository.findById(contactId).orElseThrow(() -> new EntityNotFoundException("SupplierContact", contactId.toString()));
 
         updatedContact.outerJoin(contact);
 

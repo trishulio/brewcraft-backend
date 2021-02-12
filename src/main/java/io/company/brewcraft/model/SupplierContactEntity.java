@@ -20,7 +20,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="SUPPLIER_CONTACT")
-public class SupplierContact extends BaseEntity {
+public class SupplierContactEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_SUPPLIER = "supplier";
+    public static final String FIELD_FIRST_NAME = "firstName";
+    public static final String FIELD_LAST_NAME = "lastName";
+    public static final String FIELD_POSITION = "position";
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_contact_generator")
@@ -30,7 +37,7 @@ public class SupplierContact extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="supplier_id", referencedColumnName="id", nullable=false)
     @JsonManagedReference
-    private Supplier supplier;
+    private SupplierEntity supplier;
     
     @Column(name = "first_name")
     private String firstName;
@@ -56,11 +63,11 @@ public class SupplierContact extends BaseEntity {
     @Version
     private Integer version;
 
-    public SupplierContact() {
+    public SupplierContactEntity() {
         
     }
     
-    public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
+    public SupplierContactEntity(Long id, SupplierEntity supplier, String firstName, String lastName, String position, String email,
             String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setSupplier(supplier);
@@ -82,11 +89,11 @@ public class SupplierContact extends BaseEntity {
         this.id = id;
     }
 
-    public Supplier getSupplier() {
+    public SupplierEntity getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(SupplierEntity supplier) {
         this.supplier = supplier;
     }
 

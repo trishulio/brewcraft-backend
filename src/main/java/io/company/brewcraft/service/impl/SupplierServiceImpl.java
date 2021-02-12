@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -25,29 +25,29 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Page<Supplier> getSuppliers(int page, int size, String[] sort, boolean order_asc) {
+    public Page<SupplierEntity> getSuppliers(int page, int size, String[] sort, boolean order_asc) {
         Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
 
-        Page<Supplier> suppliers = supplierRepository.findAll(paging);
+        Page<SupplierEntity> suppliers = supplierRepository.findAll(paging);
 
         return suppliers; 
     }
 
     @Override
-    public Supplier getSupplier(Long id) {
-        Supplier supplier = supplierRepository.findById(id).orElse(null);
+    public SupplierEntity getSupplier(Long id) {
+        SupplierEntity supplier = supplierRepository.findById(id).orElse(null);
         
         return supplier;
     }
 
     @Override
-    public Supplier addSupplier(Supplier supplier) {       
+    public SupplierEntity addSupplier(SupplierEntity supplier) {       
         return supplierRepository.save(supplier);
     }
 
     @Override
-    public Supplier putSupplier(Long id, Supplier updatedSupplier) {
-        Supplier supplier = supplierRepository.findById(id).orElse(null);
+    public SupplierEntity putSupplier(Long id, SupplierEntity updatedSupplier) {
+        SupplierEntity supplier = supplierRepository.findById(id).orElse(null);
         
         if (supplier != null) {
             updatedSupplier.outerJoin(supplier);
@@ -59,8 +59,8 @@ public class SupplierServiceImpl implements SupplierService {
     }
     
     @Override
-    public Supplier patchSupplier(Long id, Supplier updatedSupplier) {
-        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Supplier", id.toString()));
+    public SupplierEntity patchSupplier(Long id, SupplierEntity updatedSupplier) {
+        SupplierEntity supplier = supplierRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Supplier", id.toString()));
 
         updatedSupplier.outerJoin(supplier);
 

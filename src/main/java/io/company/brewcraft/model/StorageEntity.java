@@ -22,7 +22,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="STORAGE")
-public class Storage extends BaseEntity {
+public class StorageEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_FACILITY = "facility";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_TYPE = "type";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storage_generator")
@@ -32,7 +36,7 @@ public class Storage extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="facility_id", referencedColumnName="id", nullable = false)
     @JsonManagedReference
-    private Facility facility;
+    private FacilityEntity facility;
     
     private String name;
     
@@ -50,11 +54,11 @@ public class Storage extends BaseEntity {
     @Version
     private Integer version;
     
-    public Storage() {
+    public StorageEntity() {
         
     }
     
-    public Storage(Long id, Facility facility, String name, StorageType type, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public StorageEntity(Long id, FacilityEntity facility, String name, StorageType type, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
         setName(name);
@@ -72,11 +76,11 @@ public class Storage extends BaseEntity {
         this.id = id;
     }
 
-    public Facility getFacility() {
+    public FacilityEntity getFacility() {
         return facility;
     }
 
-    public void setFacility(Facility facility) {
+    public void setFacility(FacilityEntity facility) {
         this.facility = facility;
     }
     

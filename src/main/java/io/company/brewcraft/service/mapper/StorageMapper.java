@@ -9,25 +9,25 @@ import io.company.brewcraft.dto.FacilityBaseDto;
 import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.UpdateStorageDto;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.FacilityAddress;
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 
 @Mapper
 public interface StorageMapper {
     
     StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);
 
-    StorageDto storageToStorageDto(Storage storage);
+    StorageDto storageToStorageDto(StorageEntity storage);
         
-    FacilityBaseDto facilityToFacilityDto(Facility facility);
+    FacilityBaseDto facilityToFacilityDto(FacilityEntity facility);
     
     AddressDto addressToAddressDto(FacilityAddress facilityAddress);
 
-    Storage storageDtoToStorage(FacilityStorageDto storageDto);
+    StorageEntity storageDtoToStorage(FacilityStorageDto storageDto);
     
-    Storage storageDtoToStorage(AddStorageDto storageDto);
+    StorageEntity storageDtoToStorage(AddStorageDto storageDto);
 
-    Storage storageDtoToStorage(UpdateStorageDto storageDto);
+    StorageEntity storageDtoToStorage(UpdateStorageDto storageDto);
        
 }

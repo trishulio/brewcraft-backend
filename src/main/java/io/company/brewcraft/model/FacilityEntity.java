@@ -24,7 +24,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="FACILITY")
-public class Facility extends BaseEntity {
+public class FacilityEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
+    public static final String FIELD_FAX_NUMBER = "faxNumber";
+    public static final String FIELD_EQUIPMENT = "equipment";
+    public static final String FIELD_STORAGES = "storages";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facility_generator")
@@ -45,11 +52,11 @@ public class Facility extends BaseEntity {
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<Equipment> equipment;
+    private List<EquipmentEntity> equipment;
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<Storage> storages;
+    private List<StorageEntity> storages;
         
     @CreationTimestamp
     @Column(updatable = false)
@@ -62,11 +69,11 @@ public class Facility extends BaseEntity {
     @Version
     private Integer version;
     
-    public Facility() {
+    public FacilityEntity() {
         
     }
     
-    public Facility(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<Equipment> equipment, List<Storage> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public FacilityEntity(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setAddress(address);
@@ -119,11 +126,11 @@ public class Facility extends BaseEntity {
         this.faxNumber = faxNumber;
     }
     
-    public List<Equipment> getEquipment() {
+    public List<EquipmentEntity> getEquipment() {
         return equipment;
     }
     
-    public void setEquipment(List<Equipment> equipment) {
+    public void setEquipment(List<EquipmentEntity> equipment) {
         if (equipment != null) {
             equipment.stream().forEach(eqpt -> eqpt.setFacility(this));
         }
@@ -136,7 +143,7 @@ public class Facility extends BaseEntity {
         }
     }
     
-    public void addEquipment(Equipment equipment) {
+    public void addEquipment(EquipmentEntity equipment) {
         if (this.equipment == null) {
             this.equipment = new ArrayList<>();
         }
@@ -144,18 +151,18 @@ public class Facility extends BaseEntity {
         this.equipment.add(equipment);
     }
     
-    public void removeEquipment(Equipment equipment) {
+    public void removeEquipment(EquipmentEntity equipment) {
         if (this.equipment != null) {
             equipment.setFacility(null);
             this.equipment.remove(equipment);
         }
     }
     
-    public List<Storage> getStorages() {
+    public List<StorageEntity> getStorages() {
         return storages;
     }
     
-    public void setStorages(List<Storage> storages) {
+    public void setStorages(List<StorageEntity> storages) {
         if (storages != null) {
             storages.stream().forEach(storage -> storage.setFacility(this));
         }
@@ -168,7 +175,7 @@ public class Facility extends BaseEntity {
         }    
     }
     
-    public void addStorage(Storage storage) {
+    public void addStorage(StorageEntity storage) {
         if (this.storages == null) {
             this.storages = new ArrayList<>();
         }
@@ -176,7 +183,7 @@ public class Facility extends BaseEntity {
         storages.add(storage);
     }
     
-    public void removeStorage(Storage storage) {
+    public void removeStorage(StorageEntity storage) {
         if (storages != null) {
             storage.setFacility(null);
             storages.remove(storage);

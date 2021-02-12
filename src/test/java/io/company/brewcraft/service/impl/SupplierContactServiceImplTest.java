@@ -26,8 +26,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierContactService;
@@ -51,17 +51,17 @@ public class SupplierContactServiceImplTest {
 
     @Test
     public void testGetSuppliers_returnsSuppliers() throws Exception {
-        SupplierContact supplierContact1 = new SupplierContact();
-        SupplierContact supplierContact2 = new SupplierContact();                
-        List<SupplierContact> supplierContactList = Arrays.asList(supplierContact1, supplierContact2);
+        SupplierContactEntity supplierContact1 = new SupplierContactEntity();
+        SupplierContactEntity supplierContact2 = new SupplierContactEntity();                
+        List<SupplierContactEntity> supplierContactList = Arrays.asList(supplierContact1, supplierContact2);
         
-        Page<SupplierContact> expectedSupplierContacts = new PageImpl<>(supplierContactList);
+        Page<SupplierContactEntity> expectedSupplierContacts = new PageImpl<>(supplierContactList);
 
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
         
         when(supplierContactRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedSupplierContacts);
 
-        Page<SupplierContact> actualSupplierContacts = supplierContactService.getSupplierContacts(0, 100, new String[]{"id"}, true);
+        Page<SupplierContactEntity> actualSupplierContacts = supplierContactService.getSupplierContacts(0, 100, new String[]{"id"}, true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -75,12 +75,12 @@ public class SupplierContactServiceImplTest {
         Long supplierId = 1L;
         Long contactId = 1L;
         
-        Optional<SupplierContact> expectedSupplierContact = Optional.ofNullable(new SupplierContact());
+        Optional<SupplierContactEntity> expectedSupplierContact = Optional.ofNullable(new SupplierContactEntity());
         
         when(supplierRepositoryMock.existsById(supplierId)).thenReturn(true);
         when(supplierContactRepositoryMock.findById(contactId)).thenReturn(expectedSupplierContact);
 
-        SupplierContact actualSupplier = supplierContactService.getContact(supplierId);
+        SupplierContactEntity actualSupplier = supplierContactService.getContact(supplierId);
 
         assertSame(expectedSupplierContact.get(), actualSupplier);
     }
@@ -89,8 +89,8 @@ public class SupplierContactServiceImplTest {
     public void testAddContact_SavesContact() throws Exception {
         Long supplierId = 1L;
         
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        SupplierContact supplierContactMock = mock(SupplierContact.class);
+        Optional<SupplierEntity> supplier = Optional.ofNullable(new SupplierEntity());
+        SupplierContactEntity supplierContactMock = mock(SupplierContactEntity.class);
 
         when(supplierRepositoryMock.findById(supplierId)).thenReturn(supplier);
           
@@ -105,8 +105,8 @@ public class SupplierContactServiceImplTest {
         Long supplierId = 1L;
         Long contactId = 1L;
         
-        Optional<SupplierContact> supplierContact = Optional.ofNullable(new SupplierContact());
-        SupplierContact updatedSupplierContactMock = mock(SupplierContact.class);
+        Optional<SupplierContactEntity> supplierContact = Optional.ofNullable(new SupplierContactEntity());
+        SupplierContactEntity updatedSupplierContactMock = mock(SupplierContactEntity.class);
         
         when(supplierContactRepositoryMock.findById(contactId)).thenReturn(supplierContact);
                 
@@ -121,7 +121,7 @@ public class SupplierContactServiceImplTest {
     public void testPatchContact_throwsIfContactDoesNotExist() {
         Long contactId = 1L;
         
-        SupplierContact supplierContact = new SupplierContact();
+        SupplierContactEntity supplierContact = new SupplierContactEntity();
 
         when(supplierContactRepositoryMock.findById(contactId)).thenReturn(Optional.ofNullable(null));
         

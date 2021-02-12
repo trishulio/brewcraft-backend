@@ -8,8 +8,8 @@ import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.FacilityBaseDto;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
-import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.EquipmentEntity;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.FacilityAddress;
 
 @Mapper(uses = { QuantityMapper.class})
@@ -17,16 +17,16 @@ public interface EquipmentMapper {
     
     EquipmentMapper INSTANCE = Mappers.getMapper(EquipmentMapper.class);
 
-    EquipmentDto equipmentToEquipmentDto(Equipment equipment);
+    EquipmentDto equipmentToEquipmentDto(EquipmentEntity equipment);
     
-    FacilityBaseDto facilityToFacilityDto(Facility facility);
+    FacilityBaseDto facilityToFacilityDto(FacilityEntity facility);
     
     AddressDto addressToAddressDto(FacilityAddress facilityAddress);
 
-    Equipment equipmentDtoToEquipment(EquipmentDto equipmentDto);
+    EquipmentEntity equipmentDtoToEquipment(EquipmentDto equipmentDto);
     
-    Equipment equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
+    EquipmentEntity equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
     
-    Equipment equipmentDtoToEquipment(UpdateEquipmentDto equipmentDto);
+    EquipmentEntity equipmentDtoToEquipment(UpdateEquipmentDto equipmentDto);
         
 }

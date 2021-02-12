@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddFacilityDto;
 import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateFacilityDto;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.FacilityMapper;
@@ -46,7 +46,7 @@ public class FacilityController {
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<FacilityDto> getAllFacilities(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, 
             @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {        
-        Page<Facility> facilitiesPage = facilityService.getAllFacilities(page, size, sort, orderAscending);
+        Page<FacilityEntity> facilitiesPage = facilityService.getAllFacilities(page, size, sort, orderAscending);
         
         List<FacilityDto> facilitiesList = facilitiesPage.stream().map(facility -> facilityMapper.facilityToFacilityDto(facility)).collect(Collectors.toList());
     
@@ -58,7 +58,7 @@ public class FacilityController {
     public FacilityDto getFacility(@PathVariable Long facilityId) {   
         Validator validator = new Validator();
 
-        Facility facility =  facilityService.getFacility(facilityId);
+        FacilityEntity facility =  facilityService.getFacility(facilityId);
         
         validator.assertion(facility != null, EntityNotFoundException.class, "Facility", facilityId.toString());
         
@@ -68,27 +68,27 @@ public class FacilityController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public FacilityDto addFacility(@Valid @RequestBody AddFacilityDto facilityDto) {
-        Facility facility = facilityMapper.facilityDtoToFacility(facilityDto);    
+        FacilityEntity facility = facilityMapper.facilityDtoToFacility(facilityDto);    
         
-        Facility addedFacility = facilityService.addFacility(facility);
+        FacilityEntity addedFacility = facilityService.addFacility(facility);
         
         return facilityMapper.facilityToFacilityDto(addedFacility);   
     }
     
     @PutMapping("/{facilityId}")
     public FacilityDto putFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
-        Facility facility = facilityMapper.facilityDtoToFacility(facilityDto);
+        FacilityEntity facility = facilityMapper.facilityDtoToFacility(facilityDto);
 
-        Facility putFacility = facilityService.putFacility(facilityId, facility);
+        FacilityEntity putFacility = facilityService.putFacility(facilityId, facility);
         
         return facilityMapper.facilityToFacilityDto(putFacility);   
     }
     
     @PatchMapping("/{facilityId}")
     public FacilityDto patchFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
-        Facility facility = facilityMapper.facilityDtoToFacility(facilityDto);
+        FacilityEntity facility = facilityMapper.facilityDtoToFacility(facilityDto);
 
-        Facility patchedFacility = facilityService.patchFacility(facilityId, facility);
+        FacilityEntity patchedFacility = facilityService.patchFacility(facilityId, facility);
         
         return facilityMapper.facilityToFacilityDto(patchedFacility);   
     }

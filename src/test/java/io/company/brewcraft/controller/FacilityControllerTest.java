@@ -31,13 +31,13 @@ import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.FacilityEquipmentDto;
 import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.QuantityDto;
-import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.FacilityAddress;
 import io.company.brewcraft.model.QuantityEntity;
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 import io.company.brewcraft.model.StorageType;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.security.session.ContextHolder;
@@ -59,21 +59,21 @@ public class FacilityControllerTest {
 
     @Test
     public void testGetFacilities_ReturnsAllFacilities() throws Exception {
-       Facility facility1 = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       facility1.getEquipment().add(new Equipment(1L, facility1, "name1", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-       facility1.getEquipment().add(new Equipment(2L, facility1, "name2", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-       facility1.getStorages().add(new Storage(1L, facility1, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-       facility1.getStorages().add(new Storage(2L, facility1, "name2", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       FacilityEntity facility1 = new FacilityEntity(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       facility1.getEquipment().add(new EquipmentEntity(1L, facility1, "name1", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       facility1.getEquipment().add(new EquipmentEntity(2L, facility1, "name2", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       facility1.getStorages().add(new StorageEntity(1L, facility1, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       facility1.getStorages().add(new StorageEntity(2L, facility1, "name2", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
        
-       Facility facility2 = new Facility(2L, "facility2", new FacilityAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       facility2.getEquipment().add(new Equipment(3L, facility2, "name1", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-       facility2.getStorages().add(new Storage(3L, facility2, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       FacilityEntity facility2 = new FacilityEntity(2L, "facility2", new FacilityAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       facility2.getEquipment().add(new EquipmentEntity(3L, facility2, "name1", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+       facility2.getStorages().add(new StorageEntity(3L, facility2, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
           
-       List<Facility> facilityList = new ArrayList<>();
+       List<FacilityEntity> facilityList = new ArrayList<>();
        facilityList.add(facility1);
        facilityList.add(facility2);
        
-       Page<Facility> pagedResponse = new PageImpl<>(facilityList);
+       Page<FacilityEntity> pagedResponse = new PageImpl<>(facilityList);
         
        when(facilityServiceMock.getAllFacilities(0, 100, new HashSet<>(Arrays.asList("id")), true)).thenReturn(pagedResponse);
 
@@ -183,11 +183,11 @@ public class FacilityControllerTest {
     
     @Test
     public void testGetFacility_ReturnsFacility() throws Exception {
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        facility.getEquipment().add(new Equipment(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getEquipment().add(new Equipment(2L, facility, "name2", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getStorages().add(new Storage(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getStorages().add(new Storage(2L, facility, "name2", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        facility.getEquipment().add(new EquipmentEntity(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getEquipment().add(new EquipmentEntity(2L, facility, "name2", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getStorages().add(new StorageEntity(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getStorages().add(new StorageEntity(2L, facility, "name2", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
         
         when(facilityServiceMock.getFacility(1L)).thenReturn(facility);
          
@@ -291,11 +291,11 @@ public class FacilityControllerTest {
         payload.put("equipment", equipmentArray);      
         payload.put("storages", storageArray);    
         
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        facility.getEquipment().add(new Equipment(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getStorages().add(new Storage(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        facility.getEquipment().add(new EquipmentEntity(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getStorages().add(new StorageEntity(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
 
-        when(facilityServiceMock.addFacility(any(Facility.class))).thenReturn(facility);
+        when(facilityServiceMock.addFacility(any(FacilityEntity.class))).thenReturn(facility);
         
         this.mockMvc.perform(post("/api/v1/facilities/")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -340,7 +340,7 @@ public class FacilityControllerTest {
                  + "    'version': 1"
                  + "    }"));
         
-        verify(facilityServiceMock, times(1)).addFacility(any(Facility.class));
+        verify(facilityServiceMock, times(1)).addFacility(any(FacilityEntity.class));
     }
     
     @Test
@@ -388,15 +388,15 @@ public class FacilityControllerTest {
         payload.put("storages", storageArray);    
         payload.put("version", 1L);
                      
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        facility.getEquipment().add(new Equipment(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getStorages().add(new Storage(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        facility.getEquipment().add(new EquipmentEntity(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getStorages().add(new StorageEntity(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
                    
         FacilityDto facilityDto = new FacilityDto(1L, "facility1", new AddressDto(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), 1);
         facilityDto.getEquipment().add(new FacilityEquipmentDto(1L, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityDto("l", new BigDecimal(100.0)), 1));
         facilityDto.getStorages().add(new FacilityStorageDto(1L, "name1", StorageType.GENERAL, 1));
         
-        when(facilityServiceMock.putFacility(eq(1L), any(Facility.class))).thenReturn(facility);
+        when(facilityServiceMock.putFacility(eq(1L), any(FacilityEntity.class))).thenReturn(facility);
         
         this.mockMvc.perform(put("/api/v1/facilities/1/")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -441,7 +441,7 @@ public class FacilityControllerTest {
                  + "    'version': 1"
                  + "    }"));
         
-        verify(facilityServiceMock, times(1)).putFacility(eq(1L), any(Facility.class));
+        verify(facilityServiceMock, times(1)).putFacility(eq(1L), any(FacilityEntity.class));
     }
     
     @Test
@@ -450,11 +450,11 @@ public class FacilityControllerTest {
         payload.put("name", "testName");  
         payload.put("version", 1L);
                      
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        facility.getEquipment().add(new Equipment(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
-        facility.getStorages().add(new Storage(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", new ArrayList<>(), new ArrayList<>(), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        facility.getEquipment().add(new EquipmentEntity(1L, facility, "name1", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
+        facility.getStorages().add(new StorageEntity(1L, facility, "name1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1));
             
-        when(facilityServiceMock.patchFacility(eq(1L), any(Facility.class))).thenReturn(facility);
+        when(facilityServiceMock.patchFacility(eq(1L), any(FacilityEntity.class))).thenReturn(facility);
              
         this.mockMvc.perform(patch("/api/v1/facilities/1/")
          .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -499,7 +499,7 @@ public class FacilityControllerTest {
                  + "    'version': 1"
                  + "    }"));
         
-        verify(facilityServiceMock, times(1)).patchFacility(eq(1L), any(Facility.class));
+        verify(facilityServiceMock, times(1)).patchFacility(eq(1L), any(FacilityEntity.class));
     }
 
     @Test

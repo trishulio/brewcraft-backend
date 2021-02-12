@@ -24,7 +24,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="EQUIPMENT")
-public class Equipment extends BaseEntity {
+public class EquipmentEntity extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_FACILITY = "facility";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_TYPE = "type";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_MAX_CAPACITY = "maxCapacity";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_generator")
@@ -34,7 +40,7 @@ public class Equipment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="facility_id", referencedColumnName="id", nullable = false)
     @JsonManagedReference
-    private Facility facility;
+    private FacilityEntity facility;
     
     private String name;
     
@@ -59,11 +65,11 @@ public class Equipment extends BaseEntity {
     @Version
     private Integer version;
     
-    public Equipment() {
+    public EquipmentEntity() {
         
     }
     
-    public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, QuantityEntity maxCapacity,
+    public EquipmentEntity(Long id, FacilityEntity facility, String name, EquipmentType type, EquipmentStatus status, QuantityEntity maxCapacity,
             LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
@@ -84,11 +90,11 @@ public class Equipment extends BaseEntity {
         this.id = id;
     }
     
-    public Facility getFacility() {
+    public FacilityEntity getFacility() {
         return facility;
     }
 
-    public void setFacility(Facility facility) {
+    public void setFacility(FacilityEntity facility) {
         this.facility = facility;
     }
 

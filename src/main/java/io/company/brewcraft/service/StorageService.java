@@ -4,19 +4,19 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 
 public interface StorageService {
 
-    public Page<Storage> getAllStorages(int page, int size, Set<String> sort, boolean orderAscending);
+    public Page<StorageEntity> getAllStorages(int page, int size, Set<String> sort, boolean orderAscending);
     
-    public Storage getStorage(Long storageId);
+    public StorageEntity getStorage(Long storageId);
 
-    public Storage addStorage(Long facilityId, Storage storage);
+    public StorageEntity addStorage(Long facilityId, StorageEntity storage);
     
-    public Storage putStorage(Long facilityId, Long storageId, Storage storage);
+    public StorageEntity putStorage(Long facilityId, Long storageId, StorageEntity storage);
     
-    public Storage patchStorage(Long storageId, Storage storage);
+    public StorageEntity patchStorage(Long storageId, StorageEntity storage);
 
     public void deleteStorage(Long storageId); 
     

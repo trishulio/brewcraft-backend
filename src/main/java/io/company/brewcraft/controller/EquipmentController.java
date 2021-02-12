@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddEquipmentDto;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
-import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
@@ -52,7 +52,7 @@ public class EquipmentController {
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
             @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
         
-        Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
+        Page<EquipmentEntity> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()
                 .map(equipment -> equipmentMapper.equipmentToEquipmentDto(equipment)).collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class EquipmentController {
     public EquipmentDto getEquipment(@PathVariable Long equipmentId) {
         Validator validator = new Validator();
 
-        Equipment equipment = equipmentService.getEquipment(equipmentId);
+        EquipmentEntity equipment = equipmentService.getEquipment(equipmentId);
         
         validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
 
@@ -76,27 +76,27 @@ public class EquipmentController {
     @PostMapping("/{facilityId}/equipment")
     @ResponseStatus(HttpStatus.CREATED)
     public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
-        Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
+        EquipmentEntity equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        Equipment addedEquipment = equipmentService.addEquipment(facilityId, equipment);
+        EquipmentEntity addedEquipment = equipmentService.addEquipment(facilityId, equipment);
         
         return equipmentMapper.equipmentToEquipmentDto(addedEquipment);
     }
     
     @PutMapping("/{facilityId}/equipment/{equipmentId}")
     public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long facilityId,  @PathVariable Long equipmentId) {
-        Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
+        EquipmentEntity equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        Equipment putEquipment = equipmentService.putEquipment(facilityId, equipmentId, equipment);
+        EquipmentEntity putEquipment = equipmentService.putEquipment(facilityId, equipmentId, equipment);
 
         return equipmentMapper.equipmentToEquipmentDto(putEquipment);
     }
     
     @PatchMapping("/equipment/{equipmentId}")
     public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long equipmentId) {
-        Equipment equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
+        EquipmentEntity equipment = equipmentMapper.equipmentDtoToEquipment(equipmentDto);
         
-        Equipment patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);
+        EquipmentEntity patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);
         
         return equipmentMapper.equipmentToEquipmentDto(patchedEquipment);
     }

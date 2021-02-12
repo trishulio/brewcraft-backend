@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -25,25 +25,25 @@ public class FacilityServiceImpl implements FacilityService {
     }
     
     @Override
-    public Page<Facility> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending) {        
+    public Page<FacilityEntity> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending) {        
         return facilityRepository.findAll(pageRequest(sort, orderAscending, page, size));
     }
 
     @Override
-    public Facility getFacility(Long facilityId) {
-        Facility facility = facilityRepository.findById(facilityId).orElse(null);
+    public FacilityEntity getFacility(Long facilityId) {
+        FacilityEntity facility = facilityRepository.findById(facilityId).orElse(null);
         
         return facility;      
     }
 
     @Override
-    public Facility addFacility(Facility facility) {        
+    public FacilityEntity addFacility(FacilityEntity facility) {        
         return facilityRepository.save(facility);
     }
     
     @Override
-    public Facility putFacility(Long facilityId, Facility updatedFacility) {        
-        Facility facility = facilityRepository.findById(facilityId).orElse(null);
+    public FacilityEntity putFacility(Long facilityId, FacilityEntity updatedFacility) {        
+        FacilityEntity facility = facilityRepository.findById(facilityId).orElse(null);
         
         if (facility != null) {
             updatedFacility.outerJoin(facility);
@@ -55,8 +55,8 @@ public class FacilityServiceImpl implements FacilityService {
     }
     
     @Override
-    public Facility patchFacility(Long facilityId, Facility updatedFacility) {
-        Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
+    public FacilityEntity patchFacility(Long facilityId, FacilityEntity updatedFacility) {
+        FacilityEntity facility = facilityRepository.findById(facilityId).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
      
         updatedFacility.outerJoin(facility);
         
