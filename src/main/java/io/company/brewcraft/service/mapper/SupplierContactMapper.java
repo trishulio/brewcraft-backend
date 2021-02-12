@@ -27,5 +27,5 @@ public interface SupplierContactMapper {
     SupplierContactEntity contactDtoToContact(AddSupplierContactDto contactDto);
     
     SupplierContactEntity updateContactDtoToContact(UpdateSupplierContactDto contactDto);
-
+        
 }

@@ -7,6 +7,7 @@ import io.company.brewcraft.dto.AddEquipmentDto;
 import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.FacilityBaseDto;
+import io.company.brewcraft.dto.FacilityEquipmentDto;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
 import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.model.FacilityEntity;
@@ -28,5 +29,11 @@ public interface EquipmentMapper {
     EquipmentEntity equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
     
     EquipmentEntity equipmentDtoToEquipment(UpdateEquipmentDto equipmentDto);
+    
+    FacilityAddressEntity addressDtoToAddress(AddressDto addressDto);
+    
+    FacilityEquipmentDto equipmentToFacilityEquipmentDto(EquipmentEntity equipment);
+
+    EquipmentEntity facilityEquipmentDtoToEquipment(FacilityEquipmentDto equipmentDto);
         
 }
