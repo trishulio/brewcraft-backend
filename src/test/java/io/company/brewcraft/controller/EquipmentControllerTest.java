@@ -30,7 +30,7 @@ import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.FacilityAddressEntity;
 import io.company.brewcraft.model.QuantityEntity;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.security.session.ContextHolder;
@@ -52,7 +52,7 @@ public class EquipmentControllerTest {
     
     @Test
     public void testGetAllEquipment_ReturnsListOfEquipment() throws Exception {
-       FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null),"6045555555", "6045555555", null, null, null, null, 1);
+       FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null),"6045555555", "6045555555", null, null, null, null, 1);
 
        EquipmentEntity equipment1 = new EquipmentEntity(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        EquipmentEntity equipment2 = new EquipmentEntity(2L, facility, "testName2", EquipmentType.BRITE_TANK, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
@@ -134,7 +134,7 @@ public class EquipmentControllerTest {
     
     @Test
     public void testGetEquipment_ReturnsEquipment() throws Exception {
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         EquipmentEntity equipment = new EquipmentEntity(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);  
 
         when(equipmentServiceMock.getEquipment(1L)).thenReturn(equipment);
@@ -186,7 +186,7 @@ public class EquipmentControllerTest {
         
         payload.put("maxCapacity", maxCapacity);    
         
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         EquipmentEntity equipment = new EquipmentEntity(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                      
         when(equipmentServiceMock.addEquipment(eq(1L), any(EquipmentEntity.class))).thenReturn(equipment);
@@ -241,7 +241,7 @@ public class EquipmentControllerTest {
         payload.put("maxCapacity", maxCapacity);         
         payload.put("version", "1");
                   
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         EquipmentEntity equipment = new EquipmentEntity(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(equipmentServiceMock.putEquipment(eq(1L), eq(1L), any(EquipmentEntity.class))).thenReturn(equipment);
@@ -288,7 +288,7 @@ public class EquipmentControllerTest {
         payload.put("name", "testName");   
         payload.put("version", "1");
                   
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         EquipmentEntity equipment = new EquipmentEntity(1L, facility, "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(equipmentServiceMock.patchEquipment(eq(1L), any(EquipmentEntity.class))).thenReturn(equipment);

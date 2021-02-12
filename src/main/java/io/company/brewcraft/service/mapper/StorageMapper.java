@@ -10,7 +10,7 @@ import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.UpdateStorageDto;
 import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.FacilityAddressEntity;
 import io.company.brewcraft.model.StorageEntity;
 
 @Mapper
@@ -22,7 +22,7 @@ public interface StorageMapper {
         
     FacilityBaseDto facilityToFacilityDto(FacilityEntity facility);
     
-    AddressDto addressToAddressDto(FacilityAddress facilityAddress);
+    AddressDto addressToAddressDto(FacilityAddressEntity facilityAddress);
 
     StorageEntity storageDtoToStorage(FacilityStorageDto storageDto);
     

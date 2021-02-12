@@ -13,7 +13,7 @@ import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.UpdateFacilityDto;
 import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.FacilityAddressEntity;
 import io.company.brewcraft.model.StorageEntity;
 
 @Mapper(uses = { QuantityMapper.class})
@@ -29,9 +29,9 @@ public interface FacilityMapper {
 
     FacilityEntity facilityDtoToFacility(UpdateFacilityDto facilityDto);
         
-    AddressDto addressToAddressDto(FacilityAddress address);
+    AddressDto addressToAddressDto(FacilityAddressEntity address);
 
-    FacilityAddress addressDtoToAddress(AddressDto addressDto);
+    FacilityAddressEntity addressDtoToAddress(AddressDto addressDto);
     
     FacilityEquipmentDto equipmentToEquipmentDto(EquipmentEntity equipment);
 

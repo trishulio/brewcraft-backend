@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="SUPPLIER_ADDRESS")
-public class SupplierAddressEntity extends Address {
+public class SupplierAddressEntity extends AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_address_generator")

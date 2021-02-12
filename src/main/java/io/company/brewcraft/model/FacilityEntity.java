@@ -42,7 +42,7 @@ public class FacilityEntity extends BaseEntity {
     
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private FacilityAddress address;
+    private FacilityAddressEntity address;
     
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -73,7 +73,7 @@ public class FacilityEntity extends BaseEntity {
         
     }
     
-    public FacilityEntity(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public FacilityEntity(Long id, String name, FacilityAddressEntity address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setAddress(address);
@@ -102,11 +102,11 @@ public class FacilityEntity extends BaseEntity {
         this.name = name;
     }
     
-    public FacilityAddress getAddress() {
+    public FacilityAddressEntity getAddress() {
         return address;
     }
 
-    public void setAddress(FacilityAddress address) {
+    public void setAddress(FacilityAddressEntity address) {
         this.address = address;
     }
     

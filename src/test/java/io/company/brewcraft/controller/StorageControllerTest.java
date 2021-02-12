@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.FacilityAddressEntity;
 import io.company.brewcraft.model.StorageEntity;
 import io.company.brewcraft.model.StorageType;
 import io.company.brewcraft.security.session.ContextHolder;
@@ -46,7 +46,7 @@ public class StorageControllerTest {
 
     @Test
     public void testGetStorages_ReturnsListOfStorages() throws Exception {
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         StorageEntity storage1 = new StorageEntity(1L, facility, "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         StorageEntity storage2 = new StorageEntity(2L, facility, "testName2", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -117,7 +117,7 @@ public class StorageControllerTest {
     
     @Test
     public void testGetStorage_ReturnsStorage() throws Exception {
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         StorageEntity storage = new StorageEntity(1L, facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(storageServiceMock.getStorage(1L)).thenReturn(storage);
@@ -157,7 +157,7 @@ public class StorageControllerTest {
         payload.put("name", "testName"); 
         payload.put("type", StorageType.GENERAL);
         
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         StorageEntity storage = new StorageEntity(1L,facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(storageServiceMock.addStorage(eq(1L), any(StorageEntity.class))).thenReturn(storage);
@@ -200,7 +200,7 @@ public class StorageControllerTest {
         payload.put("type", StorageType.GENERAL);        
         payload.put("version", "1");
         
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         StorageEntity storage = new StorageEntity(1L, facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(storageServiceMock.putStorage(eq(1L), eq(1L), any(StorageEntity.class))).thenReturn(storage);
@@ -242,7 +242,7 @@ public class StorageControllerTest {
         payload.put("name", "testName"); 
         payload.put("version", "1");
         
-        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
+        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
         StorageEntity storage = new StorageEntity(1L, facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(storageServiceMock.patchStorage(eq(1L), any(StorageEntity.class))).thenReturn(storage);

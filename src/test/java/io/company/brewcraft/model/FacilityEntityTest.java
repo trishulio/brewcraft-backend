@@ -21,7 +21,7 @@ public class FacilityEntityTest {
     public void testConstructor() {
         Long id = 1L;
         String name = "testName";
-        FacilityAddress address = new FacilityAddress();
+        FacilityAddressEntity address = new FacilityAddressEntity();
         String phoneNumber = "testPhoneNumber";
         String faxNumber = "testFaxNumber";
         List<EquipmentEntity> equipment = new ArrayList<EquipmentEntity>();
@@ -59,7 +59,7 @@ public class FacilityEntityTest {
     
     @Test
     public void testGetSetAddress() {
-        FacilityAddress address = new FacilityAddress();
+        FacilityAddressEntity address = new FacilityAddressEntity();
         facility.setAddress(address);
         assertSame(address, facility.getAddress());
     }

@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.FacilityAddressEntity;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -107,7 +107,7 @@ public class FacilityServiceImplTest {
     public void testPutFacility_DoesOuterJoinWhenThereIsAnExistingFacility() throws Exception {
         Long id = 1L;
         FacilityEntity facility = mock(FacilityEntity.class);
-        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddress(), null, null, Arrays.asList(), Arrays.asList(), null, null, null);
+        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddressEntity(), null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
                 
@@ -122,7 +122,7 @@ public class FacilityServiceImplTest {
     public void testPatchFacility_success() throws Exception {
         Long id = 1L;
         FacilityEntity updatedFacilityMock = mock(FacilityEntity.class);
-        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddress(),  null, null, Arrays.asList(), Arrays.asList(), null, null, null);
+        FacilityEntity existingFacility = new FacilityEntity(id, "Facility 1", new FacilityAddressEntity(),  null, null, Arrays.asList(), Arrays.asList(), null, null, null);
         
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
  
