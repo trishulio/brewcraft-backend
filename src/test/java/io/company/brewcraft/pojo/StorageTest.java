@@ -1,10 +1,12 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import io.company.brewcraft.model.StorageType;
 
 public class StorageTest {
 
@@ -31,7 +33,7 @@ public class StorageTest {
         assertSame(facility, storage.getFacility());
         assertSame(name, storage.getName());
         assertSame(type, storage.getType());
-        assertSame(created, storage.getCreated());
+        assertSame(created, storage.getCreatedAt());
         assertSame(lastUpdated, storage.getLastUpdated());
         assertSame(version, storage.getVersion());        
     }
@@ -72,8 +74,8 @@ public class StorageTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        storage.setCreated(created);
-        assertSame(created, storage.getCreated());
+        storage.setCreatedAt(created);
+        assertSame(created, storage.getCreatedAt());
     }
     
     @Test

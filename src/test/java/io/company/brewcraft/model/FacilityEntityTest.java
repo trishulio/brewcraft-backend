@@ -8,29 +8,29 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FacilityTest {
+public class FacilityEntityTest {
 
-    private Facility facility;
+    private FacilityEntity facility;
 
     @BeforeEach
     public void init() {
-        facility = new Facility();
+        facility = new FacilityEntity();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
         String name = "testName";
-        FacilityAddress address = new FacilityAddress();
+        FacilityAddressEntity address = new FacilityAddressEntity();
         String phoneNumber = "testPhoneNumber";
         String faxNumber = "testFaxNumber";
-        List<Equipment> equipment = new ArrayList<Equipment>();
-        List<Storage> storages = new ArrayList<Storage>();
+        List<EquipmentEntity> equipment = new ArrayList<EquipmentEntity>();
+        List<StorageEntity> storages = new ArrayList<StorageEntity>();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Facility facility = new Facility(id, name, address, phoneNumber, faxNumber, equipment, storages, created, lastUpdated, version);
+        FacilityEntity facility = new FacilityEntity(id, name, address, phoneNumber, faxNumber, equipment, storages, created, lastUpdated, version);
         
         assertSame(id, facility.getId());
         assertSame(name, facility.getName());
@@ -39,7 +39,7 @@ public class FacilityTest {
         assertSame(faxNumber, facility.getFaxNumber());
         assertSame(equipment, facility.getEquipment());
         assertSame(storages, facility.getStorages());
-        assertSame(created, facility.getCreated());
+        assertSame(created, facility.getCreatedAt());
         assertSame(lastUpdated, facility.getLastUpdated());
         assertSame(version, facility.getVersion());        
     }
@@ -59,7 +59,7 @@ public class FacilityTest {
     
     @Test
     public void testGetSetAddress() {
-        FacilityAddress address = new FacilityAddress();
+        FacilityAddressEntity address = new FacilityAddressEntity();
         facility.setAddress(address);
         assertSame(address, facility.getAddress());
     }
@@ -78,14 +78,14 @@ public class FacilityTest {
     
     @Test
     public void testGetSetEquipment() {
-        List<Equipment> equipment = new ArrayList<Equipment>();
+        List<EquipmentEntity> equipment = new ArrayList<EquipmentEntity>();
         facility.setEquipment(equipment);
         assertSame(equipment, facility.getEquipment());
     }
     
     @Test
     public void testGetSetStorages() {
-        List<Storage> storages = new ArrayList<Storage>();
+        List<StorageEntity> storages = new ArrayList<StorageEntity>();
         facility.setStorages(storages);
         assertSame(storages, facility.getStorages());
     }
@@ -93,8 +93,8 @@ public class FacilityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        facility.setCreated(created);
-        assertSame(created, facility.getCreated());
+        facility.setCreatedAt(created);
+        assertSame(created, facility.getCreatedAt());
     }
     
     @Test

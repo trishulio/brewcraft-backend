@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,12 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierAddressEntity;
+import io.company.brewcraft.model.SupplierContactEntity;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.pojo.Address;
+import io.company.brewcraft.pojo.Supplier;
+import io.company.brewcraft.pojo.SupplierContact;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -45,11 +51,11 @@ public class SupplierServiceImplTest {
 
     @Test
     public void testGetSuppliers_returnsSuppliers() throws Exception {
-        Supplier supplier1 = new Supplier();
-        Supplier supplier2 = new Supplier();                
-        List<Supplier> suppliersList = Arrays.asList(supplier1, supplier2);
+        SupplierEntity supplier1 = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Page<Supplier> expectedSuppliers = new PageImpl<>(suppliersList);
+        List<SupplierEntity> suppliersList = Arrays.asList(supplier1);
+        
+        Page<SupplierEntity> expectedSuppliers = new PageImpl<>(suppliersList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
@@ -57,58 +63,147 @@ public class SupplierServiceImplTest {
 
         Page<Supplier> actualSuppliers = supplierService.getSuppliers(0, 100, new String[]{"id"}, true);
 
-        assertEquals(0, pageableArgument.getValue().getPageNumber());
-        assertEquals(100, pageableArgument.getValue().getPageSize());
-        assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
-        assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
-        assertEquals(expectedSuppliers.getContent(), actualSuppliers.getContent());
+        assertSame(0, pageableArgument.getValue().getPageNumber());
+        assertSame(100, pageableArgument.getValue().getPageSize());
+        assertSame(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
+        assertSame("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
+        assertSame(1, actualSuppliers.getNumberOfElements());
+        
+        Supplier actualSupplier = actualSuppliers.get().findFirst().get();
+        
+        assertSame(supplier1.getId(), actualSupplier.getId());
+        assertSame(supplier1.getName(), actualSupplier.getName());
+        assertSame(supplier1.getAddress().getId(), actualSupplier.getAddress().getId());
+        assertSame(supplier1.getContacts().size(), actualSupplier.getContacts().size());
+        assertSame(supplier1.getContacts().get(0).getId(), actualSupplier.getContacts().get(0).getId());
+        assertSame(supplier1.getLastUpdated(), actualSupplier.getLastUpdated());
+        assertSame(supplier1.getCreatedAt(), actualSupplier.getCreatedAt());
+        assertSame(supplier1.getVersion(), actualSupplier.getVersion());
     }
     
     @Test
     public void testGetSupplier_returnsSupplier() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
+        SupplierEntity supplier1 = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<SupplierEntity> expectedSupplierEntity = Optional.ofNullable(supplier1);
 
-        when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
+        when(supplierRepositoryMock.findById(id)).thenReturn(expectedSupplierEntity);
 
         Supplier actualSupplier = supplierService.getSupplier(id);
 
-        assertSame(supplier.get(), actualSupplier);
+        assertEquals(expectedSupplierEntity.get().getId(), actualSupplier.getId());
+        assertEquals(expectedSupplierEntity.get().getName(), actualSupplier.getName());
+        assertEquals(expectedSupplierEntity.get().getAddress().getId(), actualSupplier.getAddress().getId());
+        assertEquals(expectedSupplierEntity.get().getContacts().size(), actualSupplier.getContacts().size());
+        assertEquals(expectedSupplierEntity.get().getContacts().get(0).getId(), actualSupplier.getContacts().get(0).getId());
+        assertEquals(expectedSupplierEntity.get().getLastUpdated(), actualSupplier.getLastUpdated());
+        assertEquals(expectedSupplierEntity.get().getCreatedAt(), actualSupplier.getCreatedAt());
+        assertEquals(expectedSupplierEntity.get().getVersion(), actualSupplier.getVersion());
     }
 
     @Test
     public void testAddSupplier_SavesSupplier() throws Exception {
-        Supplier supplier = new Supplier();
+        Supplier supplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        supplierService.addSupplier(supplier);
+        SupplierEntity supplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+
+        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+
+        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(supplierEntity);
+
+        Supplier returnedSupplier = supplierService.addSupplier(supplier);
         
-        verify(supplierRepositoryMock, times(1)).save(supplier);
+        //Assert persisted entity
+        assertEquals(supplier.getId(), persistedSupplierCaptor.getValue().getId());
+        assertEquals(supplier.getName(), persistedSupplierCaptor.getValue().getName());
+        assertEquals(supplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
+        assertEquals(supplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
+        assertEquals(supplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
+        assertEquals(supplier.getLastUpdated(), persistedSupplierCaptor.getValue().getLastUpdated());
+        assertEquals(supplier.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
+        assertEquals(supplier.getVersion(), persistedSupplierCaptor.getValue().getVersion());
+        
+        //Assert returned POJO
+        assertEquals(supplierEntity.getId(), returnedSupplier.getId());
+        assertEquals(supplierEntity.getName(), returnedSupplier.getName());
+        assertEquals(supplierEntity.getAddress().getId(), returnedSupplier.getAddress().getId());
+        assertEquals(supplierEntity.getContacts().size(), returnedSupplier.getContacts().size());
+        assertEquals(supplierEntity.getContacts().get(0).getId(), returnedSupplier.getContacts().get(0).getId());
+        assertEquals(supplierEntity.getLastUpdated(), returnedSupplier.getLastUpdated());
+        assertEquals(supplierEntity.getCreatedAt(), returnedSupplier.getCreatedAt());
+        assertEquals(supplierEntity.getVersion(), returnedSupplier.getVersion()); 
     }
     
     @Test
     public void testPutSupplier_success() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        Supplier updatedSupplierMock = mock(Supplier.class);
         
-        when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
-                
-        supplierService.putSupplier(id, updatedSupplierMock);
+        Supplier putSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        
+        SupplierEntity supplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+
+        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+
+        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(supplierEntity);
+
+        Supplier returnedSupplier = supplierService.putSupplier(id, putSupplier);
        
-        verify(supplierRepositoryMock, times(1)).save(updatedSupplierMock);
+        //Assert persisted entity
+        assertEquals(putSupplier.getId(), persistedSupplierCaptor.getValue().getId());
+        assertEquals(putSupplier.getName(), persistedSupplierCaptor.getValue().getName());
+        assertEquals(putSupplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
+        assertEquals(putSupplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
+        assertEquals(putSupplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
+        assertEquals(null, persistedSupplierCaptor.getValue().getLastUpdated());
+        //assertEquals(putSupplier.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
+        assertEquals(putSupplier.getVersion(), persistedSupplierCaptor.getValue().getVersion());
+        
+        //Assert returned POJO
+        assertEquals(supplierEntity.getId(), returnedSupplier.getId());
+        assertEquals(supplierEntity.getName(), returnedSupplier.getName());
+        assertEquals(supplierEntity.getAddress().getId(), returnedSupplier.getAddress().getId());
+        assertEquals(supplierEntity.getContacts().size(), returnedSupplier.getContacts().size());
+        assertEquals(supplierEntity.getContacts().get(0).getId(), returnedSupplier.getContacts().get(0).getId());
+        assertEquals(supplierEntity.getLastUpdated(), returnedSupplier.getLastUpdated());
+        assertEquals(supplierEntity.getCreatedAt(), returnedSupplier.getCreatedAt());
+        assertEquals(supplierEntity.getVersion(), returnedSupplier.getVersion()); 
     }
     
     @Test
     public void testPatchSupplier_success() throws Exception {
         Long id = 1L;
-        Optional<Supplier> supplier = Optional.ofNullable(new Supplier());
-        Supplier updatedSupplierMock = mock(Supplier.class);
         
-        when(supplierRepositoryMock.findById(id)).thenReturn(supplier);
-                
-        supplierService.patchSupplier(id, updatedSupplierMock);
+        Supplier patchedSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);     
+        SupplierEntity existingSupplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierEntity persistedSupplierEntity = new SupplierEntity(1L, "updatedName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+
+        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+
+        when(supplierRepositoryMock.findById(id)).thenReturn(Optional.of(existingSupplierEntity));
+ 
+        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(persistedSupplierEntity);
+
+        Supplier returnedSupplier = supplierService.patchSupplier(id, patchedSupplier);
        
-        verify(supplierRepositoryMock, times(1)).save(updatedSupplierMock);
+        //Assert persisted entity
+        assertEquals(existingSupplierEntity.getId(), persistedSupplierCaptor.getValue().getId());
+        assertEquals(patchedSupplier.getName(), persistedSupplierCaptor.getValue().getName());
+        assertEquals(patchedSupplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
+        assertEquals(patchedSupplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
+        assertEquals(patchedSupplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
+        assertEquals(existingSupplierEntity.getLastUpdated(), persistedSupplierCaptor.getValue().getLastUpdated());
+        assertEquals(existingSupplierEntity.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
+        assertEquals(existingSupplierEntity.getVersion(), persistedSupplierCaptor.getValue().getVersion());
+        
+        //Assert returned POJO
+        assertEquals(persistedSupplierEntity.getId(), returnedSupplier.getId());
+        assertEquals(persistedSupplierEntity.getName(), returnedSupplier.getName());
+        assertEquals(persistedSupplierEntity.getAddress().getId(), returnedSupplier.getAddress().getId());
+        assertEquals(persistedSupplierEntity.getContacts().size(), returnedSupplier.getContacts().size());
+        assertEquals(persistedSupplierEntity.getContacts().get(0).getId(), returnedSupplier.getContacts().get(0).getId());
+        assertEquals(persistedSupplierEntity.getLastUpdated(), returnedSupplier.getLastUpdated());
+        assertEquals(persistedSupplierEntity.getCreatedAt(), returnedSupplier.getCreatedAt());
+        assertEquals(persistedSupplierEntity.getVersion(), returnedSupplier.getVersion()); 
     }
     
     @Test
@@ -121,10 +216,8 @@ public class SupplierServiceImplTest {
         assertThrows(EntityNotFoundException.class, () -> {
             supplierService.patchSupplier(id, updatedSupplierMock);
         });
-        
-        
-    }
 
+    }
 
     @Test
     public void testDeleteSupplier_success() throws Exception {

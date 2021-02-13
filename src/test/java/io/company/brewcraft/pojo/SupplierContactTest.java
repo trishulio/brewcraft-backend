@@ -1,4 +1,4 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
 
@@ -54,8 +54,8 @@ public class SupplierContactTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        supplierContact.setCreated(created);
-        assertSame(created, supplierContact.getCreated());
+        supplierContact.setCreatedAt(created);
+        assertSame(created, supplierContact.getCreatedAt());
     }
     
     @Test

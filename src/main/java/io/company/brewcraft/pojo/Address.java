@@ -1,20 +1,13 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
 
-import java.time.LocalDateTime;
+import io.company.brewcraft.model.BaseModel;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-@MappedSuperclass
-public class Address {
+public class Address extends BaseModel {
     
-    @Column(name = "address_line_1")
+    private Long id;
+    
     private String addressLine1;
     
-    @Column(name = "address_line_2")
     private String addressLine2;
     
     private String country;
@@ -23,31 +16,30 @@ public class Address {
     
     private String city;
     
-    @Column(name = "postal_code")
     private String postalCode;
     
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
-    
-    @UpdateTimestamp
-    @Column(name = "last_updated")
-    private LocalDateTime lastUpdated;
-    
     public Address() {
-        
+        super();
     }
-    
-    public Address(String addressLine1, String addressLine2, String country, String province, String city,
-            String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
+
+    public Address(Long id, String addressLine1, String addressLine2, String country, String province,
+            String city, String postalCode) {
+        super();
+        this.id = id;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.country = country;
         this.province = province;
         this.city = city;
         this.postalCode = postalCode;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getAddressLine1() {
@@ -96,22 +88,6 @@ public class Address {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
 }

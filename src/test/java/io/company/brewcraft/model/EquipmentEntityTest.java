@@ -6,19 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EquipmentTest {
+public class EquipmentEntityTest {
 
-    private Equipment equipment;
+    private EquipmentEntity equipment;
 
     @BeforeEach
     public void init() {
-        equipment = new Equipment();
+        equipment = new EquipmentEntity();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         String name = "equipment1";
         EquipmentType type = EquipmentType.BARREL;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
@@ -27,7 +27,7 @@ public class EquipmentTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Equipment equipment = new Equipment(id, facility, name, type, status, maxCapacity, created, lastUpdated, version);
+        EquipmentEntity equipment = new EquipmentEntity(id, facility, name, type, status, maxCapacity, created, lastUpdated, version);
         
         assertSame(id, equipment.getId());
         assertSame(facility, equipment.getFacility());
@@ -35,7 +35,7 @@ public class EquipmentTest {
         assertSame(type, equipment.getType());
         assertSame(status, equipment.getStatus());
         assertSame(maxCapacity, equipment.getMaxCapacity());
-        assertSame(created, equipment.getCreated());
+        assertSame(created, equipment.getCreatedAt());
         assertSame(lastUpdated, equipment.getLastUpdated());
         assertSame(version, equipment.getVersion());        
     }
@@ -49,7 +49,7 @@ public class EquipmentTest {
     
     @Test
     public void testGetSetFacility() {
-        Facility facility = new Facility();
+        FacilityEntity facility = new FacilityEntity();
         equipment.setFacility(facility);
         assertSame(facility, equipment.getFacility());
     }
@@ -92,8 +92,8 @@ public class EquipmentTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        equipment.setCreated(created);
-        assertSame(created, equipment.getCreated());
+        equipment.setCreatedAt(created);
+        assertSame(created, equipment.getCreatedAt());
     }
     
     @Test

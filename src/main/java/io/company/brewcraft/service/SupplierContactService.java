@@ -2,7 +2,8 @@ package io.company.brewcraft.service;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.dto.UpdateSupplierContact;
+import io.company.brewcraft.pojo.SupplierContact;
 
 public interface SupplierContactService {
     
@@ -12,9 +13,9 @@ public interface SupplierContactService {
     
     public SupplierContact addContact(Long supplierId, SupplierContact supplierContact);
     
-    public SupplierContact putContact(Long supplierId, Long contactId, SupplierContact supplierContact);
+    public SupplierContact putContact(Long supplierId, Long contactId, UpdateSupplierContact supplierContact);
     
-    public SupplierContact patchContact(Long contactId, SupplierContact updatedContact);
+    public SupplierContact patchContact(Long contactId, UpdateSupplierContact updatedContact);
     
     public void deleteContact(Long contactId);
 

@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.StorageEntity;
 
-public interface StorageRepository extends JpaRepository<Storage, Long> {
+public interface StorageRepository extends JpaRepository<StorageEntity, Long> {
 
-    List<Storage> findAllByFacilityId(Long facilityId);
+    List<StorageEntity> findAllByFacilityId(Long facilityId);
     
 }

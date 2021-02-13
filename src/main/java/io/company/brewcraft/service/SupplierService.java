@@ -2,7 +2,8 @@ package io.company.brewcraft.service;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.dto.UpdateSupplier;
+import io.company.brewcraft.pojo.Supplier;
 
 public interface SupplierService {
 
@@ -12,9 +13,9 @@ public interface SupplierService {
 
     public Supplier addSupplier(Supplier supplier);
     
-    public Supplier putSupplier(Long id, Supplier supplier);
+    public Supplier putSupplier(Long id, UpdateSupplier supplier);
     
-    public Supplier patchSupplier(Long id, Supplier supplier);
+    public Supplier patchSupplier(Long id, UpdateSupplier supplier);
 
     public void deleteSupplier(Long id);
     

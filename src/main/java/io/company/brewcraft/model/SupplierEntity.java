@@ -13,9 +13,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "SUPPLIER")
-public class Supplier extends BaseEntity {
+public class SupplierEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
-
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_CONTACTS = "contacts";
+    public static final String FIELD_ADDRESS = "address";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_generator")
     @SequenceGenerator(name = "supplier_generator", sequenceName = "supplier_sequence", allocationSize = 1)
@@ -25,15 +28,15 @@ public class Supplier extends BaseEntity {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<SupplierContact> contacts;
+    private List<SupplierContactEntity> contacts;
 
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private SupplierAddress address;
+    private SupplierAddressEntity address;
 
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -42,16 +45,16 @@ public class Supplier extends BaseEntity {
     @Version
     private Integer version;
 
-    public Supplier() {
+    public SupplierEntity() {
 
     }
 
-    public Supplier(Long id, String name, List<SupplierContact> contacts, SupplierAddress address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public SupplierEntity(Long id, String name, List<SupplierContactEntity> contacts, SupplierAddressEntity address, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setContacts(contacts);
         setAddress(address);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -72,11 +75,11 @@ public class Supplier extends BaseEntity {
         this.name = name;
     }
 
-    public List<SupplierContact> getContacts() {
+    public List<SupplierContactEntity> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<SupplierContact> contacts) {
+    public void setContacts(List<SupplierContactEntity> contacts) {
         if (contacts != null) {
             contacts.stream().forEach(contact -> contact.setSupplier(this));
         }
@@ -89,35 +92,41 @@ public class Supplier extends BaseEntity {
         }
     }
 
-    public SupplierAddress getAddress() {
+    public SupplierAddressEntity getAddress() {
         return address;
     }
 
-    public void setAddress(SupplierAddress address) {
+    public void setAddress(SupplierAddressEntity address) {
         this.address = address;
     }
 
-    public void addContact(SupplierContact contact) {
+    public void addContact(SupplierContactEntity contact) {
         if (contacts == null) {
             contacts = new ArrayList<>();
         }
-        contact.setSupplier(this);
-        contacts.add(contact);
-    }
+        
+        if (contact.getSupplier() != this) {
+            contact.setSupplier(this);
+        }
 
-    public void removeContect(SupplierContact contact) {
+        if (!contacts.contains(contact)) {
+            this.contacts.add(contact);
+        }
+    }
+    
+    public void removeContect(SupplierContactEntity contact) {
         if (contacts != null) {
             contact.setSupplier(null);
             contacts.remove(contact);
         }
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

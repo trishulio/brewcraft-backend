@@ -1,7 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,16 +18,12 @@ public class SupplierWithoutContactsDtoTest {
         Long id = 1L;
         String name = "Supplier1";
         AddressDto address = new AddressDto();
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        SupplierWithoutContactsDto supplierDto = new SupplierWithoutContactsDto(id, name, address, created, lastUpdated, version);
+        SupplierWithoutContactsDto supplierDto = new SupplierWithoutContactsDto(id, name, address, version);
         assertSame(id, supplierDto.getId());
         assertSame(name, supplierDto.getName());
         assertSame(address, supplierDto.getAddress());
-        assertSame(created, supplierDto.getCreated());
-        assertSame(lastUpdated, supplierDto.getLastUpdated());
         assertSame(version, supplierDto.getVersion());        
     }
 
@@ -60,17 +54,4 @@ public class SupplierWithoutContactsDtoTest {
         assertSame(version, supplierWithoutContactsDto.getVersion());
     }
 
-    @Test
-    public void testGetSetCreated() {
-        LocalDateTime created = LocalDateTime.now();
-        supplierWithoutContactsDto.setCreated(created);
-        assertSame(created, supplierWithoutContactsDto.getCreated());
-    }
-    
-    @Test
-    public void testGetSetLastUpdated() {
-        LocalDateTime lastUpdated = LocalDateTime.now();
-        supplierWithoutContactsDto.setLastUpdated(lastUpdated);
-        assertSame(lastUpdated, supplierWithoutContactsDto.getLastUpdated());
-    }
 }

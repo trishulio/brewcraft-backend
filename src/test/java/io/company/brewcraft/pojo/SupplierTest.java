@@ -1,17 +1,13 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 public class SupplierTest {
 
@@ -26,7 +22,7 @@ public class SupplierTest {
     public void testConstructor() {
         Long id = 1L;
         String name = "Supplier1";
-        SupplierAddress address = new SupplierAddress();
+        Address address = new Address();
         List<SupplierContact> contacts = new ArrayList<>();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -38,7 +34,7 @@ public class SupplierTest {
         assertSame(name, supplier.getName());
         assertSame(address, supplier.getAddress());
         assertSame(contacts, supplier.getContacts());
-        assertSame(created, supplier.getCreated());
+        assertSame(created, supplier.getCreatedAt());
         assertSame(lastUpdated, supplier.getLastUpdated());
         assertSame(version, supplier.getVersion());        
     }
@@ -65,7 +61,7 @@ public class SupplierTest {
     
     @Test
     public void testGetSetAddress() {
-        SupplierAddress address = new SupplierAddress();
+        Address address = new Address();
         supplier.setAddress(address);
         assertSame(address, supplier.getAddress());
     }
@@ -80,8 +76,8 @@ public class SupplierTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        supplier.setCreated(created);
-        assertSame(created, supplier.getCreated());
+        supplier.setCreatedAt(created);
+        assertSame(created, supplier.getCreatedAt());
     }
     
     @Test
@@ -90,28 +86,5 @@ public class SupplierTest {
         supplier.setLastUpdated(lastUpdated);
         assertSame(lastUpdated, supplier.getLastUpdated());
     }
-    
-    @Test
-    public void testSetContacts_setsSupplierToEachContact() {
-        List<SupplierContact> contacts = Arrays.asList(new SupplierContact(), new SupplierContact());
-        supplier.setContacts(contacts);
-        
-        for (SupplierContact contact : supplier.getContacts()) {
-            assertSame(supplier, contact.getSupplier());
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testSetContacts_clearsAndAddsToExistingListIfExistingListIsNotNull() {
-        List<SupplierContact> contactsMock = Mockito.mock(ArrayList.class);
-        supplier.setContacts(contactsMock);
-
-        List<SupplierContact> newContactsMock = Mockito.mock(ArrayList.class);
-        supplier.setContacts(newContactsMock);
-        
-        verify(contactsMock, times(1)).clear();
-        verify(contactsMock, times(1)).addAll(newContactsMock);
-        assertSame(supplier.getContacts(), contactsMock);
-    }
+   
 }

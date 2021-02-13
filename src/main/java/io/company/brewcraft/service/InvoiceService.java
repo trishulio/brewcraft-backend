@@ -20,7 +20,7 @@ import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceStatusEntity;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrderEntity;
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.pojo.BaseInvoiceItem;
 import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.InvoiceItem;
@@ -88,7 +88,7 @@ public class InvoiceService extends BaseService {
                                             .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_ID }, purchaseOrderIds)
                                             .between(new String[] { InvoiceEntity.FIELD_FREIGHT, FreightEntity.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { InvoiceEntity.FIELD_STATUS, InvoiceStatusEntity.FIELD_NAME }, status)
-                                            .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
+                                            .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_SUPPLIER, SupplierEntity.FIELD_ID }, supplierIds)
                                             .build();
         Page<InvoiceEntity> entityPage = repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
 

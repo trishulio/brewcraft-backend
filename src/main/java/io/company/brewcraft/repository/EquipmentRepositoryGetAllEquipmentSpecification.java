@@ -11,10 +11,10 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
-public class EquipmentRepositoryGetAllEquipmentSpecification implements Specification<Equipment> {
+public class EquipmentRepositoryGetAllEquipmentSpecification implements Specification<EquipmentEntity> {
     private static final long serialVersionUID = -6015366615586119965L;
     
     private Set<Long> ids;
@@ -34,13 +34,13 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
     }
 
     @Override
-    public Predicate toPredicate(Root<Equipment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(Root<EquipmentEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         @SuppressWarnings("unchecked")
-        CriteriaQuery<Equipment> equipmentQuery = (CriteriaQuery<Equipment>) query;
+        CriteriaQuery<EquipmentEntity> equipmentQuery = (CriteriaQuery<EquipmentEntity>) query;
         return criteriaBuilder.and(this.getPredicates(root, equipmentQuery, criteriaBuilder));
     }
 
-    public Predicate[] getPredicates(Root<Equipment> root, CriteriaQuery<Equipment> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate[] getPredicates(Root<EquipmentEntity> root, CriteriaQuery<EquipmentEntity> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<Predicate>(10);
         
         if (ids != null && ids.size() > 0) {
