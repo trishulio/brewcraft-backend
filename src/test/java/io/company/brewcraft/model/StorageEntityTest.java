@@ -31,7 +31,7 @@ public class StorageEntityTest {
         assertSame(facility, storage.getFacility());
         assertSame(name, storage.getName());
         assertSame(type, storage.getType());
-        assertSame(created, storage.getCreated());
+        assertSame(created, storage.getCreatedAt());
         assertSame(lastUpdated, storage.getLastUpdated());
         assertSame(version, storage.getVersion());        
     }
@@ -72,8 +72,8 @@ public class StorageEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        storage.setCreated(created);
-        assertSame(created, storage.getCreated());
+        storage.setCreatedAt(created);
+        assertSame(created, storage.getCreatedAt());
     }
     
     @Test

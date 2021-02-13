@@ -54,8 +54,8 @@ public class SupplierContactEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        supplierContact.setCreated(created);
-        assertSame(created, supplierContact.getCreated());
+        supplierContact.setCreatedAt(created);
+        assertSame(created, supplierContact.getCreatedAt());
     }
     
     @Test

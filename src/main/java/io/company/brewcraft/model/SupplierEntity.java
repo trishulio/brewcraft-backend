@@ -35,8 +35,8 @@ public class SupplierEntity extends BaseEntity {
     private SupplierAddressEntity address;
 
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -49,12 +49,12 @@ public class SupplierEntity extends BaseEntity {
 
     }
 
-    public SupplierEntity(Long id, String name, List<SupplierContactEntity> contacts, SupplierAddressEntity address, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public SupplierEntity(Long id, String name, List<SupplierContactEntity> contacts, SupplierAddressEntity address, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setContacts(contacts);
         setAddress(address);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -104,10 +104,16 @@ public class SupplierEntity extends BaseEntity {
         if (contacts == null) {
             contacts = new ArrayList<>();
         }
-        contact.setSupplier(this);
-        contacts.add(contact);
-    }
+        
+        if (contact.getSupplier() != this) {
+            contact.setSupplier(this);
+        }
 
+        if (!contacts.contains(contact)) {
+            this.contacts.add(contact);
+        }
+    }
+    
     public void removeContect(SupplierContactEntity contact) {
         if (contacts != null) {
             contact.setSupplier(null);
@@ -115,12 +121,12 @@ public class SupplierEntity extends BaseEntity {
         }
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
 
+import io.company.brewcraft.dto.UpdateEquipment;
+import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
+import io.company.brewcraft.model.Identified;
 
-public class Equipment extends BaseModel {
+public class Equipment extends BaseModel implements UpdateEquipment, Identified, Audited {
     
     private Long id;
     
@@ -22,7 +25,7 @@ public class Equipment extends BaseModel {
     
     private Quantity<?> maxCapacity;
     
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
     
@@ -33,7 +36,7 @@ public class Equipment extends BaseModel {
     }
 
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status,
-            Quantity<?> maxCapacity, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            Quantity<?> maxCapacity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
         this.facility = facility;
@@ -41,7 +44,7 @@ public class Equipment extends BaseModel {
         this.type = type;
         this.status = status;
         this.maxCapacity = maxCapacity;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.version = version;
     }
@@ -94,12 +97,12 @@ public class Equipment extends BaseModel {
         this.maxCapacity = maxCapacity;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

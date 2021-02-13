@@ -1,8 +1,6 @@
 
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +23,9 @@ public class SupplierContactWithSupplierDtoTest {
         String email = "email";
         String phoneNumber = "phoneNumber";
         SupplierWithoutContactsDto supplier = new SupplierWithoutContactsDto();
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         Integer version = 1;
         
-        SupplierContactWithSupplierDto supplierContactWithSupplierDto = new SupplierContactWithSupplierDto(id, firstName, lastName, position, email, phoneNumber, supplier, created, lastUpdated, version);
+        SupplierContactWithSupplierDto supplierContactWithSupplierDto = new SupplierContactWithSupplierDto(id, firstName, lastName, position, email, phoneNumber, supplier, version);
         
         assertSame(id, supplierContactWithSupplierDto.getId());
         assertSame(firstName, supplierContactWithSupplierDto.getFirstName());
@@ -38,8 +34,6 @@ public class SupplierContactWithSupplierDtoTest {
         assertSame(email, supplierContactWithSupplierDto.getEmail());
         assertSame(phoneNumber, supplierContactWithSupplierDto.getPhoneNumber());
         assertSame(supplier, supplierContactWithSupplierDto.getSupplier());
-        assertSame(created, supplierContactWithSupplierDto.getCreated());
-        assertSame(lastUpdated, supplierContactWithSupplierDto.getLastUpdated());
         assertSame(version, supplierContactWithSupplierDto.getVersion());
     }
     
@@ -84,20 +78,6 @@ public class SupplierContactWithSupplierDtoTest {
         SupplierWithoutContactsDto supplier = new SupplierWithoutContactsDto();
         supplierContactWithSupplierDto.setSupplier(supplier);
         assertSame(supplier, supplierContactWithSupplierDto.getSupplier());
-    }
-
-    @Test
-    public void testGetSetCreated() {
-        LocalDateTime created = LocalDateTime.now();
-        supplierContactWithSupplierDto.setCreated(created);
-        assertSame(created, supplierContactWithSupplierDto.getCreated());
-    }
-    
-    @Test
-    public void testGetSetLastUpdated() {
-        LocalDateTime lastUpdated = LocalDateTime.now();
-        supplierContactWithSupplierDto.setLastUpdated(lastUpdated);
-        assertSame(lastUpdated, supplierContactWithSupplierDto.getLastUpdated());
     }
     
 }

@@ -4,20 +4,21 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.EquipmentEntity;
+import io.company.brewcraft.dto.UpdateEquipment;
+import io.company.brewcraft.pojo.Equipment;
 
 public interface EquipmentService {
 
-    public Page<EquipmentEntity> getAllEquipment(Set<Long> ids, Set<String> types,
+    public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types,
             Set<String> statuses, Set<Long> facilityIds, int page, int size, Set<String> sort, boolean orderAscending);
     
-    public EquipmentEntity getEquipment(Long equipmentId);
+    public Equipment getEquipment(Long equipmentId);
 
-    public EquipmentEntity addEquipment(Long facilityId, EquipmentEntity equipment);
+    public Equipment addEquipment(Long facilityId, Equipment equipment);
     
-    public EquipmentEntity putEquipment(Long facilityId, Long equipmentId, EquipmentEntity equipment);
+    public Equipment putEquipment(Long facilityId, Long equipmentId, UpdateEquipment equipment);
     
-    public EquipmentEntity patchEquipment(Long equipmentId, EquipmentEntity equipment);
+    public Equipment patchEquipment(Long equipmentId, UpdateEquipment equipment);
 
     public void deleteEquipment(Long equipmentId);
     

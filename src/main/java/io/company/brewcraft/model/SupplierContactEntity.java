@@ -53,8 +53,8 @@ public class SupplierContactEntity extends BaseEntity {
     private String phoneNumber;
     
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -68,7 +68,7 @@ public class SupplierContactEntity extends BaseEntity {
     }
     
     public SupplierContactEntity(Long id, SupplierEntity supplier, String firstName, String lastName, String position, String email,
-            String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            String phoneNumber, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setSupplier(supplier);
         setFirstName(firstName);
@@ -76,7 +76,7 @@ public class SupplierContactEntity extends BaseEntity {
         setPosition(position);
         setEmail(email);
         setPhoneNumber(phoneNumber);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -137,12 +137,12 @@ public class SupplierContactEntity extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

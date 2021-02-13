@@ -52,8 +52,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SupplierContactService.class)
-    public SupplierContactService supplierContactService(SupplierContactRepository supplierContactRepository, SupplierRepository supplierRepository) {
-        SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository, supplierRepository);
+    public SupplierContactService supplierContactService(SupplierContactRepository supplierContactRepository, SupplierService supplierService) {
+        SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository, supplierService);
         return supplierContactService;
     }
 
@@ -90,15 +90,15 @@ public class ServiceAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(EquipmentService.class)
-    public EquipmentService equipmentService(EquipmentRepository equipmentRepository, FacilityRepository facilityRepository) {
-        EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityRepository);
+    public EquipmentService equipmentService(EquipmentRepository equipmentRepository, FacilityService facilityService) {
+        EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityService);
         return equipmentService;
     }
     
     @Bean
     @ConditionalOnMissingBean(StorageService.class)
-    public StorageService storageService(StorageRepository storageRepository, FacilityRepository facilityRepository) {
-        StorageService storageService = new StorageServiceImpl(storageRepository, facilityRepository);
+    public StorageService storageService(StorageRepository storageRepository, FacilityService facilityService) {
+        StorageService storageService = new StorageServiceImpl(storageRepository, facilityService);
         return storageService;
     }
     

@@ -1,11 +1,15 @@
 package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import io.company.brewcraft.dto.UpdateSupplier;
+import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Identified;
 
-public class Supplier extends BaseModel {
+public class Supplier extends BaseModel implements UpdateSupplier, Identified, Audited {
     
     private Long id;
 
@@ -15,7 +19,7 @@ public class Supplier extends BaseModel {
 
     private Address address;
 
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
 
     private LocalDateTime lastUpdated;
 
@@ -26,13 +30,13 @@ public class Supplier extends BaseModel {
     }
 
     public Supplier(Long id, String name, List<SupplierContact> contacts, Address address,
-            LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
         this.name = name;
         this.contacts = contacts;
         this.address = address;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.version = version;
     }
@@ -69,12 +73,12 @@ public class Supplier extends BaseModel {
         this.address = address;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime created) {
+        this.createdAt = created;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -91,6 +95,20 @@ public class Supplier extends BaseModel {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+    
+    public void addContact(SupplierContact contact) {
+        if (this.contacts == null) {
+            this.contacts = new ArrayList<>();
+        }
+
+        if (contact.getSupplier() != this) {
+            contact.setSupplier(this);
+        }
+
+        if (!contacts.contains(contact)) {
+            this.contacts.add(contact);
+        }
     }
 
 }

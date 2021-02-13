@@ -2,7 +2,12 @@ package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
 
-public class SupplierContact {
+import io.company.brewcraft.dto.UpdateSupplierContact;
+import io.company.brewcraft.model.Audited;
+import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Identified;
+
+public class SupplierContact extends BaseModel implements UpdateSupplierContact, Identified, Audited {
     
     private Long id;
     
@@ -18,7 +23,7 @@ public class SupplierContact {
 
     private String phoneNumber;
     
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
     
@@ -29,7 +34,7 @@ public class SupplierContact {
     }
 
     public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
-            String phoneNumber, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            String phoneNumber, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
         this.supplier = supplier;
@@ -38,7 +43,7 @@ public class SupplierContact {
         this.position = position;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.version = version;
     }
@@ -99,12 +104,12 @@ public class SupplierContact {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

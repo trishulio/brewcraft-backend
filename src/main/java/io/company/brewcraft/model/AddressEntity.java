@@ -27,8 +27,8 @@ public class AddressEntity {
     private String postalCode;
     
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -39,14 +39,14 @@ public class AddressEntity {
     }
     
     public AddressEntity(String addressLine1, String addressLine2, String country, String province, String city,
-            String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
+            String postalCode, LocalDateTime createdAt, LocalDateTime lastUpdated) {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.country = country;
         this.province = province;
         this.city = city;
         this.postalCode = postalCode;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
     }
 
@@ -98,12 +98,12 @@ public class AddressEntity {
         this.postalCode = postalCode;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime created) {
+        this.createdAt = created;
     }
 
     public LocalDateTime getLastUpdated() {

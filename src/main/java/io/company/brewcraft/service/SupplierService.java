@@ -2,19 +2,20 @@ package io.company.brewcraft.service;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.dto.UpdateSupplier;
+import io.company.brewcraft.pojo.Supplier;
 
 public interface SupplierService {
 
-    public Page<SupplierEntity> getSuppliers(int page, int size, String[] sort, boolean order_asc);
+    public Page<Supplier> getSuppliers(int page, int size, String[] sort, boolean order_asc);
     
-    public SupplierEntity getSupplier(Long id);
+    public Supplier getSupplier(Long id);
 
-    public SupplierEntity addSupplier(SupplierEntity supplier);
+    public Supplier addSupplier(Supplier supplier);
     
-    public SupplierEntity putSupplier(Long id, SupplierEntity supplier);
+    public Supplier putSupplier(Long id, UpdateSupplier supplier);
     
-    public SupplierEntity patchSupplier(Long id, SupplierEntity supplier);
+    public Supplier patchSupplier(Long id, UpdateSupplier supplier);
 
     public void deleteSupplier(Long id);
     

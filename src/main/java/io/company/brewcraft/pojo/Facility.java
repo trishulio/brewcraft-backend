@@ -1,11 +1,15 @@
 package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import io.company.brewcraft.dto.UpdateFacility;
+import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Identified;
 
-public class Facility extends BaseModel {
+public class Facility extends BaseModel implements UpdateFacility, Identified, Audited {
     
     private Long id;
     
@@ -21,7 +25,7 @@ public class Facility extends BaseModel {
     
     private List<Storage> storages;
         
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
     
@@ -32,7 +36,7 @@ public class Facility extends BaseModel {
     }
 
     public Facility(Long id, String name, Address address, String phoneNumber, String faxNumber,
-            List<Equipment> equipment, List<Storage> storages, LocalDateTime created, LocalDateTime lastUpdated,
+            List<Equipment> equipment, List<Storage> storages, LocalDateTime createdAt, LocalDateTime lastUpdated,
             Integer version) {
         super();
         this.id = id;
@@ -42,7 +46,7 @@ public class Facility extends BaseModel {
         this.faxNumber = faxNumber;
         this.equipment = equipment;
         this.storages = storages;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.version = version;
     }
@@ -103,12 +107,12 @@ public class Facility extends BaseModel {
         this.storages = storages;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -125,6 +129,34 @@ public class Facility extends BaseModel {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+    
+    public void addEquipment(Equipment eq) {
+        if (equipment == null) {
+            equipment = new ArrayList<>();
+        }
+        
+        if (eq.getFacility() != this) {
+            eq.setFacility(this);
+        }
+
+        if (!equipment.contains(eq)) {
+            this.equipment.add(eq);
+        }
+    }
+    
+    public void addStorage(Storage storage) {
+        if (storages == null) {
+            storages = new ArrayList<>();
+        }
+        
+        if (storage.getFacility() != this) {
+            storage.setFacility(this);
+        }
+
+        if (!storages.contains(storage)) {
+            this.storages.add(storage);
+        }
     }
     
 }

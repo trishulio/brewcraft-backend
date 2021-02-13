@@ -38,7 +38,7 @@ public class SupplierEntityTest {
         assertSame(name, supplier.getName());
         assertSame(address, supplier.getAddress());
         assertSame(contacts, supplier.getContacts());
-        assertSame(created, supplier.getCreated());
+        assertSame(created, supplier.getCreatedAt());
         assertSame(lastUpdated, supplier.getLastUpdated());
         assertSame(version, supplier.getVersion());        
     }
@@ -80,8 +80,8 @@ public class SupplierEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        supplier.setCreated(created);
-        assertSame(created, supplier.getCreated());
+        supplier.setCreatedAt(created);
+        assertSame(created, supplier.getCreatedAt());
     }
     
     @Test

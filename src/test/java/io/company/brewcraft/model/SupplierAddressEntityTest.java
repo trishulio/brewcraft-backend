@@ -60,8 +60,8 @@ public class SupplierAddressEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        supplierAddress.setCreated(created);
-        assertSame(created, supplierAddress.getCreated());
+        supplierAddress.setCreatedAt(created);
+        assertSame(created, supplierAddress.getCreatedAt());
     }
     
     @Test

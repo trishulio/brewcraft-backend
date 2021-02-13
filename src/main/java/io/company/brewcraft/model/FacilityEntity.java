@@ -59,8 +59,8 @@ public class FacilityEntity extends BaseEntity {
     private List<StorageEntity> storages;
         
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -73,7 +73,7 @@ public class FacilityEntity extends BaseEntity {
         
     }
     
-    public FacilityEntity(Long id, String name, FacilityAddressEntity address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public FacilityEntity(Long id, String name, FacilityAddressEntity address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setAddress(address);
@@ -81,7 +81,7 @@ public class FacilityEntity extends BaseEntity {
         setFaxNumber(faxNumber);
         setEquipment(equipment);
         setStorages(storages);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -142,13 +142,19 @@ public class FacilityEntity extends BaseEntity {
             this.equipment = equipment;
         }
     }
-    
-    public void addEquipment(EquipmentEntity equipment) {
-        if (this.equipment == null) {
-            this.equipment = new ArrayList<>();
+        
+    public void addEquipment(EquipmentEntity eq) {
+        if (equipment == null) {
+            equipment = new ArrayList<>();
         }
-        equipment.setFacility(this);
-        this.equipment.add(equipment);
+        
+        if (eq.getFacility() != this) {
+            eq.setFacility(this);
+        }
+
+        if (!equipment.contains(eq)) {
+            this.equipment.add(eq);
+        }
     }
     
     public void removeEquipment(EquipmentEntity equipment) {
@@ -176,11 +182,17 @@ public class FacilityEntity extends BaseEntity {
     }
     
     public void addStorage(StorageEntity storage) {
-        if (this.storages == null) {
-            this.storages = new ArrayList<>();
+        if (storages == null) {
+            storages = new ArrayList<>();
         }
-        storage.setFacility(this);
-        storages.add(storage);
+        
+        if (storage.getFacility() != this) {
+            storage.setFacility(this);
+        }
+
+        if (!storages.contains(storage)) {
+            this.storages.add(storage);
+        }
     }
     
     public void removeStorage(StorageEntity storage) {
@@ -190,12 +202,12 @@ public class FacilityEntity extends BaseEntity {
         }
     }
     
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

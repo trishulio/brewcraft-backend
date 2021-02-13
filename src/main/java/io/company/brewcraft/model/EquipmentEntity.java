@@ -55,8 +55,8 @@ public class EquipmentEntity extends BaseEntity {
     private QuantityEntity maxCapacity;
     
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -70,14 +70,14 @@ public class EquipmentEntity extends BaseEntity {
     }
     
     public EquipmentEntity(Long id, FacilityEntity facility, String name, EquipmentType type, EquipmentStatus status, QuantityEntity maxCapacity,
-            LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
         setName(name);
         setType(type);
         setStatus(status);
         setMaxCapacity(maxCapacity);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -130,12 +130,12 @@ public class EquipmentEntity extends BaseEntity {
         this.maxCapacity = maxCapacity;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

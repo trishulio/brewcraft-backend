@@ -35,7 +35,7 @@ public class EquipmentEntityTest {
         assertSame(type, equipment.getType());
         assertSame(status, equipment.getStatus());
         assertSame(maxCapacity, equipment.getMaxCapacity());
-        assertSame(created, equipment.getCreated());
+        assertSame(created, equipment.getCreatedAt());
         assertSame(lastUpdated, equipment.getLastUpdated());
         assertSame(version, equipment.getVersion());        
     }
@@ -92,8 +92,8 @@ public class EquipmentEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        equipment.setCreated(created);
-        assertSame(created, equipment.getCreated());
+        equipment.setCreatedAt(created);
+        assertSame(created, equipment.getCreatedAt());
     }
     
     @Test

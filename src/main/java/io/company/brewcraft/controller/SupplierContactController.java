@@ -24,7 +24,7 @@ import io.company.brewcraft.dto.GetSupplierContactsDto;
 import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
-import io.company.brewcraft.model.SupplierContactEntity;
+import io.company.brewcraft.pojo.SupplierContact;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierContactMapper;
@@ -43,16 +43,16 @@ public class SupplierContactController {
     
     @GetMapping("/contacts")
     public GetSupplierContactsDto getContacts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, @RequestParam(defaultValue = "id") String[] sort, @RequestParam(defaultValue = "true") boolean order_asc) {                
-        Page<SupplierContactEntity> supplierContacts = supplierContactService.getSupplierContacts(page, size, sort, order_asc);
+        Page<SupplierContact> supplierContacts = supplierContactService.getSupplierContacts(page, size, sort, order_asc);
       
-        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.supplierContactToSupplierContactWithSupplierDto(supplierContact)).collect(Collectors.toList());
+        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).collect(Collectors.toList());
     
         return new GetSupplierContactsDto(supplierContactDtos, supplierContacts.getTotalElements(), supplierContacts.getTotalPages());   
     }
     
     @GetMapping("/contacts/{contactId}")
     public SupplierContactDto getContact(@PathVariable Long contactId) {
-        SupplierContactEntity supplierContact = supplierContactService.getContact(contactId);
+        SupplierContact supplierContact = supplierContactService.getContact(contactId);
         
         if (supplierContact == null) {
             throw new EntityNotFoundException("SupplierContact", contactId.toString());
@@ -60,35 +60,35 @@ public class SupplierContactController {
             
         }
         
-        return supplierContactMapper.contactToContactDto(supplierContact);
+        return supplierContactMapper.toDto(supplierContact);
     }
 
     @PostMapping("{supplierId}/contacts")
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierContactDto addContact(@PathVariable Long supplierId, @Valid @RequestBody AddSupplierContactDto supplierContactDo) {
-        SupplierContactEntity supplierContact = supplierContactMapper.contactDtoToContact(supplierContactDo);    
+        SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDo);    
         
-        SupplierContactEntity addedContact = supplierContactService.addContact(supplierId, supplierContact);
+        SupplierContact addedContact = supplierContactService.addContact(supplierId, supplierContact);
         
-        return supplierContactMapper.contactToContactDto(addedContact);
+        return supplierContactMapper.toDto(addedContact);
     }
     
     @PutMapping("{supplierId}/contacts/{contactId}")
     public SupplierContactDto putContact(@PathVariable Long supplierId, @PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
-        SupplierContactEntity supplierContact = supplierContactMapper.updateContactDtoToContact(supplierContactDto);
+        SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDto);
         
-        SupplierContactEntity putContact = supplierContactService.putContact(supplierId, contactId, supplierContact);
+        SupplierContact putContact = supplierContactService.putContact(supplierId, contactId, supplierContact);
         
-        return supplierContactMapper.contactToContactDto(putContact);
+        return supplierContactMapper.toDto(putContact);
     }
     
     @PatchMapping("/contacts/{contactId}")
     public SupplierContactDto patchContact(@PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
-        SupplierContactEntity supplierContact  = supplierContactMapper.updateContactDtoToContact(supplierContactDto);
+        SupplierContact supplierContact  = supplierContactMapper.fromDto(supplierContactDto);
         
-        SupplierContactEntity patchedContact = supplierContactService.patchContact(contactId, supplierContact);
+        SupplierContact patchedContact = supplierContactService.patchContact(contactId, supplierContact);
         
-        return supplierContactMapper.contactToContactDto(patchedContact);
+        return supplierContactMapper.toDto(patchedContact);
     }
 
     @DeleteMapping("/contacts/{contactId}")

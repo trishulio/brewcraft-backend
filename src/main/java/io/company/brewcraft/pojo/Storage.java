@@ -2,10 +2,13 @@ package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
 
+import io.company.brewcraft.dto.UpdateStorage;
+import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.StorageType;
 
-public class Storage extends BaseModel {
+public class Storage extends BaseModel implements UpdateStorage, Identified, Audited {
     
     private Long id;
     
@@ -15,7 +18,7 @@ public class Storage extends BaseModel {
     
     private StorageType type;
     
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
     
@@ -32,7 +35,7 @@ public class Storage extends BaseModel {
         this.facility = facility;
         this.name = name;
         this.type = type;
-        this.created = created;
+        this.createdAt = created;
         this.lastUpdated = lastUpdated;
         this.version = version;
     }
@@ -69,12 +72,12 @@ public class Storage extends BaseModel {
         this.type = type;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

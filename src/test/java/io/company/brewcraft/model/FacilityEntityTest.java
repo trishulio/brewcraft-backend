@@ -39,7 +39,7 @@ public class FacilityEntityTest {
         assertSame(faxNumber, facility.getFaxNumber());
         assertSame(equipment, facility.getEquipment());
         assertSame(storages, facility.getStorages());
-        assertSame(created, facility.getCreated());
+        assertSame(created, facility.getCreatedAt());
         assertSame(lastUpdated, facility.getLastUpdated());
         assertSame(version, facility.getVersion());        
     }
@@ -93,8 +93,8 @@ public class FacilityEntityTest {
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
-        facility.setCreated(created);
-        assertSame(created, facility.getCreated());
+        facility.setCreatedAt(created);
+        assertSame(created, facility.getCreatedAt());
     }
     
     @Test

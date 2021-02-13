@@ -44,8 +44,8 @@ public class StorageEntity extends BaseEntity {
     private StorageType type;
     
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -58,12 +58,12 @@ public class StorageEntity extends BaseEntity {
         
     }
     
-    public StorageEntity(Long id, FacilityEntity facility, String name, StorageType type, LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+    public StorageEntity(Long id, FacilityEntity facility, String name, StorageType type, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
         setName(name);
         setType(type);
-        setCreated(created);
+        setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
@@ -100,12 +100,12 @@ public class StorageEntity extends BaseEntity {
         this.type = type;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {
