@@ -10,7 +10,10 @@ import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
+import io.company.brewcraft.repository.MaterialCategoryRepository;
+import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
@@ -19,13 +22,19 @@ import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
+import io.company.brewcraft.service.MaterialCategoryService;
+import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.PurchaseOrderService;
+import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
+import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
+import io.company.brewcraft.service.impl.MaterialServiceImpl;
+import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
@@ -100,6 +109,27 @@ public class ServiceAutoConfiguration {
     public StorageService storageService(StorageRepository storageRepository, FacilityService facilityService) {
         StorageService storageService = new StorageServiceImpl(storageRepository, facilityService);
         return storageService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(MaterialService.class)
+    public MaterialService materialService(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
+        MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
+        return materialService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(MaterialCategoryService.class)
+    public MaterialCategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
+        MaterialCategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
+        return materialCategoryService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(QuantityUnitService.class)
+    public QuantityUnitService quantityUnitService(QuantityUnitRepository quantityUnitRepository) {
+        QuantityUnitService quantityUnitService = new QuantityUnitServiceImpl(quantityUnitRepository);
+        return quantityUnitService;
     }
     
 }

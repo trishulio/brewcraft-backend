@@ -1,4 +1,4 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.pojo.Material;
+import io.company.brewcraft.pojo.MaterialCategory;
 import tec.units.ri.unit.Units;
 
 public class MaterialTest {

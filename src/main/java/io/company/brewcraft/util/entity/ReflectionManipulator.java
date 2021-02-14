@@ -18,7 +18,7 @@ import io.company.brewcraft.data.CheckedFunction;
 public class ReflectionManipulator {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionManipulator.class);
 
-    public boolean equals(Object o, Object that) {
+    public boolean equals(Object o, Object that) {      
         return EqualsBuilder.reflectionEquals(o, that);
     }
 

@@ -30,6 +30,7 @@ import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
 import io.company.brewcraft.util.validator.Validator;
 
@@ -92,14 +93,14 @@ public class InvoiceService extends BaseService {
                                             .build();
         Page<InvoiceEntity> entityPage = repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
-        return entityPage.map(INVOICE_MAPPER::fromEntity);
+        return entityPage.map(invoice -> INVOICE_MAPPER.fromEntity(invoice, new CycleAvoidingMappingContext()));
     }
 
     public Invoice getInvoice(Long id) {
         Invoice invoice = null;
         Optional<InvoiceEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
-            invoice = INVOICE_MAPPER.fromEntity(optional.get());
+            invoice = INVOICE_MAPPER.fromEntity(optional.get(), new CycleAvoidingMappingContext());
         }
 
         return invoice;
@@ -193,9 +194,9 @@ public class InvoiceService extends BaseService {
         // objects from the DB? or should it just reference the ID since I am not
         // cascading the changes to the Material Entity.
 
-        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
+        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice, new CycleAvoidingMappingContext());
         InvoiceEntity added = repo.save(entity);
 
-        return INVOICE_MAPPER.fromEntity(added);
+        return INVOICE_MAPPER.fromEntity(added, new CycleAvoidingMappingContext());
     }
 }

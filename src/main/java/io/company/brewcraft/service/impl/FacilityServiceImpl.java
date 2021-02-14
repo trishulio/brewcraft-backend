@@ -18,6 +18,7 @@ import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.FacilityMapper;
 
 @Transactional
@@ -36,24 +37,24 @@ public class FacilityServiceImpl extends BaseService implements FacilityService 
     public Page<Facility> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending) {        
         Page<FacilityEntity> facilityPage = facilityRepository.findAll(pageRequest(sort, orderAscending, page, size));
     
-        return facilityPage.map(facilityMapper::fromEntity);
+        return facilityPage.map(facility -> facilityMapper.fromEntity(facility, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public Facility getFacility(Long facilityId) {
         FacilityEntity facility = facilityRepository.findById(facilityId).orElse(null);
         
-        return facilityMapper.fromEntity(facility);      
+        return facilityMapper.fromEntity(facility, new CycleAvoidingMappingContext());      
     }
 
     @Override
     public Facility addFacility(Facility facility) { 
         
-        FacilityEntity facilityEntity = facilityMapper.toEntity(facility);
+        FacilityEntity facilityEntity = facilityMapper.toEntity(facility, new CycleAvoidingMappingContext());
         
         FacilityEntity addedFacility = facilityRepository.save(facilityEntity);
         
-        return facilityMapper.fromEntity(addedFacility);      
+        return facilityMapper.fromEntity(addedFacility, new CycleAvoidingMappingContext());      
     }
     
     @Override

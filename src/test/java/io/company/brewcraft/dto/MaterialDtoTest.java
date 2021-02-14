@@ -1,23 +1,16 @@
-package io.company.brewcraft.pojo;
-
-import java.time.LocalDateTime;
-
-import javax.measure.Unit;
-import javax.measure.quantity.Mass;
+package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import tec.units.ri.unit.Units;
+public class MaterialDtoTest {
 
-public class MaterialTest {
-
-    private Material material;
+    private MaterialDto material;
 
     @BeforeEach
     public void init() {
-        material = new Material();
+        material = new MaterialDto();
     }
     
     @Test
@@ -25,23 +18,23 @@ public class MaterialTest {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
-        MaterialCategory category = new MaterialCategory();
+        MaterialCategoryDto materialClass = new MaterialCategoryDto();
+        MaterialCategoryDto category = new MaterialCategoryDto();
+        MaterialCategoryDto subcategory = new MaterialCategoryDto();
         String upc = "testUPC";
-        Unit<Mass> baseQuantityUnit = Units.KILOGRAM;
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        String baseQuantityUnit = "g";
         int version = 1;
 
-        Material material = new Material(id, name, description, category, upc, baseQuantityUnit, created, lastUpdated, version);
+        MaterialDto material = new MaterialDto(id, name, description, materialClass, category, subcategory, upc, baseQuantityUnit, version);
         
         assertSame(id, material.getId());
         assertSame(name, material.getName());
         assertSame(description, material.getDescription());
+        assertSame(materialClass, material.getMaterialClass());
         assertSame(category, material.getCategory());
+        assertSame(subcategory, material.getSubcategory());
         assertSame(upc, material.getUPC());
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
-        assertSame(created, material.getCreatedAt());
-        assertSame(lastUpdated, material.getLastUpdated());
         assertSame(version, material.getVersion());        
     }
     
@@ -67,10 +60,24 @@ public class MaterialTest {
     }
     
     @Test
+    public void testGetSetMaterialClass() {
+        MaterialCategoryDto materialClass = new MaterialCategoryDto();
+        material.setMaterialClass(materialClass);
+        assertSame(materialClass, material.getMaterialClass());
+    }
+    
+    @Test
     public void testGetSetCategory() {
-        MaterialCategory category = new MaterialCategory();
+        MaterialCategoryDto category = new MaterialCategoryDto();
         material.setCategory(category);
         assertSame(category, material.getCategory());
+    }
+    
+    @Test
+    public void testGetSetSubcategory() {
+        MaterialCategoryDto subcategory = new MaterialCategoryDto();
+        material.setSubcategory(subcategory);
+        assertSame(subcategory, material.getSubcategory());
     }
     
     @Test
@@ -82,23 +89,9 @@ public class MaterialTest {
 
     @Test
     public void testGetSetBaseQuantityUnit() {
-        Unit<Mass> baseQuantityUnit = Units.KILOGRAM;
+        String baseQuantityUnit = "g";
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
-    }
-    
-    @Test
-    public void testGetSetCreated() {
-        LocalDateTime created = LocalDateTime.now();
-        material.setCreatedAt(created);
-        assertSame(created, material.getCreatedAt());
-    }
-    
-    @Test
-    public void testGetSetLastUpdated() {
-        LocalDateTime lastUpdated = LocalDateTime.now();
-        material.setLastUpdated(lastUpdated);
-        assertSame(lastUpdated, material.getLastUpdated());
     }
     
     @Test
