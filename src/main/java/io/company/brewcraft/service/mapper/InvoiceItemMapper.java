@@ -1,5 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
+import org.mapstruct.Context;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -10,7 +12,7 @@ import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItemEntity;
 import io.company.brewcraft.pojo.InvoiceItem;
 
-@Mapper(uses = { QuantityMapper.class, MoneyMapper.class, MaterialMapper.class, TaxMapper.class })
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, MaterialMapper.class, TaxMapper.class })
 public interface InvoiceItemMapper {
     InvoiceItemMapper INSTANCE = Mappers.getMapper(InvoiceItemMapper.class);
 
@@ -21,7 +23,8 @@ public interface InvoiceItemMapper {
     InvoiceItem fromDto(UpdateInvoiceItemDto dto);
 
     @Mappings({ @Mapping(target = "invoice", ignore = true) })
-    InvoiceItemEntity toEntity(InvoiceItem item);
+    InvoiceItemEntity toEntity(InvoiceItem item, @Context CycleAvoidingMappingContext context);
 
-    InvoiceItem fromEntity(InvoiceItemEntity entity);
+    @InheritInverseConfiguration
+    InvoiceItem fromEntity(InvoiceItemEntity entity, @Context CycleAvoidingMappingContext context);
 }

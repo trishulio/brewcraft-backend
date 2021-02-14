@@ -45,7 +45,7 @@ public class InvoiceItemMapperTest {
             Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L),
+            new Material(7L, null, null, null, null, null, null, null, null),
             1
         );
         InvoiceItemDto dto = mapper.toDto(item);
@@ -55,7 +55,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), dto.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), dto.getTax());
-        assertEquals(new MaterialDto(7L), dto.getMaterial());
+        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
 
@@ -69,7 +69,7 @@ public class InvoiceItemMapperTest {
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             new MoneyDto("CAD", new BigDecimal("20")),
-            new MaterialDto(7L),
+            new MaterialDto(7L, null, null, null, null, null, null, null, null),
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
@@ -79,7 +79,7 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L), item.getMaterial());
+        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, dto.getVersion());
     }
 
@@ -90,7 +90,7 @@ public class InvoiceItemMapperTest {
             new QuantityDto("KG", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
-            new MaterialDto(7L),
+            new MaterialDto(7L, null, null, null, null, null, null, null, null),
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
@@ -100,7 +100,7 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L), item.getMaterial());
+        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 
@@ -112,17 +112,17 @@ public class InvoiceItemMapperTest {
             Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L),
+            new Material(7L, null, null, null, null, null, null, null, null),
             1
         );
-        InvoiceItemEntity entity = mapper.toEntity(item);
+        InvoiceItemEntity entity = mapper.toEntity(item, new CycleAvoidingMappingContext());
 
         assertEquals(2L, entity.getId());
         assertEquals("desc2", entity.getDescription());
         assertEquals(new QuantityEntity(null, new UnitEntity("kg", null), new BigDecimal("4")), entity.getQuantity());
         assertEquals(new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("5.00")), entity.getPrice());
         assertEquals(new TaxEntity(null, new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("6.00"))), entity.getTax());
-        assertEquals(new MaterialEntity(7L), entity.getMaterial());
+        assertEquals(new MaterialEntity(7L, null, null, null, null, null, null, null, null), entity.getMaterial());
         assertEquals(1, entity.getVersion());
         assertNull(entity.getInvoice());
     }
@@ -136,17 +136,17 @@ public class InvoiceItemMapperTest {
             new QuantityEntity(null, new UnitEntity("kg", null), new BigDecimal("4")),
             new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("5.00")),
             new TaxEntity(null, new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("6.00"))),
-            new MaterialEntity(7L),
+            new MaterialEntity(7L, null, null, null, null, null, null, null, null),
             1
         );
-        InvoiceItem item = mapper.fromEntity(entity);
+        InvoiceItem item = mapper.fromEntity(entity, new CycleAvoidingMappingContext());
 
         assertEquals(2L, item.getId());
         assertEquals("desc2", item.getDescription());
         assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 5"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 6")), item.getTax());
-        assertEquals(new Material(7L), item.getMaterial());
+        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 }

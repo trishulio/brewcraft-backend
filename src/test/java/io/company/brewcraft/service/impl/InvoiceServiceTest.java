@@ -116,7 +116,7 @@ public class InvoiceServiceTest {
        InvoiceStatus mStatus = new InvoiceStatus(2L, "FINAL");
        doReturn(mStatus).when(mStatusService).getInvoiceStatus("FINAL");
        
-       InvoiceItem itemUpdate = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L, null, null, null, null, null, null, null, null), 1);
        Invoice update = new Invoice(
            9L,
            "ABCDE-12345",
@@ -153,7 +153,7 @@ public class InvoiceServiceTest {
        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
+       assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 
@@ -182,7 +182,7 @@ public class InvoiceServiceTest {
        doReturn(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME)).when(mStatusService).getInvoiceStatus(InvoiceStatusEntity.DEFAULT_STATUS_NAME);
        doReturn(new PurchaseOrder(3L)).when(mPoService).getPurchaseOrder(3L);
 
-       InvoiceItemEntity mExistingItem = new InvoiceItemEntity(2L, "Item description", null, new QuantityEntity(5L, new UnitEntity("kg"), new BigDecimal("10")), new MoneyEntity(6L, new Currency(124, "CAD"), new BigDecimal("20")), new TaxEntity(7L), new MaterialEntity(8L), 1);
+       InvoiceItemEntity mExistingItem = new InvoiceItemEntity(2L, "Item description", null, new QuantityEntity(5L, new UnitEntity("kg"), new BigDecimal("10")), new MoneyEntity(6L, new Currency(124, "CAD"), new BigDecimal("20")), new TaxEntity(7L), new MaterialEntity(8L, null, null, null, null, null, null, null, null), 1);
        InvoiceEntity mExisting = new InvoiceEntity(1L);
        mExisting.setDescription("existing description");
        mExisting.setItems(List.of(mExistingItem));
@@ -256,7 +256,7 @@ public class InvoiceServiceTest {
        doReturn(new InvoiceStatus(4L, InvoiceStatusEntity.DEFAULT_STATUS_NAME)).when(mStatusService).getInvoiceStatus(InvoiceStatusEntity.DEFAULT_STATUS_NAME);
        doReturn(new PurchaseOrder(3L)).when(mPoService).getPurchaseOrder(3L);
        
-       InvoiceItem itemAdded = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemAdded = new InvoiceItem(3L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L, null, null, null, null, null, null, null, null), 1);
        Invoice addition = new Invoice(
            9L,
            "ABCDE-12345",
@@ -294,7 +294,7 @@ public class InvoiceServiceTest {
        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
+       assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
        assertNull(item.getVersion());
    }
 
