@@ -1,48 +1,38 @@
 package io.company.brewcraft.service.mapper;
 
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Context;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
-import io.company.brewcraft.dto.AddEquipmentDto;
 import io.company.brewcraft.dto.AddFacilityDto;
-import io.company.brewcraft.dto.AddStorageDto;
-import io.company.brewcraft.dto.AddressDto;
+import io.company.brewcraft.dto.FacilityBaseDto;
 import io.company.brewcraft.dto.FacilityDto;
-import io.company.brewcraft.dto.FacilityEquipmentDto;
-import io.company.brewcraft.dto.FacilityStorageDto;
 import io.company.brewcraft.dto.UpdateFacilityDto;
-import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.Facility;
-import io.company.brewcraft.model.FacilityAddress;
-import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.FacilityEntity;
+import io.company.brewcraft.pojo.Facility;
 
-@Mapper(uses = { QuantityMapper.class})
+@Mapper(uses = { StorageMapper.class, EquipmentMapper.class, QuantityMapper.class, AddressMapper.class})
 public interface FacilityMapper {
     
     FacilityMapper INSTANCE = Mappers.getMapper(FacilityMapper.class);
 
-    FacilityDto facilityToFacilityDto(Facility facility);
-
-    Facility facilityDtoToFacility(FacilityDto facilityDto);
+    FacilityDto facilityToFacilityDto(FacilityEntity facility);
+                
+    FacilityBaseDto facilityToFacilityBaseDto(FacilityEntity facility);
     
-    Facility facilityDtoToFacility(AddFacilityDto facilityDto);
-
-    Facility facilityDtoToFacility(UpdateFacilityDto facilityDto);
-        
-    AddressDto addressToAddressDto(FacilityAddress address);
-
-    FacilityAddress addressDtoToAddress(AddressDto addressDto);
+    @InheritInverseConfiguration
+    Facility fromEntity(FacilityEntity facility, @Context CycleAvoidingMappingContext context);
     
-    FacilityEquipmentDto equipmentToEquipmentDto(Equipment equipment);
-
-    Equipment equipmentDtoToEquipment(FacilityEquipmentDto equipmentDto);
+    FacilityEntity toEntity(Facility facility, @Context CycleAvoidingMappingContext context);
     
-    Equipment equipmentDtoToEquipment(AddEquipmentDto equipmentDto);
+    FacilityDto toDto(Facility facility);
     
-    FacilityStorageDto storageToStorageDto(Storage storage);
-
-    Storage storageDtoToStorage(FacilityStorageDto storageDto);
+    Facility fromDto(AddFacilityDto facilityDto);
     
-    Storage storageDtoToStorage(AddStorageDto storageDto);
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    Facility fromDto(UpdateFacilityDto facilityDto);
     
 }

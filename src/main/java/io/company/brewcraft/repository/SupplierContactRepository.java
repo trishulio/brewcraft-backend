@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.SupplierContactEntity;
 
-public interface SupplierContactRepository extends JpaRepository<SupplierContact, Long> {
+public interface SupplierContactRepository extends JpaRepository<SupplierContactEntity, Long> {
 
-    List<SupplierContact> findAllBySupplierId(Long supplierId);
+    List<SupplierContactEntity> findAllBySupplierId(Long supplierId);
 }

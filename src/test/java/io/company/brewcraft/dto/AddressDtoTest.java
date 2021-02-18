@@ -1,7 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +22,8 @@ public class AddressDtoTest {
         String province = "province";
         String city = "city";
         String postalCode = "postalCode";
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
 
-        AddressDto addressDto = new AddressDto(id, addressLine1, addressLine2, country, province, city, postalCode, created, lastUpdated);
+        AddressDto addressDto = new AddressDto(id, addressLine1, addressLine2, country, province, city, postalCode);
         
         assertSame(id, addressDto.getId());
         assertSame(addressLine1, addressDto.getAddressLine1());
@@ -36,8 +32,6 @@ public class AddressDtoTest {
         assertSame(province, addressDto.getProvince());
         assertSame(city, addressDto.getCity());
         assertSame(postalCode, addressDto.getPostalCode());
-        assertSame(created, addressDto.getCreated());
-        assertSame(lastUpdated, addressDto.getLastUpdated());
     }
     
     @Test
@@ -82,17 +76,4 @@ public class AddressDtoTest {
         assertSame("postalCode", addressDto.getPostalCode());
     }
 
-    @Test
-    public void testGetSetCreated() {
-        LocalDateTime created = LocalDateTime.now();
-        addressDto.setCreated(created);
-        assertSame(created, addressDto.getCreated());
-    }
-    
-    @Test
-    public void testGetSetLastUpdated() {
-        LocalDateTime lastUpdated = LocalDateTime.now();
-        addressDto.setLastUpdated(lastUpdated);
-        assertSame(lastUpdated, addressDto.getLastUpdated());
-    }
 }

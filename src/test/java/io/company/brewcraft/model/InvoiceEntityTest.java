@@ -25,7 +25,7 @@ public class InvoiceEntityTest {
 
     @Test
     public void testAllArgConstructor() {
-        InvoiceItemEntity invoiceItem = new InvoiceItemEntity(3L, "desc2", null, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L), 1);
+        InvoiceItemEntity invoiceItem = new InvoiceItemEntity(3L, "desc2", null, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L, null, null, null, null, null, null, null, null), 1);
         InvoiceEntity invoice = new InvoiceEntity(1L,
             "ABCDE-12345",
             "desc1",
@@ -61,7 +61,7 @@ public class InvoiceEntityTest {
         assertEquals(new QuantityEntity(8L), item.getQuantity());
         assertEquals(new MoneyEntity(9L), item.getPrice());
         assertEquals(new TaxEntity(10L), item.getTax());
-        assertEquals(new MaterialEntity(7L), item.getMaterial());
+        assertEquals(new MaterialEntity(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 

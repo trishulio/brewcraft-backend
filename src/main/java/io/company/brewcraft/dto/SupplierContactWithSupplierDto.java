@@ -44,7 +44,7 @@ public class SupplierContactWithSupplierDto {
 
     public SupplierContactWithSupplierDto(Long id, String firstName, String lastName,
             String position, String email, String phoneNumber, SupplierWithoutContactsDto supplier,
-            LocalDateTime created, LocalDateTime lastUpdated, Integer version) {
+            Integer version) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,8 +52,6 @@ public class SupplierContactWithSupplierDto {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.supplier = supplier;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
         this.version = version;
     }
 
@@ -111,22 +109,6 @@ public class SupplierContactWithSupplierDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     public Integer getVersion() {

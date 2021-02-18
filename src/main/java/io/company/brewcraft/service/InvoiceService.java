@@ -20,7 +20,7 @@ import io.company.brewcraft.model.InvoiceEntity;
 import io.company.brewcraft.model.InvoiceStatusEntity;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrderEntity;
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.pojo.BaseInvoiceItem;
 import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.InvoiceItem;
@@ -30,6 +30,7 @@ import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
 import io.company.brewcraft.util.validator.Validator;
 
@@ -88,18 +89,18 @@ public class InvoiceService extends BaseService {
                                             .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_ID }, purchaseOrderIds)
                                             .between(new String[] { InvoiceEntity.FIELD_FREIGHT, FreightEntity.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { InvoiceEntity.FIELD_STATUS, InvoiceStatusEntity.FIELD_NAME }, status)
-                                            .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
+                                            .in(new String[] { InvoiceEntity.FIELD_PURCHASE_ORDER, PurchaseOrderEntity.FIELD_SUPPLIER, SupplierEntity.FIELD_ID }, supplierIds)
                                             .build();
         Page<InvoiceEntity> entityPage = repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
-        return entityPage.map(INVOICE_MAPPER::fromEntity);
+        return entityPage.map(invoice -> INVOICE_MAPPER.fromEntity(invoice, new CycleAvoidingMappingContext()));
     }
 
     public Invoice getInvoice(Long id) {
         Invoice invoice = null;
         Optional<InvoiceEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
-            invoice = INVOICE_MAPPER.fromEntity(optional.get());
+            invoice = INVOICE_MAPPER.fromEntity(optional.get(), new CycleAvoidingMappingContext());
         }
 
         return invoice;
@@ -193,9 +194,9 @@ public class InvoiceService extends BaseService {
         // objects from the DB? or should it just reference the ID since I am not
         // cascading the changes to the Material Entity.
 
-        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice);
+        InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice, new CycleAvoidingMappingContext());
         InvoiceEntity added = repo.save(entity);
 
-        return INVOICE_MAPPER.fromEntity(added);
+        return INVOICE_MAPPER.fromEntity(added, new CycleAvoidingMappingContext());
     }
 }

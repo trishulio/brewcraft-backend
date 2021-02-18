@@ -13,10 +13,10 @@ import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentEntity;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.FacilityEntity;
 
 @SuppressWarnings("unchecked")
 public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
@@ -27,8 +27,8 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
     public void testToPredicate_ReturnsCriteriaBuilderWithAllPredicates() {
         specification = spy(new EquipmentRepositoryGetAllEquipmentSpecification());
 
-        Root<Equipment> mRoot = mock(Root.class);
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
 
         Predicate mPredicateWithPredicates = mock(Predicate.class);
@@ -50,10 +50,10 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(ids);
 
-        Root<Equipment> mRoot = mock(Root.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
         doReturn(mPath).when(mRoot).get("id");
 
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
@@ -79,10 +79,10 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(types);
 
-        Root<Equipment> mRoot = mock(Root.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
         doReturn(mPath).when(mRoot).get("type");
 
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
@@ -108,10 +108,10 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(statuses);
 
-        Root<Equipment> mRoot = mock(Root.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
         doReturn(mPath).when(mRoot).get("status");
 
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
@@ -137,13 +137,13 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(facilityIds);
  
-        Path<Facility> mPathFacility = mock(Path.class);
+        Path<FacilityEntity> mPathFacility = mock(Path.class);
         doReturn(mPath).when(mPathFacility).get("id");
 
-        Root<Equipment> mRoot = mock(Root.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
         doReturn(mPathFacility).when(mRoot).get("facility");
 
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
@@ -186,18 +186,18 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
 
         // FacilityIds Criteria Mock
         Path<Long> mFacilityIdsPath = mock(Path.class);
-        Path<Facility> mFacilityPath = mock(Path.class);
+        Path<FacilityEntity> mFacilityPath = mock(Path.class);
         Predicate mInFacilityIdPredicate = mock(Predicate.class);
         doReturn(mInFacilityIdPredicate).when(mFacilityIdsPath).in(facilityIds);
 
-        Root<Equipment> mRoot = mock(Root.class);
+        Root<EquipmentEntity> mRoot = mock(Root.class);
         doReturn(mIdsPath).when(mRoot).get("id");
         doReturn(mTypesPath).when(mRoot).get("type");
         doReturn(mStatusesPath).when(mRoot).get("status");
         doReturn(mFacilityPath).when(mRoot).get("facility");
         doReturn(mFacilityIdsPath).when(mFacilityPath).get("id");
 
-        CriteriaQuery<Equipment> mQuery = mock(CriteriaQuery.class);
+        CriteriaQuery<EquipmentEntity> mQuery = mock(CriteriaQuery.class);
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);

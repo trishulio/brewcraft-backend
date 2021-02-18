@@ -1,39 +1,59 @@
 package io.company.brewcraft.service.mapper;
 
+import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddSupplierDto;
-import io.company.brewcraft.dto.AddressDto;
-import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierDto;
-import io.company.brewcraft.dto.UpdateSupplierContactDto;
 import io.company.brewcraft.dto.UpdateSupplierDto;
-import io.company.brewcraft.model.SupplierAddress;
-import io.company.brewcraft.model.SupplierContact;
-import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.pojo.Supplier;
 
-@Mapper
+@Mapper(uses = { SupplierContactMapper.class, AddressMapper.class})
 public interface SupplierMapper {
     
     SupplierMapper INSTANCE = Mappers.getMapper(SupplierMapper.class);
 
-    SupplierDto supplierToSupplierDto(Supplier supplier);
+    SupplierDto supplierToSupplierDto(SupplierEntity supplier);
+            
+    @Mappings({@Mapping(target = "contacts", ignore = true)})
+    Supplier fromEntity(SupplierEntity supplier);
 
-    Supplier supplierDtoToSupplier(SupplierDto supplierDto);
+    @Mappings({@Mapping(target = "contacts", ignore = true)})
+    SupplierEntity toEntity(Supplier supplier);
     
-    Supplier supplierDtoToSupplier(AddSupplierDto supplierDto);
+    SupplierDto toDto(Supplier supplier);
     
-    Supplier updateSupplierDtoToSupplier(UpdateSupplierDto supplierDto);
+    Supplier fromDto(AddSupplierDto supplierDto);
     
-    SupplierContactDto contactToContactDto(SupplierContact contact);
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    Supplier fromDto(UpdateSupplierDto supplierDto);
+    
+    @BeforeMapping
+    default void beforeFromEntity(@MappingTarget Supplier target, SupplierEntity entity) {
+        SupplierContactMapper supplierContactMapper = SupplierContactMapper.INSTANCE;
+        
+        if (entity.getContacts() != null) {
+            entity.getContacts().forEach(contact -> {
+                target.addContact(supplierContactMapper.fromEntity(contact, new CycleAvoidingMappingContext()));
+            });
+        }
+    }
 
-    SupplierContact contactDtoToContact(SupplierContactDto contactDto);
-    
-    SupplierContact updateContactDtoToContact(UpdateSupplierContactDto contactDto);
-    
-    AddressDto addressToAddressDto(SupplierAddress address);
-
-    SupplierAddress addressDtoToAddress(AddressDto addressDto);
-    
+    @BeforeMapping
+    default void beforeToEntity(@MappingTarget SupplierEntity target, Supplier supplier) {
+        SupplierContactMapper supplierContactMapper = SupplierContactMapper.INSTANCE;
+       
+        if (supplier.getContacts() != null) {
+            supplier.getContacts().forEach(contact -> {
+                target.addContact(supplierContactMapper.toEntity(contact, new CycleAvoidingMappingContext()));
+            });
+        }
+    }
 }

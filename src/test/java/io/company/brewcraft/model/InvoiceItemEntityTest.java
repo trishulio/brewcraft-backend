@@ -26,7 +26,7 @@ public class InvoiceItemEntityTest {
     @Test
     public void testConstructorWithAllArgs_CallsSetForAllArgs() {
         InvoiceEntity invoice = new InvoiceEntity(2L);
-        item = new InvoiceItemEntity(1L, "desc2", invoice, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L), 1);
+        item = new InvoiceItemEntity(1L, "desc2", invoice, new QuantityEntity(8L), new MoneyEntity(9L), new TaxEntity(10L), new MaterialEntity(7L, null, null, null, null, null, null, null, null), 1);
 
         assertEquals(1L, item.getId());
         assertEquals("desc2", item.getDescription());
@@ -34,7 +34,7 @@ public class InvoiceItemEntityTest {
         assertEquals(new QuantityEntity(8L), item.getQuantity());
         assertEquals(new MoneyEntity(9L), item.getPrice());
         assertEquals(new TaxEntity(10L), item.getTax());
-        assertEquals(new MaterialEntity(7L), item.getMaterial());
+        assertEquals(new MaterialEntity(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 
@@ -63,8 +63,8 @@ public class InvoiceItemEntityTest {
     @Disabled
     public void testAccessMaterial() {
         assertNull(item.getMaterial());
-        item.setMaterial(new MaterialEntity(11L));
-        assertEquals(new Material(11L), item.getMaterial());
+        item.setMaterial(new MaterialEntity(11L, null, null, null, null, null, null, null, null));
+        assertEquals(new Material(11L, null, null, null, null, null, null, null, null), item.getMaterial());
     }
 
     @Test

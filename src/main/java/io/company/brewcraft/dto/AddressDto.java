@@ -21,21 +21,13 @@ public class AddressDto {
     private String city;
     
     private String postalCode;
-
-    @Null
-    @JsonIgnore
-    private LocalDateTime created;
-    
-    @Null
-    @JsonIgnore
-    private LocalDateTime lastUpdated;
     
     public AddressDto() {
         
     }
     
     public AddressDto(Long id, String addressLine1, String addressLine2, String country, String province,
-            String city, String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
+            String city, String postalCode) {
         this.id = id;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
@@ -43,8 +35,6 @@ public class AddressDto {
         this.province = province;
         this.city = city;
         this.postalCode = postalCode;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
     }
 
     public Long getId() {
@@ -101,22 +91,6 @@ public class AddressDto {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
 }

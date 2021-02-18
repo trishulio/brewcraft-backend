@@ -36,13 +36,10 @@ public class SupplierWithoutContactsDto {
         
     }
     
-    public SupplierWithoutContactsDto(Long id, String name, AddressDto address, LocalDateTime created,
-            LocalDateTime lastUpdated, Integer version) {
+    public SupplierWithoutContactsDto(Long id, String name, AddressDto address, Integer version) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
         this.version = version;
     }
 
@@ -68,22 +65,6 @@ public class SupplierWithoutContactsDto {
 
     public void setAddress(AddressDto address) {
         this.address = address;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
     
     public Integer getVersion() {

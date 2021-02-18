@@ -29,7 +29,7 @@ public class InvoiceItemTest {
             Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L),
+            new Material(7L, null, null, null, null, null, null, null, null),
             1
         );
 
@@ -39,7 +39,7 @@ public class InvoiceItemTest {
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
         assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
         assertEquals(Money.parse("CAD 20"), item.getAmount());
-        assertEquals(new Material(7L), item.getMaterial());
+        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 
@@ -81,8 +81,8 @@ public class InvoiceItemTest {
     @Test
     public void testAccessMaterial() {
         assertNull(item.getMaterial());
-        item.setMaterial(new Material(1L));
-        assertEquals(new Material(1L), item.getMaterial());
+        item.setMaterial(new Material(1L, null, null, null, null, null, null, null, null));
+        assertEquals(new Material(1L, null, null, null, null, null, null, null, null), item.getMaterial());
     }
 
     @Test

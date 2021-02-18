@@ -22,7 +22,7 @@ public class UpdateInvoiceItemDtoTest {
             new QuantityDto("kg", new BigDecimal("4")),
             new MoneyDto("CAD", new BigDecimal("5")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
-            new MaterialDto(7L),
+            new MaterialDto(7L, null, null, null, null, null, null, null, null),
             1
         );
 
@@ -30,7 +30,7 @@ public class UpdateInvoiceItemDtoTest {
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
-        assertEquals(new MaterialDto(7L), item.getMaterial());
+        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 
