@@ -14,8 +14,8 @@ containerize:
 	docker build . -t ${APP_NAME}:${VERSION}
 
 pack:
-	mkdir -p {TARGET}
-	rm -rf {TARGET}/* ; true
+	mkdir -p ${TARGET}
+	rm -rf ${TARGET}/* ; true
 	docker save -o ${TARGET}/${APP_NAME}_${VERSION}.image ${APP_NAME}:${VERSION}
 	cp -r ./db-init-scripts ${TARGET}
 	cp ./docker-compose.yml ${TARGET}
