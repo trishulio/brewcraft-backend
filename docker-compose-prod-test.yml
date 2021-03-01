@@ -17,7 +17,7 @@ services:
       HOSTNAME_EXTERNAL: ${AWS_HOSTNAME_EXTERNAL}
       USE_SSL: "false"
       PORT_WEB_UI: ${LS_WEB_UI}
-      SERVICES: secretsmanager
+      #SERVICES: secretsmanager
       DATA_DIR: /tmp/localstack/data
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
