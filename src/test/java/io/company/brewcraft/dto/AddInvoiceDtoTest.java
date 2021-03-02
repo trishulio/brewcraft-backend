@@ -28,7 +28,7 @@ public class AddInvoiceDtoTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             new InvoiceStatusDto("FINAL"),
-            List.of(new UpdateInvoiceItemDto())
+            List.of(new AddInvoiceItemDto())
         );
 
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
@@ -39,7 +39,7 @@ public class AddInvoiceDtoTest {
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
         assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
         assertEquals(1, invoice.getItems().size());
-        assertEquals(new UpdateInvoiceItemDto(), invoice.getItems().get(0));
+        assertEquals(new AddInvoiceItemDto(), invoice.getItems().get(0));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class AddInvoiceDtoTest {
     @Test
     public void testAccessItems() {
         assertNull(invoice.getItems());
-        invoice.setItems(List.of(new UpdateInvoiceItemDto()));
-        assertEquals(List.of(new UpdateInvoiceItemDto()), invoice.getItems());
+        invoice.setItems(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxDto(), 1L)));
+        assertEquals(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxDto(), 1L)), invoice.getItems());
     }
 }

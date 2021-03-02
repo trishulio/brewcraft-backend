@@ -11,12 +11,12 @@ public class AddInvoiceDto extends BaseDto {
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
     private InvoiceStatusDto status;
-    private List<UpdateInvoiceItemDto> items;
+    private List<AddInvoiceItemDto> items;
 
     public AddInvoiceDto() {
     }
 
-    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items) {
+    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<AddInvoiceItemDto> items) {
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
         setFreight(freight);
@@ -83,11 +83,11 @@ public class AddInvoiceDto extends BaseDto {
         this.status = status;
     }
 
-    public List<UpdateInvoiceItemDto> getItems() {
+    public List<AddInvoiceItemDto> getItems() {
         return items;
     }
 
-    public void setItems(List<UpdateInvoiceItemDto> items) {
+    public void setItems(List<AddInvoiceItemDto> items) {
         this.items = items;
     }
 }

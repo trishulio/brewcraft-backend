@@ -16,17 +16,17 @@ public class ValidatorTest {
 
     @Test
     public void testRule_SetsMsgAsError_WhenConditionIsFalse() {
-        validator.rule(false, "This is an error message");
-        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. This is an error message");
+        validator.rule(false, "This is an error message: %s", "TEST");
+        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. This is an error message: TEST");
     }
 
     @Test
     public void testRule_DoesNotSetMsgAsError_WhenConditionIsTrue() {
-        validator.rule(true, "This is not an error message");
-        validator.rule(false, "This is an error message");
-        validator.rule(true, "This is not an error message");
+        validator.rule(true, "This is not an error message: %s", "TEST");
+        validator.rule(false, "This is an error message: %s", "TEST");
+        validator.rule(true, "This is not an error message: %s", "TEST");
 
-        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. This is an error message");
+        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. This is an error message: TEST");
     }
 
     @Test
@@ -38,16 +38,16 @@ public class ValidatorTest {
 
     @Test
     public void testRaiseErrors_ConcatsErrorsIntoNumberedList() {
-        validator.rule(false, "This is error A");
-        validator.rule(true, "This message is ignored");
-        validator.rule(false, "This is error B");
-        validator.rule(true, "This message is ignored");
-        validator.rule(false, "This is error C");
+        validator.rule(false, "This is error A: %s", "TEST");
+        validator.rule(true, "This message is ignored: %s", "TEST");
+        validator.rule(false, "This is error B: %s", "TEST");
+        validator.rule(true, "This message is ignored: %s", "TEST");
+        validator.rule(false, "This is error C: %s", "TEST");
 
         String expected = ""
-                + "1. This is error A\n"
-                + "2. This is error B\n"
-                + "3. This is error C\n";
+                + "1. This is error A: TEST\n"
+                + "2. This is error B: TEST\n"
+                + "3. This is error C: TEST\n";
         assertThrows(ValidationException.class, () -> validator.raiseErrors(), expected);
     }
 

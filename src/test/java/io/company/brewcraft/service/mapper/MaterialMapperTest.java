@@ -42,6 +42,18 @@ public class MaterialMapperTest {
     }
 
     @Test
+    public void testFromDto_ReturnsPojoWithMaterialId_WhenIdIsNotNull() {
+        Material material = materialMapper.fromDto(1L);
+        assertEquals(1L, material.getId());
+    }
+
+    @Test
+    public void testFromDto_ReturnsNull_WhenIdIsNull() {
+        Material material = materialMapper.fromDto((Long) null);
+        assertNull(material);
+    }
+
+    @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
         Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialDto dto = materialMapper.toDto(material);

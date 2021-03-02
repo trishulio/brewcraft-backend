@@ -46,12 +46,24 @@ public interface MaterialMapper {
 
     MaterialEntity toEntity(Material material , @Context CycleAvoidingMappingContext context);
     
+    default Material fromDto(Long id) {
+        Material material = null;
+        if (id != null) {
+            material = new Material();
+            material.setId(id);    
+        }
+        
+        return material;
+    }
+
     @BeforeMapping
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         MaterialCategory category = material.getCategory();
         
-        if (category.getParentCategory() == null) {
+        if (category == null) {
+            materialDto.setMaterialClass(null);
+        } else if (category.getParentCategory() == null) {
             materialDto.setMaterialClass(materialCategoryMapper.toDto(category));
         } else if (category.getParentCategory().getParentCategory() == null) {
             materialDto.setMaterialClass(materialCategoryMapper.toDto(category.getParentCategory()));

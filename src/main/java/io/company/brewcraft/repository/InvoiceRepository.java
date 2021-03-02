@@ -9,6 +9,5 @@ import io.company.brewcraft.model.InvoiceEntity;
 
 @Repository
 @Transactional
-public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long>, JpaSpecificationExecutor<InvoiceEntity> {
-
+public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long>, JpaSpecificationExecutor<InvoiceEntity>, EnhancedInvoiceRepository {
 }

@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +25,6 @@ import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.pojo.BaseInvoiceItem;
 import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.InvoiceItem;
-import io.company.brewcraft.pojo.InvoiceStatus;
-import io.company.brewcraft.pojo.PurchaseOrder;
 import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
@@ -36,22 +35,20 @@ import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
 public class InvoiceService extends BaseService {
-
+    private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
     private static final InvoiceMapper INVOICE_MAPPER = InvoiceMapper.INSTANCE;
 
     private InvoiceRepository repo;
-    private PurchaseOrderService poService;
-    private InvoiceStatusService statusService;
+    private InvoiceItemService itemService;
 
     public InvoiceService() {
         super();
     }
 
-    public InvoiceService(InvoiceRepository repo, InvoiceStatusService statusService, PurchaseOrderService poService) {
+    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService) {
         this();
         this.repo = repo;
-        this.poService = poService;
-        this.statusService = statusService;
+        this.itemService = itemService;
     }
 
     public Page<Invoice> getInvoices(
@@ -97,9 +94,11 @@ public class InvoiceService extends BaseService {
     }
 
     public Invoice getInvoice(Long id) {
+        log.info("Retrieving invoice with Id: {}", id);
         Invoice invoice = null;
         Optional<InvoiceEntity> optional = repo.findById(id);
         if (optional.isPresent()) {
+            log.info("Found invoice with id: {}", id);
             invoice = INVOICE_MAPPER.fromEntity(optional.get(), new CycleAvoidingMappingContext());
         }
 
@@ -111,92 +110,79 @@ public class InvoiceService extends BaseService {
     }
 
     public void delete(Long id) {
+        log.info("Attempting to delete Invoice with Id: {}", id);
         if (!exists(id)) {
+            log.error("Failed to delete non-existing Invoice with Id: {}", id);
             throw new EntityNotFoundException("Invoice", id.toString());
         }
         repo.deleteById(id);
     }
 
     public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
+        log.info("Updating the Invoice with Id: {}", invoiceId);
+        Validator validator = validator();
         Invoice existing = getInvoice(invoiceId);
 
         if (existing == null) {
+            log.info("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
             existing = new Invoice(invoiceId);
-            existing.setCreatedAt(LocalDateTime.now()); // TODO: This is a hack. Need a fix at hibernate level to avoid any hibernate issues.
+            LocalDateTime now = now();
+            log.info("Setting the creation timestamp for the new Invoice to: {}", now.toString());
+            existing.setCreatedAt(now);
+            // TODO: This is a hack. Need a fix at hibernate
+            // level to avoid any hibernate issues.
         }
 
+        log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
+        log.info("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
+
+        List<InvoiceItem> updatedItems = itemService.mergePut(validator, existing.getItems(), update.getItems());
+        log.info("Total UpdateItems: {}", updatedItems.size());
+        
         existing.override(update, getPropertyNames(UpdateInvoice.class));
-        // TODO: this logic needs to exist in the Mapper. When DTOs are following the same pattern then this can be achived by calling the override method in the Mapper.
-        if (existing.getItems() != null) {
-            List<InvoiceItem> items = existing.getItems().stream().map(i -> {
-                InvoiceItem item = new InvoiceItem();
-                item.override(i, getPropertyNames(UpdateInvoiceItem.class));
-                return item;
-            }).collect(Collectors.toList());
-            existing.setItems(items);   
-        }
+        existing.setItems(updatedItems);
 
-        return add(purchaseOrderId, existing);
+        validator.raiseErrors();
+        return save(purchaseOrderId, existing);
     }
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
-        Validator validator = new Validator();
+        log.info("Performing Patch on Invoice with Id: {}", invoiceId);
+        Validator validator = validator();
 
         Invoice existing = getInvoice(invoiceId);
         validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
-        existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
-        
-        if (existing.getItems() != null) {
-            List<InvoiceItem> items = existing.getItems().stream().map(i -> {
-                InvoiceItem item = new InvoiceItem();
-                item.override(i, getPropertyNames(UpdateInvoiceItem.class));
-                return item;
-            }).collect(Collectors.toList());
-            existing.setItems(items);            
-        }
+        log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
+        log.info("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
 
-        return add(purchaseOrderId, existing);
+        List<InvoiceItem> updatedItems = itemService.mergePatch(validator, existing.getItems(), patch.getItems());
+        log.info("Total UpdateItems: {}", updatedItems.size());
+        
+        existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
+        existing.setItems(updatedItems);
+        
+        validator.raiseErrors();
+        return save(purchaseOrderId, existing);
     }
 
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
+        Validator validator = validator();
+        log.info("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
         Invoice invoice = new Invoice();
+        List<InvoiceItem> itemAdditions = itemService.addList(validator, addition.getItems());
+        log.info("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
-        
-        if (invoice.getItems() != null) {
-            List<InvoiceItem> items = invoice.getItems().stream().map(i -> {
-                InvoiceItem item = new InvoiceItem();
-                item.override(i, getPropertyNames(BaseInvoiceItem.class));
-                return item;
-            }).collect(Collectors.toList());
-            invoice.setItems(items);            
-        }
+        invoice.setItems(itemAdditions);
 
-        return add(purchaseOrderId, invoice);
-    }
-
-    private Invoice add(Long purchaseOrderId, Invoice invoice) {
-        Validator validator = new Validator();
-
-        PurchaseOrder po = poService.getPurchaseOrder(purchaseOrderId);
-        validator.assertion(po != null, EntityNotFoundException.class, "Purchase Order", purchaseOrderId.toString());
-
-        String statusName = invoice.getStatus() != null ? invoice.getStatus().getName() : null;
-        statusName = statusName != null ? statusName : InvoiceStatusEntity.DEFAULT_STATUS_NAME;
-        InvoiceStatus status = statusService.getInvoiceStatus(statusName);
-
-        validator.rule(status != null, String.format("Invalid Status Name: %s", statusName));
         validator.raiseErrors();
 
-        invoice.setPurchaseOrder(po);
-        invoice.setStatus(status);
-        // TODO: Do I need to replace the Empty Material objects with the material
-        // objects from the DB? or should it just reference the ID since I am not
-        // cascading the changes to the Material Entity.
-
+        return save(purchaseOrderId, invoice);
+    }
+    
+    private Invoice save(Long purchaseOrderId, Invoice invoice) {
         InvoiceEntity entity = INVOICE_MAPPER.toEntity(invoice, new CycleAvoidingMappingContext());
-        InvoiceEntity added = repo.save(entity);
-
+        InvoiceEntity added = repo.refreshAndAdd(purchaseOrderId, entity);
         return INVOICE_MAPPER.fromEntity(added, new CycleAvoidingMappingContext());
     }
 }

@@ -23,9 +23,9 @@ public class Validator {
 //        rule(test.get(), err);
 //    }
 
-    public void rule(boolean pass, String err) {
+    public void rule(boolean pass, String err, Object... args) {
         if (!pass) {
-            this.errors.add(err);
+            this.errors.add(String.format(err, args));
         }
     }
 

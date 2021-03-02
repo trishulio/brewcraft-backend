@@ -7,32 +7,23 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UpdateInvoiceItemDtoTest {
-    UpdateInvoiceItemDto item;
+public class AddInvoiceItemDtoTest {
+    AddInvoiceItemDto item;
 
     @BeforeEach
     public void init() {
-        item = new UpdateInvoiceItemDto();
+        item = new AddInvoiceItemDto();
     }
 
     @Test
     public void testAllArgs() {
-        item = new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L, 1);
+        item = new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
 
-        assertEquals(1L, item.getId());
         assertEquals("desc2", item.getDescription());
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
         assertEquals(7L, item.getMaterialId());
-        assertEquals(1, item.getVersion());
-    }
-
-    @Test
-    public void testAccessId() {
-        assertNull(item.getId());
-        item.setId(5L);
-        assertEquals(5L, item.getId());
     }
 
     @Test
@@ -68,12 +59,5 @@ public class UpdateInvoiceItemDtoTest {
         assertNull(item.getMaterialId());
         item.setMaterialId(8L);
         assertEquals(8L, item.getMaterialId());
-    }
-
-    @Test
-    public void testAccessVersion() {
-        assertNull(item.getVersion());
-        item.setVersion(1);
-        assertEquals(1, item.getVersion());
     }
 }

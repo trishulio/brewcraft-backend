@@ -127,6 +127,7 @@ public class InvoiceEntityTest {
         InvoiceItemEntity item = new InvoiceItemEntity(12345L);
         invoice.setItems(List.of(item));
         assertEquals(List.of(item), invoice.getItems());
+        assertSame(invoice, invoice.getItems().get(0).getInvoice());
     }
 
     @Test

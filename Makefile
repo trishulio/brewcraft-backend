@@ -24,7 +24,7 @@ pack:
 	docker rmi ${APP_NAME}:${VERSION}
 
 upload:
-	ssh -i ${ID_KEY} ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR} && rm -r ${HOST_APP_DIR}/*"
+	ssh -i ${ID_KEY} ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR} && rm -r ${HOST_APP_DIR}/* ; true"
 	rsync -e "ssh -i ${ID_KEY}" --progress -avz ${TARGET}/ ${USERNAME}@${HOST}:${HOST_APP_DIR}
 
 unpack:
@@ -36,6 +36,8 @@ deploy:
 	ssh -i ${ID_KEY} ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && export VERSION=${VERSION} && make unpack && make restart"
 
 run:
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml down &&\
+	docker-compose -f docker-compose.yml -f docker-compose-dev.yml rm &&\
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml build --no-cache &&\
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 

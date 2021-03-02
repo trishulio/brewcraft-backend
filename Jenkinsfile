@@ -46,7 +46,7 @@ pipeline {
 
                 stage ('Deploy') {
                     environment {
-                        SSH_CREDS = credentials('anton_jaas')
+                        SSH_CREDS = credentials('jaas_user')
                     }
 
                     stages {
@@ -54,7 +54,7 @@ pipeline {
                             steps {
                                 sh """
                                     mkdir -p ~/.ssh/
-                                    ssh-keyscan -H ${env.ANTON_IP} > ~/.ssh/known_hosts
+                                    ssh-keyscan -H ${env.APPSERVER_IP} > ~/.ssh/known_hosts
                                 """
                             }
                         }
@@ -62,7 +62,7 @@ pipeline {
                         stage ('Upload') {
                             steps {
                                 sh """
-                                    make upload ID_KEY=${SSH_CREDS} USERNAME=${SSH_CREDS_USR} HOST=${env.ANTON_IP}
+                                    make upload ID_KEY=${SSH_CREDS} USERNAME=${SSH_CREDS_USR} HOST=${env.APPSERVER_IP}
                                 """
                             }
                         }
@@ -70,7 +70,7 @@ pipeline {
                         stage ('Start') {
                             steps {
                                 sh """
-                                    make deploy ID_KEY=${SSH_CREDS} USERNAME=${SSH_CREDS_USR} HOST=${env.ANTON_IP} VERSION=${IMAGE_TAG}
+                                    make deploy ID_KEY=${SSH_CREDS} USERNAME=${SSH_CREDS_USR} HOST=${env.APPSERVER_IP} VERSION=${IMAGE_TAG}
                                 """
                             }
                         }
