@@ -14,6 +14,7 @@ This command expects that there is a `PWD` variable available in your ENV that c
 ```
 PWD=/c/Users/<username>/code/brewcraft/
 ```
+The first time this command is run, the maven container fetches all the JAR dependencies and stores them in the volume. Unless, the volumes is removed explicitly, the subsequent builds will be faster.
 
 
 
@@ -28,14 +29,18 @@ Development mode:
 
 Alternatively, you can run app using:
 
+The build and running steps can be combined with
+```
+make install run
+```
 
 Run app (production mode) in docker using:
 ```
-make start
+export VERSION=<PUT-IMAGE-VERSION-HERE>
+# Unpack will load the docker image file into the docker system.
+# Start will spin up a container from the image.
+make unpack start
 ```
-Prod-test mode loads an existing application image and creates a container from it.
-
-
 Note: When creating postgres server in pgadmin, use the name of the postgres container(postgresdb) as the host
 
 # How to setup a development server
@@ -59,9 +64,8 @@ Note: When creating postgres server in pgadmin, use the name of the postgres con
 
 2. Build a docker image and upload it to the server
     ```
-    make source
-    source ./source.sh
-    make setup_prod
+    # A single command to build, pack, upload the files to AppServer and then unpack, and start it up.
+    make setup
     ```
     Note: This step has prerequisites:
         a. The value set for `APP_DIR` in your .env should refer to an "existing" directory, on the remote server, to which the remote user (used in `USERNAME`) should have read-write permissions to.
@@ -77,15 +81,5 @@ Note: When creating postgres server in pgadmin, use the name of the postgres con
 
 3. Start the containers in the server
     ```
-    # The username and hostname values should be configured in your env from previous step.
-    ssh $USERNAME@$HOST
+    make deploy
     ```
-
-4. Inside the SSH'd session
-    ``` 
-    cd <project_root>
-    make source
-    source ./source.sh
-    # nohup and & is needed if you want to close SSH session without stopping the containers
-    nohup make start &
-    ``` 

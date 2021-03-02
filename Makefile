@@ -1,11 +1,8 @@
-.PHONY: source install dist run export upload start setup_prod
+.PHONY: install containerize pack upload unpack deploy run start stop remove restart
 
 HOST_APP_DIR := /var/server/brewcraft
 APP_NAME := brewcraft
 TARGET := ./dist
-
-source:
-	sed -E 's/^(\w)/export \1/' .env | sed 's/\r//' > source.sh
 
 install:
 	docker-compose -f docker-compose-install.yml run --rm install
