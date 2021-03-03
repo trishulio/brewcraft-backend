@@ -37,19 +37,22 @@ public abstract class QuantityUnitMapper {
     }
 
     public Unit<?> fromSymbol(String symbol) {
-        Unit<?> unit = this.map.get(symbol);
-
-        if (unit == null) {
-            String msg = String.format("No mapping unit found for symbol: %s", symbol);
-            logger.error(msg);
-            throw new IllegalArgumentException(msg);
+        Unit<?> unit = null;
+        if (symbol != null) {
+            unit = this.map.get(symbol);
         }
+
+        logger.info("Mapping for symbol: {} is: {}", symbol, unit);
 
         return unit;
     }
 
     public Unit<?> fromEntity(UnitEntity entity) {
-        return fromSymbol(entity.getSymbol());
+        Unit<?> unit = null;
+        if (entity != null) {
+            unit = fromSymbol(entity.getSymbol());
+        }
+        return unit;
     }
 
     public abstract String toSymbol(Unit<?> unit);
@@ -57,16 +60,21 @@ public abstract class QuantityUnitMapper {
     public abstract UnitEntity toEntity(Unit<?> unit);
     
     Unit<?> fromDto(UnitDto dto) {
-        return fromSymbol(dto.getSymbol());        
+        Unit<?> unit = null;
+        if (dto != null) {
+            unit = fromSymbol(dto.getSymbol());
+        }
+
+        return unit;
     }
     
     public abstract UnitDto toDto(Unit<?> unit);
 
     private Map<String, Unit<?>> getAllUnits() {
         try {
-            
+
             Field[] fields = Units.class.getFields();
-            
+
             Predicate<Integer> isPublicStaticFinal = mod -> Modifier.isPublic(mod) && Modifier.isStatic(mod) && Modifier.isFinal(mod);
 
             Function<Field, Object> getValue = field -> {

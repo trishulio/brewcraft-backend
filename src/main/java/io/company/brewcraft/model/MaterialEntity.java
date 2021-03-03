@@ -55,13 +55,16 @@ public class MaterialEntity extends BaseEntity {
     private Integer version;
 
     public MaterialEntity() {
+    }
 
+    public MaterialEntity(Long id) {
+        this();
+        this.id = id;
     }
 
     public MaterialEntity(Long id, String name, String description, MaterialCategoryEntity category, String upc, 
             UnitEntity baseQuantityUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.description = description;
         this.category = category;

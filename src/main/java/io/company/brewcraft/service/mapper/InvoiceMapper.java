@@ -26,14 +26,18 @@ public interface InvoiceMapper {
 
     @Mappings({
         @Mapping(target = "id", ignore = true),
-        @Mapping(target = "purchaseOrder", ignore = true)
+        @Mapping(target = "purchaseOrder", ignore = true),
+        @Mapping(target = "lastUpdated", ignore = true),
+        @Mapping(target = "createdAt", ignore = true),
     })
     Invoice fromDto(UpdateInvoiceDto dto);
 
     @Mappings({
         @Mapping(target = "id", ignore = true),
         @Mapping(target = "version", ignore = true),
-        @Mapping(target = "purchaseOrder", ignore = true)
+        @Mapping(target = "purchaseOrder", ignore = true),
+        @Mapping(target = "lastUpdated", ignore = true),
+        @Mapping(target = "createdAt", ignore = true)
     })
     Invoice fromDto(AddInvoiceDto dto);
 

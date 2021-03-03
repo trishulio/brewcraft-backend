@@ -47,7 +47,7 @@ public class RepositoryUtilTest {
 
     @Test
     public void testPageRequest_ReturnsPageRequestWithAllColumns_WhenOrderByIsNotNull() {
-        PageRequest expected = PageRequest.of(1, 10, Sort.by(Direction.DESC, new String[] { "col_2", "col_1" }));
+        PageRequest expected = PageRequest.of(1, 10, Sort.by(Direction.DESC, new String[] { "col_1", "col_2" }));
         PageRequest req = RepositoryUtil.pageRequest(Set.of("col_1", "col_2"), false, 1, 10);
 
         assertEquals(expected, req);

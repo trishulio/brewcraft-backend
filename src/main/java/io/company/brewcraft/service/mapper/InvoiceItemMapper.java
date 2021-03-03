@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import io.company.brewcraft.dto.AddInvoiceItemDto;
 import io.company.brewcraft.dto.InvoiceItemDto;
 import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItemEntity;
@@ -19,10 +20,22 @@ public interface InvoiceItemMapper {
     InvoiceItemDto toDto(InvoiceItem item);
 
     InvoiceItem fromDto(InvoiceItemDto dto);
-    
+
+    @Mappings({
+        @Mapping(source = "materialId", target = "material")
+    })
     InvoiceItem fromDto(UpdateInvoiceItemDto dto);
 
-    @Mappings({ @Mapping(target = "invoice", ignore = true) })
+    @Mappings({
+        @Mapping(source = "materialId", target = "material"),
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "version", ignore = true)
+    })
+    InvoiceItem fromDto(AddInvoiceItemDto dto);
+
+    @Mappings({
+        @Mapping(target = "invoice", ignore = true)
+    })
     InvoiceItemEntity toEntity(InvoiceItem item, @Context CycleAvoidingMappingContext context);
 
     @InheritInverseConfiguration
