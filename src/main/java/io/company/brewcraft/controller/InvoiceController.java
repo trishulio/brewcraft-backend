@@ -31,7 +31,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/purchases")
+@RequestMapping(path = "/api/v1/purchases")
 public class InvoiceController extends BaseController {
     private static InvoiceMapper mapper = InvoiceMapper.INSTANCE;
 
