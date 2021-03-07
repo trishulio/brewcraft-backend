@@ -1,11 +1,10 @@
 package io.company.brewcraft.dto;
 
-import javax.measure.Unit;
-
 import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.pojo.ProductMeasures;
 
-public interface BaseMaterial {
-
+public interface BaseProduct {
+    
     public String getName();
 
     public void setName(String name);
@@ -18,12 +17,8 @@ public interface BaseMaterial {
 
     public void setCategory(Category category);
 
-    public String getUPC();
+    public ProductMeasures getTargetMeasures();
 
-    public void setUPC(String upc);
-
-    public Unit<?> getBaseQuantityUnit();
-
-    public void setBaseQuantityUnit(Unit<?> baseQuantityUnit);
-
+    public void setTargetMeasures(ProductMeasures targetMeasures);
+    
 }

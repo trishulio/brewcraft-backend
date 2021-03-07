@@ -31,14 +31,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.MaterialCategoryEntity;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.service.MaterialCategoryService;
+import io.company.brewcraft.service.CategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class MaterialCategoryServiceImplTest {
 
-    private MaterialCategoryService materialCategoryService;
+    private CategoryService materialCategoryService;
 
     private MaterialCategoryRepository materialCategoryRepository;
     
@@ -61,7 +61,7 @@ public class MaterialCategoryServiceImplTest {
 
         when(materialCategoryRepository.findAll(ArgumentMatchers.<Specification<MaterialCategoryEntity>>any(), pageableArgument.capture())).thenReturn(expectedMaterialCategoryEntities);
 
-        Page<MaterialCategory> actualMaterialCategorys = materialCategoryService.getCategories(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<Category> actualMaterialCategorys = materialCategoryService.getCategories(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -69,7 +69,7 @@ public class MaterialCategoryServiceImplTest {
         assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertEquals(1, actualMaterialCategorys.getNumberOfElements());
         
-        MaterialCategory actualCategory = actualMaterialCategorys.get().findFirst().get();
+        Category actualCategory = actualMaterialCategorys.get().findFirst().get();
 
         assertEquals(materialCategoryEntity.getId(), actualCategory.getId());
         assertEquals(materialCategoryEntity.getName(), actualCategory.getName());
@@ -89,7 +89,7 @@ public class MaterialCategoryServiceImplTest {
 
         when(materialCategoryRepository.findById(id)).thenReturn(expectedMaterialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.getCategory(id);
+        Category returnedCategory = materialCategoryService.getCategory(id);
 
         assertEquals(expectedMaterialCategoryEntity.get().getId(), returnedCategory.getId());
         assertEquals(expectedMaterialCategoryEntity.get().getName(), returnedCategory.getName());
@@ -103,7 +103,7 @@ public class MaterialCategoryServiceImplTest {
 
     @Test
     public void testAddMaterialCategory_SavesMaterialCategoryWhenNoParentCategoryIsPassed() throws Exception {
-        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -111,7 +111,7 @@ public class MaterialCategoryServiceImplTest {
         
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.addCategory(null, newCategory);
+        Category returnedCategory = materialCategoryService.addCategory(null, newCategory);
         
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
@@ -140,7 +140,7 @@ public class MaterialCategoryServiceImplTest {
 
         MaterialCategoryEntity materialCategoryParent = new MaterialCategoryEntity();
 
-        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -150,7 +150,7 @@ public class MaterialCategoryServiceImplTest {
         
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        MaterialCategory actualMaterialCategory = materialCategoryService.addCategory(parentCategoryId, newCategory);
+        Category actualMaterialCategory = materialCategoryService.addCategory(parentCategoryId, newCategory);
         
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
@@ -177,7 +177,7 @@ public class MaterialCategoryServiceImplTest {
     public void testAddMaterialCategory_throwsWhenParentCategoryDoesNotExist() throws Exception {
         Long parentCategoryId = 2L;
         
-        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
@@ -191,14 +191,14 @@ public class MaterialCategoryServiceImplTest {
     public void testPutMaterialCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
 
-        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category putCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
 
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.putCategory(null, id, putCategory);
+        Category returnedCategory = materialCategoryService.putCategory(null, id, putCategory);
        
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
@@ -226,7 +226,7 @@ public class MaterialCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(1L, null, null, null, null, null, null), Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category putCategory = new Category(null, "testName", new Category(1L, null, null, null, null, null, null), Set.of(new Category(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialCategoryEntity materialCategoryParent = new MaterialCategoryEntity();
         MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(1L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -238,7 +238,7 @@ public class MaterialCategoryServiceImplTest {
 
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.putCategory(parentCategoryId, id, putCategory);
+        Category returnedCategory = materialCategoryService.putCategory(parentCategoryId, id, putCategory);
        
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
@@ -266,7 +266,7 @@ public class MaterialCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category putCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
@@ -279,7 +279,7 @@ public class MaterialCategoryServiceImplTest {
     @Test
     public void testPatchMaterialCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
-        MaterialCategory patchedCategory = new MaterialCategory(1L, "updatedName", null, null, null, null, null);
+        Category patchedCategory = new Category(1L, "updatedName", null, null, null, null, null);
         MaterialCategoryEntity existingMaterialCategoryEntity = new MaterialCategoryEntity(1L, "testName", null, Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialCategoryEntity persistedMaterialCategoryEntity = new MaterialCategoryEntity(1L, "updatedName", null, Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -289,7 +289,7 @@ public class MaterialCategoryServiceImplTest {
  
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(persistedMaterialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.patchCategory(null, id, patchedCategory);
+        Category returnedCategory = materialCategoryService.patchCategory(null, id, patchedCategory);
        
         //Assert persisted entity
         assertEquals(existingMaterialCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
@@ -316,7 +316,7 @@ public class MaterialCategoryServiceImplTest {
     public void testPatchMaterialCategory_setsParentCategoryIfExists() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
-        MaterialCategory patchedCategory = new MaterialCategory(1L, "updatedName", null, null, null, null, null);
+        Category patchedCategory = new Category(1L, "updatedName", null, null, null, null, null);
         MaterialCategoryEntity parentCategoryEntity = new MaterialCategoryEntity();
         MaterialCategoryEntity existingCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "updatedName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -329,7 +329,7 @@ public class MaterialCategoryServiceImplTest {
  
         when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        MaterialCategory returnedCategory = materialCategoryService.patchCategory(parentCategoryId, id, patchedCategory);
+        Category returnedCategory = materialCategoryService.patchCategory(parentCategoryId, id, patchedCategory);
        
         //Assert persisted entity
         assertEquals(existingCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
@@ -356,7 +356,7 @@ public class MaterialCategoryServiceImplTest {
     public void testPatchMaterialCategory_throwsIfParentCategoryDoesNotExist() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
-        MaterialCategory material = new MaterialCategory();
+        Category material = new Category();
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
       
@@ -369,7 +369,7 @@ public class MaterialCategoryServiceImplTest {
     @Test
     public void testPatchMaterialCategory_throwsIfCategoryDoesNotExist() throws Exception {
         Long id = 1L;
-        MaterialCategory material = new MaterialCategory();
+        Category material = new Category();
         
         when(materialCategoryRepository.existsById(id)).thenReturn(false);
       

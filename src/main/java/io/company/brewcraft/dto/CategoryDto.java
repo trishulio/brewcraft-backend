@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-public class MaterialCategoryDto extends BaseDto {
+public class CategoryDto extends BaseDto {
     
     private Long id;
     
@@ -13,11 +13,11 @@ public class MaterialCategoryDto extends BaseDto {
         
     private Integer version;
 
-    public MaterialCategoryDto() {
+    public CategoryDto() {
         super();
     }
     
-    public MaterialCategoryDto(Long id, Long parentCategoryId, String name, Integer version) {
+    public CategoryDto(Long id, Long parentCategoryId, String name, Integer version) {
         super();
         this.id = id;
         this.parentCategoryId = parentCategoryId;

@@ -1,8 +1,10 @@
 package io.company.brewcraft.configuration;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
@@ -12,6 +14,8 @@ import io.company.brewcraft.service.impl.EquipmentServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
 import io.company.brewcraft.service.impl.MaterialServiceImpl;
+import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
+import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
@@ -95,16 +99,16 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @DependsOn({"materialCategoryService"})
     @ConditionalOnMissingBean(MaterialService.class)
-    public MaterialService materialService(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
+    public MaterialService materialService(MaterialRepository materialRepository, @Qualifier("materialCategoryService") CategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
         MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
         return materialService;
     }
 
-    @Bean
-    @ConditionalOnMissingBean(MaterialCategoryService.class)
-    public MaterialCategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
-        MaterialCategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
+    @Bean(name="materialCategoryService")
+    public CategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
+        CategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
         return materialCategoryService;
     }
 
@@ -115,4 +119,18 @@ public class ServiceAutoConfiguration {
         return quantityUnitService;
     }
 
+    @Bean
+    @DependsOn({"productCategoryService"})
+    @ConditionalOnMissingBean(ProductService.class)
+    public ProductService productService(ProductRepository productRepository, @Qualifier("productCategoryService") CategoryService productCategoryService) {
+        ProductService productService = new ProductServiceImpl(productRepository, productCategoryService);
+        return productService;
+    }
+    
+    @Bean(name="productCategoryService")
+    public CategoryService productCategoryService(ProductCategoryRepository productCategoryRepository) {
+        CategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
+        return productCategoryService;
+    }
+    
 }

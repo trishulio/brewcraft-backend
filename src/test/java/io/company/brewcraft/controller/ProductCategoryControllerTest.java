@@ -17,21 +17,21 @@ import io.company.brewcraft.service.CategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @SuppressWarnings("unchecked")
-public class MaterialCategoryControllerTest {
+public class ProductCategoryControllerTest {
 
-   private MaterialCategoryController materialCategoryController;
+   private ProductCategoryController productCategoryController;
 
-   private CategoryService materialCategoryService;
+   private CategoryService productCategoryService;
 
    @BeforeEach
    public void init() {
-       materialCategoryService = mock(CategoryService.class);
+       productCategoryService = mock(CategoryService.class);
 
-       materialCategoryController = new MaterialCategoryController(materialCategoryService);
+       productCategoryController = new ProductCategoryController(productCategoryService);
    }
 
    @Test
-   public void testGetMaterialCategories() {
+   public void testGetProductCategories() {
        Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
    
        List<Category> categoryList = List.of(category);
@@ -39,22 +39,22 @@ public class MaterialCategoryControllerTest {
        doReturn(categoryList.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
-       doReturn(mPage).when(materialCategoryService).getCategories(
+       doReturn(mPage).when(productCategoryService).getCategories(
            Set.of(1L),
-           Set.of("Hop"),
+           Set.of("Lager"),
            Set.of(2L),
-           Set.of("Ingredient"),
+           Set.of("Beer"),
            1,
            10,
            Set.of("id"),
            true
        );
 
-       PageDto<CategoryDto> dto = materialCategoryController.getCategories(
+       PageDto<CategoryDto> dto = productCategoryController.getCategories(
                Set.of(1L),
-               Set.of("Hop"),
+               Set.of("Lager"),
                Set.of(2L),
-               Set.of("Ingredient"),
+               Set.of("Beer"),
                1,
                10,
                Set.of("id"),
@@ -64,45 +64,45 @@ public class MaterialCategoryControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       CategoryDto materialDto = dto.getContent().get(0);
+       CategoryDto productDto = dto.getContent().get(0);
 
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), productDto.getId());
+       assertEquals(category.getName(), productDto.getName());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getVersion(), productDto.getVersion());
    }
    
    @Test
-   public void testGetMaterialCategory() {
+   public void testGetProductCategory() {
        Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
 
-       doReturn(category).when(materialCategoryService).getCategory(1L);
+       doReturn(category).when(productCategoryService).getCategory(1L);
        
-       CategoryDto materialDto = materialCategoryController.getCategory(1L);
+       CategoryDto productDto = productCategoryController.getCategory(1L);
        
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), productDto.getId());
+       assertEquals(category.getName(), productDto.getName());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getVersion(), productDto.getVersion());
    }
    
    @Test
-   public void testGetMaterialCategory_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
-       when(materialCategoryService.getCategory(1L)).thenReturn(null);
-       assertThrows(EntityNotFoundException.class, () -> materialCategoryController.getCategory(1L), "Material category not found with id: 1");
+   public void testGetProductCategory_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
+       when(productCategoryService.getCategory(1L)).thenReturn(null);
+       assertThrows(EntityNotFoundException.class, () -> productCategoryController.getCategory(1L), "Product category not found with id: 1");
    }
 
    @Test
-   public void testAddMaterialCategory() {
+   public void testAddProductCategory() {
        AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
        Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
        
        ArgumentCaptor<Category> addedCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
-       doReturn(category).when(materialCategoryService).addCategory(eq(addCategoryDto.getParentCategoryId()), addedCategoryCaptor.capture());
+       doReturn(category).when(productCategoryService).addCategory(eq(addCategoryDto.getParentCategoryId()), addedCategoryCaptor.capture());
 
-       CategoryDto materialDto = materialCategoryController.addCategory(addCategoryDto);
+       CategoryDto productDto = productCategoryController.addCategory(addCategoryDto);
        
        //Assert added category
        assertEquals(null, addedCategoryCaptor.getValue().getId());
@@ -110,23 +110,23 @@ public class MaterialCategoryControllerTest {
        assertEquals(addCategoryDto.getParentCategoryId(), 2L);
        
        //Assert returned category  
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), productDto.getId());
+       assertEquals(category.getName(), productDto.getName());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getVersion(), productDto.getVersion());
    }
    
    @Test
-   public void testPutMaterialCategory() {
+   public void testPutProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
        Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
 
        ArgumentCaptor<Category> putCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
-       doReturn(category).when(materialCategoryService).putCategory(eq(2L), eq(1L), putCategoryCaptor.capture());
+       doReturn(category).when(productCategoryService).putCategory(eq(2L), eq(1L), putCategoryCaptor.capture());
 
-       CategoryDto materialDto = materialCategoryController.putCategory(updateCategoryDto, 1L);
+       CategoryDto productDto = productCategoryController.putCategory(updateCategoryDto, 1L);
        
        //Assert put category
        assertEquals(null, putCategoryCaptor.getValue().getId());
@@ -135,23 +135,23 @@ public class MaterialCategoryControllerTest {
        assertEquals(updateCategoryDto.getVersion(), putCategoryCaptor.getValue().getVersion());
 
        //Assert returned category  
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), productDto.getId());
+       assertEquals(category.getName(), productDto.getName());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getVersion(), productDto.getVersion());
    }
    
    @Test
-   public void testPatchMaterialCategory() {
+   public void testPatchProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
        Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
 
        ArgumentCaptor<Category> patchCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
-       doReturn(category).when(materialCategoryService).patchCategory(eq(2L), eq(1L), patchCategoryCaptor.capture());
+       doReturn(category).when(productCategoryService).patchCategory(eq(2L), eq(1L), patchCategoryCaptor.capture());
 
-       CategoryDto materialDto = materialCategoryController.patchCategory(updateCategoryDto, 1L);
+       CategoryDto productDto = productCategoryController.patchCategory(updateCategoryDto, 1L);
        
        //Assert patched category
        assertEquals(null, patchCategoryCaptor.getValue().getId());
@@ -160,17 +160,17 @@ public class MaterialCategoryControllerTest {
        assertEquals(updateCategoryDto.getVersion(), patchCategoryCaptor.getValue().getVersion());
 
        //Assert returned category  
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), productDto.getId());
+       assertEquals(category.getName(), productDto.getName());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getVersion(), productDto.getVersion());
    }
    
    @Test
-   public void testDeleteMaterialCategory() {
-       materialCategoryController.deleteCategory(1L);
+   public void testDeleteProductCategory() {
+       productCategoryController.deleteCategory(1L);
 
-       verify(materialCategoryService, times(1)).deleteCategory(1L);
+       verify(productCategoryService, times(1)).deleteCategory(1L);
    }
 
 }

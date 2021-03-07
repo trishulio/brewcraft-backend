@@ -9,25 +9,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.CategoryDto;
-import io.company.brewcraft.model.MaterialCategoryEntity;
+import io.company.brewcraft.model.ProductCategoryEntity;
 import io.company.brewcraft.pojo.Category;
 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 
-public class MaterialCategoryMapperTest {
+public class ProductCategoryMapperTest {
 
-    private MaterialCategoryMapper materialCategoryMapper;
+    private ProductCategoryMapper productCategoryMapper;
 
     @BeforeEach
     public void init() {
-        materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
+        productCategoryMapper = ProductCategoryMapper.INSTANCE;
     }
 
     @Test
     public void testFromEntity_ReturnsPojo_WhenEntityIsNotNull() {
-        MaterialCategoryEntity entity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(2L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Category category = materialCategoryMapper.fromEntity(entity, new CycleAvoidingMappingContext());
+        ProductCategoryEntity entity = new ProductCategoryEntity(1L, "testName", new ProductCategoryEntity(2L, null, null, null, null, null, null), Set.of(new ProductCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Category category = productCategoryMapper.fromEntity(entity, new CycleAvoidingMappingContext());
 
         Category expected = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         expected.getParentCategory().addSubcategory(expected);
@@ -39,7 +39,7 @@ public class MaterialCategoryMapperTest {
     @Test
     public void testFromDto_ReturnPojo_WhenDtoIsNotNull() {
         CategoryDto dto = new CategoryDto(1L, 2L, "testName", 1);
-        Category category = materialCategoryMapper.fromDto(dto);
+        Category category = productCategoryMapper.fromDto(dto);
         
         Category expected = new Category(1L, "testName", null, null, null, null, 1);
         
@@ -49,7 +49,7 @@ public class MaterialCategoryMapperTest {
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
         Category category = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        CategoryDto dto = materialCategoryMapper.toDto(category);
+        CategoryDto dto = productCategoryMapper.toDto(category);
 
         assertEquals(new CategoryDto(1L, 2L, "testName", 1), dto);
     }
@@ -57,9 +57,9 @@ public class MaterialCategoryMapperTest {
     @Test
     public void testToEntity_ReturnsEntity_WhenPojoIsNotNull() {
         Category material = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategoryEntity entity = materialCategoryMapper.toEntity(material, new CycleAvoidingMappingContext());
+        ProductCategoryEntity entity = productCategoryMapper.toEntity(material, new CycleAvoidingMappingContext());
 
-        MaterialCategoryEntity expected = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(2L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategoryEntity expected = new ProductCategoryEntity(1L, "testName", new ProductCategoryEntity(2L, null, null, null, null, null, null), Set.of(new ProductCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         expected.getParentCategory().addSubcategory(expected);
         expected.getSubcategories().stream().findFirst().get().setParentCategory(expected);
         

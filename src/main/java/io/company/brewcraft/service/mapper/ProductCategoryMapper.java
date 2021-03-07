@@ -11,27 +11,27 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
-import io.company.brewcraft.model.MaterialCategoryEntity;
+import io.company.brewcraft.model.ProductCategoryEntity;
 import io.company.brewcraft.pojo.Category;
 
 @Mapper()
-public interface MaterialCategoryMapper {
+public interface ProductCategoryMapper {
 
-    MaterialCategoryMapper INSTANCE = Mappers.getMapper(MaterialCategoryMapper.class);
+    ProductCategoryMapper INSTANCE = Mappers.getMapper(ProductCategoryMapper.class);
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
-    CategoryDto toDto(Category materialCategory);
+    CategoryDto toDto(Category productCategory);
 
     @InheritInverseConfiguration
-    Category fromEntity(MaterialCategoryEntity materialCategoryEntity, @Context CycleAvoidingMappingContext context);
+    Category fromEntity(ProductCategoryEntity productCategoryEntity, @Context CycleAvoidingMappingContext context);
 
-    Category fromDto(CategoryDto materialCategoryDto);
+    Category fromDto(CategoryDto productCategoryDto);
 
-    Category fromDto(AddCategoryDto materialCategoryDto);
+    Category fromDto(AddCategoryDto productCategoryDto);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    Category fromDto(UpdateCategoryDto materialCategoryDto);
+    Category fromDto(UpdateCategoryDto productCategoryDto);
 
-    MaterialCategoryEntity toEntity(Category materialCategory, @Context CycleAvoidingMappingContext context);
+    ProductCategoryEntity toEntity(Category productCategory, @Context CycleAvoidingMappingContext context);
 
 }
