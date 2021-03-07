@@ -30,7 +30,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierMapper;
 
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class SupplierController {
     
     private SupplierService supplierService;

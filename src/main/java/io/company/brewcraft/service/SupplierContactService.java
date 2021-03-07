@@ -15,7 +15,7 @@ public interface SupplierContactService {
     
     public SupplierContact putContact(Long supplierId, Long contactId, UpdateSupplierContact supplierContact);
     
-    public SupplierContact patchContact(Long contactId, UpdateSupplierContact updatedContact);
+    public SupplierContact patchContact(Long contactId, Long supplierId, UpdateSupplierContact updatedContact);
     
     public void deleteContact(Long contactId);
 

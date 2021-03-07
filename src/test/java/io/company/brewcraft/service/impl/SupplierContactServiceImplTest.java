@@ -234,7 +234,7 @@ public class SupplierContactServiceImplTest {
         
         when(supplierContactRepositoryMock.save(persistedContactCaptor.capture())).thenReturn(persistedContactEntity);
 
-        SupplierContact returnedContact = supplierContactService.patchContact(id, patchedContact);
+        SupplierContact returnedContact = supplierContactService.patchContact(id, supplierId, patchedContact);
        
         //Assert persisted entity
         assertEquals(existingContactEntity.getId(), persistedContactCaptor.getValue().getId());
@@ -265,12 +265,13 @@ public class SupplierContactServiceImplTest {
     @Test
     public void testPatchContact_throwsIfSupplierDoesNotExist() throws Exception {
         Long id = 1L;
+        Long supplierId = 2L;
         SupplierContact contact = new SupplierContact();
         
         when(supplierContactRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
       
         assertThrows(EntityNotFoundException.class, () -> {
-            supplierContactService.patchContact(id, contact);
+            supplierContactService.patchContact(id, supplierId, contact);
             verify(supplierContactRepositoryMock, times(0)).save(Mockito.any(SupplierContactEntity.class));
         });
     }

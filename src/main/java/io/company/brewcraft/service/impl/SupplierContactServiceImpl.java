@@ -84,12 +84,14 @@ public class SupplierContactServiceImpl extends BaseService implements SupplierC
     }
     
     @Override
-    public SupplierContact patchContact(Long contactId, UpdateSupplierContact updatedContact) {
+    public SupplierContact patchContact(Long contactId, Long supplierId, UpdateSupplierContact updatedContact) {        
         SupplierContact existing = Optional.ofNullable(getContact(contactId)).orElseThrow(() -> new EntityNotFoundException("SupplierContact", contactId.toString()));
 
         existing.outerJoin(updatedContact, getPropertyNames(UpdateSupplierContact.class));
         
-        return addContact(existing.getSupplier().getId(), existing);
+        Long patchSupplierId = supplierId != null ? supplierId : existing.getSupplier().getId();
+        
+        return addContact(patchSupplierId, existing);
     }
 
     @Override
