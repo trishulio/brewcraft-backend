@@ -12,6 +12,7 @@ import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.SupplierWithoutContactsDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
+import io.company.brewcraft.dto.UpdateSupplierContactWithSupplierDto;
 import io.company.brewcraft.model.SupplierEntity;
 import io.company.brewcraft.pojo.SupplierContact;
 import io.company.brewcraft.model.SupplierContactEntity;
@@ -40,5 +41,7 @@ public interface SupplierContactMapper {
     
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     SupplierContact fromDto(UpdateSupplierContactDto contactDto);
-        
+    
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    SupplierContact fromDto(UpdateSupplierContactWithSupplierDto contactDto);        
 }

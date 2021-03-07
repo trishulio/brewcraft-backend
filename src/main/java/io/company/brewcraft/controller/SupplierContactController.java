@@ -24,13 +24,14 @@ import io.company.brewcraft.dto.GetSupplierContactsDto;
 import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
+import io.company.brewcraft.dto.UpdateSupplierContactWithSupplierDto;
 import io.company.brewcraft.pojo.SupplierContact;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierContactMapper;
 
 @RestController
-@RequestMapping(path = "/api/suppliers")
+@RequestMapping(path = "/api/v1/suppliers")
 public class SupplierContactController {
     
     private SupplierContactService supplierContactService;
@@ -51,7 +52,7 @@ public class SupplierContactController {
     }
     
     @GetMapping("/contacts/{contactId}")
-    public SupplierContactDto getContact(@PathVariable Long contactId) {
+    public SupplierContactWithSupplierDto getContact(@PathVariable Long contactId) {
         SupplierContact supplierContact = supplierContactService.getContact(contactId);
         
         if (supplierContact == null) {
@@ -60,7 +61,7 @@ public class SupplierContactController {
             
         }
         
-        return supplierContactMapper.toDto(supplierContact);
+        return supplierContactMapper.toDtoWithSupplier(supplierContact);
     }
 
     @PostMapping("{supplierId}/contacts")
@@ -83,12 +84,12 @@ public class SupplierContactController {
     }
     
     @PatchMapping("/contacts/{contactId}")
-    public SupplierContactDto patchContact(@PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
+    public SupplierContactWithSupplierDto patchContact(@PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactWithSupplierDto supplierContactDto) {
         SupplierContact supplierContact  = supplierContactMapper.fromDto(supplierContactDto);
         
-        SupplierContact patchedContact = supplierContactService.patchContact(contactId, supplierContact);
+        SupplierContact patchedContact = supplierContactService.patchContact(contactId, supplierContactDto.getSupplierId(), supplierContact);
         
-        return supplierContactMapper.toDto(patchedContact);
+        return supplierContactMapper.toDtoWithSupplier(patchedContact);
     }
 
     @DeleteMapping("/contacts/{contactId}")
