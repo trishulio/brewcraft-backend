@@ -27,6 +27,8 @@ public interface ProductService {
 
     public void deleteProduct(Long productId);
     
+    public void softDeleteProduct(Long productId);
+    
     public boolean productExists(Long productId);
     
  }

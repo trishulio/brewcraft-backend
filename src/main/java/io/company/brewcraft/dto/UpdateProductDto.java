@@ -9,7 +9,7 @@ public class UpdateProductDto extends BaseDto {
     private Long categoryId;
         
     private ProductMeasuresDto targetMeasures;
-    
+        
     private Integer version;
     
     public UpdateProductDto() {

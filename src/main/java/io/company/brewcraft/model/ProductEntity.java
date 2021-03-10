@@ -22,6 +22,7 @@ public class ProductEntity extends BaseEntity {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_CATEGORY = "category";
+    public static final String FIELD_DELETED_AT = "deletedAt";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
@@ -48,6 +49,9 @@ public class ProductEntity extends BaseEntity {
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
     
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+    
     @Version
     private Integer version;
 
@@ -57,7 +61,7 @@ public class ProductEntity extends BaseEntity {
 
     public ProductEntity(Long id, String name, String description, ProductCategoryEntity category,
             ProductMeasuresEntity targetMeasures, LocalDateTime createdAt, LocalDateTime lastUpdated,
-            Integer version) {
+            LocalDateTime deletedAt, Integer version) {
         super();
         this.id = id;
         this.name = name;
@@ -66,6 +70,7 @@ public class ProductEntity extends BaseEntity {
         this.targetMeasures = targetMeasures;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
+        this.deletedAt = deletedAt;
         this.version = version;
     }
 
@@ -108,7 +113,7 @@ public class ProductEntity extends BaseEntity {
     public void setTargetMeasures(ProductMeasuresEntity targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
-
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -123,6 +128,14 @@ public class ProductEntity extends BaseEntity {
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public Integer getVersion() {

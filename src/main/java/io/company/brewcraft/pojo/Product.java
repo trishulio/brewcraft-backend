@@ -18,10 +18,12 @@ public class Product extends BaseModel implements UpdateProduct, Identified, Aud
     private Category category;
     
     private ProductMeasures targetMeasures;
-    
+        
     private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
+    
+    private LocalDateTime deletedAt;
         
     private Integer version;
     
@@ -30,7 +32,7 @@ public class Product extends BaseModel implements UpdateProduct, Identified, Aud
     }
 
     public Product(Long id, String name, String description, Category category, ProductMeasures targetMeasures,
-            LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+            LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         super();
         this.id = id;
         this.name = name;
@@ -39,6 +41,7 @@ public class Product extends BaseModel implements UpdateProduct, Identified, Aud
         this.targetMeasures = targetMeasures;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
+        this.deletedAt = deletedAt;
         this.version = version;
     }
 
@@ -96,6 +99,14 @@ public class Product extends BaseModel implements UpdateProduct, Identified, Aud
 
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public Integer getVersion() {

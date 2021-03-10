@@ -64,9 +64,9 @@ public class ProductController {
     @GetMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
     public ProductDto getProduct(@PathVariable Long productId) {
         Validator validator = new Validator();
-
-        Product product = productService.getProduct(productId);
         
+        Product product = productService.getProduct(productId);
+                
         validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
 
         return productMapper.toDto(product);
@@ -101,7 +101,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
-    public void deleteProduct(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
+    public void softDeleteProduct(@PathVariable Long productId) {
+        productService.softDeleteProduct(productId);
     }
 }

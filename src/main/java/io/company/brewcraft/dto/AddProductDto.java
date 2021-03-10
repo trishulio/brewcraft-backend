@@ -12,7 +12,7 @@ public class AddProductDto extends BaseDto {
     
     @NotNull
     private Long categoryId;
-        
+            
     private ProductMeasuresDto targetMeasures;
     
     public AddProductDto() {
@@ -59,4 +59,5 @@ public class AddProductDto extends BaseDto {
     public void setTargetMeasures(ProductMeasuresDto targetMeasures) {
         this.targetMeasures = targetMeasures;
     }        
+    
 }

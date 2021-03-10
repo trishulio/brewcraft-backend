@@ -27,6 +27,20 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     protected BasicSpecBuilder(SpecAccumulator accumulator) {
         this.accumulator = accumulator;
     }
+    
+    @Override
+    public BasicSpecBuilder isNull(String[] paths) {
+        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(get(root, paths));
+        accumulator.add(func);
+
+        accumulator.setIsNot(false);
+        return this;
+    }
+
+    @Override
+    public SpecificationBuilder isNull(String path) {
+        return isNull(new String[] { path });
+    }
 
     @Override
     public BasicSpecBuilder in(String[] paths, Collection<?> collection) {

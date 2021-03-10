@@ -15,7 +15,7 @@ public class ProductDto extends BaseDto {
     private CategoryDto style;
 
     private ProductMeasuresDto targetMeasures;
-    
+        
     private Integer version;
     
     public ProductDto() {
@@ -90,7 +90,7 @@ public class ProductDto extends BaseDto {
     public void setTargetMeasures(ProductMeasuresDto targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
-
+    
     public Integer getVersion() {
         return version;
     }

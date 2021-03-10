@@ -44,7 +44,7 @@ public class ProductControllerTest {
        Category style = new Category(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
    
        List<Product> productList = List.of(product);
        Page<Product> mPage = mock(Page.class);
@@ -110,7 +110,7 @@ public class ProductControllerTest {
        Category style = new Category(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        doReturn(product).when(productService).getProduct(1L);
        
@@ -159,7 +159,7 @@ public class ProductControllerTest {
        Category style = new Category(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        ArgumentCaptor<Product> addProductCaptor = ArgumentCaptor.forClass(Product.class);
        
@@ -182,7 +182,7 @@ public class ProductControllerTest {
        assertEquals(addProductDto.getTargetMeasures().getBrewhouseDuration(), addProductCaptor.getValue().getTargetMeasures().getBrewhouseDuration());
        assertEquals(addProductDto.getTargetMeasures().getFermentationDays(), addProductCaptor.getValue().getTargetMeasures().getFermentationDays());
        assertEquals(addProductDto.getTargetMeasures().getConditioningDays(), addProductCaptor.getValue().getTargetMeasures().getConditioningDays());
-       
+              
        //Assert returned product  
        assertEquals(product.getId(), productDto.getId());
        assertEquals(product.getName(), productDto.getName());
@@ -221,7 +221,7 @@ public class ProductControllerTest {
        Category style = new Category(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        ArgumentCaptor<Product> putProductCaptor = ArgumentCaptor.forClass(Product.class);
        
@@ -285,7 +285,7 @@ public class ProductControllerTest {
        Category style = new Category(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        ArgumentCaptor<Product> patchProductCaptor = ArgumentCaptor.forClass(Product.class);
        
@@ -341,9 +341,9 @@ public class ProductControllerTest {
    
    @Test
    public void testDeleteProduct() {
-       productController.deleteProduct(1L);
+       productController.softDeleteProduct(1L);
 
-       verify(productService, times(1)).deleteProduct(1L);
+       verify(productService, times(1)).softDeleteProduct(1L);
    }
 
 }

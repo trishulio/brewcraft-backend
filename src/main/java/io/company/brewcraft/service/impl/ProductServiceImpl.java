@@ -41,7 +41,6 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {
-        
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
             Page<Category> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
@@ -56,13 +55,13 @@ public class ProductServiceImpl extends BaseService implements ProductService {
                 categoryIdsAndDescendantIds.addAll(category.getDescendantCategoryIds());
             });
         }
-                     
+                    
         Specification<ProductEntity> spec = SpecificationBuilder
-                .builder()
-                .in(ProductEntity.FIELD_ID, ids)
-                .in(new String[] { ProductEntity.FIELD_CATEGORY, ProductCategoryEntity.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)
-                .in(new String[] { ProductEntity.FIELD_CATEGORY, ProductCategoryEntity.FIELD_NAME }, categoryIdsAndDescendantIds.isEmpty() ? categoryNames : null)
-                .build();
+            .builder()
+            .in(ProductEntity.FIELD_ID, ids)
+            .in(new String[] { ProductEntity.FIELD_CATEGORY, ProductCategoryEntity.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)
+            .isNull(ProductEntity.FIELD_DELETED_AT)
+            .build();
         
         Page<ProductEntity> productPage = productRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
@@ -71,8 +70,8 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public Product getProduct(Long productId) {
-        ProductEntity product = productRepository.findById(productId).orElse(null);
-        
+        ProductEntity product = productRepository.findByIdsExcludeDeleted(Set.of(productId)).orElse(null);
+
         return productMapper.fromEntity(product, new CycleAvoidingMappingContext());
     }
     
@@ -84,7 +83,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {                        
+    public Product addProduct(Product product) {            
         ProductEntity productEntity = productMapper.toEntity(product, new CycleAvoidingMappingContext());
                                   
         ProductEntity savedEntity = productRepository.saveAndFlush(productEntity);
@@ -104,7 +103,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         Product existing = getProduct(productId);
 
         if (existing == null) {
-            existing = new Product(productId, null, null, null, null, null, null, null);
+            existing = new Product(productId, null, null, null, null, null, null, null, null);
         }
 
         existing.override(product, getPropertyNames(UpdateProduct.class));
@@ -131,6 +130,11 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     @Override
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);                        
+    }
+    
+    @Override
+    public void softDeleteProduct(Long productId) {
+        productRepository.softDeleteByIds(Set.of(productId));                        
     }
 
     @Override
