@@ -70,9 +70,7 @@ public class EquipmentController {
         
         validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
         
-        EquipmentDto test = equipmentMapper.toDto(equipment);
-
-        return test;
+        return equipmentMapper.toDto(equipment);
     }
 
     @PostMapping("/{facilityId}/equipment")

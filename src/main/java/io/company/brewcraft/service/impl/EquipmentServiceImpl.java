@@ -49,7 +49,7 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
             int page, int size, Set<String> sort, boolean orderAscending) {
         
         Page<EquipmentEntity> equipmentPage = equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), pageRequest(sort, orderAscending, page, size));
-        
+
         return equipmentPage.map(equipment -> equipmentMapper.fromEntity(equipment, new CycleAvoidingMappingContext()));
     }
     
@@ -70,7 +70,7 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
         Unit<?> displayUnit = equipment.getDisplayUnit();
 
         validator.assertion( (SupportedUnits.LITRE.isCompatible(maxCapacityUnit) || SupportedUnits.KILOGRAM.isCompatible(maxCapacityUnit) ), ValidationException.class, "Incompatible max capacity unit type");
-        validator.assertion( (SupportedUnits.LITRE.isCompatible(displayUnit)|| SupportedUnits.KILOGRAM.isCompatible(displayUnit) ), ValidationException.class, "Incompatible display unit type");
+        validator.assertion( (SupportedUnits.LITRE.isCompatible(displayUnit) || SupportedUnits.KILOGRAM.isCompatible(displayUnit) ), ValidationException.class, "Incompatible display unit type");
     
         validator.raiseErrors();        
         
@@ -81,9 +81,7 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
 
         EquipmentEntity savedEntity = equipmentRepository.saveAndFlush(equipmentEntity); 
             
-        Equipment addedEquipment = equipmentMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
-        
-        return addedEquipment;
+        return equipmentMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
     }
 
     @Override
