@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
 import javax.measure.Quantity;
+import javax.measure.Unit;
 
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
@@ -27,4 +28,8 @@ public interface BaseEquipment {
     public Quantity<?> getMaxCapacity();
 
     public void setMaxCapacity(Quantity<?> maxCapacity);
+    
+    public Unit<?> getDisplayUnit();
+
+    public void setDisplayUnit(Unit<?> displayUnit);
 }

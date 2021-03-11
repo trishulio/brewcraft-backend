@@ -55,7 +55,7 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testGetAllFacilities_returnsFacilities() throws Exception {
-        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         List<FacilityEntity> facilityList = Arrays.asList(facility);
         
@@ -92,7 +92,7 @@ public class FacilityServiceImplTest {
     @Test
     public void testGetFacility_returnsFacility() throws Exception {
         Long id = 1L;
-        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         Optional<FacilityEntity> expectedFacilityEntity = Optional.ofNullable(facility);
 
@@ -116,9 +116,9 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testAddFacility_SavesFacility() throws Exception {
-        Facility facility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
 
@@ -159,9 +159,9 @@ public class FacilityServiceImplTest {
     public void testPutFacility_Success() throws Exception {
         Long id = 1L;
         
-        Facility putFacility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility putFacility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
 
@@ -203,8 +203,8 @@ public class FacilityServiceImplTest {
         Long id = 1L;
         
         Facility patchedFacility = new Facility(1L, "updatedName", null, null, null, null, null, null, null, null);
-        FacilityEntity existingFacility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        FacilityEntity persistedFacilityEntity = new FacilityEntity(1L, "updatedName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity existingFacility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        FacilityEntity persistedFacilityEntity = new FacilityEntity(1L, "updatedName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
 

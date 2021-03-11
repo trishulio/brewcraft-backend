@@ -2,6 +2,8 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
+import javax.measure.Unit;
+import javax.measure.quantity.Volume;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +24,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import tec.units.ri.unit.Units;
+
 @Entity
 @Table(name="EQUIPMENT")
 public class EquipmentEntity extends BaseEntity {
@@ -31,7 +35,7 @@ public class EquipmentEntity extends BaseEntity {
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_MAX_CAPACITY = "maxCapacity";
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_generator")
     @SequenceGenerator(name="equipment_generator", sequenceName = "equipment_sequence", allocationSize = 1)
@@ -54,6 +58,10 @@ public class EquipmentEntity extends BaseEntity {
     @JoinColumn(name = "qty_id", referencedColumnName = "id")
     private QuantityEntity maxCapacity;
     
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
+    private UnitEntity displayUnit;
+    
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -70,13 +78,14 @@ public class EquipmentEntity extends BaseEntity {
     }
     
     public EquipmentEntity(Long id, FacilityEntity facility, String name, EquipmentType type, EquipmentStatus status, QuantityEntity maxCapacity,
-            LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+            UnitEntity displayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setFacility(facility);
         setName(name);
         setType(type);
         setStatus(status);
         setMaxCapacity(maxCapacity);
+        setDisplayUnit(displayUnit);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -128,6 +137,14 @@ public class EquipmentEntity extends BaseEntity {
 
     public void setMaxCapacity(QuantityEntity maxCapacity) {
         this.maxCapacity = maxCapacity;
+    }
+    
+    public UnitEntity getDisplayUnit() {
+        return displayUnit;
+    }
+
+    public void setDisplayUnit(UnitEntity displayUnit) {
+        this.displayUnit = displayUnit;
     }
 
     public LocalDateTime getCreatedAt() {

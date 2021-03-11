@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class MaterialTest {
 
@@ -27,7 +27,7 @@ public class MaterialTest {
         String description = "testDesc";
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
-        Unit<Mass> baseQuantityUnit = Units.KILOGRAM;
+        Unit<Mass> baseQuantityUnit = SupportedUnits.KILOGRAM;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
@@ -82,7 +82,7 @@ public class MaterialTest {
 
     @Test
     public void testGetSetBaseQuantityUnit() {
-        Unit<Mass> baseQuantityUnit = Units.KILOGRAM;
+        Unit<Mass> baseQuantityUnit = SupportedUnits.KILOGRAM;
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
     }

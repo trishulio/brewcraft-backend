@@ -69,8 +69,10 @@ public class EquipmentController {
         Equipment equipment = equipmentService.getEquipment(equipmentId);
         
         validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
+        
+        EquipmentDto test = equipmentMapper.toDto(equipment);
 
-        return equipmentMapper.toDto(equipment);
+        return test;
     }
 
     @PostMapping("/{facilityId}/equipment")

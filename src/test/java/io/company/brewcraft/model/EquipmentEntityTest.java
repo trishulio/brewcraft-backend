@@ -23,11 +23,12 @@ public class EquipmentEntityTest {
         EquipmentType type = EquipmentType.BARREL;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         QuantityEntity maxCapacity = new QuantityEntity();
+        UnitEntity displayUnit = new UnitEntity();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        EquipmentEntity equipment = new EquipmentEntity(id, facility, name, type, status, maxCapacity, created, lastUpdated, version);
+        EquipmentEntity equipment = new EquipmentEntity(id, facility, name, type, status, maxCapacity, displayUnit, created, lastUpdated, version);
         
         assertSame(id, equipment.getId());
         assertSame(facility, equipment.getFacility());
@@ -35,6 +36,7 @@ public class EquipmentEntityTest {
         assertSame(type, equipment.getType());
         assertSame(status, equipment.getStatus());
         assertSame(maxCapacity, equipment.getMaxCapacity());
+        assertSame(displayUnit, equipment.getDisplayUnit());
         assertSame(created, equipment.getCreatedAt());
         assertSame(lastUpdated, equipment.getLastUpdated());
         assertSame(version, equipment.getVersion());        
@@ -80,6 +82,13 @@ public class EquipmentEntityTest {
         QuantityEntity maxCapacity = new QuantityEntity();
         equipment.setMaxCapacity(maxCapacity);
         assertSame(maxCapacity, equipment.getMaxCapacity());
+    }
+    
+    @Test
+    public void testGetSetDisplayUnit() {
+        UnitEntity displayUnit = new UnitEntity();
+        equipment.setDisplayUnit(displayUnit);
+        assertSame(displayUnit, equipment.getDisplayUnit());
     }
     
     @Test

@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.measure.Unit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,9 @@ import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
+import io.company.brewcraft.util.validator.ValidationException;
+import io.company.brewcraft.util.validator.Validator;
+import io.company.brewcraft.utils.SupportedUnits;
 
 @Transactional
 public class EquipmentServiceImpl extends BaseService implements EquipmentService {
@@ -44,27 +49,41 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
             int page, int size, Set<String> sort, boolean orderAscending) {
         
         Page<EquipmentEntity> equipmentPage = equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), pageRequest(sort, orderAscending, page, size));
-    
+        
         return equipmentPage.map(equipment -> equipmentMapper.fromEntity(equipment, new CycleAvoidingMappingContext()));
     }
     
     @Override
     public Equipment getEquipment(Long equipmentId) {       
-        EquipmentEntity equipment = equipmentRepository.findById(equipmentId).orElse(null);
-
-        return equipmentMapper.fromEntity(equipment, new CycleAvoidingMappingContext());
+        EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
+        
+        Equipment equipment = equipmentMapper.fromEntity(equipmentEntity, new CycleAvoidingMappingContext());
+        
+        return equipment;
     }
 
     @Override
     public Equipment addEquipment(Long facilityId, Equipment equipment) { 
+        Validator validator = validator();
+
+        Unit<?> maxCapacityUnit = equipment.getMaxCapacity().getUnit();
+        Unit<?> displayUnit = equipment.getDisplayUnit();
+
+        validator.assertion( (SupportedUnits.LITRE.isCompatible(maxCapacityUnit) || SupportedUnits.KILOGRAM.isCompatible(maxCapacityUnit) ), ValidationException.class, "Incompatible max capacity unit type");
+        validator.assertion( (SupportedUnits.LITRE.isCompatible(displayUnit)|| SupportedUnits.KILOGRAM.isCompatible(displayUnit) ), ValidationException.class, "Incompatible display unit type");
+    
+        validator.raiseErrors();        
+        
         Facility facility = Optional.ofNullable(facilityService.getFacility(facilityId)).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
         equipment.setFacility(facility);
         
         EquipmentEntity equipmentEntity = equipmentMapper.toEntity(equipment, new CycleAvoidingMappingContext());
+
+        EquipmentEntity savedEntity = equipmentRepository.saveAndFlush(equipmentEntity); 
+            
+        Equipment addedEquipment = equipmentMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
         
-        EquipmentEntity savedEntity = equipmentRepository.save(equipmentEntity);  
-        
-        return equipmentMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
+        return addedEquipment;
     }
 
     @Override

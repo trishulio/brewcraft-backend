@@ -25,8 +25,8 @@ import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.Tax;
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 public class InvoiceItemMapperTest {
 
@@ -42,7 +42,7 @@ public class InvoiceItemMapperTest {
         InvoiceItem item = new InvoiceItem(
             2L,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
             new Material(7L, null, null, null, null, null, null, null, null),
@@ -76,7 +76,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(2L, item.getId());
         assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
@@ -98,7 +98,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(1L, item.getId());
         assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
@@ -110,7 +110,7 @@ public class InvoiceItemMapperTest {
         InvoiceItem item = new InvoiceItem(
             2L,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
             new Material(7L, null, null, null, null, null, null, null, null),
@@ -144,7 +144,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(2L, item.getId());
         assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 5"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 6")), item.getTax());
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());

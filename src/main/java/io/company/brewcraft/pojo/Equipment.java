@@ -3,6 +3,9 @@ package io.company.brewcraft.pojo;
 import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
+import javax.measure.Unit;
+import javax.measure.quantity.Mass;
+import javax.measure.quantity.Volume;
 
 import io.company.brewcraft.dto.UpdateEquipment;
 import io.company.brewcraft.model.Audited;
@@ -10,6 +13,7 @@ import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.Identified;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class Equipment extends BaseModel implements UpdateEquipment, Identified, Audited {
     
@@ -25,6 +29,8 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
     
     private Quantity<?> maxCapacity;
     
+    private Unit<?> displayUnit;
+    
     private LocalDateTime createdAt;
     
     private LocalDateTime lastUpdated;
@@ -36,7 +42,7 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
     }
 
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status,
-            Quantity<?> maxCapacity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+            Quantity<?> maxCapacity, Unit<?> displayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
         this.facility = facility;
@@ -44,6 +50,7 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
         this.type = type;
         this.status = status;
         this.maxCapacity = maxCapacity;
+        this.displayUnit = displayUnit;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.version = version;
@@ -92,9 +99,52 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
     public Quantity<?> getMaxCapacity() {
         return maxCapacity;
     }
+    
+    /*
+     * Default peristed unit for volume is litres
+     * Default persisted unit for mass is kilograms
+     */
+    public Quantity<?> getMaxCapacityInPersistedUnit() {
+        if (maxCapacity != null) {
+            Unit<?> displayUnit = this.getDisplayUnit();
+            Quantity<?> maxCapacityInPersistedUnit = null;
+            
+            if (SupportedUnits.LITRE.isCompatible(displayUnit)) {
+                Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
+                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.LITRE);
+            } else {
+                //Must be mass if its not Volume
+                Quantity<Mass> quantity = (Quantity<Mass>) maxCapacity;
+                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.KILOGRAM);
+            } 
+            return maxCapacityInPersistedUnit;
+        } else {
+            return maxCapacity;
+        }
+    }
+    
+    public Quantity<?> getMaxCapacityInDisplayUnit() {
+        if (maxCapacity != null && this.getDisplayUnit() != null) {
+            Unit displayUnit = this.getDisplayUnit();
+            Quantity<?> quantity = (Quantity<?>) maxCapacity;
+            Quantity<?> quantityInDisplayUnit = quantity.to(displayUnit);
+            
+            return quantityInDisplayUnit;
+        } else {
+            return maxCapacity;
+        }
+    }
 
     public void setMaxCapacity(Quantity<?> maxCapacity) {
         this.maxCapacity = maxCapacity;
+    }
+    
+    public Unit<?> getDisplayUnit() {
+        return displayUnit;
+    }
+
+    public void setDisplayUnit(Unit<?> displayUnit) {
+        this.displayUnit = displayUnit;
     }
 
     public LocalDateTime getCreatedAt() {

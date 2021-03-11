@@ -1,16 +1,15 @@
 package io.company.brewcraft.service.mapper;
 
+import java.util.Map;
+
+import javax.measure.Unit;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import javax.measure.Unit;
-import javax.measure.quantity.AmountOfSubstance;
-import javax.measure.quantity.Volume;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -19,10 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.dto.UnitDto;
 import io.company.brewcraft.model.UnitEntity;
-import tec.units.ri.quantity.QuantityDimension;
-import tec.units.ri.unit.BaseUnit;
-import tec.units.ri.unit.MetricPrefix;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
 
 @Mapper
 public abstract class QuantityUnitMapper {
@@ -71,9 +67,8 @@ public abstract class QuantityUnitMapper {
     public abstract UnitDto toDto(Unit<?> unit);
 
     private Map<String, Unit<?>> getAllUnits() {
-        try {
-
-            Field[] fields = Units.class.getFields();
+        try {           
+            Field[] fields = SupportedUnits.class.getFields();
 
             Predicate<Integer> isPublicStaticFinal = mod -> Modifier.isPublic(mod) && Modifier.isStatic(mod) && Modifier.isFinal(mod);
 
@@ -92,13 +87,6 @@ public abstract class QuantityUnitMapper {
                          .map(getValue)
                          .filter(o -> o instanceof Unit)
                          .collect(Collectors.toMap(o -> ((Unit<?>) o).toString(), o -> (Unit<?>) o));
-            
-            //Define custom unit types here
-            Unit<AmountOfSubstance> EACH = new BaseUnit<AmountOfSubstance>("each", QuantityDimension.AMOUNT_OF_SUBSTANCE);
-            Unit<Volume> HECTOLITRE = MetricPrefix.HECTO(Units.LITRE);
-
-            unitMap.put("each", EACH);
-            unitMap.put("hl", HECTOLITRE);
                   
             return unitMap;
         } catch (IllegalArgumentException e) {

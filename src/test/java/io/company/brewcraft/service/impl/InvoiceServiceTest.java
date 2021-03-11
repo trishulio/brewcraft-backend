@@ -31,8 +31,8 @@ import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 @SuppressWarnings("unchecked")
 public class InvoiceServiceTest {
@@ -105,7 +105,7 @@ public class InvoiceServiceTest {
    
    @Test
    public void testPut_CreatesAndSaveNewEntityWithUpdates_WhenInvoiceWithGivenIdDoesNotExist() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice update = new Invoice(
            1L,
            "ABCDE-12345",
@@ -154,7 +154,7 @@ public class InvoiceServiceTest {
        InvoiceItem item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
        assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
@@ -165,7 +165,7 @@ public class InvoiceServiceTest {
    public void testPut_UpdatesTheExistingEntityAndSavesIt_WhenEntityExist() {
        InvoiceEntity mExisting = new InvoiceEntity(1L);
        mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice update = new Invoice(
            1L,
            "ABCDE-12345",
@@ -214,7 +214,7 @@ public class InvoiceServiceTest {
        InvoiceItem item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
        assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
@@ -258,7 +258,7 @@ public class InvoiceServiceTest {
            1  
        );
 
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice update = new Invoice(1L);
        update.setDescription("New description value");
        update.setCreatedAt(LocalDateTime.of(9999, 12, 31, 12, 0));
@@ -297,7 +297,7 @@ public class InvoiceServiceTest {
        InvoiceItem item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
        assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
@@ -325,7 +325,7 @@ public class InvoiceServiceTest {
 
    @Test
    public void testAdd_SavesTheNewEntity() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice addition = new Invoice(
            1L,
            "ABCDE-12345",
@@ -372,7 +372,7 @@ public class InvoiceServiceTest {
        InvoiceItem item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
        assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), item.getQuantity());
+       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
