@@ -38,8 +38,8 @@ public class InvoiceItemService extends BaseService {
 
         for (UpdateInvoiceItem itemUpdate: itemUpdates) {
             InvoiceItem targetItem = existingItemsMap.get(itemUpdate.getId());
-            validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", itemUpdate.getId());
-            if (targetItem != null) {
+            boolean isNotNull = validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", itemUpdate.getId());
+            if (isNotNull) {
                 targetItem.override(itemUpdate, getPropertyNames(UpdateInvoiceItem.class));
                 targetItems.add(targetItem);
             }
