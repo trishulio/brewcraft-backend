@@ -69,8 +69,8 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
         Unit<?> maxCapacityUnit = equipment.getMaxCapacity().getUnit();
         Unit<?> displayUnit = equipment.getDisplayUnit();
 
-        validator.assertion( (SupportedUnits.LITRE.isCompatible(maxCapacityUnit) || SupportedUnits.KILOGRAM.isCompatible(maxCapacityUnit) ), ValidationException.class, "Incompatible max capacity unit type");
-        validator.assertion( (SupportedUnits.LITRE.isCompatible(displayUnit) || SupportedUnits.KILOGRAM.isCompatible(displayUnit) ), ValidationException.class, "Incompatible display unit type");
+        validator.assertion( (SupportedUnits.DEFAULT_VOLUME.isCompatible(maxCapacityUnit) || SupportedUnits.DEFAULT_MASS.isCompatible(maxCapacityUnit) ), ValidationException.class, "Incompatible max capacity unit type");
+        validator.assertion( (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit) || SupportedUnits.DEFAULT_MASS.isCompatible(displayUnit) ), ValidationException.class, "Incompatible display unit type");
     
         validator.raiseErrors();        
         

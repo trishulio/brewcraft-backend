@@ -109,7 +109,7 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
             Unit<?> displayUnit = this.getDisplayUnit();
             Quantity<?> maxCapacityInPersistedUnit = null;
             
-            if (SupportedUnits.LITRE.isCompatible(displayUnit)) {
+            if (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit)) {
                 Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
                 maxCapacityInPersistedUnit = quantity.to(SupportedUnits.LITRE);
             } else {

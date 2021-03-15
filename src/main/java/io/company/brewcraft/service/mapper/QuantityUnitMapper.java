@@ -37,6 +37,10 @@ public abstract class QuantityUnitMapper {
         if (symbol != null) {
             unit = this.map.get(symbol);
         }
+        
+        this.map.entrySet().forEach(entry->{
+            System.out.println(entry.getKey() + " " + entry.getValue());  
+         });
 
         logger.info("Mapping for symbol: {} is: {}", symbol, unit);
 
@@ -83,7 +87,7 @@ public abstract class QuantityUnitMapper {
             };
 
             Map<String, Unit<?>> unitMap = Arrays.stream(fields)
-                         .filter(field -> isPublicStaticFinal.test(field.getModifiers()))
+                         .filter(field -> isPublicStaticFinal.test(field.getModifiers()) && !field.getName().contains("DEFAULT"))
                          .map(getValue)
                          .filter(o -> o instanceof Unit)
                          .collect(Collectors.toMap(o -> ((Unit<?>) o).toString(), o -> (Unit<?>) o));

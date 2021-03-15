@@ -36,7 +36,7 @@ public class EquipmentTest {
         String name = "equipment1";
         EquipmentType type = EquipmentType.BARREL;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
-        Quantity<Volume> maxCapacity = (Quantity<Volume>) Quantities.getQuantity(new BigDecimal("100"), UnitMapper.fromSymbol("hl") );
+        Quantity<Volume> maxCapacity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE);
         Unit<?> displayUnit = SupportedUnits.LITRE;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);

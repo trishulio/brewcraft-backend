@@ -20,4 +20,7 @@ public class SupportedUnits {
     public static final Unit<Mass> MILLIGRAM = new TransformedUnit<Mass>("mg", Units.KILOGRAM, Units.KILOGRAM.getSystemUnit(), RationalConverter.of(1, 1000000));
     public static final Unit<Mass> GRAM = new TransformedUnit<Mass>("g", Units.KILOGRAM, Units.KILOGRAM.getSystemUnit(), RationalConverter.of(1, 1000));
     public static final Unit<Mass> KILOGRAM = Units.KILOGRAM;
+    
+    public static final Unit<Mass> DEFAULT_MASS = KILOGRAM;
+    public static final Unit<Volume> DEFAULT_VOLUME = LITRE;
 }
