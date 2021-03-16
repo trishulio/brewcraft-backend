@@ -44,15 +44,17 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
             int page, int size, Set<String> sort, boolean orderAscending) {
         
         Page<EquipmentEntity> equipmentPage = equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), pageRequest(sort, orderAscending, page, size));
-    
+
         return equipmentPage.map(equipment -> equipmentMapper.fromEntity(equipment, new CycleAvoidingMappingContext()));
     }
     
     @Override
     public Equipment getEquipment(Long equipmentId) {       
-        EquipmentEntity equipment = equipmentRepository.findById(equipmentId).orElse(null);
-
-        return equipmentMapper.fromEntity(equipment, new CycleAvoidingMappingContext());
+        EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
+        
+        Equipment equipment = equipmentMapper.fromEntity(equipmentEntity, new CycleAvoidingMappingContext());
+        
+        return equipment;
     }
 
     @Override
@@ -61,9 +63,9 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
         equipment.setFacility(facility);
         
         EquipmentEntity equipmentEntity = equipmentMapper.toEntity(equipment, new CycleAvoidingMappingContext());
-        
-        EquipmentEntity savedEntity = equipmentRepository.save(equipmentEntity);  
-        
+
+        EquipmentEntity savedEntity = equipmentRepository.saveAndFlush(equipmentEntity); 
+            
         return equipmentMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
     }
 

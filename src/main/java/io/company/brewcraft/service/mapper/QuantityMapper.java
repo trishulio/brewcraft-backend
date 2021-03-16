@@ -52,6 +52,12 @@ public abstract class QuantityMapper {
      * if there is a change in default behavior by Spring.
      */
     public BigDecimal parseNumber(Number num) {
-        return (BigDecimal) num;
+        BigDecimal bigDecimal = null;
+        if (num != null && num instanceof Double) {
+            bigDecimal = BigDecimal.valueOf(num.doubleValue());
+        } else {
+            bigDecimal = (BigDecimal) num;
+        }
+        return bigDecimal;
     }
 }

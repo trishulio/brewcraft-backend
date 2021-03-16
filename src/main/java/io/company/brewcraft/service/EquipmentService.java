@@ -13,7 +13,7 @@ public interface EquipmentService {
             Set<String> statuses, Set<Long> facilityIds, int page, int size, Set<String> sort, boolean orderAscending);
     
     public Equipment getEquipment(Long equipmentId);
-
+    
     public Equipment addEquipment(Long facilityId, Equipment equipment);
     
     public Equipment putEquipment(Long facilityId, Long equipmentId, UpdateEquipment equipment);

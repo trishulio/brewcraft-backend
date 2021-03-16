@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.service.QuantityUnitService;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class QuantityUnitServiceImplTest {
 
@@ -45,7 +45,7 @@ public class QuantityUnitServiceImplTest {
 
         Unit<?> returnedUnit = quantityUnitService.get(symbol);
 
-        assertEquals(Units.GRAM, returnedUnit);
+        assertEquals(SupportedUnits.GRAM, returnedUnit);
     }
     
     @Test

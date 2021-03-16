@@ -9,8 +9,8 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 public class InvoiceItemTest {
 
@@ -26,7 +26,7 @@ public class InvoiceItemTest {
         InvoiceItem item = new InvoiceItem(
             2L,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
             new Material(7L, null, null, null, null, null, null, null, null),
@@ -35,7 +35,7 @@ public class InvoiceItemTest {
 
         assertEquals(2L, item.getId());
         assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
         assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
         assertEquals(Money.parse("CAD 20"), item.getAmount());
@@ -60,8 +60,8 @@ public class InvoiceItemTest {
     @Test
     public void testAccessQuantity() {
         assertNull(item.getQuantity());
-        item.setQuantity(Quantities.getQuantity(10, Units.KILOGRAM));
-        assertEquals(Quantities.getQuantity(10, Units.KILOGRAM), item.getQuantity());
+        item.setQuantity(Quantities.getQuantity(10, SupportedUnits.KILOGRAM));
+        assertEquals(Quantities.getQuantity(10, SupportedUnits.KILOGRAM), item.getQuantity());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class InvoiceItemTest {
 
     @Test
     public void testGetAmount_ReturnsProductOfQuantityAndPrice() {
-        item.setQuantity(Quantities.getQuantity(11, Units.KILOGRAM));
+        item.setQuantity(Quantities.getQuantity(11, SupportedUnits.KILOGRAM));
         item.setPrice(Money.parse("CAD 10"));
 
         assertEquals(Money.parse("CAD 110"), item.getAmount());

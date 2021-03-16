@@ -69,7 +69,7 @@ public class EquipmentController {
         Equipment equipment = equipmentService.getEquipment(equipmentId);
         
         validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
-
+        
         return equipmentMapper.toDto(equipment);
     }
 

@@ -14,7 +14,7 @@ import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.MaterialCategory;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class MaterialMapperTest {
 
@@ -30,7 +30,7 @@ public class MaterialMapperTest {
         MaterialEntity entity = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Material material = materialMapper.fromEntity(entity, new CycleAvoidingMappingContext());
 
-        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1), material);
+        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1), material);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class MaterialMapperTest {
         MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new MaterialCategoryDto(1L, null, null, null), null, null, "testUPC", "kg", 1);
         Material material = materialMapper.fromDto(dto);
         
-        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", Units.KILOGRAM, null, null, 1), material);
+        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, null, null, 1), material);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MaterialMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialDto dto = materialMapper.toDto(material);
 
         assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new MaterialCategoryDto(1L, null, null, null), null, null, "testUPC", "kg", 1), dto);
@@ -63,7 +63,7 @@ public class MaterialMapperTest {
 
     @Test
     public void testToEntity_ReturnsEntity_WhenPojoIsNotNull() {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialEntity entity = materialMapper.toEntity(material, new CycleAvoidingMappingContext());
 
         assertEquals(new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1), entity);

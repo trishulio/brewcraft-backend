@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.QuantityDto;
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 public class QuantityMapperTest {
 
@@ -24,7 +24,7 @@ public class QuantityMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenQuantityIsNotNull() {
-        QuantityDto dto = mapper.toDto(Quantities.getQuantity(new BigDecimal(100), Units.KILOGRAM));
+        QuantityDto dto = mapper.toDto(Quantities.getQuantity(new BigDecimal(100), SupportedUnits.KILOGRAM));
 
         assertEquals("kg", dto.getSymbol());
         assertEquals(new BigDecimal(100), dto.getValue());
@@ -33,7 +33,7 @@ public class QuantityMapperTest {
     @Test
     public void testFromDto_ReturnsQuantity_WhenDtoIsNotNull() {
         Quantity<?> quantity = mapper.fromDto(new QuantityDto("kg", new BigDecimal(100)));
-        assertEquals(Units.KILOGRAM, quantity.getUnit());
+        assertEquals(SupportedUnits.KILOGRAM, quantity.getUnit());
         assertEquals(new BigDecimal(100), quantity.getValue());
     }
 }

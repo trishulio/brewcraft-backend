@@ -15,7 +15,7 @@ import io.company.brewcraft.model.FacilityEntity;
 import io.company.brewcraft.model.StorageEntity;
 import io.company.brewcraft.pojo.Storage;
 
-@Mapper(uses = { QuantityMapper.class} )
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class} )
 public interface StorageMapper {
     
     StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);

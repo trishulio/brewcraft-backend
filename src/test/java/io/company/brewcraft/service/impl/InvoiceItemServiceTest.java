@@ -16,8 +16,8 @@ import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 public class InvoiceItemServiceTest {
 
@@ -31,20 +31,20 @@ public class InvoiceItemServiceTest {
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemsUpdated_WhenPayloadObjectsHaveIds() {
         List<InvoiceItem> existingItems = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
-            new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
+            new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
         
         List<UpdateInvoiceItem> itemUpdates = List.of(
-            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
-            new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21.00"), Units.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), 21)
+            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
+            new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), 21)
         );
 
         List<InvoiceItem> updatedItems = service.mergePut(new Validator(), existingItems, itemUpdates);
         
         assertEquals(1L, updatedItems.get(0).getId());
         assertEquals("New_Description_1", updatedItems.get(0).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), updatedItems.get(0).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), updatedItems.get(0).getQuantity());
         assertEquals(Money.parse("CAD 101"), updatedItems.get(0).getPrice());
         assertEquals(null, updatedItems.get(0).getTax());
         assertEquals(new Material(11L), updatedItems.get(0).getMaterial());
@@ -52,7 +52,7 @@ public class InvoiceItemServiceTest {
 
         assertEquals(2L, updatedItems.get(1).getId());
         assertEquals("New_Description_2", updatedItems.get(1).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("21.00"), Units.KILOGRAM), updatedItems.get(1).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("21.00"), SupportedUnits.KILOGRAM), updatedItems.get(1).getQuantity());
         assertEquals(Money.parse("CAD 201"), updatedItems.get(1).getPrice());
         assertEquals(null, updatedItems.get(1).getTax());
         assertEquals(new Material(21L), updatedItems.get(1).getMaterial());
@@ -62,19 +62,19 @@ public class InvoiceItemServiceTest {
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemsUpdatedAndNewItemsAdded_WhenPayloadObjectsDoNotHaveIds() {
         List<InvoiceItem> existingItems = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
         List<UpdateInvoiceItem> itemUpdates = List.of(
-            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
-            new InvoiceItem(null, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
+            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
+            new InvoiceItem(null, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
         List<InvoiceItem> updatedItems = service.mergePut(new Validator(), existingItems, itemUpdates);
 
         assertEquals(1L, updatedItems.get(0).getId());
         assertEquals("New_Description_1", updatedItems.get(0).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), updatedItems.get(0).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), updatedItems.get(0).getQuantity());
         assertEquals(Money.parse("CAD 101"), updatedItems.get(0).getPrice());
         assertEquals(null, updatedItems.get(0).getTax());
         assertEquals(new Material(11L), updatedItems.get(0).getMaterial());
@@ -82,7 +82,7 @@ public class InvoiceItemServiceTest {
 
         assertEquals(null, updatedItems.get(1).getId());
         assertEquals("Description_2", updatedItems.get(1).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), updatedItems.get(1).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), SupportedUnits.KILOGRAM), updatedItems.get(1).getQuantity());
         assertEquals(Money.parse("CAD 200"), updatedItems.get(1).getPrice());
         assertEquals(new Tax(), updatedItems.get(1).getTax());
         assertEquals(new Material(20L), updatedItems.get(1).getMaterial());
@@ -92,7 +92,7 @@ public class InvoiceItemServiceTest {
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemRemoved_WhenExistingItemDoesNotExistInPayloadObjects() {
         List<InvoiceItem> existingItems = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         List<UpdateInvoiceItem> itemUpdates = List.of();
 
@@ -123,18 +123,18 @@ public class InvoiceItemServiceTest {
     @Test
     public void testMergePatch_ReturnsNewItemsListWithNonNullPropertiesApplied_WhenPayloadObjectsHaveId() {
         List<InvoiceItem> existingItems = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
         List<UpdateInvoiceItem> itemUpdates = List.of(
-            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, 11)
+            new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, 11)
         );
 
         List<InvoiceItem> updatedItems = service.mergePatch(new Validator(), existingItems, itemUpdates);
         
         assertEquals(1L, updatedItems.get(0).getId());
         assertEquals("New_Description_1", updatedItems.get(0).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), updatedItems.get(0).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("11.00"), SupportedUnits.KILOGRAM), updatedItems.get(0).getQuantity());
         assertEquals(Money.parse("CAD 100"), updatedItems.get(0).getPrice());
         assertEquals(new Tax(Money.parse("CAD 100")), updatedItems.get(0).getTax());
         assertEquals(new Material(10L), updatedItems.get(0).getMaterial());
@@ -144,7 +144,7 @@ public class InvoiceItemServiceTest {
     @Test
     public void testMergePatch_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
         List<UpdateInvoiceItem> itemUpdates = List.of(
@@ -162,8 +162,8 @@ public class InvoiceItemServiceTest {
     @Test
     public void testAddList_ReturnsListOfBaseItems_WhenInputIsNotNull() {
         List<UpdateInvoiceItem> itemUpdates = List.of(
-            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
-            new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
+            new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
+            new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
         List<InvoiceItem> items = service.addList(new Validator(), itemUpdates);
@@ -172,7 +172,7 @@ public class InvoiceItemServiceTest {
 
         assertEquals(null, items.get(0).getId());
         assertEquals("Description_1", items.get(0).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), items.get(0).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), items.get(0).getQuantity());
         assertEquals(Money.parse("CAD 100"), items.get(0).getPrice());
         assertEquals(new Tax(), items.get(0).getTax());
         assertEquals(new Material(10L), items.get(0).getMaterial());
@@ -180,7 +180,7 @@ public class InvoiceItemServiceTest {
 
         assertEquals(null, items.get(1).getId());
         assertEquals("Description_2", items.get(1).getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), items.get(1).getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), SupportedUnits.KILOGRAM), items.get(1).getQuantity());
         assertEquals(Money.parse("CAD 200"), items.get(1).getPrice());
         assertEquals(new Tax(), items.get(1).getTax());
         assertEquals(new Material(20L), items.get(1).getMaterial());

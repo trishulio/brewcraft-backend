@@ -20,7 +20,7 @@ import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.MaterialCategory;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
 
 @SuppressWarnings("unchecked")
 public class MaterialControllerTest {
@@ -40,7 +40,7 @@ public class MaterialControllerTest {
    public void testGetMaterials() {
        MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
        MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
-       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        List<Material> materialsList = List.of(material);
        Page<Material> mPage = mock(Page.class);
@@ -93,7 +93,7 @@ public class MaterialControllerTest {
    public void testGetMaterial() {
        MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
        MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
-       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        doReturn(material).when(materialService).getMaterial(1L);
        
@@ -128,7 +128,7 @@ public class MaterialControllerTest {
               
        MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
        MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
-       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> addedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
        
@@ -168,7 +168,7 @@ public class MaterialControllerTest {
               
        MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
        MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
-       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> putMaterialCaptor = ArgumentCaptor.forClass(Material.class);
        
@@ -209,7 +209,7 @@ public class MaterialControllerTest {
        
        MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
        MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
-       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", Units.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> patchMaterialCaptor = ArgumentCaptor.forClass(Material.class);
        
