@@ -21,6 +21,10 @@ public class ShipmentService extends BaseService {
         this.repo = repo;
         this.itemService = itemService;
     }
+    
+    public Collection<Shipment> getShipments() {
+        return null;
+    }
 
     public Shipment getShipment(Long id) {
         Shipment shipment = null;

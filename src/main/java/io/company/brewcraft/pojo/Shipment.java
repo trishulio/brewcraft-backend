@@ -156,7 +156,16 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
 
     @Override
     public void setItems(Collection<ShipmentItem> items) {
-        this.items = items;
+        if (items != null) {
+            items.forEach(i -> i.setShipment(this));
+        }
+
+        if (this.getItems() == null) {
+            this.items = items;
+        } else {
+            this.getItems().clear();
+            this.getItems().addAll(items);
+        }
     }
 
     @Override

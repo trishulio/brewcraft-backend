@@ -126,13 +126,13 @@ public class InvoiceServiceTest {
            invoice.setPurchaseOrder(new PurchaseOrder(poId));           
            return invoice;
 
-       }).when(mRepo).refreshAndAdd(any(Long.class), any(Invoice.class));
+       }).when(mRepo).save(any(Long.class), any(Invoice.class));
        
        doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
 
        Invoice invoice = service.put(3L, 1L, update);
 
-       verify(mRepo, times(1)).refreshAndAdd(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -185,7 +185,7 @@ public class InvoiceServiceTest {
            invoice.setPurchaseOrder(new PurchaseOrder(poId));           
            return invoice;
 
-       }).when(mRepo).refreshAndAdd(any(Long.class), any(Invoice.class));
+       }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
        doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
        
@@ -193,7 +193,7 @@ public class InvoiceServiceTest {
 
        Invoice invoice = service.put(3L, 1L, update);
 
-       verify(mRepo, times(1)).refreshAndAdd(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -269,7 +269,7 @@ public class InvoiceServiceTest {
            invoice.setPurchaseOrder(new PurchaseOrder(poId));           
            return invoice;
 
-       }).when(mRepo).refreshAndAdd(any(Long.class), any(Invoice.class));
+       }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
        doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
 
@@ -277,7 +277,7 @@ public class InvoiceServiceTest {
 
        Invoice invoice = service.patch(3L, 1L, update);
 
-       verify(mRepo, times(1)).refreshAndAdd(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("New description value", invoice.getDescription());
@@ -285,7 +285,7 @@ public class InvoiceServiceTest {
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(), invoice.getFreight());
+       assertEquals(new Freight(1L), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
        assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
@@ -347,13 +347,13 @@ public class InvoiceServiceTest {
            invoice.setPurchaseOrder(new PurchaseOrder(poId));           
            return invoice;
 
-       }).when(mRepo).refreshAndAdd(any(Long.class), any(Invoice.class));
+       }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
        doReturn(Set.of(itemUpdate)).when(mItemService).getAddCollection(any(Validator.class), eq(Set.of(itemUpdate)));
 
        Invoice invoice = service.add(3L, addition);
 
-       verify(mRepo, times(1)).refreshAndAdd(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
        assertEquals(null, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());

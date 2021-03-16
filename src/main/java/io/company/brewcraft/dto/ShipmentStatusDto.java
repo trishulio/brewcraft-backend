@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-public class ShipmentStatusDto {
+public class ShipmentStatusDto extends BaseDto {
     private Long id;
     private String name;
 

@@ -1,6 +1,8 @@
 package io.company.brewcraft.pojo;
 
-public class ShipmentStatus {
+import io.company.brewcraft.model.BaseModel;
+
+public class ShipmentStatus extends BaseModel {
     private Long id;
     private String name;
 

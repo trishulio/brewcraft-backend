@@ -32,7 +32,7 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
     }
 
     @Override
-    public Invoice refreshAndAdd(Long purchaseOrderId, Invoice invoice) {
+    public Invoice save(Long purchaseOrderId, Invoice invoice) {
         log.info("Invoice with Id: {} has {} items and belong to PurchaseOrder: {}", invoice.getId(), invoice.getItems() != null ? invoice.getItems().size() : null, invoice.getPurchaseOrder() != null ? invoice.getPurchaseOrder().getId() : null);
         log.info("Attempting to fetch PurchaseOrder with Id: {}", purchaseOrderId);
         PurchaseOrder po = poRepo.findById(purchaseOrderId).orElseThrow(() -> new EntityNotFoundException("PurchaseOrder", purchaseOrderId));

@@ -139,7 +139,7 @@ public class InvoiceService extends BaseService {
         existing.setItems(updatedItems);
 
         validator.raiseErrors();
-        return repo.refreshAndAdd(purchaseOrderId, existing);
+        return repo.save(purchaseOrderId, existing);
     }
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
@@ -159,7 +159,7 @@ public class InvoiceService extends BaseService {
         existing.setItems(updatedItems);
         
         validator.raiseErrors();
-        return repo.refreshAndAdd(purchaseOrderId, existing);
+        return repo.save(purchaseOrderId, existing);
     }
 
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
@@ -173,6 +173,6 @@ public class InvoiceService extends BaseService {
 
         validator.raiseErrors();
 
-        return repo.refreshAndAdd(purchaseOrderId, invoice);
+        return repo.save(purchaseOrderId, invoice);
     }
 }

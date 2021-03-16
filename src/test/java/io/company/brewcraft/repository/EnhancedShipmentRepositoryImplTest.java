@@ -1,6 +1,7 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -8,7 +9,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -29,6 +30,7 @@ public class EnhancedShipmentRepositoryImplTest {
 
     @Test
     public void testSave_SetsHibernateReferencesAndSaves_WhenShipmentIsNotNull() {
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
 
         Shipment shipment = new Shipment(1L);

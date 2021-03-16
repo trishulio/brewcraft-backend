@@ -61,7 +61,7 @@ public class EnhancedInvoiceRepositoryTest {
         invoice.setItems(items);
         invoice.setStatus(new InvoiceStatus(null, "FINAL"));
 
-        Invoice ret = repo.refreshAndAdd(1L, invoice);
+        Invoice ret = repo.save(1L, invoice);
 
         verify(mInvoiceRepo, times(1)).saveAndFlush(invoice);
 
@@ -77,7 +77,7 @@ public class EnhancedInvoiceRepositoryTest {
     public void testRefreshAndAdd_ThrowsEntityNotFoundException_WhenPurchaseOrderDoesNotExist() {
         doReturn(Optional.empty()).when(mPoRepo).findById(1L);
 
-        assertThrows(EntityNotFoundException.class, () -> repo.refreshAndAdd(1L, new Invoice()), "PurchaseOrder not found with id: 1");
+        assertThrows(EntityNotFoundException.class, () -> repo.save(1L, new Invoice()), "PurchaseOrder not found with id: 1");
     }
 
     @Test
@@ -88,6 +88,6 @@ public class EnhancedInvoiceRepositoryTest {
         Invoice invoice = new Invoice();
         invoice.setStatus(new InvoiceStatus(2L, "PENDING"));
 
-        assertThrows(EntityNotFoundException.class, () -> repo.refreshAndAdd(1L, invoice), "InvoiceStatus not found with name: PENDING");
+        assertThrows(EntityNotFoundException.class, () -> repo.save(1L, invoice), "InvoiceStatus not found with name: PENDING");
     }
 }
