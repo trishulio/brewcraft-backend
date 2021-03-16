@@ -37,9 +37,13 @@ public abstract class QuantityUnitMapper {
         if (symbol != null) {
             unit = this.map.get(symbol);
         }
-
+        
         logger.info("Mapping for symbol: {} is: {}", symbol, unit);
 
+        if (unit == null) {
+            throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", symbol));
+        }
+        
         return unit;
     }
 

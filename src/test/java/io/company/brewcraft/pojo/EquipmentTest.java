@@ -8,6 +8,7 @@ import javax.measure.Unit;
 import javax.measure.quantity.Time;
 import javax.measure.quantity.Volume;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -58,24 +59,6 @@ public class EquipmentTest {
         assertSame(created, equipment.getCreatedAt());
         assertSame(lastUpdated, equipment.getLastUpdated());
         assertSame(version, equipment.getVersion());        
-    }
-    
-    @Test
-    public void testConstructor_throwsWhenDisplayUnitAndMaxCapacityUnitAreNotCompatible() {
-        Long id = 1L;
-        Facility facility = new Facility();
-        String name = "equipment1";
-        EquipmentType type = EquipmentType.BARREL;
-        EquipmentStatus status = EquipmentStatus.ACTIVE;
-        Quantity<Volume> maxCapacity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE);
-        Unit<?> displayUnit = SupportedUnits.KILOGRAM;
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
-        int version = 1;
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            Equipment equipment = new Equipment(id, facility, name, type, status, maxCapacity, displayUnit, created, lastUpdated, version);
-        });
     }
     
     @Test
@@ -194,31 +177,11 @@ public class EquipmentTest {
     }
     
     @Test
-    public void testSetMaxCapacity_throwsWhenUnitIsNotCompatibleWithSetDisplayUnit() {
-        Equipment testEquipment = new Equipment();
-        testEquipment.setDisplayUnit(SupportedUnits.KILOGRAM);
-        
-        assertThrows(IllegalArgumentException.class, () -> {
-            testEquipment.setMaxCapacity(Quantities.getQuantity(100, Units.LITRE));
-        });
-    }
-    
-    @Test
     public void testSetDisplayUnit_throwsWhenUnitIsInvalid() {
         Equipment testEquipment = new Equipment();
 
         assertThrows(IllegalArgumentException.class, () -> {
             testEquipment.setDisplayUnit(Units.DAY);
-        });
-    }
-    
-    @Test
-    public void testSetDisplayUnit_throwsWhenUnitIsNotCompatibileWithSetMaxCapacityUnit() {
-        Equipment testEquipment = new Equipment();
-        testEquipment.setMaxCapacity(Quantities.getQuantity(100, Units.LITRE));
-        
-        assertThrows(IllegalArgumentException.class, () -> {
-            testEquipment.setDisplayUnit(SupportedUnits.KILOGRAM);
         });
     }
 }

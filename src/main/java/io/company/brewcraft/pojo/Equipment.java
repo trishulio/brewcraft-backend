@@ -117,11 +117,7 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
         if (maxCapacity != null) {
             if (!isValidUnit(maxCapacity.getUnit())) {
                 throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", maxCapacity.getUnit().getSymbol()));
-            } else if (this.displayUnit != null && !maxCapacity.getUnit().isCompatible(this.displayUnit)) {
-                throw new IllegalArgumentException(String.format("Max Capacity unit '%s' is not compatabile with display unit '%s'", maxCapacity.getUnit().getSymbol(), this.displayUnit.getSymbol()));
-            } 
-            
-            if (SupportedUnits.DEFAULT_VOLUME.isCompatible(maxCapacity.getUnit())) {
+            } else if (SupportedUnits.DEFAULT_VOLUME.isCompatible(maxCapacity.getUnit())) {
                 Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
                 maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_VOLUME);
             } else {
@@ -139,12 +135,8 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
     }
 
     public void setDisplayUnit(Unit<?> displayUnit) throws IllegalArgumentException {
-        if (displayUnit != null) {    
-            if (!isValidUnit(displayUnit)) {
-                throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", displayUnit.getSymbol()));
-            } else if (this.maxCapacity != null && !displayUnit.isCompatible(maxCapacity.getUnit())) {
-                throw new IllegalArgumentException(String.format("Display unit '%s' is not compatabile with max capacity unit '%s'", displayUnit.getSymbol(), this.maxCapacity.getUnit().getSymbol()));
-            }
+        if (displayUnit != null && !isValidUnit(displayUnit)) {    
+            throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", displayUnit.getSymbol()));
         }
         this.displayUnit = displayUnit;
     }
