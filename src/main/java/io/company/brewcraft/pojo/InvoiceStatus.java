@@ -1,10 +1,30 @@
 package io.company.brewcraft.pojo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import io.company.brewcraft.model.BaseModel;
 
+
+@Entity(name = "INVOICE_STATUS")
+@Table
 public class InvoiceStatus extends BaseModel {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+    
+    public static final String DEFAULT_STATUS_NAME = "PENDING";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_status_generator")
+    @SequenceGenerator(name = "invoice_status_generator", sequenceName = "invoice_status_sequence", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     public InvoiceStatus() {

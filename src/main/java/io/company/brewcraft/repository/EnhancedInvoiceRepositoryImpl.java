@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.company.brewcraft.model.InvoiceEntity;
-import io.company.brewcraft.model.InvoiceItemEntity;
-import io.company.brewcraft.model.InvoiceStatusEntity;
 import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.model.PurchaseOrderEntity;
+import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.pojo.InvoiceItem;
+import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.pojo.PurchaseOrder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {
@@ -32,24 +32,25 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
     }
 
     @Override
-    public InvoiceEntity refreshAndAdd(Long purchaseOrderId, InvoiceEntity invoice) {
+    public Invoice refreshAndAdd(Long purchaseOrderId, Invoice invoice) {
         log.info("Invoice with Id: {} has {} items and belong to PurchaseOrder: {}", invoice.getId(), invoice.getItems() != null ? invoice.getItems().size() : null, invoice.getPurchaseOrder() != null ? invoice.getPurchaseOrder().getId() : null);
         log.info("Attempting to fetch PurchaseOrder with Id: {}", purchaseOrderId);
-        PurchaseOrderEntity po = poRepo.findById(purchaseOrderId).orElseThrow(() -> new EntityNotFoundException("PurchaseOrder", purchaseOrderId));
+        PurchaseOrder po = poRepo.findById(purchaseOrderId).orElseThrow(() -> new EntityNotFoundException("PurchaseOrder", purchaseOrderId));
 
         String statusName = invoice.getStatus() != null ? invoice.getStatus().getName() : null;
-        statusName = statusName != null ? statusName : InvoiceStatusEntity.DEFAULT_STATUS_NAME;
+        statusName = statusName != null ? statusName : InvoiceStatus.DEFAULT_STATUS_NAME;
         log.info("Target Invoice Status Name: {}", statusName);
         final String finalStatusName = statusName;
-        InvoiceStatusEntity status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", "name", finalStatusName));
+        InvoiceStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", "name", finalStatusName));
 
-        Map<Long, List<InvoiceItemEntity>> materialToItems = invoice.getItems().stream().filter(item -> item.getMaterial() != null && item.getMaterial().getId() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
+        Map<Long, List<InvoiceItem>> materialToItems = invoice.getItems().stream().filter(item -> item.getMaterial() != null && item.getMaterial().getId() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
         log.info("Material to Items Mapping: {}", materialToItems);
 
         List<MaterialEntity> materials = materialRepo.findAllById(materialToItems.keySet());
         log.info("Total materials fetched: {}", materials.size());
 
-        materials.forEach(material -> materialToItems.get(material.getId()).forEach(item -> item.setMaterial(material)));
+        // TODO: Double check that removing this doesn't not cause an error.
+//        materials.forEach(material -> materialToItems.get(material.getId()).forEach(item -> item.setMaterial(material)));
 
         invoice.setPurchaseOrder(po);
         invoice.setStatus(status);

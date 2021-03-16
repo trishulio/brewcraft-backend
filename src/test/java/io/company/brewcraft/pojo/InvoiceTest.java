@@ -31,7 +31,7 @@ public class InvoiceTest {
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
-            new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+            new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
             new InvoiceStatus(4L, "FINAL"),
@@ -46,14 +46,14 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
+        assertEquals(new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
         assertEquals(new InvoiceStatus(4L, "FINAL"), invoice.getStatus());
         assertNull(invoice.getAmount());
         assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
-        assertEquals(new InvoiceItem(), invoice.getItems().get(0));
+        assertEquals(new InvoiceItem(), invoice.getItems().iterator().next());
     }
 
     @Test
@@ -129,8 +129,8 @@ public class InvoiceTest {
     @Test
     public void testAccessFreight() {
         assertNull(invoice.getFreight());
-        invoice.setFreight(new Freight(Money.parse("CAD 10")));
-        assertEquals(new Freight(Money.parse("CAD 10")), invoice.getFreight());
+        invoice.setFreight(new Freight(1L, Money.parse("CAD 10")));
+        assertEquals(new Freight(1L, Money.parse("CAD 10")), invoice.getFreight());
     }
 
     @Test

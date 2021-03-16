@@ -1,23 +1,42 @@
 package io.company.brewcraft.pojo;
 
+import javax.persistence.*;
+
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.Supplier;
 
+@Entity(name = "purchase_order")
+@Table
 public class PurchaseOrder extends BaseModel {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_ORDER_NUMBER = "orderNumber";
+    public static final String FIELD_SUPPLIER = "supplier";    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_order_generator")
+    @SequenceGenerator(name = "purchase_order_generator", sequenceName = "purchase_order_sequence", allocationSize = 1)
     private Long id;
+
+    @Column(name = "order_number", nullable = false, unique = true)
     private String orderNumber;
-    private Supplier supplier;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private SupplierEntity supplier;
+
 
     public PurchaseOrder() {
     }
 
     public PurchaseOrder(Long id) {
+        this();
         setId(id);
     }
 
-    public PurchaseOrder(Long id, String orderNumber) {
+    public PurchaseOrder(Long id, String orderNumber, SupplierEntity supplier) {
         this(id);
-        this.orderNumber = orderNumber;
+        setOrderNumber(orderNumber);
+        setSupplier(supplier);
     }
 
     public Long getId() {
@@ -36,11 +55,11 @@ public class PurchaseOrder extends BaseModel {
         this.orderNumber = orderNumber;
     }
 
-    public Supplier getSupplier() {
+    public SupplierEntity getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Supplier supplier) {
+    public void setSupplier(SupplierEntity supplier) {
         this.supplier = supplier;
     }
 }

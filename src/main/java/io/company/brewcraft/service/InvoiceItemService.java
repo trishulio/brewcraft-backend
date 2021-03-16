@@ -1,8 +1,7 @@
 package io.company.brewcraft.service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,8 +18,8 @@ import io.company.brewcraft.util.validator.Validator;
 public class InvoiceItemService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemService.class);
 
-    public List<InvoiceItem> mergePut(Validator validator, List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> updates) {
-        final List<InvoiceItem> targetItems = new ArrayList<>();
+    public Collection<InvoiceItem> getPutCollection(Validator validator, Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> updates) {
+        final Collection<InvoiceItem> targetItems = new HashSet<>();
 
         // Separating the ItemUpdate items into 'additions' and 'updates'
         Set<UpdateInvoiceItem> itemUpdates = new HashSet<>(updates.size());
@@ -33,7 +32,7 @@ public class InvoiceItemService extends BaseService {
             }
         }
 
-        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
+        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
         Map<Long, InvoiceItem> existingItemsMap = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         for (UpdateInvoiceItem itemUpdate: itemUpdates) {
@@ -54,8 +53,8 @@ public class InvoiceItemService extends BaseService {
         return targetItems;
     }
     
-    public List<InvoiceItem> mergePatch(Validator validator, List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> patches) {
-        final List<InvoiceItem> targetItems = new ArrayList<>();
+    public Collection<InvoiceItem> getPatchCollection(Validator validator, Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> patches) {
+        final Collection<InvoiceItem> targetItems = new HashSet<>();
 
         Set<UpdateInvoiceItem> itemUpdates = new HashSet<>(patches.size());
         AtomicInteger additionCount = new AtomicInteger(0);
@@ -69,7 +68,7 @@ public class InvoiceItemService extends BaseService {
         }
         validator.rule(additionCount.intValue() <= 0, "%s InvoiceItem payloads with no Id found. Patch can only be used to modify existing InvoiceItems.", additionCount.intValue());
 
-        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
+        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
         Map<Long, InvoiceItem> existingItemsMap = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         for (UpdateInvoiceItem itemUpdate : itemUpdates) {
@@ -84,15 +83,15 @@ public class InvoiceItemService extends BaseService {
         return targetItems;
     }
 
-    public List<InvoiceItem> addList(Validator validator, List<? extends BaseInvoiceItem> additions) {
-        List<InvoiceItem> targetItems = null;
+    public Collection<InvoiceItem> getAddCollection(Validator validator, Collection<? extends BaseInvoiceItem> additions) {
+        Collection<InvoiceItem> targetItems = null;
         if (additions != null) {
             targetItems = additions.stream().map(i -> {
                 InvoiceItem item = new InvoiceItem();
                 log.info("Applying properties of InvoiceItem: {} to new item", i);
                 item.override(i, getPropertyNames(BaseInvoiceItem.class));
                 return item;
-            }).collect(Collectors.toList());
+            }).collect(Collectors.toSet());
         }
 
         return targetItems;

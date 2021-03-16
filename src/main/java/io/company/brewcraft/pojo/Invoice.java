@@ -1,9 +1,13 @@
 package io.company.brewcraft.pojo;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
+import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,23 +19,68 @@ import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 
+@Entity(name = "INVOICE")
+@Table
 public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
 
-    private Long id;
-    private String invoiceNumber;
-    private PurchaseOrder purchaseOrder;
-    private String description;
-    private LocalDateTime generatedOn;
-    private LocalDateTime receivedOn;
-    private LocalDateTime paymentDueDate;
-    private LocalDateTime lastUpdated;
-    private LocalDateTime createdAt;
-    private InvoiceStatus status;
-    private List<InvoiceItem> items;
-    private Freight freight;
-    private Integer version;
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_INVOICE_NUMBER = "invoiceNumber";
+    public static final String FIELD_DESCRITION = "description";
+    public static final String FIELD_PURCHASE_ORDER = "purchaseOrder";
+    public static final String FIELD_GENERATED_ON = "generatedOn";
+    public static final String FIELD_RECEIVED_ON = "receivedOn";
+    public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
+    public static final String FIELD_FREIGHT = "freight";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_ITEMS = "items";
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_generator")
+    @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
+    private Long id;
+
+    @Column(name = "invoice_number", nullable = false, unique = true)
+    private String invoiceNumber;
+
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_order_id", referencedColumnName = "id")
+    private PurchaseOrder purchaseOrder;
+
+    @Column(name = "generated_on")
+    private LocalDateTime generatedOn;
+
+    @Column(name = "received_on")
+    private LocalDateTime receivedOn;
+
+    @Column(name = "payment_due_date")
+    private LocalDateTime paymentDueDate;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "freight_id", referencedColumnName = "id")
+    private Freight freight;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
+
+    @ManyToOne
+    @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
+    private InvoiceStatus status;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<InvoiceItem> items;
+
+    @Version
+    private Integer version;
+    
     public Invoice() {
     }
 
@@ -40,7 +89,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     }
 
     public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
-            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
+            LocalDateTime lastUpdated, InvoiceStatus status, Collection<InvoiceItem> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -155,12 +204,12 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     }
 
     @Override
-    public List<InvoiceItem> getItems() {
+    public Collection<InvoiceItem> getItems() {
         return items;
     }
 
     @Override
-    public void setItems(List<InvoiceItem> items) {
+    public void setItems(Collection<InvoiceItem> items) {
         this.items = items;
     }
 
@@ -192,7 +241,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     public Tax getTax() {
         Tax tax = null;
         if (getItems() != null) {
-            List<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toList());
+            Collection<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
         

@@ -5,10 +5,11 @@ import java.time.LocalDateTime;
 import javax.measure.Quantity;
 
 import io.company.brewcraft.model.Audited;
+import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.QuantityEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
-public class ShipmentItem implements UpdateShipmentItem, Audited {
+public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audited {
 
     private Long id;
     private QuantityEntity qty;

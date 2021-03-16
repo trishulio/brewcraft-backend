@@ -17,7 +17,8 @@ public class FreightTest {
 
     @Test
     public void testAllArgConstructor() {
-        freight = new Freight(Money.parse("CAD 10"));
+        freight = new Freight(1L, Money.parse("CAD 10"));
+        assertEquals(1L, freight.getId());
         assertEquals(Money.parse("CAD 10"), freight.getAmount());
     }
 

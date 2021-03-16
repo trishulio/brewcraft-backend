@@ -3,8 +3,6 @@ package io.company.brewcraft.pojo;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-import io.company.brewcraft.model.InvoiceEntity;
-
 public interface BaseShipment<T extends BaseShipmentItem> {
     String getShipmentNumber();
 
@@ -18,9 +16,9 @@ public interface BaseShipment<T extends BaseShipmentItem> {
 
     void setStatus(ShipmentStatus status);
 
-    InvoiceEntity getInvoice();
+    Invoice getInvoice();
 
-    void setInvoice(InvoiceEntity invoice);
+    void setInvoice(Invoice invoice);
 
     LocalDateTime getDeliveryDueDate();
 

@@ -10,7 +10,6 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.InvoiceEntity;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 
@@ -92,8 +91,8 @@ public class ShipmentTest {
     @Test
     public void testAccessInvoice() {
         assertNull(shipment.getInvoice());
-        shipment.setInvoice(new InvoiceEntity(1L));
-        assertEquals(new InvoiceEntity(1L), shipment.getInvoice());
+        shipment.setInvoice(new Invoice(1L));
+        assertEquals(new Invoice(1L), shipment.getInvoice());
     }
 
     @Test

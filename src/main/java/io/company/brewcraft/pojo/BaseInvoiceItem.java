@@ -8,6 +8,10 @@ public interface BaseInvoiceItem {
     String getDescription();
 
     void setDescription(String description);
+    
+    Invoice getInvoice();
+    
+    void setInvoice(Invoice invoice);
 
     Quantity<?> getQuantity();
 

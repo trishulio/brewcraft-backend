@@ -1,7 +1,7 @@
 package io.company.brewcraft.repository;
 
-import io.company.brewcraft.model.InvoiceEntity;
+import io.company.brewcraft.pojo.Invoice;
 
 public interface EnhancedInvoiceRepository {
-    InvoiceEntity refreshAndAdd(Long purchaseOrderId, InvoiceEntity invoice);
+    Invoice refreshAndAdd(Long purchaseOrderId, Invoice invoice);
 }

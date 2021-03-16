@@ -3,17 +3,32 @@ package io.company.brewcraft.pojo;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.InvoiceEntity;
 
+@Entity(name = "SHIPMENT")
+@Table
 public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>, Identified, Audited {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
+    public static final String FIELD_LOT_NUMBER = "lotNumber";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_generator")
+    @SequenceGenerator(name = "shipment_generator", sequenceName = "shipment_sequence", allocationSize = 1)
     private Long id;
     private String shipmentNumber;
     private String lotNumber;
     private ShipmentStatus status;
-    private InvoiceEntity invoice;
+    private Invoice invoice;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
     private LocalDateTime createdAt;
@@ -29,7 +44,8 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
         setId(id);
     }
 
-    public Shipment(Long id, String shipmentNumber, String lotNumber, ShipmentStatus shipmentStatus, InvoiceEntity invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, Collection<ShipmentItem> items, Integer version) {
+    public Shipment(Long id, String shipmentNumber, String lotNumber, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
+            Collection<ShipmentItem> items, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
@@ -84,12 +100,12 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     }
 
     @Override
-    public InvoiceEntity getInvoice() {
+    public Invoice getInvoice() {
         return invoice;
     }
 
     @Override
-    public void setInvoice(InvoiceEntity invoice) {
+    public void setInvoice(Invoice invoice) {
         this.invoice = invoice;
     }
 

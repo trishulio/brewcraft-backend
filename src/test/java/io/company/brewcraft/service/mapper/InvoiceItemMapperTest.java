@@ -15,13 +15,6 @@ import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.TaxDto;
 import io.company.brewcraft.dto.UpdateInvoiceItemDto;
-import io.company.brewcraft.model.Currency;
-import io.company.brewcraft.model.InvoiceItemEntity;
-import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.model.MoneyEntity;
-import io.company.brewcraft.model.QuantityEntity;
-import io.company.brewcraft.model.TaxEntity;
-import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.Tax;
@@ -58,6 +51,11 @@ public class InvoiceItemMapperTest {
         assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
+    
+    @Test
+    public void testToDto_ReturnsNull_WhenInvoiceItemIsNull() {
+        assertNull(mapper.toDto(null));
+    }
 
     @Test
     public void testFromDto_ReturnsInvoice_WhenInvoiceItemDtoIsNotNull() {
@@ -84,6 +82,11 @@ public class InvoiceItemMapperTest {
     }
 
     @Test
+    public void testFromDto_ReturnsNull_WhenInvoiceItemDtoIsNull() {
+        assertNull(mapper.fromDto((InvoiceItemDto) null));
+    }
+    
+    @Test
     public void testFromDto_ReturnsInvoice_WhenUpdateInvoiceItemIsNotNull() {
         UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(
             1L,
@@ -104,7 +107,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
-
+    
     @Test
     public void testToEntity_ReturnEntity_WhenPojoIsNotNull() {
         InvoiceItem item = new InvoiceItem(
@@ -149,5 +152,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new Tax(Money.parse("CAD 6")), item.getTax());
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
+    public void testFromDto_ReturnsNull_WhenUpdateInvoiceItemIsNull() {
+        assertNull(mapper.fromDto((UpdateInvoiceItemDto) null));
     }
 }

@@ -2,7 +2,7 @@ package io.company.brewcraft.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.company.brewcraft.model.InvoiceEntity;
+import io.company.brewcraft.pojo.Invoice;
 import io.company.brewcraft.pojo.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -20,7 +20,7 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
     
     @Override
     public Shipment save(Long invoiceId, Shipment shipment) {
-        InvoiceEntity invoice = this.invoiceRepo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId));
+        Invoice invoice = this.invoiceRepo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId));
         shipment.setInvoice(invoice);
 
         return this.shipmentRepo.save(shipment);
