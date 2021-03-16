@@ -37,10 +37,6 @@ public abstract class QuantityUnitMapper {
         if (symbol != null) {
             unit = this.map.get(symbol);
         }
-        
-        this.map.entrySet().forEach(entry->{
-            System.out.println(entry.getKey() + " " + entry.getValue());  
-         });
 
         logger.info("Mapping for symbol: {} is: {}", symbol, unit);
 

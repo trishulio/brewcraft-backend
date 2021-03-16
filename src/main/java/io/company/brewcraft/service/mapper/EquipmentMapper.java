@@ -27,7 +27,6 @@ public interface EquipmentMapper {
     @InheritInverseConfiguration
     Equipment fromEntity(EquipmentEntity equipment, @Context CycleAvoidingMappingContext context);
     
-    @Mapping(target = "maxCapacity", source = "maxCapacityInPersistedUnit")
     EquipmentEntity toEntity(Equipment equipment, @Context CycleAvoidingMappingContext context);
     
     @Mapping(target = "maxCapacity", source = "maxCapacityInDisplayUnit")

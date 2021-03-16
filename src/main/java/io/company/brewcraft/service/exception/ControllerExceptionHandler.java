@@ -89,4 +89,14 @@ public class ControllerExceptionHandler {
         log.debug("Entity Not Found Exception", e);
         return message;
     }
+    
+    @ExceptionHandler(value = { IllegalArgumentException.class })
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse illegalArgumentNotValidException(IllegalArgumentException e, HttpServletRequest request) {
+        log.debug("argument not valid", e);
+        
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        return message;
+    }
 }

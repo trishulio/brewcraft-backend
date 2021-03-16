@@ -42,10 +42,8 @@ import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
 
 public class EquipmentServiceImplTest {
 
@@ -172,34 +170,6 @@ public class EquipmentServiceImplTest {
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(null);
 
         assertThrows(EntityNotFoundException.class, () -> {
-            equipmentService.addEquipment(facilityId, equipment);
-            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
-        });
-    }
-    
-    @Test
-    public void testAddEquipment_throwsWhenMaxCapacityUnitIsInvalid() throws Exception {
-        Long facilityId = 2L;
-        
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), Units.DAY), SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility());
-
-        assertThrows(ValidationException.class, () -> {
-            equipmentService.addEquipment(facilityId, equipment);
-            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
-        });
-    }
-    
-    @Test
-    public void testAddEquipment_throwsWhenDisplayUnitIsInvalid() throws Exception {
-        Long facilityId = 2L;
-        
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), Units.AMPERE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility());
-
-        assertThrows(ValidationException.class, () -> {
             equipmentService.addEquipment(facilityId, equipment);
             verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
         });

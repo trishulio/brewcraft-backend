@@ -2,8 +2,6 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
-import javax.measure.Unit;
-import javax.measure.quantity.Volume;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +21,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import tec.units.ri.unit.Units;
 
 @Entity
 @Table(name="EQUIPMENT")

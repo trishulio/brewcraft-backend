@@ -1,8 +1,9 @@
 package io.company.brewcraft.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ public class EquipmentEntityTest {
 
         EquipmentEntity equipment = new EquipmentEntity(id, facility, name, type, status, maxCapacity, displayUnit, created, lastUpdated, version);
         
-        assertEquals((Long) 1L, equipment.getId());
+        assertEquals(1L, equipment.getId());
         assertEquals(new FacilityEntity(), equipment.getFacility());
         assertEquals("equipment1", equipment.getName());
         assertEquals(EquipmentType.BARREL, equipment.getType());
@@ -39,14 +40,14 @@ public class EquipmentEntityTest {
         assertEquals(new UnitEntity(), equipment.getDisplayUnit());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getLastUpdated());
-        assertEquals((Integer)1, equipment.getVersion());        
+        assertEquals(1, equipment.getVersion());        
     }
     
     @Test
     public void testGetSetId() {
         Long id = 1L;
         equipment.setId(id);
-        assertEquals((Long) 1L, equipment.getId());
+        assertEquals(1L, equipment.getId());
     }
     
     @Test
@@ -95,7 +96,7 @@ public class EquipmentEntityTest {
     public void testGetSetVersion() {
         Integer version = 1;
         equipment.setVersion(version);
-        assertEquals((Integer)1, equipment.getVersion());
+        assertEquals(1, equipment.getVersion());
     }
 
     @Test

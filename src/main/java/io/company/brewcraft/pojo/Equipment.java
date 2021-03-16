@@ -44,16 +44,16 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status,
             Quantity<?> maxCapacity, Unit<?> displayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
-        this.id = id;
-        this.facility = facility;
-        this.name = name;
-        this.type = type;
-        this.status = status;
-        this.maxCapacity = maxCapacity;
-        this.displayUnit = displayUnit;
-        this.createdAt = createdAt;
-        this.lastUpdated = lastUpdated;
-        this.version = version;
+        setId(id);
+        setFacility(facility);
+        setName(name);
+        setType(type);
+        setStatus(status);
+        setMaxCapacity(maxCapacity);
+        setDisplayUnit(displayUnit);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     public Long getId() {
@@ -100,29 +100,6 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
         return maxCapacity;
     }
     
-    /*
-     * Default peristed unit for volume is litres
-     * Default persisted unit for mass is kilograms
-     */
-    public Quantity<?> getMaxCapacityInPersistedUnit() {
-        if (maxCapacity != null) {
-            Unit<?> displayUnit = this.getDisplayUnit();
-            Quantity<?> maxCapacityInPersistedUnit = null;
-            
-            if (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit)) {
-                Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
-                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.LITRE);
-            } else {
-                //Must be mass if its not Volume
-                Quantity<Mass> quantity = (Quantity<Mass>) maxCapacity;
-                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.KILOGRAM);
-            } 
-            return maxCapacityInPersistedUnit;
-        } else {
-            return maxCapacity;
-        }
-    }
-    
     public Quantity<?> getMaxCapacityInDisplayUnit() {
         if (maxCapacity != null && this.getDisplayUnit() != null) {
             Unit displayUnit = this.getDisplayUnit();
@@ -135,15 +112,40 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
         }
     }
 
-    public void setMaxCapacity(Quantity<?> maxCapacity) {
-        this.maxCapacity = maxCapacity;
+    public void setMaxCapacity(Quantity<?> maxCapacity) throws IllegalArgumentException {
+        Quantity<?> maxCapacityInPersistedUnit = null;
+        if (maxCapacity != null) {
+            if (!isValidUnit(maxCapacity.getUnit())) {
+                throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", maxCapacity.getUnit().getSymbol()));
+            } else if (this.displayUnit != null && !maxCapacity.getUnit().isCompatible(this.displayUnit)) {
+                throw new IllegalArgumentException(String.format("Max Capacity unit '%s' is not compatabile with display unit '%s'", maxCapacity.getUnit().getSymbol(), this.displayUnit.getSymbol()));
+            } 
+            
+            if (SupportedUnits.DEFAULT_VOLUME.isCompatible(maxCapacity.getUnit())) {
+                Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
+                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_VOLUME);
+            } else {
+                //Must be mass if its not Volume
+                Quantity<Mass> quantity = (Quantity<Mass>) maxCapacity;
+                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_MASS);
+            } 
+        } 
+        
+        this.maxCapacity = maxCapacityInPersistedUnit;
     }
     
     public Unit<?> getDisplayUnit() {
         return displayUnit;
     }
 
-    public void setDisplayUnit(Unit<?> displayUnit) {
+    public void setDisplayUnit(Unit<?> displayUnit) throws IllegalArgumentException {
+        if (displayUnit != null) {    
+            if (!isValidUnit(displayUnit)) {
+                throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", displayUnit.getSymbol()));
+            } else if (this.maxCapacity != null && !displayUnit.isCompatible(maxCapacity.getUnit())) {
+                throw new IllegalArgumentException(String.format("Display unit '%s' is not compatabile with max capacity unit '%s'", displayUnit.getSymbol(), this.maxCapacity.getUnit().getSymbol()));
+            }
+        }
         this.displayUnit = displayUnit;
     }
 
@@ -171,4 +173,11 @@ public class Equipment extends BaseModel implements UpdateEquipment, Identified,
         this.version = version;
     }
     
+    private boolean isValidUnit(Unit<?> displayUnit) {
+        boolean result = false;
+        if (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit) || SupportedUnits.DEFAULT_MASS.isCompatible(displayUnit)) {
+            result = true;
+        }
+        return result;
+    }
 }
