@@ -3,12 +3,10 @@ package io.company.brewcraft.pojo;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
@@ -20,20 +18,49 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_INVOICE = "invoice";
+    public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
+    public static final String FIELD_DELIVERED_DATE = "deliveredDate";
+    public static final String FIELD_ITEMS = "items";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_generator")
     @SequenceGenerator(name = "shipment_generator", sequenceName = "shipment_sequence", allocationSize = 1)
     private Long id;
+    
+    @Column(name = "shipment_number")
     private String shipmentNumber;
+    
+    @Column(name = "lot_number")
     private String lotNumber;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipment_status_id", referencedColumnName = "id")
     private ShipmentStatus status;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
+    
+    @Column(name = "delivery_due_date")
     private LocalDateTime deliveryDueDate;
+    
+    @Column(name = "delivered_date")
     private LocalDateTime deliveredDate;
+    
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+    
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<ShipmentItem> items;
+    
+    @Version
     private Integer version;
 
     public Shipment() {

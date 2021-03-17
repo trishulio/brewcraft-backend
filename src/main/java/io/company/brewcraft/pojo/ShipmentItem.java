@@ -3,6 +3,10 @@ package io.company.brewcraft.pojo;
 import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
+import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseModel;
@@ -11,12 +15,32 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audited {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_item_generator")
+    @SequenceGenerator(name = "shipment_item_generator", sequenceName = "shipment_item_sequence", allocationSize = 1)
     private Long id;
+    
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "qty_id", referencedColumnName = "id")
     private QuantityEntity qty;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id")
     private Material material;
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "shipment_id", referencedColumnName = "id")
     private Shipment shipment;
+    
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+    
+    @Version
     private Integer version;
 
     public ShipmentItem() {

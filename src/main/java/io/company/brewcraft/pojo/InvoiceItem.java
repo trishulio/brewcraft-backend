@@ -50,7 +50,7 @@ public class InvoiceItem extends BaseModel implements MoneySupplier, UpdateInvoi
     @JoinColumn(name = "tax_id", referencedColumnName = "id")
     private Tax tax;
 
-    @OneToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
     private MaterialEntity material;
 

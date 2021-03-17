@@ -75,7 +75,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
     private InvoiceStatus status;
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<InvoiceItem> items;
 
     @Version
