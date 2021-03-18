@@ -26,12 +26,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.SupplierAddressEntity;
-import io.company.brewcraft.model.SupplierContactEntity;
-import io.company.brewcraft.model.SupplierEntity;
-import io.company.brewcraft.pojo.Address;
-import io.company.brewcraft.pojo.Supplier;
-import io.company.brewcraft.pojo.SupplierContact;
+import io.company.brewcraft.model.SupplierAddress;
+import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -51,11 +48,11 @@ public class SupplierServiceImplTest {
 
     @Test
     public void testGetSuppliers_returnsSuppliers() throws Exception {
-        SupplierEntity supplier1 = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier supplier1 = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        List<SupplierEntity> suppliersList = Arrays.asList(supplier1);
+        List<Supplier> suppliersList = Arrays.asList(supplier1);
         
-        Page<SupplierEntity> expectedSuppliers = new PageImpl<>(suppliersList);
+        Page<Supplier> expectedSuppliers = new PageImpl<>(suppliersList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
@@ -84,8 +81,8 @@ public class SupplierServiceImplTest {
     @Test
     public void testGetSupplier_returnsSupplier() throws Exception {
         Long id = 1L;
-        SupplierEntity supplier1 = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<SupplierEntity> expectedSupplierEntity = Optional.ofNullable(supplier1);
+        Supplier supplier1 = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<Supplier> expectedSupplierEntity = Optional.ofNullable(supplier1);
 
         when(supplierRepositoryMock.findById(id)).thenReturn(expectedSupplierEntity);
 
@@ -102,28 +99,14 @@ public class SupplierServiceImplTest {
     }
 
     @Test
-    public void testAddSupplier_SavesSupplier() throws Exception {
-        Supplier supplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
-        SupplierEntity supplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+    public void testAddSupplier_SavesSupplier() throws Exception {        
+        Supplier supplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier addedSupplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+        when(supplierRepositoryMock.saveAndFlush(supplierEntity)).thenReturn(addedSupplierEntity);
 
-        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(supplierEntity);
-
-        Supplier returnedSupplier = supplierService.addSupplier(supplier);
+        Supplier returnedSupplier = supplierService.addSupplier(supplierEntity);
         
-        //Assert persisted entity
-        assertEquals(supplier.getId(), persistedSupplierCaptor.getValue().getId());
-        assertEquals(supplier.getName(), persistedSupplierCaptor.getValue().getName());
-        assertEquals(supplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
-        assertEquals(supplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
-        assertEquals(supplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
-        assertEquals(supplier.getLastUpdated(), persistedSupplierCaptor.getValue().getLastUpdated());
-        assertEquals(supplier.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
-        assertEquals(supplier.getVersion(), persistedSupplierCaptor.getValue().getVersion());
-        
-        //Assert returned POJO
         assertEquals(supplierEntity.getId(), returnedSupplier.getId());
         assertEquals(supplierEntity.getName(), returnedSupplier.getName());
         assertEquals(supplierEntity.getAddress().getId(), returnedSupplier.getAddress().getId());
@@ -138,13 +121,13 @@ public class SupplierServiceImplTest {
     public void testPutSupplier_success() throws Exception {
         Long id = 1L;
         
-        Supplier putSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier putSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        SupplierEntity supplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier supplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+        ArgumentCaptor<Supplier> persistedSupplierCaptor = ArgumentCaptor.forClass(Supplier.class);
 
-        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(supplierEntity);
+        when(supplierRepositoryMock.saveAndFlush(persistedSupplierCaptor.capture())).thenReturn(supplierEntity);
 
         Supplier returnedSupplier = supplierService.putSupplier(id, putSupplier);
        
@@ -154,7 +137,7 @@ public class SupplierServiceImplTest {
         assertEquals(putSupplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
         assertEquals(putSupplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
         assertEquals(putSupplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
-        assertEquals(null, persistedSupplierCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedSupplierCaptor.getValue().getLastUpdated());
         //assertEquals(putSupplier.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
         assertEquals(putSupplier.getVersion(), persistedSupplierCaptor.getValue().getVersion());
         
@@ -173,15 +156,15 @@ public class SupplierServiceImplTest {
     public void testPatchSupplier_success() throws Exception {
         Long id = 1L;
         
-        Supplier patchedSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new Address(1L, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);     
-        SupplierEntity existingSupplierEntity = new SupplierEntity(1L, "testName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        SupplierEntity persistedSupplierEntity = new SupplierEntity(1L, "updatedName", List.of(new SupplierContactEntity(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddressEntity(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier patchedSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);     
+        Supplier existingSupplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier persistedSupplierEntity = new Supplier(1L, "updatedName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<SupplierEntity> persistedSupplierCaptor = ArgumentCaptor.forClass(SupplierEntity.class);
+        ArgumentCaptor<Supplier> persistedSupplierCaptor = ArgumentCaptor.forClass(Supplier.class);
 
         when(supplierRepositoryMock.findById(id)).thenReturn(Optional.of(existingSupplierEntity));
  
-        when(supplierRepositoryMock.save(persistedSupplierCaptor.capture())).thenReturn(persistedSupplierEntity);
+        when(supplierRepositoryMock.saveAndFlush(persistedSupplierCaptor.capture())).thenReturn(persistedSupplierEntity);
 
         Supplier returnedSupplier = supplierService.patchSupplier(id, patchedSupplier);
        

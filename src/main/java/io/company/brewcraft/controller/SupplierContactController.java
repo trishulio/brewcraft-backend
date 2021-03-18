@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.SupplierContactDto;
 import io.company.brewcraft.dto.SupplierContactWithSupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierContactDto;
 import io.company.brewcraft.dto.UpdateSupplierContactWithSupplierDto;
-import io.company.brewcraft.pojo.SupplierContact;
+import io.company.brewcraft.model.SupplierContact;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierContactMapper;

@@ -11,18 +11,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="SUPPLIER_ADDRESS")
-public class SupplierAddressEntity extends AddressEntity {
+public class SupplierAddress extends AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_address_generator")
     @SequenceGenerator(name="supplier_address_generator", sequenceName = "supplier_address_sequence", allocationSize = 1)
     private Long id;
     
-    public SupplierAddressEntity() {
+    public SupplierAddress() {
         
     }
     
-    public SupplierAddressEntity(Long id, String addressLine1, String addressLine2, String country, String province, String city,
+    public SupplierAddress(Long id, String addressLine1, String addressLine2, String country, String province, String city,
             String postalCode, LocalDateTime created, LocalDateTime lastUpdated) {
         super(addressLine1, addressLine2, country, province, city, postalCode, created, lastUpdated);
         this.id = id;

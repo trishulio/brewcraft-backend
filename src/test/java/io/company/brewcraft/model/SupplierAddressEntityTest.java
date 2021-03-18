@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 public class SupplierAddressEntityTest {
 
-    private SupplierAddressEntity supplierAddress;
+    private SupplierAddress supplierAddress;
 
     @BeforeEach
     public void init() {
-        supplierAddress = new SupplierAddressEntity();
+        supplierAddress = new SupplierAddress();
     }
 
     @Test

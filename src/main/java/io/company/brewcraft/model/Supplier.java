@@ -11,9 +11,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import io.company.brewcraft.dto.UpdateSupplier;
+
 @Entity
 @Table(name = "SUPPLIER")
-public class SupplierEntity extends BaseEntity {
+public class Supplier extends BaseEntity implements UpdateSupplier, Identified, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_CONTACTS = "contacts";
@@ -28,11 +30,11 @@ public class SupplierEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<SupplierContactEntity> contacts;
+    private List<SupplierContact> contacts;
 
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private SupplierAddressEntity address;
+    private SupplierAddress address;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -45,11 +47,11 @@ public class SupplierEntity extends BaseEntity {
     @Version
     private Integer version;
 
-    public SupplierEntity() {
+    public Supplier() {
 
     }
 
-    public SupplierEntity(Long id, String name, List<SupplierContactEntity> contacts, SupplierAddressEntity address, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Supplier(Long id, String name, List<SupplierContact> contacts, SupplierAddress address, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setContacts(contacts);
@@ -75,11 +77,11 @@ public class SupplierEntity extends BaseEntity {
         this.name = name;
     }
 
-    public List<SupplierContactEntity> getContacts() {
+    public List<SupplierContact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<SupplierContactEntity> contacts) {
+    public void setContacts(List<SupplierContact> contacts) {
         if (contacts != null) {
             contacts.stream().forEach(contact -> contact.setSupplier(this));
         }
@@ -92,15 +94,15 @@ public class SupplierEntity extends BaseEntity {
         }
     }
 
-    public SupplierAddressEntity getAddress() {
+    public SupplierAddress getAddress() {
         return address;
     }
 
-    public void setAddress(SupplierAddressEntity address) {
+    public void setAddress(SupplierAddress address) {
         this.address = address;
     }
 
-    public void addContact(SupplierContactEntity contact) {
+    public void addContact(SupplierContact contact) {
         if (contacts == null) {
             contacts = new ArrayList<>();
         }
@@ -114,7 +116,7 @@ public class SupplierEntity extends BaseEntity {
         }
     }
     
-    public void removeContect(SupplierContactEntity contact) {
+    public void removeContect(SupplierContact contact) {
         if (contacts != null) {
             contact.setSupplier(null);
             contacts.remove(contact);

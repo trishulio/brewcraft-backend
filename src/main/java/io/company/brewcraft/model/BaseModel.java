@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.lang.reflect.Field;
 import java.util.Set;
 
 import io.company.brewcraft.util.entity.ReflectionManipulator;
@@ -21,6 +22,21 @@ public abstract class BaseModel {
 
     public void outerJoin(Object other, Set<String> include) {
         util.copy(this, other, pd -> include.contains(pd.getName()) && pd.getReadMethod().invoke(other) != null);
+    }
+    
+    public void copyToNullFields(Object existingEntity) {
+        for (Field field : this.getClass().getDeclaredFields()) {
+            try {
+                field.setAccessible(true);
+                Object value = field.get(this);
+
+                if (value == null) {
+                    field.set(this, field.get(existingEntity));
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void override(Object other) {

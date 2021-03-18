@@ -2,8 +2,8 @@ package io.company.brewcraft.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.Supplier;
 
-public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> {
+public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
 }

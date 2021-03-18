@@ -19,7 +19,7 @@ public class PurchaseOrderEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private SupplierEntity supplier;
+    private Supplier supplier;
 
     public PurchaseOrderEntity() {
     }
@@ -28,7 +28,7 @@ public class PurchaseOrderEntity extends BaseEntity {
         setId(id);
     }
 
-    public PurchaseOrderEntity(Long id, String orderNumber, SupplierEntity supplier) {
+    public PurchaseOrderEntity(Long id, String orderNumber, Supplier supplier) {
         this(id);
         setOrderNumber(orderNumber);
         setSupplier(supplier);
@@ -50,11 +50,11 @@ public class PurchaseOrderEntity extends BaseEntity {
         this.orderNumber = orderNumber;
     }
 
-    public SupplierEntity getSupplier() {
+    public Supplier getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(SupplierEntity supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
 }
