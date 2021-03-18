@@ -26,7 +26,10 @@ public class ShipmentService extends BaseService {
         return null;
     }
 
-    public Shipment getShipment(Long id) {
+    public Shipment getShipment(Validator validator, Long id) {
+        validator.rule(id != null, "Non-null Id expected");
+        validator.raiseErrors();
+
         Shipment shipment = null;
         Optional<Shipment> retrieved = repo.findById(id);
 
@@ -37,11 +40,17 @@ public class ShipmentService extends BaseService {
         return shipment;
     }
 
-    public boolean existsByIds(Collection<Long> ids) {
+    public boolean existsByIds(Validator validator, Collection<Long> ids) {
+        validator.rule(ids != null, "");
+        validator.raiseErrors();
+
         return repo.existsByIds(ids);
     }
 
-    public int delete(Collection<Long> ids) {
+    public int delete(Validator validator, Collection<Long> ids) {
+        validator.rule(ids != null, "");
+        validator.raiseErrors();
+
         return repo.softDelete(ids);
     }
 
@@ -51,9 +60,9 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         Shipment addition = new Shipment();
-        addition.override(shipment, getPropertyNames(BaseShipment.class));
-
         Collection<ShipmentItem> itemAdditions = itemService.getAddItems(validator, shipment.getItems());
+
+        addition.override(shipment, getPropertyNames(BaseShipment.class));
         addition.setItems(itemAdditions);
 
         return repo.save(invoiceId, addition);
@@ -65,17 +74,18 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         Class<?> shipmentClz = UpdateShipment.class;
-        Shipment existing = getShipment(shipmentId);
+        Shipment existing = getShipment(validator, shipmentId);
         if (existing == null) {
-            existing = new Shipment(shipmentId);
-            existing.setCreatedAt(now());
+            existing = new Shipment();
+//            existing.setCreatedAt(now());
 
             shipmentClz = BaseShipment.class;
         }
-
+        existing.setId(shipmentId);
+        
         Collection<ShipmentItem> existingItems = existing.getItems();
-        existing.override(update, getPropertyNames(shipmentClz));
         Collection<ShipmentItem> updatedItems = itemService.getPutList(validator, existingItems, update.getItems());
+        existing.override(update, getPropertyNames(shipmentClz));
         existing.setItems(updatedItems);
 
         return repo.save(invoiceId, existing);
@@ -89,8 +99,8 @@ public class ShipmentService extends BaseService {
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
 
         Collection<ShipmentItem> existingItems = existing.getItems();
-        existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
         Collection<ShipmentItem> updatedItems = itemService.getPatchList(validator, existingItems, update.getItems());
+        existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
         existing.setItems(updatedItems);
 
         return repo.save(invoiceId, existing);

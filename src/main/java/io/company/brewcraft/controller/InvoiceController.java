@@ -65,7 +65,7 @@ public class InvoiceController extends BaseController {
         @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "10") int size,
-        @RequestParam(name="attr") Set<String> attributes
+        @RequestParam(required = false, defaultValue = "", name="attr") Set<String> attributes
     ) {
         Page<Invoice> invoices = invoiceService.getInvoices(
             ids,
