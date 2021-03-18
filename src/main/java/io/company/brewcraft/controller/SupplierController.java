@@ -22,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.company.brewcraft.dto.AddSupplierDto;
 import io.company.brewcraft.dto.GetSuppliersDto;
 import io.company.brewcraft.dto.SupplierDto;
-import io.company.brewcraft.dto.UpdateSupplier;
 import io.company.brewcraft.dto.UpdateSupplierDto;
-import io.company.brewcraft.pojo.Supplier;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.SupplierMapper;
@@ -73,7 +72,7 @@ public class SupplierController {
     
     @PutMapping("/suppliers/{supplierId}")
     public SupplierDto putSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
-        UpdateSupplier supplier = supplierMapper.fromDto(supplierDto);
+        Supplier supplier = supplierMapper.fromDto(supplierDto);
         
         Supplier putSupplier = supplierService.putSupplier(supplierId, supplier);
         
@@ -82,7 +81,7 @@ public class SupplierController {
 
     @PatchMapping("/suppliers/{supplierId}")
     public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
-        UpdateSupplier supplier = supplierMapper.fromDto(supplierDto);
+        Supplier supplier = supplierMapper.fromDto(supplierDto);
         
         Supplier patchedSupplier = supplierService.patchSupplier(supplierId, supplier);
         

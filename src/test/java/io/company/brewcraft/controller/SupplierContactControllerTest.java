@@ -23,10 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import io.company.brewcraft.pojo.Address;
-import io.company.brewcraft.pojo.Supplier;
-import io.company.brewcraft.pojo.SupplierContact;
-import io.company.brewcraft.repository.SupplierRepository;
+import io.company.brewcraft.model.SupplierAddress;
+import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.SupplierContactService;
 
@@ -43,14 +42,11 @@ public class SupplierContactControllerTest {
 
     @MockBean
     private SupplierContactService supplierContactServiceMock;
-    
-    @MockBean
-    private SupplierRepository supplierRepositoryMock;
 
     @Test
     public void testGetAll_ReturnsListOfAllSuppliers() throws Exception {
-       Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-       Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new Address(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
+       Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new SupplierAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
 
        SupplierContact contact1 = new SupplierContact(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
        SupplierContact contact2 = new SupplierContact(2L, supplier2, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1);
@@ -126,7 +122,7 @@ public class SupplierContactControllerTest {
     
     @Test
     public void testGetContact_ReturnsContact() throws Exception {
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         SupplierContact contact = new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
         
         when(supplierContactServiceMock.getContact(1L)).thenReturn(contact);
@@ -189,8 +185,6 @@ public class SupplierContactControllerTest {
                  + "  'phoneNumber': 'phoneNumber1',"
                  + "  'version': 1"
                  + " }"));
-        
-        verify(supplierContactServiceMock, times(1)).addContact(eq(1L), any(SupplierContact.class));
     }
     
     @Test
@@ -220,9 +214,7 @@ public class SupplierContactControllerTest {
                  + "  'email': 'email1',"
                  + "  'phoneNumber': 'phoneNumber1',"
                  + "  'version': 1"
-                 + " }"));
-               
-        verify(supplierContactServiceMock, times(1)).putContact(eq(1L), eq(1L), any(SupplierContact.class));
+                 + " }"));        
     }
     
     @Test
@@ -237,7 +229,7 @@ public class SupplierContactControllerTest {
         payload.put("version", "1");
         
         
-        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         SupplierContact contact = new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1);
                             
         when(supplierContactServiceMock.patchContact(eq(1L), eq(1L), any(SupplierContact.class))).thenReturn(contact);

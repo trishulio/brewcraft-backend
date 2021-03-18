@@ -1,6 +1,7 @@
 package io.company.brewcraft.pojo;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.Supplier;
 
 public class PurchaseOrder extends BaseModel {
     private Long id;

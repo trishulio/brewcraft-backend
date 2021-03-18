@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddressDto;
 import io.company.brewcraft.model.FacilityAddressEntity;
-import io.company.brewcraft.model.SupplierAddressEntity;
+import io.company.brewcraft.model.SupplierAddress;
 
 
 @Mapper()
@@ -15,9 +15,9 @@ public interface AddressMapper {
         
     AddressDto addressToAddressDto(FacilityAddressEntity address);
     
-    AddressDto addressToAddressDto(SupplierAddressEntity address);
+    AddressDto addressToAddressDto(SupplierAddress address);
 
-    SupplierAddressEntity addressDtoToSupplierAddress(AddressDto addressDto);
+    SupplierAddress addressDtoToSupplierAddress(AddressDto addressDto);
     
     FacilityAddressEntity addressDtoToFacilityAddress(AddressDto addressDto);
             

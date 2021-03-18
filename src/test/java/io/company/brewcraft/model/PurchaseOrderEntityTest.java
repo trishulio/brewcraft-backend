@@ -21,11 +21,11 @@ public class PurchaseOrderEntityTest {
 
     @Test
     public void testAllArgConstructor() {
-        purchaseOrder = new PurchaseOrderEntity(1L, "ABCDE-12345", new SupplierEntity());
+        purchaseOrder = new PurchaseOrderEntity(1L, "ABCDE-12345", new Supplier());
 
         assertEquals(1L, purchaseOrder.getId());
         assertEquals("ABCDE-12345", purchaseOrder.getOrderNumber());
-        assertEquals(new SupplierEntity(), purchaseOrder.getSupplier());
+        assertEquals(new Supplier(), purchaseOrder.getSupplier());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class PurchaseOrderEntityTest {
     @Test
     public void testAccessSupplier() {
         assertNull(purchaseOrder.getSupplier());
-        purchaseOrder.setSupplier(new SupplierEntity());
-        assertEquals(new SupplierEntity(), purchaseOrder.getSupplier());
+        purchaseOrder.setSupplier(new Supplier());
+        assertEquals(new Supplier(), purchaseOrder.getSupplier());
     }
 }

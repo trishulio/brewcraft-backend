@@ -2,8 +2,8 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
-import io.company.brewcraft.pojo.Address;
-import io.company.brewcraft.pojo.SupplierContact;
+import io.company.brewcraft.model.SupplierAddress;
+import io.company.brewcraft.model.SupplierContact;
 
 public interface BaseSupplier {
     
@@ -15,8 +15,8 @@ public interface BaseSupplier {
 
     public void setContacts(List<SupplierContact> contacts);
 
-    public Address getAddress();
+    public SupplierAddress getAddress();
 
-    public void setAddress(Address address);
+    public void setAddress(SupplierAddress address);
 
 }

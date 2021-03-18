@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import io.company.brewcraft.pojo.Supplier;
+import io.company.brewcraft.model.Supplier;
 
 public interface BaseSupplierContact {
 
