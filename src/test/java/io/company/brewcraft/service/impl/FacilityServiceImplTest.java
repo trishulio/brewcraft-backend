@@ -28,14 +28,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.StorageEntity;
-import io.company.brewcraft.pojo.Address;
-import io.company.brewcraft.pojo.Equipment;
-import io.company.brewcraft.pojo.Facility;
-import io.company.brewcraft.pojo.Storage;
-import io.company.brewcraft.model.EquipmentEntity;
-import io.company.brewcraft.model.FacilityAddressEntity;
+import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.FacilityAddress;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -55,46 +51,46 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testGetAllFacilities_returnsFacilities() throws Exception {
-        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        List<FacilityEntity> facilityList = Arrays.asList(facility);
+        List<Facility> facilityList = Arrays.asList(facility);
         
-        Page<FacilityEntity> expectedFacilities = new PageImpl<>(facilityList);
+        Page<Facility> expectedFacilities = new PageImpl<>(facilityList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(facilityRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedFacilities);
 
-        Page<Facility> actualSuppliers = facilityService.getAllFacilities(0, 100, Set.of("id"), true);
+        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, Set.of("id"), true);
 
         assertSame(0, pageableArgument.getValue().getPageNumber());
         assertSame(100, pageableArgument.getValue().getPageSize());
         assertSame(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertSame("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
-        assertSame(1, actualSuppliers.getNumberOfElements());
+        assertSame(1, actualFacilities.getNumberOfElements());
         
-        Facility actualSupplier = actualSuppliers.get().findFirst().get();
+        Facility actualFacility = actualFacilities.get().findFirst().get();
         
-        assertSame(facility.getId(), actualSupplier.getId());
-        assertSame(facility.getName(), actualSupplier.getName());
-        assertSame(facility.getAddress().getId(), actualSupplier.getAddress().getId());
-        assertSame(facility.getEquipment().size(), actualSupplier.getEquipment().size());
-        assertSame(facility.getEquipment().get(0).getId(), actualSupplier.getEquipment().get(0).getId());
-        assertSame(facility.getStorages().size(), actualSupplier.getStorages().size());
-        assertSame(facility.getStorages().get(0).getId(), actualSupplier.getStorages().get(0).getId());
-        assertSame(facility.getPhoneNumber(), actualSupplier.getPhoneNumber());
-        assertSame(facility.getFaxNumber(), actualSupplier.getFaxNumber());
-        assertSame(facility.getLastUpdated(), actualSupplier.getLastUpdated());
-        assertSame(facility.getCreatedAt(), actualSupplier.getCreatedAt());
-        assertSame(facility.getVersion(), actualSupplier.getVersion());
+        assertSame(facility.getId(), actualFacility.getId());
+        assertSame(facility.getName(), actualFacility.getName());
+        assertSame(facility.getAddress().getId(), actualFacility.getAddress().getId());
+        assertSame(facility.getEquipment().size(), actualFacility.getEquipment().size());
+        assertSame(facility.getEquipment().get(0).getId(), actualFacility.getEquipment().get(0).getId());
+        assertSame(facility.getStorages().size(), actualFacility.getStorages().size());
+        assertSame(facility.getStorages().get(0).getId(), actualFacility.getStorages().get(0).getId());
+        assertSame(facility.getPhoneNumber(), actualFacility.getPhoneNumber());
+        assertSame(facility.getFaxNumber(), actualFacility.getFaxNumber());
+        assertSame(facility.getLastUpdated(), actualFacility.getLastUpdated());
+        assertSame(facility.getCreatedAt(), actualFacility.getCreatedAt());
+        assertSame(facility.getVersion(), actualFacility.getVersion());
     }
     
     @Test
     public void testGetFacility_returnsFacility() throws Exception {
         Long id = 1L;
-        FacilityEntity facility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        Optional<FacilityEntity> expectedFacilityEntity = Optional.ofNullable(facility);
+        Optional<Facility> expectedFacilityEntity = Optional.ofNullable(facility);
 
         when(facilityRepositoryMock.findById(id)).thenReturn(expectedFacilityEntity);
 
@@ -116,13 +112,13 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testAddFacility_SavesFacility() throws Exception {
-        Facility facility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
+        ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
-        when(facilityRepositoryMock.save(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
+        when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
 
         Facility returnedFacility = facilityService.addFacility(facility);
         
@@ -159,13 +155,13 @@ public class FacilityServiceImplTest {
     public void testPutFacility_Success() throws Exception {
         Long id = 1L;
         
-        Facility putFacility = new Facility(1L, "facility1", new Address(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode"), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility putFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        FacilityEntity facilityEntity = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
+        ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
-        when(facilityRepositoryMock.save(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
+        when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
 
         Facility returnedFacility = facilityService.putFacility(id, putFacility);
        
@@ -179,7 +175,7 @@ public class FacilityServiceImplTest {
         assertEquals(putFacility.getStorages().get(0).getId(), persistedFacilityCaptor.getValue().getStorages().get(0).getId());
         assertEquals(putFacility.getPhoneNumber(), persistedFacilityCaptor.getValue().getPhoneNumber());
         assertEquals(putFacility.getFaxNumber(), persistedFacilityCaptor.getValue().getFaxNumber());
-        assertEquals(null, persistedFacilityCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedFacilityCaptor.getValue().getLastUpdated());
         //assertEquals(putFacility.getCreatedAt(), persistedFacilityCaptor.getValue().getCreatedAt());
         assertEquals(putFacility.getVersion(), persistedFacilityCaptor.getValue().getVersion());
         
@@ -203,14 +199,14 @@ public class FacilityServiceImplTest {
         Long id = 1L;
         
         Facility patchedFacility = new Facility(1L, "updatedName", null, null, null, null, null, null, null, null);
-        FacilityEntity existingFacility = new FacilityEntity(1L, "facility1", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        FacilityEntity persistedFacilityEntity = new FacilityEntity(1L, "updatedName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new EquipmentEntity(2L, null, null, null, null, null, null, null, null, null)), List.of(new StorageEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility existingFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility persistedFacilityEntity = new Facility(1L, "updatedName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<FacilityEntity> persistedFacilityCaptor = ArgumentCaptor.forClass(FacilityEntity.class);
+        ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
  
-        when(facilityRepositoryMock.save(persistedFacilityCaptor.capture())).thenReturn(persistedFacilityEntity);
+        when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(persistedFacilityEntity);
 
         Facility returnedFacility = facilityService.patchFacility(id, patchedFacility);
        
@@ -252,7 +248,7 @@ public class FacilityServiceImplTest {
       
         assertThrows(EntityNotFoundException.class, () -> {
             facilityService.patchFacility(id, facility);
-            verify(facilityRepositoryMock, times(0)).save(Mockito.any(FacilityEntity.class));
+            verify(facilityRepositoryMock, times(0)).saveAndFlush(Mockito.any(Facility.class));
         });
     }
 

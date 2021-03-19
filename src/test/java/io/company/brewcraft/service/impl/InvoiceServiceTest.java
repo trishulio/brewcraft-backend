@@ -32,7 +32,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
-import tec.units.ri.quantity.Quantities;
+import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class InvoiceServiceTest {

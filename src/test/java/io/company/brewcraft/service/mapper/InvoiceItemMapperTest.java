@@ -26,7 +26,7 @@ import io.company.brewcraft.pojo.InvoiceItem;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.Tax;
 import io.company.brewcraft.utils.SupportedUnits;
-import tec.units.ri.quantity.Quantities;
+import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemMapperTest {
 

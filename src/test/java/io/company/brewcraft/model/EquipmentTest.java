@@ -1,43 +1,57 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import javax.measure.Quantity;
+import javax.measure.Unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EquipmentEntityTest {
+import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
-    private EquipmentEntity equipment;
+public class EquipmentTest {
+
+    private Equipment equipment;
 
     @BeforeEach
     public void init() {
-        equipment = new EquipmentEntity();
+        equipment = new Equipment();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
-        FacilityEntity facility = new FacilityEntity();
+        Facility facility = new Facility();
         String name = "equipment1";
         EquipmentType type = EquipmentType.BARREL;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
-        QuantityEntity maxCapacity = new QuantityEntity();
-        UnitEntity displayUnit = new UnitEntity();
+        BigDecimal maxCapacityValue = BigDecimal.valueOf(100.0);
+        Unit<?> maxCapacityUnit = SupportedUnits.LITRE;
+        Unit<?> maxcapacityDisplayUnit = SupportedUnits.LITRE;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         Integer version = 1;
 
-        EquipmentEntity equipment = new EquipmentEntity(id, facility, name, type, status, maxCapacity, displayUnit, created, lastUpdated, version);
+        Equipment equipment = new Equipment(id, facility, name, type, status, maxCapacityValue, maxCapacityUnit, maxcapacityDisplayUnit, created, lastUpdated, version);
+        
+        equipment.getMaxCapacity();
         
         assertEquals(1L, equipment.getId());
-        assertEquals(new FacilityEntity(), equipment.getFacility());
+        assertEquals(new Facility(), equipment.getFacility());
         assertEquals("equipment1", equipment.getName());
         assertEquals(EquipmentType.BARREL, equipment.getType());
         assertEquals(EquipmentStatus.ACTIVE, equipment.getStatus());
-        assertEquals(new QuantityEntity(), equipment.getMaxCapacity());
-        assertEquals(new UnitEntity(), equipment.getDisplayUnit());
+        assertEquals(BigDecimal.valueOf(100.0), equipment.getMaxCapacityValue());
+        assertEquals(SupportedUnits.LITRE, equipment.getMaxCapacityUnit());
+        assertEquals(SupportedUnits.LITRE, equipment.getMaxCapacityDisplayUnit());
+        assertEquals(Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE), equipment.getMaxCapacity());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getLastUpdated());
         assertEquals(1, equipment.getVersion());        
@@ -52,9 +66,9 @@ public class EquipmentEntityTest {
     
     @Test
     public void testGetSetFacility() {
-        FacilityEntity facility = new FacilityEntity();
+        Facility facility = new Facility();
         equipment.setFacility(facility);
-        assertEquals(new FacilityEntity(), equipment.getFacility());
+        assertEquals(new Facility(), equipment.getFacility());
     }
 
     @Test
@@ -80,16 +94,23 @@ public class EquipmentEntityTest {
     
     @Test
     public void testGetSetMaxCapacity() {
-        QuantityEntity maxCapacity = new QuantityEntity();
+        Quantity<?> maxCapacity = Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE);
         equipment.setMaxCapacity(maxCapacity);
-        assertEquals(new QuantityEntity(), equipment.getMaxCapacity());
+        assertEquals(Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE), equipment.getMaxCapacity());
     }
     
     @Test
-    public void testGetSetDisplayUnit() {
-        UnitEntity displayUnit = new UnitEntity();
-        equipment.setDisplayUnit(displayUnit);
-        assertEquals(new UnitEntity(), equipment.getDisplayUnit());
+    public void testGetSetMaxCapacityUnit() {
+        Unit<?> unit = SupportedUnits.LITRE;
+        equipment.setMaxCapacityUnit(unit);
+        assertEquals(SupportedUnits.LITRE, equipment.getMaxCapacityUnit());
+    }
+    
+    @Test
+    public void testGetSetMaxCapacityDisplayUnit() {
+        Unit<?> displayUnit = SupportedUnits.LITRE;
+        equipment.setMaxCapacityDisplayUnit(displayUnit);
+        assertEquals(SupportedUnits.LITRE, equipment.getMaxCapacityDisplayUnit());
     }
     
     @Test
@@ -111,5 +132,23 @@ public class EquipmentEntityTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         equipment.setLastUpdated(lastUpdated);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getLastUpdated());
+    }
+     
+    @Test
+    public void testSetMaxCapacity_throwsWhenUnitIsInvalid() {
+        Equipment testEquipment = new Equipment();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            testEquipment.setMaxCapacity(Quantities.getQuantity(100, Units.CELSIUS));
+        });
+    }
+    
+    @Test
+    public void testSetDisplayUnit_throwsWhenUnitIsInvalid() {
+        Equipment testEquipment = new Equipment();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            testEquipment.setMaxCapacityDisplayUnit(Units.DAY);
+        });
     }
 }

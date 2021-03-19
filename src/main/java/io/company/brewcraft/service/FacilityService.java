@@ -4,8 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateFacility;
-import io.company.brewcraft.pojo.Facility;
+import io.company.brewcraft.model.Facility;
 
 public interface FacilityService {
 
@@ -15,9 +14,9 @@ public interface FacilityService {
 
     public Facility addFacility(Facility facility);
     
-    public Facility putFacility(Long id, UpdateFacility facility);
+    public Facility putFacility(Long id, Facility facility);
     
-    public Facility patchFacility(Long id, UpdateFacility facility);
+    public Facility patchFacility(Long id, Facility facility);
 
     public void deleteFacility(Long id);
     

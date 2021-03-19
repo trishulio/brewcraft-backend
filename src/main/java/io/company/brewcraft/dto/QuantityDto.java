@@ -20,7 +20,9 @@ public class QuantityDto extends BaseDto {
     }
 
     public Number getValue() {
-        return value;
+        //Working and converting between units with BigDecimals can add trailing zeros or result in a number displayed in scientific notation. 
+        //This resolves those issues and returns exact number back to client without trailing zero's or in scientific notation.
+        return new BigDecimal(value.stripTrailingZeros().toPlainString());
     }
 
     public void setValue(BigDecimal value) {

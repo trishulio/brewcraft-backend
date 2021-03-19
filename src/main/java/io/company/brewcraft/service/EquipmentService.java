@@ -4,8 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateEquipment;
-import io.company.brewcraft.pojo.Equipment;
+import io.company.brewcraft.model.Equipment;
 
 public interface EquipmentService {
 
@@ -16,9 +15,9 @@ public interface EquipmentService {
     
     public Equipment addEquipment(Long facilityId, Equipment equipment);
     
-    public Equipment putEquipment(Long facilityId, Long equipmentId, UpdateEquipment equipment);
+    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment equipment);
     
-    public Equipment patchEquipment(Long equipmentId, UpdateEquipment equipment);
+    public Equipment patchEquipment(Long equipmentId, Equipment equipment);
 
     public void deleteEquipment(Long equipmentId);
     

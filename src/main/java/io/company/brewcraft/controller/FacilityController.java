@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddFacilityDto;
 import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateFacilityDto;
-import io.company.brewcraft.pojo.Facility;
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.FacilityMapper;

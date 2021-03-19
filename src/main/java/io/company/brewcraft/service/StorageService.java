@@ -4,8 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateStorage;
-import io.company.brewcraft.pojo.Storage;
+import io.company.brewcraft.model.Storage;
 
 public interface StorageService {
 
@@ -15,9 +14,9 @@ public interface StorageService {
 
     public Storage addStorage(Long facilityId, Storage storage);
     
-    public Storage putStorage(Long facilityId, Long storageId, UpdateStorage storage);
+    public Storage putStorage(Long facilityId, Long storageId, Storage storage);
     
-    public Storage patchStorage(Long storageId, UpdateStorage storage);
+    public Storage patchStorage(Long storageId, Storage storage);
 
     public void deleteStorage(Long storageId); 
     

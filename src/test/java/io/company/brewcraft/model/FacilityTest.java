@@ -8,29 +8,29 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FacilityEntityTest {
+public class FacilityTest {
 
-    private FacilityEntity facility;
+    private Facility facility;
 
     @BeforeEach
     public void init() {
-        facility = new FacilityEntity();
+        facility = new Facility();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
         String name = "testName";
-        FacilityAddressEntity address = new FacilityAddressEntity();
+        FacilityAddress address = new FacilityAddress();
         String phoneNumber = "testPhoneNumber";
         String faxNumber = "testFaxNumber";
-        List<EquipmentEntity> equipment = new ArrayList<EquipmentEntity>();
-        List<StorageEntity> storages = new ArrayList<StorageEntity>();
+        List<Equipment> equipment = new ArrayList<Equipment>();
+        List<Storage> storages = new ArrayList<Storage>();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        FacilityEntity facility = new FacilityEntity(id, name, address, phoneNumber, faxNumber, equipment, storages, created, lastUpdated, version);
+        Facility facility = new Facility(id, name, address, phoneNumber, faxNumber, equipment, storages, created, lastUpdated, version);
         
         assertSame(id, facility.getId());
         assertSame(name, facility.getName());
@@ -59,7 +59,7 @@ public class FacilityEntityTest {
     
     @Test
     public void testGetSetAddress() {
-        FacilityAddressEntity address = new FacilityAddressEntity();
+        FacilityAddress address = new FacilityAddress();
         facility.setAddress(address);
         assertSame(address, facility.getAddress());
     }
@@ -78,14 +78,14 @@ public class FacilityEntityTest {
     
     @Test
     public void testGetSetEquipment() {
-        List<EquipmentEntity> equipment = new ArrayList<EquipmentEntity>();
+        List<Equipment> equipment = new ArrayList<Equipment>();
         facility.setEquipment(equipment);
         assertSame(equipment, facility.getEquipment());
     }
     
     @Test
     public void testGetSetStorages() {
-        List<StorageEntity> storages = new ArrayList<StorageEntity>();
+        List<Storage> storages = new ArrayList<Storage>();
         facility.setStorages(storages);
         assertSame(storages, facility.getStorages());
     }

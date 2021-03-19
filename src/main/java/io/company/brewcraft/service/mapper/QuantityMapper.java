@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.model.QuantityEntity;
-import tec.units.ri.quantity.Quantities;
+import tec.uom.se.quantity.Quantities;
 
 @Mapper(uses = { QuantityUnitMapper.class })
 public abstract class QuantityMapper {
@@ -31,6 +31,7 @@ public abstract class QuantityMapper {
             Unit<?> unit = QuantityUnitMapper.INSTANCE.fromSymbol(dto.getSymbol());
             qty = Quantities.getQuantity(dto.getValue(), unit);
         }
+
         return qty;
     }
 
@@ -54,7 +55,7 @@ public abstract class QuantityMapper {
     public BigDecimal parseNumber(Number num) {
         BigDecimal bigDecimal = null;
         if (num != null && num instanceof Double) {
-            bigDecimal = BigDecimal.valueOf(num.doubleValue());
+            bigDecimal = new BigDecimal(num.toString());
         } else {
             bigDecimal = (BigDecimal) num;
         }

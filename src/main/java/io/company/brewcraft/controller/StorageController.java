@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddStorageDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.UpdateStorageDto;
-import io.company.brewcraft.pojo.Storage;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.StorageMapper;

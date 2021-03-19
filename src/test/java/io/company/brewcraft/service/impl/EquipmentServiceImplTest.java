@@ -30,20 +30,15 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.EquipmentEntity;
+import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
-import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.QuantityEntity;
-import io.company.brewcraft.model.UnitEntity;
-import io.company.brewcraft.pojo.Equipment;
-import io.company.brewcraft.pojo.Facility;
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.utils.SupportedUnits;
-import tec.units.ri.quantity.Quantities;
 
 public class EquipmentServiceImplTest {
 
@@ -63,14 +58,14 @@ public class EquipmentServiceImplTest {
 
     @Test
     public void testGetAllEquipment_returnsEquipment() throws Exception {
-        EquipmentEntity equipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        List<EquipmentEntity> equipmentList = Arrays.asList(equipmentEntity);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        List<Equipment> equipmentList = Arrays.asList(equipmentEntity);
         
-        Page<EquipmentEntity> expectedEquipmentEntity = new PageImpl<>(equipmentList);
+        Page<Equipment> expectedEquipmentEntity = new PageImpl<>(equipmentList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
-        when(equipmentRepositoryMock.findAll(ArgumentMatchers.<Specification<EquipmentEntity>>any(),pageableArgument.capture())).thenReturn(expectedEquipmentEntity);
+        when(equipmentRepositoryMock.findAll(ArgumentMatchers.<Specification<Equipment>>any(),pageableArgument.capture())).thenReturn(expectedEquipmentEntity);
 
         Page<Equipment> actualEquipments = equipmentService.getAllEquipment(null, null, null, null, 0, 100, Set.of("id"), true);
 
@@ -88,7 +83,7 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getType(), actualEquipment.getType());
         assertEquals(equipmentEntity.getMaxCapacity().getUnit().getSymbol(), actualEquipment.getMaxCapacity().getUnit().getSymbol());
         assertEquals(equipmentEntity.getMaxCapacity().getValue(), actualEquipment.getMaxCapacity().getValue());
-        assertEquals(equipmentEntity.getDisplayUnit().getSymbol(), actualEquipment.getDisplayUnit().getSymbol());
+        assertEquals(equipmentEntity.getMaxCapacityDisplayUnit().getSymbol(), actualEquipment.getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(equipmentEntity.getFacility().getId(), actualEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), actualEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), actualEquipment.getCreatedAt());
@@ -98,8 +93,8 @@ public class EquipmentServiceImplTest {
     @Test
     public void testGetEquipment_returnsEquipment() throws Exception {
         Long id = 1L;
-        EquipmentEntity equipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<EquipmentEntity> expectedEquipmentEntity = Optional.ofNullable(equipmentEntity);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<Equipment> expectedEquipmentEntity = Optional.ofNullable(equipmentEntity);
 
         when(equipmentRepositoryMock.findById(id)).thenReturn(expectedEquipmentEntity);
 
@@ -111,7 +106,7 @@ public class EquipmentServiceImplTest {
         assertEquals(expectedEquipmentEntity.get().getType(), returnedEntity.getType());
         assertEquals(expectedEquipmentEntity.get().getMaxCapacity().getUnit().getSymbol(), returnedEntity.getMaxCapacity().getUnit().getSymbol());
         assertEquals(expectedEquipmentEntity.get().getMaxCapacity().getValue(), returnedEntity.getMaxCapacity().getValue());
-        assertEquals(expectedEquipmentEntity.get().getDisplayUnit().getSymbol(), returnedEntity.getDisplayUnit().getSymbol());
+        assertEquals(expectedEquipmentEntity.get().getMaxCapacityDisplayUnit().getSymbol(), returnedEntity.getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(expectedEquipmentEntity.get().getFacility().getId(), returnedEntity.getFacility().getId());
         assertEquals(expectedEquipmentEntity.get().getLastUpdated(), returnedEntity.getLastUpdated());
         assertEquals(expectedEquipmentEntity.get().getCreatedAt(), returnedEntity.getCreatedAt());
@@ -121,12 +116,12 @@ public class EquipmentServiceImplTest {
     @Test
     public void testAddEquipment_Success() throws Exception {
         Long facilityId = 2L;
+                
+        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
-        EquipmentEntity equipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<EquipmentEntity> persistedEquipmentCaptor = ArgumentCaptor.forClass(EquipmentEntity.class);
+        ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
         
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
         
@@ -141,7 +136,7 @@ public class EquipmentServiceImplTest {
         assertEquals(equipment.getType(), persistedEquipmentCaptor.getValue().getType());
         assertEquals(equipmentEntity.getMaxCapacity().getUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacity().getUnit().getSymbol());
         assertEquals(equipment.getMaxCapacity().getValue(), persistedEquipmentCaptor.getValue().getMaxCapacity().getValue());
-        assertEquals(equipment.getDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getDisplayUnit().getSymbol());
+        assertEquals(equipment.getMaxCapacityDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(equipment.getFacility().getId(), persistedEquipmentCaptor.getValue().getFacility().getId());
         assertEquals(equipment.getLastUpdated(), persistedEquipmentCaptor.getValue().getLastUpdated());
         assertEquals(equipment.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
@@ -154,7 +149,7 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getType(), returnedEquipment.getType());
         assertEquals(equipmentEntity.getMaxCapacity().getUnit().getSymbol(), returnedEquipment.getMaxCapacity().getUnit().getSymbol());
         assertEquals(equipmentEntity.getMaxCapacity().getValue(), returnedEquipment.getMaxCapacity().getValue());
-        assertEquals(equipmentEntity.getDisplayUnit().getSymbol(), returnedEquipment.getDisplayUnit().getSymbol());
+        assertEquals(equipmentEntity.getMaxCapacityDisplayUnit().getSymbol(), returnedEquipment.getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(equipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
@@ -165,13 +160,13 @@ public class EquipmentServiceImplTest {
     public void testAddEquipment_throwsWhenFacilityDoesNotExist() throws Exception {
         Long facilityId = 2L;
         
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(null);
 
         assertThrows(EntityNotFoundException.class, () -> {
             equipmentService.addEquipment(facilityId, equipment);
-            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
+            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
         });
     }
     
@@ -180,10 +175,10 @@ public class EquipmentServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
 
-        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        EquipmentEntity equipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<EquipmentEntity> persistedEquipmentCaptor = ArgumentCaptor.forClass(EquipmentEntity.class);
+        ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
 
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
 
@@ -198,9 +193,9 @@ public class EquipmentServiceImplTest {
         assertEquals(putEquipment.getType(), persistedEquipmentCaptor.getValue().getType());
         assertEquals(putEquipment.getMaxCapacity().getUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacity().getUnit().getSymbol());
         assertEquals(putEquipment.getMaxCapacity().getValue(), persistedEquipmentCaptor.getValue().getMaxCapacity().getValue());
-        assertEquals(putEquipment.getDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getDisplayUnit().getSymbol());
+        assertEquals(putEquipment.getMaxCapacityDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(putEquipment.getFacility().getId(), persistedEquipmentCaptor.getValue().getFacility().getId());
-        assertEquals(null, persistedEquipmentCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedEquipmentCaptor.getValue().getLastUpdated());
         //assertEquals(putEquipment.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
         assertEquals(putEquipment.getVersion(), persistedEquipmentCaptor.getValue().getVersion());
         
@@ -211,7 +206,7 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getType(), returnedEquipment.getType());
         assertEquals(equipmentEntity.getMaxCapacity().getUnit().getSymbol(), returnedEquipment.getMaxCapacity().getUnit().getSymbol());
         assertEquals(equipmentEntity.getMaxCapacity().getValue(), returnedEquipment.getMaxCapacity().getValue());
-        assertEquals(equipmentEntity.getDisplayUnit().getSymbol(), returnedEquipment.getDisplayUnit().getSymbol());
+        assertEquals(equipmentEntity.getMaxCapacityDisplayUnit().getSymbol(), returnedEquipment.getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(equipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
@@ -223,13 +218,13 @@ public class EquipmentServiceImplTest {
         Long id = 1L;
         Long facilityId = 2L;
 
-        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(equipmentRepositoryMock.findById(facilityId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
             equipmentService.putEquipment(facilityId, id, putEquipment);
-            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
+            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
         });
     }
     
@@ -237,11 +232,11 @@ public class EquipmentServiceImplTest {
     public void testPatchEquipment_success() throws Exception {
         Long facilityId = 2L;
         Long id = 1L;
-        Equipment patchedEquipment = new Equipment(1L, null, "updatedName", null, null, null, null, null, null, null);
-        EquipmentEntity existingEquipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        EquipmentEntity persistedEquipmentEntity = new EquipmentEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "updatedName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, new QuantityEntity(1L, new UnitEntity("l"), new BigDecimal(100.0)), new UnitEntity("l"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment patchedEquipment = new Equipment(1L, null, "updatedName", null, null, null, null, null, null, null, null);
+        Equipment existingEquipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment persistedEquipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "updatedName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<EquipmentEntity> persistedEquipmentCaptor = ArgumentCaptor.forClass(EquipmentEntity.class);
+        ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
 
         when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.of(existingEquipmentEntity));
 
@@ -258,7 +253,7 @@ public class EquipmentServiceImplTest {
         assertEquals(existingEquipmentEntity.getType(), persistedEquipmentCaptor.getValue().getType());
         assertEquals(existingEquipmentEntity.getMaxCapacity().getUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacity().getUnit().getSymbol());
         assertEquals(existingEquipmentEntity.getMaxCapacity().getValue(), persistedEquipmentCaptor.getValue().getMaxCapacity().getValue());
-        assertEquals(existingEquipmentEntity.getDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getDisplayUnit().getSymbol());
+        assertEquals(existingEquipmentEntity.getMaxCapacityDisplayUnit().getSymbol(), persistedEquipmentCaptor.getValue().getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(existingEquipmentEntity.getFacility().getId(), persistedEquipmentCaptor.getValue().getFacility().getId());
         assertEquals(existingEquipmentEntity.getLastUpdated(), persistedEquipmentCaptor.getValue().getLastUpdated());
         //assertEquals(existingEquipmentEntity.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
@@ -271,7 +266,7 @@ public class EquipmentServiceImplTest {
         assertEquals(persistedEquipmentEntity.getType(), returnedEquipment.getType());
         assertEquals(persistedEquipmentEntity.getMaxCapacity().getUnit().getSymbol(), returnedEquipment.getMaxCapacity().getUnit().getSymbol());
         assertEquals(persistedEquipmentEntity.getMaxCapacity().getValue(), returnedEquipment.getMaxCapacity().getValue());
-        assertEquals(persistedEquipmentEntity.getDisplayUnit().getSymbol(), returnedEquipment.getDisplayUnit().getSymbol());
+        assertEquals(persistedEquipmentEntity.getMaxCapacityDisplayUnit().getSymbol(), returnedEquipment.getMaxCapacityDisplayUnit().getSymbol());
         assertEquals(persistedEquipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(persistedEquipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(persistedEquipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
@@ -287,7 +282,7 @@ public class EquipmentServiceImplTest {
       
         assertThrows(EntityNotFoundException.class, () -> {
             equipmentService.patchEquipment(id, equipment);
-            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(EquipmentEntity.class));
+            verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
         });
     }
 
