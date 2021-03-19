@@ -19,6 +19,9 @@ public class InvoiceItemService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemService.class);
 
     public Collection<InvoiceItem> getPutCollection(Validator validator, Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> updates) {
+        if (updates == null) {
+            
+        }
         final Collection<InvoiceItem> targetItems = new HashSet<>();
 
         // Separating the ItemUpdate items into 'additions' and 'updates'

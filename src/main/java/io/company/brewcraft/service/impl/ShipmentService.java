@@ -84,7 +84,7 @@ public class ShipmentService extends BaseService {
         existing.setId(shipmentId);
         
         Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPutList(validator, existingItems, update.getItems());
+        Collection<ShipmentItem> updatedItems = itemService.getPutItems(validator, existingItems, update.getItems());
         existing.override(update, getPropertyNames(shipmentClz));
         existing.setItems(updatedItems);
 
@@ -99,7 +99,7 @@ public class ShipmentService extends BaseService {
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
 
         Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPatchList(validator, existingItems, update.getItems());
+        Collection<ShipmentItem> updatedItems = itemService.getPatchItems(validator, existingItems, update.getItems());
         existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
         existing.setItems(updatedItems);
 

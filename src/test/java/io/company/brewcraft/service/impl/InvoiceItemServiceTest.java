@@ -152,6 +152,11 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
+    public void testMergePut_ReturnsNull_WhenUpdateItemsAreNull() {
+        fail("Not implemented yet");
+    }
+    
+    @Test
     public void testMergePatch_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
         Collection<InvoiceItem> existingItems = Set.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)

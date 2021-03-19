@@ -199,7 +199,7 @@ public class ShipmentServiceTest {
         
         doReturn(Set.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
-        )).when(mItemService).getPutList(validator,
+        )).when(mItemService).getPutItems(validator,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         ));
@@ -227,7 +227,7 @@ public class ShipmentServiceTest {
         assertEquals(2, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, existing);
-        verify(mItemService, times(1)).getPutList(eq(validator), anyCollection(), anyCollection());
+        verify(mItemService, times(1)).getPutItems(eq(validator), anyCollection(), anyCollection());
     }
     
     @Test
@@ -253,7 +253,7 @@ public class ShipmentServiceTest {
         
         doReturn(Set.of(
             new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), null, null, null)
-        )).when(mItemService).getPutList(
+        )).when(mItemService).getPutItems(
             validator,
             null,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2))
@@ -282,7 +282,7 @@ public class ShipmentServiceTest {
         assertEquals(null, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPutList(eq(validator), isNull(), anyCollection());
+        verify(mItemService, times(1)).getPutItems(eq(validator), isNull(), anyCollection());
     }
     
     @Test
@@ -334,7 +334,7 @@ public class ShipmentServiceTest {
 
         doReturn(Set.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
-        )).when(mItemService).getPatchList(
+        )).when(mItemService).getPatchItems(
             validator,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1))
@@ -363,6 +363,6 @@ public class ShipmentServiceTest {
         assertEquals(1, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPatchList(eq(validator), anyCollection(), anyCollection());
+        verify(mItemService, times(1)).getPatchItems(eq(validator), anyCollection(), anyCollection());
     }
 }
