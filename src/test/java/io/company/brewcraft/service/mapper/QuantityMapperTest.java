@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.utils.SupportedUnits;
-import tec.units.ri.quantity.Quantities;
+import tec.uom.se.quantity.Quantities;
 
 public class QuantityMapperTest {
 

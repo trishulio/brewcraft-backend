@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.model.StorageType;
-import io.company.brewcraft.pojo.Facility;
 
 public interface BaseStorage {
     

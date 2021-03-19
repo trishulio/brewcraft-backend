@@ -5,7 +5,7 @@ import javax.measure.Unit;
 
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
-import io.company.brewcraft.pojo.Facility;
+import io.company.brewcraft.model.Facility;
 
 public interface BaseEquipment {
     

@@ -17,7 +17,7 @@ import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
-import tec.units.ri.quantity.Quantities;
+import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemServiceTest {
 

@@ -22,9 +22,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import io.company.brewcraft.dto.UpdateFacility;
+
 @Entity
 @Table(name="FACILITY")
-public class FacilityEntity extends BaseEntity {
+public class Facility extends BaseModel implements UpdateFacility, Identified, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_ADDRESS = "address";
@@ -42,7 +44,7 @@ public class FacilityEntity extends BaseEntity {
     
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)
-    private FacilityAddressEntity address;
+    private FacilityAddress address;
     
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -52,11 +54,11 @@ public class FacilityEntity extends BaseEntity {
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<EquipmentEntity> equipment;
+    private List<Equipment> equipment;
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
-    private List<StorageEntity> storages;
+    private List<Storage> storages;
         
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -69,11 +71,11 @@ public class FacilityEntity extends BaseEntity {
     @Version
     private Integer version;
     
-    public FacilityEntity() {
+    public Facility() {
         
     }
     
-    public FacilityEntity(Long id, String name, FacilityAddressEntity address, String phoneNumber, String faxNumber, List<EquipmentEntity> equipment, List<StorageEntity> storages, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Facility(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<Equipment> equipment, List<Storage> storages, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         setId(id);
         setName(name);
         setAddress(address);
@@ -102,11 +104,11 @@ public class FacilityEntity extends BaseEntity {
         this.name = name;
     }
     
-    public FacilityAddressEntity getAddress() {
+    public FacilityAddress getAddress() {
         return address;
     }
 
-    public void setAddress(FacilityAddressEntity address) {
+    public void setAddress(FacilityAddress address) {
         this.address = address;
     }
     
@@ -126,11 +128,11 @@ public class FacilityEntity extends BaseEntity {
         this.faxNumber = faxNumber;
     }
     
-    public List<EquipmentEntity> getEquipment() {
+    public List<Equipment> getEquipment() {
         return equipment;
     }
     
-    public void setEquipment(List<EquipmentEntity> equipment) {
+    public void setEquipment(List<Equipment> equipment) {
         if (equipment != null) {
             equipment.stream().forEach(eqpt -> eqpt.setFacility(this));
         }
@@ -143,7 +145,7 @@ public class FacilityEntity extends BaseEntity {
         }
     }
         
-    public void addEquipment(EquipmentEntity eq) {
+    public void addEquipment(Equipment eq) {
         if (equipment == null) {
             equipment = new ArrayList<>();
         }
@@ -157,18 +159,18 @@ public class FacilityEntity extends BaseEntity {
         }
     }
     
-    public void removeEquipment(EquipmentEntity equipment) {
+    public void removeEquipment(Equipment equipment) {
         if (this.equipment != null) {
             equipment.setFacility(null);
             this.equipment.remove(equipment);
         }
     }
     
-    public List<StorageEntity> getStorages() {
+    public List<Storage> getStorages() {
         return storages;
     }
     
-    public void setStorages(List<StorageEntity> storages) {
+    public void setStorages(List<Storage> storages) {
         if (storages != null) {
             storages.stream().forEach(storage -> storage.setFacility(this));
         }
@@ -181,7 +183,7 @@ public class FacilityEntity extends BaseEntity {
         }    
     }
     
-    public void addStorage(StorageEntity storage) {
+    public void addStorage(Storage storage) {
         if (storages == null) {
             storages = new ArrayList<>();
         }
@@ -195,7 +197,7 @@ public class FacilityEntity extends BaseEntity {
         }
     }
     
-    public void removeStorage(StorageEntity storage) {
+    public void removeStorage(Storage storage) {
         if (storages != null) {
             storage.setFacility(null);
             storages.remove(storage);

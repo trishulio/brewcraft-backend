@@ -27,11 +27,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.FacilityEntity;
-import io.company.brewcraft.model.StorageEntity;
+import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.StorageType;
-import io.company.brewcraft.pojo.Facility;
-import io.company.brewcraft.pojo.Storage;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.StorageService;
@@ -54,11 +52,11 @@ public class StorageServiceImplTest {
 
     @Test
     public void testGetStorages_returnsStorages() throws Exception {
-        StorageEntity storageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
-        List<StorageEntity> storageList = Arrays.asList(storageEntity);
+        List<Storage> storageList = Arrays.asList(storageEntity);
         
-        Page<StorageEntity> expectedStorages = new PageImpl<>(storageList);
+        Page<Storage> expectedStorages = new PageImpl<>(storageList);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
@@ -86,8 +84,8 @@ public class StorageServiceImplTest {
     @Test
     public void testGetStorage_returnsStorage() throws Exception {
         Long id = 1L;
-        StorageEntity storageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<StorageEntity> expectedStorageEntity = Optional.ofNullable(storageEntity);
+        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<Storage> expectedStorageEntity = Optional.ofNullable(storageEntity);
 
         when(storageRepositoryMock.findById(id)).thenReturn(expectedStorageEntity);
 
@@ -108,13 +106,13 @@ public class StorageServiceImplTest {
         
         Storage storage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        StorageEntity storageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<StorageEntity> persistedStorageCaptor = ArgumentCaptor.forClass(StorageEntity.class);
+        ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
         
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
         
-        when(storageRepositoryMock.save(persistedStorageCaptor.capture())).thenReturn(storageEntity);
+        when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(storageEntity);
 
         Storage returnedStorage = storageService.addStorage(facilityId, storage);
         
@@ -147,7 +145,7 @@ public class StorageServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> {
             storageService.addStorage(facilityId, storage);
-            verify(storageRepositoryMock, times(0)).save(Mockito.any(StorageEntity.class));
+            verify(storageRepositoryMock, times(0)).saveAndFlush(Mockito.any(Storage.class));
         });
     }
     
@@ -157,13 +155,13 @@ public class StorageServiceImplTest {
         Long id = 1L;
 
         Storage putStorage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        StorageEntity storageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<StorageEntity> persistedStorageCaptor = ArgumentCaptor.forClass(StorageEntity.class);
+        ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
 
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
 
-        when(storageRepositoryMock.save(persistedStorageCaptor.capture())).thenReturn(storageEntity);
+        when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(storageEntity);
 
         Storage returnedStorage = storageService.putStorage(facilityId, id, putStorage);
        
@@ -172,7 +170,7 @@ public class StorageServiceImplTest {
         assertEquals(putStorage.getName(), persistedStorageCaptor.getValue().getName());
         assertEquals(putStorage.getType(), persistedStorageCaptor.getValue().getType());
         assertEquals(putStorage.getFacility().getId(), persistedStorageCaptor.getValue().getFacility().getId());
-        assertEquals(null, persistedStorageCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedStorageCaptor.getValue().getLastUpdated());
         //assertEquals(putStorage.getCreatedAt(), persistedStorageCaptor.getValue().getCreatedAt());
         assertEquals(putStorage.getVersion(), persistedStorageCaptor.getValue().getVersion());
         
@@ -197,7 +195,7 @@ public class StorageServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> {
             storageService.putStorage(facilityId, id, putStorage);
-            verify(storageRepositoryMock, times(0)).save(Mockito.any(StorageEntity.class));
+            verify(storageRepositoryMock, times(0)).saveAndFlush(Mockito.any(Storage.class));
         });
     }
     
@@ -206,16 +204,16 @@ public class StorageServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
         Storage patchedStorage = new Storage(1L, null, "updatedName", null, null, null, null);
-        StorageEntity existingStorageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        StorageEntity persistedStorageEntity = new StorageEntity(1L, new FacilityEntity(2L, null, null, null, null, null, null, null, null, null), "updatedName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage existingStorageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage persistedStorageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "updatedName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<StorageEntity> persistedStorageCaptor = ArgumentCaptor.forClass(StorageEntity.class);
+        ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
 
         when(storageRepositoryMock.findById(id)).thenReturn(Optional.of(existingStorageEntity));
 
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
         
-        when(storageRepositoryMock.save(persistedStorageCaptor.capture())).thenReturn(persistedStorageEntity);
+        when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(persistedStorageEntity);
 
         Storage returnedStorage = storageService.patchStorage(id, patchedStorage);
        
@@ -247,7 +245,7 @@ public class StorageServiceImplTest {
       
         assertThrows(EntityNotFoundException.class, () -> {
             storageService.patchStorage(id, storage);
-            verify(storageRepositoryMock, times(0)).save(Mockito.any(StorageEntity.class));
+            verify(storageRepositoryMock, times(0)).saveAndFlush(Mockito.any(Storage.class));
         });
     }
     @Test

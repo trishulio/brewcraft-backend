@@ -16,7 +16,7 @@
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <javax.measure.version>2.0</javax.measure.version>
-        <javax.measure.impl.version>1.0.3</javax.measure.impl.version>
+        <javax.measure.impl.version>1.0.10</javax.measure.impl.version>
         <org.joda.money.version>1.0.1</org.joda.money.version>
     </properties>
 
@@ -126,10 +126,10 @@
             <version>${javax.measure.version}</version>
         </dependency>
         <dependency>
-            <groupId>tec.units</groupId>
-            <artifactId>unit-ri</artifactId>
+           <groupId>tec.uom</groupId>
+           <artifactId>uom-se</artifactId>
             <version>${javax.measure.impl.version}</version>
-        </dependency>
+       </dependency>
         <dependency>
             <groupId>org.joda</groupId>
             <artifactId>joda-money</artifactId>

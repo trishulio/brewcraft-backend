@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddEquipmentDto;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
-import io.company.brewcraft.pojo.Equipment;
+import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
@@ -75,7 +75,7 @@ public class EquipmentController {
 
     @PostMapping("/{facilityId}/equipment")
     @ResponseStatus(HttpStatus.CREATED)
-    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
+    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {        
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
         
         Equipment addedEquipment = equipmentService.addEquipment(facilityId, equipment);

@@ -2,9 +2,9 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
-import io.company.brewcraft.pojo.Address;
-import io.company.brewcraft.pojo.Equipment;
-import io.company.brewcraft.pojo.Storage;
+import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.Storage;
 
 public interface BaseFacility {
     
@@ -12,9 +12,9 @@ public interface BaseFacility {
 
     public void setName(String name);
 
-    public Address getAddress();
+    public FacilityAddress getAddress();
 
-    public void setAddress(Address address);
+    public void setAddress(FacilityAddress address);
 
     public String getPhoneNumber();
 

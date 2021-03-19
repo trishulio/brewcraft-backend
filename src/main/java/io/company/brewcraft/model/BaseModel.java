@@ -25,6 +25,8 @@ public abstract class BaseModel {
     }
     
     public void copyToNullFields(Object existingEntity) {
+        //TODO: util.copy below causing unit test to fail, need to investigate why
+        //util.copy(this, existingEntity, pd -> pd.getReadMethod().invoke(this) == null);
         for (Field field : this.getClass().getDeclaredFields()) {
             try {
                 field.setAccessible(true);
