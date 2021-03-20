@@ -1,33 +1,57 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
-import io.company.brewcraft.dto.UpdateProductMeasures;
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Identified;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
-public class ProductMeasures extends BaseModel implements UpdateProductMeasures, Identified {
+@Entity(name = "PRODUCT_MEASURES")
+public class ProductMeasures extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_ABV = "abv";
+    public static final String FIELD_IBU = "ibu";
+    public static final String FIELD_PH = "ph";
+    public static final String FIELD_MASH_TEMP = "mashTemperature";
+    public static final String FIELD_GRAVITY = "gravity";
+    public static final String FIELD_YIELD = "yield";
+    public static final String FIELD_BREWHOUSE_DURATION = "brewhouseDuration";
+    public static final String FIELD_FERMENTATION_DAYS = "fermentationDays";
+    public static final String FIELD_CONDITIONING_DAYS = "conditioningDays";
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_measures_generator")
+    @SequenceGenerator(name = "product_measures_generator", sequenceName = "product_measures_sequence", allocationSize = 1)
     private Long id;
     
     private Double abv;
     
     private Double ibu;
     
+    @Column(name = "ph")
     private Double ph;
 
+    @Column(name = "mash_temperature")
     private Double mashTemperature;
     
+    @Column(name = "gravity")
     private Double gravity;
     
+    @Column(name = "yield")
     private Double yield;
     
+    @Column(name = "brewhouse_duration")
     private Double brewhouseDuration;
 
+    @Column(name = "fermentation_days")
     private Double fermentationDays;
 
+    @Column(name = "conditioning_days")
     private Double conditioningDays;
     
     public ProductMeasures() {
-        
+        super();
     }
 
     public ProductMeasures(Long id, Double abv, Double ibu, Double ph, Double mashTemperature, Double gravity,

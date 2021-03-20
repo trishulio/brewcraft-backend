@@ -9,22 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.UpdateCategory;
-import io.company.brewcraft.model.ProductCategoryEntity;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.repository.ProductCategoryRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
-import io.company.brewcraft.service.mapper.ProductCategoryMapper;
 
 @Transactional
-public class ProductCategoryServiceImpl extends BaseService implements CategoryService {
-    
-    private ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
-    
+public class ProductCategoryServiceImpl extends BaseService implements ProductCategoryService {
+        
     private ProductCategoryRepository productCategoryRepository;
     
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
@@ -32,64 +26,55 @@ public class ProductCategoryServiceImpl extends BaseService implements CategoryS
     }
 
     @Override
-    public Page<Category> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames, 
+    public Page<ProductCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames, 
             int page, int size, Set<String> sort, boolean orderAscending) {
 
-        Specification<ProductCategoryEntity> spec = SpecificationBuilder.builder()
-                .in(ProductCategoryEntity.FIELD_ID, ids)
-                .in(ProductCategoryEntity.FIELD_NAME, names)
-                .in(new String[] { ProductCategoryEntity.FIELD_PARENT_CATEGORY, ProductCategoryEntity.FIELD_ID }, parentCategoryIds)
-                .in(new String[] { ProductCategoryEntity.FIELD_PARENT_CATEGORY, ProductCategoryEntity.FIELD_NAME }, parentNames)
+        Specification<ProductCategory> spec = SpecificationBuilder.builder()
+                .in(ProductCategory.FIELD_ID, ids)
+                .in(ProductCategory.FIELD_NAME, names)
+                .in(new String[] { ProductCategory.FIELD_PARENT_CATEGORY, ProductCategory.FIELD_ID }, parentCategoryIds)
+                .in(new String[] { ProductCategory.FIELD_PARENT_CATEGORY, ProductCategory.FIELD_NAME }, parentNames)
                 .build();
 
-        Page<ProductCategoryEntity> categoryPage = productCategoryRepository.findAll(spec,
+        Page<ProductCategory> categoryPage = productCategoryRepository.findAll(spec,
                 pageRequest(sort, orderAscending, page, size));
 
-        return categoryPage.map(productCategory -> productCategoryMapper.fromEntity(productCategory,
-                new CycleAvoidingMappingContext()));
+        return categoryPage;
     }
 
     @Override
-    public Category getCategory(Long categoryId) {
-        ProductCategoryEntity category = productCategoryRepository.findById(categoryId).orElse(null);    
+    public ProductCategory getCategory(Long categoryId) {
+        ProductCategory category = productCategoryRepository.findById(categoryId).orElse(null);    
         
-        return productCategoryMapper.fromEntity(category, new CycleAvoidingMappingContext());
+        return category;
     }
 
     @Override
-    public Category addCategory(Long parentCategoryId, Category productCategory) {        
+    public ProductCategory addCategory(Long parentCategoryId, ProductCategory productCategory) {        
         if (parentCategoryId != null) {
-            Category parentCategory = Optional.ofNullable(getCategory(parentCategoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", parentCategoryId.toString()));
+            ProductCategory parentCategory = Optional.ofNullable(getCategory(parentCategoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", parentCategoryId.toString()));
             productCategory.setParentCategory(parentCategory);
         }
         
-        ProductCategoryEntity categoryEntity = productCategoryMapper.toEntity(productCategory, new CycleAvoidingMappingContext());
-
-        ProductCategoryEntity savedEntity = productCategoryRepository.saveAndFlush(categoryEntity);
+        ProductCategory savedEntity = productCategoryRepository.saveAndFlush(productCategory);
         
-        return productCategoryMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
+        return savedEntity;
     }
 
     @Override
-    public Category putCategory(Long parentCategoryId, Long categoryId, UpdateCategory putCategory) {        
-        Category category = getCategory(categoryId);
-
-        if (category == null) {
-            category = new Category(categoryId, null, null, null, null, null, null);
-        }
-
-        category.override(putCategory, getPropertyNames(UpdateCategory.class));
+    public ProductCategory putCategory(Long parentCategoryId, Long categoryId, ProductCategory putCategory) {        
+        putCategory.setId(categoryId);
         
-        return addCategory(parentCategoryId, category);
+        return addCategory(parentCategoryId, putCategory);
     }
 
     @Override
-    public Category patchCategory(Long parentCategoryId, Long categoryId, UpdateCategory updateProductCategory) {                
-        Category category = Optional.ofNullable(getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));     
+    public ProductCategory patchCategory(Long parentCategoryId, Long categoryId, ProductCategory updateProductCategory) {                
+        ProductCategory category = Optional.ofNullable(getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));     
         
-        category.outerJoin(updateProductCategory, getPropertyNames(UpdateCategory.class));
+        updateProductCategory.copyToNullFields(category);
 
-        return addCategory(parentCategoryId, category);
+        return addCategory(parentCategoryId, updateProductCategory);
     }
 
     @Override

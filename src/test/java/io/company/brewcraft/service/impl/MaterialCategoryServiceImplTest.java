@@ -33,12 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.model.MaterialCategoryEntity;
 import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class MaterialCategoryServiceImplTest {
 
-    private CategoryService materialCategoryService;
+    private MaterialCategoryService materialCategoryService;
 
     private MaterialCategoryRepository materialCategoryRepository;
     

@@ -17,7 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "PRODUCT")
-public class ProductEntity extends BaseEntity {
+public class Product extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
@@ -35,11 +35,11 @@ public class ProductEntity extends BaseEntity {
     
     @OneToOne(optional = false)
     @JoinColumn(name = "product_category_id", referencedColumnName = "id")
-    private ProductCategoryEntity category;
+    private ProductCategory category;
     
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     @JoinColumn(name = "product_measures_id", referencedColumnName = "id")
-    private ProductMeasuresEntity targetMeasures;
+    private ProductMeasures targetMeasures;
     
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -55,12 +55,12 @@ public class ProductEntity extends BaseEntity {
     @Version
     private Integer version;
 
-    public ProductEntity() {
+    public Product() {
         super();
     }
 
-    public ProductEntity(Long id, String name, String description, ProductCategoryEntity category,
-            ProductMeasuresEntity targetMeasures, LocalDateTime createdAt, LocalDateTime lastUpdated,
+    public Product(Long id, String name, String description, ProductCategory category,
+            ProductMeasures targetMeasures, LocalDateTime createdAt, LocalDateTime lastUpdated,
             LocalDateTime deletedAt, Integer version) {
         super();
         this.id = id;
@@ -98,19 +98,19 @@ public class ProductEntity extends BaseEntity {
         this.description = description;
     }
 
-    public ProductCategoryEntity getCategory() {
+    public ProductCategory getCategory() {
         return category;
     }
 
-    public void setCategory(ProductCategoryEntity category) {
+    public void setCategory(ProductCategory category) {
         this.category = category;
     }
 
-    public ProductMeasuresEntity getTargetMeasures() {
+    public ProductMeasures getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(ProductMeasuresEntity targetMeasures) {
+    public void setTargetMeasures(ProductMeasures targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
     

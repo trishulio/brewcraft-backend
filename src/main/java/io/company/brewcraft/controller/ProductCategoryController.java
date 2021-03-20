@@ -25,8 +25,8 @@ import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
-import io.company.brewcraft.pojo.Category;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.ProductCategoryMapper;
 import io.company.brewcraft.util.validator.Validator;
@@ -35,11 +35,11 @@ import io.company.brewcraft.util.validator.Validator;
 @RequestMapping(path = "/api/v1/products/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductCategoryController {
     
-    private CategoryService productCategoryService;
+    private ProductCategoryService productCategoryService;
     
     private ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         
-    public ProductCategoryController(CategoryService productCategoryService) {
+    public ProductCategoryController(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
     }
     
@@ -48,7 +48,7 @@ public class ProductCategoryController {
             @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false) Set<Long> parentCategoryIds,
             @RequestParam(required = false) Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
             @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
-            Page<Category> categoriesPage = productCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
+            Page<ProductCategory> categoriesPage = productCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
 
             List<CategoryDto> productCategoriesList = categoriesPage.stream()
                     .map(productCategory -> productCategoryMapper.toDto(productCategory)).collect(Collectors.toList());
@@ -62,7 +62,7 @@ public class ProductCategoryController {
     public CategoryDto getCategory(@PathVariable Long categoryId) {
         Validator validator = new Validator();
 
-        Category productCategory = productCategoryService.getCategory(categoryId);
+        ProductCategory productCategory = productCategoryService.getCategory(categoryId);
         
         validator.assertion(productCategory != null, EntityNotFoundException.class, "ProductCategory", categoryId.toString());
 
@@ -72,30 +72,30 @@ public class ProductCategoryController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Valid @RequestBody AddCategoryDto addProductCategoryDto) {
-        Category productCategory = productCategoryMapper.fromDto(addProductCategoryDto);
+        ProductCategory productCategory = productCategoryMapper.fromDto(addProductCategoryDto);
         Long parentCategoryId = addProductCategoryDto.getParentCategoryId();
         
-        Category addedProductCategory = productCategoryService.addCategory(parentCategoryId, productCategory);
+        ProductCategory addedProductCategory = productCategoryService.addCategory(parentCategoryId, productCategory);
         
         return productCategoryMapper.toDto(addedProductCategory);
     }
     
     @PutMapping("/{categoryId}")
     public CategoryDto putCategory(@Valid @RequestBody UpdateCategoryDto updateCategoryDto, @PathVariable Long categoryId) {
-        Category productCategory = productCategoryMapper.fromDto(updateCategoryDto);
+        ProductCategory productCategory = productCategoryMapper.fromDto(updateCategoryDto);
         Long parentCategoryId = updateCategoryDto.getParentCategoryId();
 
-        Category putProductCategory = productCategoryService.putCategory(parentCategoryId, categoryId, productCategory);
+        ProductCategory putProductCategory = productCategoryService.putCategory(parentCategoryId, categoryId, productCategory);
 
         return productCategoryMapper.toDto(putProductCategory);
     }
     
     @PatchMapping("/{categoryId}")
     public CategoryDto patchCategory(@Valid @RequestBody UpdateCategoryDto updateCategoryDto, @PathVariable Long categoryId) {
-        Category productCategory = productCategoryMapper.fromDto(updateCategoryDto);
+        ProductCategory productCategory = productCategoryMapper.fromDto(updateCategoryDto);
         Long parentCategoryId = updateCategoryDto.getParentCategoryId();
 
-        Category patchedProductCategory = productCategoryService.patchCategory(parentCategoryId, categoryId, productCategory);
+        ProductCategory patchedProductCategory = productCategoryService.patchCategory(parentCategoryId, categoryId, productCategory);
         
         return productCategoryMapper.toDto(patchedProductCategory);
     }

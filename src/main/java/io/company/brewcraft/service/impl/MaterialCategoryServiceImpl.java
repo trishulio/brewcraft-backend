@@ -10,20 +10,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.UpdateMaterial;
 import io.company.brewcraft.dto.UpdateCategory;
 import io.company.brewcraft.model.MaterialCategoryEntity;
 import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.MaterialCategoryMapper;
 
 @Transactional
-public class MaterialCategoryServiceImpl extends BaseService implements CategoryService {
+public class MaterialCategoryServiceImpl extends BaseService implements MaterialCategoryService {
     
     private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
     

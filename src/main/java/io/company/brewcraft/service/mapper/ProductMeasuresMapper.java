@@ -8,8 +8,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.ProductMeasuresDto;
-import io.company.brewcraft.model.ProductMeasuresEntity;
-import io.company.brewcraft.pojo.ProductMeasures;
+import io.company.brewcraft.model.ProductMeasures;
 
 @Mapper()
 public interface ProductMeasuresMapper {
@@ -20,10 +19,4 @@ public interface ProductMeasuresMapper {
     ProductMeasures fromDto(ProductMeasuresDto dto);
 
     ProductMeasuresDto toDto(ProductMeasures productMeasures);
-    
-    @InheritInverseConfiguration
-    ProductMeasures fromEntity(ProductMeasuresEntity entity, @Context CycleAvoidingMappingContext context);
-
-    ProductMeasuresEntity toEntity(ProductMeasures productMeasures , @Context CycleAvoidingMappingContext context);
-    
 }

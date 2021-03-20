@@ -1,33 +1,36 @@
 package io.company.brewcraft.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ProductCategoryEntityTest {
+public class ProductCategoryTest {
 
-    private ProductCategoryEntity productCategoryEntity;
+    private ProductCategory productCategoryEntity;
 
     @BeforeEach
     public void init() {
-        productCategoryEntity = new ProductCategoryEntity();
+        productCategoryEntity = new ProductCategory();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
         String name = "testName";
-        ProductCategoryEntity parentCategory = new ProductCategoryEntity();
-        Set<ProductCategoryEntity> subcategories = Set.of();       
+        ProductCategory parentCategory = new ProductCategory();
+        Set<ProductCategory> subcategories = Set.of();       
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        ProductCategoryEntity productCategoryEntity = new ProductCategoryEntity(id, name, parentCategory, subcategories, created, lastUpdated, version);
+        ProductCategory productCategoryEntity = new ProductCategory(id, name, parentCategory, subcategories, created, lastUpdated, version);
         
         assertSame(id, productCategoryEntity.getId());
         assertSame(name, productCategoryEntity.getName());
@@ -54,14 +57,14 @@ public class ProductCategoryEntityTest {
     
     @Test
     public void testGetSetParentCategory() {
-        ProductCategoryEntity parentCategory = new ProductCategoryEntity();
+        ProductCategory parentCategory = new ProductCategory();
         productCategoryEntity.setParentCategory(parentCategory);
         assertSame(parentCategory, productCategoryEntity.getParentCategory());
     }
     
     @Test
     public void testGetSetSubcategories() {
-        Set<ProductCategoryEntity> subcategories = Set.of();       
+        Set<ProductCategory> subcategories = Set.of();       
         productCategoryEntity.setSubcategories(subcategories);
         assertSame(subcategories, productCategoryEntity.getSubcategories());
     }
@@ -85,5 +88,22 @@ public class ProductCategoryEntityTest {
         Integer version = 1;
         productCategoryEntity.setVersion(version);
         assertSame(version, productCategoryEntity.getVersion());
+    }
+    
+    @Test
+    public void testGetDescendantCategoryIds() {
+        Set<ProductCategory> subcategories = Set.of(
+                new ProductCategory(1L, null, null,
+                        Set.of(new ProductCategory(3L, null, null, null, null, null, null),
+                                new ProductCategory(4L, null, null, null, null, null, null)),
+                        null, null, null),
+                new ProductCategory(2L, null, null, null, null, null, null));
+
+        ProductCategory category = new ProductCategory(null, null, null, subcategories, null, null, null);
+
+        Set<Long> result = category.getDescendantCategoryIds();
+        
+        assertEquals(4, result.size());
+        assertTrue(result.containsAll(List.of(1L, 2L, 3L, 4L)));       
     }
 }

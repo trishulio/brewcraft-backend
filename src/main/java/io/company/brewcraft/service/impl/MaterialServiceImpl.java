@@ -22,7 +22,7 @@ import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -36,11 +36,11 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
     
     private MaterialRepository materialRepository;
     
-    private CategoryService materialCategoryService;
+    private MaterialCategoryService materialCategoryService;
     
     private QuantityUnitService quantityUnitService;
     
-    public MaterialServiceImpl(MaterialRepository materialRepository, CategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
+    public MaterialServiceImpl(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
         this.materialRepository = materialRepository;        
         this.materialCategoryService = materialCategoryService;
         this.quantityUnitService = quantityUnitService;

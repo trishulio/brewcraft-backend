@@ -4,8 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateProduct;
-import io.company.brewcraft.pojo.Product;
+import io.company.brewcraft.model.Product;
 
 public interface ProductService {
 
@@ -17,13 +16,13 @@ public interface ProductService {
     
     public Product addProduct(Product product, Long categoryId);        
         
-    public Product putProduct(Long productId, UpdateProduct product);
+    public Product putProduct(Long productId, Product product);
     
-    public Product putProduct(Long productId, UpdateProduct product, Long categoryId);
+    public Product putProduct(Long productId, Product product, Long categoryId);
     
-    public Product patchProduct(Long productId, UpdateProduct product);
+    public Product patchProduct(Long productId, Product product);
     
-    public Product patchProduct(Long productId, UpdateProduct product, Long categoryId);
+    public Product patchProduct(Long productId, Product product, Long categoryId);
 
     public void deleteProduct(Long productId);
     

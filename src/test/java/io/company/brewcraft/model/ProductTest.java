@@ -1,4 +1,4 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -21,7 +21,7 @@ public class ProductTest {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
-        Category category = new Category();
+        ProductCategory category = new ProductCategory();
         ProductMeasures targetMeasures = new ProductMeasures();
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -64,7 +64,7 @@ public class ProductTest {
     
     @Test
     public void testGetSetCategory() {
-        Category category = new Category();
+        ProductCategory category = new ProductCategory();
         product.setCategory(category);
         assertSame(category, product.getCategory());
     }

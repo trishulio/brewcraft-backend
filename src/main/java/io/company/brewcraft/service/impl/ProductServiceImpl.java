@@ -10,31 +10,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.BaseProduct;
-import io.company.brewcraft.dto.UpdateProduct;
-import io.company.brewcraft.model.ProductCategoryEntity;
-import io.company.brewcraft.model.ProductEntity;
-import io.company.brewcraft.pojo.Product;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
-import io.company.brewcraft.service.mapper.ProductMapper;
 
 @Transactional
 public class ProductServiceImpl extends BaseService implements ProductService {
-    
-    private ProductMapper productMapper = ProductMapper.INSTANCE;
-    
+        
     private ProductRepository productRepository;
     
-    private CategoryService productCategoryService;
+    private ProductCategoryService productCategoryService;
         
-    public ProductServiceImpl(ProductRepository productRepository, CategoryService productCategoryService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService) {
         this.productRepository = productRepository;        
         this.productCategoryService = productCategoryService;
     }
@@ -43,7 +35,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<Category> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
+            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no products with those categories assigned
@@ -56,23 +48,23 @@ public class ProductServiceImpl extends BaseService implements ProductService {
             });
         }
                     
-        Specification<ProductEntity> spec = SpecificationBuilder
+        Specification<Product> spec = SpecificationBuilder
             .builder()
-            .in(ProductEntity.FIELD_ID, ids)
-            .in(new String[] { ProductEntity.FIELD_CATEGORY, ProductCategoryEntity.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)
-            .isNull(ProductEntity.FIELD_DELETED_AT)
+            .in(Product.FIELD_ID, ids)
+            .in(new String[] { Product.FIELD_CATEGORY, ProductCategory.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)
+            .isNull(Product.FIELD_DELETED_AT)
             .build();
         
-        Page<ProductEntity> productPage = productRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
+        Page<Product> productPage = productRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
-        return productPage.map(product -> productMapper.fromEntity(product, new CycleAvoidingMappingContext()));
+        return productPage;
     }
 
     @Override
     public Product getProduct(Long productId) {
-        ProductEntity product = productRepository.findByIdsExcludeDeleted(Set.of(productId)).orElse(null);
+        Product product = productRepository.findByIdsExcludeDeleted(Set.of(productId)).orElse(null);
 
-        return productMapper.fromEntity(product, new CycleAvoidingMappingContext());
+        return product;
     }
     
     @Override
@@ -83,45 +75,37 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {            
-        ProductEntity productEntity = productMapper.toEntity(product, new CycleAvoidingMappingContext());
-                                  
-        ProductEntity savedEntity = productRepository.saveAndFlush(productEntity);
+    public Product addProduct(Product product) {                                              
+        Product savedEntity = productRepository.saveAndFlush(product);
         
-        return productMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
+        return savedEntity;
     }
     
     @Override
-    public Product putProduct(Long productId, UpdateProduct product, Long categoryId) {                
+    public Product putProduct(Long productId, Product product, Long categoryId) {                
         mapChildEntites(product, categoryId);
         
         return putProduct(productId, product);
     }
 
     @Override
-    public Product putProduct(Long productId, UpdateProduct product) {                
-        Product existing = getProduct(productId);
-
-        if (existing == null) {
-            existing = new Product(productId, null, null, null, null, null, null, null, null);
-        }
-
-        existing.override(product, getPropertyNames(UpdateProduct.class));
+    public Product putProduct(Long productId, Product product) {                
+        product.setId(productId);
         
-        return addProduct(existing);        
+        return addProduct(product);        
     }
     
     @Override
-    public Product patchProduct(Long productId, UpdateProduct productPatch) {                           
+    public Product patchProduct(Long productId, Product productPatch) {                           
         Product product = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));     
                 
-        product.outerJoin(productPatch, getPropertyNames(UpdateProduct.class));
-                
-        return addProduct(product);
+        productPatch.copyToNullFields(product);     
+        
+        return addProduct(productPatch);
     }
 
     @Override
-    public Product patchProduct(Long productId, UpdateProduct productPatch, Long categoryId) {        
+    public Product patchProduct(Long productId, Product productPatch, Long categoryId) {        
         mapChildEntites(productPatch, categoryId);
 
         return patchProduct(productId, productPatch);
@@ -142,9 +126,9 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         return productRepository.existsById(productId);
     }
     
-    private void mapChildEntites(BaseProduct product, Long categoryId) {
+    private void mapChildEntites(Product product, Long categoryId) {
         if (categoryId != null) {
-            Category category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
+            ProductCategory category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
             product.setCategory(category);
         }
     }

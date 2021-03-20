@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.*;
 import io.company.brewcraft.pojo.Category;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @SuppressWarnings("unchecked")
@@ -21,11 +21,11 @@ public class MaterialCategoryControllerTest {
 
    private MaterialCategoryController materialCategoryController;
 
-   private CategoryService materialCategoryService;
+   private MaterialCategoryService materialCategoryService;
 
    @BeforeEach
    public void init() {
-       materialCategoryService = mock(CategoryService.class);
+       materialCategoryService = mock(MaterialCategoryService.class);
 
        materialCategoryController = new MaterialCategoryController(materialCategoryService);
    }

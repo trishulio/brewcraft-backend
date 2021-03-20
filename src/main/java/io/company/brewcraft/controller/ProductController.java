@@ -25,7 +25,7 @@ import io.company.brewcraft.dto.AddProductDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.UpdateProductDto;
-import io.company.brewcraft.pojo.Product;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.ProductMapper;

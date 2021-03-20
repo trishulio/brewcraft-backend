@@ -1,6 +1,5 @@
 package io.company.brewcraft.configuration;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -101,14 +100,15 @@ public class ServiceAutoConfiguration {
     @Bean
     @DependsOn({"materialCategoryService"})
     @ConditionalOnMissingBean(MaterialService.class)
-    public MaterialService materialService(MaterialRepository materialRepository, @Qualifier("materialCategoryService") CategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
+    public MaterialService materialService(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
         MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
         return materialService;
     }
 
-    @Bean(name="materialCategoryService")
-    public CategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
-        CategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
+    @Bean
+    @ConditionalOnMissingBean(MaterialCategoryService.class)
+    public MaterialCategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
+        MaterialCategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
         return materialCategoryService;
     }
 
@@ -120,16 +120,16 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @DependsOn({"productCategoryService"})
     @ConditionalOnMissingBean(ProductService.class)
-    public ProductService productService(ProductRepository productRepository, @Qualifier("productCategoryService") CategoryService productCategoryService) {
+    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService) {
         ProductService productService = new ProductServiceImpl(productRepository, productCategoryService);
         return productService;
     }
     
-    @Bean(name="productCategoryService")
-    public CategoryService productCategoryService(ProductCategoryRepository productCategoryRepository) {
-        CategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
+    @Bean
+    @ConditionalOnMissingBean(ProductCategoryService.class)
+    public ProductCategoryService productCategoryService(ProductCategoryRepository productCategoryRepository) {
+        ProductCategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
         return productCategoryService;
     }
     

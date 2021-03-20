@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.dto.UpdateCategory;
 import io.company.brewcraft.pojo.Category;
 
-public interface CategoryService {
+public interface MaterialCategoryService {
 
     public Page<Category> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentIds, Set<String> parentNames, 
             int page, int size, Set<String> sort, boolean orderAscending);

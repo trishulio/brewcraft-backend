@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ProductMeasuresEntityTest {
+public class ProductMeasuresTest {
 
-    private ProductMeasuresEntity productMeasuresEntity;
+    private ProductMeasures productMeasuresEntity;
 
     @BeforeEach
     public void init() {
-        productMeasuresEntity = new ProductMeasuresEntity();
+        productMeasuresEntity = new ProductMeasures();
     }
     
     @Test
@@ -27,7 +27,7 @@ public class ProductMeasuresEntityTest {
         Double fermentationDays = 1.0;
         Double conditioningDays = 1.0;
 
-        ProductMeasuresEntity productMeasuresEntity = new ProductMeasuresEntity(id, abv, ibu, ph, mashTemperature, gravity, yield, brewhouseDuration, fermentationDays, conditioningDays);
+        ProductMeasures productMeasuresEntity = new ProductMeasures(id, abv, ibu, ph, mashTemperature, gravity, yield, brewhouseDuration, fermentationDays, conditioningDays);
         
         assertSame(id, productMeasuresEntity.getId());
         assertSame(abv, productMeasuresEntity.getAbv());

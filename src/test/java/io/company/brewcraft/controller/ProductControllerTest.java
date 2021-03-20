@@ -17,9 +17,9 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.ProductMeasuresDto;
 import io.company.brewcraft.dto.UpdateProductDto;
-import io.company.brewcraft.pojo.Product;
-import io.company.brewcraft.pojo.ProductMeasures;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.ProductMeasures;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -39,9 +39,9 @@ public class ProductControllerTest {
 
    @Test
    public void testGetProducts() {
-       Category productClass = new Category(1L, "testClass", null, null, null, null, null);
-       Category type = new Category(2L, "testType", productClass, null, null, null, null);
-       Category style = new Category(3L, "testStyle", type, null, null, null, null);
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
@@ -105,9 +105,9 @@ public class ProductControllerTest {
    
    @Test
    public void testGetProduct() {
-       Category productClass = new Category(1L, "testClass", null, null, null, null, null);
-       Category type = new Category(2L, "testType", productClass, null, null, null, null);
-       Category style = new Category(3L, "testStyle", type, null, null, null, null);
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -154,9 +154,9 @@ public class ProductControllerTest {
        ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
        AddProductDto addProductDto = new AddProductDto("testProduct", "testDescription", 2L, targetMeasuresDto);
        
-       Category productClass = new Category(1L, "testClass", null, null, null, null, null);
-       Category type = new Category(2L, "testType", productClass, null, null, null, null);
-       Category style = new Category(3L, "testStyle", type, null, null, null, null);
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -216,9 +216,9 @@ public class ProductControllerTest {
        ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
        UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
               
-       Category productClass = new Category(1L, "testClass", null, null, null, null, null);
-       Category type = new Category(2L, "testType", productClass, null, null, null, null);
-       Category style = new Category(3L, "testStyle", type, null, null, null, null);
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -280,9 +280,9 @@ public class ProductControllerTest {
        ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
        UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
        
-       Category productClass = new Category(1L, "testClass", null, null, null, null, null);
-       Category type = new Category(2L, "testType", productClass, null, null, null, null);
-       Category style = new Category(3L, "testStyle", type, null, null, null, null);
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);

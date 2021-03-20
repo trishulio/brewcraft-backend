@@ -12,8 +12,8 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.*;
-import io.company.brewcraft.pojo.Category;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @SuppressWarnings("unchecked")
@@ -21,21 +21,21 @@ public class ProductCategoryControllerTest {
 
    private ProductCategoryController productCategoryController;
 
-   private CategoryService productCategoryService;
+   private ProductCategoryService productCategoryService;
 
    @BeforeEach
    public void init() {
-       productCategoryService = mock(CategoryService.class);
+       productCategoryService = mock(ProductCategoryService.class);
 
        productCategoryController = new ProductCategoryController(productCategoryService);
    }
 
    @Test
    public void testGetProductCategories() {
-       Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
+       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, null);
    
-       List<Category> categoryList = List.of(category);
-       Page<Category> mPage = mock(Page.class);
+       List<ProductCategory> categoryList = List.of(category);
+       Page<ProductCategory> mPage = mock(Page.class);
        doReturn(categoryList.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
@@ -74,7 +74,7 @@ public class ProductCategoryControllerTest {
    
    @Test
    public void testGetProductCategory() {
-       Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
+       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, null);
 
        doReturn(category).when(productCategoryService).getCategory(1L);
        
@@ -96,9 +96,9 @@ public class ProductCategoryControllerTest {
    public void testAddProductCategory() {
        AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
        
-       ArgumentCaptor<Category> addedCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<ProductCategory> addedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        
        doReturn(category).when(productCategoryService).addCategory(eq(addCategoryDto.getParentCategoryId()), addedCategoryCaptor.capture());
 
@@ -120,9 +120,9 @@ public class ProductCategoryControllerTest {
    public void testPutProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<Category> putCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<ProductCategory> putCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        
        doReturn(category).when(productCategoryService).putCategory(eq(2L), eq(1L), putCategoryCaptor.capture());
 
@@ -145,9 +145,9 @@ public class ProductCategoryControllerTest {
    public void testPatchProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<Category> patchCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<ProductCategory> patchCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        
        doReturn(category).when(productCategoryService).patchCategory(eq(2L), eq(1L), patchCategoryCaptor.capture());
 

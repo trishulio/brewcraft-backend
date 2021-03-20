@@ -8,12 +8,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
-import io.company.brewcraft.model.ProductCategoryEntity;
-import io.company.brewcraft.pojo.Category;
-
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
-
+import io.company.brewcraft.dto.UpdateCategoryDto;
+import io.company.brewcraft.model.ProductCategory;
 
 public class ProductCategoryMapperTest {
 
@@ -25,44 +23,41 @@ public class ProductCategoryMapperTest {
     }
 
     @Test
-    public void testFromEntity_ReturnsPojo_WhenEntityIsNotNull() {
-        ProductCategoryEntity entity = new ProductCategoryEntity(1L, "testName", new ProductCategoryEntity(2L, null, null, null, null, null, null), Set.of(new ProductCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Category category = productCategoryMapper.fromEntity(entity, new CycleAvoidingMappingContext());
+    public void testoDto_ReturnsDto() {
+        ProductCategory entity = new ProductCategory(1L, "testName", new ProductCategory(2L, null, null, null, null, null, null), Set.of(new ProductCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        CategoryDto category = productCategoryMapper.toDto(entity);
 
-        Category expected = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        expected.getParentCategory().addSubcategory(expected);
-        expected.getSubcategories().stream().findFirst().get().setParentCategory(expected);
-        
-        assertReflectionEquals(expected, category);
+        assertEquals(new CategoryDto(1L, 2L, "testName", 1), category);
     }
 
     @Test
-    public void testFromDto_ReturnPojo_WhenDtoIsNotNull() {
+    public void testFromDto_ReturnsEntity() {
         CategoryDto dto = new CategoryDto(1L, 2L, "testName", 1);
-        Category category = productCategoryMapper.fromDto(dto);
+        ProductCategory category = productCategoryMapper.fromDto(dto);
         
-        Category expected = new Category(1L, "testName", null, null, null, null, 1);
+        ProductCategory expected = new ProductCategory(1L, "testName", null, null, null, null, 1);
+        
+        assertEquals(expected, category);
+    }
+    
+    @Test
+    public void testFromAddDto_ReturnsEntity() {
+        AddCategoryDto dto = new AddCategoryDto(1L, "testName");
+        ProductCategory category = productCategoryMapper.fromDto(dto);
+        
+        ProductCategory expected = new ProductCategory(null, "testName", null, null, null, null, null);
+        
+        assertEquals(expected, category);
+    }
+    
+    @Test
+    public void testFromUpdateDto_ReturnsEntity() {
+        UpdateCategoryDto dto = new UpdateCategoryDto(1L, "testName", 1);
+        ProductCategory category = productCategoryMapper.fromDto(dto);
+        
+        ProductCategory expected = new ProductCategory(null, "testName", null, null, null, null, 1);
         
         assertEquals(expected, category);
     }
 
-    @Test
-    public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        Category category = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        CategoryDto dto = productCategoryMapper.toDto(category);
-
-        assertEquals(new CategoryDto(1L, 2L, "testName", 1), dto);
-    }
-
-    @Test
-    public void testToEntity_ReturnsEntity_WhenPojoIsNotNull() {
-        Category material = new Category(1L, "testName", new Category(2L, null, null, null, null, null, null), Set.of(new Category(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        ProductCategoryEntity entity = productCategoryMapper.toEntity(material, new CycleAvoidingMappingContext());
-
-        ProductCategoryEntity expected = new ProductCategoryEntity(1L, "testName", new ProductCategoryEntity(2L, null, null, null, null, null, null), Set.of(new ProductCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        expected.getParentCategory().addSubcategory(expected);
-        expected.getSubcategories().stream().findFirst().get().setParentCategory(expected);
-        
-        assertReflectionEquals(expected, entity);
-    }
 }

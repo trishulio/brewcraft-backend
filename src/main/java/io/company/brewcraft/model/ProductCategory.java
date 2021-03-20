@@ -3,6 +3,7 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "PRODUCT_CATEGORY")
-public class ProductCategoryEntity extends BaseEntity {
+public class ProductCategory extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";
@@ -35,10 +36,10 @@ public class ProductCategoryEntity extends BaseEntity {
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
-    private ProductCategoryEntity parentCategory;
+    private ProductCategory parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
-    private Set<ProductCategoryEntity> subcategories;
+    private Set<ProductCategory> subcategories;
     
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -51,11 +52,11 @@ public class ProductCategoryEntity extends BaseEntity {
     @Version
     private Integer version;
     
-    public ProductCategoryEntity() {
+    public ProductCategory() {
         
     }
 
-    public ProductCategoryEntity(Long id, String name, ProductCategoryEntity parentCategory, Set<ProductCategoryEntity> subcategories,
+    public ProductCategory(Long id, String name, ProductCategory parentCategory, Set<ProductCategory> subcategories,
             LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
@@ -83,11 +84,11 @@ public class ProductCategoryEntity extends BaseEntity {
         this.name = name;
     }
 
-    public ProductCategoryEntity getParentCategory() {
+    public ProductCategory getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(ProductCategoryEntity parentCategory) {
+    public void setParentCategory(ProductCategory parentCategory) {
         this.parentCategory = parentCategory;
         
         if (parentCategory != null) {
@@ -95,11 +96,11 @@ public class ProductCategoryEntity extends BaseEntity {
         }
     }
 
-    public Set<ProductCategoryEntity> getSubcategories() {
+    public Set<ProductCategory> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(Set<ProductCategoryEntity> subcategories) {
+    public void setSubcategories(Set<ProductCategory> subcategories) {
         if (subcategories != null) {
             subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
         }
@@ -112,7 +113,7 @@ public class ProductCategoryEntity extends BaseEntity {
         }
     }
     
-    public void addSubcategory(ProductCategoryEntity subcategory) {
+    public void addSubcategory(ProductCategory subcategory) {
         if (this.subcategories == null) {
             this.subcategories = new HashSet<>();
         }
@@ -126,7 +127,7 @@ public class ProductCategoryEntity extends BaseEntity {
         }
     }
     
-    public void removeSubcategory(ProductCategoryEntity subcategory) {
+    public void removeSubcategory(ProductCategory subcategory) {
         if (this.subcategories != null) {
             subcategory.setParentCategory(null);
             this.subcategories.remove(subcategory);
@@ -155,6 +156,39 @@ public class ProductCategoryEntity extends BaseEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+    
+    public ProductCategory getRootCategory() {
+        ProductCategory root = this;
+        
+        while (root.getParentCategory() != null) {
+            root = root.getParentCategory();
+        }
+        
+        return root;        
+    }
+    
+    /*
+     * Returns all descendant category id's using iterative DFS
+     */
+    public Set<Long> getDescendantCategoryIds() {
+        Set<Long> ids = new HashSet<>();
+        Stack<ProductCategory> stack = new Stack<ProductCategory>();
+        
+        if (this.getSubcategories() != null) {
+            stack.addAll(this.getSubcategories());
+        }
+        
+        while (!stack.isEmpty()) {
+            ProductCategory category = stack.pop();
+            ids.add(category.getId());
+            
+            if (category.getSubcategories() != null) {
+                stack.addAll(category.getSubcategories());
+            }
+        }
+              
+        return ids;        
     }
  
 }

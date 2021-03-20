@@ -26,7 +26,7 @@ import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.pojo.Category;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.MaterialCategoryMapper;
 import io.company.brewcraft.util.validator.Validator;
@@ -35,11 +35,11 @@ import io.company.brewcraft.util.validator.Validator;
 @RequestMapping(path = "/api/v1/materials/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MaterialCategoryController {
     
-    private CategoryService materialCategoryService;
+    private MaterialCategoryService materialCategoryService;
     
     private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         
-    public MaterialCategoryController(CategoryService materialCategoryService) {
+    public MaterialCategoryController(MaterialCategoryService materialCategoryService) {
         this.materialCategoryService = materialCategoryService;
     }
     

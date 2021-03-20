@@ -36,7 +36,7 @@ import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialRepository;
-import io.company.brewcraft.service.CategoryService;
+import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -48,14 +48,14 @@ public class MaterialServiceImplTest {
 
     private MaterialRepository materialRepositoryMock;
     
-    private CategoryService materialCategoryServiceMock;
+    private MaterialCategoryService materialCategoryServiceMock;
     
     private QuantityUnitService quantityUnitServiceMock;
 
     @BeforeEach
     public void init() {
         materialRepositoryMock = mock(MaterialRepository.class);
-        materialCategoryServiceMock = mock(CategoryService.class);
+        materialCategoryServiceMock = mock(MaterialCategoryService.class);
         quantityUnitServiceMock = mock(QuantityUnitService.class);
         
         materialService = new MaterialServiceImpl(materialRepositoryMock, materialCategoryServiceMock, quantityUnitServiceMock);

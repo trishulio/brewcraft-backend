@@ -3,8 +3,6 @@ package io.company.brewcraft.service.mapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
-import org.mapstruct.Context;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -15,9 +13,8 @@ import io.company.brewcraft.dto.AddProductDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.UpdateProductDto;
-import io.company.brewcraft.model.ProductEntity;
-import io.company.brewcraft.pojo.Product;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.Product;
 
 @Mapper(uses = { ProductMeasuresMapper.class, ProductCategoryMapper.class })
 public interface ProductMapper {
@@ -35,15 +32,10 @@ public interface ProductMapper {
 
     ProductDto toDto(Product product);
     
-    @InheritInverseConfiguration
-    Product fromEntity(ProductEntity entity, @Context CycleAvoidingMappingContext context);
-
-    ProductEntity toEntity(Product product, @Context CycleAvoidingMappingContext context);
-    
     @BeforeMapping
     default void beforetoDto(@MappingTarget ProductDto productDto, Product product) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
-        Category category = product.getCategory();
+        ProductCategory category = product.getCategory();
         
         if (category.getParentCategory() == null) {
             productDto.setProductClass(productCategoryMapper.toDto(category));
