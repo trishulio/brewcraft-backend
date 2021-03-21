@@ -3,6 +3,9 @@ package io.company.brewcraft.service.impl;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.company.brewcraft.pojo.BaseShipment;
 import io.company.brewcraft.pojo.Shipment;
 import io.company.brewcraft.pojo.ShipmentItem;
@@ -13,6 +16,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.validator.Validator;
 
 public class ShipmentService extends BaseService {
+    private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
     private ShipmentRepository repo;
     private ShipmentItemService itemService;
@@ -21,7 +25,7 @@ public class ShipmentService extends BaseService {
         this.repo = repo;
         this.itemService = itemService;
     }
-    
+
     public Collection<Shipment> getShipments() {
         return null;
     }
@@ -31,9 +35,12 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         Shipment shipment = null;
+
+        log.debug("Finding shipment by Id: {}", id);
         Optional<Shipment> retrieved = repo.findById(id);
 
         if (retrieved.isPresent()) {
+            log.debug("Shipment not found with id: {}", id);
             shipment = retrieved.get();
         }
 
@@ -44,14 +51,22 @@ public class ShipmentService extends BaseService {
         validator.rule(ids != null, "");
         validator.raiseErrors();
 
-        return repo.existsByIds(ids);
+        log.debug("Search shipment exists in Id: {}", ids);
+        boolean exists = repo.existsByIds(ids);
+        log.debug("Shipments exists: {}", exists);
+        
+        return exists;
     }
 
     public int delete(Validator validator, Collection<Long> ids) {
-        validator.rule(ids != null, "");
+        validator.rule(ids != null, "Cannot retrieve Ids to delete from a null collection");
         validator.raiseErrors();
 
-        return repo.softDelete(ids);
+        log.debug("Attempting to delete shipments with Ids: {}", ids);
+        int count = repo.softDelete(ids);
+        log.debug("Number of shipments deleted: {}", count);
+        
+        return count;
     }
 
     public Shipment add(Validator validator, Long invoiceId, Shipment shipment) {
@@ -82,7 +97,7 @@ public class ShipmentService extends BaseService {
             shipmentClz = BaseShipment.class;
         }
         existing.setId(shipmentId);
-        
+
         Collection<ShipmentItem> existingItems = existing.getItems();
         Collection<ShipmentItem> updatedItems = itemService.getPutItems(validator, existingItems, update.getItems());
         existing.override(update, getPropertyNames(shipmentClz));

@@ -14,6 +14,8 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
+import io.company.brewcraft.dto.UpdateShipmentDto;
+import io.company.brewcraft.dto.UpdateShipmentItemDto;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.pojo.Shipment;
 import io.company.brewcraft.pojo.ShipmentItem;
@@ -32,33 +34,30 @@ public class ShipmentMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-        ShipmentDto dto = new ShipmentDto(
-            1L,
+        UpdateShipmentDto dto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "LOT_1",
-            new ShipmentStatusDto(1L, "RECEIVED"),
-            null,
+            "RECEIVED",
+            2L,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), 1L, 1)),
             1
         );
 
         Shipment shipment = mapper.fromDto(dto);
 
         Shipment expected = new Shipment(
-            1L,
+            null,
             "SHIPMENT_1",
             "LOT_1",
-            new ShipmentStatus(1L, "RECEIVED"),
+            new ShipmentStatus(null, "RECEIVED"),
             null,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            null,
+            null,
+            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), null, null, 1)),
             1
         );
 

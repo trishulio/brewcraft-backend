@@ -8,15 +8,7 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.*;
 import io.company.brewcraft.service.*;
-import io.company.brewcraft.service.impl.EquipmentServiceImpl;
-import io.company.brewcraft.service.impl.FacilityServiceImpl;
-import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
-import io.company.brewcraft.service.impl.MaterialServiceImpl;
-import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
-import io.company.brewcraft.service.impl.StorageServiceImpl;
-import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
-import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.*;
 import io.company.brewcraft.service.mapper.TenantMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -115,4 +107,19 @@ public class ServiceAutoConfiguration {
         return quantityUnitService;
     }
 
+    @Bean
+    @ConditionalOnMissingBean(ShipmentService.class)
+    public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
+        ShipmentService shipmentService = new ShipmentService(repo, itemService);
+        
+        return shipmentService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ShipmentItemService.class)
+    public ShipmentItemService shipmentItemService() {
+        ShipmentItemService itemService = new ShipmentItemService();
+        
+        return itemService;
+    }
 }

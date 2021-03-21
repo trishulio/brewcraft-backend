@@ -10,6 +10,15 @@ import io.company.brewcraft.pojo.ShipmentStatus;
 public interface ShipmentStatusMapper {
     ShipmentStatusMapper INSTANCE = Mappers.getMapper(ShipmentStatusMapper.class);
 
+    default ShipmentStatus fromDto(String statusName) {
+        ShipmentStatus status = null;
+        if (statusName != null) {
+            status = new ShipmentStatus(statusName);
+        }
+        
+        return status;
+    }
+
     ShipmentStatusDto toDto(ShipmentStatus status);
 
     ShipmentStatus fromDto(ShipmentStatusDto status);

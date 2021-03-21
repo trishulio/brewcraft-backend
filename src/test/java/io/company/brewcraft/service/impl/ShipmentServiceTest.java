@@ -95,7 +95,7 @@ public class ShipmentServiceTest {
     
     @Test
     public void testDelete_ThrowsValidation_WhenIdsAreNull() {
-        assertThrows(ValidationException.class, () -> service.delete(validator, null));
+        assertThrows(ValidationException.class, () -> service.delete(validator, null), "Cannot retrieve Ids to delete from a null collection");
     }
     
     @Test

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
@@ -18,6 +19,8 @@ import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
+import io.company.brewcraft.service.impl.ShipmentItemService;
+import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
@@ -89,5 +92,22 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testAttributeFilter_ReturnsInstanceOfAttributeFilter() {
         new AttributeFilter();
+    }
+    
+    @Test
+    public void testShipmentService_ReturnsInstanceOfShipmentService() {
+        ShipmentRepository mRepo = mock(ShipmentRepository.class);
+        ShipmentItemService mItemService = mock(ShipmentItemService.class);
+
+        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService);
+        
+        assertSame(ShipmentService.class, service.getClass());
+    }
+
+    @Test
+    public void testShipmentItemService_ReturnsInstanceOfShipmentItemService() {
+        ShipmentItemService service = serviceAutoConfiguration.shipmentItemService();
+        
+        assertSame(ShipmentItemService.class, service.getClass());
     }
 }
