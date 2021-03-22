@@ -57,15 +57,15 @@ public class InvoiceController extends BaseController {
         @RequestParam(required = false, name = "payment_due_date_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime paymentDueDateFrom,
         @RequestParam(required = false, name = "payment_due_date_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime paymentDueDateTo,
         @RequestParam(required = false, name = "purchase_order_ids") Set<Long> purchaseOrderIds,
-        @RequestParam(required = false, name = "freightAmtFrom") BigDecimal freightAmtFrom,
-        @RequestParam(required = false, name = "freightAmtTo") BigDecimal freightAmtTo,
+        @RequestParam(required = false, name = "freight_amt_from") BigDecimal freightAmtFrom,
+        @RequestParam(required = false, name = "freight_amt_to") BigDecimal freightAmtTo,
         @RequestParam(required = false, name = "status") Set<String> status,
         @RequestParam(required = false, name = "supplier_id") Set<Long> supplierIds,
         @RequestParam(required = false, name = "sort") Set<String> sort,         
         @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
         @RequestParam(name="page", defaultValue = "0") int page,
         @RequestParam(name="size", defaultValue = "10") int size,
-        @RequestParam(required = false, defaultValue = "", name="attr") Set<String> attributes
+        @RequestParam(defaultValue = "", name="attr") Set<String> attributes
     ) {
         Page<Invoice> invoices = invoiceService.getInvoices(
             ids,

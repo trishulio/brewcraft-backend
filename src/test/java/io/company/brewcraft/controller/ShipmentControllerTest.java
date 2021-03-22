@@ -6,13 +6,17 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.MaterialDto;
+import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.ShipmentItemDto;
@@ -21,18 +25,26 @@ import io.company.brewcraft.dto.UpdateShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentItemDto;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
+import io.company.brewcraft.util.controller.AttributeFilter;
+import tec.units.ri.quantity.Quantities;
+import tec.units.ri.unit.Units;
 
 public class ShipmentControllerTest {
 
     ShipmentController controller;
     ShipmentService mService;
+    private AttributeFilter filter;
     
     @BeforeEach
     public void init() {
         mService = mock(ShipmentService.class);
-        controller = new ShipmentController(mService);
+        filter = new AttributeFilter();
+        controller = new ShipmentController(mService, filter);
     }
     
     @Test
@@ -48,6 +60,174 @@ public class ShipmentControllerTest {
     public void testGetShipment_ThrowsEntityNotFoundException_WhenShipmentDoesNotExist() { 
         doReturn(null).when(mService).getShipment(anyLong());
         assertThrows(EntityNotFoundException.class, () -> controller.getShipment(1L), "Shipment not found with Id: 1");
+    }
+    
+    @Test
+    public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
+        Collection<ShipmentItem> items = Set.of( 
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+        );
+        Shipment shipment = new Shipment(
+            1L,
+            "SHIPMENT_1",
+            "LOT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus("RECEIVED"),
+            null,
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0),
+            items,
+            1
+        );
+        
+        Page<Shipment> mPage = mock(Page.class);
+        doReturn(List.of(shipment).stream()).when(mPage).stream();
+        doReturn(10).when(mPage).getTotalPages();
+        doReturn(1000L).when(mPage).getTotalElements();
+        
+        doReturn(mPage).when(mService).getShipments(
+            Set.of(1L),
+            Set.of(2L),
+            Set.of("SHIPMENT_1"),
+            Set.of("LOT_1"),
+            Set.of("DESC_1"),
+            Set.of("RECEIVED"),
+            Set.of(3L),
+            LocalDateTime.of(1999, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0, 0),
+            Set.of("col_1"),
+            true,
+            1,
+            10
+        );
+        
+        PageDto<ShipmentDto> dto = controller.getShipments(
+                                    Set.of(1L),
+                                    Set.of(2L),
+                                    Set.of("SHIPMENT_1"),
+                                    Set.of("LOT_1"),
+                                    Set.of("DESC_1"),
+                                    Set.of("RECEIVED"),
+                                    Set.of(3L),
+                                    LocalDateTime.of(1999, 1, 1, 12, 0, 0),
+                                    LocalDateTime.of(2000, 1, 1, 12, 0, 0),
+                                    LocalDateTime.of(2001, 1, 1, 12, 0, 0),
+                                    LocalDateTime.of(2002, 1, 1, 12, 0, 0),
+                                    Set.of("col_1"),
+                                    true,
+                                    1,
+                                    10,
+                                    Set.of("")
+                                );
+        assertEquals(1L, shipment.getId());
+        assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
+        assertEquals("LOT_1", shipment.getLotNumber());
+        assertEquals("DESCRIPTION_1", shipment.getDescription());
+        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
+        assertEquals(null, shipment.getInvoice());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
+        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getVersion());
+        ShipmentItem item = shipment.getItems().iterator().next();
+        assertEquals(1L, item.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(shipment, item.getShipment());
+        assertEquals(new Material(1L), item.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
+        assertEquals(2, item.getVersion());
+    }
+    
+    @Test
+    public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
+        Collection<ShipmentItem> items = Set.of( 
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+        );
+        Shipment shipment = new Shipment(
+            1L,
+            "SHIPMENT_1",
+            "LOT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus("RECEIVED"),
+            null,
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0),
+            items,
+            1
+        );
+        
+        Page<Shipment> mPage = mock(Page.class);
+        doReturn(List.of(shipment).stream()).when(mPage).stream();
+        doReturn(10).when(mPage).getTotalPages();
+        doReturn(1000L).when(mPage).getTotalElements();
+        
+        doReturn(mPage).when(mService).getShipments(
+            Set.of(1L),
+            Set.of(2L),
+            Set.of("SHIPMENT_1"),
+            Set.of("LOT_1"),
+            Set.of("DESC_1"),
+            Set.of("RECEIVED"),
+            Set.of(3L),
+            LocalDateTime.of(1999, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0, 0),
+            Set.of("col_1"),
+            true,
+            1,
+            10
+        );
+        
+        PageDto<ShipmentDto> dto = controller.getShipments(
+                                        Set.of(1L),
+                                        Set.of(2L),
+                                        Set.of("SHIPMENT_1"),
+                                        Set.of("LOT_1"),
+                                        Set.of("DESC_1"),
+                                        Set.of("RECEIVED"),
+                                        Set.of(3L),
+                                        LocalDateTime.of(1999, 1, 1, 12, 0, 0),
+                                        LocalDateTime.of(2000, 1, 1, 12, 0, 0),
+                                        LocalDateTime.of(2001, 1, 1, 12, 0, 0),
+                                        LocalDateTime.of(2002, 1, 1, 12, 0, 0),
+                                        Set.of("col_1"),
+                                        true,
+                                        1,
+                                        10,
+                                        Set.of("")
+                                    );
+        
+        assertEquals(new ShipmentDto(1L), shipment);
+        assertEquals(1L, shipment.getId());
+        assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
+        assertEquals("LOT_1", shipment.getLotNumber());
+        assertEquals("DESCRIPTION_1", shipment.getDescription());
+        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
+        assertEquals(null, shipment.getInvoice());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
+        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getVersion());
+        ShipmentItem item = shipment.getItems().iterator().next();
+        assertEquals(1L, item.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(shipment, item.getShipment());
+        assertEquals(new Material(1L), item.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
+        assertEquals(2, item.getVersion());
     }
     
     @Test

@@ -69,6 +69,11 @@ public class ShipmentServiceTest {
     }
     
     @Test
+    public void testGetShipments() {
+        fail("Not tested");
+    }
+
+    @Test
     public void testExists_ReturnsTrue_WhenRepositoryReturnsTrue() {
         doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
         

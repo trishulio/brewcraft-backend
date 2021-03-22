@@ -34,14 +34,14 @@ public class InvoiceControllerTest {
    private InvoiceController controller;
 
    private InvoiceService mService;
-   private AttributeFilter mFilter;
+   private AttributeFilter filter;
 
    @BeforeEach
    public void init() {
        mService = mock(InvoiceService.class);
-       mFilter = new AttributeFilter();
+       filter = new AttributeFilter();
 
-       controller = new InvoiceController(mService, mFilter);
+       controller = new InvoiceController(mService, filter);
    }
 
    @Test

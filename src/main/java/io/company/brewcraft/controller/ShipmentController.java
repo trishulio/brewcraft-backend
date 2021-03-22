@@ -1,6 +1,9 @@
 package io.company.brewcraft.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -8,25 +11,29 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.mapper.ShipmentMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
 @RequestMapping(path = "/api/v1/purchases", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-public class ShipmentController {
+public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
     private ShipmentService service;
 
     @Autowired
-    public ShipmentController(ShipmentService service) {
+    public ShipmentController(ShipmentService service, AttributeFilter filter) {
+        super(filter);
         this.service = service;
     }
 
@@ -41,6 +48,32 @@ public class ShipmentController {
         }
 
         return ShipmentMapper.INSTANCE.toDto(shipment);
+    }
+
+    @GetMapping
+    public PageDto<ShipmentDto> getShipments(
+        @RequestParam(required = false, name = "ids") Set<Long> ids,
+        @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
+        @RequestParam(required = false, name = "shipment_numbers") Set<String> shipmentNumbers,
+        @RequestParam(required = false, name = "lot_numbers") Set<String> lotNumbers,
+        @RequestParam(required = false, name = "descriptions") Set<String> descriptions,
+        @RequestParam(required = false, name = "statuses") Set<String> statuses,
+        @RequestParam(required = false, name = "invoice_ids") Set<Long> invoiceIds,
+        @RequestParam(required = false, name = "delivery_due_date_from") LocalDateTime deliveryDueDateFrom,
+        @RequestParam(required = false, name = "delivery_due_date_to") LocalDateTime deliveryDueDateTo,
+        @RequestParam(required = false, name = "delivered_date_from") LocalDateTime deliveredDateFrom,
+        @RequestParam(required = false, name = "delivered_date_to") LocalDateTime deliveredDateTo,
+        @RequestParam(required = false, name = "sort") Set<String> sort,
+        @RequestParam(name = "order_asc", defaultValue = "true") boolean orderAscending,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size,
+        @RequestParam(name = "attr", defaultValue = "") Set<String> attributes
+    ) {
+        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, lotNumbers, descriptions, statuses, invoiceIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
+        List<ShipmentDto> shipments = shipmentsPage.stream().parallel().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
+        shipments.stream().parallel().forEach(shipment -> filter(shipment, attributes));
+        
+        return new PageDto<ShipmentDto>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
     }
 
     @DeleteMapping("/")

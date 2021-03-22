@@ -1,17 +1,26 @@
 package io.company.brewcraft.service.impl;
 
+import static io.company.brewcraft.repository.RepositoryUtil.*;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.ShipmentRepository;
+import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.UtilityProvider;
@@ -31,8 +40,36 @@ public class ShipmentService extends BaseService {
         this.utilProvider = utilProvider;
     }
 
-    public Collection<Shipment> getShipments() {
-        return null;
+    public Page<Shipment> getShipments(
+        Set<Long> ids,
+        Set<Long> excludeIds,
+        Set<String> shipmentNumbers,
+        Set<String> lotNumbers,
+        Set<String> descriptions,
+        Set<String> statuses,
+        Set<Long> invoiceIds,
+        LocalDateTime deliveryDueDateFrom,
+        LocalDateTime deliveryDueDateTo,
+        LocalDateTime deliveredDateFrom,
+        LocalDateTime deliveredDateTo,
+        Set<String> sort,
+        boolean orderAscending,
+        int page,
+        int size
+    ) {
+        Specification<Shipment> spec= SpecificationBuilder
+                                                        .builder()
+                                                        .in(Shipment.FIELD_ID, ids)
+                                                        .not().in(Shipment.FIELD_ID, excludeIds)
+                                                        .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
+                                                        .in(Shipment.FIELD_LOT_NUMBER, lotNumbers)
+                                                        .in(Shipment.FIELD_DESCRIPTION, descriptions)
+                                                        .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_NAME}, statuses)
+                                                        .in(new String[] {Shipment.FIELD_INVOICE, Invoice.FIELD_ID}, invoiceIds)
+                                                        .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
+                                                        .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
+                                                        .build();
+        return repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
     }
 
     public Shipment getShipment(Long id) {

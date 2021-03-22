@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @Entity(name = "shipment_status")
 @Table
 public class ShipmentStatus extends BaseModel {
+    public static final String FIELD_NAME = "name";
+    
     public static final String DEFAULT_STATUS = "RECEIVED";
     
     @Id
