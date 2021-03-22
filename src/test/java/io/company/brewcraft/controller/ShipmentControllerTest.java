@@ -69,6 +69,7 @@ public class ShipmentControllerTest {
         UpdateShipmentDto addDto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "LOT_1",
+            "DESCRIPTION_1",
             "RECEIVED",
             1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
@@ -84,6 +85,7 @@ public class ShipmentControllerTest {
         assertEquals(null, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("LOT_1", dto.getLotNumber());
+        assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
@@ -109,6 +111,7 @@ public class ShipmentControllerTest {
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "LOT_1",
+            "DESCRIPTION_1",
             "RECEIVED",
             1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
@@ -124,6 +127,7 @@ public class ShipmentControllerTest {
         assertEquals(2L, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("LOT_1", dto.getLotNumber());
+        assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
@@ -149,6 +153,7 @@ public class ShipmentControllerTest {
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "LOT_1",
+            "DESCRIPTION_1",
             "RECEIVED",
             1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
@@ -164,6 +169,7 @@ public class ShipmentControllerTest {
         assertEquals(2L, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("LOT_1", dto.getLotNumber());
+        assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());

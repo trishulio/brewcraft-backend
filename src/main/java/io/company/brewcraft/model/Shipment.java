@@ -14,6 +14,7 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
+    public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
@@ -30,6 +31,9 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     
     @Column(name = "lot_number")
     private String lotNumber;
+    
+    @Column(name = "description")
+    private String description;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipment_status_id", referencedColumnName = "id")
@@ -67,11 +71,12 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
         setId(id);
     }
 
-    public Shipment(Long id, String shipmentNumber, String lotNumber, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
+    public Shipment(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
             Collection<ShipmentItem> items, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
+        setDescription(description);
         setStatus(shipmentStatus);
         setInvoice(invoice);
         setDeliveryDueDate(deliveryDueDate);
@@ -110,6 +115,16 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     @Override
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

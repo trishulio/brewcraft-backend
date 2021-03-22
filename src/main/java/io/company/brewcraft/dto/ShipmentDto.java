@@ -10,6 +10,7 @@ public class ShipmentDto extends BaseDto {
     private Long id;
     private String shipmentNumber;
     private String lotNumber;
+    private String description;
     private ShipmentStatusDto status;
     private InvoiceDto invoice;
     private LocalDateTime deliveryDueDate;
@@ -27,10 +28,11 @@ public class ShipmentDto extends BaseDto {
         setId(id);
     }
 
-    public ShipmentDto(Long id, String shipmentNumber, String lotNumber, ShipmentStatusDto status, InvoiceDto invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, Collection<ShipmentItemDto> items, Integer version) {
+    public ShipmentDto(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatusDto status, InvoiceDto invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, Collection<ShipmentItemDto> items, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
+        setDescription(description);
         setStatus(status);
         setInvoice(invoice);
         setDeliveryDueDate(deliveryDueDate);
@@ -63,6 +65,14 @@ public class ShipmentDto extends BaseDto {
 
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
+    }
+    
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ShipmentStatusDto getStatus() {

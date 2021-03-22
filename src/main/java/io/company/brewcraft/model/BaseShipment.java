@@ -11,6 +11,10 @@ public interface BaseShipment<T extends BaseShipmentItem> {
     String getLotNumber();
 
     void setLotNumber(String lotNumber);
+    
+    String getDescription();
+    
+    void setDescription(String description);
 
     ShipmentStatus getStatus();
 

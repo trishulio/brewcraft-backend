@@ -55,6 +55,7 @@ public class EnhancedShipmentRepositoryImplTest {
         Shipment shipment = new Shipment(1L,
                 "SHIPMENT_1",
                 "LOT_1",
+                "DESCRIPTION_1",
                 new ShipmentStatus("IN-TRANSIT"),
                 null,
                 LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -69,6 +70,7 @@ public class EnhancedShipmentRepositoryImplTest {
         assertEquals(1L, ret.getId());
         assertEquals("SHIPMENT_1", ret.getShipmentNumber());
         assertEquals("LOT_1", ret.getLotNumber());
+        assertEquals("DESCRIPTION_1", ret.getDescription());
         assertEquals(new ShipmentStatus(1L, "IN-TRANSIT"), ret.getStatus());
         assertEquals(new Invoice(1L), ret.getInvoice());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), ret.getDeliveryDueDate());
@@ -131,7 +133,7 @@ public class EnhancedShipmentRepositoryImplTest {
 
         Collection<ShipmentItem> items = new HashSet<>();
         items.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
-        Shipment shipment = new Shipment(1L, "SHIPMENT_1", "LOT_1", null, null, LocalDateTime.of(1999, 1, 1, 12, 0), LocalDateTime.of(2000, 1, 1, 12, 0), LocalDateTime.of(2001, 1, 1, 12, 0), LocalDateTime.of(2002, 1, 1, 12, 0), items, 1);
+        Shipment shipment = new Shipment(1L, "SHIPMENT_1", "LOT_1", "DESCRIPTION_1", null, null, LocalDateTime.of(1999, 1, 1, 12, 0), LocalDateTime.of(2000, 1, 1, 12, 0), LocalDateTime.of(2001, 1, 1, 12, 0), LocalDateTime.of(2002, 1, 1, 12, 0), items, 1);
 
         Shipment ret = repo.save(null, shipment);
 
