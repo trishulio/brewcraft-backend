@@ -12,6 +12,13 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Tax;
+
 public class InvoiceTest {
 
     private Invoice invoice;

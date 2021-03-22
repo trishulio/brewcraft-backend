@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.MoneyDto;
-import io.company.brewcraft.pojo.Freight;
+import io.company.brewcraft.model.Freight;
 
 public class FreightMapperTest {
     private FreightMapper mapper;

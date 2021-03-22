@@ -1,4 +1,4 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -7,10 +7,6 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import io.company.brewcraft.model.Audited;
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Identified;
 
 @Entity(name = "SHIPMENT")
 @Table

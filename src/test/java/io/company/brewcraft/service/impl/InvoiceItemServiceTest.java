@@ -11,10 +11,10 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.pojo.InvoiceItem;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Tax;
-import io.company.brewcraft.pojo.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;

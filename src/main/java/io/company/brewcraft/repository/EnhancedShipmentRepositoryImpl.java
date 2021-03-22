@@ -2,8 +2,8 @@ package io.company.brewcraft.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.company.brewcraft.pojo.Invoice;
-import io.company.brewcraft.pojo.Shipment;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepository {

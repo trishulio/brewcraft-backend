@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 
 public class InvoiceStatusService {

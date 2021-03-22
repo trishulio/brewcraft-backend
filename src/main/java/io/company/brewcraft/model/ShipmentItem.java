@@ -1,4 +1,4 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
@@ -8,11 +8,13 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import io.company.brewcraft.model.Audited;
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.QuantityEntity;
+import io.company.brewcraft.pojo.Material;
+import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
+import io.company.brewcraft.service.mapper.MaterialMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
+@Entity(name = "shipment_item")
+@Table
 public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audited {
 
     @Id
@@ -26,7 +28,7 @@ public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audit
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
-    private Material material;
+    private MaterialEntity material;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id")
@@ -83,12 +85,12 @@ public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audit
 
     @Override
     public Material getMaterial() {
-        return material;
+        return MaterialMapper.INSTANCE.fromEntity(material, new CycleAvoidingMappingContext());
     }
 
     @Override
     public void setMaterial(Material material) {
-        this.material = material;
+        this.material = MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext());
     }
 
     @Override

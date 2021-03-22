@@ -1,10 +1,9 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import javax.persistence.*;
 
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.Supplier;
-
 @Entity(name = "purchase_order")
 @Table
 public class PurchaseOrder extends BaseModel {

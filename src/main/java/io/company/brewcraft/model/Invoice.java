@@ -1,4 +1,4 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -13,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.dto.UpdateInvoice;
-import io.company.brewcraft.model.Audited;
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 

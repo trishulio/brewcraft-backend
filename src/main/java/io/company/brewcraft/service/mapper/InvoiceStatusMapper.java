@@ -6,7 +6,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.InvoiceStatusDto;
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.InvoiceStatus;
 
 @Mapper
 public interface InvoiceStatusMapper {

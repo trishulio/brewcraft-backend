@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.InvoiceStatus;
+
 public class InvoiceStatusTest {
 
     private InvoiceStatus status;

@@ -12,8 +12,8 @@ import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.UpdateShipmentItemDto;
+import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.ShipmentItem;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.ShipmentStatusDto;
-import io.company.brewcraft.pojo.ShipmentStatus;
+import io.company.brewcraft.model.ShipmentStatus;
 
 @Mapper
 public interface ShipmentStatusMapper {

@@ -12,12 +12,12 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.pojo.Invoice;
-import io.company.brewcraft.pojo.InvoiceItem;
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.PurchaseOrder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryTest {

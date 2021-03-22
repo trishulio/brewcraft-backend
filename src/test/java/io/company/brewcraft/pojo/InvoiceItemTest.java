@@ -9,8 +9,10 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.utils.SupportedUnits;
-import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.Tax;
+import tec.units.ri.quantity.Quantities;
+import tec.units.ri.unit.Units;
 
 public class InvoiceItemTest {
 

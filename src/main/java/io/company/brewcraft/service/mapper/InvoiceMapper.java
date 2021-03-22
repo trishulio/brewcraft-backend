@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddInvoiceDto;
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
-import io.company.brewcraft.pojo.Invoice;
+import io.company.brewcraft.model.Invoice;
 
 @Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, InvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, PurchaseOrderMapper.class })
 public interface InvoiceMapper {

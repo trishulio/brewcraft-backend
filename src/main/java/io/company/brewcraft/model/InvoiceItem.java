@@ -1,15 +1,11 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 import javax.persistence.*;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.model.MoneyEntity;
-import io.company.brewcraft.model.QuantityEntity;
+import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
 import io.company.brewcraft.service.mapper.MaterialMapper;

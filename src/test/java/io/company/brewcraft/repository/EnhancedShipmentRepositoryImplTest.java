@@ -9,8 +9,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.pojo.Invoice;
-import io.company.brewcraft.pojo.Shipment;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedShipmentRepositoryImplTest {

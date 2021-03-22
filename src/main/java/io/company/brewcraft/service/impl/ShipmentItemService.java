@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.company.brewcraft.pojo.BaseShipmentItem;
-import io.company.brewcraft.pojo.ShipmentItem;
-import io.company.brewcraft.pojo.UpdateShipmentItem;
+import io.company.brewcraft.model.BaseShipmentItem;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.UpdateShipmentItem;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.util.validator.Validator;
 

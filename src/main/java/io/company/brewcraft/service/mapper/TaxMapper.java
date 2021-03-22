@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.TaxDto;
-import io.company.brewcraft.pojo.Tax;
+import io.company.brewcraft.model.Tax;
 
 @Mapper(uses = { MoneyMapper.class })
 public interface TaxMapper {

@@ -12,10 +12,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.pojo.BaseShipmentItem;
+import io.company.brewcraft.model.BaseShipmentItem;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.UpdateShipmentItem;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.ShipmentItem;
-import io.company.brewcraft.pojo.UpdateShipmentItem;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import tec.units.ri.quantity.Quantities;

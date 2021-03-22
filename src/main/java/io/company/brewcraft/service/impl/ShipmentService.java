@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.pojo.BaseShipment;
-import io.company.brewcraft.pojo.Shipment;
-import io.company.brewcraft.pojo.ShipmentItem;
-import io.company.brewcraft.pojo.UpdateShipment;
+import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -63,7 +63,7 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         log.debug("Attempting to delete shipments with Ids: {}", ids);
-        int count = repo.softDelete(ids);
+        int count = repo.deleteByIds(ids);
         log.debug("Number of shipments deleted: {}", count);
         
         return count;

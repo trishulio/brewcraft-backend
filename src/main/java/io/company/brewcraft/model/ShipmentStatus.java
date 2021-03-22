@@ -1,13 +1,15 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-import io.company.brewcraft.model.BaseModel;
-
+@Entity(name = "shipment_status")
+@Table
 public class ShipmentStatus extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")

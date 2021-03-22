@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.SupplierEntity;
 
 public class PurchaseOrderTest {

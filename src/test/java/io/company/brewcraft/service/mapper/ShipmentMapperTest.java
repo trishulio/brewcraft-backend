@@ -16,10 +16,10 @@ import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentItemDto;
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Shipment;
-import io.company.brewcraft.pojo.ShipmentItem;
-import io.company.brewcraft.pojo.ShipmentStatus;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 

@@ -14,10 +14,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Shipment;
-import io.company.brewcraft.pojo.ShipmentItem;
-import io.company.brewcraft.pojo.ShipmentStatus;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
@@ -90,7 +90,7 @@ public class ShipmentServiceTest {
     public void testDelete_CallsDeleteByIdOnRepository() {
         service.delete(validator, Set.of(1L, 2L, 3L));
         
-        verify(mRepo, times(1)).softDelete(Set.of(1L, 2L, 3L));
+        verify(mRepo, times(1)).deleteByIds(Set.of(1L, 2L, 3L));
     }
     
     @Test

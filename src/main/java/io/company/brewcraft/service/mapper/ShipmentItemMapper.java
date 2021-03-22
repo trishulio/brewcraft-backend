@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.UpdateShipmentItemDto;
-import io.company.brewcraft.pojo.ShipmentItem;
+import io.company.brewcraft.model.ShipmentItem;
 
 @Mapper(uses = {QuantityMapper.class, MaterialMapper.class})
 public interface ShipmentItemMapper {

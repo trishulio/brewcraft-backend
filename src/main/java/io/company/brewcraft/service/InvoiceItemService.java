@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.pojo.BaseInvoiceItem;
-import io.company.brewcraft.pojo.InvoiceItem;
-import io.company.brewcraft.pojo.UpdateInvoiceItem;
+import io.company.brewcraft.model.BaseInvoiceItem;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.util.validator.Validator;
 
 public class InvoiceItemService extends BaseService {

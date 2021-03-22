@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.PurchaseOrderDto;
-import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.model.PurchaseOrder;
 
 @Mapper
 public interface PurchaseOrderMapper {

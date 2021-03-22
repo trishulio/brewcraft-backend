@@ -2,7 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.Optional;
 
-import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.service.mapper.PurchaseOrderMapper;
 

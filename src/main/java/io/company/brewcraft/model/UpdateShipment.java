@@ -1,6 +1,4 @@
-package io.company.brewcraft.pojo;
-
-import io.company.brewcraft.model.Versioned;
+package io.company.brewcraft.model;
 
 public interface UpdateShipment<T extends UpdateShipmentItem> extends BaseShipment<T>, Versioned {
 }

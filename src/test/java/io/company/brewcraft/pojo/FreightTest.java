@@ -6,6 +6,8 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Freight;
+
 public class FreightTest {
 
     private Freight freight;

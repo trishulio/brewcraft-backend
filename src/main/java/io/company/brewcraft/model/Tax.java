@@ -1,4 +1,6 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
+
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,50 +14,47 @@ import javax.persistence.Table;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.MoneyEntity;
+import io.company.brewcraft.service.MoneyService;
+import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
-@Entity(name = "FREIGHT")
+@Entity(name = "TAX")
 @Table
-public class Freight extends BaseModel {
-    public static final String FIELD_ID = "id";
+public class Tax extends BaseModel implements MoneySupplier {
     public static final String FIELD_AMOUNT = "amount";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "freight_generator")
-    @SequenceGenerator(name = "freight_generator", sequenceName = "freight_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tax_generator")
+    @SequenceGenerator(name = "tax_generator", sequenceName = "tax_sequence", allocationSize = 1)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "amount_id", referencedColumnName = "id")
     private MoneyEntity amount;
 
-    public Freight() {
+    public Tax() {
     }
 
-    public Freight(Long id) {
-        setId(id);
-    }
-
-    public Freight(Long id, Money amount) {
-        this(id);
+    public Tax(Money amount) {
+        this();
         setAmount(amount);
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @Override
     public Money getAmount() {
-        return MoneyMapper.INSTANCE.fromEntity(this.amount);
+        return MoneyMapper.INSTANCE.fromEntity(amount);
     }
 
     public void setAmount(Money amount) {
         this.amount = MoneyMapper.INSTANCE.toEntity(amount);
+    }
+
+    public static Tax total(Collection<Tax> taxes) {
+        Tax combined = null;
+        Money total = MoneyService.total(taxes);
+        if (total != null) {
+            combined = new Tax(total);
+        }
+        return combined;
     }
 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.service.InvoiceStatusService;
 

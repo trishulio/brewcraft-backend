@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
-import io.company.brewcraft.pojo.Shipment;
+import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.mapper.ShipmentMapper;

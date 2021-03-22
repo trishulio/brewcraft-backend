@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.service.PurchaseOrderService;
 

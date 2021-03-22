@@ -8,11 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.pojo.Invoice;
-import io.company.brewcraft.pojo.InvoiceItem;
-import io.company.brewcraft.pojo.InvoiceStatus;
-import io.company.brewcraft.pojo.PurchaseOrder;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {

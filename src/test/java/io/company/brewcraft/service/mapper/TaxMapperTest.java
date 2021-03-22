@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.TaxDto;
-import io.company.brewcraft.pojo.Tax;
+import io.company.brewcraft.model.Tax;
 
 public class TaxMapperTest {
 

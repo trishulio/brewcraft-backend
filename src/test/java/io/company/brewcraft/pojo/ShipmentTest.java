@@ -10,6 +10,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.ShipmentStatus;
 import tec.units.ri.quantity.Quantities;
 import tec.units.ri.unit.Units;
 

@@ -1,8 +1,10 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
 import org.joda.money.Money;
+
+import io.company.brewcraft.pojo.Material;
 
 public interface BaseInvoiceItem {
     String getDescription();
