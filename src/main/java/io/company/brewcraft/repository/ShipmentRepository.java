@@ -11,10 +11,10 @@ import io.company.brewcraft.model.Shipment;
 
 public interface ShipmentRepository extends CrudRepository<Shipment, Long>, JpaSpecificationExecutor<Shipment>, EnhancedShipmentRepository {
     
-    @Query("select count(s) > 0 from SHIPMENT s where s.id in (:ids)")
+    @Query("select count(s) > 0 from shipment s where s.id in (:ids)")
     boolean existsByIds(Collection<Long> ids);
 
     @Modifying
-    @Query("delete from SHIPMENT s where s.id in (:ids)")
+    @Query("delete from shipment s where s.id in (:ids)")
     int deleteByIds(Collection<Long> ids);
 }

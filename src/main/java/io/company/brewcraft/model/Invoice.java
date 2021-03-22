@@ -16,7 +16,7 @@ import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 
-@Entity(name = "INVOICE")
+@Entity(name = "invoice")
 @Table
 public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
     private static final Logger logger = LoggerFactory.getLogger(Invoice.class);

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity(name = "SHIPMENT")
+@Entity(name = "shipment")
 @Table
 public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>, Identified, Audited {
     public static final String FIELD_ID = "id";

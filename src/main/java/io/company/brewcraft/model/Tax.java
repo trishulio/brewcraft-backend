@@ -18,7 +18,7 @@ import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
-@Entity(name = "TAX")
+@Entity(name = "tax")
 @Table
 public class Tax extends BaseModel implements MoneySupplier {
     public static final String FIELD_AMOUNT = "amount";

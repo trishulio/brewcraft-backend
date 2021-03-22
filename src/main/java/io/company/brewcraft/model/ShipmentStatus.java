@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @Entity(name = "shipment_status")
 @Table
 public class ShipmentStatus extends BaseModel {
+    public static final String DEFAULT_STATUS = "RECEIVED";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")
     @SequenceGenerator(name = "shipment_status_generator", sequenceName = "shipment_status_sequence", allocationSize = 1)

@@ -14,7 +14,7 @@ import org.joda.money.Money;
 
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
-@Entity(name = "FREIGHT")
+@Entity(name = "freight")
 @Table
 public class Freight extends BaseModel {
     public static final String FIELD_ID = "id";

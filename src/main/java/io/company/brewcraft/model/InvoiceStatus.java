@@ -9,7 +9,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 
-@Entity(name = "INVOICE_STATUS")
+@Entity(name = "invoice_status")
 @Table
 public class InvoiceStatus extends BaseModel {
     public static final String FIELD_ID = "id";

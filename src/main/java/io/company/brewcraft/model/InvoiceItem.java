@@ -12,7 +12,7 @@ import io.company.brewcraft.service.mapper.MaterialMapper;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
-@Entity(name = "INVOICE_ITEM")
+@Entity(name = "invoice_item")
 @Table
 public class InvoiceItem extends BaseModel implements MoneySupplier, UpdateInvoiceItem, Identified {
     public static final String FIELD_ID = "id";

@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "QTY_UNIT")
+@Entity(name = "qty_unit")
 public class UnitEntity extends BaseEntity {
     public static final String FIELD_SYMBOL = "symbol";
     public static final String FIELD_NAME = "name";

@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-@Entity(name = "QTY")
+@Entity(name = "qty")
 public class QuantityEntity extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_UNIT = "unit";
