@@ -10,6 +10,8 @@ import io.company.brewcraft.repository.*;
 import io.company.brewcraft.service.*;
 import io.company.brewcraft.service.impl.*;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.util.ThreadLocalUtilityProvider;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @Configuration
@@ -111,7 +113,7 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(ShipmentService.class)
     public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
         ShipmentService shipmentService = new ShipmentService(repo, itemService);
-        
+
         return shipmentService;
     }
 
@@ -119,7 +121,13 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(ShipmentItemService.class)
     public ShipmentItemService shipmentItemService() {
         ShipmentItemService itemService = new ShipmentItemService();
-        
+
         return itemService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public UtilityProvider utilityProvider() {
+        return new ThreadLocalUtilityProvider();
     }
 }

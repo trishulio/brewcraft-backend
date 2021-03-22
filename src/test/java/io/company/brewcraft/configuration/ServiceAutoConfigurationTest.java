@@ -24,6 +24,8 @@ import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.util.ThreadLocalUtilityProvider;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class ServiceAutoConfigurationTest {
@@ -109,5 +111,12 @@ public class ServiceAutoConfigurationTest {
         ShipmentItemService service = serviceAutoConfiguration.shipmentItemService();
         
         assertSame(ShipmentItemService.class, service.getClass());
+    }
+    
+    @Test
+    public void testUtilityProvider_ReturnsInstanceOfThreadLocalUtilityProvider() {
+        UtilityProvider provider = serviceAutoConfiguration.utilityProvider();
+        
+        assertSame(ThreadLocalUtilityProvider.class, provider.getClass());
     }
 }
