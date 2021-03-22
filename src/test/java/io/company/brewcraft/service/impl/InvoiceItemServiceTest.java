@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -16,6 +17,7 @@ import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.InvoiceItemService;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
@@ -25,9 +27,14 @@ public class InvoiceItemServiceTest {
 
     private InvoiceItemService service;
     
+    private UtilityProvider mUtilProvider;
+    
     @BeforeEach
     public void init() {
-        service = new InvoiceItemService();
+        mUtilProvider = mock(UtilityProvider.class);
+        doReturn(new Validator()).when(mUtilProvider).getValidator();
+        
+        service = new InvoiceItemService(mUtilProvider);
     }
     
     @Test
@@ -42,7 +49,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21.00"), Units.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), 21)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(new Validator(), existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -75,7 +82,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(null, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(new Validator(), existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -104,15 +111,13 @@ public class InvoiceItemServiceTest {
         );
         Collection<UpdateInvoiceItem> itemUpdates = Set.of();
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(new Validator(), existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
 
         assertEquals(0, updatedItems.size());
     }
     
     @Test
     public void testMergePut_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
-        Validator validator = new Validator();
-        
         Collection<InvoiceItem> existingItems = Set.of();
         
         Collection<UpdateInvoiceItem> itemUpdates = Set.of(
@@ -121,11 +126,11 @@ public class InvoiceItemServiceTest {
             new InvoiceItem()
         );
         
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(validator, existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
         
         assertEquals(1, updatedItems.size());
         
-        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. No existing invoice item found with Id: 1. To add a new item to the invoice, don't include the version and id in the payload.\n2. No existing invoice item found with Id: 2. To add a new item to the invoice, don't include the version and id in the payload.\n 3. No existing invoice item found with Id: 3. To add a new item to the invoice, don't include the version and id in the payload.");
+        assertThrows(ValidationException.class, () -> mUtilProvider.getValidator().raiseErrors(), "1. No existing invoice item found with Id: 1. To add a new item to the invoice, don't include the version and id in the payload.\n2. No existing invoice item found with Id: 2. To add a new item to the invoice, don't include the version and id in the payload.\n 3. No existing invoice item found with Id: 3. To add a new item to the invoice, don't include the version and id in the payload.");
     }
     
     @Test
@@ -138,7 +143,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11.00"), Units.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, 11)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPatchCollection(new Validator(), existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPatchCollection(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -167,11 +172,10 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(3L)
         );
 
-        Validator validator = new Validator();
-        Collection<InvoiceItem> updatedItems = service.getPatchCollection(validator, existingItems, itemUpdates);
+        Collection<InvoiceItem> updatedItems = service.getPatchCollection(existingItems, itemUpdates);
 
         assertEquals(0, updatedItems.size());
-        assertThrows(ValidationException.class, () -> validator.raiseErrors(), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
+        assertThrows(ValidationException.class, () -> mUtilProvider.getValidator().raiseErrors(), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
     }
     
     @Test
@@ -181,7 +185,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
-        Collection<InvoiceItem> items = service.getAddCollection(new Validator(), itemUpdates);
+        Collection<InvoiceItem> items = service.getAddCollection(itemUpdates);
         assertEquals(2, items.size());        
         Iterator<InvoiceItem> it = items.iterator();
 

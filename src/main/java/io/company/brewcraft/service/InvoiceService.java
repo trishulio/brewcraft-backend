@@ -28,25 +28,26 @@ import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.InvoiceMapper;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
 public class InvoiceService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
-    private static final InvoiceMapper INVOICE_MAPPER = InvoiceMapper.INSTANCE;
 
     private InvoiceRepository repo;
     private InvoiceItemService itemService;
+    private UtilityProvider utilProvider;
 
     public InvoiceService() {
         super();
     }
 
-    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService) {
+    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService,UtilityProvider utilProvider) {
         this();
         this.repo = repo;
         this.itemService = itemService;
+        this.utilProvider = utilProvider;
     }
 
     public Page<Invoice> getInvoices(
@@ -116,7 +117,7 @@ public class InvoiceService extends BaseService {
 
     public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
         log.info("Updating the Invoice with Id: {}", invoiceId);
-        Validator validator = validator();
+        Validator validator = this.utilProvider.getValidator();
         Invoice existing = getInvoice(invoiceId);
 
         if (existing == null) {
@@ -132,7 +133,7 @@ public class InvoiceService extends BaseService {
         log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.info("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
 
-        Collection<InvoiceItem> updatedItems = itemService.getPutCollection(validator, existing.getItems(), update.getItems());
+        Collection<InvoiceItem> updatedItems = itemService.getPutCollection(existing.getItems(), update.getItems());
         log.info("Total UpdateItems: {}", updatedItems.size());
         
         existing.override(update, getPropertyNames(UpdateInvoice.class));
@@ -144,15 +145,14 @@ public class InvoiceService extends BaseService {
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
         log.info("Performing Patch on Invoice with Id: {}", invoiceId);
-        Validator validator = validator();
+        Validator validator = this.utilProvider.getValidator();
 
-        Invoice existing = getInvoice(invoiceId);
-        validator.assertion(existing != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
+        Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
 
         log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.info("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
 
-        Collection<InvoiceItem> updatedItems = itemService.getPatchCollection(validator, existing.getItems(), patch.getItems());
+        Collection<InvoiceItem> updatedItems = itemService.getPatchCollection(existing.getItems(), patch.getItems());
         log.info("Total UpdateItems: {}", updatedItems.size());
         
         existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
@@ -163,10 +163,10 @@ public class InvoiceService extends BaseService {
     }
 
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
-        Validator validator = validator();
+        Validator validator = this.utilProvider.getValidator();
         log.info("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
         Invoice invoice = new Invoice();
-        Collection<InvoiceItem> itemAdditions = itemService.getAddCollection(validator, addition.getItems());
+        Collection<InvoiceItem> itemAdditions = itemService.getAddCollection(addition.getItems());
         log.info("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);

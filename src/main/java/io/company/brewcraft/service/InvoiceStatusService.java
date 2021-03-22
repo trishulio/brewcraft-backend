@@ -1,8 +1,11 @@
 package io.company.brewcraft.service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 
+@Transactional
 public class InvoiceStatusService {
     private InvoiceStatusRepository repo;
 

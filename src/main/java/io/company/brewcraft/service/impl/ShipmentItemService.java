@@ -9,11 +9,20 @@ import io.company.brewcraft.model.BaseShipmentItem;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.UpdateShipmentItem;
 import io.company.brewcraft.service.BaseService;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
 public class ShipmentItemService extends BaseService {
 
-    public Collection<ShipmentItem> getAddItems(Validator validator, Collection<? extends BaseShipmentItem> additionItems) {
+    private UtilityProvider utilProvider;
+
+    public ShipmentItemService(UtilityProvider utilProvider) {
+        this.utilProvider = utilProvider;
+    }
+
+    public Collection<ShipmentItem> getAddItems(Collection<? extends BaseShipmentItem> additionItems) {
+        Validator validator = this.utilProvider.getValidator();
+
         Collection<ShipmentItem> targetItems = null;
         if (additionItems != null) {
             targetItems = additionItems.stream().map(addition -> {
@@ -22,12 +31,14 @@ public class ShipmentItemService extends BaseService {
                 return item;
             }).collect(Collectors.toSet());
         }
-        
+
         validator.raiseErrors();
         return targetItems;
     }
-    
-    public Collection<ShipmentItem> getPutItems(Validator validator, Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+
+    public Collection<ShipmentItem> getPutItems(Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+        Validator validator = this.utilProvider.getValidator();
+
         if (updateItems == null) {
             return null;
         }
@@ -35,7 +46,8 @@ public class ShipmentItemService extends BaseService {
         int maxPossibleTargetSize = existingItems == null ? 0 : existingItems.size() + updateItems.size();
         Collection<ShipmentItem> targetItems = new HashSet<>(maxPossibleTargetSize);
 
-        // Separating the put payloads into additions (without Id param) and updates (with Ids that match and existing item)
+        // Separating the put payloads into additions (without Id param) and updates
+        // (with Ids that match and existing item)
         Collection<UpdateShipmentItem> updates = new HashSet<UpdateShipmentItem>(updateItems.size());
         for (UpdateShipmentItem update : updateItems) {
             if (update.getId() != null) {
@@ -46,7 +58,7 @@ public class ShipmentItemService extends BaseService {
                 targetItems.add(item);
             }
         }
-        
+
         existingItems = existingItems != null ? existingItems : new HashSet<>(0);
         Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
@@ -57,12 +69,14 @@ public class ShipmentItemService extends BaseService {
                 targetItems.add(item);
             }
         });
-        
+
         validator.raiseErrors();
         return targetItems;
-   }
-    
-    public Collection<ShipmentItem> getPatchItems(Validator validator, Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+    }
+
+    public Collection<ShipmentItem> getPatchItems(Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+        Validator validator = this.utilProvider.getValidator();
+
         existingItems = existingItems != null ? existingItems : new HashSet<>(0);
         Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
@@ -75,7 +89,7 @@ public class ShipmentItemService extends BaseService {
                 targetItems.add(item);
             }
         });
-        
+
         validator.raiseErrors();
         return targetItems;
     }

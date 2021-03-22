@@ -17,7 +17,6 @@ import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.mapper.ShipmentMapper;
-import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/purchases", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,7 +33,7 @@ public class ShipmentController {
     @GetMapping(value = "/{shipmentId}")
     public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId) {
         log.debug("Fetching shipment with Id: {}", shipmentId);
-        Shipment shipment = service.getShipment(new Validator(), shipmentId);
+        Shipment shipment = service.getShipment(shipmentId);
 
         if (shipment == null) {
             log.debug("No shipment found with Id: {}", shipmentId);
@@ -47,7 +46,7 @@ public class ShipmentController {
     @DeleteMapping("/")
     public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
         log.debug("Attempting to delete shipments with Ids: {}", shipmentIds);
-        int count = service.delete(new Validator(), shipmentIds);
+        int count = service.delete(shipmentIds);
         log.debug("Number of shipments deleted: {}", count);
 
         return count;
@@ -58,7 +57,7 @@ public class ShipmentController {
         log.debug("Updating shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
 
-        Shipment updated = service.put(new Validator(), updateDto.getInvoiceId(), shipmentId, update);
+        Shipment updated = service.put(updateDto.getInvoiceId(), shipmentId, update);
 
         log.debug("Put successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
@@ -69,7 +68,7 @@ public class ShipmentController {
         log.debug("Patching shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
 
-        Shipment updated = service.patch(new Validator(), updateDto.getInvoiceId(), shipmentId, update);
+        Shipment updated = service.patch(updateDto.getInvoiceId(), shipmentId, update);
 
         log.debug("Patch successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
@@ -80,7 +79,7 @@ public class ShipmentController {
         log.debug("Adding a new shipment item");
         Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
 
-        Shipment added = service.add(new Validator(), addDto.getInvoiceId(), shipment);
+        Shipment added = service.add(addDto.getInvoiceId(), shipment);
 
         log.debug("Added a new shipment item with Id: {}", shipment.getId());
         return ShipmentMapper.INSTANCE.toDto(added);

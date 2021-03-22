@@ -19,6 +19,7 @@ import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.repository.ShipmentRepository;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import tec.units.ri.quantity.Quantities;
@@ -30,6 +31,7 @@ public class ShipmentServiceTest {
     
     private ShipmentRepository mRepo;
     private ShipmentItemService mItemService;
+    private UtilityProvider mUtilProvider;
     
     private Validator validator;
     
@@ -37,15 +39,18 @@ public class ShipmentServiceTest {
     public void init() {
         mRepo = mock(ShipmentRepository.class);
         mItemService = mock(ShipmentItemService.class);
-        service = new ShipmentService(mRepo, mItemService);
-        validator = new Validator();
+        mUtilProvider = mock(UtilityProvider.class);
+
+        doReturn(new Validator()).when(mUtilProvider).getValidator();
+
+        service = new ShipmentService(mRepo, mItemService, mUtilProvider);
     }
     
     @Test
     public void testGetShipment_ReturnsShipmentInstance_WhenItExistsInRepository() {
         doReturn(Optional.of(new Shipment(1L))).when(mRepo).findById(1L);
         
-        Shipment shipment = service.getShipment(validator, 1L);
+        Shipment shipment = service.getShipment(1L);
         
         assertEquals(new Shipment(1L), shipment);
     }
@@ -53,21 +58,21 @@ public class ShipmentServiceTest {
     @Test
     public void testGetShipment_ReturnsNull_WhenRepositoryDoesNotHaveIt() {
         doReturn(Optional.empty()).when(mRepo).findById(1L);
-        Shipment shipment = service.getShipment(validator, 1L);
+        Shipment shipment = service.getShipment(1L);
         
         assertNull(shipment);
     }
     
     @Test
     public void testGetShipment_ThrowsValidationException_WhenIdIsNull() {
-        assertThrows(ValidationException.class, () -> service.getShipment(validator, null), "1. Non-null Id expected.");
+        assertThrows(ValidationException.class, () -> service.getShipment(null), "1. Non-null Id expected.");
     }
     
     @Test
     public void testExists_ReturnsTrue_WhenRepositoryReturnsTrue() {
         doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
         
-        boolean exists = service.existsByIds(validator, Set.of(1L, 2L, 3L));
+        boolean exists = service.existsByIds(Set.of(1L, 2L, 3L));
         
         assertTrue(exists);
     }
@@ -76,26 +81,26 @@ public class ShipmentServiceTest {
     public void testExists_ReturnsFalse_WhenRepositoryReturnsFalse() {
         doReturn(false).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
         
-        boolean exists = service.existsByIds(validator, Set.of(1L, 2L, 3L));
+        boolean exists = service.existsByIds(Set.of(1L, 2L, 3L));
         
         assertFalse(exists);
     }
     
     @Test
     public void testExists_ThrowsValidationException_WhenIdCollectionIsNull() {
-        assertThrows(ValidationException.class, () -> service.existsByIds(validator, null));
+        assertThrows(ValidationException.class, () -> service.existsByIds(null));
     }
     
     @Test
     public void testDelete_CallsDeleteByIdOnRepository() {
-        service.delete(validator, Set.of(1L, 2L, 3L));
+        service.delete(Set.of(1L, 2L, 3L));
         
         verify(mRepo, times(1)).deleteByIds(Set.of(1L, 2L, 3L));
     }
     
     @Test
     public void testDelete_ThrowsValidation_WhenIdsAreNull() {
-        assertThrows(ValidationException.class, () -> service.delete(validator, null), "Cannot retrieve Ids to delete from a null collection");
+        assertThrows(ValidationException.class, () -> service.delete(null), "Cannot retrieve Ids to delete from a null collection");
     }
     
     @Test
@@ -121,11 +126,10 @@ public class ShipmentServiceTest {
         doReturn(Set.of(
             new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), addition, new Material(1L), null, null, null)
         )).when(mItemService).getAddItems(
-            validator,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), addition, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1))
         );
 
-        Shipment shipment = service.add(validator, 2L, addition);
+        Shipment shipment = service.add(2L, addition);
         
         assertEquals(null, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
@@ -148,7 +152,7 @@ public class ShipmentServiceTest {
         assertEquals(null, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getAddItems(eq(validator), anyCollection());
+        verify(mItemService, times(1)).getAddItems(anyCollection());
     }
     
     @Test
@@ -156,7 +160,7 @@ public class ShipmentServiceTest {
         String err = "1. InvoiceId cannot be null\n"
                 + "2. Shipment cannot be null#n";
         
-        assertThrows(ValidationException.class, () -> service.add(validator, null, null), err);
+        assertThrows(ValidationException.class, () -> service.add(null, null), err);
     }
     
     @Test
@@ -199,12 +203,12 @@ public class ShipmentServiceTest {
         
         doReturn(Set.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
-        )).when(mItemService).getPutItems(validator,
+        )).when(mItemService).getPutItems(
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         ));
 
-        Shipment shipment = service.put(validator, 2L, 1L, update);
+        Shipment shipment = service.put(2L, 1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
@@ -227,7 +231,7 @@ public class ShipmentServiceTest {
         assertEquals(2, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, existing);
-        verify(mItemService, times(1)).getPutItems(eq(validator), anyCollection(), anyCollection());
+        verify(mItemService, times(1)).getPutItems(anyCollection(), anyCollection());
     }
     
     @Test
@@ -254,12 +258,11 @@ public class ShipmentServiceTest {
         doReturn(Set.of(
             new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), null, null, null)
         )).when(mItemService).getPutItems(
-            validator,
             null,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2))
         );
 
-        Shipment shipment = service.put(validator, 2L, 1L, update);
+        Shipment shipment = service.put(2L, 1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
@@ -282,7 +285,7 @@ public class ShipmentServiceTest {
         assertEquals(null, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPutItems(eq(validator), isNull(), anyCollection());
+        verify(mItemService, times(1)).getPutItems(isNull(), anyCollection());
     }
     
     @Test
@@ -291,7 +294,7 @@ public class ShipmentServiceTest {
                 + "2. ShipmentId cannot be null\n"
                 + "3. Shipment cannot be null\n";
         
-        assertThrows(ValidationException.class, () -> service.put(validator, null, null, null), err);
+        assertThrows(ValidationException.class, () -> service.put(null, null, null), err);
     }
     
     @Test
@@ -335,12 +338,11 @@ public class ShipmentServiceTest {
         doReturn(Set.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         )).when(mItemService).getPatchItems(
-            validator,
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1))
         );
 
-        Shipment shipment = service.patch(validator, 2L, 1L, update);
+        Shipment shipment = service.patch(2L, 1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_0", shipment.getShipmentNumber());
@@ -363,6 +365,6 @@ public class ShipmentServiceTest {
         assertEquals(1, item.getVersion());
         
         verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPatchItems(eq(validator), anyCollection(), anyCollection());
+        verify(mItemService, times(1)).getPatchItems(anyCollection(), anyCollection());
     }
 }

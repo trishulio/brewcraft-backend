@@ -63,7 +63,9 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testInvoiceItemService_ReturnsInstanceOfInvoiceItemService() {
-        InvoiceItemService service = serviceAutoConfiguration.invoiceItemService();
+        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        InvoiceItemService service = serviceAutoConfiguration.invoiceItemService(mUtilProvider);
+
         assertTrue(service instanceof InvoiceItemService);
     }
 
@@ -71,7 +73,9 @@ public class ServiceAutoConfigurationTest {
     public void testInvoiceService_ReturnsInstanceOfInvoiceService() {
         InvoiceRepository mInvoiceRepo = mock(InvoiceRepository.class);
         InvoiceItemService mInvoiceItemService = mock(InvoiceItemService.class);
-        InvoiceService service = serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService);
+        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+
+        InvoiceService service = serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService, mUtilProvider);
         assertTrue(service instanceof InvoiceService);
     }
 
@@ -100,22 +104,24 @@ public class ServiceAutoConfigurationTest {
     public void testShipmentService_ReturnsInstanceOfShipmentService() {
         ShipmentRepository mRepo = mock(ShipmentRepository.class);
         ShipmentItemService mItemService = mock(ShipmentItemService.class);
+        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService);
+        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService, mUtilProvider);
         
         assertSame(ShipmentService.class, service.getClass());
     }
 
     @Test
     public void testShipmentItemService_ReturnsInstanceOfShipmentItemService() {
-        ShipmentItemService service = serviceAutoConfiguration.shipmentItemService();
+        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        ShipmentItemService service = serviceAutoConfiguration.shipmentItemService(mUtilProvider);
         
         assertSame(ShipmentItemService.class, service.getClass());
     }
     
     @Test
     public void testUtilityProvider_ReturnsInstanceOfThreadLocalUtilityProvider() {
-        UtilityProvider provider = serviceAutoConfiguration.utilityProvider();
+        UtilityProvider provider = serviceAutoConfiguration.utilProvider();
         
         assertSame(ThreadLocalUtilityProvider.class, provider.getClass());
     }

@@ -39,14 +39,14 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    public InvoiceItemService invoiceItemService() {
-        return new InvoiceItemService();
+    public InvoiceItemService invoiceItemService(UtilityProvider utilProvider) {
+        return new InvoiceItemService(utilProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService) {
-        return new InvoiceService(invoiceRepo, invoiceItemService);
+    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService, UtilityProvider utilProvider) {
+        return new InvoiceService(invoiceRepo, invoiceItemService, utilProvider);
     }
 
     @Bean
@@ -111,23 +111,23 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ShipmentService.class)
-    public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
-        ShipmentService shipmentService = new ShipmentService(repo, itemService);
+    public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService, UtilityProvider utilProvider) {
+        ShipmentService shipmentService = new ShipmentService(repo, itemService, utilProvider);
 
         return shipmentService;
     }
 
     @Bean
     @ConditionalOnMissingBean(ShipmentItemService.class)
-    public ShipmentItemService shipmentItemService() {
-        ShipmentItemService itemService = new ShipmentItemService();
+    public ShipmentItemService shipmentItemService(UtilityProvider utilProvider) {
+        ShipmentItemService itemService = new ShipmentItemService(utilProvider);
 
         return itemService;
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public UtilityProvider utilityProvider() {
+    @ConditionalOnMissingBean(UtilityProvider.class)
+    public UtilityProvider utilProvider() {
         return new ThreadLocalUtilityProvider();
     }
 }

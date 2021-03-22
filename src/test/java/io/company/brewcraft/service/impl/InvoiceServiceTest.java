@@ -26,7 +26,7 @@ import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.validator.ValidationException;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
@@ -36,12 +36,18 @@ public class InvoiceServiceTest {
 
    private InvoiceRepository mRepo;
    private InvoiceItemService mItemService;
+   private UtilityProvider mUtilProvider;
+
 
    @BeforeEach
    public void init() {
        mRepo = mock(InvoiceRepository.class);
        mItemService = mock(InvoiceItemService.class);
-       this.service = spy(new InvoiceService(mRepo, mItemService));
+       
+       mUtilProvider = mock(UtilityProvider.class);
+       doReturn(new Validator()).when(mUtilProvider).getValidator();
+
+       this.service = spy(new InvoiceService(mRepo, mItemService, mUtilProvider));
    }
    
    @Test
@@ -128,7 +134,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
        
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
+       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(isNull(), eq(Set.of(itemUpdate)));
 
        Invoice invoice = service.put(3L, 1L, update);
 
@@ -187,7 +193,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
+       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(isNull(), eq(Set.of(itemUpdate)));
        
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
@@ -217,25 +223,6 @@ public class InvoiceServiceTest {
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
-   }
-
-   @Test
-   public void testPut_RaisesErrors_WhenValidatorHasFailures() {
-       Validator mValidator = new Validator();
-       mValidator.rule(false, "Fake Failure: %s", "TEST");
-
-       Invoice mExisting = new Invoice(1L);
-       mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
-       InvoiceItem itemUpdate = new InvoiceItem(2L);
-       Invoice update = new Invoice(1L);
-
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
-       
-       doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
-
-       doReturn(mValidator).when(service).validator();
-       
-       assertThrows(ValidationException.class, () -> service.put(3L, 1L, update), "1. Fake Failure: TEST");
    }
 
    @Test
@@ -271,7 +258,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
+       doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(isNull(), eq(Set.of(itemUpdate)));
 
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
@@ -304,25 +291,6 @@ public class InvoiceServiceTest {
    }
 
    @Test
-   public void testPatch_RaisesErrors_WhenValidatorHasFailures() {
-       Validator mValidator = new Validator();
-       mValidator.rule(false, "Fake Failure: %s", "TEST");
-
-       Invoice mExisting = new Invoice(1L);
-       mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
-       InvoiceItem itemUpdate = new InvoiceItem(2L);
-       Invoice update = new Invoice(1L);
-
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
-
-       doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
-
-       doReturn(mValidator).when(service).validator();
-
-       assertThrows(ValidationException.class, () -> service.patch(3L, 1L, update), "1. Fake Failure: TEST");
-   }
-
-   @Test
    public void testAdd_SavesTheNewEntity() {
        InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice addition = new Invoice(
@@ -349,7 +317,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getAddCollection(any(Validator.class), eq(Set.of(itemUpdate)));
+       doReturn(Set.of(itemUpdate)).when(mItemService).getAddCollection(eq(Set.of(itemUpdate)));
 
        Invoice invoice = service.add(3L, addition);
 
@@ -377,24 +345,5 @@ public class InvoiceServiceTest {
        assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
        assertEquals(new Material(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
-   }
-
-   @Test
-   public void testAdd_RaisesErrors_WhenValidatorHasFailures() {
-       Validator mValidator = new Validator();
-       mValidator.rule(false, "Fake Failure: %s", "TEST");
-
-       Invoice mExisting = new Invoice(1L);
-       mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
-       InvoiceItem itemUpdate = new InvoiceItem(2L);
-       Invoice update = new Invoice(1L);
-
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(any(Validator.class), isNull(), eq(Set.of(itemUpdate)));
-       
-       doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
-
-       doReturn(mValidator).when(service).validator();
-
-       assertThrows(ValidationException.class, () -> service.add(3L, update), "1. Fake Failure: TEST");
    }
 }

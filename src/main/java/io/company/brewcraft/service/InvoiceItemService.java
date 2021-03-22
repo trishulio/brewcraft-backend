@@ -13,14 +13,22 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.UpdateInvoiceItem;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
 public class InvoiceItemService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemService.class);
 
-    public Collection<InvoiceItem> getPutCollection(Validator validator, Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> updates) {
+    private UtilityProvider utilProvider;
+
+    public InvoiceItemService(UtilityProvider utilProvider) {
+        this.utilProvider = utilProvider;
+    }
+
+    public Collection<InvoiceItem> getPutCollection(Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> updates) {
+        Validator validator = this.utilProvider.getValidator();
         if (updates == null) {
-            
+            // TODO:
         }
         final Collection<InvoiceItem> targetItems = new HashSet<>();
 
@@ -38,7 +46,7 @@ public class InvoiceItemService extends BaseService {
         existingItems = existingItems != null ? existingItems : new HashSet<>(0);
         Map<Long, InvoiceItem> existingItemsMap = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
-        for (UpdateInvoiceItem itemUpdate: itemUpdates) {
+        for (UpdateInvoiceItem itemUpdate : itemUpdates) {
             InvoiceItem targetItem = existingItemsMap.get(itemUpdate.getId());
             boolean isNotNull = validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", itemUpdate.getId());
             if (isNotNull) {
@@ -52,11 +60,12 @@ public class InvoiceItemService extends BaseService {
             targetItem.override(itemAddition, getPropertyNames(BaseInvoiceItem.class));
             targetItems.add(targetItem);
         }
-        
+
         return targetItems;
     }
-    
-    public Collection<InvoiceItem> getPatchCollection(Validator validator, Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> patches) {
+
+    public Collection<InvoiceItem> getPatchCollection(Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> patches) {
+        Validator validator = this.utilProvider.getValidator();
         final Collection<InvoiceItem> targetItems = new HashSet<>();
 
         Set<UpdateInvoiceItem> itemUpdates = new HashSet<>(patches.size());
@@ -82,11 +91,12 @@ public class InvoiceItemService extends BaseService {
                 targetItems.add(targetItem);
             }
         }
-        
+
         return targetItems;
     }
 
-    public Collection<InvoiceItem> getAddCollection(Validator validator, Collection<? extends BaseInvoiceItem> additions) {
+    public Collection<InvoiceItem> getAddCollection(Collection<? extends BaseInvoiceItem> additions) {
+        Validator validator = this.utilProvider.getValidator();
         Collection<InvoiceItem> targetItems = null;
         if (additions != null) {
             targetItems = additions.stream().map(i -> {

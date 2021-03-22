@@ -23,7 +23,6 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
-import io.company.brewcraft.util.validator.Validator;
 
 public class ShipmentControllerTest {
 
@@ -38,7 +37,7 @@ public class ShipmentControllerTest {
     
     @Test
     public void testGetShipment_ReturnsShipmentDto_WhenServiceReturnsShipment() {
-        doReturn(new Shipment(1L)).when(mService).getShipment(any(Validator.class), anyLong());
+        doReturn(new Shipment(1L)).when(mService).getShipment(anyLong());
         
         ShipmentDto dto = controller.getShipment(1L);
         
@@ -47,13 +46,13 @@ public class ShipmentControllerTest {
     
     @Test
     public void testGetShipment_ThrowsEntityNotFoundException_WhenShipmentDoesNotExist() { 
-        doReturn(null).when(mService).getShipment(any(Validator.class), anyLong());
+        doReturn(null).when(mService).getShipment(anyLong());
         assertThrows(EntityNotFoundException.class, () -> controller.getShipment(1L), "Shipment not found with Id: 1");
     }
     
     @Test
     public void testDeleteShipments_CallsServiceWithSetOfIds_WhenIdsAreNotNull() {
-        doReturn(99).when(mService).delete(any(Validator.class), eq(Set.of(1L, 2L, 3L)));
+        doReturn(99).when(mService).delete(eq(Set.of(1L, 2L, 3L)));
 
         int deleteCount = controller.deleteShipments(Set.of(1L, 2L, 3L));
         assertEquals(99, deleteCount);
@@ -62,10 +61,10 @@ public class ShipmentControllerTest {
     @Test
     public void testAddShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
         doAnswer(i -> {
-            Shipment shipment = i.getArgument(2, Shipment.class);
-            shipment.setInvoice(new Invoice(i.getArgument(1, Long.class)));
+            Shipment shipment = i.getArgument(1, Shipment.class);
+            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
             return shipment;
-        }).when(mService).add(any(Validator.class), anyLong(), any(Shipment.class));
+        }).when(mService).add(anyLong(), any(Shipment.class));
         
         UpdateShipmentDto addDto = new UpdateShipmentDto(
             "SHIPMENT_1",
@@ -101,11 +100,11 @@ public class ShipmentControllerTest {
     @Test
     public void testPutShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
         doAnswer(i -> {
-            Shipment shipment = i.getArgument(3, Shipment.class);
-            shipment.setId(i.getArgument(2, Long.class));
-            shipment.setInvoice(new Invoice(i.getArgument(1, Long.class)));
+            Shipment shipment = i.getArgument(2, Shipment.class);
+            shipment.setId(i.getArgument(1, Long.class));
+            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
             return shipment;
-        }).when(mService).put(any(Validator.class), anyLong(), anyLong(), any(Shipment.class));
+        }).when(mService).put(anyLong(), anyLong(), any(Shipment.class));
         
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
@@ -141,11 +140,11 @@ public class ShipmentControllerTest {
     @Test
     public void testPatch_ReturnsPatchShipmentDto_WhenServiceReturnsPatchShipment() {
         doAnswer(i -> {
-            Shipment shipment = i.getArgument(3, Shipment.class);
-            shipment.setId(i.getArgument(2, Long.class));
-            shipment.setInvoice(new Invoice(i.getArgument(1, Long.class)));
+            Shipment shipment = i.getArgument(2, Shipment.class);
+            shipment.setId(i.getArgument(1, Long.class));
+            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
             return shipment;
-        }).when(mService).patch(any(Validator.class), anyLong(), anyLong(), any(Shipment.class));
+        }).when(mService).patch(anyLong(), anyLong(), any(Shipment.class));
         
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",

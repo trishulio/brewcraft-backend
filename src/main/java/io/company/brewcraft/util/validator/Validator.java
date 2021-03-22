@@ -39,7 +39,7 @@ public class Validator {
         assertion(this.errors.size() == 0, ValidationException.class, err);
     }
 
-    public void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
+    public static void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
         if (!pass) {
             try {
                 if (args == null) {

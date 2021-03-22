@@ -94,10 +94,8 @@ public class InvoiceController extends BaseController {
 
     @GetMapping("/invoices/{invoiceId}")
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Size(min = 1) @NotNull @RequestParam(required = false, name = "attr") Set<String> attributes) {
-        Validator validator = new Validator();
-
         Invoice invoice = invoiceService.getInvoice(invoiceId);
-        validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
+        Validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
         filter(dto, attributes);

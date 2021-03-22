@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Shipment;
@@ -13,24 +14,29 @@ import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
+@Transactional
 public class ShipmentService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
     private ShipmentRepository repo;
     private ShipmentItemService itemService;
+    private UtilityProvider utilProvider;
 
-    public ShipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
+    public ShipmentService(ShipmentRepository repo, ShipmentItemService itemService, UtilityProvider utilProvider) {
         this.repo = repo;
         this.itemService = itemService;
+        this.utilProvider = utilProvider;
     }
 
     public Collection<Shipment> getShipments() {
         return null;
     }
 
-    public Shipment getShipment(Validator validator, Long id) {
+    public Shipment getShipment(Long id) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(id != null, "Non-null Id expected");
         validator.raiseErrors();
 
@@ -47,7 +53,8 @@ public class ShipmentService extends BaseService {
         return shipment;
     }
 
-    public boolean existsByIds(Validator validator, Collection<Long> ids) {
+    public boolean existsByIds(Collection<Long> ids) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(ids != null, "");
         validator.raiseErrors();
 
@@ -58,7 +65,8 @@ public class ShipmentService extends BaseService {
         return exists;
     }
 
-    public int delete(Validator validator, Collection<Long> ids) {
+    public int delete(Collection<Long> ids) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(ids != null, "Cannot retrieve Ids to delete from a null collection");
         validator.raiseErrors();
 
@@ -69,13 +77,14 @@ public class ShipmentService extends BaseService {
         return count;
     }
 
-    public Shipment add(Validator validator, Long invoiceId, Shipment shipment) {
+    public Shipment add(Long invoiceId, Shipment shipment) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(shipment != null, "Shipment cannot be null");
         validator.raiseErrors();
 
         Shipment addition = new Shipment();
-        Collection<ShipmentItem> itemAdditions = itemService.getAddItems(validator, shipment.getItems());
+        Collection<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
 
         addition.override(shipment, getPropertyNames(BaseShipment.class));
         addition.setItems(itemAdditions);
@@ -83,13 +92,14 @@ public class ShipmentService extends BaseService {
         return repo.save(invoiceId, addition);
     }
 
-    public Shipment put(Validator validator, Long invoiceId, Long shipmentId, Shipment update) {
+    public Shipment put(Long invoiceId, Long shipmentId, Shipment update) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(update != null, "Shipment cannot be null");
         validator.raiseErrors();
 
         Class<?> shipmentClz = UpdateShipment.class;
-        Shipment existing = getShipment(validator, shipmentId);
+        Shipment existing = getShipment(shipmentId);
         if (existing == null) {
             existing = new Shipment();
 //            existing.setCreatedAt(now());
@@ -99,14 +109,15 @@ public class ShipmentService extends BaseService {
         existing.setId(shipmentId);
 
         Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPutItems(validator, existingItems, update.getItems());
+        Collection<ShipmentItem> updatedItems = itemService.getPutItems(existingItems, update.getItems());
         existing.override(update, getPropertyNames(shipmentClz));
         existing.setItems(updatedItems);
 
         return repo.save(invoiceId, existing);
     }
 
-    public Shipment patch(Validator validator, Long invoiceId, Long shipmentId, Shipment update) {
+    public Shipment patch(Long invoiceId, Long shipmentId, Shipment update) {
+        Validator validator = this.utilProvider.getValidator();
         validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(update != null, "Shipment cannot be null");
         validator.raiseErrors();
@@ -114,7 +125,7 @@ public class ShipmentService extends BaseService {
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
 
         Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPatchItems(validator, existingItems, update.getItems());
+        Collection<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());
         existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
         existing.setItems(updatedItems);
 

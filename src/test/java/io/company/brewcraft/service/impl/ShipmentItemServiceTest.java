@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import io.company.brewcraft.model.BaseShipmentItem;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.UpdateShipmentItem;
 import io.company.brewcraft.pojo.Material;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 import tec.units.ri.quantity.Quantities;
@@ -25,12 +27,14 @@ public class ShipmentItemServiceTest {
 
     private ShipmentItemService service;
 
-    private Validator validator;
+    private UtilityProvider mUtilProvider;
     
     @BeforeEach
     public void init() {
-        service = new ShipmentItemService();
-        validator = new Validator();
+        mUtilProvider = mock(UtilityProvider.class);
+        doReturn(new Validator()).when(mUtilProvider).getValidator();
+        
+        service = new ShipmentItemService(mUtilProvider);
     }
     
     @Test
@@ -39,7 +43,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
      
-        Collection<ShipmentItem> items = service.getAddItems(validator, additionItems);
+        Collection<ShipmentItem> items = service.getAddItems(additionItems);
         
         assertEquals(1, items.size()); // Excludes the null item
         ShipmentItem item = items.iterator().next();
@@ -54,7 +58,7 @@ public class ShipmentItemServiceTest {
     
     @Test
     public void testAddList_ReturnsNull_WhenItemsAreNull() {
-        assertNull(service.getAddItems(validator, null));
+        assertNull(service.getAddItems(null));
     }    
 
     @Test
@@ -68,7 +72,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
 
-        Collection<ShipmentItem> items = service.getPutItems(validator, existingItems, updateItems);
+        Collection<ShipmentItem> items = service.getPutItems(existingItems, updateItems);
 
         assertEquals(2, items.size());
         Iterator<ShipmentItem> it = items.iterator();
@@ -98,7 +102,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        assertEquals(Collections.emptySet(), service.getPutItems(validator, existingItems, Set.of()));
+        assertEquals(Collections.emptySet(), service.getPutItems(existingItems, Set.of()));
     }
     
     @Test
@@ -107,7 +111,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        assertNull(service.getPutItems(validator, existingItems, null));
+        assertNull(service.getPutItems(existingItems, null));
     }
     
     @Test
@@ -120,7 +124,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         
-        assertThrows(ValidationException.class, () -> service.getPutItems(validator, existingItems, updateItems), "1. No existing item found with Id: 2\n");
+        assertThrows(ValidationException.class, () -> service.getPutItems(existingItems, updateItems), "1. No existing item found with Id: 2\n");
     }
     
     @Test
@@ -133,7 +137,7 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
-        Collection<ShipmentItem> items = service.getPatchItems(validator, existingItems, updateItems);
+        Collection<ShipmentItem> items = service.getPatchItems(existingItems, updateItems);
 
         assertEquals(1, items.size());
         Iterator<ShipmentItem> it = items.iterator();
@@ -158,11 +162,11 @@ public class ShipmentItemServiceTest {
             new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
-        assertThrows(ValidationException.class, () -> service.getPatchItems(validator, existingItems, updateItems), "1. No existing item found with Id: 2\\n");
+        assertThrows(ValidationException.class, () -> service.getPatchItems(existingItems, updateItems), "1. No existing item found with Id: 2\\n");
     }
 
     @Test
     public void testPutList_ReturnsNull_WhenUpdateItemsAreNull() {
-        assertNull(service.getPutItems(validator, Set.of(), null));
+        assertNull(service.getPutItems(Set.of(), null));
     }
 }
