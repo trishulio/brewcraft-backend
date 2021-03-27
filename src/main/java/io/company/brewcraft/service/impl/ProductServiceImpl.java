@@ -2,20 +2,30 @@ package io.company.brewcraft.service.impl;
 
 import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.ProductMeasureValue;
+import io.company.brewcraft.dto.BaseProduct;
+import io.company.brewcraft.dto.UpdateProduct;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.ProductCategoryService;
+import io.company.brewcraft.service.ProductMeasureService;
+import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -25,10 +35,16 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     private ProductRepository productRepository;
     
     private ProductCategoryService productCategoryService;
-        
-    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService) {
+    
+    private ProductMeasureValueService productMeasureValueService;
+    
+    private ProductMeasureService productMeasureService;
+
+    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
         this.productRepository = productRepository;        
         this.productCategoryService = productCategoryService;
+        this.productMeasureValueService = productMeasureValueService;
+        this.productMeasureService = productMeasureService;
     }
 
     @Override
@@ -62,7 +78,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public Product getProduct(Long productId) {
-        Product product = productRepository.findByIdsExcludeDeleted(Set.of(productId)).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
 
         return product;
     }
@@ -75,7 +91,9 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {                                              
+    public Product addProduct(Product product) {         
+        validateTargetMeasures(product.getTargetMeasures());
+        
         Product savedEntity = productRepository.saveAndFlush(product);
         
         return savedEntity;
@@ -89,19 +107,44 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product putProduct(Long productId, Product product) {                
-        product.setId(productId);
+    public Product putProduct(Long productId, Product putProduct) {                
+        validateTargetMeasures(putProduct.getTargetMeasures());
         
-        return addProduct(product);        
+        Product existingProduct = getProduct(productId);          
+
+        if (existingProduct != null && existingProduct.getVersion() != putProduct.getVersion()) {
+            throw new ObjectOptimisticLockingFailureException(Product.class, existingProduct.getId());
+        }
+        
+        if (existingProduct == null) {
+            existingProduct = putProduct;
+            existingProduct.setId(productId);
+        } else {
+            List<ProductMeasureValue> updatedProductMeasureValues = productMeasureValueService.merge(existingProduct.getTargetMeasures(), putProduct.getTargetMeasures());
+
+            existingProduct.override(putProduct, getPropertyNames(BaseProduct.class));       
+            existingProduct.setTargetMeasures(updatedProductMeasureValues);
+        }
+        
+        return productRepository.saveAndFlush(existingProduct); 
     }
     
     @Override
-    public Product patchProduct(Long productId, Product productPatch) {                           
-        Product product = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));     
-                
-        productPatch.copyToNullFields(product);     
+    public Product patchProduct(Long productId, Product productPatch) {   
+        validateTargetMeasures(productPatch.getTargetMeasures());
         
-        return addProduct(productPatch);
+        Product existingProduct = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));            
+  
+        if (existingProduct.getVersion() != productPatch.getVersion()) {
+            throw new ObjectOptimisticLockingFailureException(Product.class, existingProduct.getId());
+        }
+        
+        List<ProductMeasureValue> updatedProductMeasureValues = productMeasureValueService.merge(existingProduct.getTargetMeasures(), productPatch.getTargetMeasures());
+             
+        existingProduct.outerJoin(productPatch, getPropertyNames(UpdateProduct.class));
+        existingProduct.setTargetMeasures(updatedProductMeasureValues);
+                
+        return productRepository.saveAndFlush(existingProduct); 
     }
 
     @Override
@@ -130,6 +173,20 @@ public class ProductServiceImpl extends BaseService implements ProductService {
         if (categoryId != null) {
             ProductCategory category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
             product.setCategory(category);
+        }
+    }
+    
+    private void validateTargetMeasures(List<ProductMeasureValue> targetMeasures) {
+        if (targetMeasures != null) {
+            List<ProductMeasure> productMeasures = productMeasureService.getAllProductMeasures();
+            Map<String, ProductMeasure> productMeasureMap = new HashMap<String, ProductMeasure>();
+            productMeasures.forEach(measure -> productMeasureMap.put(measure.getName(), measure) );
+                        
+            targetMeasures.forEach(measure -> {
+                if(measure.getProductMeasure() == null || !productMeasureMap.containsKey(measure.getProductMeasure().getName())) {
+                    throw new IllegalArgumentException("Invalid target measure: " + measure.getProductMeasure().getName());
+                }           
+            });        
         }
     }
 }

@@ -3,7 +3,6 @@ package io.company.brewcraft.configuration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
@@ -14,6 +13,8 @@ import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
 import io.company.brewcraft.service.impl.MaterialServiceImpl;
 import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
+import io.company.brewcraft.service.impl.ProductMeasureServiceImpl;
+import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
 import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
@@ -98,7 +99,6 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @DependsOn({"materialCategoryService"})
     @ConditionalOnMissingBean(MaterialService.class)
     public MaterialService materialService(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
         MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
@@ -121,8 +121,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ProductService.class)
-    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService) {
-        ProductService productService = new ProductServiceImpl(productRepository, productCategoryService);
+    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
+        ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
         return productService;
     }
     
@@ -133,4 +133,18 @@ public class ServiceAutoConfiguration {
         return productCategoryService;
     }
     
+    @Bean
+    @ConditionalOnMissingBean(ProductMeasureService.class) 
+    public ProductMeasureService productMeasureService(ProductMeasureRepository productMeasureRepository) {
+        ProductMeasureService productMeasureService = new ProductMeasureServiceImpl(productMeasureRepository);
+        return productMeasureService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(ProductMeasureValueService.class) 
+    public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
+        ProductMeasureValueService productMeasureService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
+        return productMeasureService;
+    }
+  
 }

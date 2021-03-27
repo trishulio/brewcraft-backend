@@ -1,5 +1,8 @@
 package io.company.brewcraft.dto;
 
+import java.util.List;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,14 +16,14 @@ public class AddProductDto extends BaseDto {
     @NotNull
     private Long categoryId;
             
-    private ProductMeasuresDto targetMeasures;
+    @Valid
+    private List<ProductMeasureDto> targetMeasures;
     
     public AddProductDto() {
         super();
     }
 
-    public AddProductDto(@NotEmpty String name, String description, @NotNull Long categoryId,
-            ProductMeasuresDto targetMeasures) {
+    public AddProductDto(String name, String description, Long categoryId, List<ProductMeasureDto> targetMeasures) {
         super();
         this.name = name;
         this.description = description;
@@ -52,11 +55,11 @@ public class AddProductDto extends BaseDto {
         this.categoryId = categoryId;
     }
 
-    public ProductMeasuresDto getTargetMeasures() {
+    public List<ProductMeasureDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(ProductMeasuresDto targetMeasures) {
+    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }        
     

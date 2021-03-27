@@ -1,6 +1,8 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,41 +21,41 @@ public class AddProductDtoTest {
         String name = "testName";
         String description = "testDesc";
         Long categoryId = 1L;
-        ProductMeasuresDto targetMeasures = new ProductMeasuresDto();
+        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
 
         AddProductDto addProductDto = new AddProductDto(name, description, categoryId, targetMeasures);
         
-        assertSame(name, addProductDto.getName());
-        assertSame(description, addProductDto.getDescription());
-        assertSame(categoryId, addProductDto.getCategoryId());
-        assertSame(targetMeasures, addProductDto.getTargetMeasures());
+        assertEquals("testName", addProductDto.getName());
+        assertEquals("testDesc", addProductDto.getDescription());
+        assertEquals(1L, addProductDto.getCategoryId());
+        assertEquals(List.of(new ProductMeasureDto()), addProductDto.getTargetMeasures());
     }
 
     @Test
     public void testGetSetName() {
         String name = "testName";
         addProductDto.setName(name);
-        assertSame(name, addProductDto.getName());
+        assertEquals("testName", addProductDto.getName());
     }
     
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         addProductDto.setDescription(description);
-        assertSame(description, addProductDto.getDescription());
+        assertEquals("testDesc", addProductDto.getDescription());
     }
     
     @Test
     public void testGetSetCategoryId() {
         Long categoryId = 1L;
         addProductDto.setCategoryId(categoryId);
-        assertSame(categoryId, addProductDto.getCategoryId());
+        assertEquals(1L, addProductDto.getCategoryId());
     }
     
     @Test
     public void testGetSetTargetMeasures() {
-        ProductMeasuresDto targetMeasures = new ProductMeasuresDto();
+        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
         addProductDto.setTargetMeasures(targetMeasures);
-        assertSame(targetMeasures, addProductDto.getTargetMeasures());
+        assertEquals(List.of(new ProductMeasureDto()), addProductDto.getTargetMeasures());
     }
 }

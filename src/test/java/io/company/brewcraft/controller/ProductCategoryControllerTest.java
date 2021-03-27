@@ -51,14 +51,14 @@ public class ProductCategoryControllerTest {
        );
 
        PageDto<CategoryDto> dto = productCategoryController.getCategories(
-               Set.of(1L),
-               Set.of("Lager"),
-               Set.of(2L),
-               Set.of("Beer"),
-               1,
-               10,
-               Set.of("id"),
-               true
+           Set.of(1L),
+           Set.of("Lager"),
+           Set.of(2L),
+           Set.of("Beer"),
+           1,
+           10,
+           Set.of("id"),
+           true
        );
 
        assertEquals(100, dto.getTotalPages());

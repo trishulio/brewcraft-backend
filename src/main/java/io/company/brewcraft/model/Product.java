@@ -1,6 +1,8 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
@@ -29,17 +32,17 @@ public class Product extends BaseEntity {
     @SequenceGenerator(name = "product_generator", sequenceName = "product_sequence", allocationSize = 1)
     private Long id;
     
+    @Column(nullable = false)
     private String name;
     
     private String description;
     
     @OneToOne(optional = false)
-    @JoinColumn(name = "product_category_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_category_id", referencedColumnName = "id", nullable = false)
     private ProductCategory category;
     
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "product_measures_id", referencedColumnName = "id")
-    private ProductMeasures targetMeasures;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductMeasureValue> targetMeasures;
     
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -59,9 +62,8 @@ public class Product extends BaseEntity {
         super();
     }
 
-    public Product(Long id, String name, String description, ProductCategory category,
-            ProductMeasures targetMeasures, LocalDateTime createdAt, LocalDateTime lastUpdated,
-            LocalDateTime deletedAt, Integer version) {
+    public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures, 
+            LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         super();
         this.id = id;
         this.name = name;
@@ -106,12 +108,35 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
-    public ProductMeasures getTargetMeasures() {
+    public List<ProductMeasureValue> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(ProductMeasures targetMeasures) {
-        this.targetMeasures = targetMeasures;
+    public void setTargetMeasures(List<ProductMeasureValue> trgtMeasures) {
+        if (trgtMeasures != null) {
+            trgtMeasures.stream().forEach(measure -> measure.setProduct(this));
+        }
+        
+        if (this.getTargetMeasures() != null) {
+            this.getTargetMeasures().clear();
+            this.getTargetMeasures().addAll(trgtMeasures);
+        } else {
+            this.targetMeasures = trgtMeasures;
+        }    
+    }
+    
+    public void AddTargetMeasure(ProductMeasureValue productMeasureValue) {
+        if (targetMeasures == null) {
+            targetMeasures = new ArrayList<>();
+        }
+        
+        if (productMeasureValue.getProduct() != this) {
+            productMeasureValue.setProduct(this);
+        }
+
+        if (!targetMeasures.contains(productMeasureValue)) {
+            this.targetMeasures.add(productMeasureValue);
+        }
     }
     
     public LocalDateTime getCreatedAt() {

@@ -1,12 +1,10 @@
 package io.company.brewcraft.service.mapper;
 
 import org.mapstruct.AfterMapping;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddProductDto;
@@ -16,7 +14,7 @@ import io.company.brewcraft.dto.UpdateProductDto;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.Product;
 
-@Mapper(uses = { ProductMeasuresMapper.class, ProductCategoryMapper.class })
+@Mapper(uses = { ProductMeasureValueMapper.class, ProductCategoryMapper.class })
 public interface ProductMapper {
 
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
@@ -26,7 +24,6 @@ public interface ProductMapper {
     @Mapping(target = "category.id", source = "categoryId")
     Product fromDto(AddProductDto dto);
 
-    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "category.id", source = "categoryId")
     Product fromDto(UpdateProductDto dto);
 
@@ -37,7 +34,9 @@ public interface ProductMapper {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         ProductCategory category = product.getCategory();
         
-        if (category.getParentCategory() == null) {
+        if (category == null) {
+            productDto.setProductClass(null);
+        } else if (category.getParentCategory() == null) {
             productDto.setProductClass(productCategoryMapper.toDto(category));
         } else if (category.getParentCategory().getParentCategory() == null) {
             productDto.setProductClass(productCategoryMapper.toDto(category.getParentCategory()));

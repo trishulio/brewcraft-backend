@@ -13,7 +13,7 @@ import io.company.brewcraft.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
-  @Query("update PRODUCT p set p.deletedAt=CURRENT_DATE where p.id in (:ids)")
+  @Query("update PRODUCT p set p.deletedAt=CURRENT_TIMESTAMP where p.id in (:ids)")
   @Modifying
   public void softDeleteByIds(@Param("ids") Set<Long> ids); 
   

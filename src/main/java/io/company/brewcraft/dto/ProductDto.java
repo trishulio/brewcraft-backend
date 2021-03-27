@@ -1,5 +1,7 @@
 package io.company.brewcraft.dto;
 
+import java.util.List;
+
 public class ProductDto extends BaseDto {
     
     private Long id;
@@ -14,7 +16,7 @@ public class ProductDto extends BaseDto {
 
     private CategoryDto style;
 
-    private ProductMeasuresDto targetMeasures;
+    private List<ProductMeasureDto> targetMeasures;
         
     private Integer version;
     
@@ -23,7 +25,7 @@ public class ProductDto extends BaseDto {
     }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
-            CategoryDto style, ProductMeasuresDto targetMeasures, Integer version) {
+            CategoryDto style, List<ProductMeasureDto> targetMeasures, Integer version) {
         super();
         this.id = id;
         this.name = name;
@@ -83,11 +85,11 @@ public class ProductDto extends BaseDto {
         this.style = style;
     }
 
-    public ProductMeasuresDto getTargetMeasures() {
+    public List<ProductMeasureDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(ProductMeasuresDto targetMeasures) {
+    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
     

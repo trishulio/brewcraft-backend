@@ -15,11 +15,12 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.dto.AddProductDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
-import io.company.brewcraft.dto.ProductMeasuresDto;
+import io.company.brewcraft.dto.ProductMeasureDto;
 import io.company.brewcraft.dto.UpdateProductDto;
 import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.model.Product;
-import io.company.brewcraft.model.ProductMeasures;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -42,7 +43,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
    
@@ -89,16 +90,10 @@ public class ProductControllerTest {
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
        assertEquals(null, productDto.getProductClass().getParentCategoryId());
-
-       assertEquals(product.getTargetMeasures().getAbv(), productDto.getTargetMeasures().getAbv());
-       assertEquals(product.getTargetMeasures().getIbu(), productDto.getTargetMeasures().getIbu());
-       assertEquals(product.getTargetMeasures().getPh(), productDto.getTargetMeasures().getPh());
-       assertEquals(product.getTargetMeasures().getMashTemperature(), productDto.getTargetMeasures().getMashTemperature());
-       assertEquals(product.getTargetMeasures().getGravity(), productDto.getTargetMeasures().getGravity());
-       assertEquals(product.getTargetMeasures().getYield(), productDto.getTargetMeasures().getYield());
-       assertEquals(product.getTargetMeasures().getBrewhouseDuration(), productDto.getTargetMeasures().getBrewhouseDuration());
-       assertEquals(product.getTargetMeasures().getFermentationDays(), productDto.getTargetMeasures().getFermentationDays());
-       assertEquals(product.getTargetMeasures().getConditioningDays(), productDto.getTargetMeasures().getConditioningDays());
+       
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
        
        assertEquals(product.getVersion(), productDto.getVersion());
    }
@@ -108,7 +103,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -130,15 +125,9 @@ public class ProductControllerTest {
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
        assertEquals(null, productDto.getProductClass().getParentCategoryId());
 
-       assertEquals(product.getTargetMeasures().getAbv(), productDto.getTargetMeasures().getAbv());
-       assertEquals(product.getTargetMeasures().getIbu(), productDto.getTargetMeasures().getIbu());
-       assertEquals(product.getTargetMeasures().getPh(), productDto.getTargetMeasures().getPh());
-       assertEquals(product.getTargetMeasures().getMashTemperature(), productDto.getTargetMeasures().getMashTemperature());
-       assertEquals(product.getTargetMeasures().getGravity(), productDto.getTargetMeasures().getGravity());
-       assertEquals(product.getTargetMeasures().getYield(), productDto.getTargetMeasures().getYield());
-       assertEquals(product.getTargetMeasures().getBrewhouseDuration(), productDto.getTargetMeasures().getBrewhouseDuration());
-       assertEquals(product.getTargetMeasures().getFermentationDays(), productDto.getTargetMeasures().getFermentationDays());
-       assertEquals(product.getTargetMeasures().getConditioningDays(), productDto.getTargetMeasures().getConditioningDays());
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
        
        assertEquals(product.getVersion(), productDto.getVersion());
    }
@@ -151,13 +140,13 @@ public class ProductControllerTest {
 
    @Test
    public void testAddProduct() {
-       ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
        AddProductDto addProductDto = new AddProductDto("testProduct", "testDescription", 2L, targetMeasuresDto);
        
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -172,17 +161,11 @@ public class ProductControllerTest {
        assertEquals(addProductDto.getName(), addProductCaptor.getValue().getName());
        assertEquals(addProductDto.getDescription(), addProductCaptor.getValue().getDescription());
        assertEquals(addProductDto.getCategoryId(), addProductCaptor.getValue().getCategory().getId());
-
-       assertEquals(addProductDto.getTargetMeasures().getAbv(), addProductCaptor.getValue().getTargetMeasures().getAbv());
-       assertEquals(addProductDto.getTargetMeasures().getIbu(), addProductCaptor.getValue().getTargetMeasures().getIbu());
-       assertEquals(addProductDto.getTargetMeasures().getPh(), addProductCaptor.getValue().getTargetMeasures().getPh());
-       assertEquals(addProductDto.getTargetMeasures().getMashTemperature(), addProductCaptor.getValue().getTargetMeasures().getMashTemperature());
-       assertEquals(addProductDto.getTargetMeasures().getGravity(), addProductCaptor.getValue().getTargetMeasures().getGravity());
-       assertEquals(addProductDto.getTargetMeasures().getYield(), addProductCaptor.getValue().getTargetMeasures().getYield());
-       assertEquals(addProductDto.getTargetMeasures().getBrewhouseDuration(), addProductCaptor.getValue().getTargetMeasures().getBrewhouseDuration());
-       assertEquals(addProductDto.getTargetMeasures().getFermentationDays(), addProductCaptor.getValue().getTargetMeasures().getFermentationDays());
-       assertEquals(addProductDto.getTargetMeasures().getConditioningDays(), addProductCaptor.getValue().getTargetMeasures().getConditioningDays());
-              
+       
+       assertEquals(addProductDto.getTargetMeasures().size(), addProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(addProductDto.getTargetMeasures().get(0).getName(), addProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(addProductDto.getTargetMeasures().get(0).getValue(), addProductCaptor.getValue().getTargetMeasures().get(0).getValue());       
+       
        //Assert returned product  
        assertEquals(product.getId(), productDto.getId());
        assertEquals(product.getName(), productDto.getName());
@@ -198,28 +181,22 @@ public class ProductControllerTest {
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
        assertEquals(null, productDto.getProductClass().getParentCategoryId());
 
-       assertEquals(product.getTargetMeasures().getAbv(), productDto.getTargetMeasures().getAbv());
-       assertEquals(product.getTargetMeasures().getIbu(), productDto.getTargetMeasures().getIbu());
-       assertEquals(product.getTargetMeasures().getPh(), productDto.getTargetMeasures().getPh());
-       assertEquals(product.getTargetMeasures().getMashTemperature(), productDto.getTargetMeasures().getMashTemperature());
-       assertEquals(product.getTargetMeasures().getGravity(), productDto.getTargetMeasures().getGravity());
-       assertEquals(product.getTargetMeasures().getYield(), productDto.getTargetMeasures().getYield());
-       assertEquals(product.getTargetMeasures().getBrewhouseDuration(), productDto.getTargetMeasures().getBrewhouseDuration());
-       assertEquals(product.getTargetMeasures().getFermentationDays(), productDto.getTargetMeasures().getFermentationDays());
-       assertEquals(product.getTargetMeasures().getConditioningDays(), productDto.getTargetMeasures().getConditioningDays());
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());       
        
        assertEquals(product.getVersion(), productDto.getVersion());
    }
    
    @Test
    public void testPutProduct() {
-       ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
        UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
               
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -234,16 +211,10 @@ public class ProductControllerTest {
        assertEquals(updateProductDto.getName(), putProductCaptor.getValue().getName());
        assertEquals(updateProductDto.getDescription(), putProductCaptor.getValue().getDescription());
        assertEquals(updateProductDto.getCategoryId(), putProductCaptor.getValue().getCategory().getId());
-
-       assertEquals(updateProductDto.getTargetMeasures().getAbv(), putProductCaptor.getValue().getTargetMeasures().getAbv());
-       assertEquals(updateProductDto.getTargetMeasures().getIbu(), putProductCaptor.getValue().getTargetMeasures().getIbu());
-       assertEquals(updateProductDto.getTargetMeasures().getPh(), putProductCaptor.getValue().getTargetMeasures().getPh());
-       assertEquals(updateProductDto.getTargetMeasures().getMashTemperature(), putProductCaptor.getValue().getTargetMeasures().getMashTemperature());
-       assertEquals(updateProductDto.getTargetMeasures().getGravity(), putProductCaptor.getValue().getTargetMeasures().getGravity());
-       assertEquals(updateProductDto.getTargetMeasures().getYield(), putProductCaptor.getValue().getTargetMeasures().getYield());
-       assertEquals(updateProductDto.getTargetMeasures().getBrewhouseDuration(), putProductCaptor.getValue().getTargetMeasures().getBrewhouseDuration());
-       assertEquals(updateProductDto.getTargetMeasures().getFermentationDays(), putProductCaptor.getValue().getTargetMeasures().getFermentationDays());
-       assertEquals(updateProductDto.getTargetMeasures().getConditioningDays(), putProductCaptor.getValue().getTargetMeasures().getConditioningDays());
+       
+       assertEquals(updateProductDto.getTargetMeasures().size(), putProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getName(), putProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), putProductCaptor.getValue().getTargetMeasures().get(0).getValue());
        
        assertEquals(updateProductDto.getVersion(), putProductCaptor.getValue().getVersion());        
 
@@ -261,29 +232,23 @@ public class ProductControllerTest {
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
        assertEquals(null, productDto.getProductClass().getParentCategoryId());
-
-       assertEquals(product.getTargetMeasures().getAbv(), productDto.getTargetMeasures().getAbv());
-       assertEquals(product.getTargetMeasures().getIbu(), productDto.getTargetMeasures().getIbu());
-       assertEquals(product.getTargetMeasures().getPh(), productDto.getTargetMeasures().getPh());
-       assertEquals(product.getTargetMeasures().getMashTemperature(), productDto.getTargetMeasures().getMashTemperature());
-       assertEquals(product.getTargetMeasures().getGravity(), productDto.getTargetMeasures().getGravity());
-       assertEquals(product.getTargetMeasures().getYield(), productDto.getTargetMeasures().getYield());
-       assertEquals(product.getTargetMeasures().getBrewhouseDuration(), productDto.getTargetMeasures().getBrewhouseDuration());
-       assertEquals(product.getTargetMeasures().getFermentationDays(), productDto.getTargetMeasures().getFermentationDays());
-       assertEquals(product.getTargetMeasures().getConditioningDays(), productDto.getTargetMeasures().getConditioningDays());
+       
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
        
        assertEquals(product.getVersion(), productDto.getVersion());
    }
    
    @Test
    public void testPatchProduct() {
-       ProductMeasuresDto targetMeasuresDto = new ProductMeasuresDto(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);  
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
        UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
        
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       ProductMeasures targetMeasures = new ProductMeasures(1L, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -299,15 +264,9 @@ public class ProductControllerTest {
        assertEquals(updateProductDto.getDescription(), patchProductCaptor.getValue().getDescription());
        assertEquals(updateProductDto.getCategoryId(), patchProductCaptor.getValue().getCategory().getId());
        
-       assertEquals(updateProductDto.getTargetMeasures().getAbv(), patchProductCaptor.getValue().getTargetMeasures().getAbv());
-       assertEquals(updateProductDto.getTargetMeasures().getIbu(), patchProductCaptor.getValue().getTargetMeasures().getIbu());
-       assertEquals(updateProductDto.getTargetMeasures().getPh(), patchProductCaptor.getValue().getTargetMeasures().getPh());
-       assertEquals(updateProductDto.getTargetMeasures().getMashTemperature(), patchProductCaptor.getValue().getTargetMeasures().getMashTemperature());
-       assertEquals(updateProductDto.getTargetMeasures().getGravity(), patchProductCaptor.getValue().getTargetMeasures().getGravity());
-       assertEquals(updateProductDto.getTargetMeasures().getYield(), patchProductCaptor.getValue().getTargetMeasures().getYield());
-       assertEquals(updateProductDto.getTargetMeasures().getBrewhouseDuration(), patchProductCaptor.getValue().getTargetMeasures().getBrewhouseDuration());
-       assertEquals(updateProductDto.getTargetMeasures().getFermentationDays(), patchProductCaptor.getValue().getTargetMeasures().getFermentationDays());
-       assertEquals(updateProductDto.getTargetMeasures().getConditioningDays(), patchProductCaptor.getValue().getTargetMeasures().getConditioningDays());
+       assertEquals(updateProductDto.getTargetMeasures().size(), patchProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getName(), patchProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), patchProductCaptor.getValue().getTargetMeasures().get(0).getValue());
        
        assertEquals(updateProductDto.getVersion(), patchProductCaptor.getValue().getVersion());        
 
@@ -326,24 +285,18 @@ public class ProductControllerTest {
        assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
        assertEquals(null, productDto.getProductClass().getParentCategoryId());
 
-       assertEquals(product.getTargetMeasures().getAbv(), productDto.getTargetMeasures().getAbv());
-       assertEquals(product.getTargetMeasures().getIbu(), productDto.getTargetMeasures().getIbu());
-       assertEquals(product.getTargetMeasures().getPh(), productDto.getTargetMeasures().getPh());
-       assertEquals(product.getTargetMeasures().getMashTemperature(), productDto.getTargetMeasures().getMashTemperature());
-       assertEquals(product.getTargetMeasures().getGravity(), productDto.getTargetMeasures().getGravity());
-       assertEquals(product.getTargetMeasures().getYield(), productDto.getTargetMeasures().getYield());
-       assertEquals(product.getTargetMeasures().getBrewhouseDuration(), productDto.getTargetMeasures().getBrewhouseDuration());
-       assertEquals(product.getTargetMeasures().getFermentationDays(), productDto.getTargetMeasures().getFermentationDays());
-       assertEquals(product.getTargetMeasures().getConditioningDays(), productDto.getTargetMeasures().getConditioningDays());
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
        
        assertEquals(product.getVersion(), productDto.getVersion());
    }
    
    @Test
    public void testDeleteProduct() {
-       productController.softDeleteProduct(1L);
+       productController.deleteProduct(1L);
 
-       verify(productService, times(1)).softDeleteProduct(1L);
+       verify(productService, times(1)).deleteProduct(1L);
    }
 
 }

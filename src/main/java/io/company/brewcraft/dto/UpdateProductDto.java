@@ -1,5 +1,9 @@
 package io.company.brewcraft.dto;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 public class UpdateProductDto extends BaseDto {
     
     private String name;
@@ -8,7 +12,8 @@ public class UpdateProductDto extends BaseDto {
     
     private Long categoryId;
         
-    private ProductMeasuresDto targetMeasures;
+    @Valid
+    private List<ProductMeasureDto> targetMeasures;
         
     private Integer version;
     
@@ -16,7 +21,7 @@ public class UpdateProductDto extends BaseDto {
         super();
     }
 
-    public UpdateProductDto(String name, String description, Long categoryId, ProductMeasuresDto targetMeasures,
+    public UpdateProductDto(String name, String description, Long categoryId, List<ProductMeasureDto> targetMeasures,
             Integer version) {
         super();
         this.name = name;
@@ -50,11 +55,11 @@ public class UpdateProductDto extends BaseDto {
         this.categoryId = categoryId;
     }
 
-    public ProductMeasuresDto getTargetMeasures() {
+    public List<ProductMeasureDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(ProductMeasuresDto targetMeasures) {
+    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
 

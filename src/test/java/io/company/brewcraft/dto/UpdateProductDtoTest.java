@@ -1,6 +1,8 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,30 +21,30 @@ public class UpdateProductDtoTest {
         String name = "testName";
         String description = "testDesc";
         Long categoryId = 1L;
-        ProductMeasuresDto targetMeasures = new ProductMeasuresDto();
+        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
         Integer version = 1;
 
         UpdateProductDto productDto = new UpdateProductDto(name, description, categoryId, targetMeasures, version);
         
-        assertSame(name, productDto.getName());
-        assertSame(description, productDto.getDescription());
-        assertSame(categoryId, productDto.getCategoryId());
-        assertSame(targetMeasures, productDto.getTargetMeasures());
-        assertSame(version, productDto.getVersion());        
+        assertEquals("testName", productDto.getName());
+        assertEquals("testDesc", productDto.getDescription());
+        assertEquals(1L, productDto.getCategoryId());
+        assertEquals(List.of(new ProductMeasureDto()), productDto.getTargetMeasures());
+        assertEquals(1, productDto.getVersion());        
     }
 
     @Test
     public void testGetSetName() {
         String name = "testName";
         updateProductDto.setName(name);
-        assertSame(name, updateProductDto.getName());
+        assertEquals(name, updateProductDto.getName());
     }
     
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         updateProductDto.setDescription(description);
-        assertSame(description, updateProductDto.getDescription());
+        assertEquals(description, updateProductDto.getDescription());
     }
     
     
@@ -50,20 +52,20 @@ public class UpdateProductDtoTest {
     public void testGetSetCategoryId() {
         Long categoryId = 1L;
         updateProductDto.setCategoryId(categoryId);
-        assertSame(categoryId, updateProductDto.getCategoryId());
+        assertEquals(categoryId, updateProductDto.getCategoryId());
     }
     
     @Test
     public void testGetSetTargetMeasures() {
-        ProductMeasuresDto targetMeasures = new ProductMeasuresDto();
+        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
         updateProductDto.setTargetMeasures(targetMeasures);
-        assertSame(targetMeasures, updateProductDto.getTargetMeasures());
+        assertEquals(List.of(new ProductMeasureDto()), updateProductDto.getTargetMeasures());
     }
     
     @Test
     public void testGetSetVersion() {
         Integer version = 1;
         updateProductDto.setVersion(version);
-        assertSame(version, updateProductDto.getVersion());
+        assertEquals(version, updateProductDto.getVersion());
     }
 }

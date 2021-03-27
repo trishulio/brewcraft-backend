@@ -1,7 +1,9 @@
 package io.company.brewcraft.dto;
 
+import java.util.List;
+
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.ProductMeasures;
+import io.company.brewcraft.model.ProductMeasureValue;
 
 public interface BaseProduct {
     
@@ -17,8 +19,8 @@ public interface BaseProduct {
 
     public void setCategory(ProductCategory category);
 
-    public ProductMeasures getTargetMeasures();
+    public List<ProductMeasureValue> getTargetMeasures();
 
-    public void setTargetMeasures(ProductMeasures targetMeasures);
+    public void setTargetMeasures(List<ProductMeasureValue> targetMeasures);
     
 }

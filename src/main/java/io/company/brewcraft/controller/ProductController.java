@@ -101,7 +101,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
-    public void softDeleteProduct(@PathVariable Long productId) {
-        productService.softDeleteProduct(productId);
+    public void deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
     }
 }
