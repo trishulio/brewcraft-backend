@@ -46,9 +46,9 @@ public class ProductCategoryController {
     
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<CategoryDto> getCategories(
-            @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false) Set<Long> parentCategoryIds,
-            @RequestParam(required = false) Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
+            @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false, name = "parent_category_ids") Set<Long> parentCategoryIds,
+            @RequestParam(required = false, name = "parent_names") Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
+            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true", name = "order_asc") boolean orderAscending) {
             Page<ProductCategory> categoriesPage = productCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
 
             List<CategoryDto> productCategoriesList = categoriesPage.stream()

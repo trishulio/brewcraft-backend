@@ -46,10 +46,10 @@ public class ProductController {
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<ProductDto> getProducts(
             @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false) Set<Long> categoryIds,
-            @RequestParam(required = false) Set<String> categoryNames,
+            @RequestParam(required = false, name = "category_ids") Set<Long> categoryIds,
+            @RequestParam(required = false, name = "category_names") Set<String> categoryNames,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
+            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true", name = "order_asc") boolean orderAscending) {
         
         Page<Product> productsPage = productService.getProducts(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
         
