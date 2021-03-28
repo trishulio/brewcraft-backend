@@ -74,16 +74,17 @@ public class MaterialCategoryControllerTest {
    
    @Test
    public void testGetMaterialCategory() {
-       Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
+       Category category = new Category(1L, "root", new Category(2L, "parent", null, null, null, null, null), null, null, null, null);
 
        doReturn(category).when(materialCategoryService).getCategory(1L);
        
-       CategoryDto materialDto = materialCategoryController.getCategory(1L);
+       CategoryWithParentDto categoryWithParentDto = materialCategoryController.getCategory(1L);
        
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), categoryWithParentDto.getId());
+       assertEquals(category.getName(), categoryWithParentDto.getName());
+       assertEquals(category.getParentCategory().getId(), categoryWithParentDto.getParentCategory().getId());
+       assertEquals(category.getParentCategory().getName(), categoryWithParentDto.getParentCategory().getName());
+       assertEquals(category.getVersion(), categoryWithParentDto.getVersion());
    }
    
    @Test

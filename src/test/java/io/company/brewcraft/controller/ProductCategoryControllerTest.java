@@ -74,15 +74,16 @@ public class ProductCategoryControllerTest {
    
    @Test
    public void testGetProductCategory() {
-       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, null);
+       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L, "parent", null, null, null, null, null), null, null, null, null);
 
        doReturn(category).when(productCategoryService).getCategory(1L);
        
-       CategoryDto productDto = productCategoryController.getCategory(1L);
+       CategoryWithParentDto productDto = productCategoryController.getCategory(1L);
        
        assertEquals(category.getId(), productDto.getId());
        assertEquals(category.getName(), productDto.getName());
-       assertEquals(category.getParentCategory().getId(), productDto.getParentCategoryId());
+       assertEquals(category.getParentCategory().getId(), productDto.getParentCategory().getId());
+       assertEquals(category.getParentCategory().getName(), productDto.getParentCategory().getName());
        assertEquals(category.getVersion(), productDto.getVersion());
    }
    

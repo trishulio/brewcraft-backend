@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.ProductCategory;
 
@@ -18,6 +19,8 @@ public interface ProductCategoryMapper {
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
     CategoryDto toDto(ProductCategory productCategory);
+    
+    CategoryWithParentDto toCategoryWithParentDto(ProductCategory productCategory);
 
     ProductCategory fromDto(CategoryDto productCategoryDto);
 

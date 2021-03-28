@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.MaterialCategoryEntity;
 import io.company.brewcraft.pojo.Category;
@@ -21,6 +22,8 @@ public interface MaterialCategoryMapper {
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
     CategoryDto toDto(Category materialCategory);
+    
+    CategoryWithParentDto toCategoryWithParentDto(Category materialCategory);
 
     @InheritInverseConfiguration
     Category fromEntity(MaterialCategoryEntity materialCategoryEntity, @Context CycleAvoidingMappingContext context);

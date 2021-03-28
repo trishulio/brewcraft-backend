@@ -187,9 +187,9 @@ public class ProductServiceImplTest {
         assertEquals(putProduct.getDescription(), persistedProductCaptor.getValue().getDescription());
         assertEquals(putProduct.getCategory().getId(), persistedProductCaptor.getValue().getCategory().getId());
         assertEquals(putProduct.getTargetMeasures(), persistedProductCaptor.getValue().getTargetMeasures());
-        assertEquals(null, persistedProductCaptor.getValue().getLastUpdated());
-        assertEquals(null, persistedProductCaptor.getValue().getCreatedAt());
-        assertEquals(null, persistedProductCaptor.getValue().getVersion());
+        assertEquals(putProduct.getLastUpdated(), persistedProductCaptor.getValue().getLastUpdated());
+        assertEquals(putProduct.getCreatedAt(), persistedProductCaptor.getValue().getCreatedAt());
+        assertEquals(putProduct.getVersion(), persistedProductCaptor.getValue().getVersion());
         
         //Assert returned POJO
         assertEquals(putProduct.getId(), returnedProduct.getId());

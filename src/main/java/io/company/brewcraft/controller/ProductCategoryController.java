@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.company.brewcraft.dto.AddCategoryDto;
 import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.ProductCategory;
@@ -59,14 +60,14 @@ public class ProductCategoryController {
     }
     
     @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)
-    public CategoryDto getCategory(@PathVariable Long categoryId) {
+    public CategoryWithParentDto getCategory(@PathVariable Long categoryId) {
         Validator validator = new Validator();
 
         ProductCategory productCategory = productCategoryService.getCategory(categoryId);
         
         validator.assertion(productCategory != null, EntityNotFoundException.class, "ProductCategory", categoryId.toString());
 
-        return productCategoryMapper.toDto(productCategory);
+        return productCategoryMapper.toCategoryWithParentDto(productCategory);
     }
     
     @PostMapping("")
