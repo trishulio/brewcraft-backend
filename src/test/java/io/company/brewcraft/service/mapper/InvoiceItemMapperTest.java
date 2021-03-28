@@ -18,8 +18,8 @@ import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.pojo.Material;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemMapperTest {
 
@@ -107,51 +107,8 @@ public class InvoiceItemMapperTest {
         assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
-    
-    @Test
-    public void testToEntity_ReturnEntity_WhenPojoIsNotNull() {
-        InvoiceItem item = new InvoiceItem(
-            2L,
-            "desc2",
-            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
-            Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
-            new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L, null, null, null, null, null, null, null, null),
-            1
-        );
-        InvoiceItemEntity entity = mapper.toEntity(item, new CycleAvoidingMappingContext());
-
-        assertEquals(2L, entity.getId());
-        assertEquals("desc2", entity.getDescription());
-        assertEquals(new QuantityEntity(null, new UnitEntity("kg", null), new BigDecimal("4")), entity.getQuantity());
-        assertEquals(new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("5.00")), entity.getPrice());
-        assertEquals(new TaxEntity(null, new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("6.00"))), entity.getTax());
-        assertEquals(new MaterialEntity(7L, null, null, null, null, null, null, null, null), entity.getMaterial());
-        assertEquals(1, entity.getVersion());
-        assertNull(entity.getInvoice());
-    }
 
     @Test
-    public void testFromEntity_ReturnsPojo_WhenEntityIsNotNull() {
-        InvoiceItemEntity entity = new InvoiceItemEntity(
-            2L,
-            "desc2",
-            null,
-            new QuantityEntity(null, new UnitEntity("kg", null), new BigDecimal("4")),
-            new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("5.00")),
-            new TaxEntity(null, new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("6.00"))),
-            new MaterialEntity(7L, null, null, null, null, null, null, null, null),
-            1
-        );
-        InvoiceItem item = mapper.fromEntity(entity, new CycleAvoidingMappingContext());
-
-        assertEquals(2L, item.getId());
-        assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(Money.parse("CAD 5"), item.getPrice());
-        assertEquals(new Tax(Money.parse("CAD 6")), item.getTax());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
-        assertEquals(1, item.getVersion());
     public void testFromDto_ReturnsNull_WhenUpdateInvoiceItemIsNull() {
         assertNull(mapper.fromDto((UpdateInvoiceItemDto) null));
     }

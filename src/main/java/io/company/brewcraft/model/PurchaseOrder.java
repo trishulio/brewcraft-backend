@@ -1,9 +1,6 @@
 package io.company.brewcraft.model;
 
 import javax.persistence.*;
-
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Supplier;
 @Entity(name = "purchase_order")
 @Table
 public class PurchaseOrder extends BaseModel {
@@ -21,8 +18,7 @@ public class PurchaseOrder extends BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private SupplierEntity supplier;
-
+    private Supplier supplier;
 
     public PurchaseOrder() {
     }
@@ -32,7 +28,7 @@ public class PurchaseOrder extends BaseModel {
         setId(id);
     }
 
-    public PurchaseOrder(Long id, String orderNumber, SupplierEntity supplier) {
+    public PurchaseOrder(Long id, String orderNumber, Supplier supplier) {
         this(id);
         setOrderNumber(orderNumber);
         setSupplier(supplier);
@@ -54,11 +50,11 @@ public class PurchaseOrder extends BaseModel {
         this.orderNumber = orderNumber;
     }
 
-    public SupplierEntity getSupplier() {
+    public Supplier getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(SupplierEntity supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
 }

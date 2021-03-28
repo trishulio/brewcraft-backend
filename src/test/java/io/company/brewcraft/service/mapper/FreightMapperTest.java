@@ -22,7 +22,7 @@ public class FreightMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojoFromDto() {
-        FreightDto dto = new FreightDto(new MoneyDto("CAD", new BigDecimal("10.00")));
+        FreightDto dto = new FreightDto(new MoneyDto("CAD", new BigDecimal("10")));
         Freight freight = mapper.fromDto(dto);
 
         assertEquals(new Freight(null, Money.parse("CAD 10")), freight);

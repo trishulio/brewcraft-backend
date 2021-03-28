@@ -20,8 +20,8 @@ import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class EnhancedShipmentRepositoryImplTest {
 
@@ -51,7 +51,7 @@ public class EnhancedShipmentRepositoryImplTest {
         doReturn(true).when(mMaterialRepo).existsByIds(Set.of(1L));
 
         Collection<ShipmentItem> items = new HashSet<>();
-        items.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        items.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment shipment = new Shipment(1L,
                 "SHIPMENT_1",
                 "LOT_1",
@@ -81,7 +81,7 @@ public class EnhancedShipmentRepositoryImplTest {
         assertEquals(1, ret.getVersion());
         ShipmentItem item = ret.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(ret, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
@@ -132,7 +132,7 @@ public class EnhancedShipmentRepositoryImplTest {
         doReturn(true).when(mMaterialRepo).existsByIds(Set.of(1L));
 
         Collection<ShipmentItem> items = new HashSet<>();
-        items.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        items.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment shipment = new Shipment(1L, "SHIPMENT_1", "LOT_1", "DESCRIPTION_1", null, null, LocalDateTime.of(1999, 1, 1, 12, 0), LocalDateTime.of(2000, 1, 1, 12, 0), LocalDateTime.of(2001, 1, 1, 12, 0), LocalDateTime.of(2002, 1, 1, 12, 0), items, 1);
 
         Shipment ret = repo.save(null, shipment);

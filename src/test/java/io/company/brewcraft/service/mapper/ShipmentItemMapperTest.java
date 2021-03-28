@@ -14,8 +14,8 @@ import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.UpdateShipmentItemDto;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.pojo.Material;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class ShipmentItemMapperTest {
 
@@ -28,7 +28,7 @@ public class ShipmentItemMapperTest {
 
     @Test
     public void toDto_ReturnsDtoFromShipmentItem_WhenShipmentItemIsNotNull() {
-        ShipmentItem item = new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        ShipmentItem item = new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         ShipmentItemDto dto = mapper.toDto(item);
 
@@ -48,7 +48,7 @@ public class ShipmentItemMapperTest {
 
         ShipmentItem item = mapper.fromDto(dto);
 
-        ShipmentItem expected = new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), null, null, 1);
+        ShipmentItem expected = new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), null, null, 1);
         assertEquals(expected, item);
     }
 

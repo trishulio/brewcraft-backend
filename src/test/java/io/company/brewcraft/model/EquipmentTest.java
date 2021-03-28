@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -139,7 +138,7 @@ public class EquipmentTest {
         Equipment testEquipment = new Equipment();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            testEquipment.setMaxCapacity(Quantities.getQuantity(100, Units.CELSIUS));
+            testEquipment.setMaxCapacity(Quantities.getQuantity(100, SupportedUnits.EACH));
         });
     }
     
@@ -148,7 +147,7 @@ public class EquipmentTest {
         Equipment testEquipment = new Equipment();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            testEquipment.setMaxCapacityDisplayUnit(Units.DAY);
+            testEquipment.setMaxCapacityDisplayUnit(Units.AMPERE);
         });
     }
 }

@@ -46,8 +46,11 @@ public class EnhancedInvoiceRepositoryTest {
         doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
         doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
-        doReturn(Set.of(new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5), new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
-                new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
+//        doReturn(Set.of(
+//            new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
+//            new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
+//            new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))
+//        ).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
 
         InvoiceItem item1 = new InvoiceItem(11L);
         InvoiceItem item2 = new InvoiceItem(12L);

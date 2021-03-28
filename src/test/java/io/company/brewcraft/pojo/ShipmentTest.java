@@ -14,8 +14,8 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class ShipmentTest {
 
@@ -28,7 +28,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        Collection<ShipmentItem> items = Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        Collection<ShipmentItem> items = Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
             "LOT_1",
@@ -58,7 +58,7 @@ public class ShipmentTest {
 
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());

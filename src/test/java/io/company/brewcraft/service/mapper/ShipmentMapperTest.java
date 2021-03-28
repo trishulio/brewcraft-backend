@@ -20,8 +20,8 @@ import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.pojo.Material;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class ShipmentMapperTest {
 
@@ -42,7 +42,7 @@ public class ShipmentMapperTest {
             2L,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            List.of(new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), 1L, 1)),
+            List.of(new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 1L, 1)),
             1
         );
 
@@ -59,7 +59,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), null, null, 1)),
+            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), null, null, 1)),
             1
         );
 
@@ -84,7 +84,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
 
@@ -99,7 +99,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new ShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
         

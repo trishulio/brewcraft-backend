@@ -31,8 +31,8 @@ import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class ShipmentControllerTest {
 
@@ -65,7 +65,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
         Collection<ShipmentItem> items = Set.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -137,7 +137,7 @@ public class ShipmentControllerTest {
         assertEquals(1, shipment.getVersion());
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
@@ -148,7 +148,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
         Collection<ShipmentItem> items = Set.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -204,30 +204,9 @@ public class ShipmentControllerTest {
                                         true,
                                         1,
                                         10,
-                                        Set.of("")
+                                        Set.of("id")
                                     );
-        
-        assertEquals(new ShipmentDto(1L), shipment);
-        assertEquals(1L, shipment.getId());
-        assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
-        assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
-        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
-        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
-        assertEquals(1, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(2, item.getVersion());
+        assertEquals(new ShipmentDto(1L), dto.getContent().get(0));
     }
     
     @Test
@@ -255,7 +234,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), 2L, 1)
+                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -274,7 +253,7 @@ public class ShipmentControllerTest {
         assertEquals(1, dto.getItems().size());
         ShipmentItemDto item = dto.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), item.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
         assertEquals(new MaterialDto(2L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
@@ -297,7 +276,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), 2L, 1)
+                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -316,7 +295,7 @@ public class ShipmentControllerTest {
         assertEquals(1, dto.getItems().size());
         ShipmentItemDto item = dto.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), item.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
         assertEquals(new MaterialDto(2L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
@@ -339,7 +318,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10.00")), 2L, 1)
+                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -358,7 +337,7 @@ public class ShipmentControllerTest {
         assertEquals(1, dto.getItems().size());
         ShipmentItemDto item = dto.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), item.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
         assertEquals(new MaterialDto(2L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }

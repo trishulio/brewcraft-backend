@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.Supplier;
 
 public class PurchaseOrderTest {
     private PurchaseOrder order;
@@ -18,11 +18,11 @@ public class PurchaseOrderTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        order = new PurchaseOrder(1L, "ABCD-123", new SupplierEntity());
+        order = new PurchaseOrder(1L, "ABCD-123", new Supplier());
 
         assertEquals(1L, order.getId());
         assertEquals("ABCD-123", order.getOrderNumber());
-        assertEquals(new SupplierEntity(), order.getSupplier());
+        assertEquals(new Supplier(), order.getSupplier());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class PurchaseOrderTest {
     @Test
     public void testAccessSupplier() {
         assertNull(order.getSupplier());
-        order.setSupplier(new SupplierEntity());
-        assertEquals(new SupplierEntity(), order.getSupplier());
+        order.setSupplier(new Supplier());
+        assertEquals(new Supplier(), order.getSupplier());
     }
 }

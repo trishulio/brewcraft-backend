@@ -24,7 +24,7 @@ public class MoneyMapperTest {
     public void testToDto_ReturnsMoneyDto_WhenMoneyIsNotNull() {
         MoneyDto dto = mapper.toDto(Money.parse("USD 100"));
         assertEquals("USD", dto.getCurrency());
-        assertEquals(new BigDecimal("100.00"), dto.getAmount());
+        assertEquals(new BigDecimal("100"), dto.getAmount());
     }
 
     @Test
@@ -45,9 +45,9 @@ public class MoneyMapperTest {
 
     @Test
     public void testFromEntity_ReturnsMoney_WhenEntityIsNotNull() {
-        MoneyEntity entity = new MoneyEntity(1L, new Currency(124, "CAD"), new BigDecimal("10.00"));
+        MoneyEntity entity = new MoneyEntity(1L, new Currency(124, "CAD"), new BigDecimal("10"));
 
-        assertEquals(Money.parse("CAD 10.00"), mapper.fromEntity(entity));
+        assertEquals(Money.parse("CAD 10"), mapper.fromEntity(entity));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class MoneyMapperTest {
 
     @Test
     public void testToEntity_ReturnsEntity_WhenPojoIsNotNull() {
-        Money money = Money.parse("CAD 10.00");
+        Money money = Money.parse("CAD 10");
 
         MoneyEntity entity = mapper.toEntity(money);
         assertEquals(new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("10.00")), entity);

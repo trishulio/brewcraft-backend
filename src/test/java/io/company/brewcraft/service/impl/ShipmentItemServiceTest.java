@@ -20,8 +20,8 @@ import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class ShipmentItemServiceTest {
 
@@ -40,7 +40,7 @@ public class ShipmentItemServiceTest {
     @Test
     public void testAddList_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
         Collection<BaseShipmentItem> additionItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
      
         Collection<ShipmentItem> items = service.getAddItems(additionItems);
@@ -48,7 +48,7 @@ public class ShipmentItemServiceTest {
         assertEquals(1, items.size()); // Excludes the null item
         ShipmentItem item = items.iterator().next();
         assertEquals(null, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(null, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(null, item.getCreatedAt());
@@ -64,12 +64,12 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPutList_ReturnsUpdatedList_WhenUpdateIsNotNull() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         Collection<UpdateShipmentItem> updateItems = Set.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
 
         Collection<ShipmentItem> items = service.getPutItems(existingItems, updateItems);
@@ -79,7 +79,7 @@ public class ShipmentItemServiceTest {
 
         ShipmentItem item1 = it.next();
         assertEquals(null, item1.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), item1.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item1.getQuantity());
         assertEquals(null, item1.getShipment());
         assertEquals(new Material(1L), item1.getMaterial());
         assertEquals(null, item1.getCreatedAt());
@@ -88,7 +88,7 @@ public class ShipmentItemServiceTest {
 
         ShipmentItem item2 = it.next();
         assertEquals(1L, item2.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), item2.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), item2.getQuantity());
         assertEquals(null, item2.getShipment());
         assertEquals(new Material(2L), item2.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item2.getCreatedAt());
@@ -99,7 +99,7 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPutList_ReturnsEmptyList_WhenUpdateListIsEmpty() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         assertEquals(Collections.emptySet(), service.getPutItems(existingItems, Set.of()));
@@ -108,7 +108,7 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPutList_ReturnsNull_WhenUpdateListIsNull() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         assertNull(service.getPutItems(existingItems, null));
@@ -117,11 +117,11 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPutList_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         Collection<UpdateShipmentItem> updateItems = Set.of(
-            new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         
         assertThrows(ValidationException.class, () -> service.getPutItems(existingItems, updateItems), "1. No existing item found with Id: 2\n");
@@ -130,11 +130,11 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPatchList_ReturnsPatchedList_WhenItemsAreNotNull() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
         Collection<UpdateShipmentItem> updateItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
         Collection<ShipmentItem> items = service.getPatchItems(existingItems, updateItems);
@@ -144,7 +144,7 @@ public class ShipmentItemServiceTest {
         
         ShipmentItem item = it.next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(null, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
@@ -155,11 +155,11 @@ public class ShipmentItemServiceTest {
     @Test
     public void testPatchList_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
         Collection<ShipmentItem> existingItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
         Collection<UpdateShipmentItem> updateItems = Set.of(
-            new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20.00"), Units.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
+            new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
         assertThrows(ValidationException.class, () -> service.getPatchItems(existingItems, updateItems), "1. No existing item found with Id: 2\\n");

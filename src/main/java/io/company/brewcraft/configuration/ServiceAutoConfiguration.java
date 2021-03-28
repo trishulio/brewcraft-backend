@@ -127,7 +127,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UtilityProvider.class)
-    public UtilityProvider utilProvider() {
+    public UtilityProvider utilityProvider() {
         return new ThreadLocalUtilityProvider();
     }
 }

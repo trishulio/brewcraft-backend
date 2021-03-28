@@ -23,7 +23,7 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.SupplierEntity;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
@@ -85,7 +85,7 @@ public class InvoiceService extends BaseService {
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID }, purchaseOrderIds)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_NAME }, status)
-                                            .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, SupplierEntity.FIELD_ID }, supplierIds)
+                                            .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
         return repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
     }

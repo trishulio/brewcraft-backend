@@ -121,7 +121,7 @@ public class ServiceAutoConfigurationTest {
     
     @Test
     public void testUtilityProvider_ReturnsInstanceOfThreadLocalUtilityProvider() {
-        UtilityProvider provider = serviceAutoConfiguration.utilProvider();
+        UtilityProvider provider = serviceAutoConfiguration.utilityProvider();
         
         assertSame(ThreadLocalUtilityProvider.class, provider.getClass());
     }

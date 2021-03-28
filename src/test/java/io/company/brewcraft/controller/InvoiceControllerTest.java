@@ -136,7 +136,7 @@ public class InvoiceControllerTest {
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+       assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 
@@ -266,7 +266,7 @@ public class InvoiceControllerTest {
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+       assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 
@@ -330,12 +330,12 @@ public class InvoiceControllerTest {
        AddInvoiceDto payload = new AddInvoiceDto(
            "ABCDE-12345",
            "desc1",
-           new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))),
+           new FreightDto(new MoneyDto("CAD", new BigDecimal("4"))),
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
            new InvoiceStatusDto("FINAL"),
-           List.of(new AddInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L))
+           List.of(new AddInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L))
        );
        BaseInvoice<InvoiceItem> mAddInvoice = new Invoice(
            null,
@@ -345,11 +345,11 @@ public class InvoiceControllerTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(null, Money.of(CurrencyUnit.CAD, new BigDecimal("4.00"))),
+           new Freight(null, Money.of(CurrencyUnit.CAD, new BigDecimal("4"))),
            null,
            null,
            new InvoiceStatus(null, "FINAL"),
-           List.of(new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("1.00"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L, null, null, null, null, null, null, null, null), null)),
+           List.of(new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), null)),
            null
        );
        Invoice mRetInvoice = new Invoice(
@@ -388,7 +388,7 @@ public class InvoiceControllerTest {
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+       assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 
@@ -397,12 +397,12 @@ public class InvoiceControllerTest {
        UpdateInvoiceDto payload = new UpdateInvoiceDto(
            "ABCDE-12345",
            "desc1",
-           new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))),
+           new FreightDto(new MoneyDto("CAD", new BigDecimal("4"))),
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
            new InvoiceStatusDto("FINAL"),
-           List.of(new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("KG", new BigDecimal("1.00")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L, 1)),
+           List.of(new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L, 1)),
            1
        );
        UpdateInvoice<InvoiceItem> mUpdateInvoice = new Invoice(
@@ -413,11 +413,11 @@ public class InvoiceControllerTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(null, Money.of(CurrencyUnit.CAD, new BigDecimal("4.00"))),
+           new Freight(null, Money.of(CurrencyUnit.CAD, new BigDecimal("4"))),
            null,
            null,
            new InvoiceStatus(null, "FINAL"),
-           List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("1.00"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5.00")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6.00"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
+           List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
            1
        );
        Invoice mRetInvoice = new Invoice(

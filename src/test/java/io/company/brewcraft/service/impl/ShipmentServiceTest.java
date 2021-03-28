@@ -22,8 +22,8 @@ import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
-import tec.units.ri.quantity.Quantities;
-import tec.units.ri.unit.Units;
+import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class ShipmentServiceTest {
 
@@ -113,7 +113,7 @@ public class ShipmentServiceTest {
         doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
 
         Collection<ShipmentItem> additionItems = new HashSet<>();
-        additionItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        additionItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment addition = new Shipment(
             1L,
             "SHIPMENT_1",
@@ -130,9 +130,9 @@ public class ShipmentServiceTest {
         );
         
         doReturn(Set.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), addition, new Material(1L), null, null, null)
+            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), addition, new Material(1L), null, null, null)
         )).when(mItemService).getAddItems(
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), addition, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1))
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), addition, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1))
         );
 
         Shipment shipment = service.add(2L, addition);
@@ -151,7 +151,7 @@ public class ShipmentServiceTest {
         assertEquals(null, shipment.getVersion());
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(null, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(null, item.getCreatedAt());
@@ -175,7 +175,7 @@ public class ShipmentServiceTest {
         doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
 
         Collection<ShipmentItem> existingitems = new HashSet<>();
-        existingitems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        existingitems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
@@ -193,7 +193,7 @@ public class ShipmentServiceTest {
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
         Collection<ShipmentItem> updateItems = Set.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         Shipment update = new Shipment(
             null,
@@ -211,10 +211,10 @@ public class ShipmentServiceTest {
         );
         
         doReturn(Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         )).when(mItemService).getPutItems(
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         ));
 
         Shipment shipment = service.put(2L, 1L, update);
@@ -233,7 +233,7 @@ public class ShipmentServiceTest {
         assertEquals(1, shipment.getVersion());
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
@@ -250,7 +250,7 @@ public class ShipmentServiceTest {
         doReturn(Optional.empty()).when(mRepo).findById(1L);
 
         Collection<ShipmentItem> updateItems = new HashSet<>(); 
-        updateItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2));
+        updateItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2));
         Shipment update = new Shipment(
             1L,
             "SHIPMENT_1",
@@ -267,10 +267,10 @@ public class ShipmentServiceTest {
         );
         
         doReturn(Set.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), null, null, null)
+            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), null, null, null)
         )).when(mItemService).getPutItems(
             null,
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2))
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2))
         );
 
         Shipment shipment = service.put(2L, 1L, update);
@@ -289,7 +289,7 @@ public class ShipmentServiceTest {
         assertEquals(null, shipment.getVersion());
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(null, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(null, item.getCreatedAt());
@@ -312,7 +312,7 @@ public class ShipmentServiceTest {
     @Test
     public void testPatch_PatchesExistingEntity_WhenExistingIsNotNull() {
         Collection<ShipmentItem> existingItems = new HashSet<>();
-        existingItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        existingItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
@@ -332,7 +332,7 @@ public class ShipmentServiceTest {
         doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
 
         Collection<ShipmentItem> updateItems = Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
         Shipment update = new Shipment(
             null,
@@ -350,10 +350,10 @@ public class ShipmentServiceTest {
         );
 
         doReturn(Set.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         )).when(mItemService).getPatchItems(
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), Units.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
-            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), update, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1))
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1))
         );
 
         Shipment shipment = service.patch(2L, 1L, update);
@@ -372,7 +372,7 @@ public class ShipmentServiceTest {
         assertEquals(1, shipment.getVersion());
         ShipmentItem item = shipment.getItems().iterator().next();
         assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), Units.KILOGRAM), item.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(shipment, item.getShipment());
         assertEquals(new Material(1L), item.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
