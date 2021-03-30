@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateInvoiceDto extends BaseDto {
     private String invoiceNumber;
+    private Long purchaseOrderId;
     private String description;
     private FreightDto freight;
     private LocalDateTime generatedOn;
@@ -14,16 +15,16 @@ public class UpdateInvoiceDto extends BaseDto {
     private LocalDateTime paymentDueDate;
     private InvoiceStatusDto status;
     private List<UpdateInvoiceItemDto> items;
-    
+
     @NotNull
     private Integer version;
 
     public UpdateInvoiceDto() {
     }
 
-    public UpdateInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items,
-            Integer version) {
+    public UpdateInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<UpdateInvoiceItemDto> items, Integer version) {
         setInvoiceNumber(invoiceNumber);
+        setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
         setFreight(freight);
         setGeneratedOn(generatedOn);
@@ -40,6 +41,14 @@ public class UpdateInvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Long getPurchaseOrderId() {
+        return purchaseOrderId;
+    }
+
+    public void setPurchaseOrderId(Long purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
     }
 
     public String getDescription() {

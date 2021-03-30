@@ -1,7 +1,7 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -58,7 +58,7 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     private LocalDateTime lastUpdated;
     
     @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Collection<ShipmentItem> items;
+    private List<ShipmentItem> items;
     
     @Version
     private Integer version;
@@ -72,7 +72,7 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     }
 
     public Shipment(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
-            Collection<ShipmentItem> items, Integer version) {
+            List<ShipmentItem> items, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
@@ -188,12 +188,12 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     }
 
     @Override
-    public Collection<ShipmentItem> getItems() {
+    public List<ShipmentItem> getItems() {
         return items;
     }
 
     @Override
-    public void setItems(Collection<ShipmentItem> items) {
+    public void setItems(List<ShipmentItem> items) {
 //        if (this.getItems() != null) {
 //            this.getItems().clear();
 //            this.getItems().addAll(items);

@@ -5,10 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,8 @@ import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
-import tec.uom.se.quantity.Quantities;
 import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class ShipmentItemServiceTest {
 
@@ -39,11 +38,11 @@ public class ShipmentItemServiceTest {
     
     @Test
     public void testAddList_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
-        Collection<BaseShipmentItem> additionItems = Set.of(
+        List<BaseShipmentItem> additionItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
      
-        Collection<ShipmentItem> items = service.getAddItems(additionItems);
+        List<ShipmentItem> items = service.getAddItems(additionItems);
         
         assertEquals(1, items.size()); // Excludes the null item
         ShipmentItem item = items.iterator().next();
@@ -63,16 +62,16 @@ public class ShipmentItemServiceTest {
 
     @Test
     public void testPutList_ReturnsUpdatedList_WhenUpdateIsNotNull() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        Collection<UpdateShipmentItem> updateItems = Set.of(
+        List<UpdateShipmentItem> updateItems = List.of(
             new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
 
-        Collection<ShipmentItem> items = service.getPutItems(existingItems, updateItems);
+        List<ShipmentItem> items = service.getPutItems(existingItems, updateItems);
 
         assertEquals(2, items.size());
         Iterator<ShipmentItem> it = items.iterator();
@@ -98,16 +97,16 @@ public class ShipmentItemServiceTest {
     
     @Test
     public void testPutList_ReturnsEmptyList_WhenUpdateListIsEmpty() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        assertEquals(Collections.emptySet(), service.getPutItems(existingItems, Set.of()));
+        assertEquals(Collections.emptyList(), service.getPutItems(existingItems, List.of()));
     }
     
     @Test
     public void testPutList_ReturnsNull_WhenUpdateListIsNull() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
@@ -116,11 +115,11 @@ public class ShipmentItemServiceTest {
     
     @Test
     public void testPutList_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        Collection<UpdateShipmentItem> updateItems = Set.of(
+        List<UpdateShipmentItem> updateItems = List.of(
             new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         
@@ -129,15 +128,15 @@ public class ShipmentItemServiceTest {
     
     @Test
     public void testPatchList_ReturnsPatchedList_WhenItemsAreNotNull() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
-        Collection<UpdateShipmentItem> updateItems = Set.of(
+        List<UpdateShipmentItem> updateItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
-        Collection<ShipmentItem> items = service.getPatchItems(existingItems, updateItems);
+        List<ShipmentItem> items = service.getPatchItems(existingItems, updateItems);
 
         assertEquals(1, items.size());
         Iterator<ShipmentItem> it = items.iterator();
@@ -154,11 +153,11 @@ public class ShipmentItemServiceTest {
 
     @Test
     public void testPatchList_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
-        Collection<ShipmentItem> existingItems = Set.of(
+        List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
-        Collection<UpdateShipmentItem> updateItems = Set.of(
+        List<UpdateShipmentItem> updateItems = List.of(
             new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
@@ -167,6 +166,6 @@ public class ShipmentItemServiceTest {
 
     @Test
     public void testPutList_ReturnsNull_WhenUpdateItemsAreNull() {
-        assertNull(service.getPutItems(Set.of(), null));
+        assertNull(service.getPutItems(List.of(), null));
     }
 }

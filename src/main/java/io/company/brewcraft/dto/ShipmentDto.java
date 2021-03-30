@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,7 +17,7 @@ public class ShipmentDto extends BaseDto {
     private LocalDateTime deliveredDate;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
-    private Collection<ShipmentItemDto> items;
+    private List<ShipmentItemDto> items;
     private Integer version;
 
     public ShipmentDto() {
@@ -28,7 +28,7 @@ public class ShipmentDto extends BaseDto {
         setId(id);
     }
 
-    public ShipmentDto(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatusDto status, InvoiceDto invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, Collection<ShipmentItemDto> items, Integer version) {
+    public ShipmentDto(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatusDto status, InvoiceDto invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, List<ShipmentItemDto> items, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
@@ -123,11 +123,11 @@ public class ShipmentDto extends BaseDto {
         this.lastUpdated = lastUpdated;
     }
 
-    public Collection<ShipmentItemDto> getItems() {
+    public List<ShipmentItemDto> getItems() {
         return items;
     }
 
-    public void setItems(Collection<ShipmentItemDto> items) {
+    public void setItems(List<ShipmentItemDto> items) {
         this.items = items;
     }
 

@@ -7,8 +7,8 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
@@ -120,11 +120,11 @@ public class InvoiceServiceTest {
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
            new InvoiceStatus(2L, "FINAL"),
-           Set.of(itemUpdate),
+           List.of(itemUpdate),
            1
        );
 
-       doReturn(LocalDateTime.of(2100, 12, 31, 23, 59)).when(service).now();
+//       doReturn(LocalDateTime.of(2100, 12, 31, 23, 59)).when(service).now();
 
        doAnswer(inv -> {
            Long poId = inv.getArgument(0, Long.class);
@@ -134,7 +134,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
        
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(isNull(), eq(Set.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(isNull(), eq(List.of(itemUpdate)));
 
        Invoice invoice = service.put(3L, 1L, update);
 
@@ -147,10 +147,10 @@ public class InvoiceServiceTest {
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
        assertEquals(new Freight(1L), invoice.getFreight());
-       assertEquals(LocalDateTime.of(2100, 12, 31, 23, 59), invoice.getCreatedAt());
+       assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
        assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
-       assertEquals(1, invoice.getVersion());
+       assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
        Iterator<InvoiceItem> it = invoice.getItems().iterator();
@@ -181,7 +181,7 @@ public class InvoiceServiceTest {
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
            new InvoiceStatus(2L, "FINAL"),
-           Set.of(itemUpdate),
+           List.of(itemUpdate),
            1
        );
 
@@ -193,7 +193,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPutCollection(isNull(), eq(Set.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(isNull(), eq(List.of(itemUpdate)));
        
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
@@ -248,7 +248,7 @@ public class InvoiceServiceTest {
        update.setDescription("New description value");
        update.setCreatedAt(LocalDateTime.of(9999, 12, 31, 12, 0));
        update.setLastUpdated(LocalDateTime.of(9999, 12, 31, 12, 0));
-       update.setItems(Set.of(itemUpdate));
+       update.setItems(List.of(itemUpdate));
        
        doAnswer(inv -> {
            Long poId = inv.getArgument(0, Long.class);
@@ -258,7 +258,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getPatchCollection(isNull(), eq(Set.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPatchItems(isNull(), eq(List.of(itemUpdate)));
 
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
@@ -305,7 +305,7 @@ public class InvoiceServiceTest {
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
            new InvoiceStatus(2L, "FINAL"),
-           Set.of(itemUpdate),
+           List.of(itemUpdate),
            1
        );
 
@@ -317,7 +317,7 @@ public class InvoiceServiceTest {
 
        }).when(mRepo).save(any(Long.class), any(Invoice.class));
 
-       doReturn(Set.of(itemUpdate)).when(mItemService).getAddCollection(eq(Set.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getAddItems(eq(List.of(itemUpdate)));
 
        Invoice invoice = service.add(3L, addition);
 

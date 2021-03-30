@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +63,7 @@ public class ShipmentControllerTest {
     
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
-        Collection<ShipmentItem> items = Set.of( 
+        List<ShipmentItem> items = List.of( 
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
@@ -147,7 +146,7 @@ public class ShipmentControllerTest {
     
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
-        Collection<ShipmentItem> items = Set.of( 
+        List<ShipmentItem> items = List.of( 
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(

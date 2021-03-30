@@ -1,5 +1,8 @@
 package io.company.brewcraft.service;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.InvoiceStatus;
@@ -14,6 +17,12 @@ public class InvoiceStatusService {
     }
 
     public InvoiceStatus getInvoiceStatus(String name) {
-        return this.repo.findByName(name).orElse(null);
+        InvoiceStatus status = null;
+        Iterator<InvoiceStatus> it = this.repo.findByNames(Set.of(name)).iterator();
+        if (it.hasNext()) {
+            status = it.next();
+        }
+        
+        return status;
     }
 }

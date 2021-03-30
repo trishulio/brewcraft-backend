@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        Collection<ShipmentItem> items = Set.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<ShipmentItem> items = List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
             "LOT_1",
@@ -132,11 +132,11 @@ public class ShipmentTest {
     @Test
     public void testAccessItems() {
         assertNull(shipment.getItems());
-        shipment.setItems(Set.of(new ShipmentItem(1L)));
+        shipment.setItems(List.of(new ShipmentItem(1L)));
 
         ShipmentItem expected = new ShipmentItem(1L);
         expected.setShipment(shipment);
-        assertEquals(Set.of(expected), shipment.getItems());
+        assertEquals(List.of(expected), shipment.getItems());
     }
 
     @Test

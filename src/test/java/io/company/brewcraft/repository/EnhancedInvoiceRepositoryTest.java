@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
-import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -44,21 +44,15 @@ public class EnhancedInvoiceRepositoryTest {
         doAnswer(i -> i.getArgument(0, Invoice.class)).when(mInvoiceRepo).saveAndFlush(any(Invoice.class));
 
         doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
-        doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
-
-//        doReturn(Set.of(
-//            new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
-//            new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
-//            new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))
-//        ).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
+        doReturn(List.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByNames(Set.of("FINAL"));
 
         InvoiceItem item1 = new InvoiceItem(11L);
         InvoiceItem item2 = new InvoiceItem(12L);
         InvoiceItem item3 = new InvoiceItem(13L);
         item1.setMaterial(new Material(3L));
-        item1.setMaterial(new Material(4L));
-        item1.setMaterial(new Material(5L));
-        Collection<InvoiceItem> items = Set.of(item1, item2, item3);
+        item2.setMaterial(new Material(4L));
+        item3.setMaterial(new Material(5L));
+        List<InvoiceItem> items = List.of(item1, item2, item3);
 
         Invoice invoice = new Invoice();
         invoice.setItems(items);
@@ -71,9 +65,9 @@ public class EnhancedInvoiceRepositoryTest {
         assertEquals(new PurchaseOrder(1L), ret.getPurchaseOrder());
         assertEquals(new InvoiceStatus(2L, "FINAL"), ret.getStatus());
         Iterator<InvoiceItem> it = ret.getItems().iterator();
-        assertEquals(new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3), it.next().getMaterial());
-        assertEquals(new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4), it.next().getMaterial());
-        assertEquals(new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5), it.next().getMaterial());
+        assertEquals(new Material(3L), it.next().getMaterial());
+        assertEquals(new Material(4L), it.next().getMaterial());
+        assertEquals(new Material(5L), it.next().getMaterial());
     }
 
     @Test
@@ -86,7 +80,7 @@ public class EnhancedInvoiceRepositoryTest {
     @Test
     public void testRefreshAndAdd_ThrowsEntityNotFoundException_WhenInvoiceStatusNameIsNonExistent() {
         doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
-        doReturn(Optional.empty()).when(mStatusRepo).findByName("PENDING");
+        doReturn(new ArrayList<>()).when(mStatusRepo).findByNames(Set.of("PENDING"));
 
         Invoice invoice = new Invoice();
         invoice.setStatus(new InvoiceStatus(2L, "PENDING"));

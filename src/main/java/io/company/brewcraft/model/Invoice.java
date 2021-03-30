@@ -2,6 +2,7 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.*;
@@ -73,7 +74,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     private InvoiceStatus status;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Collection<InvoiceItem> items;
+    private List<InvoiceItem> items;
 
     @Version
     private Integer version;
@@ -86,7 +87,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     }
 
     public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
-            LocalDateTime lastUpdated, InvoiceStatus status, Collection<InvoiceItem> items, Integer version) {
+            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -201,12 +202,12 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     }
 
     @Override
-    public Collection<InvoiceItem> getItems() {
+    public List<InvoiceItem> getItems() {
         return items;
     }
 
     @Override
-    public void setItems(Collection<InvoiceItem> items) {
+    public void setItems(List<InvoiceItem> items) {
         this.items = items;
     }
 

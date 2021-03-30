@@ -22,6 +22,7 @@ public class AddInvoiceDtoTest {
     public void testAllArgsConstructor() {
         invoice = new AddInvoiceDto(
             "ABCDE-12345",
+            2L,
             "desc1",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -32,6 +33,7 @@ public class AddInvoiceDtoTest {
         );
 
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+        assertEquals(2L, invoice.getPurchaseOrderId());
         assertEquals("desc1", invoice.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
@@ -47,6 +49,13 @@ public class AddInvoiceDtoTest {
         assertNull(invoice.getInvoiceNumber());
         invoice.setInvoiceNumber("ABCDE-12345");
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+    }
+
+    @Test
+    public void testAccessPurchaseOrderId() {
+        assertNull(invoice.getPurchaseOrderId());
+        invoice.setPurchaseOrderId(2L);
+        assertEquals(2L, invoice.getPurchaseOrderId());
     }
 
     @Test

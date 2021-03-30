@@ -1,7 +1,7 @@
 package io.company.brewcraft.service.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,23 +20,23 @@ public class ShipmentItemService extends BaseService {
         this.utilProvider = utilProvider;
     }
 
-    public Collection<ShipmentItem> getAddItems(Collection<? extends BaseShipmentItem> additionItems) {
+    public List<ShipmentItem> getAddItems(List<? extends BaseShipmentItem> additionItems) {
         Validator validator = this.utilProvider.getValidator();
 
-        Collection<ShipmentItem> targetItems = null;
+        List<ShipmentItem> targetItems = null;
         if (additionItems != null) {
             targetItems = additionItems.stream().map(addition -> {
                 ShipmentItem item = new ShipmentItem();
                 item.override(addition, getPropertyNames(BaseShipmentItem.class));
                 return item;
-            }).collect(Collectors.toSet());
+            }).collect(Collectors.toList());
         }
 
         validator.raiseErrors();
         return targetItems;
     }
 
-    public Collection<ShipmentItem> getPutItems(Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+    public List<ShipmentItem> getPutItems(List<ShipmentItem> existingItems, List<? extends UpdateShipmentItem> updateItems) {
         Validator validator = this.utilProvider.getValidator();
 
         if (updateItems == null) {
@@ -44,11 +44,11 @@ public class ShipmentItemService extends BaseService {
         }
 
         int maxPossibleTargetSize = existingItems == null ? 0 : existingItems.size() + updateItems.size();
-        Collection<ShipmentItem> targetItems = new HashSet<>(maxPossibleTargetSize);
+        List<ShipmentItem> targetItems = new ArrayList<>(maxPossibleTargetSize);
 
         // Separating the put payloads into additions (without Id param) and updates
         // (with Ids that match and existing item)
-        Collection<UpdateShipmentItem> updates = new HashSet<UpdateShipmentItem>(updateItems.size());
+        List<UpdateShipmentItem> updates = new ArrayList<UpdateShipmentItem>(updateItems.size());
         for (UpdateShipmentItem update : updateItems) {
             if (update.getId() != null) {
                 updates.add(update);
@@ -59,7 +59,7 @@ public class ShipmentItemService extends BaseService {
             }
         }
 
-        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
+        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
         Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         updates.forEach(update -> {
@@ -74,13 +74,13 @@ public class ShipmentItemService extends BaseService {
         return targetItems;
     }
 
-    public Collection<ShipmentItem> getPatchItems(Collection<ShipmentItem> existingItems, Collection<? extends UpdateShipmentItem> updateItems) {
+    public List<ShipmentItem> getPatchItems(List<ShipmentItem> existingItems, List<? extends UpdateShipmentItem> updateItems) {
         Validator validator = this.utilProvider.getValidator();
 
-        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
+        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
         Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
-        Collection<ShipmentItem> targetItems = new HashSet<>(existingItems.size());
+        List<ShipmentItem> targetItems = new ArrayList<>(existingItems.size());
 
         updateItems.forEach(update -> {
             ShipmentItem item = existingItemsLookup.get(update.getId());

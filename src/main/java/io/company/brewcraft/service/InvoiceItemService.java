@@ -1,9 +1,9 @@
 package io.company.brewcraft.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -25,86 +25,79 @@ public class InvoiceItemService extends BaseService {
         this.utilProvider = utilProvider;
     }
 
-    public Collection<InvoiceItem> getPutCollection(Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> updates) {
+    public List<InvoiceItem> getPutItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> updates) {
         Validator validator = this.utilProvider.getValidator();
+
         if (updates == null) {
-            // TODO:
+            return null;
         }
-        final Collection<InvoiceItem> targetItems = new HashSet<>();
 
-        // Separating the ItemUpdate items into 'additions' and 'updates'
-        Set<UpdateInvoiceItem> itemUpdates = new HashSet<>(updates.size());
-        Set<BaseInvoiceItem> itemAdditions = new HashSet<>(updates.size());
-        for (UpdateInvoiceItem item : updates) {
-            if (item.getId() != null) {
-                itemUpdates.add(item);
+        List<InvoiceItem> targetItems = new ArrayList<>();        
+        List<UpdateInvoiceItem> itemUpdates = new ArrayList<>(updates.size());
+        
+        updates.forEach(update -> {
+            if (update.getId() == null) {
+                InvoiceItem item = new InvoiceItem();
+                item.override(update, getPropertyNames(BaseInvoiceItem.class));
+                targetItems.add(item);
+
             } else {
-                itemAdditions.add(item);
+                itemUpdates.add(update);
             }
-        }
-
-        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
-        Map<Long, InvoiceItem> existingItemsMap = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-
-        for (UpdateInvoiceItem itemUpdate : itemUpdates) {
-            InvoiceItem targetItem = existingItemsMap.get(itemUpdate.getId());
-            boolean isNotNull = validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", itemUpdate.getId());
-            if (isNotNull) {
-                targetItem.override(itemUpdate, getPropertyNames(UpdateInvoiceItem.class));
+        });
+        
+        existingItems = existingItems == null ? new ArrayList<>(0) : existingItems;
+        Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+        
+        itemUpdates.forEach(update -> {
+            InvoiceItem targetItem = idToItemLookup.get(update.getId());
+            if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {
+                targetItem.override(update, getPropertyNames(UpdateInvoiceItem.class));
                 targetItems.add(targetItem);
             }
-        }
-
-        for (BaseInvoiceItem itemAddition : itemAdditions) {
-            InvoiceItem targetItem = new InvoiceItem();
-            targetItem.override(itemAddition, getPropertyNames(BaseInvoiceItem.class));
-            targetItems.add(targetItem);
-        }
+        });
 
         return targetItems;
     }
 
-    public Collection<InvoiceItem> getPatchCollection(Collection<InvoiceItem> existingItems, Collection<? extends UpdateInvoiceItem> patches) {
+    public List<InvoiceItem> getPatchItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> patches) {
         Validator validator = this.utilProvider.getValidator();
-        final Collection<InvoiceItem> targetItems = new HashSet<>();
-
-        Set<UpdateInvoiceItem> itemUpdates = new HashSet<>(patches.size());
-        AtomicInteger additionCount = new AtomicInteger(0);
-
-        for (UpdateInvoiceItem item : patches) {
-            if (item.getId() != null) {
-                itemUpdates.add(item);
-            } else {
-                additionCount.getAndIncrement();
-            }
+        if (patches == null) {
+            return null;
         }
-        validator.rule(additionCount.intValue() <= 0, "%s InvoiceItem payloads with no Id found. Patch can only be used to modify existing InvoiceItems.", additionCount.intValue());
+        
+        validator.rule(existingItems != null, "Cannot apply patch over null item set");
 
-        existingItems = existingItems != null ? existingItems : new HashSet<>(0);
-        Map<Long, InvoiceItem> existingItemsMap = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+        AtomicInteger invalidCount = new AtomicInteger(0);
+        patches.stream().filter(item -> item.getId() == null).forEach(i -> invalidCount.getAndIncrement());
+        validator.rule(invalidCount.intValue() <= 0, "%s InvoiceItem payloads with no Id found. Patch can only be used to modify existing InvoiceItems.", invalidCount.intValue());
+        validator.raiseErrors();
 
-        for (UpdateInvoiceItem itemUpdate : itemUpdates) {
-            InvoiceItem targetItem = existingItemsMap.get(itemUpdate.getId());
-            validator.rule(targetItem != null, "No existing invoice item found with Id: %s.", itemUpdate.getId());
-            if (targetItem != null) {
-                targetItem.outerJoin(itemUpdate, getPropertyNames(UpdateInvoiceItem.class));
+        final List<InvoiceItem> targetItems = new ArrayList<>();
+
+        Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+        
+        patches.forEach(patch -> {
+            InvoiceItem targetItem = idToItemLookup.get(patch.getId());
+            if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s.", patch.getId())) {
+                targetItem.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
                 targetItems.add(targetItem);
             }
-        }
+        });
 
         return targetItems;
     }
 
-    public Collection<InvoiceItem> getAddCollection(Collection<? extends BaseInvoiceItem> additions) {
+    public List<InvoiceItem> getAddItems(Collection<? extends BaseInvoiceItem> additions) {
         Validator validator = this.utilProvider.getValidator();
-        Collection<InvoiceItem> targetItems = null;
+        List<InvoiceItem> targetItems = null;
         if (additions != null) {
             targetItems = additions.stream().map(i -> {
                 InvoiceItem item = new InvoiceItem();
                 log.info("Applying properties of InvoiceItem: {} to new item", i);
                 item.override(i, getPropertyNames(BaseInvoiceItem.class));
                 return item;
-            }).collect(Collectors.toSet());
+            }).collect(Collectors.toList());
         }
 
         return targetItems;

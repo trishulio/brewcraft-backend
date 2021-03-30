@@ -4,7 +4,7 @@ import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -118,25 +118,25 @@ public class InvoiceService extends BaseService {
     public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
         log.info("Updating the Invoice with Id: {}", invoiceId);
         Validator validator = this.utilProvider.getValidator();
+        validator.rule(update != null, "Update Payload cannot be null");
+        validator.raiseErrors();
+
         Invoice existing = getInvoice(invoiceId);
+        Class<?> invoiceClz = UpdateInvoice.class;
 
         if (existing == null) {
             log.info("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
             existing = new Invoice(invoiceId);
-            LocalDateTime now = now();
-            log.info("Setting the creation timestamp for the new Invoice to: {}", now.toString());
-            existing.setCreatedAt(now);
-            // TODO: This is a hack. Need a fix at hibernate
-            // level to avoid any hibernate issues.
+            invoiceClz = BaseInvoice.class;
         }
-
+        
         log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.info("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
 
-        Collection<InvoiceItem> updatedItems = itemService.getPutCollection(existing.getItems(), update.getItems());
+        List<InvoiceItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
         log.info("Total UpdateItems: {}", updatedItems.size());
         
-        existing.override(update, getPropertyNames(UpdateInvoice.class));
+        existing.override(update, getPropertyNames(invoiceClz));
         existing.setItems(updatedItems);
 
         validator.raiseErrors();
@@ -146,13 +146,15 @@ public class InvoiceService extends BaseService {
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
         log.info("Performing Patch on Invoice with Id: {}", invoiceId);
         Validator validator = this.utilProvider.getValidator();
+        validator.rule(patch != null, "Update Payload cannot be null");
+        
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
 
         log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.info("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
 
-        Collection<InvoiceItem> updatedItems = itemService.getPatchCollection(existing.getItems(), patch.getItems());
+        List<InvoiceItem> updatedItems = itemService.getPatchItems(existing.getItems(), patch.getItems());
         log.info("Total UpdateItems: {}", updatedItems.size());
         
         existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
@@ -166,7 +168,7 @@ public class InvoiceService extends BaseService {
         Validator validator = this.utilProvider.getValidator();
         log.info("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
         Invoice invoice = new Invoice();
-        Collection<InvoiceItem> itemAdditions = itemService.getAddCollection(addition.getItems());
+        List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
         log.info("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);

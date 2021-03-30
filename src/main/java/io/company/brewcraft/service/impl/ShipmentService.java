@@ -4,6 +4,7 @@ import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -116,12 +117,11 @@ public class ShipmentService extends BaseService {
 
     public Shipment add(Long invoiceId, Shipment shipment) {
         Validator validator = this.utilProvider.getValidator();
-        validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(shipment != null, "Shipment cannot be null");
         validator.raiseErrors();
 
         Shipment addition = new Shipment();
-        Collection<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
+        List<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
 
         addition.override(shipment, getPropertyNames(BaseShipment.class));
         addition.setItems(itemAdditions);
@@ -131,7 +131,6 @@ public class ShipmentService extends BaseService {
 
     public Shipment put(Long invoiceId, Long shipmentId, Shipment update) {
         Validator validator = this.utilProvider.getValidator();
-        validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(update != null, "Shipment cannot be null");
         validator.raiseErrors();
 
@@ -145,8 +144,8 @@ public class ShipmentService extends BaseService {
         }
         existing.setId(shipmentId);
 
-        Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPutItems(existingItems, update.getItems());
+        List<ShipmentItem> existingItems = existing.getItems();
+        List<ShipmentItem> updatedItems = itemService.getPutItems(existingItems, update.getItems());
         existing.override(update, getPropertyNames(shipmentClz));
         existing.setItems(updatedItems);
 
@@ -155,14 +154,13 @@ public class ShipmentService extends BaseService {
 
     public Shipment patch(Long invoiceId, Long shipmentId, Shipment update) {
         Validator validator = this.utilProvider.getValidator();
-        validator.rule(invoiceId != null, "InvoiceId cannot be null");
         validator.rule(update != null, "Shipment cannot be null");
         validator.raiseErrors();
 
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
 
-        Collection<ShipmentItem> existingItems = existing.getItems();
-        Collection<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());
+        List<ShipmentItem> existingItems = existing.getItems();
+        List<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());
         existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
         existing.setItems(updatedItems);
 

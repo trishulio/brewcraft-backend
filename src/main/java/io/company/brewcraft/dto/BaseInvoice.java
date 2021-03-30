@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
@@ -32,9 +32,9 @@ public interface BaseInvoice<T extends BaseInvoiceItem> {
 
     void setStatus(InvoiceStatus status);
 
-    Collection<T> getItems();
+    List<T> getItems();
 
-    void setItems(Collection<T> items);
+    void setItems(List<T> items);
 
     Freight getFreight();
 

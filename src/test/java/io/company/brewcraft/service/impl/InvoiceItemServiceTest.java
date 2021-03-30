@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,17 +38,17 @@ public class InvoiceItemServiceTest {
     
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemsUpdated_WhenPayloadObjectsHaveIds() {
-        Collection<InvoiceItem> existingItems = Set.of(
+        List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
         
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), 21)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -73,16 +72,16 @@ public class InvoiceItemServiceTest {
 
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemsUpdatedAndNewItemsAdded_WhenPayloadObjectsDoNotHaveIds() {
-        Collection<InvoiceItem> existingItems = Set.of(
+        List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), 11),
             new InvoiceItem(null, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -106,27 +105,27 @@ public class InvoiceItemServiceTest {
     
     @Test
     public void testMergePut_ReturnsNewItemsWithExistingItemRemoved_WhenExistingItemDoesNotExistInPayloadObjects() {
-        Collection<InvoiceItem> existingItems = Set.of(
+        List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of();
+        List<UpdateInvoiceItem> itemUpdates = List.of();
 
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
 
         assertEquals(0, updatedItems.size());
     }
     
     @Test
     public void testMergePut_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
-        Collection<InvoiceItem> existingItems = Set.of();
+        List<InvoiceItem> existingItems = List.of();
         
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(1L),
             new InvoiceItem(2L),
             new InvoiceItem()
         );
         
-        Collection<InvoiceItem> updatedItems = service.getPutCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         
         assertEquals(1, updatedItems.size());
         
@@ -135,15 +134,15 @@ public class InvoiceItemServiceTest {
     
     @Test
     public void testMergePatch_ReturnsNewItemsCollectionWithNonNullPropertiesApplied_WhenPayloadObjectsHaveId() {
-        Collection<InvoiceItem> existingItems = Set.of(
+        List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, 11)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPatchCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPatchItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
         
         InvoiceItem item1 = it.next();
@@ -158,34 +157,39 @@ public class InvoiceItemServiceTest {
     
     @Test
     public void testMergePut_ReturnsNull_WhenUpdateItemsAreNull() {
-        fail("Not implemented yet");
+        assertNull(service.getPutItems(List.of(), null));
     }
     
     @Test
     public void testMergePatch_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
-        Collection<InvoiceItem> existingItems = Set.of(
+        List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
         
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(2L),
             new InvoiceItem(3L)
         );
 
-        Collection<InvoiceItem> updatedItems = service.getPatchCollection(existingItems, itemUpdates);
+        List<InvoiceItem> updatedItems = service.getPatchItems(existingItems, itemUpdates);
 
         assertEquals(0, updatedItems.size());
         assertThrows(ValidationException.class, () -> mUtilProvider.getValidator().raiseErrors(), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
     }
     
     @Test
+    public void testMergePatch_ReturnsNull_WhenPatchItemsAreNull() {
+        assertNull(service.getPatchItems(List.of(), null));
+    }
+
+    @Test
     public void testAddCollection_ReturnsCollectionOfBaseItems_WhenInputIsNotNull() {
-        Collection<UpdateInvoiceItem> itemUpdates = Set.of(
+        List<UpdateInvoiceItem> itemUpdates = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
         );
 
-        Collection<InvoiceItem> items = service.getAddCollection(itemUpdates);
+        List<InvoiceItem> items = service.getAddItems(itemUpdates);
         assertEquals(2, items.size());        
         Iterator<InvoiceItem> it = items.iterator();
 
