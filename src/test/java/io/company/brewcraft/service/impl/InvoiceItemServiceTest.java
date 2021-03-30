@@ -37,7 +37,7 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePut_ReturnsNewItemsWithExistingItemsUpdated_WhenPayloadObjectsHaveIds() {
+    public void testGetPutItems_ReturnsNewItemsWithExistingItemsUpdated_WhenPayloadObjectsHaveIds() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1),
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), 2)
@@ -71,7 +71,7 @@ public class InvoiceItemServiceTest {
     }
 
     @Test
-    public void testMergePut_ReturnsNewItemsWithExistingItemsUpdatedAndNewItemsAdded_WhenPayloadObjectsDoNotHaveIds() {
+    public void testGetPutItems_ReturnsNewItemsWithExistingItemsUpdatedAndNewItemsAdded_WhenPayloadObjectsDoNotHaveIds() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
@@ -104,7 +104,7 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePut_ReturnsNewItemsWithExistingItemRemoved_WhenExistingItemDoesNotExistInPayloadObjects() {
+    public void testGetPutItems_ReturnsNewItemsWithExistingItemRemoved_WhenExistingItemDoesNotExistInPayloadObjects() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
@@ -116,7 +116,7 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePut_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
+    public void testGetPutItems_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of();
         
         List<UpdateInvoiceItem> itemUpdates = List.of(
@@ -133,7 +133,7 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePatch_ReturnsNewItemsCollectionWithNonNullPropertiesApplied_WhenPayloadObjectsHaveId() {
+    public void testGetPatchItems_ReturnsNewItemsCollectionWithNonNullPropertiesApplied_WhenPayloadObjectsHaveId() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
@@ -156,12 +156,12 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePut_ReturnsNull_WhenUpdateItemsAreNull() {
+    public void testGetPutItems_ReturnsNull_WhenUpdateItemsAreNull() {
         assertNull(service.getPutItems(List.of(), null));
     }
     
     @Test
-    public void testMergePatch_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
+    public void testGetPatchItems_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), 1)
         );
@@ -178,7 +178,7 @@ public class InvoiceItemServiceTest {
     }
     
     @Test
-    public void testMergePatch_ReturnsNull_WhenPatchItemsAreNull() {
+    public void testGetPatchItems_ReturnsNull_WhenPatchItemsAreNull() {
         assertNull(service.getPatchItems(List.of(), null));
     }
 
