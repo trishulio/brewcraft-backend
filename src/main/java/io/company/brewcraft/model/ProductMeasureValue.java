@@ -35,7 +35,7 @@ public class ProductMeasureValue extends BaseEntity {
     }
 
     public ProductMeasureValue(Long id, ProductMeasure productMeasure,  String value, Product product) {
-        super();
+        this();
         this.id = id;
         this.productMeasure = productMeasure;
         this.value = value;
