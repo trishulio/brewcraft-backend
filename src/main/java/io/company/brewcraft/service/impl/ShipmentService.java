@@ -93,7 +93,7 @@ public class ShipmentService extends BaseService {
 
     public boolean existsByIds(Collection<Long> ids) {
         Validator validator = this.utilProvider.getValidator();
-        validator.rule(ids != null, "");
+        validator.rule(ids != null, "Cannot search on a null Id set");
         validator.raiseErrors();
 
         log.debug("Search shipment exists in Id: {}", ids);

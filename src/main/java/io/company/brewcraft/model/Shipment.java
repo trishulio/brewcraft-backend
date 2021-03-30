@@ -50,7 +50,7 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     private LocalDateTime deliveredDate;
     
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
     @UpdateTimestamp

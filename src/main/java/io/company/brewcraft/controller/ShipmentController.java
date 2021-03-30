@@ -70,8 +70,8 @@ public class ShipmentController extends BaseController {
         @RequestParam(name = "attr", defaultValue = "") Set<String> attributes
     ) {
         Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, lotNumbers, descriptions, statuses, invoiceIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
-        List<ShipmentDto> shipments = shipmentsPage.stream().parallel().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
-        shipments.stream().parallel().forEach(shipment -> filter(shipment, attributes));
+        List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
+        shipments.stream().forEach(shipment -> filter(shipment, attributes));
         
         return new PageDto<ShipmentDto>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
     }
