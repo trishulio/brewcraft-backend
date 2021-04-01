@@ -1,36 +1,63 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import io.company.brewcraft.dto.UpdateMaterialCategory;
-import io.company.brewcraft.model.Audited;
-import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.model.Identified;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
-public class MaterialCategory extends BaseModel implements UpdateMaterialCategory, Identified, Audited {
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+@Entity(name = "PRODUCT_CATEGORY")
+public class ProductCategory extends BaseEntity {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_PARENT_CATEGORY = "parentCategory";
+    public static final String FIELD_SUBCATEGORIES = "subcategories";
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_category_generator")
+    @SequenceGenerator(name = "product_category_generator", sequenceName = "product_category_sequence", allocationSize = 1)
     private Long id;
     
+    @Column(nullable = false)
     private String name;
     
-    private MaterialCategory parentCategory;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
+    private ProductCategory parentCategory;
 
-    private Set<MaterialCategory> subcategories;
+    @OneToMany(mappedBy = "parentCategory")
+    private Set<ProductCategory> subcategories;
     
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
+    @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
     
+    @Version
     private Integer version;
     
-    public MaterialCategory() {
-        super();
+    public ProductCategory() {
+        
     }
 
-    public MaterialCategory(Long id, String name, MaterialCategory parentCategory, Set<MaterialCategory> subcategories,
+    public ProductCategory(Long id, String name, ProductCategory parentCategory, Set<ProductCategory> subcategories,
             LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super();
         this.id = id;
@@ -58,11 +85,11 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
         this.name = name;
     }
 
-    public MaterialCategory getParentCategory() {
+    public ProductCategory getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(MaterialCategory parentCategory) {
+    public void setParentCategory(ProductCategory parentCategory) {
         this.parentCategory = parentCategory;
         
         if (parentCategory != null) {
@@ -70,11 +97,11 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
         }
     }
 
-    public Set<MaterialCategory> getSubcategories() {
+    public Set<ProductCategory> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(Set<MaterialCategory> subcategories) {
+    public void setSubcategories(Set<ProductCategory> subcategories) {
         if (subcategories != null) {
             subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
         }
@@ -87,7 +114,7 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
         }
     }
     
-    public void addSubcategory(MaterialCategory subcategory) {
+    public void addSubcategory(ProductCategory subcategory) {        
         if (this.subcategories == null) {
             this.subcategories = new HashSet<>();
         }
@@ -101,7 +128,7 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
         }
     }
     
-    public void removeSubcategory(MaterialCategory subcategory) {
+    public void removeSubcategory(ProductCategory subcategory) {
         if (this.subcategories != null) {
             subcategory.setParentCategory(null);
             this.subcategories.remove(subcategory);
@@ -132,8 +159,8 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
         this.version = version;
     }
     
-    public MaterialCategory getRootCategory() {
-        MaterialCategory root = this;
+    public ProductCategory getRootCategory() {
+        ProductCategory root = this;
         
         while (root.getParentCategory() != null) {
             root = root.getParentCategory();
@@ -147,14 +174,14 @@ public class MaterialCategory extends BaseModel implements UpdateMaterialCategor
      */
     public Set<Long> getDescendantCategoryIds() {
         Set<Long> ids = new HashSet<>();
-        Stack<MaterialCategory> stack = new Stack<MaterialCategory>();
+        Stack<ProductCategory> stack = new Stack<ProductCategory>();
         
         if (this.getSubcategories() != null) {
             stack.addAll(this.getSubcategories());
         }
         
         while (!stack.isEmpty()) {
-            MaterialCategory category = stack.pop();
+            ProductCategory category = stack.pop();
             ids.add(category.getId());
             
             if (category.getSubcategories() != null) {

@@ -7,11 +7,11 @@ public class MaterialDto extends BaseDto {
     
     private String description;
     
-    private MaterialCategoryDto materialClass;
+    private CategoryDto materialClass;
     
-    private MaterialCategoryDto category;
+    private CategoryDto category;
 
-    private MaterialCategoryDto subcategory;
+    private CategoryDto subcategory;
     
     private String upc;
 
@@ -23,8 +23,8 @@ public class MaterialDto extends BaseDto {
         super();
     }
 
-    public MaterialDto(Long id, String name, String description, MaterialCategoryDto materialClass, MaterialCategoryDto type,
-            MaterialCategoryDto subCategory, String upc, String baseQuantityUnit, Integer version) {
+    public MaterialDto(Long id, String name, String description, CategoryDto materialClass, CategoryDto type,
+            CategoryDto subCategory, String upc, String baseQuantityUnit, Integer version) {
         super();
         this.id = id;
         this.name = name;
@@ -61,27 +61,27 @@ public class MaterialDto extends BaseDto {
         this.description = description;
     }
 
-    public MaterialCategoryDto getMaterialClass() {
+    public CategoryDto getMaterialClass() {
         return materialClass;
     }
 
-    public void setMaterialClass(MaterialCategoryDto materialClass) {
+    public void setMaterialClass(CategoryDto materialClass) {
         this.materialClass = materialClass;
     }
 
-    public MaterialCategoryDto getCategory() {
+    public CategoryDto getCategory() {
         return category;
     }
 
-    public void setCategory(MaterialCategoryDto category) {
+    public void setCategory(CategoryDto category) {
         this.category = category;
     }
 
-    public MaterialCategoryDto getSubcategory() {
+    public CategoryDto getSubcategory() {
         return subcategory;
     }
 
-    public void setSubcategory(MaterialCategoryDto subcategory) {
+    public void setSubcategory(CategoryDto subcategory) {
         this.subcategory = subcategory;
     }
 

@@ -1,0 +1,302 @@
+package io.company.brewcraft.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+
+import io.company.brewcraft.dto.AddProductDto;
+import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.ProductDto;
+import io.company.brewcraft.dto.ProductMeasureDto;
+import io.company.brewcraft.dto.UpdateProductDto;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.ProductMeasureValue;
+import io.company.brewcraft.model.Product;
+import io.company.brewcraft.service.ProductService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
+
+@SuppressWarnings("unchecked")
+public class ProductControllerTest {
+
+   private ProductController productController;
+
+   private ProductService productService;
+
+   @BeforeEach
+   public void init() {
+       productService = mock(ProductService.class);
+
+       productController = new ProductController(productService);
+   }
+
+   @Test
+   public void testGetProducts() {
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+       
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
+   
+       List<Product> productList = List.of(product);
+       Page<Product> mPage = mock(Page.class);
+       doReturn(productList.stream()).when(mPage).stream();
+       doReturn(100).when(mPage).getTotalPages();
+       doReturn(1000L).when(mPage).getTotalElements();
+       doReturn(mPage).when(productService).getProducts(
+           Set.of(1L),
+           Set.of(2L),
+           Set.of("Beer"),
+           1,
+           10,
+           Set.of("id"),
+           true
+       );
+
+       PageDto<ProductDto> dto = productController.getProducts(
+               Set.of(1L),
+               Set.of(2L),
+               Set.of("Beer"),
+               1,
+               10,
+               Set.of("id"),
+               true
+       );
+
+       assertEquals(100, dto.getTotalPages());
+       assertEquals(1000L, dto.getTotalElements());
+       assertEquals(1, dto.getContent().size());
+       ProductDto productDto = dto.getContent().get(0);
+
+       assertEquals(product.getId(), productDto.getId());
+       assertEquals(product.getName(), productDto.getName());
+       assertEquals(product.getDescription(), productDto.getDescription());
+       
+       assertEquals(product.getCategory().getId(), productDto.getStyle().getId());
+       assertEquals(product.getCategory().getName(), productDto.getStyle().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getId(), productDto.getType().getId());
+       assertEquals(product.getCategory().getParentCategory().getName(), productDto.getType().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
+       assertEquals(null, productDto.getProductClass().getParentCategoryId());
+       
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
+       
+       assertEquals(product.getVersion(), productDto.getVersion());
+   }
+   
+   @Test
+   public void testGetProduct() {
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+       
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+   
+       doReturn(product).when(productService).getProduct(1L);
+       
+       ProductDto productDto = productController.getProduct(1L);
+       
+       assertEquals(product.getId(), productDto.getId());
+       assertEquals(product.getName(), productDto.getName());
+       assertEquals(product.getDescription(), productDto.getDescription());
+       
+       assertEquals(product.getCategory().getId(), productDto.getStyle().getId());
+       assertEquals(product.getCategory().getName(), productDto.getStyle().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getId(), productDto.getType().getId());
+       assertEquals(product.getCategory().getParentCategory().getName(), productDto.getType().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
+       assertEquals(null, productDto.getProductClass().getParentCategoryId());
+
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
+       
+       assertEquals(product.getVersion(), productDto.getVersion());
+   }
+   
+   @Test
+   public void testGetProduct_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
+       when(productService.getProduct(1L)).thenReturn(null);
+       assertThrows(EntityNotFoundException.class, () -> productController.getProduct(1L), "Product not found with id: 1");
+   }
+
+   @Test
+   public void testAddProduct() {
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
+       AddProductDto addProductDto = new AddProductDto("testProduct", "testDescription", 2L, targetMeasuresDto);
+       
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+       
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+   
+       ArgumentCaptor<Product> addProductCaptor = ArgumentCaptor.forClass(Product.class);
+       
+       doReturn(product).when(productService).addProduct(addProductCaptor.capture(), eq(addProductDto.getCategoryId()));
+
+       ProductDto productDto = productController.addProduct(addProductDto);
+       
+       //Assert added product
+       assertEquals(null, addProductCaptor.getValue().getId());
+       assertEquals(addProductDto.getName(), addProductCaptor.getValue().getName());
+       assertEquals(addProductDto.getDescription(), addProductCaptor.getValue().getDescription());
+       assertEquals(addProductDto.getCategoryId(), addProductCaptor.getValue().getCategory().getId());
+       
+       assertEquals(addProductDto.getTargetMeasures().size(), addProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(addProductDto.getTargetMeasures().get(0).getName(), addProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(addProductDto.getTargetMeasures().get(0).getValue(), addProductCaptor.getValue().getTargetMeasures().get(0).getValue());       
+       
+       //Assert returned product  
+       assertEquals(product.getId(), productDto.getId());
+       assertEquals(product.getName(), productDto.getName());
+       assertEquals(product.getDescription(), productDto.getDescription());
+       
+       assertEquals(product.getCategory().getId(), productDto.getStyle().getId());
+       assertEquals(product.getCategory().getName(), productDto.getStyle().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getId(), productDto.getType().getId());
+       assertEquals(product.getCategory().getParentCategory().getName(), productDto.getType().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
+       assertEquals(null, productDto.getProductClass().getParentCategoryId());
+
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());       
+       
+       assertEquals(product.getVersion(), productDto.getVersion());
+   }
+   
+   @Test
+   public void testPutProduct() {
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
+       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
+              
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+       
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+   
+       ArgumentCaptor<Product> putProductCaptor = ArgumentCaptor.forClass(Product.class);
+       
+       doReturn(product).when(productService).putProduct(eq(1L), putProductCaptor.capture(), eq(updateProductDto.getCategoryId()));
+
+       ProductDto productDto = productController.putProduct(updateProductDto, 1L);
+       
+       //Assert put product
+       assertEquals(null, putProductCaptor.getValue().getId());
+       assertEquals(updateProductDto.getName(), putProductCaptor.getValue().getName());
+       assertEquals(updateProductDto.getDescription(), putProductCaptor.getValue().getDescription());
+       assertEquals(updateProductDto.getCategoryId(), putProductCaptor.getValue().getCategory().getId());
+       
+       assertEquals(updateProductDto.getTargetMeasures().size(), putProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getName(), putProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), putProductCaptor.getValue().getTargetMeasures().get(0).getValue());
+       
+       assertEquals(updateProductDto.getVersion(), putProductCaptor.getValue().getVersion());        
+
+       //Assert returned product  
+       assertEquals(product.getId(), productDto.getId());
+       assertEquals(product.getName(), productDto.getName());
+       assertEquals(product.getDescription(), productDto.getDescription());
+       
+       assertEquals(product.getCategory().getId(), productDto.getStyle().getId());
+       assertEquals(product.getCategory().getName(), productDto.getStyle().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getId(), productDto.getType().getId());
+       assertEquals(product.getCategory().getParentCategory().getName(), productDto.getType().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
+       assertEquals(null, productDto.getProductClass().getParentCategoryId());
+       
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
+       
+       assertEquals(product.getVersion(), productDto.getVersion());
+   }
+   
+   @Test
+   public void testPatchProduct() {
+       List<ProductMeasureDto> targetMeasuresDto = List.of(new ProductMeasureDto("abv", "100"));
+       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
+       
+       ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
+       ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
+       ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+       
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+   
+       ArgumentCaptor<Product> patchProductCaptor = ArgumentCaptor.forClass(Product.class);
+       
+       doReturn(product).when(productService).patchProduct(eq(1L), patchProductCaptor.capture(), eq(updateProductDto.getCategoryId()));
+
+       ProductDto productDto = productController.patchProduct(updateProductDto, 1L);
+       
+       //Assert patched product
+       assertEquals(null, patchProductCaptor.getValue().getId());
+       assertEquals(updateProductDto.getName(), patchProductCaptor.getValue().getName());
+       assertEquals(updateProductDto.getDescription(), patchProductCaptor.getValue().getDescription());
+       assertEquals(updateProductDto.getCategoryId(), patchProductCaptor.getValue().getCategory().getId());
+       
+       assertEquals(updateProductDto.getTargetMeasures().size(), patchProductCaptor.getValue().getTargetMeasures().size());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getName(), patchProductCaptor.getValue().getTargetMeasures().get(0).getProductMeasure().getName());
+       assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), patchProductCaptor.getValue().getTargetMeasures().get(0).getValue());
+       
+       assertEquals(updateProductDto.getVersion(), patchProductCaptor.getValue().getVersion());        
+
+       //Assert returned product  
+       assertEquals(product.getId(), productDto.getId());
+       assertEquals(product.getName(), productDto.getName());
+       assertEquals(product.getDescription(), productDto.getDescription());
+       
+       assertEquals(product.getCategory().getId(), productDto.getStyle().getId());
+       assertEquals(product.getCategory().getName(), productDto.getStyle().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getId(), productDto.getType().getId());
+       assertEquals(product.getCategory().getParentCategory().getName(), productDto.getType().getName());
+       
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getId(), productDto.getProductClass().getId());
+       assertEquals(product.getCategory().getParentCategory().getParentCategory().getName(), productDto.getProductClass().getName());
+       assertEquals(null, productDto.getProductClass().getParentCategoryId());
+
+       assertEquals(product.getTargetMeasures().size(), productDto.getTargetMeasures().size());
+       assertEquals(product.getTargetMeasures().get(0).getProductMeasure().getName(), productDto.getTargetMeasures().get(0).getName());
+       assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
+       
+       assertEquals(product.getVersion(), productDto.getVersion());
+   }
+   
+   @Test
+   public void testDeleteProduct() {
+       productController.deleteProduct(1L);
+
+       verify(productService, times(1)).deleteProduct(1L);
+   }
+
+}

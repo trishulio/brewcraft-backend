@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import javax.measure.Unit;
 
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 
 public interface BaseMaterial {
 
@@ -14,9 +14,9 @@ public interface BaseMaterial {
 
     public void setDescription(String description);
 
-    public MaterialCategory getCategory();
+    public Category getCategory();
 
-    public void setCategory(MaterialCategory category);
+    public void setCategory(Category category);
 
     public String getUPC();
 

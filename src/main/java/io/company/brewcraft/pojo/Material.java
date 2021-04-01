@@ -16,7 +16,7 @@ public class Material extends BaseModel implements UpdateMaterial, Identified, A
     
     private String description;
     
-    private MaterialCategory category;
+    private Category category;
         
     private String upc;
     
@@ -37,7 +37,7 @@ public class Material extends BaseModel implements UpdateMaterial, Identified, A
         this.id = id;
     }
 
-    public Material(Long id, String name, String description, MaterialCategory category, String upc, Unit<?> baseQuantityUnit, LocalDateTime createdAt,
+    public Material(Long id, String name, String description, Category category, String upc, Unit<?> baseQuantityUnit, LocalDateTime createdAt,
             LocalDateTime lastUpdated, Integer version) {
         this(id);
         this.name = name;
@@ -81,12 +81,12 @@ public class Material extends BaseModel implements UpdateMaterial, Identified, A
     }
 
     @Override
-    public MaterialCategory getCategory() {
+    public Category getCategory() {
         return category;
     }
 
     @Override
-    public void setCategory(MaterialCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

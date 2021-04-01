@@ -34,7 +34,7 @@ import io.company.brewcraft.model.MaterialCategoryEntity;
 import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
@@ -117,7 +117,7 @@ public class MaterialServiceImplTest {
 
     @Test
     public void testAddMaterial_SavesMaterial() throws Exception {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new Category(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         MaterialEntity newMaterial = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
@@ -153,7 +153,7 @@ public class MaterialServiceImplTest {
     @Test
     public void testPutMaterial_success() throws Exception {
         Long id = 1L;
-        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new Category(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialEntity materialEntity = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<MaterialEntity> persistedMaterialCaptor = ArgumentCaptor.forClass(MaterialEntity.class);

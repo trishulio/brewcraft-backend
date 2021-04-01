@@ -12,12 +12,12 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddMaterialDto;
-import io.company.brewcraft.dto.MaterialCategoryDto;
+import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.UpdateMaterialDto;
 import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 
 @Mapper(uses = { QuantityUnitMapper.class, MaterialCategoryMapper.class })
 public interface MaterialMapper {
@@ -59,7 +59,7 @@ public interface MaterialMapper {
     @BeforeMapping
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
-        MaterialCategory category = material.getCategory();
+        Category category = material.getCategory();
         
         if (category == null) {
             materialDto.setMaterialClass(null);
@@ -88,7 +88,7 @@ public interface MaterialMapper {
     default void afterFromDto(@MappingTarget Material material, MaterialDto materialDto) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE; 
         
-        MaterialCategoryDto categoryDto = null;
+        CategoryDto categoryDto = null;
         if (materialDto.getSubcategory() != null) {
             categoryDto = materialDto.getSubcategory();
         } else if (materialDto.getCategory() != null) {

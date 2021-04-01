@@ -12,7 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.*;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,10 +32,10 @@ public class MaterialCategoryControllerTest {
 
    @Test
    public void testGetMaterialCategories() {
-       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, null);
+       Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
    
-       List<MaterialCategory> categoryList = List.of(category);
-       Page<MaterialCategory> mPage = mock(Page.class);
+       List<Category> categoryList = List.of(category);
+       Page<Category> mPage = mock(Page.class);
        doReturn(categoryList.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
@@ -50,7 +50,7 @@ public class MaterialCategoryControllerTest {
            true
        );
 
-       PageDto<MaterialCategoryDto> dto = materialCategoryController.getCategories(
+       PageDto<CategoryDto> dto = materialCategoryController.getCategories(
                Set.of(1L),
                Set.of("Hop"),
                Set.of(2L),
@@ -64,7 +64,7 @@ public class MaterialCategoryControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       MaterialCategoryDto materialDto = dto.getContent().get(0);
+       CategoryDto materialDto = dto.getContent().get(0);
 
        assertEquals(category.getId(), materialDto.getId());
        assertEquals(category.getName(), materialDto.getName());
@@ -74,16 +74,17 @@ public class MaterialCategoryControllerTest {
    
    @Test
    public void testGetMaterialCategory() {
-       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, null);
+       Category category = new Category(1L, "root", new Category(2L, "parent", null, null, null, null, null), null, null, null, null);
 
        doReturn(category).when(materialCategoryService).getCategory(1L);
        
-       MaterialCategoryDto materialDto = materialCategoryController.getCategory(1L);
+       CategoryWithParentDto categoryWithParentDto = materialCategoryController.getCategory(1L);
        
-       assertEquals(category.getId(), materialDto.getId());
-       assertEquals(category.getName(), materialDto.getName());
-       assertEquals(category.getParentCategory().getId(), materialDto.getParentCategoryId());
-       assertEquals(category.getVersion(), materialDto.getVersion());
+       assertEquals(category.getId(), categoryWithParentDto.getId());
+       assertEquals(category.getName(), categoryWithParentDto.getName());
+       assertEquals(category.getParentCategory().getId(), categoryWithParentDto.getParentCategory().getId());
+       assertEquals(category.getParentCategory().getName(), categoryWithParentDto.getParentCategory().getName());
+       assertEquals(category.getVersion(), categoryWithParentDto.getVersion());
    }
    
    @Test
@@ -94,15 +95,15 @@ public class MaterialCategoryControllerTest {
 
    @Test
    public void testAddMaterialCategory() {
-       AddMaterialCategoryDto addCategoryDto = new AddMaterialCategoryDto(2L, "categoryName");
+       AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
        
-       ArgumentCaptor<MaterialCategory> addedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
+       ArgumentCaptor<Category> addedCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
        doReturn(category).when(materialCategoryService).addCategory(eq(addCategoryDto.getParentCategoryId()), addedCategoryCaptor.capture());
 
-       MaterialCategoryDto materialDto = materialCategoryController.addCategory(addCategoryDto);
+       CategoryDto materialDto = materialCategoryController.addCategory(addCategoryDto);
        
        //Assert added category
        assertEquals(null, addedCategoryCaptor.getValue().getId());
@@ -118,21 +119,21 @@ public class MaterialCategoryControllerTest {
    
    @Test
    public void testPutMaterialCategory() {
-       UpdateMaterialCategoryDto updateCategoryDto = new UpdateMaterialCategoryDto(2L, "categoryName", 1);
+       UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<MaterialCategory> putMaterialCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
+       ArgumentCaptor<Category> putCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
-       doReturn(category).when(materialCategoryService).putCategory(eq(2L), eq(1L), putMaterialCaptor.capture());
+       doReturn(category).when(materialCategoryService).putCategory(eq(2L), eq(1L), putCategoryCaptor.capture());
 
-       MaterialCategoryDto materialDto = materialCategoryController.putCategory(updateCategoryDto, 1L);
+       CategoryDto materialDto = materialCategoryController.putCategory(updateCategoryDto, 1L);
        
        //Assert put category
-       assertEquals(null, putMaterialCaptor.getValue().getId());
-       assertEquals(updateCategoryDto.getName(), putMaterialCaptor.getValue().getName());
+       assertEquals(null, putCategoryCaptor.getValue().getId());
+       assertEquals(updateCategoryDto.getName(), putCategoryCaptor.getValue().getName());
        assertEquals(updateCategoryDto.getParentCategoryId(), 2L);
-       assertEquals(updateCategoryDto.getVersion(), putMaterialCaptor.getValue().getVersion());
+       assertEquals(updateCategoryDto.getVersion(), putCategoryCaptor.getValue().getVersion());
 
        //Assert returned category  
        assertEquals(category.getId(), materialDto.getId());
@@ -143,21 +144,21 @@ public class MaterialCategoryControllerTest {
    
    @Test
    public void testPatchMaterialCategory() {
-       UpdateMaterialCategoryDto updateCategoryDto = new UpdateMaterialCategoryDto(2L, "categoryName", 1);
+       UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<MaterialCategory> patchMaterialCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
+       ArgumentCaptor<Category> patchCategoryCaptor = ArgumentCaptor.forClass(Category.class);
        
-       doReturn(category).when(materialCategoryService).patchCategory(eq(2L), eq(1L), patchMaterialCaptor.capture());
+       doReturn(category).when(materialCategoryService).patchCategory(eq(2L), eq(1L), patchCategoryCaptor.capture());
 
-       MaterialCategoryDto materialDto = materialCategoryController.patchCategory(updateCategoryDto, 1L);
+       CategoryDto materialDto = materialCategoryController.patchCategory(updateCategoryDto, 1L);
        
        //Assert patched category
-       assertEquals(null, patchMaterialCaptor.getValue().getId());
-       assertEquals(updateCategoryDto.getName(), patchMaterialCaptor.getValue().getName());
+       assertEquals(null, patchCategoryCaptor.getValue().getId());
+       assertEquals(updateCategoryDto.getName(), patchCategoryCaptor.getValue().getName());
        assertEquals(updateCategoryDto.getParentCategoryId(), 2L);
-       assertEquals(updateCategoryDto.getVersion(), patchMaterialCaptor.getValue().getVersion());
+       assertEquals(updateCategoryDto.getVersion(), patchCategoryCaptor.getValue().getVersion());
 
        //Assert returned category  
        assertEquals(category.getId(), materialDto.getId());
