@@ -90,7 +90,12 @@ public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audit
 
     @Override
     public void setMaterial(Material material) {
-        this.material = MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext());
+        setMaterial(MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext()));
+    }
+    
+    // TODO: Remove when MaterialEntity is replaced by Material
+    public void setMaterial(MaterialEntity material) {
+        this.material = material;
     }
 
     @Override

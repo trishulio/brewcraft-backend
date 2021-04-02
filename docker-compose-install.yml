@@ -4,7 +4,7 @@ services:
     image: maven:3.6.3-jdk-13
     container_name: maven    
     working_dir: /usr/code/app
-    command: ['mvn', 'clean', 'install', '-DskipTests']
+    command: ['mvn', 'clean', 'install']
     volumes:
       - ${PWD}:/usr/code/app
       - m2-data:/root/.m2

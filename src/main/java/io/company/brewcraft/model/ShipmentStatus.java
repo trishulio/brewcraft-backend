@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class ShipmentStatus extends BaseModel {
     public static final String FIELD_NAME = "name";
     
-    public static final String DEFAULT_STATUS = "RECEIVED";
+    public static final String DEFAULT_STATUS = "DELIVERED";
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")

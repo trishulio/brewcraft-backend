@@ -1,0 +1,23 @@
+{
+    "id": 1,
+    "shipmentNumber": "SHIPMENT_2",
+    "lotNumber": "LOT_2",
+    "description": "DESCRIPTION_1",
+    "status": {
+        "id": 4,
+        "name": "PENDING"
+    },
+    "deliveryDueDate": "2000-01-01T00:00:00",
+    "deliveredDate": "2001-01-01T00:00:00",
+    "createdAt": "2021-04-03T02:39:33.237188",
+    "lastUpdated": "2021-04-03T02:39:33.237203",
+    "items": [
+        {
+            "id": 1,
+            "createdAt": "2021-04-03T02:39:33.241428",
+            "lastUpdated": "2021-04-03T02:39:33.241442",
+            "version": 0
+        }
+    ],
+    "version": 0
+}

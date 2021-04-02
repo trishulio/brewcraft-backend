@@ -30,7 +30,7 @@ public class InvoiceStatusServiceTest {
         InvoiceStatus mEntity = new InvoiceStatus(1L, "FINAL");
         doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
 
-        InvoiceStatus status = service.getInvoiceStatus("FINAL");
+        InvoiceStatus status = service.getStatus("FINAL");
         assertEquals(new InvoiceStatus(1L, "FINAL"), status);
     }
 
@@ -38,7 +38,33 @@ public class InvoiceStatusServiceTest {
     public void testGetInvoiceStatus_ReturnsNull_WhenEntityDoesNotExists() {
         doReturn(new ArrayList<>()).when(mRepo).findByNames(Set.of("FINAL"));
 
-        InvoiceStatus status = service.getInvoiceStatus("FINAL");
+        InvoiceStatus status = service.getStatus("FINAL");
         assertNull(status);
+    }
+
+    @Test
+    public void testGetInvoiceStatus_ThrowsNPE_WhenNameIsNull() {
+        assertThrows(NullPointerException.class, () -> service.getStatus(null));
+    }
+
+    @Test
+    public void testGetStatuses_ReturnTheListOfStatuses_WhenArgIsNotNull() {
+        InvoiceStatus mEntity = new InvoiceStatus(1L, "FINAL");
+        doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
+
+        List<InvoiceStatus> statuses = service.getStatuses(Set.of("FINAL"));
+        assertEquals(1, statuses.size());
+        assertEquals(new InvoiceStatus(1L, "FINAL"), statuses.get(0));
+    }
+
+    @Test
+    public void testGetStatuses_ReturnsNull_WhenArgIsEmptySet() {
+        List<InvoiceStatus> statuses = service.getStatuses(Set.of());
+        assertNull(statuses);
+    }
+
+    @Test
+    public void testGetStatuses_ThrowsNullPointerExceptioN_WhenArgIsNull() {
+        assertThrows(NullPointerException.class, () -> service.getStatus(null));
     }
 }

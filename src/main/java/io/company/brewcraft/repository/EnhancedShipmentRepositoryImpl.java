@@ -1,7 +1,7 @@
 package io.company.brewcraft.repository;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -44,19 +46,23 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
             statusName = shipment.getStatus().getName();
         }
         log.debug("Shipment status name: {}", statusName);
-        Iterator<ShipmentStatus> it = statusRepo.findByNames(Set.of(statusName)).iterator();
-        if (!it.hasNext()) {
-            log.error("ShipmentStatus not found for name: {}", statusName);
-            throw new EntityNotFoundException("ShipmentStatus", "name", statusName);
-        }
-        shipment.setStatus(it.next());
+        final String targetStatusName = statusName;
+        ShipmentStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("ShipmentStatus", "name", targetStatusName));
+        shipment.setStatus(status);
 
-        if (shipment.getItems() != null) {
-            Set<Long> materialIds = shipment.getItems().stream().filter(i -> i != null && i.getMaterial() != null && i.getMaterial().getId() != null).map(i -> i.getMaterial().getId()).collect(Collectors.toSet());
-            log.debug("Asserting that the following material Ids refer to existing materials: {}", materialIds);
-            if (!materialIds.isEmpty() && !materialRepo.existsByIds(materialIds)) {
-                throw new EntityNotFoundException("Materials", "ids", materialIds.toString());
+        if (shipment.getItems() != null && shipment.getItems().size() > 0) {
+            Map<Long, List<ShipmentItem>> materialIdToItemLookup = shipment.getItems().stream().filter(i -> i != null && i.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
+            log.info("Material to Items Mapping: {}", materialIdToItemLookup);
+
+            List<MaterialEntity> materials = materialRepo.findAllById(materialIdToItemLookup.keySet());
+            log.info("Total materials fetched: {}", materials.size());
+
+            if (materialIdToItemLookup.keySet().size() != materials.size()) {
+                List<Long> materialIds = materials.stream().map(material -> material.getId()).collect(Collectors.toList());
+                throw new EntityNotFoundException(String.format("Cannot find all materials in Id-Set: %s. Materials found with Ids: %s", materialIdToItemLookup.keySet(), materialIds));
             }
+
+            materials.forEach(material -> materialIdToItemLookup.get(material.getId()).forEach(item -> item.setMaterial(material)));
         }
 
         log.debug("Saving shipment");

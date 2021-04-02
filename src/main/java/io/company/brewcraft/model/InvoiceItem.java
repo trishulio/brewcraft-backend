@@ -138,7 +138,12 @@ public class InvoiceItem extends BaseModel implements MoneySupplier, UpdateInvoi
 
     @Override
     public void setMaterial(Material material) {
-        this.material = MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext());
+        setMaterial(MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext()));
+    }
+
+    // TODO: Remove when the MaterialEntity is completely removed with Material pojo
+    public void setMaterial(MaterialEntity material) {
+        this.material = material;
     }
 
     @Override

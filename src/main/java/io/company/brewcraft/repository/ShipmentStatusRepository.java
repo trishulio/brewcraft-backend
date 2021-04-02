@@ -1,5 +1,6 @@
 package io.company.brewcraft.repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
@@ -11,4 +12,7 @@ public interface ShipmentStatusRepository extends CrudRepository<ShipmentStatus,
     
     @Query("select s from shipment_status s where s.name in (:names)")
     Iterable<ShipmentStatus> findByNames(Set<String> names);
+
+    @Query("select s from shipment_status s where s.name = :name")
+    Optional<ShipmentStatus> findByName(String name);
 }

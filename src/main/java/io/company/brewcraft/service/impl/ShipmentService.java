@@ -74,6 +74,8 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment getShipment(Long id) {
+        log.info("Fetching shipment with Id: {}", id);
+
         Validator validator = this.utilProvider.getValidator();
         validator.rule(id != null, "Non-null Id expected");
         validator.raiseErrors();
@@ -92,6 +94,8 @@ public class ShipmentService extends BaseService {
     }
 
     public boolean existsByIds(Collection<Long> ids) {
+        log.info("Checking invoice exists in Ids: {}", ids);
+
         Validator validator = this.utilProvider.getValidator();
         validator.rule(ids != null, "Cannot search on a null Id set");
         validator.raiseErrors();
@@ -104,6 +108,8 @@ public class ShipmentService extends BaseService {
     }
 
     public int delete(Collection<Long> ids) {
+        log.debug("Deleting shipments in Ids: {}", ids);
+
         Validator validator = this.utilProvider.getValidator();
         validator.rule(ids != null, "Cannot retrieve Ids to delete from a null collection");
         validator.raiseErrors();
@@ -116,12 +122,16 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment add(Long invoiceId, Shipment shipment) {
+        log.debug("Adding a new shipment under invoice: {}", invoiceId);
+
         Validator validator = this.utilProvider.getValidator();
         validator.rule(shipment != null, "Shipment cannot be null");
         validator.raiseErrors();
 
+        log.debug("Creating a new shipment with {} items", shipment.getItems() == null ? null : shipment.getItems().size());
         Shipment addition = new Shipment();
         List<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
+        log.debug("Number of item additions: {}", itemAdditions == null ? null : itemAdditions.size());
 
         addition.override(shipment, getPropertyNames(BaseShipment.class));
         addition.setItems(itemAdditions);
@@ -130,6 +140,8 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment put(Long invoiceId, Long shipmentId, Shipment update) {
+        log.debug("Putting a shipment with Id: {} under InvoiceId: {}", shipmentId, invoiceId);
+
         Validator validator = this.utilProvider.getValidator();
         validator.rule(update != null, "Shipment cannot be null");
         validator.raiseErrors();
@@ -138,14 +150,14 @@ public class ShipmentService extends BaseService {
         Shipment existing = getShipment(shipmentId);
         if (existing == null) {
             existing = new Shipment();
-//            existing.setCreatedAt(now());
-
             shipmentClz = BaseShipment.class;
         }
         existing.setId(shipmentId);
 
+        log.debug("Replacing existing {} items", existing.getItems() == null ? null : existing.getItems().size());
         List<ShipmentItem> existingItems = existing.getItems();
         List<ShipmentItem> updatedItems = itemService.getPutItems(existingItems, update.getItems());
+        log.debug("Updated {} items", updatedItems == null ? null : updatedItems.size());
         existing.override(update, getPropertyNames(shipmentClz));
         existing.setItems(updatedItems);
 

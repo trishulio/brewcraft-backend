@@ -25,7 +25,7 @@ import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/purchases", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/purchases", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
@@ -37,7 +37,7 @@ public class ShipmentController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping(value = "/{shipmentId}")
+    @GetMapping(value = "/shipments/{shipmentId}")
     public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId) {
         log.debug("Fetching shipment with Id: {}", shipmentId);
         Shipment shipment = service.getShipment(shipmentId);
@@ -50,7 +50,7 @@ public class ShipmentController extends BaseController {
         return ShipmentMapper.INSTANCE.toDto(shipment);
     }
 
-    @GetMapping
+    @GetMapping("/shipments")
     public PageDto<ShipmentDto> getShipments(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -76,7 +76,7 @@ public class ShipmentController extends BaseController {
         return new PageDto<ShipmentDto>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/shipments")
     public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
         log.debug("Attempting to delete shipments with Ids: {}", shipmentIds);
         int count = service.delete(shipmentIds);
@@ -85,7 +85,7 @@ public class ShipmentController extends BaseController {
         return count;
     }
 
-    @PutMapping("/{shipmentId}")
+    @PutMapping("/shipments/{shipmentId}")
     public ShipmentDto putShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
         log.debug("Updating shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
@@ -96,7 +96,7 @@ public class ShipmentController extends BaseController {
         return ShipmentMapper.INSTANCE.toDto(updated);
     }
 
-    @PatchMapping("/{shipmentId}")
+    @PatchMapping("/shipments/{shipmentId}")
     public ShipmentDto patchShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
         log.debug("Patching shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
@@ -107,8 +107,8 @@ public class ShipmentController extends BaseController {
         return ShipmentMapper.INSTANCE.toDto(updated);
     }
 
-    @PostMapping("")
-    public ShipmentDto addShipment(UpdateShipmentDto addDto) {
+    @PostMapping("/shipments")
+    public ShipmentDto addShipment(@RequestBody @Valid @NotNull UpdateShipmentDto addDto) {
         log.debug("Adding a new shipment item");
         Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
 

@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,11 @@ public class InvoiceStatusService {
         this.repo = repo;
     }
 
-    public InvoiceStatus getInvoiceStatus(String name) {
+    public InvoiceStatus getStatus(String name) {
+        if (name == null) {
+            throw new NullPointerException("Non-null status name expected");
+        }
+
         InvoiceStatus status = null;
         Iterator<InvoiceStatus> it = this.repo.findByNames(Set.of(name)).iterator();
         if (it.hasNext()) {
@@ -24,5 +29,18 @@ public class InvoiceStatusService {
         }
         
         return status;
+    }
+    
+    public List<InvoiceStatus> getStatuses(Set<String> names) {
+        List<InvoiceStatus> statuses = null;
+        
+        if (names == null) {
+            throw new NullPointerException("Non-null name-set is expected");
+
+        } else if (!names.isEmpty()) {            
+            statuses = (List<InvoiceStatus>) this.repo.findByNames(names);
+        }
+        
+        return statuses;
     }
 }

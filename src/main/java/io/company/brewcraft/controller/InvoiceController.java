@@ -120,7 +120,7 @@ public class InvoiceController extends BaseController {
         return dto;
     }
 
-    @PutMapping("/{purchaseOrderId}/invoices/{invoiceId}")
+    @PutMapping("/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
@@ -131,7 +131,7 @@ public class InvoiceController extends BaseController {
         return dto;
     }
     
-    @PatchMapping("/{purchaseOrderId}/invoices/{invoiceId}")
+    @PatchMapping("/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
