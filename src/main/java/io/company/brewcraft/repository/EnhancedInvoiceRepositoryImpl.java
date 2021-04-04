@@ -33,8 +33,8 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
 
     @Override
     public Invoice save(Long purchaseOrderId, Invoice invoice) {
-        log.info("Invoice with Id: {} has {} items and belong to PurchaseOrder: {}", invoice.getId(), invoice.getItems() != null ? invoice.getItems().size() : null, invoice.getPurchaseOrder() != null ? invoice.getPurchaseOrder().getId() : null);
-        log.info("Attempting to fetch PurchaseOrder with Id: {}", purchaseOrderId);
+        log.debug("Invoice with Id: {} has {} items and belong to PurchaseOrder: {}", invoice.getId(), invoice.getItems() != null ? invoice.getItems().size() : null, invoice.getPurchaseOrder() != null ? invoice.getPurchaseOrder().getId() : null);
+        log.debug("Attempting to fetch PurchaseOrder with Id: {}", purchaseOrderId);
         PurchaseOrder po = null;
         if (purchaseOrderId != null) {            
             po = poRepo.findById(purchaseOrderId).orElse(null);
@@ -45,7 +45,7 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
         if (invoice.getStatus() != null && invoice.getStatus().getName() != null) {
             statusName = invoice.getStatus().getName();
         }
-        log.info("Target Invoice Status Name: {}", statusName);
+        log.debug("Target Invoice Status Name: {}", statusName);
 
         final String targetStatusName = statusName;
         InvoiceStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", targetStatusName));
@@ -53,10 +53,10 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
 
         if (invoice.getItems() != null && invoice.getItems().size() > 0) {
             Map<Long, List<InvoiceItem>> materialToItems = invoice.getItems().stream().filter(item -> item.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
-            log.info("Material to Items Mapping: {}", materialToItems);
+            log.debug("Material to Items Mapping: {}", materialToItems);
 
             List<MaterialEntity> materials = materialRepo.findAllById(materialToItems.keySet());
-            log.info("Total materials fetched: {}", materials.size());
+            log.debug("Total materials fetched: {}", materials.size());
 
             if (materialToItems.keySet().size() != materials.size()) {
                 List<Long> materialIds = materials.stream().map(material -> material.getId()).collect(Collectors.toList());

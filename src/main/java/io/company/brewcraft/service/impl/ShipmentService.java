@@ -73,7 +73,7 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment getShipment(Long id) {
-        log.info("Fetching shipment with Id: {}", id);
+        log.debug("Fetching shipment with Id: {}", id);
 
         Validator validator = this.utilProvider.getValidator();
         validator.rule(id != null, "Non-null Id expected");
@@ -93,7 +93,7 @@ public class ShipmentService extends BaseService {
     }
 
     public boolean existsByIds(Collection<Long> ids) {
-        log.info("Checking invoice exists in Ids: {}", ids);
+        log.debug("Checking invoice exists in Ids: {}", ids);
 
         Validator validator = this.utilProvider.getValidator();
         validator.rule(ids != null, "Cannot search on a null Id set");

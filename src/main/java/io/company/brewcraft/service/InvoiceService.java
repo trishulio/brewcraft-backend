@@ -91,11 +91,11 @@ public class InvoiceService extends BaseService {
     }
 
     public Invoice getInvoice(Long id) {
-        log.info("Retrieving invoice with Id: {}", id);
+        log.debug("Retrieving invoice with Id: {}", id);
         Invoice invoice = null;
         Optional<Invoice> optional = repo.findById(id);
         if (optional.isPresent()) {
-            log.info("Found invoice with id: {}", id);
+            log.debug("Found invoice with id: {}", id);
             invoice = optional.get();
         }
 
@@ -107,7 +107,7 @@ public class InvoiceService extends BaseService {
     }
 
     public void delete(Long id) {
-        log.info("Attempting to delete Invoice with Id: {}", id);
+        log.debug("Attempting to delete Invoice with Id: {}", id);
         if (!exists(id)) {
             log.error("Failed to delete non-existing Invoice with Id: {}", id);
             throw new EntityNotFoundException("Invoice", id.toString());
@@ -116,7 +116,7 @@ public class InvoiceService extends BaseService {
     }
 
     public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
-        log.info("Updating the Invoice with Id: {}", invoiceId);
+        log.debug("Updating the Invoice with Id: {}", invoiceId);
         Validator validator = this.utilProvider.getValidator();
         validator.rule(update != null, "Update Payload cannot be null");
         validator.raiseErrors();
@@ -125,16 +125,16 @@ public class InvoiceService extends BaseService {
         Class<?> invoiceClz = UpdateInvoice.class;
 
         if (existing == null) {
-            log.info("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
+            log.debug("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
             existing = new Invoice(invoiceId);
             invoiceClz = BaseInvoice.class;
         }
         
-        log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
-        log.info("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
+        log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
+        log.debug("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
 
         List<InvoiceItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
-        log.info("Total UpdateItems: {}", updatedItems.size());
+        log.debug("Total UpdateItems: {}", updatedItems.size());
         
         existing.override(update, getPropertyNames(invoiceClz));
         existing.setItems(updatedItems);
@@ -144,7 +144,7 @@ public class InvoiceService extends BaseService {
     }
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
-        log.info("Performing Patch on Invoice with Id: {}", invoiceId);
+        log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
         Validator validator = this.utilProvider.getValidator();
         validator.rule(patch != null, "Update Payload cannot be null");
         
@@ -155,11 +155,11 @@ public class InvoiceService extends BaseService {
             purchaseOrderId = existing.getPurchaseOrder().getId();
         }
 
-        log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
-        log.info("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
+        log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
+        log.debug("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
 
         List<InvoiceItem> updatedItems = itemService.getPatchItems(existing.getItems(), patch.getItems());
-        log.info("Total UpdateItems: {}", updatedItems.size());
+        log.debug("Total UpdateItems: {}", updatedItems.size());
         
         existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
         existing.setItems(updatedItems);
@@ -170,10 +170,10 @@ public class InvoiceService extends BaseService {
 
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
         Validator validator = this.utilProvider.getValidator();
-        log.info("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
+        log.debug("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
         Invoice invoice = new Invoice();
         List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
-        log.info("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
+        log.debug("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);
 

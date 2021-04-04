@@ -54,10 +54,10 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
 
         if (shipment.getItems() != null && shipment.getItems().size() > 0) {
             Map<Long, List<ShipmentItem>> materialIdToItemLookup = shipment.getItems().stream().filter(i -> i != null && i.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
-            log.info("Material to Items Mapping: {}", materialIdToItemLookup);
+            log.debug("Material to Items Mapping: {}", materialIdToItemLookup);
 
             List<MaterialEntity> materials = materialRepo.findAllById(materialIdToItemLookup.keySet());
-            log.info("Total materials fetched: {}", materials.size());
+            log.debug("Total materials fetched: {}", materials.size());
 
             if (materialIdToItemLookup.keySet().size() != materials.size()) {
                 List<Long> materialIds = materials.stream().map(material -> material.getId()).collect(Collectors.toList());

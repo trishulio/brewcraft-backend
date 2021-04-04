@@ -86,7 +86,7 @@ public class InvoiceItemService extends BaseService {
         if (additions != null) {
             targetItems = additions.stream().map(i -> {
                 InvoiceItem item = new InvoiceItem();
-                log.info("Applying properties of InvoiceItem: {} to new item", i);
+                log.debug("Applying properties of InvoiceItem: {} to new item", i);
                 item.override(i, getPropertyNames(BaseInvoiceItem.class));
                 return item;
             }).collect(Collectors.toList());
