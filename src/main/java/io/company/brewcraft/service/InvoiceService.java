@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
@@ -33,7 +32,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
-@Transactional
+//@Transactional
 public class InvoiceService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
@@ -179,9 +178,11 @@ public class InvoiceService extends BaseService {
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
         Validator validator = this.utilProvider.getValidator();
         log.debug("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
+
         Invoice invoice = new Invoice();
         List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
         log.debug("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
+
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);
 

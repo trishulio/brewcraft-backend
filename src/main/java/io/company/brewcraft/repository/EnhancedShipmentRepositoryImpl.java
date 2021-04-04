@@ -70,5 +70,4 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
         log.debug("Saving shipment");
         return this.shipmentRepo.saveAndFlush(shipment);
     }
-
 }

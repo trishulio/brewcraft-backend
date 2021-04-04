@@ -49,11 +49,11 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
         log.debug("Target Invoice Status Name: {}", statusName);
 
         final String targetStatusName = statusName;
-        InvoiceStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", targetStatusName));
+        InvoiceStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("InvoiceStatus", "name", targetStatusName));
         invoice.setStatus(status);
 
         if (invoice.getItems() != null && invoice.getItems().size() > 0) {
-            Map<Long, List<InvoiceItem>> materialToItems = invoice.getItems().stream().filter(item -> item.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
+            Map<Long, List<InvoiceItem>> materialToItems = invoice.getItems().stream().filter(item -> item != null && item.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
             log.debug("Material to Items Mapping: {}", materialToItems);
 
             List<MaterialEntity> materials = materialRepo.findAllById(materialToItems.keySet());
