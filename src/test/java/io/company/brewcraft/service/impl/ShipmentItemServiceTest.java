@@ -35,9 +35,9 @@ public class ShipmentItemServiceTest {
         
         service = new ShipmentItemService(mUtilProvider);
     }
-    
+
     @Test
-    public void testAddList_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
+    public void testAddItems_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
         List<BaseShipmentItem> additionItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -56,12 +56,12 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testAddList_ReturnsNull_WhenItemsAreNull() {
+    public void testAddItems_ReturnsNull_WhenItemsAreNull() {
         assertNull(service.getAddItems(null));
     }    
 
     @Test
-    public void testPutList_ReturnsUpdatedList_WhenUpdateIsNotNull() {
+    public void testPutItems_ReturnsUpdatedList_WhenUpdateIsNotNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -96,7 +96,7 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testPutList_ReturnsEmptyList_WhenUpdateListIsEmpty() {
+    public void testPutItems_ReturnsEmptyList_WhenUpdateListIsEmpty() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -105,7 +105,7 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testPutList_ReturnsNull_WhenUpdateListIsNull() {
+    public void testPutItems_ReturnsNull_WhenUpdateListIsNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -114,7 +114,7 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testPutList_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
+    public void testPutItems_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -125,9 +125,9 @@ public class ShipmentItemServiceTest {
         
         assertThrows(ValidationException.class, () -> service.getPutItems(existingItems, updateItems), "1. No existing item found with Id: 2\n");
     }
-    
+
     @Test
-    public void testPatchList_ReturnsPatchedList_WhenItemsAreNotNull() {
+    public void testPatchItems_ReturnsPatchedList_WhenItemsAreNotNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -152,7 +152,7 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testPatchList_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
+    public void testPatchItems_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -165,7 +165,8 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testPutList_ReturnsNull_WhenUpdateItemsAreNull() {
-        assertNull(service.getPutItems(List.of(), null));
+    public void testPatchItems_ReturnsExistingItems_WhenUpdateItemsAreNull() {
+        List<ShipmentItem> existingItems = List.of(new ShipmentItem(1L));
+        assertEquals(List.of(new ShipmentItem(1l)), service.getPatchItems(existingItems, null));
     }
 }

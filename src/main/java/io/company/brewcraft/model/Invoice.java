@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ import io.company.brewcraft.service.MoneySupplier;
 @Entity(name = "invoice")
 @Table
 public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
-    private static final Logger logger = LoggerFactory.getLogger(Invoice.class);
+    private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_INVOICE_NUMBER = "invoiceNumber";
@@ -69,7 +70,7 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
     private InvoiceStatus status;
 
@@ -208,7 +209,19 @@ public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Id
 
     @Override
     public void setItems(List<InvoiceItem> items) {
-        this.items = items;
+        if (this.getItems() != null) {
+            this.getItems().clear();
+            this.getItems().addAll(items);
+        } else if (items != null){
+            this.items = new ArrayList<>();
+            items.forEach(item -> this.items.add(item));
+        } else {
+            this.items = null;
+        }
+
+        if (this.getItems() != null) {
+            this.getItems().forEach(item -> item.setInvoice(this));
+        }
     }
 
     @Override

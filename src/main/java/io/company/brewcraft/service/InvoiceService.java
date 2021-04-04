@@ -151,6 +151,10 @@ public class InvoiceService extends BaseService {
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
 
+        if (purchaseOrderId == null && existing.getPurchaseOrder() != null) {
+            purchaseOrderId = existing.getPurchaseOrder().getId();
+        }
+
         log.info("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.info("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
 

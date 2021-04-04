@@ -83,7 +83,7 @@ public class InvoiceItemServiceTest {
 
         List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
-        
+
         InvoiceItem item1 = it.next();
         assertEquals(1L, item1.getId());
         assertEquals("New_Description_1", item1.getDescription());
@@ -102,7 +102,7 @@ public class InvoiceItemServiceTest {
         assertEquals(new Material(20L), item2.getMaterial());
         assertEquals(null, item2.getVersion());
     }
-    
+
     @Test
     public void testGetPutItems_ReturnsNewItemsWithExistingItemRemoved_WhenExistingItemDoesNotExistInPayloadObjects() {
         List<InvoiceItem> existingItems = List.of(
@@ -171,15 +171,13 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(3L)
         );
 
-        List<InvoiceItem> updatedItems = service.getPatchItems(existingItems, itemUpdates);
-
-        assertEquals(0, updatedItems.size());
-        assertThrows(ValidationException.class, () -> mUtilProvider.getValidator().raiseErrors(), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
+        assertThrows(ValidationException.class, () -> service.getPatchItems(existingItems, itemUpdates), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
     }
     
     @Test
-    public void testGetPatchItems_ReturnsNull_WhenPatchItemsAreNull() {
-        assertNull(service.getPatchItems(List.of(), null));
+    public void testGetPatchItems_ReturnsExistingItems_WhenPatchItemsAreNull() {
+        List<InvoiceItem> existingItems = List.of(new InvoiceItem(1L));
+        assertEquals(List.of(new InvoiceItem(1L)), service.getPatchItems(existingItems, null));
     }
 
     @Test

@@ -14,6 +14,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
@@ -381,5 +382,30 @@ public class ShipmentServiceTest {
         
         verify(mRepo, times(1)).save(2L, shipment);
         verify(mItemService, times(1)).getPatchItems(anyList(), anyList());
+    }
+
+    @Test
+    public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
+        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
+
+        Shipment existing = new Shipment(1L);
+        existing.setInvoice(new Invoice(2L));
+        doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+        Shipment update = new Shipment(1L);
+        Shipment shipment = service.patch(null, 1L, update);        
+        verify(mRepo, times(1)).save(2L, shipment);
+    }
+
+    @Test
+    public void testPatch_SavesWithNullInvoiceId_WhenInvoiceIdArgIsNullAndExistingInvoiceIsNull() {
+        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(isNull(), any(Shipment.class));
+
+        Shipment existing = new Shipment(1L);
+        doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+        Shipment update = new Shipment(1L);
+        Shipment shipment = service.patch(null, 1L, update);
+        verify(mRepo, times(1)).save(null, shipment);
     }
 }

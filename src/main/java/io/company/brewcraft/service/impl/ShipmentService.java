@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Invoice;
@@ -27,7 +26,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
-@Transactional
+//@Transactional
 public class ShipmentService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
@@ -86,7 +85,7 @@ public class ShipmentService extends BaseService {
         Optional<Shipment> retrieved = repo.findById(id);
 
         if (retrieved.isPresent()) {
-            log.debug("Shipment not found with id: {}", id);
+            log.debug("Shipment found with id: {}", id);
             shipment = retrieved.get();
         }
 
@@ -152,7 +151,7 @@ public class ShipmentService extends BaseService {
             existing = new Shipment();
             shipmentClz = BaseShipment.class;
         }
-        existing.setId(shipmentId);
+        existing.setId(shipmentId); // Doesn't work. Hibernate ignores this.
 
         log.debug("Replacing existing {} items", existing.getItems() == null ? null : existing.getItems().size());
         List<ShipmentItem> existingItems = existing.getItems();
@@ -170,6 +169,10 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
+
+        if (invoiceId == null && existing.getInvoice() != null) {
+            invoiceId = existing.getInvoice().getId();
+        }
 
         List<ShipmentItem> existingItems = existing.getItems();
         List<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());

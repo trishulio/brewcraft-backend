@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -62,29 +61,22 @@ public class InvoiceItemService extends BaseService {
 
     public List<InvoiceItem> getPatchItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> patches) {
         Validator validator = this.utilProvider.getValidator();
-        if (patches == null) {
-            return null;
+
+        existingItems = existingItems == null ? new ArrayList<>() : existingItems;
+        final List<InvoiceItem> targetItems = existingItems.stream().collect(Collectors.toList());
+
+        if (patches != null) {
+            Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+
+            patches.forEach(patch -> {
+                InvoiceItem targetItem = idToItemLookup.get(patch.getId());
+                if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s.", patch.getId())) {
+                    targetItem.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
+                }
+            });
         }
-        
-        validator.rule(existingItems != null, "Cannot apply patch over null item set");
 
-        AtomicInteger invalidCount = new AtomicInteger(0);
-        patches.stream().filter(item -> item.getId() == null).forEach(i -> invalidCount.getAndIncrement());
-        validator.rule(invalidCount.intValue() <= 0, "%s InvoiceItem payloads with no Id found. Patch can only be used to modify existing InvoiceItems.", invalidCount.intValue());
         validator.raiseErrors();
-
-        final List<InvoiceItem> targetItems = new ArrayList<>();
-
-        Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-        
-        patches.forEach(patch -> {
-            InvoiceItem targetItem = idToItemLookup.get(patch.getId());
-            if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s.", patch.getId())) {
-                targetItem.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
-                targetItems.add(targetItem);
-            }
-        });
-
         return targetItems;
     }
 

@@ -43,11 +43,13 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
 
         String statusName = ShipmentStatus.DEFAULT_STATUS;
         if (shipment.getStatus() != null && shipment.getStatus().getName() != null) {
+            log.debug("Using specified shipment status");
             statusName = shipment.getStatus().getName();
         }
         log.debug("Shipment status name: {}", statusName);
-        final String targetStatusName = statusName;
-        ShipmentStatus status = statusRepo.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("ShipmentStatus", "name", targetStatusName));
+        final String targetStatusName = statusName.toString();
+        ShipmentStatus status = statusRepo.findByName(targetStatusName).orElseThrow(() -> new EntityNotFoundException("ShipmentStatus", "name", targetStatusName));
+        log.debug("Shipment status fetched from repository with name: {}", status.getName());
         shipment.setStatus(status);
 
         if (shipment.getItems() != null && shipment.getItems().size() > 0) {
@@ -66,7 +68,7 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
         }
 
         log.debug("Saving shipment");
-        return this.shipmentRepo.save(shipment);
+        return this.shipmentRepo.saveAndFlush(shipment);
     }
 
 }

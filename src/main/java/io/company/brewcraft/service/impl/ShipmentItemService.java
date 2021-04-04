@@ -77,18 +77,19 @@ public class ShipmentItemService extends BaseService {
     public List<ShipmentItem> getPatchItems(List<ShipmentItem> existingItems, List<? extends UpdateShipmentItem> updateItems) {
         Validator validator = this.utilProvider.getValidator();
 
-        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
-        Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+        existingItems = existingItems == null ? new ArrayList<>() : existingItems;
+        List<ShipmentItem> targetItems = existingItems.stream().collect(Collectors.toList());
 
-        List<ShipmentItem> targetItems = new ArrayList<>(existingItems.size());
+        if (updateItems != null) {
+            Map<Long, ShipmentItem> existingItemsLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
-        updateItems.forEach(update -> {
-            ShipmentItem item = existingItemsLookup.get(update.getId());
-            if (validator.rule(item != null, "No existing item found with Id: %s. Use the put method to add new payload item. Patch can only perform patches on existing items.", update.getId())) {
-                item.outerJoin(update, getPropertyNames(UpdateShipmentItem.class));
-                targetItems.add(item);
-            }
-        });
+            updateItems.forEach(update -> {
+                ShipmentItem item = existingItemsLookup.get(update.getId());
+                if (validator.rule(item != null, "No existing item found with Id: %s. Use the put method to add new payload item. Patch can only perform patches on existing items.", update.getId())) {
+                    item.outerJoin(update, getPropertyNames(UpdateShipmentItem.class));
+                }
+            });
+        }
 
         validator.raiseErrors();
         return targetItems;

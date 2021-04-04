@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -194,19 +195,18 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
 
     @Override
     public void setItems(List<ShipmentItem> items) {
-//        if (this.getItems() != null) {
-//            this.getItems().clear();
-//            this.getItems().addAll(items);
-//        } else {
-//            this.items = items;
-//        }
-//
-//        if (this.getItems() != null) {
-//            this.getItems().forEach(item -> item.setShipment(this));
-//        }
-        this.items = items;
-        if (this.items != null) {
-            this.items.forEach(item -> item.setShipment(this));
+        if (this.getItems() != null) {
+            this.getItems().clear();
+            this.getItems().addAll(items);
+        } else if (items != null) {
+            this.items = new ArrayList<>();
+            items.forEach(item -> this.items.add(item));
+        } else {
+            this.items = null;
+        }
+
+        if (this.getItems() != null) {
+            this.getItems().forEach(item -> item.setShipment(this));
         }
     }
 

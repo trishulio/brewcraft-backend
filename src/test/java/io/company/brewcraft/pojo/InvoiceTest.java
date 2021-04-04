@@ -60,7 +60,9 @@ public class InvoiceTest {
         assertNull(invoice.getAmount());
         assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
-        assertEquals(new InvoiceItem(), invoice.getItems().iterator().next());
+        InvoiceItem item = new InvoiceItem();
+        item.setInvoice(invoice);
+        assertEquals(item, invoice.getItems().iterator().next());
     }
 
     @Test
@@ -151,7 +153,11 @@ public class InvoiceTest {
     public void testAccessItems() {
         assertNull(invoice.getItems());
         invoice.setItems(List.of(new InvoiceItem(2L)));
-        assertEquals(List.of(new InvoiceItem(2L)), invoice.getItems());
+
+        InvoiceItem expected = new InvoiceItem(2L);
+        expected.setInvoice(invoice);
+
+        assertEquals(List.of(expected), invoice.getItems());
     }
 
     @Test

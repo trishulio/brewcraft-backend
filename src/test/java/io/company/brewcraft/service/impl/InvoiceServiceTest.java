@@ -291,6 +291,32 @@ public class InvoiceServiceTest {
    }
 
    @Test
+   public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
+       doAnswer(i -> i.getArgument(1, Invoice.class)).when(mRepo).save(anyLong(), any(Invoice.class));
+
+       Invoice existing = new Invoice(1L);
+
+       existing.setPurchaseOrder(new PurchaseOrder(2L));
+       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+       Invoice update = new Invoice(1L);
+       Invoice invoice = service.patch(null, 1L, update);        
+       verify(mRepo, times(1)).save(2L, invoice);
+   }
+
+   @Test
+   public void testPatch_SavesWithNullInvoiceId_WhenInvoiceIdArgIsNullAndExistingInvoiceIsNull() {
+       doAnswer(i -> i.getArgument(1, Invoice.class)).when(mRepo).save(isNull(), any(Invoice.class));
+
+       Invoice existing = new Invoice(1L);
+       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+       Invoice update = new Invoice(1L);
+       Invoice invoice = service.patch(null, 1L, update);
+       verify(mRepo, times(1)).save(null, invoice);
+   }
+
+   @Test
    public void testAdd_SavesTheNewEntity() {
        InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice addition = new Invoice(
