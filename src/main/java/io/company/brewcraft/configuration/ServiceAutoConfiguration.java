@@ -131,6 +131,7 @@ public class ServiceAutoConfiguration {
         return new ThreadLocalUtilityProvider();
     }
 
+    @Bean
     @ConditionalOnMissingBean(ProductService.class)
     public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
         ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
