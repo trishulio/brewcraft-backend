@@ -13,6 +13,7 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {
@@ -63,6 +64,7 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
                 throw new EntityNotFoundException(String.format("Cannot find all materials in Id-Set: %s. Materials found with Ids: %s", materialToItems.keySet(), materialIds));
             }
 
+            invoice.getItems().forEach(i -> i.setMaterial((Material) null));
             materials.forEach(material -> materialToItems.get(material.getId()).forEach(item -> item.setMaterial(material)));            
         }
 

@@ -11,7 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "shipment")
 @Table
-public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>, Identified, Audited {
+public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>, Identified, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
@@ -218,5 +218,10 @@ public class Shipment extends BaseModel implements UpdateShipment<ShipmentItem>,
     @Override
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public Shipment clone() {
+        return (Shipment) super.clone();
     }
 }

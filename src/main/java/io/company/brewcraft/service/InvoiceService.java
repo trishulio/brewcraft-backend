@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.OptimisticLockException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -128,6 +130,9 @@ public class InvoiceService extends BaseService {
             log.debug("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
             existing = new Invoice(invoiceId);
             invoiceClz = BaseInvoice.class;
+
+        } else if (existing.getVersion() != update.getVersion()) {
+            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
         }
         
         log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
@@ -147,9 +152,12 @@ public class InvoiceService extends BaseService {
         log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
         Validator validator = this.utilProvider.getValidator();
         validator.rule(patch != null, "Update Payload cannot be null");
-        
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
+
+        if (existing.getVersion() != patch.getVersion()) {
+            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), patch.getVersion()));
+        }
 
         if (purchaseOrderId == null && existing.getPurchaseOrder() != null) {
             purchaseOrderId = existing.getPurchaseOrder().getId();

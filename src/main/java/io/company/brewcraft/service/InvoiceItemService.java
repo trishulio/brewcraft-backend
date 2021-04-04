@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.persistence.OptimisticLockException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,10 +51,13 @@ public class InvoiceItemService extends BaseService {
         Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
         
         itemUpdates.forEach(update -> {
-            InvoiceItem targetItem = idToItemLookup.get(update.getId());
-            if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {
-                targetItem.override(update, getPropertyNames(UpdateInvoiceItem.class));
-                targetItems.add(targetItem);
+            InvoiceItem item = idToItemLookup.get(update.getId());
+            if (validator.rule(item != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {
+                if (item.getVersion() != update.getVersion()) {
+                    throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", item.getId(), item.getVersion(), update.getVersion()));
+                }
+                item.override(update, getPropertyNames(UpdateInvoiceItem.class));
+                targetItems.add(item);
             }
         });
 
@@ -69,9 +74,12 @@ public class InvoiceItemService extends BaseService {
             Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
             patches.forEach(patch -> {
-                InvoiceItem targetItem = idToItemLookup.get(patch.getId());
-                if (validator.rule(targetItem != null, "No existing invoice item found with Id: %s.", patch.getId())) {
-                    targetItem.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
+                InvoiceItem item = idToItemLookup.get(patch.getId());
+                if (validator.rule(item != null, "No existing invoice item found with Id: %s.", patch.getId())) {
+                    if (item.getVersion() != patch.getVersion()) {
+                        throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", item.getId(), item.getVersion(), patch.getVersion()));
+                    }
+                    item.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
                 }
             });
         }

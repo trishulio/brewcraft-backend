@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.OptimisticLockException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +39,7 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testAddItems_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
+    public void testGetAddItems_ReturnsListOfShipmentItemsWithBaseShipmentValues_WhenItemsAreNotNull() {
         List<BaseShipmentItem> additionItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -56,19 +58,19 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testAddItems_ReturnsNull_WhenItemsAreNull() {
+    public void testGetAddItems_ReturnsNull_WhenItemsAreNull() {
         assertNull(service.getAddItems(null));
     }    
 
     @Test
-    public void testPutItems_ReturnsUpdatedList_WhenUpdateIsNotNull() {
+    public void testGetPutItems_ReturnsUpdatedList_WhenUpdateIsNotNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         List<UpdateShipmentItem> updateItems = List.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2),
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
 
         List<ShipmentItem> items = service.getPutItems(existingItems, updateItems);
@@ -92,11 +94,11 @@ public class ShipmentItemServiceTest {
         assertEquals(new Material(2L), item2.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item2.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item2.getLastUpdated());
-        assertEquals(2, item2.getVersion());
+        assertEquals(1, item2.getVersion());
     }
     
     @Test
-    public void testPutItems_ReturnsEmptyList_WhenUpdateListIsEmpty() {
+    public void testGetPutItems_ReturnsEmptyList_WhenUpdateListIsEmpty() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -105,7 +107,7 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testPutItems_ReturnsNull_WhenUpdateListIsNull() {
+    public void testGetPutItems_ReturnsNull_WhenUpdateListIsNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -114,7 +116,7 @@ public class ShipmentItemServiceTest {
     }
     
     @Test
-    public void testPutItems_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
+    public void testGetPutItems_ThrowsError_WhenUpdateItemsDontHaveExistingId() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -127,13 +129,33 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testPatchItems_ReturnsPatchedList_WhenItemsAreNotNull() {
+    public void testGetPutItems_ThrowsOptimisticLockingException_WhenExistingItemVersionIsDifferentFromUpdateVersion() {
+        List<ShipmentItem> existingItems = List.of(
+            new ShipmentItem(1L),
+            new ShipmentItem(2L)
+        );
+        existingItems.get(0).setVersion(1);
+        existingItems.get(1).setVersion(1);
+
+        List<ShipmentItem> itemUpdates = List.of(
+            new ShipmentItem(1L),
+            new ShipmentItem(2L)
+        );
+
+        itemUpdates.get(0).setVersion(1);
+        itemUpdates.get(1).setVersion(2);
+        
+        assertThrows(OptimisticLockException.class, () -> service.getPutItems(existingItems, itemUpdates), "Cannot update entity with Id: 2 of version: 1 with payload of version: 2");
+    }
+
+    @Test
+    public void testGetPatchItems_ReturnsPatchedList_WhenItemsAreNotNull() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
         List<UpdateShipmentItem> updateItems = List.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
+            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
 
         List<ShipmentItem> items = service.getPatchItems(existingItems, updateItems);
@@ -152,7 +174,7 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testPatchItems_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
+    public void testGetPatchItems_ThrowsValidationException_WhenUpdateItemsDontHaveExistingId() {
         List<ShipmentItem> existingItems = List.of(
             new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
@@ -165,8 +187,28 @@ public class ShipmentItemServiceTest {
     }
 
     @Test
-    public void testPatchItems_ReturnsExistingItems_WhenUpdateItemsAreNull() {
+    public void testGetPatchItems_ReturnsExistingItems_WhenUpdateItemsAreNull() {
         List<ShipmentItem> existingItems = List.of(new ShipmentItem(1L));
         assertEquals(List.of(new ShipmentItem(1l)), service.getPatchItems(existingItems, null));
+    }
+    
+    @Test
+    public void testGetPatchItems_ThrowsOptimisticLockingException_WhenExistingItemVersionIsDifferentFromUpdateVersion() {
+        List<ShipmentItem> existingItems = List.of(
+            new ShipmentItem(1L),
+            new ShipmentItem(2L)
+        );
+        existingItems.get(0).setVersion(1);
+        existingItems.get(1).setVersion(1);
+
+        List<ShipmentItem> itemUpdates = List.of(
+            new ShipmentItem(1L),
+            new ShipmentItem(2L)
+        );
+
+        itemUpdates.get(0).setVersion(1);
+        itemUpdates.get(1).setVersion(2);
+        
+        assertThrows(OptimisticLockException.class, () -> service.getPatchItems(existingItems, itemUpdates), "Cannot update entity with Id: 2 of version: 1 with payload of version: 2");
     }
 }

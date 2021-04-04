@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.OptimisticLockException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -147,10 +149,15 @@ public class ShipmentService extends BaseService {
 
         Class<?> shipmentClz = UpdateShipment.class;
         Shipment existing = getShipment(shipmentId);
+
         if (existing == null) {
             existing = new Shipment();
             shipmentClz = BaseShipment.class;
+
+        } else if (existing.getVersion() != update.getVersion()) {
+            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
         }
+        
         existing.setId(shipmentId); // Doesn't work. Hibernate ignores this.
 
         log.debug("Replacing existing {} items", existing.getItems() == null ? null : existing.getItems().size());
@@ -169,6 +176,10 @@ public class ShipmentService extends BaseService {
         validator.raiseErrors();
 
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
+
+        if (existing.getVersion() != update.getVersion()) {
+            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
+        }
 
         if (invoiceId == null && existing.getInvoice() != null) {
             invoiceId = existing.getInvoice().getId();

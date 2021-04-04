@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.OptimisticLockException;
+
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -168,6 +170,7 @@ public class InvoiceServiceTest {
    public void testPut_UpdatesTheExistingEntityAndSavesIt_WhenEntityExist() {
        Invoice mExisting = new Invoice(1L);
        mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
+       mExisting.setVersion(1);
        InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
        Invoice update = new Invoice(
            1L,
@@ -226,6 +229,18 @@ public class InvoiceServiceTest {
    }
 
    @Test
+   public void testPut_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
+       Invoice existing = new Invoice(1L);
+       existing.setVersion(1);
+       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+       Invoice update = new Invoice(1L);
+       existing.setVersion(2);
+
+       assertThrows(OptimisticLockException.class, () -> service.put(2L, 1L, update));
+   }
+
+   @Test
    public void testPatch_ApplyUpdatesOnExistingEntityAndSavesIt_WhenInvoiceExists() {
        Invoice mExisting = new Invoice(
            1L,
@@ -249,6 +264,7 @@ public class InvoiceServiceTest {
        update.setCreatedAt(LocalDateTime.of(9999, 12, 31, 12, 0));
        update.setLastUpdated(LocalDateTime.of(9999, 12, 31, 12, 0));
        update.setItems(List.of(itemUpdate));
+       update.setVersion(1);
        
        doAnswer(inv -> {
            Long poId = inv.getArgument(0, Long.class);
@@ -314,6 +330,18 @@ public class InvoiceServiceTest {
        Invoice update = new Invoice(1L);
        Invoice invoice = service.patch(null, 1L, update);
        verify(mRepo, times(1)).save(null, invoice);
+   }
+
+   @Test
+   public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
+       Invoice existing = new Invoice(1L);
+       existing.setVersion(1);
+       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+       Invoice update = new Invoice(1L);
+       existing.setVersion(2);
+
+       assertThrows(OptimisticLockException.class, () -> service.patch(2L, 1L, update));
    }
 
    @Test

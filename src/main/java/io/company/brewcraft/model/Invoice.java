@@ -20,7 +20,7 @@ import io.company.brewcraft.service.MoneySupplier;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseModel implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";

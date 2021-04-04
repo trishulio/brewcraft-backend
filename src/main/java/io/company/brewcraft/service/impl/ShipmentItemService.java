@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.persistence.OptimisticLockException;
+
 import io.company.brewcraft.model.BaseShipmentItem;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.UpdateShipmentItem;
@@ -65,6 +67,9 @@ public class ShipmentItemService extends BaseService {
         updates.forEach(update -> {
             ShipmentItem item = existingItemsLookup.get(update.getId());
             if (validator.rule(item != null, "No existing item found with Id: %s. For adding a new item, don't include Id in the payload.", update.getId())) {
+                if (item.getVersion() != update.getVersion()) {
+                    throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", item.getId(), item.getVersion(), update.getVersion()));
+                }
                 item.override(update, getPropertyNames(UpdateShipmentItem.class));
                 targetItems.add(item);
             }
@@ -86,6 +91,9 @@ public class ShipmentItemService extends BaseService {
             updateItems.forEach(update -> {
                 ShipmentItem item = existingItemsLookup.get(update.getId());
                 if (validator.rule(item != null, "No existing item found with Id: %s. Use the put method to add new payload item. Patch can only perform patches on existing items.", update.getId())) {
+                    if (item.getVersion() != update.getVersion()) {
+                        throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", item.getId(), item.getVersion(), update.getVersion()));
+                    }
                     item.outerJoin(update, getPropertyNames(UpdateShipmentItem.class));
                 }
             });

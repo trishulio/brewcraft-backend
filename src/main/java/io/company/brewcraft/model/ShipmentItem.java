@@ -15,7 +15,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "shipment_item")
 @Table
-public class ShipmentItem extends BaseModel implements UpdateShipmentItem, Audited {
+public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audited {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_item_generator")

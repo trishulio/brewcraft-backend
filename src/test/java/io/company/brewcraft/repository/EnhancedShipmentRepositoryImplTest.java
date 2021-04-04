@@ -46,7 +46,7 @@ public class EnhancedShipmentRepositoryImplTest {
 
     @Test
     public void testSave_CallsShipmentRepositorySaveWithShipmentEntity_WhenAllValuesAreProvided() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
 
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Optional.of(new ShipmentStatus(1L, "IN-TRANSIT"))).when(mStatusRepo).findByName("IN-TRANSIT");
@@ -119,12 +119,12 @@ public class EnhancedShipmentRepositoryImplTest {
         assertEquals(LocalDateTime.of(2000, 1, 3, 12, 0, 0), item.getLastUpdated());
         assertEquals(3, item.getVersion());
 
-        verify(mShipmentRepo, times(1)).save(ret);
+        verify(mShipmentRepo, times(1)).saveAndFlush(ret);
     }
 
     @Test
     public void testSave_CallsShipmentRepositorySaveWithNullInvoice_WhenAInvoiceIdIsNull() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
         doReturn(Optional.of(new ShipmentStatus(1L, "IN-TRANSIT"))).when(mStatusRepo).findByName("IN-TRANSIT");
 
         Shipment shipment = new Shipment(1L);
@@ -134,12 +134,12 @@ public class EnhancedShipmentRepositoryImplTest {
 
         assertEquals(null, ret.getInvoice());
 
-        verify(mShipmentRepo, times(1)).save(ret);
+        verify(mShipmentRepo, times(1)).saveAndFlush(ret);
     }
 
     @Test
     public void testSave_ThrowsEntityNotFoundException_WhenInvoiceDoesNotExistForId() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
 
         doReturn(Optional.empty()).when(mInvoiceRepo).findById(1L);
         doReturn(Optional.of(new ShipmentStatus(1L, "DELIVERED"))).when(mStatusRepo).findByName("DELIVERED");
@@ -153,7 +153,7 @@ public class EnhancedShipmentRepositoryImplTest {
 
     @Test
     public void testSave_CallsShipmentRepositorySaveWithDefaultShipmentStatus_WhenShipmentStatusIsNull() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
 
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Optional.of(new ShipmentStatus(1L, ShipmentStatus.DEFAULT_STATUS))).when(mStatusRepo).findByName(ShipmentStatus.DEFAULT_STATUS);
@@ -164,12 +164,12 @@ public class EnhancedShipmentRepositoryImplTest {
         Shipment ret = repo.save(null, shipment);
 
         assertEquals(new ShipmentStatus(1L, ShipmentStatus.DEFAULT_STATUS), ret.getStatus());
-        verify(mShipmentRepo, times(1)).save(ret);
+        verify(mShipmentRepo, times(1)).saveAndFlush(ret);
     }
 
     @Test
     public void testSave_ThrowsEntityNotFoundException_WhenShipmentStatusDoesNotExistForName() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
 
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Set.of()).when(mStatusRepo).findByNames(Set.of("NO-STATUS-NAME"));
@@ -185,7 +185,7 @@ public class EnhancedShipmentRepositoryImplTest {
 
     @Test
     public void testSave_ThrowsEntityNotFoundException_WhenMaterialsDoesNotExistForIds() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).save(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mShipmentRepo).saveAndFlush(any(Shipment.class));
 
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Set.of(new ShipmentStatus(1L, "DELIVERED"))).when(mStatusRepo).findByNames(Set.of("DELIVERED"));

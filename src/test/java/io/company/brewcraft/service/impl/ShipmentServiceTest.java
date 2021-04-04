@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.OptimisticLockException;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
@@ -33,8 +36,6 @@ public class ShipmentServiceTest {
     private ShipmentRepository mRepo;
     private ShipmentItemService mItemService;
     private UtilityProvider mUtilProvider;
-    
-    private Validator validator;
     
     @BeforeEach
     public void init() {
@@ -70,6 +71,7 @@ public class ShipmentServiceTest {
     }
     
     @Test
+    @Disabled("TODO: Find a good strategy to test get method with long list of specifications")
     public void testGetShipments() {
         fail("Not tested");
     }
@@ -311,6 +313,18 @@ public class ShipmentServiceTest {
     }
     
     @Test
+    public void testPut_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
+        Shipment existing = new Shipment(1L);
+        existing.setVersion(1);
+        doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+        Shipment update = new Shipment(1L);
+        existing.setVersion(2);
+
+        assertThrows(OptimisticLockException.class, () -> service.put(2L, 1L, update));
+    }
+
+    @Test
     public void testPatch_PatchesExistingEntity_WhenExistingIsNotNull() {
         List<ShipmentItem> existingItems = new ArrayList<>();
         existingItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
@@ -407,5 +421,17 @@ public class ShipmentServiceTest {
         Shipment update = new Shipment(1L);
         Shipment shipment = service.patch(null, 1L, update);
         verify(mRepo, times(1)).save(null, shipment);
+    }
+
+    @Test
+    public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
+        Shipment existing = new Shipment(1L);
+        existing.setVersion(1);
+        doReturn(Optional.of(existing)).when(mRepo).findById(1L);
+
+        Shipment update = new Shipment(1L);
+        existing.setVersion(2);
+
+        assertThrows(OptimisticLockException.class, () -> service.patch(2L, 1L, update));
     }
 }

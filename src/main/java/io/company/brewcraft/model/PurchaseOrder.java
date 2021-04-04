@@ -3,7 +3,7 @@ package io.company.brewcraft.model;
 import javax.persistence.*;
 @Entity(name = "purchase_order")
 @Table
-public class PurchaseOrder extends BaseModel {
+public class PurchaseOrder extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";
     public static final String FIELD_SUPPLIER = "supplier";    
