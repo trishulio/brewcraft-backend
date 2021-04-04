@@ -18,7 +18,7 @@ import io.company.brewcraft.dto.UpdateMaterial;
 import io.company.brewcraft.model.MaterialCategoryEntity;
 import io.company.brewcraft.model.MaterialEntity;
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
@@ -51,7 +51,7 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
         
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
+            Page<Category> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no materials with those categories assigned
@@ -148,7 +148,7 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
     
     private void mapChildEntites(BaseMaterial material, Long categoryId, String quantityUnitSymbol) {
         if (categoryId != null) {
-            MaterialCategory category = Optional.ofNullable(materialCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", categoryId.toString()));
+            Category category = Optional.ofNullable(materialCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", categoryId.toString()));
             material.setCategory(category);
         }
         

@@ -1,24 +1,24 @@
 package io.company.brewcraft.dto;
 
-public class UpdateMaterialCategoryDto extends BaseDto {
+import javax.validation.constraints.NotEmpty;
+
+public class AddCategoryDto extends BaseDto {
         
     private Long parentCategoryId;
     
+    @NotEmpty
     private String name;
-    
-    private Integer version;
-
-    public UpdateMaterialCategoryDto() {
+        
+    public AddCategoryDto() {
         super();
     }
     
-    public UpdateMaterialCategoryDto(Long parentCategoryId, String name, Integer version) {
+    public AddCategoryDto(Long parentCategoryId, String name) {
         super();
-        this.parentCategoryId = parentCategoryId;
         this.name = name;
-        this.version = version;
+        this.parentCategoryId = parentCategoryId;
     }
-
+    
     public Long getParentCategoryId() {
         return parentCategoryId;
     }
@@ -26,7 +26,7 @@ public class UpdateMaterialCategoryDto extends BaseDto {
     public void setParentCategoryId(Long parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -34,13 +34,4 @@ public class UpdateMaterialCategoryDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-   
 }

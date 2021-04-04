@@ -130,4 +130,31 @@ public class ServiceAutoConfiguration {
     public UtilityProvider utilityProvider() {
         return new ThreadLocalUtilityProvider();
     }
+
+    @ConditionalOnMissingBean(ProductService.class)
+    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
+        ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
+        return productService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(ProductCategoryService.class)
+    public ProductCategoryService productCategoryService(ProductCategoryRepository productCategoryRepository) {
+        ProductCategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
+        return productCategoryService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(ProductMeasureService.class) 
+    public ProductMeasureService productMeasureService(ProductMeasureRepository productMeasureRepository) {
+        ProductMeasureService productMeasureService = new ProductMeasureServiceImpl(productMeasureRepository);
+        return productMeasureService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(ProductMeasureValueService.class) 
+    public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
+        ProductMeasureValueService productMeasureService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
+        return productMeasureService;
+    }
 }

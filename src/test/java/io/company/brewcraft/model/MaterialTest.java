@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 import io.company.brewcraft.utils.SupportedUnits;
 
 public class MaterialTest {
@@ -27,7 +27,7 @@ public class MaterialTest {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
-        MaterialCategory category = new MaterialCategory();
+        Category category = new Category();
         String upc = "testUPC";
         Unit<Mass> baseQuantityUnit = SupportedUnits.KILOGRAM;
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -70,7 +70,7 @@ public class MaterialTest {
     
     @Test
     public void testGetSetCategory() {
-        MaterialCategory category = new MaterialCategory();
+        Category category = new Category();
         material.setCategory(category);
         assertSame(category, material.getCategory());
     }

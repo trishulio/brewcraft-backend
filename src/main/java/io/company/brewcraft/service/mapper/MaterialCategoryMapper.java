@@ -8,11 +8,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
-import io.company.brewcraft.dto.AddMaterialCategoryDto;
-import io.company.brewcraft.dto.MaterialCategoryDto;
-import io.company.brewcraft.dto.UpdateMaterialCategoryDto;
+import io.company.brewcraft.dto.AddCategoryDto;
+import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
+import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.MaterialCategoryEntity;
-import io.company.brewcraft.pojo.MaterialCategory;
+import io.company.brewcraft.pojo.Category;
 
 @Mapper()
 public interface MaterialCategoryMapper {
@@ -20,18 +21,20 @@ public interface MaterialCategoryMapper {
     MaterialCategoryMapper INSTANCE = Mappers.getMapper(MaterialCategoryMapper.class);
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
-    MaterialCategoryDto toDto(MaterialCategory materialCategory);
+    CategoryDto toDto(Category materialCategory);
+    
+    CategoryWithParentDto toCategoryWithParentDto(Category materialCategory);
 
     @InheritInverseConfiguration
-    MaterialCategory fromEntity(MaterialCategoryEntity materialCategoryEntity, @Context CycleAvoidingMappingContext context);
+    Category fromEntity(MaterialCategoryEntity materialCategoryEntity, @Context CycleAvoidingMappingContext context);
 
-    MaterialCategory fromDto(MaterialCategoryDto materialCategoryDto);
+    Category fromDto(CategoryDto materialCategoryDto);
 
-    MaterialCategory fromDto(AddMaterialCategoryDto materialCategoryDto);
+    Category fromDto(AddCategoryDto materialCategoryDto);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    MaterialCategory fromDto(UpdateMaterialCategoryDto materialCategoryDto);
+    Category fromDto(UpdateCategoryDto materialCategoryDto);
 
-    MaterialCategoryEntity toEntity(MaterialCategory materialCategory, @Context CycleAvoidingMappingContext context);
+    MaterialCategoryEntity toEntity(Category materialCategory, @Context CycleAvoidingMappingContext context);
 
 }

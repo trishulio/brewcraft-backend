@@ -18,9 +18,9 @@ public class MaterialDtoTest {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
-        MaterialCategoryDto materialClass = new MaterialCategoryDto();
-        MaterialCategoryDto category = new MaterialCategoryDto();
-        MaterialCategoryDto subcategory = new MaterialCategoryDto();
+        CategoryDto materialClass = new CategoryDto();
+        CategoryDto category = new CategoryDto();
+        CategoryDto subcategory = new CategoryDto();
         String upc = "testUPC";
         String baseQuantityUnit = "g";
         int version = 1;
@@ -61,21 +61,21 @@ public class MaterialDtoTest {
     
     @Test
     public void testGetSetMaterialClass() {
-        MaterialCategoryDto materialClass = new MaterialCategoryDto();
+        CategoryDto materialClass = new CategoryDto();
         material.setMaterialClass(materialClass);
         assertSame(materialClass, material.getMaterialClass());
     }
     
     @Test
     public void testGetSetCategory() {
-        MaterialCategoryDto category = new MaterialCategoryDto();
+        CategoryDto category = new CategoryDto();
         material.setCategory(category);
         assertSame(category, material.getCategory());
     }
     
     @Test
     public void testGetSetSubcategory() {
-        MaterialCategoryDto subcategory = new MaterialCategoryDto();
+        CategoryDto subcategory = new CategoryDto();
         material.setSubcategory(subcategory);
         assertSame(subcategory, material.getSubcategory());
     }
