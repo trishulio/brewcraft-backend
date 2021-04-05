@@ -11,8 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
@@ -37,7 +37,7 @@ public class Product extends BaseEntity {
     
     private String description;
     
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "product_category_id", referencedColumnName = "id", nullable = false)
     private ProductCategory category;
     

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
@@ -33,13 +34,13 @@ public class MaterialEntity extends BaseEntity {
     
     private String description;
     
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "material_category_id", referencedColumnName = "id")
     private MaterialCategoryEntity category;
     
     private String upc;
     
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity baseQuantityUnit;
     
