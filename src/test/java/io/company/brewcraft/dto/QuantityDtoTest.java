@@ -39,7 +39,10 @@ public class QuantityDtoTest {
     @Test
     public void testAccessValue() {
         assertNull(dto.getValue());
-        dto.setValue(new BigDecimal(100));
-        assertEquals(new BigDecimal(100), dto.getValue());
+        dto.setValue(new BigDecimal("100"));
+        assertEquals(new BigDecimal("100"), dto.getValue());
+
+        dto.setValue(new BigDecimal("100.00"));
+        assertEquals(new BigDecimal("100"), dto.getValue());
     }
 }

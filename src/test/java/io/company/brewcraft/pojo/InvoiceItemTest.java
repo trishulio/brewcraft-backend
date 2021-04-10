@@ -9,8 +9,10 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.Tax;
 import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.utils.SupportedUnits;
 
 public class InvoiceItemTest {
 
@@ -60,8 +62,8 @@ public class InvoiceItemTest {
     @Test
     public void testAccessQuantity() {
         assertNull(item.getQuantity());
-        item.setQuantity(Quantities.getQuantity(10, SupportedUnits.KILOGRAM));
-        assertEquals(Quantities.getQuantity(10, SupportedUnits.KILOGRAM), item.getQuantity());
+        item.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
     }
 
     @Test
@@ -94,7 +96,7 @@ public class InvoiceItemTest {
 
     @Test
     public void testGetAmount_ReturnsProductOfQuantityAndPrice() {
-        item.setQuantity(Quantities.getQuantity(11, SupportedUnits.KILOGRAM));
+        item.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM));
         item.setPrice(Money.parse("CAD 10"));
 
         assertEquals(Money.parse("CAD 110"), item.getAmount());

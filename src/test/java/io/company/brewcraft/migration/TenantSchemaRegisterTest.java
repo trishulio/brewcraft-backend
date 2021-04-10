@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import io.company.brewcraft.data.CheckedRunnable;
+import io.company.brewcraft.data.CheckedConsumer;
 import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
@@ -36,7 +36,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testAdd_UsesTenantDsToCreateSchema() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(1, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedRunnable.class));
+        doAnswer(inv -> {inv.getArgument(1, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedConsumer.class));
 
         register.add("12345");
 
@@ -73,7 +73,7 @@ public class TenantSchemaRegisterTest {
     @Test
     public void testRemove_DropsSchema() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(1, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedRunnable.class));
+        doAnswer(inv -> {inv.getArgument(1, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(eq("12345"), any(CheckedConsumer.class));
 
         register.remove("12345");
 

@@ -28,6 +28,10 @@ public class MoneyDto extends BaseDto {
     }
 
     public BigDecimal getAmount() {
+        BigDecimal amount = null;
+        if (this.amount != null) {
+            amount = new BigDecimal(this.amount.stripTrailingZeros().toPlainString());
+        }
         return amount;
     }
 

@@ -6,8 +6,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.InvoiceStatusDto;
-import io.company.brewcraft.model.InvoiceStatusEntity;
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.InvoiceStatus;
 
 @Mapper
 public interface InvoiceStatusMapper {
@@ -24,8 +23,4 @@ public interface InvoiceStatusMapper {
     InvoiceStatus fromDto(InvoiceStatusDto status);
     
     InvoiceStatusDto toDto(InvoiceStatus status);
-
-    InvoiceStatus fromEntity(InvoiceStatusEntity entity);
-
-    InvoiceStatusEntity toEntity(InvoiceStatus status);
 }

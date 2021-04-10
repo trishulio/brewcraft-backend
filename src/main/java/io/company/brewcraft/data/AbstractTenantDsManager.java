@@ -64,7 +64,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     }
 
     @Override
-    public void query(String tenantId, CheckedRunnable<Connection, Exception> runnable) {
+    public void query(String tenantId, CheckedConsumer<Connection, Exception> runnable) {
         try {
             DataSource ds = this.getDataSource(tenantId);
             executeQuery(ds, runnable);
@@ -74,7 +74,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
     }
 
     @Override
-    public void query(CheckedRunnable<Connection, Exception> runnable) {
+    public void query(CheckedConsumer<Connection, Exception> runnable) {
         executeQuery(this.getAdminDataSource(), runnable);
     }
 
@@ -101,7 +101,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
         }
     }
 
-    private void executeQuery(DataSource ds, CheckedRunnable<Connection, Exception> runnable) {
+    private void executeQuery(DataSource ds, CheckedConsumer<Connection, Exception> runnable) {
         Connection conn = null;
         try {
             conn = ds.getConnection();

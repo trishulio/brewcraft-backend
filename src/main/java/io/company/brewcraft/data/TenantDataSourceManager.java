@@ -19,7 +19,7 @@ public interface TenantDataSourceManager extends DataSourceManager {
 
     <T> T query(String tenantId, CheckedSupplier<T, Connection, Exception> supplier);
 
-    void query(CheckedRunnable<Connection, Exception> runnable);
+    void query(CheckedConsumer<Connection, Exception> runnable);
 
-    void query(String tenantId, CheckedRunnable<Connection, Exception> runnable);
+    void query(String tenantId, CheckedConsumer<Connection, Exception> runnable);
 }

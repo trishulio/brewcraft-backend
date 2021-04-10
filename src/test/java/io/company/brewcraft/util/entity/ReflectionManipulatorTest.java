@@ -37,6 +37,7 @@ public class ReflectionManipulatorTest {
     public void testEquals_ReturnsFalse_WhenObjectsAreNotEquals() {
         class Other {
             int x;
+            public int getX() { return this.x; }
         }
         Other a = new Other();
         Other b = new Other();
