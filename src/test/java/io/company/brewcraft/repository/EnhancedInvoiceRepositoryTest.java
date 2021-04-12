@@ -15,9 +15,8 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
-import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryTest {
@@ -47,9 +46,9 @@ public class EnhancedInvoiceRepositoryTest {
         doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
         doReturn(List.of(
-           new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
-           new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
-           new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))
+           new Material(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
+           new Material(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
+           new Material(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))
        ).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
 
        InvoiceItem item1 = new InvoiceItem(11L);
@@ -100,8 +99,8 @@ public class EnhancedInvoiceRepositoryTest {
         doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
         doReturn(List.of(
-           new MaterialEntity(3L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
-           new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4))
+           new Material(3L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
+           new Material(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4))
        ).when(mMaterialRepo).findAllById(Set.of(3L, 4L));
 
        InvoiceItem item1 = new InvoiceItem(11L);

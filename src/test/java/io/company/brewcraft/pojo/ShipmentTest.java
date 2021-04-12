@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;

@@ -16,8 +16,8 @@ import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateMaterialDto;
-import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.utils.SupportedUnits;
@@ -38,8 +38,8 @@ public class MaterialControllerTest {
 
    @Test
    public void testGetMaterials() {
-       Category rootCategory = new Category(1L, "root", null, null, null, null, null);
-       Category subcategory = new Category(2L, "subcategory1", rootCategory, null, null, null, null);
+       MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
+       MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
        Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
        List<Material> materialsList = List.of(material);
@@ -91,8 +91,8 @@ public class MaterialControllerTest {
    
    @Test
    public void testGetMaterial() {
-       Category rootCategory = new Category(1L, "root", null, null, null, null, null);
-       Category subcategory = new Category(2L, "subcategory1", rootCategory, null, null, null, null);
+       MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
+       MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
        Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        doReturn(material).when(materialService).getMaterial(1L);
@@ -126,8 +126,8 @@ public class MaterialControllerTest {
    public void testAddMaterial() {
        AddMaterialDto addMaterialDto = new AddMaterialDto("testMaterial", "testDescription", 2L, "testUPC", "kg");
               
-       Category rootCategory = new Category(1L, "root", null, null, null, null, null);
-       Category subcategory = new Category(2L, "subcategory1", rootCategory, null, null, null, null);
+       MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
+       MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
        Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> addedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
@@ -166,8 +166,8 @@ public class MaterialControllerTest {
    public void testPutMaterial() {
        UpdateMaterialDto updateMaterialDto = new UpdateMaterialDto("testMaterial", "testDescription", 2L, "testUPC", "kg", 1);
               
-       Category rootCategory = new Category(1L, "root", null, null, null, null, null);
-       Category subcategory = new Category(2L, "subcategory1", rootCategory, null, null, null, null);
+       MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
+       MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
        Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> putMaterialCaptor = ArgumentCaptor.forClass(Material.class);
@@ -207,8 +207,8 @@ public class MaterialControllerTest {
    public void testPatchMaterial() {
        UpdateMaterialDto updateMaterialDto = new UpdateMaterialDto("testMaterial", "testDescription", 2L, "testUPC", "kg", 1);
        
-       Category rootCategory = new Category(1L, "root", null, null, null, null, null);
-       Category subcategory = new Category(2L, "subcategory1", rootCategory, null, null, null, null);
+       MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
+       MaterialCategory subcategory = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
        Material material = new Material(1L, "testMaterial", "testDescription", subcategory, "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        
        ArgumentCaptor<Material> patchMaterialCaptor = ArgumentCaptor.forClass(Material.class);

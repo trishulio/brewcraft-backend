@@ -4,8 +4,6 @@ import javax.measure.Quantity;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.pojo.Material;
-
 public interface BaseInvoiceItem {
     String getDescription();
 

@@ -2,7 +2,6 @@ package io.company.brewcraft.service.impl;
 
 import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,21 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.UpdateCategory;
-import io.company.brewcraft.model.MaterialCategoryEntity;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
-import io.company.brewcraft.service.mapper.MaterialCategoryMapper;
 
 @Transactional
 public class MaterialCategoryServiceImpl extends BaseService implements MaterialCategoryService {
-    
-    private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
     
     private MaterialCategoryRepository materialCategoryRepository;
     
@@ -33,65 +26,55 @@ public class MaterialCategoryServiceImpl extends BaseService implements Material
     }
 
     @Override
-    public Page<Category> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames, 
+    public Page<MaterialCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames, 
             int page, int size, Set<String> sort, boolean orderAscending) {
 
-        Specification<MaterialCategoryEntity> spec = SpecificationBuilder.builder()
-                .in(MaterialCategoryEntity.FIELD_ID, ids)
-                .in(MaterialCategoryEntity.FIELD_NAME, names)
-                .in(new String[] { MaterialCategoryEntity.FIELD_PARENT_CATEGORY, MaterialCategoryEntity.FIELD_ID }, parentCategoryIds)
-                .in(new String[] { MaterialCategoryEntity.FIELD_PARENT_CATEGORY, MaterialCategoryEntity.FIELD_NAME }, parentNames)
+        Specification<MaterialCategory> spec = SpecificationBuilder.builder()
+                .in(MaterialCategory.FIELD_ID, ids)
+                .in(MaterialCategory.FIELD_NAME, names)
+                .in(new String[] { MaterialCategory.FIELD_PARENT_CATEGORY, MaterialCategory.FIELD_ID }, parentCategoryIds)
+                .in(new String[] { MaterialCategory.FIELD_PARENT_CATEGORY, MaterialCategory.FIELD_NAME }, parentNames)
                 .build();
 
-        Page<MaterialCategoryEntity> categoryPage = materialCategoryRepository.findAll(spec,
+        Page<MaterialCategory> categoryPage = materialCategoryRepository.findAll(spec,
                 pageRequest(sort, orderAscending, page, size));
 
-        return categoryPage.map(materialCategory -> materialCategoryMapper.fromEntity(materialCategory,
-                new CycleAvoidingMappingContext()));
+        return categoryPage;
     }
 
     @Override
-    public Category getCategory(Long categoryId) {
-        MaterialCategoryEntity category = materialCategoryRepository.findById(categoryId).orElse(null);    
+    public MaterialCategory getCategory(Long categoryId) {
+        MaterialCategory category = materialCategoryRepository.findById(categoryId).orElse(null);    
         
-        return materialCategoryMapper.fromEntity(category, new CycleAvoidingMappingContext());
+        return category;
     }
 
     @Override
-    public Category addCategory(Long parentCategoryId, Category materialCategory) {        
+    public MaterialCategory addCategory(Long parentCategoryId, MaterialCategory materialCategory) {        
         if (parentCategoryId != null) {
-            Category parentCategory = Optional.ofNullable(getCategory(parentCategoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", parentCategoryId.toString()));
+            MaterialCategory parentCategory = Optional.ofNullable(getCategory(parentCategoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", parentCategoryId.toString()));
             materialCategory.setParentCategory(parentCategory);
         }
         
-        MaterialCategoryEntity categoryEntity = materialCategoryMapper.toEntity(materialCategory, new CycleAvoidingMappingContext());
-
-        MaterialCategoryEntity savedEntity = materialCategoryRepository.save(categoryEntity);
+        MaterialCategory savedEntity = materialCategoryRepository.saveAndFlush(materialCategory);
         
-        return materialCategoryMapper.fromEntity(savedEntity, new CycleAvoidingMappingContext());
+        return savedEntity;
     }
 
     @Override
-    public Category putCategory(Long parentCategoryId, Long categoryId, UpdateCategory putCategory) {        
-        Category category = getCategory(categoryId);
-
-        if (category == null) {
-            // TODO: setting createdAt is a hack. Need a fix at hibernate level to avoid any hibernate issues.
-            category = new Category(categoryId, null, null, null, LocalDateTime.now(), null, null);
-        }
-
-        category.override(putCategory, getPropertyNames(UpdateCategory.class));
+    public MaterialCategory putCategory(Long parentCategoryId, Long categoryId, MaterialCategory putCategory) {        
+        putCategory.setId(categoryId);
         
-        return addCategory(parentCategoryId, category);
+        return addCategory(parentCategoryId, putCategory);
     }
 
     @Override
-    public Category patchCategory(Long parentCategoryId, Long categoryId, UpdateCategory updateMaterialCategory) {                
-        Category category = Optional.ofNullable(getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", categoryId.toString()));     
+    public MaterialCategory patchCategory(Long parentCategoryId, Long categoryId, MaterialCategory updateMaterialCategory) {                
+        MaterialCategory category = Optional.ofNullable(getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("MaterialCategory", categoryId.toString()));     
         
-        category.outerJoin(updateMaterialCategory, getPropertyNames(UpdateCategory.class));
+        updateMaterialCategory.copyToNullFields(category);
 
-        return addCategory(parentCategoryId, category);
+        return addCategory(parentCategoryId, updateMaterialCategory);
     }
 
     @Override

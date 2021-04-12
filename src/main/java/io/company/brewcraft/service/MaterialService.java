@@ -4,8 +4,7 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateMaterial;
-import io.company.brewcraft.pojo.Material;
+import io.company.brewcraft.model.Material;
 
 public interface MaterialService {
 
@@ -17,13 +16,13 @@ public interface MaterialService {
     
     public Material addMaterial(Material material, Long categoryId, String quantityUnitSymbol);        
         
-    public Material putMaterial(Long materialId, UpdateMaterial material);
+    public Material putMaterial(Long materialId, Material material);
     
-    public Material putMaterial(Long materialId, UpdateMaterial material, Long categoryId, String quantityUnitSymbol);
+    public Material putMaterial(Long materialId, Material material, Long categoryId, String quantityUnitSymbol);
     
-    public Material patchMaterial(Long materialId, UpdateMaterial material);
+    public Material patchMaterial(Long materialId, Material material);
     
-    public Material patchMaterial(Long materialId, UpdateMaterial material, Long categoryId, String quantityUnitSymbol);
+    public Material patchMaterial(Long materialId, Material material, Long categoryId, String quantityUnitSymbol);
 
     public void deleteMaterial(Long materialId);
     

@@ -8,26 +8,26 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MaterialCategoryEntityTest {
+public class MaterialCategoryTest {
 
-    private MaterialCategoryEntity materialCategoryEntityTest;
+    private MaterialCategory materialCategoryEntityTest;
 
     @BeforeEach
     public void init() {
-        materialCategoryEntityTest = new MaterialCategoryEntity();
+        materialCategoryEntityTest = new MaterialCategory();
     }
     
     @Test
     public void testConstructor() {
         Long id = 1L;
         String name = "testName";
-        MaterialCategoryEntity parentCategory = new MaterialCategoryEntity();
-        Set<MaterialCategoryEntity> subcategories = Set.of();       
+        MaterialCategory parentCategory = new MaterialCategory();
+        Set<MaterialCategory> subcategories = Set.of();       
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        MaterialCategoryEntity productCategoryEntity = new MaterialCategoryEntity(id, name, parentCategory, subcategories, created, lastUpdated, version);
+        MaterialCategory productCategoryEntity = new MaterialCategory(id, name, parentCategory, subcategories, created, lastUpdated, version);
         
         assertSame(id, productCategoryEntity.getId());
         assertSame(name, productCategoryEntity.getName());
@@ -54,14 +54,14 @@ public class MaterialCategoryEntityTest {
     
     @Test
     public void testGetSetParentCategory() {
-        MaterialCategoryEntity parentCategory = new MaterialCategoryEntity();
+        MaterialCategory parentCategory = new MaterialCategory();
         materialCategoryEntityTest.setParentCategory(parentCategory);
         assertSame(parentCategory, materialCategoryEntityTest.getParentCategory());
     }
     
     @Test
     public void testGetSetSubcategories() {
-        Set<MaterialCategoryEntity> subcategories = Set.of();       
+        Set<MaterialCategory> subcategories = Set.of();       
         materialCategoryEntityTest.setSubcategories(subcategories);
         assertSame(subcategories, materialCategoryEntityTest.getSubcategories());
     }

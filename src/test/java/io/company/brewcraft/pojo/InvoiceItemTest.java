@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
 import tec.uom.se.quantity.Quantities;
 import io.company.brewcraft.utils.SupportedUnits;

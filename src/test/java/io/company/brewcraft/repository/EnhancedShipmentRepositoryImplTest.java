@@ -16,11 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
@@ -51,9 +50,9 @@ public class EnhancedShipmentRepositoryImplTest {
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Optional.of(new ShipmentStatus(1L, "IN-TRANSIT"))).when(mStatusRepo).findByName("IN-TRANSIT");
         doReturn(List.of(
-            new MaterialEntity(1L, "Material_A", null, null, null, null, null, null, null),
-            new MaterialEntity(2L, "Material_B", null, null, null, null, null, null, null),
-            new MaterialEntity(3L, "Material_C", null, null, null, null, null, null, null)
+            new Material(1L, "Material_A", null, null, null, null, null, null, null),
+            new Material(2L, "Material_B", null, null, null, null, null, null, null),
+            new Material(3L, "Material_C", null, null, null, null, null, null, null)
         )).when(mMaterialRepo).findAllById(Set.of(1L, 2L, 3L));
 
         List<ShipmentItem> items = List.of(

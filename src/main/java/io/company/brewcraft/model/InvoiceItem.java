@@ -5,10 +5,7 @@ import javax.persistence.*;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.MoneySupplier;
-import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
-import io.company.brewcraft.service.mapper.MaterialMapper;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
@@ -48,7 +45,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
-    private MaterialEntity material;
+    private Material material;
 
     @Version
     private Integer version;
@@ -133,16 +130,11 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public Material getMaterial() {
-        return MaterialMapper.INSTANCE.fromEntity(material, new CycleAvoidingMappingContext());
+        return material;
     }
 
     @Override
     public void setMaterial(Material material) {
-        setMaterial(MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext()));
-    }
-
-    // TODO: Remove when the MaterialEntity is completely removed with Material pojo
-    public void setMaterial(MaterialEntity material) {
         this.material = material;
     }
 

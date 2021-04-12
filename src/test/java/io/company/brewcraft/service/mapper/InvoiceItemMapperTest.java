@@ -16,8 +16,8 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.TaxDto;
 import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 

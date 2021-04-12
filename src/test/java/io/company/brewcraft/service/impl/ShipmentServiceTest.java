@@ -18,10 +18,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;

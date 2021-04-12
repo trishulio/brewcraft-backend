@@ -2,6 +2,7 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
+import javax.measure.Unit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,15 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.mapper.QuantityUnitMapper;
+
 @Entity(name = "MATERIAL")
-public class MaterialEntity extends BaseEntity {
+public class Material extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
@@ -36,7 +38,7 @@ public class MaterialEntity extends BaseEntity {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "material_category_id", referencedColumnName = "id")
-    private MaterialCategoryEntity category;
+    private MaterialCategory category;
     
     private String upc;
     
@@ -55,25 +57,25 @@ public class MaterialEntity extends BaseEntity {
     @Version
     private Integer version;
 
-    public MaterialEntity() {
+    public Material() {
     }
 
-    public MaterialEntity(Long id) {
+    public Material(Long id) {
         this();
         this.id = id;
     }
 
-    public MaterialEntity(Long id, String name, String description, MaterialCategoryEntity category, String upc, 
-            UnitEntity baseQuantityUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Material(Long id, String name, String description, MaterialCategory category, String upc, 
+            Unit<?> baseQuantityUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.upc = upc;
-        this.baseQuantityUnit = baseQuantityUnit;
-        this.createdAt = createdAt;
-        this.lastUpdated = lastUpdated;
-        this.version = version;
+        setName(name);
+        setDescription(description);
+        setCategory(category);
+        setUPC(upc);
+        setBaseQuantityUnit(baseQuantityUnit);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     public Long getId() {
@@ -100,11 +102,11 @@ public class MaterialEntity extends BaseEntity {
         this.description = description;
     }
     
-    public MaterialCategoryEntity getCategory() {
+    public MaterialCategory getCategory() {
         return category;
     }
 
-    public void setCategory(MaterialCategoryEntity category) {
+    public void setCategory(MaterialCategory category) {
         this.category = category;
     }
 
@@ -115,13 +117,13 @@ public class MaterialEntity extends BaseEntity {
     public void setUPC(String upc) {
         this.upc = upc;
     }
-
-    public UnitEntity getBaseQuantityUnit() {
-        return baseQuantityUnit;
+    
+    public Unit<?> getBaseQuantityUnit() {
+        return QuantityUnitMapper.INSTANCE.fromEntity(this.baseQuantityUnit);
     }
 
-    public void setBaseQuantityUnit(UnitEntity baseQuantityUnit) {
-        this.baseQuantityUnit = baseQuantityUnit;
+    public void setBaseQuantityUnit(Unit<?> baseQuantityUnit) {
+        this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);    
     }
 
     public LocalDateTime getCreatedAt() {

@@ -139,7 +139,7 @@ public class SupplierContactServiceImplTest {
 
         assertThrows(EntityNotFoundException.class, () -> {
             supplierContactService.addContact(supplierId, supplierContact);
-            verify(supplierContactRepositoryMock, times(0)).save(Mockito.any(SupplierContact.class));
+            verify(supplierContactRepositoryMock, times(0)).saveAndFlush(Mockito.any(SupplierContact.class));
         });
     }
     

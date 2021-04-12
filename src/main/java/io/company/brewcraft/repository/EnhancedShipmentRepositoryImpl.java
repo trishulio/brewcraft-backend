@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
@@ -56,7 +56,7 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
             Map<Long, List<ShipmentItem>> materialIdToItemLookup = shipment.getItems().stream().filter(i -> i != null && i.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
             log.debug("Material to Items Mapping: {}", materialIdToItemLookup);
 
-            List<MaterialEntity> materials = materialRepo.findAllById(materialIdToItemLookup.keySet());
+            List<Material> materials = materialRepo.findAllById(materialIdToItemLookup.keySet());
             log.debug("Total materials fetched: {}", materials.size());
 
             if (materialIdToItemLookup.keySet().size() != materials.size()) {

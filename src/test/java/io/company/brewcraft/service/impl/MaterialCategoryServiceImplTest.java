@@ -30,8 +30,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.MaterialCategoryEntity;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -51,17 +50,17 @@ public class MaterialCategoryServiceImplTest {
 
     @Test
     public void testGetMaterialCategories_returnsMaterialCategories() throws Exception {
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(2L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L, null, null, null, null, null, null), Set.of(new MaterialCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
-        List<MaterialCategoryEntity> materialCategoryEntities = Arrays.asList(materialCategoryEntity);
+        List<MaterialCategory> materialCategoryEntities = Arrays.asList(materialCategoryEntity);
         
-        Page<MaterialCategoryEntity> expectedMaterialCategoryEntities = new PageImpl<>(materialCategoryEntities);
+        Page<MaterialCategory> expectedMaterialCategoryEntities = new PageImpl<>(materialCategoryEntities);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
-        when(materialCategoryRepository.findAll(ArgumentMatchers.<Specification<MaterialCategoryEntity>>any(), pageableArgument.capture())).thenReturn(expectedMaterialCategoryEntities);
+        when(materialCategoryRepository.findAll(ArgumentMatchers.<Specification<MaterialCategory>>any(), pageableArgument.capture())).thenReturn(expectedMaterialCategoryEntities);
 
-        Page<Category> actualMaterialCategorys = materialCategoryService.getCategories(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<MaterialCategory> actualMaterialCategorys = materialCategoryService.getCategories(null, null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -69,7 +68,7 @@ public class MaterialCategoryServiceImplTest {
         assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertEquals(1, actualMaterialCategorys.getNumberOfElements());
         
-        Category actualCategory = actualMaterialCategorys.get().findFirst().get();
+        MaterialCategory actualCategory = actualMaterialCategorys.get().findFirst().get();
 
         assertEquals(materialCategoryEntity.getId(), actualCategory.getId());
         assertEquals(materialCategoryEntity.getName(), actualCategory.getName());
@@ -84,12 +83,12 @@ public class MaterialCategoryServiceImplTest {
     @Test
     public void testGetMaterialCategory_returnsMaterialCategory() throws Exception {
         Long id = 1L;
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(2L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<MaterialCategoryEntity> expectedMaterialCategoryEntity = Optional.ofNullable(materialCategoryEntity);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L, null, null, null, null, null, null), Set.of(new MaterialCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<MaterialCategory> expectedMaterialCategoryEntity = Optional.ofNullable(materialCategoryEntity);
 
         when(materialCategoryRepository.findById(id)).thenReturn(expectedMaterialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.getCategory(id);
+        MaterialCategory returnedCategory = materialCategoryService.getCategory(id);
 
         assertEquals(expectedMaterialCategoryEntity.get().getId(), returnedCategory.getId());
         assertEquals(expectedMaterialCategoryEntity.get().getName(), returnedCategory.getName());
@@ -103,15 +102,15 @@ public class MaterialCategoryServiceImplTest {
 
     @Test
     public void testAddMaterialCategory_SavesMaterialCategoryWhenNoParentCategoryIsPassed() throws Exception {
-        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
         
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.addCategory(null, newCategory);
+        MaterialCategory returnedCategory = materialCategoryService.addCategory(null, newCategory);
         
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
@@ -138,19 +137,19 @@ public class MaterialCategoryServiceImplTest {
     public void testAddMaterialCategory_setsParentCategoryWhenParentCategoryIsPassed() throws Exception {
         Long parentCategoryId = 2L;
 
-        MaterialCategoryEntity materialCategoryParent = new MaterialCategoryEntity();
+        MaterialCategory materialCategoryParent = new MaterialCategory();
 
-        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
 
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.of(materialCategoryParent));
         
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        Category actualMaterialCategory = materialCategoryService.addCategory(parentCategoryId, newCategory);
+        MaterialCategory actualMaterialCategory = materialCategoryService.addCategory(parentCategoryId, newCategory);
         
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
@@ -177,13 +176,13 @@ public class MaterialCategoryServiceImplTest {
     public void testAddMaterialCategory_throwsWhenParentCategoryDoesNotExist() throws Exception {
         Long parentCategoryId = 2L;
         
-        Category newCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory newCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
             materialCategoryService.addCategory(parentCategoryId, newCategory);
-            verify(materialCategoryRepository, times(0)).save(Mockito.any(MaterialCategoryEntity.class));
+            verify(materialCategoryRepository, times(0)).saveAndFlush(Mockito.any(MaterialCategory.class));
         });
     }
     
@@ -191,14 +190,14 @@ public class MaterialCategoryServiceImplTest {
     public void testPutMaterialCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
 
-        Category putCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
 
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.putCategory(null, id, putCategory);
+        MaterialCategory returnedCategory = materialCategoryService.putCategory(null, id, putCategory);
        
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
@@ -206,7 +205,7 @@ public class MaterialCategoryServiceImplTest {
         assertEquals(putCategory.getParentCategory().getId(), returnedCategory.getParentCategory().getId());
         assertEquals(putCategory.getSubcategories().size(), returnedCategory.getSubcategories().size());
         assertEquals(putCategory.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
-        assertEquals(null, persistedCategoryCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedCategoryCaptor.getValue().getLastUpdated());
         //assertEquals(putCategory.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(putCategory.getVersion(), persistedCategoryCaptor.getValue().getVersion());
         
@@ -226,19 +225,19 @@ public class MaterialCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        Category putCategory = new Category(null, "testName", new Category(1L, null, null, null, null, null, null), Set.of(new Category(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategoryEntity materialCategoryParent = new MaterialCategoryEntity();
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(1L, null, null, null, null, null, null), Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(1L, null, null, null, null, null, null), Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryParent = new MaterialCategory();
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(1L, null, null, null, null, null, null), Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
         
         when(materialCategoryRepository.findById(id)).thenReturn(Optional.of(materialCategoryEntity));
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.of(materialCategoryParent));
 
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.putCategory(parentCategoryId, id, putCategory);
+        MaterialCategory returnedCategory = materialCategoryService.putCategory(parentCategoryId, id, putCategory);
        
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
@@ -266,30 +265,30 @@ public class MaterialCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        Category putCategory = new Category(null, "testName", new Category(), Set.of(new Category()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
             materialCategoryService.putCategory(parentCategoryId, id, putCategory);
-            verify(materialCategoryRepository, times(0)).save(Mockito.any(MaterialCategoryEntity.class));
+            verify(materialCategoryRepository, times(0)).saveAndFlush(Mockito.any(MaterialCategory.class));
         });
     }
     
     @Test
     public void testPatchMaterialCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
-        Category patchedCategory = new Category(1L, "updatedName", null, null, null, null, null);
-        MaterialCategoryEntity existingMaterialCategoryEntity = new MaterialCategoryEntity(1L, "testName", null, Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategoryEntity persistedMaterialCategoryEntity = new MaterialCategoryEntity(1L, "updatedName", null, Set.of(new MaterialCategoryEntity(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory patchedCategory = new MaterialCategory(1L, "updatedName", null, null, null, null, null);
+        MaterialCategory existingMaterialCategoryEntity = new MaterialCategory(1L, "testName", null, Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory persistedMaterialCategoryEntity = new MaterialCategory(1L, "updatedName", null, Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
 
         when(materialCategoryRepository.findById(id)).thenReturn(Optional.of(existingMaterialCategoryEntity));
  
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(persistedMaterialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(persistedMaterialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.patchCategory(null, id, patchedCategory);
+        MaterialCategory returnedCategory = materialCategoryService.patchCategory(null, id, patchedCategory);
        
         //Assert persisted entity
         assertEquals(existingMaterialCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
@@ -316,20 +315,20 @@ public class MaterialCategoryServiceImplTest {
     public void testPatchMaterialCategory_setsParentCategoryIfExists() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
-        Category patchedCategory = new Category(1L, "updatedName", null, null, null, null, null);
-        MaterialCategoryEntity parentCategoryEntity = new MaterialCategoryEntity();
-        MaterialCategoryEntity existingCategoryEntity = new MaterialCategoryEntity(1L, "testName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategoryEntity materialCategoryEntity = new MaterialCategoryEntity(1L, "updatedName", new MaterialCategoryEntity(), Set.of(new MaterialCategoryEntity()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory patchedCategory = new MaterialCategory(1L, "updatedName", null, null, null, null, null);
+        MaterialCategory parentCategoryEntity = new MaterialCategory();
+        MaterialCategory existingCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "updatedName", new MaterialCategory(), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialCategoryEntity> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategoryEntity.class);
+        ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
 
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.of(parentCategoryEntity));
         
         when(materialCategoryRepository.findById(id)).thenReturn(Optional.of(existingCategoryEntity));
  
-        when(materialCategoryRepository.save(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
+        when(materialCategoryRepository.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(materialCategoryEntity);
 
-        Category returnedCategory = materialCategoryService.patchCategory(parentCategoryId, id, patchedCategory);
+        MaterialCategory returnedCategory = materialCategoryService.patchCategory(parentCategoryId, id, patchedCategory);
        
         //Assert persisted entity
         assertEquals(existingCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
@@ -356,26 +355,26 @@ public class MaterialCategoryServiceImplTest {
     public void testPatchMaterialCategory_throwsIfParentCategoryDoesNotExist() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
-        Category material = new Category();
+        MaterialCategory material = new MaterialCategory();
         
         when(materialCategoryRepository.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
       
         assertThrows(EntityNotFoundException.class, () -> {
             materialCategoryService.patchCategory(parentCategoryId, id, material);
-            verify(materialCategoryRepository, times(0)).save(Mockito.any(MaterialCategoryEntity.class));
+            verify(materialCategoryRepository, times(0)).saveAndFlush(Mockito.any(MaterialCategory.class));
         });
     }
     
     @Test
     public void testPatchMaterialCategory_throwsIfCategoryDoesNotExist() throws Exception {
         Long id = 1L;
-        Category material = new Category();
+        MaterialCategory material = new MaterialCategory();
         
         when(materialCategoryRepository.existsById(id)).thenReturn(false);
       
         assertThrows(EntityNotFoundException.class, () -> {
             materialCategoryService.patchCategory(null,id, material);
-            verify(materialCategoryRepository, times(0)).save(Mockito.any(MaterialCategoryEntity.class));
+            verify(materialCategoryRepository, times(0)).saveAndFlush(Mockito.any(MaterialCategory.class));
         });
     }
 

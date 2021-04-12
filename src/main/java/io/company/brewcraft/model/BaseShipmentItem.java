@@ -2,8 +2,6 @@ package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
-import io.company.brewcraft.pojo.Material;
-
 public interface BaseShipmentItem {
     public Quantity<?> getQuantity();
 

@@ -8,9 +8,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.service.mapper.CycleAvoidingMappingContext;
-import io.company.brewcraft.service.mapper.MaterialMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "shipment_item")
@@ -28,7 +25,7 @@ public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audi
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
-    private MaterialEntity material;
+    private Material material;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id")
@@ -85,19 +82,14 @@ public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audi
 
     @Override
     public Material getMaterial() {
-        return MaterialMapper.INSTANCE.fromEntity(material, new CycleAvoidingMappingContext());
+        return material;
     }
 
     @Override
     public void setMaterial(Material material) {
-        setMaterial(MaterialMapper.INSTANCE.toEntity(material, new CycleAvoidingMappingContext()));
-    }
-    
-    // TODO: Remove when MaterialEntity is replaced by Material
-    public void setMaterial(MaterialEntity material) {
         this.material = material;
     }
-
+    
     @Override
     public Shipment getShipment() {
         return this.shipment;

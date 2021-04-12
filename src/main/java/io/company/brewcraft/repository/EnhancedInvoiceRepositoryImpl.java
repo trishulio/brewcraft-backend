@@ -11,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
-import io.company.brewcraft.model.MaterialEntity;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.pojo.Material;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {
@@ -56,7 +55,7 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
             Map<Long, List<InvoiceItem>> materialToItems = invoice.getItems().stream().filter(item -> item != null && item.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
             log.debug("Material to Items Mapping: {}", materialToItems);
 
-            List<MaterialEntity> materials = materialRepo.findAllById(materialToItems.keySet());
+            List<Material> materials = materialRepo.findAllById(materialToItems.keySet());
             log.debug("Total materials fetched: {}", materials.size());
 
             if (materialToItems.keySet().size() != materials.size()) {
