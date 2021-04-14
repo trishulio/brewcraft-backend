@@ -1,5 +1,9 @@
 package io.company.brewcraft.configuration;
 
+import io.company.brewcraft.security.idp.IdentityProvider;
+import io.company.brewcraft.security.idp.IdpConfiguration;
+import io.company.brewcraft.service.impl.UserServiceImpl;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +29,7 @@ import io.company.brewcraft.service.mapper.TenantMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @Configuration
+@AutoConfigureAfter({IdpConfiguration.class})
 public class ServiceAutoConfiguration {
 
     @Bean
@@ -145,6 +150,12 @@ public class ServiceAutoConfiguration {
     public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
         ProductMeasureValueService productMeasureService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
         return productMeasureService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserService.class)
+    public UserService userService(UserRepository userRepository, IdentityProvider identityProvider) {
+        return new UserServiceImpl(userRepository, identityProvider);
     }
   
 }
