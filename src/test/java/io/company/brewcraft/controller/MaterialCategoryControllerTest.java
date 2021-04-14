@@ -12,7 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.*;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,10 +32,10 @@ public class MaterialCategoryControllerTest {
 
    @Test
    public void testGetMaterialCategories() {
-       Category category = new Category(1L, "root", new Category(2L, null, null, null, null, null, null), null, null, null, null);
+       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, null);
    
-       List<Category> categoryList = List.of(category);
-       Page<Category> mPage = mock(Page.class);
+       List<MaterialCategory> categoryList = List.of(category);
+       Page<MaterialCategory> mPage = mock(Page.class);
        doReturn(categoryList.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
@@ -74,7 +74,7 @@ public class MaterialCategoryControllerTest {
    
    @Test
    public void testGetMaterialCategory() {
-       Category category = new Category(1L, "root", new Category(2L, "parent", null, null, null, null, null), null, null, null, null);
+       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L, "parent", null, null, null, null, null), null, null, null, null);
 
        doReturn(category).when(materialCategoryService).getCategory(1L);
        
@@ -97,9 +97,9 @@ public class MaterialCategoryControllerTest {
    public void testAddMaterialCategory() {
        AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
        
-       ArgumentCaptor<Category> addedCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<MaterialCategory> addedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        
        doReturn(category).when(materialCategoryService).addCategory(eq(addCategoryDto.getParentCategoryId()), addedCategoryCaptor.capture());
 
@@ -121,9 +121,9 @@ public class MaterialCategoryControllerTest {
    public void testPutMaterialCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<Category> putCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<MaterialCategory> putCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        
        doReturn(category).when(materialCategoryService).putCategory(eq(2L), eq(1L), putCategoryCaptor.capture());
 
@@ -146,9 +146,9 @@ public class MaterialCategoryControllerTest {
    public void testPatchMaterialCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
-       Category category = new Category(1L, "categoryName", new Category(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
 
-       ArgumentCaptor<Category> patchCategoryCaptor = ArgumentCaptor.forClass(Category.class);
+       ArgumentCaptor<MaterialCategory> patchCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        
        doReturn(category).when(materialCategoryService).patchCategory(eq(2L), eq(1L), patchCategoryCaptor.capture());
 

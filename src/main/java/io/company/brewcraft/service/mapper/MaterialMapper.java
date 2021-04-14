@@ -3,8 +3,6 @@ package io.company.brewcraft.service.mapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
-import org.mapstruct.Context;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -15,9 +13,8 @@ import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.UpdateMaterialDto;
-import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
+import io.company.brewcraft.model.Material;
 
 @Mapper(uses = { QuantityUnitMapper.class, MaterialCategoryMapper.class })
 public interface MaterialMapper {
@@ -40,12 +37,6 @@ public interface MaterialMapper {
     @Mapping(target = "category", ignore = true)
     MaterialDto toDto(Material material);
     
-    @InheritInverseConfiguration
-    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit.symbol")
-    Material fromEntity(MaterialEntity entity, @Context CycleAvoidingMappingContext context);
-
-    MaterialEntity toEntity(Material material , @Context CycleAvoidingMappingContext context);
-    
     default Material fromDto(Long id) {
         Material material = null;
         if (id != null) {
@@ -59,7 +50,7 @@ public interface MaterialMapper {
     @BeforeMapping
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
-        Category category = material.getCategory();
+        MaterialCategory category = material.getCategory();
         
         if (category == null) {
             materialDto.setMaterialClass(null);

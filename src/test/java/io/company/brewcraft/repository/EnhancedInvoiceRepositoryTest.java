@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,11 +12,11 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.InvoiceEntity;
-import io.company.brewcraft.model.InvoiceItemEntity;
-import io.company.brewcraft.model.InvoiceStatusEntity;
-import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.model.PurchaseOrderEntity;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class EnhancedInvoiceRepositoryTest {
@@ -38,50 +39,99 @@ public class EnhancedInvoiceRepositoryTest {
     }
 
     @Test
-    public void testRefreshAndAdd_ReturnsInvoiceEntity_WithRefreshedChildEntities() {
-        doAnswer(i -> i.getArgument(0, InvoiceEntity.class)).when(mInvoiceRepo).saveAndFlush(any(InvoiceEntity.class));
+    public void testSave_ReturnsInvoice_WithRefreshedChildEntities() {
+        doAnswer(i -> i.getArgument(0, Invoice.class)).when(mInvoiceRepo).saveAndFlush(any(Invoice.class));
 
-        doReturn(Optional.of(new PurchaseOrderEntity(1L))).when(mPoRepo).findById(1L);
-        doReturn(Optional.of(new InvoiceStatusEntity(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
+        doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
+        doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
-        doReturn(List.of(new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5), new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
-                new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
+        doReturn(List.of(
+           new Material(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
+           new Material(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4),
+           new Material(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3))
+       ).when(mMaterialRepo).findAllById(Set.of(3L, 4L, 5L));
 
-        List<InvoiceItemEntity> items = List.of(new InvoiceItemEntity(11L), new InvoiceItemEntity(12L), new InvoiceItemEntity(13L));
-        items.get(0).setMaterial(new MaterialEntity(3L));
-        items.get(1).setMaterial(new MaterialEntity(4L));
-        items.get(2).setMaterial(new MaterialEntity(5L));
+       InvoiceItem item1 = new InvoiceItem(11L);
+       InvoiceItem item2 = new InvoiceItem(12L);
+       InvoiceItem item3 = new InvoiceItem(13L);
+       item1.setMaterial(new Material(3L));
+       item2.setMaterial(new Material(4L));
+       item3.setMaterial(new Material(5L));
+       List<InvoiceItem> items = List.of(item1, item2, item3);
 
-        InvoiceEntity invoice = new InvoiceEntity();
-        invoice.setItems(items);
-        invoice.setStatus(new InvoiceStatusEntity(null, "FINAL"));
+       Invoice invoice = new Invoice();
+       invoice.setItems(items);
+       invoice.setStatus(new InvoiceStatus(null, "FINAL"));
 
-        InvoiceEntity ret = repo.refreshAndAdd(1L, invoice);
+       Invoice ret = repo.save(1L, invoice);
 
-        verify(mInvoiceRepo, times(1)).saveAndFlush(invoice);
+       verify(mInvoiceRepo, times(1)).saveAndFlush(invoice);
 
-        assertEquals(new PurchaseOrderEntity(1L), ret.getPurchaseOrder());
-        assertEquals(new InvoiceStatusEntity(2L, "FINAL"), ret.getStatus());
-        assertEquals(new MaterialEntity(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3), ret.getItems().get(0).getMaterial());
-        assertEquals(new MaterialEntity(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4), ret.getItems().get(1).getMaterial());
-        assertEquals(new MaterialEntity(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5), ret.getItems().get(2).getMaterial());
-    }
+       assertEquals(new PurchaseOrder(1L), ret.getPurchaseOrder());
+       assertEquals(new InvoiceStatus(2L, "FINAL"), ret.getStatus());
+       Iterator<InvoiceItem> it = ret.getItems().iterator();
+       assertEquals(new Material(3L, "Material_3", "Description_3", null, "UPC_3", null, null, null, 3), it.next().getMaterial());
+       assertEquals(new Material(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4), it.next().getMaterial());
+       assertEquals(new Material(5L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5), it.next().getMaterial());
+   }
+
+   @Test
+   public void testSave_ThrowsEntityNotFoundException_WhenPurchaseOrderDoesNotExist() {
+       doReturn(Optional.empty()).when(mPoRepo).findById(1L);
+
+       assertThrows(EntityNotFoundException.class, () -> repo.save(1L, new Invoice()), "PurchaseOrder not found with id: 1");
+   }
+
+   @Test
+   public void testSave_ThrowsEntityNotFoundException_WhenInvoiceStatusNameIsNonExistent() {
+       doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
+       doReturn(Optional.empty()).when(mStatusRepo).findByName("PENDING");
+
+       Invoice invoice = new Invoice();
+       invoice.setStatus(new InvoiceStatus(2L, "PENDING"));
+
+       assertThrows(EntityNotFoundException.class, () -> repo.save(1L, invoice), "InvoiceStatus not found with name: PENDING");
+   }
 
     @Test
-    public void testRefreshAndAdd_ThrowsEntityNotFoundException_WhenPurchaseOrderDoesNotExist() {
-        doReturn(Optional.empty()).when(mPoRepo).findById(1L);
+    public void testSave_ThrowsEntityNotFoundException_WhenAllMaterialsDontExist() {
+        doReturn(Optional.of(new PurchaseOrder(1L))).when(mPoRepo).findById(1L);
+        doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
-        assertThrows(EntityNotFoundException.class, () -> repo.refreshAndAdd(1L, new InvoiceEntity()), "PurchaseOrder not found with id: 1");
-    }
+        doReturn(List.of(
+           new Material(3L, "Material_5", "Description_5", null, "UPC_5", null, null, null, 5),
+           new Material(4L, "Material_4", "Description_4", null, "UPC_4", null, null, null, 4))
+       ).when(mMaterialRepo).findAllById(Set.of(3L, 4L));
+
+       InvoiceItem item1 = new InvoiceItem(11L);
+       InvoiceItem item2 = new InvoiceItem(12L);
+       InvoiceItem item3 = new InvoiceItem(13L);
+       item1.setMaterial(new Material(3L));
+       item2.setMaterial(new Material(4L));
+       item3.setMaterial(new Material(5L));
+       List<InvoiceItem> items = List.of(item1, item2, item3);
+
+       Invoice invoice = new Invoice();
+       invoice.setItems(items);
+       invoice.setStatus(new InvoiceStatus(null, "FINAL"));
+
+       assertThrows(EntityNotFoundException.class, () -> repo.save(1L, invoice), "Cannot find all materials in Id-Set: [3, 4, 5]. Materials found with Ids: [5, 4]");
+   }
 
     @Test
-    public void testRefreshAndAdd_ThrowsEntityNotFoundException_WhenInvoiceStatusNameIsNonExistent() {
-        doReturn(Optional.of(new PurchaseOrderEntity(1L))).when(mPoRepo).findById(1L);
-        doReturn(Optional.empty()).when(mStatusRepo).findByName("PENDING");
+    public void testSave_SavesWithNullPurchaseOrder_WhenPurchaseOrderIdIsNull() {
+        doAnswer(i -> i.getArgument(0, Invoice.class)).when(mInvoiceRepo).saveAndFlush(any(Invoice.class));
 
-        InvoiceEntity invoice = new InvoiceEntity();
-        invoice.setStatus(new InvoiceStatusEntity(2L, "PENDING"));
+        doReturn(Optional.of(new InvoiceStatus(2L, "FINAL"))).when(mStatusRepo).findByName("FINAL");
 
-        assertThrows(EntityNotFoundException.class, () -> repo.refreshAndAdd(1L, invoice), "InvoiceStatus not found with name: PENDING");
+        Invoice invoice = new Invoice();
+        invoice.setPurchaseOrder(new PurchaseOrder(1L));
+        invoice.setStatus(new InvoiceStatus(null, "FINAL"));
+
+        Invoice ret = repo.save(null, invoice);
+
+       verify(mInvoiceRepo, times(1)).saveAndFlush(invoice);
+
+       assertNull(ret.getPurchaseOrder());
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class AddInvoiceDto extends BaseDto {
     private String invoiceNumber;
+    private Long purchaseOrderId;
     private String description;
     private FreightDto freight;
     private LocalDateTime generatedOn;
@@ -16,8 +17,9 @@ public class AddInvoiceDto extends BaseDto {
     public AddInvoiceDto() {
     }
 
-    public AddInvoiceDto(String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<AddInvoiceItemDto> items) {
+    public AddInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, InvoiceStatusDto status, List<AddInvoiceItemDto> items) {
         setInvoiceNumber(invoiceNumber);
+        setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
         setFreight(freight);
         setGeneratedOn(generatedOn);
@@ -33,6 +35,14 @@ public class AddInvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Long getPurchaseOrderId() {
+        return purchaseOrderId;
+    }
+
+    public void setPurchaseOrderId(Long purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
     }
 
     public String getDescription() {

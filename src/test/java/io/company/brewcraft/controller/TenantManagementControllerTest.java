@@ -1,7 +1,9 @@
 package io.company.brewcraft.controller;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,13 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.company.brewcraft.dto.TenantDto;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.util.UtilityProvider;
 
 @WebMvcTest(TenantManagementController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -36,6 +35,9 @@ public class TenantManagementControllerTest {
     
     @MockBean
     private ContextHolder contextHolderMock;
+
+    @MockBean
+    private UtilityProvider utilityProvider;
 
     @MockBean
     private TenantManagementService tenantManagementServiceMock;

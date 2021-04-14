@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import io.company.brewcraft.data.CheckedRunnable;
+import io.company.brewcraft.data.CheckedConsumer;
 import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
@@ -42,7 +42,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testAdd_CreatesUserAndGrantPrivilegesAndStorePassInSecretManager() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(0, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedRunnable.class));
+        doAnswer(inv -> {inv.getArgument(0, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedConsumer.class));
 
         doReturn("1234567890").when(mRand).string(TenantUserRegister.LENGTH_PASSWORD);
 
@@ -85,7 +85,7 @@ public class TenantUserRegisterTest {
     @Test
     public void testRemove_TransfersUserOwnershipAndThenDropUser() throws SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(0, CheckedRunnable.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedRunnable.class));
+        doAnswer(inv -> {inv.getArgument(0, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedConsumer.class));
 
         doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
 

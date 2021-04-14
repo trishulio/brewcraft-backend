@@ -5,7 +5,6 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.pojo.Category;
 
 public interface ProductCategoryService {
 
@@ -14,11 +13,11 @@ public interface ProductCategoryService {
     
     public ProductCategory getCategory(Long categoryId);
 
-    public ProductCategory addCategory(Long parentCategoryId, ProductCategory materialCategory);
+    public ProductCategory addCategory(Long parentCategoryId, ProductCategory productCategory);
     
-    public ProductCategory putCategory(Long parentCategoryId, Long categoryId, ProductCategory material);
+    public ProductCategory putCategory(Long parentCategoryId, Long categoryId, ProductCategory productCategory);
     
-    public ProductCategory patchCategory(Long parentCategoryId, Long categoryId, ProductCategory material);
+    public ProductCategory patchCategory(Long parentCategoryId, Long categoryId, ProductCategory productCategory);
 
     public void deleteCategory(Long categoryId);
     

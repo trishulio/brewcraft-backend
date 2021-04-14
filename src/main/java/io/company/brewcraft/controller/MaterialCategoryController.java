@@ -26,7 +26,7 @@ import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.CategoryWithParentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateCategoryDto;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.MaterialCategoryMapper;
@@ -49,7 +49,7 @@ public class MaterialCategoryController {
             @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false) Set<Long> parentCategoryIds,
             @RequestParam(required = false) Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
             @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
-            Page<Category> materialCategoriesPage = materialCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
+            Page<MaterialCategory> materialCategoriesPage = materialCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
 
             List<CategoryDto> materialCategoriesList = materialCategoriesPage.stream()
                     .map(materialCategory -> materialCategoryMapper.toDto(materialCategory)).collect(Collectors.toList());
@@ -63,7 +63,7 @@ public class MaterialCategoryController {
     public CategoryWithParentDto getCategory(@PathVariable Long categoryId) {
         Validator validator = new Validator();
 
-        Category materialCategory = materialCategoryService.getCategory(categoryId);
+        MaterialCategory materialCategory = materialCategoryService.getCategory(categoryId);
         
         validator.assertion(materialCategory != null, EntityNotFoundException.class, "MaterialCategory", categoryId.toString());
 
@@ -73,30 +73,30 @@ public class MaterialCategoryController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Valid @RequestBody AddCategoryDto addMaterialCategoryDto) {
-        Category materialCategory = materialCategoryMapper.fromDto(addMaterialCategoryDto);
+        MaterialCategory materialCategory = materialCategoryMapper.fromDto(addMaterialCategoryDto);
         Long parentCategoryId = addMaterialCategoryDto.getParentCategoryId();
         
-        Category addedMaterialCategory = materialCategoryService.addCategory(parentCategoryId, materialCategory);
+        MaterialCategory addedMaterialCategory = materialCategoryService.addCategory(parentCategoryId, materialCategory);
         
         return materialCategoryMapper.toDto(addedMaterialCategory);
     }
     
     @PutMapping("/{categoryId}")
     public CategoryDto putCategory(@Valid @RequestBody UpdateCategoryDto updateMaterialCategoryDto, @PathVariable Long categoryId) {
-        Category materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
+        MaterialCategory materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
         Long parentCategoryId = updateMaterialCategoryDto.getParentCategoryId();
 
-        Category putMaterialCategory = materialCategoryService.putCategory(parentCategoryId, categoryId, materialCategory);
+        MaterialCategory putMaterialCategory = materialCategoryService.putCategory(parentCategoryId, categoryId, materialCategory);
 
         return materialCategoryMapper.toDto(putMaterialCategory);
     }
     
     @PatchMapping("/{categoryId}")
     public CategoryDto patchCategory(@Valid @RequestBody UpdateCategoryDto updateMaterialCategoryDto, @PathVariable Long categoryId) {
-        Category materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
+        MaterialCategory materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
         Long parentCategoryId = updateMaterialCategoryDto.getParentCategoryId();
 
-        Category patchedMaterialCategory = materialCategoryService.patchCategory(parentCategoryId, categoryId, materialCategory);
+        MaterialCategory patchedMaterialCategory = materialCategoryService.patchCategory(parentCategoryId, categoryId, materialCategory);
         
         return materialCategoryMapper.toDto(patchedMaterialCategory);
     }

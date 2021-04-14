@@ -22,11 +22,16 @@ public class Validator {
 //    public void rule(Supplier<Boolean> test, String err) {
 //        rule(test.get(), err);
 //    }
+    public boolean hasErrors() {
+        return this.errors.size() > 0;
+    }
 
-    public void rule(boolean pass, String err, Object... args) {
+    public boolean rule(boolean pass, String err, Object... args) {
         if (!pass) {
             this.errors.add(String.format(err, args));
         }
+        
+        return pass;
     }
 
     public void raiseErrors() {
@@ -34,7 +39,7 @@ public class Validator {
         assertion(this.errors.size() == 0, ValidationException.class, err);
     }
 
-    public void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
+    public static void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
         if (!pass) {
             try {
                 if (args == null) {

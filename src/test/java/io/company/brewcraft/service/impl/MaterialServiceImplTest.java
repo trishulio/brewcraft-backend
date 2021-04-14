@@ -30,11 +30,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.MaterialCategoryEntity;
-import io.company.brewcraft.model.MaterialEntity;
-import io.company.brewcraft.model.UnitEntity;
-import io.company.brewcraft.pojo.Material;
-import io.company.brewcraft.pojo.Category;
+import io.company.brewcraft.model.MaterialCategory;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
@@ -63,15 +60,15 @@ public class MaterialServiceImplTest {
 
     @Test
     public void testGetMaterials_returnsMaterials() throws Exception {
-        MaterialEntity materialEntity = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
-        List<MaterialEntity> materialEntitys = Arrays.asList(materialEntity);
+        List<Material> materialEntitys = Arrays.asList(materialEntity);
         
-        Page<MaterialEntity> expectedMaterialEntities = new PageImpl<>(materialEntitys);
+        Page<Material> expectedMaterialEntities = new PageImpl<>(materialEntitys);
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
-        when(materialRepositoryMock.findAll(ArgumentMatchers.<Specification<MaterialEntity>>any(), pageableArgument.capture())).thenReturn(expectedMaterialEntities);
+        when(materialRepositoryMock.findAll(ArgumentMatchers.<Specification<Material>>any(), pageableArgument.capture())).thenReturn(expectedMaterialEntities);
 
         Page<Material> actualMaterials = materialService.getMaterials(null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
 
@@ -97,8 +94,8 @@ public class MaterialServiceImplTest {
     @Test
     public void testGetMaterial_returnsMaterial() throws Exception {
         Long id = 1L;
-        MaterialEntity materialEntity = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<MaterialEntity> expectedMaterialEntity = Optional.ofNullable(materialEntity);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Optional<Material> expectedMaterialEntity = Optional.ofNullable(materialEntity);
 
         when(materialRepositoryMock.findById(id)).thenReturn(expectedMaterialEntity);
 
@@ -117,13 +114,13 @@ public class MaterialServiceImplTest {
 
     @Test
     public void testAddMaterial_SavesMaterial() throws Exception {
-        Material material = new Material(1L, "testMaterial", "testDescription", new Category(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        MaterialEntity newMaterial = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material newMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialEntity> persistedMaterialCaptor = ArgumentCaptor.forClass(MaterialEntity.class);
+        ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
-        when(materialRepositoryMock.save(persistedMaterialCaptor.capture())).thenReturn(newMaterial);
+        when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(newMaterial);
 
         Material returnedMaterial = materialService.addMaterial(material);
         
@@ -153,12 +150,12 @@ public class MaterialServiceImplTest {
     @Test
     public void testPutMaterial_success() throws Exception {
         Long id = 1L;
-        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new Category(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialEntity materialEntity = new MaterialEntity(1L, "testMaterial", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialEntity> persistedMaterialCaptor = ArgumentCaptor.forClass(MaterialEntity.class);
+        ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
-        when(materialRepositoryMock.save(persistedMaterialCaptor.capture())).thenReturn(materialEntity);
+        when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(materialEntity);
 
         Material returnedMaterial = materialService.putMaterial(id, putMaterial);
        
@@ -169,7 +166,7 @@ public class MaterialServiceImplTest {
         assertEquals(putMaterial.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
         assertEquals(putMaterial.getUPC(), persistedMaterialCaptor.getValue().getUPC());
         assertEquals(putMaterial.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
-        assertEquals(null, persistedMaterialCaptor.getValue().getLastUpdated());
+        //assertEquals(null, persistedMaterialCaptor.getValue().getLastUpdated());
         //assertEquals(putMaterial.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(putMaterial.getVersion(), persistedMaterialCaptor.getValue().getVersion());
         
@@ -188,15 +185,15 @@ public class MaterialServiceImplTest {
     @Test
     public void testPatchMaterial_success() throws Exception {
         Long id = 1L;
-        Material patchedMaterial = new Material(1L, "updatedName", null, null, null, null, null, null, null);
-        MaterialEntity existingMaterialEntity = new MaterialEntity(1L, "materialName", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialEntity persistedMaterialEntity = new MaterialEntity(1L, "updatedName", "testDescription", new MaterialCategoryEntity(1L, null, null, null, null, null, null), "testUPC", new UnitEntity("kg"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material patchedMaterial = new Material(1L, "updatedName", null, null, null, null, null, null, 1);
+        Material existingMaterialEntity = new Material(1L, "materialName", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material persistedMaterialEntity = new Material(1L, "updatedName", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MaterialEntity> persistedMaterialCaptor = ArgumentCaptor.forClass(MaterialEntity.class);
+        ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
         when(materialRepositoryMock.findById(id)).thenReturn(Optional.of(existingMaterialEntity));
  
-        when(materialRepositoryMock.save(persistedMaterialCaptor.capture())).thenReturn(persistedMaterialEntity);
+        when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(persistedMaterialEntity);
 
         Material returnedMaterial = materialService.patchMaterial(id, patchedMaterial);
        
@@ -232,7 +229,7 @@ public class MaterialServiceImplTest {
       
         assertThrows(EntityNotFoundException.class, () -> {
             materialService.patchMaterial(id, material);
-            verify(materialRepositoryMock, times(0)).save(Mockito.any(MaterialEntity.class));
+            verify(materialRepositoryMock, times(0)).saveAndFlush(Mockito.any(Material.class));
         });
     }
 

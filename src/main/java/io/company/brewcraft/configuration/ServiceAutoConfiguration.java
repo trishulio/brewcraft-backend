@@ -12,20 +12,10 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.*;
 import io.company.brewcraft.service.*;
-import io.company.brewcraft.service.impl.EquipmentServiceImpl;
-import io.company.brewcraft.service.impl.FacilityServiceImpl;
-import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
-import io.company.brewcraft.service.impl.MaterialServiceImpl;
-import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
-import io.company.brewcraft.service.impl.ProductMeasureServiceImpl;
-import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
-import io.company.brewcraft.service.impl.ProductServiceImpl;
-import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
-import io.company.brewcraft.service.impl.StorageServiceImpl;
-import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
-import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.*;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.util.ThreadLocalUtilityProvider;
+import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @Configuration
@@ -54,14 +44,14 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    public InvoiceItemService invoiceItemService() {
-        return new InvoiceItemService();
+    public InvoiceItemService invoiceItemService(UtilityProvider utilProvider) {
+        return new InvoiceItemService(utilProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService) {
-        return new InvoiceService(invoiceRepo, invoiceItemService);
+    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService, UtilityProvider utilProvider) {
+        return new InvoiceService(invoiceRepo, invoiceItemService, utilProvider);
     }
 
     @Bean
@@ -122,6 +112,28 @@ public class ServiceAutoConfiguration {
     public QuantityUnitService quantityUnitService(QuantityUnitRepository quantityUnitRepository) {
         QuantityUnitService quantityUnitService = new QuantityUnitServiceImpl(quantityUnitRepository);
         return quantityUnitService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ShipmentService.class)
+    public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService, UtilityProvider utilProvider) {
+        ShipmentService shipmentService = new ShipmentService(repo, itemService, utilProvider);
+
+        return shipmentService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ShipmentItemService.class)
+    public ShipmentItemService shipmentItemService(UtilityProvider utilProvider) {
+        ShipmentItemService itemService = new ShipmentItemService(utilProvider);
+
+        return itemService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UtilityProvider.class)
+    public UtilityProvider utilityProvider() {
+        return new ThreadLocalUtilityProvider();
     }
 
     @Bean

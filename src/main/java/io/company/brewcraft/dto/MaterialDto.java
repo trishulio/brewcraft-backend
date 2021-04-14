@@ -22,11 +22,15 @@ public class MaterialDto extends BaseDto {
     public MaterialDto() {
         super();
     }
+    
+    public MaterialDto(Long id) {
+        this();
+        this.id = id;
+    }
 
     public MaterialDto(Long id, String name, String description, CategoryDto materialClass, CategoryDto type,
             CategoryDto subCategory, String upc, String baseQuantityUnit, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.description = description;
         this.materialClass = materialClass;

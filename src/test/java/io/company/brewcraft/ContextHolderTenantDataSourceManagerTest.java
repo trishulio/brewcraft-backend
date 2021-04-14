@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import io.company.brewcraft.data.CheckedRunnable;
+import io.company.brewcraft.data.CheckedConsumer;
 import io.company.brewcraft.data.CheckedSupplier;
 import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataSourceManager;
@@ -174,7 +174,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 
-        mgr.query(new CheckedRunnable<Connection, Exception>() {
+        mgr.query(new CheckedConsumer<Connection, Exception>() {
             @Override
             public void run(Connection conn) throws Exception {
                 assertSame(mConn, conn);
@@ -194,7 +194,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         doReturn(mConn).when(mDs).getConnection();
 
         assertThrows(RuntimeException.class, () -> {
-            mgr.query(new CheckedRunnable<Connection, Exception>() {
+            mgr.query(new CheckedConsumer<Connection, Exception>() {
                 @Override
                 public void run(Connection conn) throws Exception {
                     throw new SQLException("Should result in rollback on Connection");
@@ -215,7 +215,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 
-        mgr.query("12345", new CheckedRunnable<Connection, Exception>() {
+        mgr.query("12345", new CheckedConsumer<Connection, Exception>() {
             @Override
             public void run(Connection conn) throws Exception {
                 assertSame(mConn, conn);
@@ -235,7 +235,7 @@ public class ContextHolderTenantDataSourceManagerTest {
         doReturn(mConn).when(mDs).getConnection();
 
         assertThrows(RuntimeException.class, () -> {
-            mgr.query("12345", new CheckedRunnable<Connection, Exception>() {
+            mgr.query("12345", new CheckedConsumer<Connection, Exception>() {
                 @Override
                 public void run(Connection conn) throws Exception {
                     throw new SQLException();

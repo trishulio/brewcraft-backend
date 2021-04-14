@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.InvoiceEntity;
+import io.company.brewcraft.model.Invoice;
 
 @Repository
 @Transactional
-public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long>, JpaSpecificationExecutor<InvoiceEntity>, EnhancedInvoiceRepository {
+public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice>, EnhancedInvoiceRepository {
 }

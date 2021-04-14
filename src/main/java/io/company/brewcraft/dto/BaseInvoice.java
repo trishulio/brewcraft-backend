@@ -3,9 +3,9 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import io.company.brewcraft.pojo.BaseInvoiceItem;
-import io.company.brewcraft.pojo.Freight;
-import io.company.brewcraft.pojo.InvoiceStatus;
+import io.company.brewcraft.model.BaseInvoiceItem;
+import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.InvoiceStatus;
 
 public interface BaseInvoice<T extends BaseInvoiceItem> {
     String getInvoiceNumber();

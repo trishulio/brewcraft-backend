@@ -43,15 +43,15 @@ public class AddInvoiceItemDtoTest {
     @Test
     public void testAccessPrice() {
         assertNull(item.getPrice());
-        item.setPrice(new MoneyDto("CAD", new BigDecimal("100.00")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100.00")), item.getPrice());
+        item.setPrice(new MoneyDto("CAD", new BigDecimal("100")));
+        assertEquals(new MoneyDto("CAD", new BigDecimal("100")), item.getPrice());
     }
 
     @Test
     public void testAccessTax() {
         assertNull(item.getTax());
-        item.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100.00"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100.00"))), item.getTax());
+        item.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
+        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), item.getTax());
     }
 
     @Test

@@ -25,10 +25,14 @@ public class InvoiceDto extends BaseDto {
 
     public InvoiceDto() {
     }
-
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusDto status, List<InvoiceItemDto> items, Integer version) {
+    
+    public InvoiceDto(Long id) {
         this();
         setId(id);
+    }
+
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusDto status, List<InvoiceItemDto> items, Integer version) {
+        this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
         setPurchaseOrder(purchaseOrder);

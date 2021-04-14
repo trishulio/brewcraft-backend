@@ -1,6 +1,7 @@
 package io.company.brewcraft.security.auth;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -9,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.data.CheckedRunnable;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
@@ -70,8 +72,4 @@ public class ThreadLocalContextHolderTest {
 
         return marker;
     }
-}
-
-interface CheckedRunnable<T extends Throwable> {
-    void run() throws T;
 }

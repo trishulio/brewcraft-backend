@@ -31,9 +31,29 @@ public class QuantityMapperTest {
     }
 
     @Test
+    public void testToDto_ReturnsNull_WhenQuantityIsNull() {
+        assertNull(mapper.toDto(null));
+    }
+
+    @Test
+    public void testToEntity_ReturnsNull_WhenQuantityIsNull() {
+        assertNull(mapper.toEntity(null));
+    }
+
+    @Test
     public void testFromDto_ReturnsQuantity_WhenDtoIsNotNull() {
         Quantity<?> quantity = mapper.fromDto(new QuantityDto("kg", new BigDecimal(100)));
         assertEquals(SupportedUnits.KILOGRAM, quantity.getUnit());
         assertEquals(new BigDecimal(100), quantity.getValue());
+    }
+
+    @Test
+    public void testFromDto_ReturnsNull_WhenDtoIsNull() {
+        assertNull(mapper.fromDto(null));
+    }
+
+    @Test
+    public void testFromEntity_ReturnsNull_WhenEntityIsNotNull() {
+        assertNull(mapper.fromEntity(null));
     }
 }

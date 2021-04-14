@@ -82,28 +82,28 @@ public class SupplierServiceImplTest {
     public void testGetSupplier_returnsSupplier() throws Exception {
         Long id = 1L;
         Supplier supplier1 = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Optional<Supplier> expectedSupplierEntity = Optional.ofNullable(supplier1);
+        Optional<Supplier> expectedSupplier = Optional.ofNullable(supplier1);
 
-        when(supplierRepositoryMock.findById(id)).thenReturn(expectedSupplierEntity);
+        when(supplierRepositoryMock.findById(id)).thenReturn(expectedSupplier);
 
         Supplier actualSupplier = supplierService.getSupplier(id);
 
-        assertEquals(expectedSupplierEntity.get().getId(), actualSupplier.getId());
-        assertEquals(expectedSupplierEntity.get().getName(), actualSupplier.getName());
-        assertEquals(expectedSupplierEntity.get().getAddress().getId(), actualSupplier.getAddress().getId());
-        assertEquals(expectedSupplierEntity.get().getContacts().size(), actualSupplier.getContacts().size());
-        assertEquals(expectedSupplierEntity.get().getContacts().get(0).getId(), actualSupplier.getContacts().get(0).getId());
-        assertEquals(expectedSupplierEntity.get().getLastUpdated(), actualSupplier.getLastUpdated());
-        assertEquals(expectedSupplierEntity.get().getCreatedAt(), actualSupplier.getCreatedAt());
-        assertEquals(expectedSupplierEntity.get().getVersion(), actualSupplier.getVersion());
+        assertEquals(expectedSupplier.get().getId(), actualSupplier.getId());
+        assertEquals(expectedSupplier.get().getName(), actualSupplier.getName());
+        assertEquals(expectedSupplier.get().getAddress().getId(), actualSupplier.getAddress().getId());
+        assertEquals(expectedSupplier.get().getContacts().size(), actualSupplier.getContacts().size());
+        assertEquals(expectedSupplier.get().getContacts().get(0).getId(), actualSupplier.getContacts().get(0).getId());
+        assertEquals(expectedSupplier.get().getLastUpdated(), actualSupplier.getLastUpdated());
+        assertEquals(expectedSupplier.get().getCreatedAt(), actualSupplier.getCreatedAt());
+        assertEquals(expectedSupplier.get().getVersion(), actualSupplier.getVersion());
     }
 
     @Test
     public void testAddSupplier_SavesSupplier() throws Exception {        
         Supplier supplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Supplier addedSupplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier addedSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        when(supplierRepositoryMock.saveAndFlush(supplierEntity)).thenReturn(addedSupplierEntity);
+        when(supplierRepositoryMock.saveAndFlush(supplierEntity)).thenReturn(addedSupplier);
 
         Supplier returnedSupplier = supplierService.addSupplier(supplierEntity);
         
@@ -157,36 +157,36 @@ public class SupplierServiceImplTest {
         Long id = 1L;
         
         Supplier patchedSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);     
-        Supplier existingSupplierEntity = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Supplier persistedSupplierEntity = new Supplier(1L, "updatedName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier existingSupplier = new Supplier(1L, "testName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Supplier persistedSupplier = new Supplier(1L, "updatedName", List.of(new SupplierContact(2L, null, null, null, null, null, null, null, null, null)), new SupplierAddress(1L, null, null, null, null, null, null, null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Supplier> persistedSupplierCaptor = ArgumentCaptor.forClass(Supplier.class);
 
-        when(supplierRepositoryMock.findById(id)).thenReturn(Optional.of(existingSupplierEntity));
+        when(supplierRepositoryMock.findById(id)).thenReturn(Optional.of(existingSupplier));
  
-        when(supplierRepositoryMock.saveAndFlush(persistedSupplierCaptor.capture())).thenReturn(persistedSupplierEntity);
+        when(supplierRepositoryMock.saveAndFlush(persistedSupplierCaptor.capture())).thenReturn(persistedSupplier);
 
         Supplier returnedSupplier = supplierService.patchSupplier(id, patchedSupplier);
        
         //Assert persisted entity
-        assertEquals(existingSupplierEntity.getId(), persistedSupplierCaptor.getValue().getId());
+        assertEquals(existingSupplier.getId(), persistedSupplierCaptor.getValue().getId());
         assertEquals(patchedSupplier.getName(), persistedSupplierCaptor.getValue().getName());
         assertEquals(patchedSupplier.getAddress().getId(), persistedSupplierCaptor.getValue().getAddress().getId());
         assertEquals(patchedSupplier.getContacts().size(), persistedSupplierCaptor.getValue().getContacts().size());
         assertEquals(patchedSupplier.getContacts().get(0).getId(), persistedSupplierCaptor.getValue().getContacts().get(0).getId());
-        assertEquals(existingSupplierEntity.getLastUpdated(), persistedSupplierCaptor.getValue().getLastUpdated());
-        assertEquals(existingSupplierEntity.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
-        assertEquals(existingSupplierEntity.getVersion(), persistedSupplierCaptor.getValue().getVersion());
+        assertEquals(existingSupplier.getLastUpdated(), persistedSupplierCaptor.getValue().getLastUpdated());
+        assertEquals(existingSupplier.getCreatedAt(), persistedSupplierCaptor.getValue().getCreatedAt());
+        assertEquals(existingSupplier.getVersion(), persistedSupplierCaptor.getValue().getVersion());
         
         //Assert returned POJO
-        assertEquals(persistedSupplierEntity.getId(), returnedSupplier.getId());
-        assertEquals(persistedSupplierEntity.getName(), returnedSupplier.getName());
-        assertEquals(persistedSupplierEntity.getAddress().getId(), returnedSupplier.getAddress().getId());
-        assertEquals(persistedSupplierEntity.getContacts().size(), returnedSupplier.getContacts().size());
-        assertEquals(persistedSupplierEntity.getContacts().get(0).getId(), returnedSupplier.getContacts().get(0).getId());
-        assertEquals(persistedSupplierEntity.getLastUpdated(), returnedSupplier.getLastUpdated());
-        assertEquals(persistedSupplierEntity.getCreatedAt(), returnedSupplier.getCreatedAt());
-        assertEquals(persistedSupplierEntity.getVersion(), returnedSupplier.getVersion()); 
+        assertEquals(persistedSupplier.getId(), returnedSupplier.getId());
+        assertEquals(persistedSupplier.getName(), returnedSupplier.getName());
+        assertEquals(persistedSupplier.getAddress().getId(), returnedSupplier.getAddress().getId());
+        assertEquals(persistedSupplier.getContacts().size(), returnedSupplier.getContacts().size());
+        assertEquals(persistedSupplier.getContacts().get(0).getId(), returnedSupplier.getContacts().get(0).getId());
+        assertEquals(persistedSupplier.getLastUpdated(), returnedSupplier.getLastUpdated());
+        assertEquals(persistedSupplier.getCreatedAt(), returnedSupplier.getCreatedAt());
+        assertEquals(persistedSupplier.getVersion(), returnedSupplier.getVersion()); 
     }
     
     @Test

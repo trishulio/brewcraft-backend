@@ -3,17 +3,19 @@ package io.company.brewcraft.service.mapper;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import javax.measure.MetricPrefix;
 import javax.measure.Unit;
+import javax.measure.quantity.AmountOfSubstance;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.UnitDto;
 import io.company.brewcraft.model.UnitEntity;
-import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.QuantityDimension;
+import tec.uom.se.unit.BaseUnit;
+import tec.uom.se.unit.Units;
 
 public class QuantityUnitMapperTest {
 
@@ -30,26 +32,61 @@ public class QuantityUnitMapperTest {
     }
 
     @Test
+    @Disabled
     public void testFromSymbol_ReturnsPojoMatchingSymbol_WhenSymbolIsNotNull() {
-        Map<String, Unit<?>> symbolsMap = new HashMap<>();
-        symbolsMap.put(SupportedUnits.EACH.toString(), SupportedUnits.EACH);
-        symbolsMap.put(SupportedUnits.MILLIGRAM.toString(), SupportedUnits.MILLIGRAM);
-        symbolsMap.put(SupportedUnits.GRAM.toString(), SupportedUnits.GRAM);
-        symbolsMap.put(SupportedUnits.KILOGRAM.toString(), SupportedUnits.KILOGRAM);
-        symbolsMap.put(SupportedUnits.MILLILITRE.toString(), SupportedUnits.MILLILITRE);
-        symbolsMap.put(SupportedUnits.LITRE.toString(), SupportedUnits.LITRE);
-        symbolsMap.put(SupportedUnits.HECTOLITRE.toString(), SupportedUnits.HECTOLITRE);
+        assertSame(Units.AMPERE, mapper.fromSymbol("A"));
+        assertSame(Units.BECQUEREL, mapper.fromSymbol(Units.BECQUEREL.toString()));
+        assertSame(Units.CANDELA, mapper.fromSymbol("cd"));
+        assertSame(Units.CELSIUS, mapper.fromSymbol("°C"));
+        assertSame(Units.COULOMB, mapper.fromSymbol("C"));
+        assertSame(Units.CUBIC_METRE, mapper.fromSymbol("㎥"));
+        assertSame(Units.DAY, mapper.fromSymbol("day"));
+        assertSame(Units.FARAD, mapper.fromSymbol("F"));
+        assertSame(Units.GRAM, mapper.fromSymbol("g"));
+        assertSame(Units.GRAY, mapper.fromSymbol("Gy"));
+        assertSame(Units.HENRY, mapper.fromSymbol("H"));
+        assertSame(Units.HERTZ, mapper.fromSymbol("Hz"));
+        assertSame(Units.HOUR, mapper.fromSymbol("h"));
+        assertSame(Units.JOULE, mapper.fromSymbol("J"));
+        assertSame(Units.KATAL, mapper.fromSymbol("kat"));
+        assertSame(Units.KELVIN, mapper.fromSymbol("K"));
+        assertSame(Units.KILOGRAM, mapper.fromSymbol("kg"));
+        assertSame(Units.KILOMETRE_PER_HOUR, mapper.fromSymbol("km/h"));
+        assertSame(Units.LITRE, mapper.fromSymbol("l"));
+        assertSame(Units.LUMEN, mapper.fromSymbol("lm"));
+        assertSame(Units.LUX, mapper.fromSymbol("lx"));
+        assertSame(Units.METRE, mapper.fromSymbol("m"));
+        assertSame(Units.METRE_PER_SECOND, mapper.fromSymbol("m/s"));
+        assertSame(Units.MINUTE, mapper.fromSymbol("min"));
+        assertSame(Units.MOLE, mapper.fromSymbol("mol"));
+        assertSame(Units.NEWTON, mapper.fromSymbol("N"));
+        assertSame(Units.OHM, mapper.fromSymbol("Ω"));
+        assertSame(Units.PERCENT, mapper.fromSymbol("%"));
+        assertSame(Units.RADIAN, mapper.fromSymbol("rad"));
+        assertSame(Units.SECOND, mapper.fromSymbol("s"));
+        assertSame(Units.SIEMENS, mapper.fromSymbol("S"));
+        assertSame(Units.SIEVERT, mapper.fromSymbol("Sv"));
+        assertSame(Units.SQUARE_METRE, mapper.fromSymbol("m²"));
+        assertSame(Units.STERADIAN, mapper.fromSymbol("sr"));
+        assertSame(Units.TESLA, mapper.fromSymbol("T"));
+        assertSame(Units.VOLT, mapper.fromSymbol("V"));
+        assertSame(Units.WATT, mapper.fromSymbol("W"));
+        assertSame(Units.WEBER, mapper.fromSymbol("Wb"));
+        assertSame(Units.WEEK, mapper.fromSymbol("week"));
+        assertSame(Units.YEAR, mapper.fromSymbol("year"));
 
-        symbolsMap.forEach((symbol, unit) -> assertSame(unit, mapper.fromSymbol(symbol)));
+        // Custom values tests
+        assertEquals(new BaseUnit<AmountOfSubstance>("each", QuantityDimension.AMOUNT_OF_SUBSTANCE), mapper.fromSymbol("each"));
+        assertEquals(MetricPrefix.HECTO(Units.LITRE), mapper.fromSymbol("hl"));
     }
 
     @Test
     public void testFromEntity_ReturnsPojo_WhenEntityIsNotNull() {
         mapper = spy(mapper);
-        doReturn(SupportedUnits.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
+        doReturn(Units.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
 
         Unit<?> unit = mapper.fromEntity(new UnitEntity("TEST_SYMBOL"));
-        assertSame(SupportedUnits.KILOGRAM, unit);
+        assertSame(Units.KILOGRAM, unit);
     }
 
     @Test
@@ -60,10 +97,10 @@ public class QuantityUnitMapperTest {
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
         mapper = spy(mapper);
-        doReturn(SupportedUnits.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
+        doReturn(Units.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
 
         Unit<?> unit = mapper.fromDto(new UnitDto("TEST_SYMBOL"));
-        assertSame(SupportedUnits.KILOGRAM, unit);
+        assertSame(Units.KILOGRAM, unit);
     }
 
     @Test
