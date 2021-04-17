@@ -95,6 +95,14 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     
     @Override
     public void setInvoice(Invoice invoice) {
+        if (this.invoice != null) {
+            this.invoice.getItems().remove(this);
+        }
+
+        if (invoice != null) {
+            invoice.getItems().add(this);            
+        }
+
         this.invoice = invoice;
     }
 

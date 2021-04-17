@@ -97,6 +97,14 @@ public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audi
 
     @Override
     public void setShipment(Shipment shipment) {
+        if (this.shipment != null) {
+            this.shipment.getItems().remove(this);
+        }
+
+        if (shipment != null) {
+            shipment.getItems().add(this);            
+        }
+
         this.shipment = shipment;
     }
 

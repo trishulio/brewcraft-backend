@@ -1,8 +1,16 @@
 package io.company.brewcraft.model;
 
+import javax.persistence.OptimisticLockException;
+
 public interface Versioned {
 
     Integer getVersion();
 
     void setVersion(Integer version);
+
+    default void optimisicLockCheck(Versioned update) {
+        if (this.getVersion() != update.getVersion()) {
+            throw new OptimisticLockException(String.format("Cannot update entity with of version: %s with update payload of version: %s", this.getVersion(), update.getVersion()));
+        }
+    }
 }

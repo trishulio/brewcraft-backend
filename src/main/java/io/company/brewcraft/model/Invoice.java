@@ -134,10 +134,12 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
         this.description = description;
     }
 
+    @Override
     public PurchaseOrder getPurchaseOrder() {
         return purchaseOrder;
     }
 
+    @Override
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
     }
@@ -209,18 +211,14 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public void setItems(List<InvoiceItem> items) {
-        if (this.getItems() != null) {
-            this.getItems().clear();
-            this.getItems().addAll(items);
-        } else if (items != null){
+        if (this.items == null) {
             this.items = new ArrayList<>();
-            items.forEach(item -> this.items.add(item));
         } else {
-            this.items = null;
+            this.items.clear();            
         }
 
-        if (this.getItems() != null) {
-            this.getItems().forEach(item -> item.setInvoice(this));
+        if (items != null) {
+            items.stream().collect(Collectors.toList()).forEach(item -> item.setInvoice(this));
         }
     }
 

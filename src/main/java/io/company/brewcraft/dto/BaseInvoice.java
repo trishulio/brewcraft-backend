@@ -6,6 +6,7 @@ import java.util.List;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.PurchaseOrder;
 
 public interface BaseInvoice<T extends BaseInvoiceItem> {
     String getInvoiceNumber();
@@ -15,6 +16,10 @@ public interface BaseInvoice<T extends BaseInvoiceItem> {
     String getDescription();
 
     void setDescription(String description);
+
+    void setPurchaseOrder(PurchaseOrder purchaseOrder);
+
+    PurchaseOrder getPurchaseOrder();
 
     LocalDateTime getGeneratedOn();
 

@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.OptimisticLockException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Invoice;
@@ -25,21 +24,17 @@ import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
 
-//@Transactional
+@Transactional
 public class ShipmentService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
     private ShipmentRepository repo;
     private ShipmentItemService itemService;
-    private UtilityProvider utilProvider;
 
-    public ShipmentService(ShipmentRepository repo, ShipmentItemService itemService, UtilityProvider utilProvider) {
+    public ShipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
         this.repo = repo;
         this.itemService = itemService;
-        this.utilProvider = utilProvider;
     }
 
     public Page<Shipment> getShipments(
@@ -77,10 +72,6 @@ public class ShipmentService extends BaseService {
     public Shipment getShipment(Long id) {
         log.debug("Fetching shipment with Id: {}", id);
 
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(id != null, "Non-null Id expected");
-        validator.raiseErrors();
-
         Shipment shipment = null;
 
         log.debug("Finding shipment by Id: {}", id);
@@ -96,12 +87,6 @@ public class ShipmentService extends BaseService {
 
     public boolean existsByIds(Collection<Long> ids) {
         log.debug("Checking invoice exists in Ids: {}", ids);
-
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(ids != null, "Cannot search on a null Id set");
-        validator.raiseErrors();
-
-        log.debug("Search shipment exists in Id: {}", ids);
         boolean exists = repo.existsByIds(ids);
         log.debug("Shipments exists: {}", exists);
         
@@ -109,12 +94,6 @@ public class ShipmentService extends BaseService {
     }
 
     public int delete(Collection<Long> ids) {
-        log.debug("Deleting shipments in Ids: {}", ids);
-
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(ids != null, "Cannot retrieve Ids to delete from a null collection");
-        validator.raiseErrors();
-
         log.debug("Attempting to delete shipments with Ids: {}", ids);
         int count = repo.deleteByIds(ids);
         log.debug("Number of shipments deleted: {}", count);
@@ -123,13 +102,7 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment add(Long invoiceId, Shipment shipment) {
-        log.debug("Adding a new shipment under invoice: {}", invoiceId);
-
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(shipment != null, "Shipment cannot be null");
-        validator.raiseErrors();
-
-        log.debug("Creating a new shipment with {} items", shipment.getItems() == null ? null : shipment.getItems().size());
+        log.debug("Adding a new shipment under invoice: {} with {} items", invoiceId, shipment.getItems() == null ? null : shipment.getItems().size());
         Shipment addition = new Shipment();
         List<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
         log.debug("Number of item additions: {}", itemAdditions == null ? null : itemAdditions.size());
@@ -137,59 +110,61 @@ public class ShipmentService extends BaseService {
         addition.override(shipment, getPropertyNames(BaseShipment.class));
         addition.setItems(itemAdditions);
 
-        return repo.save(invoiceId, addition);
+        repo.refresh(invoiceId, addition);
+
+        return repo.saveAndFlush(addition);
     }
 
     public Shipment put(Long invoiceId, Long shipmentId, Shipment update) {
         log.debug("Putting a shipment with Id: {} under InvoiceId: {}", shipmentId, invoiceId);
 
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(update != null, "Shipment cannot be null");
-        validator.raiseErrors();
-
-        Class<?> shipmentClz = UpdateShipment.class;
         Shipment existing = getShipment(shipmentId);
+        Class<? super Shipment> shipmentClz = BaseShipment.class;
 
         if (existing == null) {
-            existing = new Shipment();
-            shipmentClz = BaseShipment.class;
-
-        } else if (existing.getVersion() != update.getVersion()) {
-            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
+            existing = new Shipment(shipmentId); //TODO: Hibernate ignores the id.
+        } else {
+            existing.optimisicLockCheck(update);
+            shipmentClz = UpdateShipment.class;
         }
-        
-        existing.setId(shipmentId); // Doesn't work. Hibernate ignores this.
 
-        log.debug("Replacing existing {} items", existing.getItems() == null ? null : existing.getItems().size());
-        List<ShipmentItem> existingItems = existing.getItems();
-        List<ShipmentItem> updatedItems = itemService.getPutItems(existingItems, update.getItems());
-        log.debug("Updated {} items", updatedItems == null ? null : updatedItems.size());
-        existing.override(update, getPropertyNames(shipmentClz));
-        existing.setItems(updatedItems);
+        log.debug("Shipment with Id: {} has {} existing items", existing == null ? null : invoiceId, existing.getItems() == null ? null : existing.getItems().size());
+        log.debug("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
 
-        return repo.save(invoiceId, existing);
+        List<ShipmentItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
+        log.debug("Total UpdateItems: {}", updatedItems == null ? null : updatedItems.size());
+
+        Shipment temp = new Shipment();
+        temp.override(update, getPropertyNames(shipmentClz));
+        temp.setItems(updatedItems);
+        repo.refresh(invoiceId, temp);
+
+        existing.override(temp, getPropertyNames(shipmentClz));
+
+        return repo.saveAndFlush(existing);
     }
 
     public Shipment patch(Long invoiceId, Long shipmentId, Shipment update) {
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(update != null, "Shipment cannot be null");
-        validator.raiseErrors();
+        log.debug("Performing patch on Shipment with Id: {}", invoiceId);
 
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
-
-        if (existing.getVersion() != update.getVersion()) {
-            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
-        }
-
+        existing.optimisicLockCheck(update);
+        
         if (invoiceId == null && existing.getInvoice() != null) {
             invoiceId = existing.getInvoice().getId();
         }
 
         List<ShipmentItem> existingItems = existing.getItems();
         List<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());
-        existing.outerJoin(update, getPropertyNames(UpdateShipment.class));
-        existing.setItems(updatedItems);
 
-        return repo.save(invoiceId, existing);
+        Shipment temp = new Shipment();
+        temp.override(existing);
+        temp.outerJoin(update, getPropertyNames(UpdateShipment.class));
+        temp.setItems(updatedItems);        
+        repo.refresh(invoiceId, temp);
+
+        existing.override(temp, getPropertyNames(UpdateShipment.class));
+
+        return repo.saveAndFlush(existing);
     }
 }

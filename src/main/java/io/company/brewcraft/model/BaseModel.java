@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import io.company.brewcraft.util.entity.ReflectionManipulator;
@@ -48,22 +47,6 @@ public abstract class BaseModel {
 
     public void override(Object other, Set<String> include) {
         util.copy(this, other, pd -> include.contains(pd.getName()));
-    }
-
-    public Set<String> getProps(Class<?> clazz) {
-        return util.getPropertyNames(clazz);
-    }
-
-    @Override
-    public BaseModel clone() {
-        try {
-            BaseModel clone = this.getClass().getConstructor().newInstance();
-            clone.override(this);            
-
-            return clone;
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException("Failed to create an instance of class: %s. The class should have a no-arg constructor", e);
-        }
     }
 
     @Override

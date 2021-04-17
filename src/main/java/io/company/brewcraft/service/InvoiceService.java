@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.OptimisticLockException;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,26 +29,22 @@ import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
 
-//@Transactional
+@Transactional
 public class InvoiceService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
     private InvoiceRepository repo;
     private InvoiceItemService itemService;
-    private UtilityProvider utilProvider;
 
     public InvoiceService() {
         super();
     }
 
-    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService,UtilityProvider utilProvider) {
+    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService) {
         this();
         this.repo = repo;
         this.itemService = itemService;
-        this.utilProvider = utilProvider;
     }
 
     public Page<Invoice> getInvoices(
@@ -118,45 +114,39 @@ public class InvoiceService extends BaseService {
 
     public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
         log.debug("Updating the Invoice with Id: {}", invoiceId);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(update != null, "Update Payload cannot be null");
-        validator.raiseErrors();
 
         Invoice existing = getInvoice(invoiceId);
-        Class<?> invoiceClz = UpdateInvoice.class;
+        Class<? super Invoice> invoiceClz = BaseInvoice.class;
 
         if (existing == null) {
-            log.debug("Invoice with Id: {} not found. New Invoice will be created", invoiceId);
-            existing = new Invoice(invoiceId);
-            invoiceClz = BaseInvoice.class;
+            existing = new Invoice(invoiceId); // Gotcha: The save function ignores this ID
 
-        } else if (existing.getVersion() != update.getVersion()) {
-            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), update.getVersion()));
+        } else {
+            existing.optimisicLockCheck(update);
+            invoiceClz = UpdateInvoice.class;
         }
-        
-        log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
+
+        log.debug("Invoice with Id: {} has {} existing items", existing == null ? null : invoiceId, existing.getItems() == null ? null : existing.getItems().size());
         log.debug("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
 
         List<InvoiceItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
-        log.debug("Total UpdateItems: {}", updatedItems.size());
-        
-        existing.override(update, getPropertyNames(invoiceClz));
-        existing.setItems(updatedItems);
+        log.debug("Total UpdateItems: {}", updatedItems == null ? null : updatedItems.size());
 
-        validator.raiseErrors();
-        return repo.save(purchaseOrderId, existing);
+        Invoice temp = new Invoice();
+        temp.override(update, getPropertyNames(invoiceClz));
+        temp.setItems(updatedItems);
+        repo.refresh(purchaseOrderId, temp);
+
+        existing.override(temp, getPropertyNames(invoiceClz));
+
+        return repo.saveAndFlush(existing);
     }
 
     public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
         log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(patch != null, "Update Payload cannot be null");
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
-
-        if (existing.getVersion() != patch.getVersion()) {
-            throw new OptimisticLockException(String.format("Cannot update entity with Id: %s of version: %s with payload of version: %s", existing.getId(), existing.getVersion(), patch.getVersion()));
-        }
+        existing.optimisicLockCheck(patch);
 
         if (purchaseOrderId == null && existing.getPurchaseOrder() != null) {
             purchaseOrderId = existing.getPurchaseOrder().getId();
@@ -167,16 +157,19 @@ public class InvoiceService extends BaseService {
 
         List<InvoiceItem> updatedItems = itemService.getPatchItems(existing.getItems(), patch.getItems());
         log.debug("Total UpdateItems: {}", updatedItems.size());
-        
-        existing.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
-        existing.setItems(updatedItems);
-        
-        validator.raiseErrors();
-        return repo.save(purchaseOrderId, existing);
+
+        Invoice temp = new Invoice(invoiceId);
+        temp.override(existing);
+        temp.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
+        temp.setItems(updatedItems);
+        repo.refresh(purchaseOrderId, temp);
+
+        existing.override(temp);
+
+        return repo.saveAndFlush(existing);
     }
 
     public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
-        Validator validator = this.utilProvider.getValidator();
         log.debug("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
 
         Invoice invoice = new Invoice();
@@ -186,8 +179,8 @@ public class InvoiceService extends BaseService {
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);
 
-        validator.raiseErrors();
+        repo.refresh(purchaseOrderId, invoice);
 
-        return repo.save(purchaseOrderId, invoice);
+        return repo.saveAndFlush(invoice);
     }
 }

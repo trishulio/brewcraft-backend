@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -28,8 +29,6 @@ import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
@@ -38,18 +37,21 @@ public class InvoiceServiceTest {
 
    private InvoiceRepository mRepo;
    private InvoiceItemService mItemService;
-   private UtilityProvider mUtilProvider;
-
 
    @BeforeEach
    public void init() {
        mRepo = mock(InvoiceRepository.class);
-       mItemService = mock(InvoiceItemService.class);
-       
-       mUtilProvider = mock(UtilityProvider.class);
-       doReturn(new Validator()).when(mUtilProvider).getValidator();
+       doAnswer(inv -> inv.getArgument(0, Invoice.class)).when(mRepo).saveAndFlush(any(Invoice.class));
+       doAnswer(inv -> {
+           Long poId = inv.getArgument(0, Long.class);
+           Invoice invoice = inv.getArgument(1, Invoice.class);           
+           invoice.setPurchaseOrder(new PurchaseOrder(poId));
+           return null;
+       }).when(mRepo).refresh(anyLong(), any(Invoice.class));
 
-       this.service = spy(new InvoiceService(mRepo, mItemService, mUtilProvider));
+       mItemService = mock(InvoiceItemService.class);
+
+       this.service = spy(new InvoiceService(mRepo, mItemService));
    }
    
    @Test
@@ -106,7 +108,7 @@ public class InvoiceServiceTest {
 
        assertThrows(EntityNotFoundException.class, () -> service.delete(12345L));
    }
-   
+
    @Test
    public void testPut_CreatesAndSaveNewEntityWithUpdates_WhenInvoiceWithGivenIdDoesNotExist() {
        InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
@@ -126,21 +128,11 @@ public class InvoiceServiceTest {
            1
        );
 
-//       doReturn(LocalDateTime.of(2100, 12, 31, 23, 59)).when(service).now();
-
-       doAnswer(inv -> {
-           Long poId = inv.getArgument(0, Long.class);
-           Invoice invoice = inv.getArgument(1, Invoice.class);           
-           invoice.setPurchaseOrder(new PurchaseOrder(poId));           
-           return invoice;
-
-       }).when(mRepo).save(any(Long.class), any(Invoice.class));
-       
-       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(isNull(), eq(List.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
 
        Invoice invoice = service.put(3L, 1L, update);
 
-       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).saveAndFlush(any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -188,21 +180,13 @@ public class InvoiceServiceTest {
            1
        );
 
-       doAnswer(inv -> {
-           Long poId = inv.getArgument(0, Long.class);
-           Invoice invoice = inv.getArgument(1, Invoice.class);           
-           invoice.setPurchaseOrder(new PurchaseOrder(poId));           
-           return invoice;
-
-       }).when(mRepo).save(any(Long.class), any(Invoice.class));
-
-       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(isNull(), eq(List.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
        
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
        Invoice invoice = service.put(3L, 1L, update);
 
-       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -265,22 +249,15 @@ public class InvoiceServiceTest {
        update.setLastUpdated(LocalDateTime.of(9999, 12, 31, 12, 0));
        update.setItems(List.of(itemUpdate));
        update.setVersion(1);
-       
-       doAnswer(inv -> {
-           Long poId = inv.getArgument(0, Long.class);
-           Invoice invoice = inv.getArgument(1, Invoice.class);           
-           invoice.setPurchaseOrder(new PurchaseOrder(poId));           
-           return invoice;
 
-       }).when(mRepo).save(any(Long.class), any(Invoice.class));
-
-       doReturn(List.of(itemUpdate)).when(mItemService).getPatchItems(isNull(), eq(List.of(itemUpdate)));
+       doReturn(List.of(itemUpdate)).when(mItemService).getPatchItems(Collections.emptyList(), List.of(itemUpdate));
 
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
        Invoice invoice = service.patch(3L, 1L, update);
 
-       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).saveAndFlush(invoice);
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("New description value", invoice.getDescription());
@@ -308,7 +285,7 @@ public class InvoiceServiceTest {
 
    @Test
    public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
-       doAnswer(i -> i.getArgument(1, Invoice.class)).when(mRepo).save(anyLong(), any(Invoice.class));
+       doNothing().when(mRepo).refresh(anyLong(), any(Invoice.class));
 
        Invoice existing = new Invoice(1L);
 
@@ -317,19 +294,21 @@ public class InvoiceServiceTest {
 
        Invoice update = new Invoice(1L);
        Invoice invoice = service.patch(null, 1L, update);        
-       verify(mRepo, times(1)).save(2L, invoice);
+       verify(mRepo, times(1)).refresh(2L, invoice);
    }
 
    @Test
-   public void testPatch_SavesWithNullInvoiceId_WhenInvoiceIdArgIsNullAndExistingInvoiceIsNull() {
-       doAnswer(i -> i.getArgument(1, Invoice.class)).when(mRepo).save(isNull(), any(Invoice.class));
+   public void testPatch_SavesWithNullPurchaseOrder_WhenPurchaseOrderIdIsNullAndExistingPurchaseOrderIsNull() {
+       doNothing().when(mRepo).refresh(isNull(), any(Invoice.class));
 
        Invoice existing = new Invoice(1L);
        doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
        Invoice update = new Invoice(1L);
        Invoice invoice = service.patch(null, 1L, update);
-       verify(mRepo, times(1)).save(null, invoice);
+
+       verify(mRepo, times(1)).refresh(null, invoice);
+       verify(mRepo, times(1)).saveAndFlush(invoice);
    }
 
    @Test
@@ -363,19 +342,12 @@ public class InvoiceServiceTest {
            1
        );
 
-       doAnswer(inv -> {
-           Long poId = inv.getArgument(0, Long.class);
-           Invoice invoice = inv.getArgument(1, Invoice.class);           
-           invoice.setPurchaseOrder(new PurchaseOrder(poId));           
-           return invoice;
-
-       }).when(mRepo).save(any(Long.class), any(Invoice.class));
-
        doReturn(List.of(itemUpdate)).when(mItemService).getAddItems(eq(List.of(itemUpdate)));
 
        Invoice invoice = service.add(3L, addition);
 
-       verify(mRepo, times(1)).save(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).saveAndFlush(invoice);
        assertEquals(null, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());

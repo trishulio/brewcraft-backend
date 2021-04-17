@@ -18,21 +18,19 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedShipmentRepositoryImpl.class);
 
-    private ShipmentRepository shipmentRepo;
     private ShipmentStatusRepository statusRepo;
     private InvoiceRepository invoiceRepo;
     private MaterialRepository materialRepo;
 
     @Autowired
-    public EnhancedShipmentRepositoryImpl(ShipmentRepository shipmentRepo, ShipmentStatusRepository statusRepo, InvoiceRepository invoiceRepo, MaterialRepository materialRepo) {
-        this.shipmentRepo = shipmentRepo;
+    public EnhancedShipmentRepositoryImpl(ShipmentStatusRepository statusRepo, InvoiceRepository invoiceRepo, MaterialRepository materialRepo) {
         this.statusRepo = statusRepo;
         this.invoiceRepo = invoiceRepo;
         this.materialRepo = materialRepo;
     }
 
     @Override
-    public Shipment save(Long invoiceId, Shipment shipment) {
+    public void refresh(Long invoiceId, Shipment shipment) {
         log.debug("Attempting to save shipment with Id: {} under the invoiceId: {}", shipment.getId(), invoiceId);
         Invoice invoice = null;
 
@@ -66,8 +64,5 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
 
             materials.forEach(material -> materialIdToItemLookup.get(material.getId()).forEach(item -> item.setMaterial(material)));
         }
-
-        log.debug("Saving shipment");
-        return this.shipmentRepo.saveAndFlush(shipment);
     }
 }

@@ -73,9 +73,8 @@ public class ServiceAutoConfigurationTest {
     public void testInvoiceService_ReturnsInstanceOfInvoiceService() {
         InvoiceRepository mInvoiceRepo = mock(InvoiceRepository.class);
         InvoiceItemService mInvoiceItemService = mock(InvoiceItemService.class);
-        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        InvoiceService service = serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService, mUtilProvider);
+        InvoiceService service = serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService);
         assertTrue(service instanceof InvoiceService);
     }
 
@@ -104,9 +103,8 @@ public class ServiceAutoConfigurationTest {
     public void testShipmentService_ReturnsInstanceOfShipmentService() {
         ShipmentRepository mRepo = mock(ShipmentRepository.class);
         ShipmentItemService mItemService = mock(ShipmentItemService.class);
-        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService, mUtilProvider);
+        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService);
         
         assertSame(ShipmentService.class, service.getClass());
     }

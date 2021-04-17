@@ -18,21 +18,19 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedInvoiceRepositoryImpl.class);
 
-    private InvoiceRepository invoiceRepo;
     private InvoiceStatusRepository statusRepo;
     private PurchaseOrderRepository poRepo;
     private MaterialRepository materialRepo;
 
     @Autowired
-    public EnhancedInvoiceRepositoryImpl(InvoiceRepository invoiceRepo, InvoiceStatusRepository statusRepo, PurchaseOrderRepository poRepo, MaterialRepository materialRepo) {
-        this.invoiceRepo = invoiceRepo;
+    public EnhancedInvoiceRepositoryImpl(InvoiceStatusRepository statusRepo, PurchaseOrderRepository poRepo, MaterialRepository materialRepo) {
         this.statusRepo = statusRepo;
         this.poRepo = poRepo;
         this.materialRepo = materialRepo;
     }
 
     @Override
-    public Invoice save(Long purchaseOrderId, Invoice invoice) {
+    public void refresh(Long purchaseOrderId, Invoice invoice) {
         log.debug("Invoice with Id: {} has {} items and belong to PurchaseOrder: {}", invoice.getId(), invoice.getItems() != null ? invoice.getItems().size() : null, invoice.getPurchaseOrder() != null ? invoice.getPurchaseOrder().getId() : null);
         log.debug("Attempting to fetch PurchaseOrder with Id: {}", purchaseOrderId);
         PurchaseOrder po = null;
@@ -66,7 +64,5 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
             invoice.getItems().forEach(i -> i.setMaterial((Material) null));
             materials.forEach(material -> materialToItems.get(material.getId()).forEach(item -> item.setMaterial(material)));            
         }
-
-        return invoiceRepo.saveAndFlush(invoice);
     }
 }
