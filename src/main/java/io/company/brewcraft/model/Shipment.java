@@ -15,10 +15,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, Identified, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
-    public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_STATUS = "status";
-    public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
     public static final String FIELD_DELIVERED_DATE = "deliveredDate";
     public static final String FIELD_ITEMS = "lots";
@@ -31,19 +29,12 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     @Column(name = "shipment_number")
     private String shipmentNumber;
 
-    @Column(name = "lot_number")
-    private String lotNumber;
-
     @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipment_status_id", referencedColumnName = "id")
     private ShipmentStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
-    private Invoice invoice;
 
     @Column(name = "delivery_due_date")
     private LocalDateTime deliveryDueDate;
@@ -73,14 +64,12 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         setId(id);
     }
 
-    public Shipment(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
+    public Shipment(Long id, String shipmentNumber, String description, ShipmentStatus shipmentStatus, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
             List<MaterialLot> lots, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
         setDescription(description);
         setStatus(shipmentStatus);
-        setInvoice(invoice);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
         setCreatedAt(createdAt);
@@ -110,16 +99,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     }
 
     @Override
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    @Override
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
-    }
-
-    @Override
     public String getDescription() {
         return description;
     }
@@ -137,16 +116,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     @Override
     public void setStatus(ShipmentStatus status) {
         this.status = status;
-    }
-
-    @Override
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    @Override
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
     }
 
     @Override

@@ -13,16 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.InvoiceDto;
-import io.company.brewcraft.dto.MaterialDto;
-import io.company.brewcraft.dto.MaterialLotDto;
-import io.company.brewcraft.dto.PageDto;
-import io.company.brewcraft.dto.QuantityDto;
-import io.company.brewcraft.dto.ShipmentDto;
-import io.company.brewcraft.dto.ShipmentStatusDto;
-import io.company.brewcraft.dto.UpdateMaterialLotDto;
-import io.company.brewcraft.dto.UpdateShipmentDto;
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.dto.*;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
@@ -64,15 +56,13 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             new ShipmentStatus("RECEIVED"),
-            null,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -90,10 +80,8 @@ public class ShipmentControllerTest {
             Set.of(1L),
             Set.of(2L),
             Set.of("SHIPMENT_1"),
-            Set.of("LOT_1"),
             Set.of("DESC_1"),
             Set.of("RECEIVED"),
-            Set.of(3L),
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -108,10 +96,8 @@ public class ShipmentControllerTest {
                                     Set.of(1L),
                                     Set.of(2L),
                                     Set.of("SHIPMENT_1"),
-                                    Set.of("LOT_1"),
                                     Set.of("DESC_1"),
                                     Set.of("RECEIVED"),
-                                    Set.of(3L),
                                     LocalDateTime.of(1999, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -124,10 +110,8 @@ public class ShipmentControllerTest {
                                 );
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
         assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
@@ -147,15 +131,13 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             new ShipmentStatus("RECEIVED"),
-            null,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -173,10 +155,8 @@ public class ShipmentControllerTest {
             Set.of(1L),
             Set.of(2L),
             Set.of("SHIPMENT_1"),
-            Set.of("LOT_1"),
             Set.of("DESC_1"),
             Set.of("RECEIVED"),
-            Set.of(3L),
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -191,10 +171,8 @@ public class ShipmentControllerTest {
                                         Set.of(1L),
                                         Set.of(2L),
                                         Set.of("SHIPMENT_1"),
-                                        Set.of("LOT_1"),
                                         Set.of("DESC_1"),
                                         Set.of("RECEIVED"),
-                                        Set.of(3L),
                                         LocalDateTime.of(1999, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -218,64 +196,52 @@ public class ShipmentControllerTest {
 
     @Test
     public void testAddShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
-        doAnswer(i -> {
-            Shipment shipment = i.getArgument(1, Shipment.class);
-            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
-            return shipment;
-        }).when(mService).add(anyLong(), any(Shipment.class));
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mService).add(any(Shipment.class));
         
-        UpdateShipmentDto addDto = new UpdateShipmentDto(
+        AddShipmentDto addDto = new AddShipmentDto(
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             "RECEIVED",
-            1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
-            ),
-            1
+                new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L)
+            )
         );
         
         ShipmentDto dto = controller.addShipment(addDto);
 
         assertEquals(null, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
-        assertEquals("LOT_1", dto.getLotNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
-        assertEquals(new InvoiceDto(1L), dto.getInvoice());
-        assertEquals(1, dto.getVersion());
+        assertEquals(null, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();
-        assertEquals(1L, lot.getId());
+        assertEquals(null, lot.getId());
         assertEquals(new QuantityDto("kg", new BigDecimal("10")), lot.getQuantity());
         assertEquals(new MaterialDto(2L), lot.getMaterial());
-        assertEquals(1, lot.getVersion());
+        assertEquals(null, lot.getVersion());
     }
     
     @Test
     public void testPutShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
         doAnswer(i -> {
-            Shipment shipment = i.getArgument(2, Shipment.class);
-            shipment.setId(i.getArgument(1, Long.class));
-            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
+            Shipment shipment = i.getArgument(1, Shipment.class);
+            shipment.setId(i.getArgument(0, Long.class));
             return shipment;
-        }).when(mService).put(anyLong(), anyLong(), any(Shipment.class));
+        }).when(mService).put(anyLong(), any(Shipment.class));
         
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             "RECEIVED",
-            1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
+                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 1)
             ),
             1
         );
@@ -284,12 +250,10 @@ public class ShipmentControllerTest {
         
         assertEquals(2L, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
-        assertEquals("LOT_1", dto.getLotNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
-        assertEquals(new InvoiceDto(1L), dto.getInvoice());
         assertEquals(1, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();
@@ -302,22 +266,19 @@ public class ShipmentControllerTest {
     @Test
     public void testPatch_ReturnsPatchShipmentDto_WhenServiceReturnsPatchShipment() {
         doAnswer(i -> {
-            Shipment shipment = i.getArgument(2, Shipment.class);
-            shipment.setId(i.getArgument(1, Long.class));
-            shipment.setInvoice(new Invoice(i.getArgument(0, Long.class)));
+            Shipment shipment = i.getArgument(1, Shipment.class);
+            shipment.setId(i.getArgument(0, Long.class));
             return shipment;
-        }).when(mService).patch(anyLong(), anyLong(), any(Shipment.class));
+        }).when(mService).patch(anyLong(), any(Shipment.class));
         
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             "RECEIVED",
-            1L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
+                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 1)
             ),
             1
         );
@@ -326,12 +287,10 @@ public class ShipmentControllerTest {
         
         assertEquals(2L, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
-        assertEquals("LOT_1", dto.getLotNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
-        assertEquals(new InvoiceDto(1L), dto.getInvoice());
         assertEquals(1, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();

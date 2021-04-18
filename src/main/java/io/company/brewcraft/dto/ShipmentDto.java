@@ -9,10 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ShipmentDto extends BaseDto {
     private Long id;
     private String shipmentNumber;
-    private String lotNumber;
     private String description;
     private ShipmentStatusDto status;
-    private InvoiceDto invoice;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
     private LocalDateTime createdAt;
@@ -28,13 +26,11 @@ public class ShipmentDto extends BaseDto {
         setId(id);
     }
 
-    public ShipmentDto(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatusDto status, InvoiceDto invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, List<MaterialLotDto> lots, Integer version) {
+    public ShipmentDto(Long id, String shipmentNumber, String description, ShipmentStatusDto status, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated, List<MaterialLotDto> lots, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
         setDescription(description);
         setStatus(status);
-        setInvoice(invoice);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
         setCreatedAt(createdAt);
@@ -59,14 +55,6 @@ public class ShipmentDto extends BaseDto {
         this.shipmentNumber = shipmentNumber;
     }
 
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
-    }
-    
     public String getDescription() {
         return this.description;
     }
@@ -81,14 +69,6 @@ public class ShipmentDto extends BaseDto {
 
     public void setStatus(ShipmentStatusDto status) {
         this.status = status;
-    }
-
-    public InvoiceDto getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(InvoiceDto invoice) {
-        this.invoice = invoice;
     }
 
     public LocalDateTime getDeliveryDueDate() {

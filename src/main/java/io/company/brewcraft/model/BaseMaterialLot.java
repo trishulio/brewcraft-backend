@@ -2,14 +2,17 @@ package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
-public interface BaseMaterialLot {
+import io.company.brewcraft.service.InvoiceItemAccessor;
+import io.company.brewcraft.service.MaterialAccessor;
+
+public interface BaseMaterialLot extends MaterialAccessor, InvoiceItemAccessor {
+    public String getLotNumber();
+
+    public void setLotNumber(String lotNumber);
+
     public Quantity<?> getQuantity();
 
     public void setQuantity(Quantity<?> qty);
-
-    public Material getMaterial();
-
-    public void setMaterial(Material material);
 
     public Shipment getShipment();
 

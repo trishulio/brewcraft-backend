@@ -16,14 +16,28 @@ public interface InvoiceItemMapper {
 
     InvoiceItemDto toDto(InvoiceItem item);
 
+    default InvoiceItem fromDto(Long id) {
+        InvoiceItem item = null;
+        if (id != null) {
+            item = new InvoiceItem(id);
+        }
+        
+        return item;
+    }
+
+    @Mappings({
+        @Mapping(target = "invoice", ignore = true)
+    })
     InvoiceItem fromDto(InvoiceItemDto dto);
 
     @Mappings({
+        @Mapping(target = "invoice", ignore = true),
         @Mapping(source = "materialId", target = "material")
     })
     InvoiceItem fromDto(UpdateInvoiceItemDto dto);
 
     @Mappings({
+        @Mapping(target = "invoice", ignore = true),
         @Mapping(source = "materialId", target = "material"),
         @Mapping(target = "id", ignore = true),
         @Mapping(target = "version", ignore = true)

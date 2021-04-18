@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
+import java.util.ArrayList;
+
 import javax.measure.Quantity;
 import javax.persistence.*;
 
@@ -100,6 +102,9 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
         }
 
         if (invoice != null) {
+            if (invoice.getItems() == null) {
+                invoice.setItems(new ArrayList<>(0));
+            }
             invoice.getItems().add(this);            
         }
 

@@ -113,7 +113,7 @@ public class InvoiceController extends BaseController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public InvoiceDto addInvoice(@Valid @RequestBody @NotNull AddInvoiceDto payload) {
         BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice added = invoiceService.add(payload.getPurchaseOrderId(), addition);
+        Invoice added = invoiceService.add(addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
 
@@ -125,7 +125,7 @@ public class InvoiceController extends BaseController {
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        Invoice invoice = invoiceService.put(payload.getPurchaseOrderId(), invoiceId, update);
+        Invoice invoice = invoiceService.put(invoiceId, update);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;
@@ -136,7 +136,7 @@ public class InvoiceController extends BaseController {
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        Invoice invoice = invoiceService.patch(payload.getPurchaseOrderId(), invoiceId, patch);
+        Invoice invoice = invoiceService.patch(invoiceId, patch);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;        

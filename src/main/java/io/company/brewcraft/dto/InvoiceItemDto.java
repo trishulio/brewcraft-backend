@@ -16,8 +16,13 @@ public class InvoiceItemDto extends BaseDto {
     public InvoiceItemDto() {
     }
 
-    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
+    public InvoiceItemDto(Long id) {
+        this();
         setId(id);
+    }
+
+    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
+        this(id);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);

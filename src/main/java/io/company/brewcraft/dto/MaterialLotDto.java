@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 
 public class MaterialLotDto extends BaseDto{
     private Long id;
+    private String lotNumber;
     private QuantityDto qty;
     private MaterialDto material;
+    private InvoiceItemDto invoiceItem;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private Integer version;
@@ -18,10 +20,12 @@ public class MaterialLotDto extends BaseDto{
         setId(id);
     }
 
-    public MaterialLotDto(Long id, QuantityDto qty, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLotDto(Long id, String lotNumber, QuantityDto qty, MaterialDto material, InvoiceItemDto invoiceItem, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        setLotNumber(lotNumber);
         setQuantity(qty);
         setMaterial(material);
+        setInvoiceItem(invoiceItem);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -33,6 +37,14 @@ public class MaterialLotDto extends BaseDto{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLotNumber() {
+        return this.lotNumber;
+    }
+    
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
     }
 
     public QuantityDto getQuantity() {
@@ -49,6 +61,14 @@ public class MaterialLotDto extends BaseDto{
 
     public void setMaterial(MaterialDto material) {
         this.material = material;
+    }
+
+    public InvoiceItemDto getInvoiceItem() {
+        return this.invoiceItem;
+    }
+
+    public void setInvoiceItem(InvoiceItemDto invoiceItem) { 
+        this.invoiceItem = invoiceItem;
     }
 
     public LocalDateTime getCreatedAt() {

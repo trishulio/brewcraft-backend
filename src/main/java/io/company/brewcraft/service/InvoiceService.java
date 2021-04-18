@@ -112,7 +112,7 @@ public class InvoiceService extends BaseService {
         repo.deleteById(id);
     }
 
-    public Invoice put(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
+    public Invoice put(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
         log.debug("Updating the Invoice with Id: {}", invoiceId);
 
         Invoice existing = getInvoice(invoiceId);
@@ -135,22 +135,18 @@ public class InvoiceService extends BaseService {
         Invoice temp = new Invoice();
         temp.override(update, getPropertyNames(invoiceClz));
         temp.setItems(updatedItems);
-        repo.refresh(purchaseOrderId, temp);
+        repo.refresh(List.of(temp));
 
         existing.override(temp, getPropertyNames(invoiceClz));
 
         return repo.saveAndFlush(existing);
     }
 
-    public Invoice patch(Long purchaseOrderId, Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
+    public Invoice patch(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
         log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
         existing.optimisicLockCheck(patch);
-
-        if (purchaseOrderId == null && existing.getPurchaseOrder() != null) {
-            purchaseOrderId = existing.getPurchaseOrder().getId();
-        }
 
         log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.debug("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
@@ -162,16 +158,14 @@ public class InvoiceService extends BaseService {
         temp.override(existing);
         temp.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
         temp.setItems(updatedItems);
-        repo.refresh(purchaseOrderId, temp);
+        repo.refresh(List.of(temp));
 
         existing.override(temp);
 
         return repo.saveAndFlush(existing);
     }
 
-    public Invoice add(Long purchaseOrderId, BaseInvoice<? extends BaseInvoiceItem> addition) {
-        log.debug("Attempting to add a new Invoice under the Purchase Order with Id: {}", purchaseOrderId);
-
+    public Invoice add(BaseInvoice<? extends BaseInvoiceItem> addition) {
         Invoice invoice = new Invoice();
         List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
         log.debug("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
@@ -179,7 +173,7 @@ public class InvoiceService extends BaseService {
         invoice.override(addition, getPropertyNames(BaseInvoice.class));
         invoice.setItems(itemAdditions);
 
-        repo.refresh(purchaseOrderId, invoice);
+        repo.refresh(List.of(invoice));
 
         return repo.saveAndFlush(invoice);
     }

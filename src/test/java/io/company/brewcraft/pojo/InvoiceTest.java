@@ -155,7 +155,7 @@ public class InvoiceTest {
         invoice.setItems(List.of(new InvoiceItem(2L)));
 
         InvoiceItem expected = new InvoiceItem(2L);
-        expected.setInvoice(invoice);
+        expected.setInvoice(new Invoice());
 
         assertEquals(List.of(expected), invoice.getItems());
     }

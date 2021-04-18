@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
@@ -28,13 +28,11 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        List<MaterialLot> lots = List.of(new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
             new ShipmentStatus("RECEIVED"),
-            null,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -45,10 +43,8 @@ public class ShipmentTest {
 
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
         assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
@@ -81,24 +77,10 @@ public class ShipmentTest {
     }
 
     @Test
-    public void testAccessLotNumber() {
-        assertNull(shipment.getLotNumber());
-        shipment.setLotNumber("ABCD-123");
-        assertEquals("ABCD-123", shipment.getLotNumber());
-    }
-
-    @Test
     public void testAccessStatus() {
         assertNull(shipment.getStatus());
         shipment.setStatus(new ShipmentStatus("RECEIVED"));
         assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-    }
-
-    @Test
-    public void testAccessInvoice() {
-        assertNull(shipment.getInvoice());
-        shipment.setInvoice(new Invoice(1L));
-        assertEquals(new Invoice(1L), shipment.getInvoice());
     }
 
     @Test
@@ -135,7 +117,7 @@ public class ShipmentTest {
         shipment.setLots(List.of(new MaterialLot(1L)));
 
         MaterialLot expected = new MaterialLot(1L);
-        expected.setShipment(shipment);
+        expected.setShipment(new Shipment());
         assertEquals(List.of(expected), shipment.getLots());
     }
 

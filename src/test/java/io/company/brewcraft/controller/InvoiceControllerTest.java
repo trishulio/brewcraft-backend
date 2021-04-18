@@ -329,11 +329,11 @@ public class InvoiceControllerTest {
    @Test
    public void testAddInvoice_ReturnsInvoiceDtoAfterAddingToService() {
        doAnswer(i -> {
-           Invoice invoice = i.getArgument(1, Invoice.class);
+           Invoice invoice = i.getArgument(0, Invoice.class);
            invoice.setId(1L);
-           invoice.setPurchaseOrder(new PurchaseOrder(i.getArgument(0, Long.class)));
            return invoice;
-       }).when(mService).add(anyLong(), any(Invoice.class));
+       }).when(mService).add(any(Invoice.class));
+
 
        AddInvoiceDto payload = new AddInvoiceDto(
            "ABCDE-12345",
@@ -373,11 +373,10 @@ public class InvoiceControllerTest {
    @Test
    public void testUpdateInvoice_ReturnsInvoiceDtoAfterUpdatingItToService() {
        doAnswer(i -> {
-           Invoice invoice = i.getArgument(2, Invoice.class);
-           invoice.setId(i.getArgument(1, Long.class));
-           invoice.setPurchaseOrder(new PurchaseOrder(i.getArgument(0, Long.class)));
+           Invoice invoice = i.getArgument(1, Invoice.class);
+           invoice.setId(i.getArgument(0, Long.class));
            return invoice;
-       }).when(mService).put(anyLong(), anyLong(), any(Invoice.class));
+       }).when(mService).put(anyLong(), any(Invoice.class));
 
        UpdateInvoiceDto payload = new UpdateInvoiceDto(
            "ABCDE-12345",
@@ -419,11 +418,10 @@ public class InvoiceControllerTest {
    @Test
    public void testPatchInvoice_ReturnsInvoiceDtoAfterPatchingItToService() {
        doAnswer(i -> {
-           Invoice invoice = i.getArgument(2, Invoice.class);
-           invoice.setId(i.getArgument(1, Long.class));
-           invoice.setPurchaseOrder(new PurchaseOrder(i.getArgument(0, Long.class)));
+           Invoice invoice = i.getArgument(1, Invoice.class);
+           invoice.setId(i.getArgument(0, Long.class));
            return invoice;
-       }).when(mService).patch(anyLong(), anyLong(), any(Invoice.class));
+       }).when(mService).patch(anyLong(), any(Invoice.class));
 
        UpdateInvoiceDto payload = new UpdateInvoiceDto(
            "ABCDE-12345",

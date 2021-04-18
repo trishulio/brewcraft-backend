@@ -4,7 +4,9 @@ import javax.measure.Quantity;
 
 import org.joda.money.Money;
 
-public interface BaseInvoiceItem {
+import io.company.brewcraft.service.MaterialAccessor;
+
+public interface BaseInvoiceItem extends MaterialAccessor {
     String getDescription();
 
     void setDescription(String description);
@@ -24,8 +26,4 @@ public interface BaseInvoiceItem {
     Tax getTax();
 
     void setTax(Tax tax);
-
-    Material getMaterial();
-
-    void setMaterial(Material material);
 }

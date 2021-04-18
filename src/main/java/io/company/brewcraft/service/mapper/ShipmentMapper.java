@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import io.company.brewcraft.dto.AddShipmentDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
 import io.company.brewcraft.model.Shipment;
@@ -17,9 +18,16 @@ public interface ShipmentMapper {
         @Mapping(target = "id", ignore = true),
         @Mapping(target = "createdAt", ignore = true),
         @Mapping(target = "lastUpdated", ignore = true),
-        @Mapping(target = "invoice", ignore = true),
     })
     Shipment fromDto(UpdateShipmentDto dto);
+
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "createdAt", ignore = true),
+        @Mapping(target = "lastUpdated", ignore = true),
+        @Mapping(target = "version", ignore = true)
+    })
+    Shipment fromDto(AddShipmentDto dto);
 
     ShipmentDto toDto(Shipment shipment);
 }

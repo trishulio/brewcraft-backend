@@ -50,6 +50,9 @@ public class InvoiceStatus extends BaseModel {
     }
 
     public void setName(String name) {
+        if (name == null) {
+            name = DEFAULT_STATUS_NAME;
+        }
         this.name = name;
     }
 }

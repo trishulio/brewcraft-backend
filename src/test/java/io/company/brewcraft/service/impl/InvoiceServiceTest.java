@@ -43,11 +43,14 @@ public class InvoiceServiceTest {
        mRepo = mock(InvoiceRepository.class);
        doAnswer(inv -> inv.getArgument(0, Invoice.class)).when(mRepo).saveAndFlush(any(Invoice.class));
        doAnswer(inv -> {
-           Long poId = inv.getArgument(0, Long.class);
-           Invoice invoice = inv.getArgument(1, Invoice.class);           
-           invoice.setPurchaseOrder(new PurchaseOrder(poId));
+           @SuppressWarnings("unchecked")
+           List<Invoice> invoices = inv.getArgument(0, List.class);
+           invoices.forEach(i -> {
+               i.setStatus(new InvoiceStatus(99L, "FINAL"));
+               i.setPurchaseOrder(new PurchaseOrder(99L));
+           });
            return null;
-       }).when(mRepo).refresh(anyLong(), any(Invoice.class));
+       }).when(mRepo).refresh(anyList());
 
        mItemService = mock(InvoiceItemService.class);
 
@@ -130,20 +133,20 @@ public class InvoiceServiceTest {
 
        doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
 
-       Invoice invoice = service.put(3L, 1L, update);
+       Invoice invoice = service.put(1L, update);
 
        verify(mRepo, times(1)).saveAndFlush(any(Invoice.class));
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
+       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
        assertEquals(new Freight(1L), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -184,20 +187,20 @@ public class InvoiceServiceTest {
        
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
-       Invoice invoice = service.put(3L, 1L, update);
+       Invoice invoice = service.put(1L, update);
 
-       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
+       verify(mRepo, times(1)).saveAndFlush(invoice);
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
+       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
        assertEquals(new Freight(1L), invoice.getFreight());
        assertEquals(LocalDateTime.of(2100, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -221,7 +224,7 @@ public class InvoiceServiceTest {
        Invoice update = new Invoice(1L);
        existing.setVersion(2);
 
-       assertThrows(OptimisticLockException.class, () -> service.put(2L, 1L, update));
+       assertThrows(OptimisticLockException.class, () -> service.put(1L, update));
    }
 
    @Test
@@ -254,21 +257,20 @@ public class InvoiceServiceTest {
 
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
-       Invoice invoice = service.patch(3L, 1L, update);
+       Invoice invoice = service.patch(1L, update);
 
-       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
        verify(mRepo, times(1)).saveAndFlush(invoice);
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("New description value", invoice.getDescription());
-       assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
+       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
        assertEquals(new Freight(1L), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -284,34 +286,6 @@ public class InvoiceServiceTest {
    }
 
    @Test
-   public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
-       doNothing().when(mRepo).refresh(anyLong(), any(Invoice.class));
-
-       Invoice existing = new Invoice(1L);
-
-       existing.setPurchaseOrder(new PurchaseOrder(2L));
-       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
-
-       Invoice update = new Invoice(1L);
-       Invoice invoice = service.patch(null, 1L, update);        
-       verify(mRepo, times(1)).refresh(2L, invoice);
-   }
-
-   @Test
-   public void testPatch_SavesWithNullPurchaseOrder_WhenPurchaseOrderIdIsNullAndExistingPurchaseOrderIsNull() {
-       doNothing().when(mRepo).refresh(isNull(), any(Invoice.class));
-
-       Invoice existing = new Invoice(1L);
-       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
-
-       Invoice update = new Invoice(1L);
-       Invoice invoice = service.patch(null, 1L, update);
-
-       verify(mRepo, times(1)).refresh(null, invoice);
-       verify(mRepo, times(1)).saveAndFlush(invoice);
-   }
-
-   @Test
    public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
        Invoice existing = new Invoice(1L);
        existing.setVersion(1);
@@ -320,7 +294,7 @@ public class InvoiceServiceTest {
        Invoice update = new Invoice(1L);
        existing.setVersion(2);
 
-       assertThrows(OptimisticLockException.class, () -> service.patch(2L, 1L, update));
+       assertThrows(OptimisticLockException.class, () -> service.patch(1L, update));
    }
 
    @Test
@@ -344,21 +318,20 @@ public class InvoiceServiceTest {
 
        doReturn(List.of(itemUpdate)).when(mItemService).getAddItems(eq(List.of(itemUpdate)));
 
-       Invoice invoice = service.add(3L, addition);
+       Invoice invoice = service.add(addition);
 
-       verify(mRepo, times(1)).refresh(eq(3L), any(Invoice.class));
        verify(mRepo, times(1)).saveAndFlush(invoice);
        assertEquals(null, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(3L), invoice.getPurchaseOrder());
+       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(2L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 

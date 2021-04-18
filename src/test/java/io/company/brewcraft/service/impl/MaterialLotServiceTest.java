@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.UpdateMaterialLot;
@@ -41,7 +42,7 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetAddLots_ReturnsListOfMaterialLotsWithBaseShipmentValues_WhenLotsAreNotNull() {
         List<BaseMaterialLot> additionLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L),LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
      
         List<MaterialLot> lots = service.getAddLots(additionLots);
@@ -65,12 +66,12 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPutLots_ReturnsUpdatedList_WhenUpdateIsNotNull() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         List<UpdateMaterialLot> updateLots = List.of(
-            new MaterialLot(null, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2),
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
+            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2),
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new Material(2L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
 
         List<MaterialLot> lots = service.getPutLots(existingLots, updateLots);
@@ -100,7 +101,7 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPutLots_ReturnsEmptyList_WhenUpdateListIsEmpty() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         assertEquals(Collections.emptyList(), service.getPutLots(existingLots, List.of()));
@@ -109,7 +110,7 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPutLots_ReturnsNull_WhenUpdateListIsNull() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         assertNull(service.getPutLots(existingLots, null));
@@ -118,11 +119,11 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPutLots_ThrowsError_WhenUpdateLotsDontHaveExistingId() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
         List<UpdateMaterialLot> updateLots = List.of(
-            new MaterialLot(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new MaterialLot(2L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new Material(2L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         
         assertThrows(ValidationException.class, () -> service.getPutLots(existingLots, updateLots), "1. No existing lot found with Id: 2\n");
@@ -151,11 +152,11 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPatchLots_ReturnsPatchedList_WhenLotsAreNotNull() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
         List<UpdateMaterialLot> updateLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, new InvoiceItem(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
 
         List<MaterialLot> lots = service.getPatchLots(existingLots, updateLots);
@@ -176,11 +177,11 @@ public class MaterialLotServiceTest {
     @Test
     public void testGetPatchLots_ThrowsValidationException_WhenUpdateLotsDontHaveExistingId() {
         List<MaterialLot> existingLots = List.of(
-            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
         List<UpdateMaterialLot> updateLots = List.of(
-            new MaterialLot(2L, Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
+            new MaterialLot(2L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, null, new InvoiceItem(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 
         assertThrows(ValidationException.class, () -> service.getPatchLots(existingLots, updateLots), "1. No existing lot found with Id: 2\\n");

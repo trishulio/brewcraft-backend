@@ -27,7 +27,7 @@ import tec.uom.se.quantity.Quantities;
 public class InvoiceItemServiceTest {
 
     private InvoiceItemService service;
-    
+
     private UtilityProvider mUtilProvider;
     
     @BeforeEach
@@ -127,11 +127,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem()
         );
         
-        List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
-        
-        assertEquals(1, updatedItems.size());
-        
-        assertThrows(ValidationException.class, () -> mUtilProvider.getValidator().raiseErrors(), "1. No existing invoice item found with Id: 1. To add a new item to the invoice, don't include the version and id in the payload.\n2. No existing invoice item found with Id: 2. To add a new item to the invoice, don't include the version and id in the payload.\n 3. No existing invoice item found with Id: 3. To add a new item to the invoice, don't include the version and id in the payload.");
+        assertThrows(ValidationException.class, () -> service.getPutItems(existingItems, itemUpdates), "1. No existing invoice item found with Id: 1. To add a new item to the invoice, don't include the version and id in the payload.\n2. No existing invoice item found with Id: 2. To add a new item to the invoice, don't include the version and id in the payload.\n 3. No existing invoice item found with Id: 3. To add a new item to the invoice, don't include the version and id in the payload.");
     }
 
     @Test

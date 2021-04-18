@@ -8,10 +8,13 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.AddMaterialLotDto;
+import io.company.brewcraft.dto.InvoiceItemDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMaterialLotDto;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.utils.SupportedUnits;
@@ -28,11 +31,11 @@ public class MaterialLotMapperTest {
 
     @Test
     public void toDto_ReturnsDtoFromMaterialLot_WhenMaterialLotIsNotNull() {
-        MaterialLot lot = new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        MaterialLot lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         MaterialLotDto dto = mapper.toDto(lot);
 
-        MaterialLotDto expected = new MaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("1")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        MaterialLotDto expected = new MaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("1")), new MaterialDto(1L), new InvoiceItemDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         assertEquals(expected, dto);
     }
@@ -44,17 +47,18 @@ public class MaterialLotMapperTest {
 
     @Test
     public void fromDto_ReturnMaterialLot_WhenDtoIsNotNull() {
-        UpdateMaterialLotDto dto = new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("1")), 1L, 1);
+        UpdateMaterialLotDto dto = new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("1")), 1L, 1L, 1);
 
         MaterialLot lot = mapper.fromDto(dto);
 
-        MaterialLot expected = new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), null, null, 1);
+        MaterialLot expected = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), null, null, 1);
         assertEquals(expected, lot);
     }
 
     @Test
     public void fromDto_ReturnsNull_WhenMaterialLotDtoIsNull() {
-        assertNull(mapper.fromDto(null));
+        assertNull(mapper.fromDto((UpdateMaterialLotDto) null));
+        assertNull(mapper.fromDto((AddMaterialLotDto) null));
     }
 
 }
