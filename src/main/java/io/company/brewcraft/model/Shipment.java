@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "shipment")
 @Table
-public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>, Identified, Audited {
+public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, Identified, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
@@ -21,7 +21,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
     public static final String FIELD_DELIVERED_DATE = "deliveredDate";
-    public static final String FIELD_ITEMS = "items";
+    public static final String FIELD_ITEMS = "lots";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_generator")
@@ -60,7 +60,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     private LocalDateTime lastUpdated;
 
     @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ShipmentItem> items;
+    private List<MaterialLot> lots;
 
     @Version
     private Integer version;
@@ -74,7 +74,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     }
 
     public Shipment(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
-            List<ShipmentItem> items, Integer version) {
+            List<MaterialLot> lots, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
@@ -85,7 +85,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
         setDeliveredDate(deliveredDate);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
-        setItems(items);
+        setLots(lots);
         setVersion(version);
     }
 
@@ -190,20 +190,20 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     }
 
     @Override
-    public List<ShipmentItem> getItems() {
-        return items;
+    public List<MaterialLot> getLots() {
+        return lots;
     }
 
     @Override
-    public void setItems(List<ShipmentItem> items) {
-        if (this.items == null) {
-            this.items = new ArrayList<>();
+    public void setLots(List<MaterialLot> lots) {
+        if (this.lots == null) {
+            this.lots = new ArrayList<>();
         } else {
-            this.items.clear();
+            this.lots.clear();
         }
 
-        if (items != null) {
-            items.stream().collect(Collectors.toList()).forEach(item -> item.setShipment(this));
+        if (lots != null) {
+            lots.stream().collect(Collectors.toList()).forEach(item -> item.setShipment(this));
         }
     }
 

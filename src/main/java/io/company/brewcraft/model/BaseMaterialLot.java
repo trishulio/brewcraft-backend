@@ -2,7 +2,7 @@ package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
-public interface BaseShipmentItem {
+public interface BaseMaterialLot {
     public Quantity<?> getQuantity();
 
     public void setQuantity(Quantity<?> qty);

@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.utils.SupportedUnits;
@@ -50,10 +50,10 @@ public class EnhancedShipmentRepositoryImplTest {
             new Material(3L, "Material_C", null, null, null, null, null, null, null)
         )).when(mMaterialRepo).findAllById(Set.of(1L, 2L, 3L));
 
-        List<ShipmentItem> items = List.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new ShipmentItem(2L, Quantities.getQuantity(new BigDecimal("2"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 1, 2, 12, 0, 0), LocalDateTime.of(2000, 1, 2, 12, 0, 0), 2),
-            new ShipmentItem(3L, Quantities.getQuantity(new BigDecimal("3"), SupportedUnits.KILOGRAM), null, new Material(3L), LocalDateTime.of(1999, 1, 3, 12, 0, 0), LocalDateTime.of(2000, 1, 3, 12, 0, 0), 3)
+        List<MaterialLot> lots = List.of(
+            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new MaterialLot(2L, Quantities.getQuantity(new BigDecimal("2"), SupportedUnits.KILOGRAM), null, new Material(2L), LocalDateTime.of(1999, 1, 2, 12, 0, 0), LocalDateTime.of(2000, 1, 2, 12, 0, 0), 2),
+            new MaterialLot(3L, Quantities.getQuantity(new BigDecimal("3"), SupportedUnits.KILOGRAM), null, new Material(3L), LocalDateTime.of(1999, 1, 3, 12, 0, 0), LocalDateTime.of(2000, 1, 3, 12, 0, 0), 3)
         );
         Shipment shipment = new Shipment(1L,
             "SHIPMENT_1",
@@ -65,7 +65,7 @@ public class EnhancedShipmentRepositoryImplTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            items,
+            lots,
             1
         );
 
@@ -83,35 +83,35 @@ public class EnhancedShipmentRepositoryImplTest {
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
         assertEquals(1, shipment.getVersion());
 
-        assertEquals(3, shipment.getItems().size());
-        Iterator<ShipmentItem> it = shipment.getItems().iterator();
+        assertEquals(3, shipment.getLots().size());
+        Iterator<MaterialLot> it = shipment.getLots().iterator();
 
-        ShipmentItem item = it.next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L, "Material_A", null, null, null, null, null, null, null), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(1, item.getVersion());
+        MaterialLot lot = it.next();
+        assertEquals(1L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L, "Material_A", null, null, null, null, null, null, null), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(1, lot.getVersion());
 
-        item = it.next();
-        assertEquals(2L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("2"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(2L, "Material_B", null, null, null, null, null, null, null), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 2, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 2, 12, 0, 0), item.getLastUpdated());
-        assertEquals(2, item.getVersion());
+        lot = it.next();
+        assertEquals(2L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("2"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(2L, "Material_B", null, null, null, null, null, null, null), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 2, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 2, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(2, lot.getVersion());
 
-        item = it.next();
-        assertEquals(3L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("3"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(3L, "Material_C", null, null, null, null, null, null, null), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 3, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 3, 12, 0, 0), item.getLastUpdated());
-        assertEquals(3, item.getVersion());
+        lot = it.next();
+        assertEquals(3L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("3"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(3L, "Material_C", null, null, null, null, null, null, null), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 3, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 3, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(3, lot.getVersion());
 
     }
 
@@ -142,8 +142,8 @@ public class EnhancedShipmentRepositoryImplTest {
         doReturn(Optional.of(new Invoice(1L))).when(mInvoiceRepo).findById(1L);
         doReturn(Optional.of(new ShipmentStatus(1L, ShipmentStatus.DEFAULT_STATUS))).when(mStatusRepo).findByName(ShipmentStatus.DEFAULT_STATUS);
 
-        List<ShipmentItem> items = new ArrayList<>();
-        Shipment shipment = new Shipment(1L, "SHIPMENT_1", "LOT_1", "DESCRIPTION_1", null, null, LocalDateTime.of(1999, 1, 1, 12, 0), LocalDateTime.of(2000, 1, 1, 12, 0), LocalDateTime.of(2001, 1, 1, 12, 0), LocalDateTime.of(2002, 1, 1, 12, 0), items, 1);
+        List<MaterialLot> lots = new ArrayList<>();
+        Shipment shipment = new Shipment(1L, "SHIPMENT_1", "LOT_1", "DESCRIPTION_1", null, null, LocalDateTime.of(1999, 1, 1, 12, 0), LocalDateTime.of(2000, 1, 1, 12, 0), LocalDateTime.of(2001, 1, 1, 12, 0), LocalDateTime.of(2002, 1, 1, 12, 0), lots, 1);
 
         repo.refresh(null, shipment);
 
@@ -168,11 +168,11 @@ public class EnhancedShipmentRepositoryImplTest {
         doReturn(Set.of(new ShipmentStatus(1L, "DELIVERED"))).when(mStatusRepo).findByNames(Set.of("DELIVERED"));
         doReturn(false).when(mMaterialRepo).existsByIds(Set.of(1L));
 
-        List<ShipmentItem> items = new ArrayList<>();
-        items.add(new ShipmentItem(1L));
-        items.iterator().next().setMaterial(new Material(1L));
+        List<MaterialLot> lots = new ArrayList<>();
+        lots.add(new MaterialLot(1L));
+        lots.iterator().next().setMaterial(new Material(1L));
         Shipment shipment = new Shipment(1L);
-        shipment.setItems(items);
+        shipment.setLots(lots);
 
         assertThrows(EntityNotFoundException.class, () -> repo.refresh(1L, shipment), "Materials not found with ids: (1)");
     }

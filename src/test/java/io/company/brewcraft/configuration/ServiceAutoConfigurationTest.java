@@ -19,7 +19,7 @@ import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
-import io.company.brewcraft.service.impl.ShipmentItemService;
+import io.company.brewcraft.service.impl.MaterialLotService;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
@@ -102,7 +102,7 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testShipmentService_ReturnsInstanceOfShipmentService() {
         ShipmentRepository mRepo = mock(ShipmentRepository.class);
-        ShipmentItemService mItemService = mock(ShipmentItemService.class);
+        MaterialLotService mItemService = mock(MaterialLotService.class);
 
         ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService);
         
@@ -110,11 +110,11 @@ public class ServiceAutoConfigurationTest {
     }
 
     @Test
-    public void testShipmentItemService_ReturnsInstanceOfShipmentItemService() {
+    public void testMaterialLotService_ReturnsInstanceOfMaterialLotService() {
         UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        ShipmentItemService service = serviceAutoConfiguration.shipmentItemService(mUtilProvider);
+        MaterialLotService service = serviceAutoConfiguration.materialLotService(mUtilProvider);
         
-        assertSame(ShipmentItemService.class, service.getClass());
+        assertSame(MaterialLotService.class, service.getClass());
     }
     
     @Test

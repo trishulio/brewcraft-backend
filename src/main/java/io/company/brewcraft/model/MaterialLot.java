@@ -10,13 +10,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
-@Entity(name = "shipment_item")
+@Entity(name = "shipment_lot")
 @Table
-public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audited {
+public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audited {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_item_generator")
-    @SequenceGenerator(name = "shipment_item_generator", sequenceName = "shipment_item_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_lot_generator")
+    @SequenceGenerator(name = "shipment_lot_generator", sequenceName = "shipment_lot_sequence", allocationSize = 1)
     private Long id;
     
     @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
@@ -42,15 +42,15 @@ public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audi
     @Version
     private Integer version;
 
-    public ShipmentItem() {
+    public MaterialLot() {
     }
 
-    public ShipmentItem(Long id) {
+    public MaterialLot(Long id) {
         this();
         setId(id);
     }
 
-    public ShipmentItem(Long id, Quantity<?> qty, Shipment shipment, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLot(Long id, Quantity<?> qty, Shipment shipment, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setQuantity(qty);
         setMaterial(material);
@@ -98,11 +98,11 @@ public class ShipmentItem extends BaseEntity implements UpdateShipmentItem, Audi
     @Override
     public void setShipment(Shipment shipment) {
         if (this.shipment != null) {
-            this.shipment.getItems().remove(this);
+            this.shipment.getLots().remove(this);
         }
 
         if (shipment != null) {
-            shipment.getItems().add(this);            
+            shipment.getLots().add(this);            
         }
 
         this.shipment = shipment;

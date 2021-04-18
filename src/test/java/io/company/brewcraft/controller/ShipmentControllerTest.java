@@ -15,17 +15,17 @@ import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.MaterialDto;
+import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentDto;
-import io.company.brewcraft.dto.ShipmentItemDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
+import io.company.brewcraft.dto.UpdateMaterialLotDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
-import io.company.brewcraft.dto.UpdateShipmentItemDto;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
@@ -63,8 +63,8 @@ public class ShipmentControllerTest {
     
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
-        List<ShipmentItem> items = List.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+        List<MaterialLot> lots = List.of( 
+            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -77,7 +77,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            items,
+            lots,
             1
         );
         
@@ -132,22 +132,22 @@ public class ShipmentControllerTest {
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(1, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(2, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(2, lot.getVersion());
     }
     
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
-        List<ShipmentItem> items = List.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+        List<MaterialLot> lots = List.of( 
+            new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -160,7 +160,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            items,
+            lots,
             1
         );
         
@@ -233,7 +233,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
+                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -249,12 +249,12 @@ public class ShipmentControllerTest {
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
         assertEquals(new InvoiceDto(1L), dto.getInvoice());
         assertEquals(1, dto.getVersion());
-        assertEquals(1, dto.getItems().size());
-        ShipmentItemDto item = dto.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
-        assertEquals(new MaterialDto(2L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(1, dto.getLots().size());
+        MaterialLotDto lot = dto.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), lot.getQuantity());
+        assertEquals(new MaterialDto(2L), lot.getMaterial());
+        assertEquals(1, lot.getVersion());
     }
     
     @Test
@@ -275,7 +275,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
+                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -291,12 +291,12 @@ public class ShipmentControllerTest {
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
         assertEquals(new InvoiceDto(1L), dto.getInvoice());
         assertEquals(1, dto.getVersion());
-        assertEquals(1, dto.getItems().size());
-        ShipmentItemDto item = dto.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
-        assertEquals(new MaterialDto(2L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(1, dto.getLots().size());
+        MaterialLotDto lot = dto.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), lot.getQuantity());
+        assertEquals(new MaterialDto(2L), lot.getMaterial());
+        assertEquals(1, lot.getVersion());
     }
     
     @Test
@@ -317,7 +317,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
+                new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 2L, 1)
             ),
             1
         );
@@ -333,11 +333,11 @@ public class ShipmentControllerTest {
         assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
         assertEquals(new InvoiceDto(1L), dto.getInvoice());
         assertEquals(1, dto.getVersion());
-        assertEquals(1, dto.getItems().size());
-        ShipmentItemDto item = dto.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10")), item.getQuantity());
-        assertEquals(new MaterialDto(2L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(1, dto.getLots().size());
+        MaterialLotDto lot = dto.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10")), lot.getQuantity());
+        assertEquals(new MaterialDto(2L), lot.getMaterial());
+        assertEquals(1, lot.getVersion());
     }
 }

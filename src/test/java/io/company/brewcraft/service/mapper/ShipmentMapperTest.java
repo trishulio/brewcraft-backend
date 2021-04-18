@@ -12,13 +12,13 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentDto;
-import io.company.brewcraft.dto.ShipmentItemDto;
+import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
-import io.company.brewcraft.dto.UpdateShipmentItemDto;
+import io.company.brewcraft.dto.UpdateMaterialLotDto;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.ShipmentStatus;
 import tec.uom.se.quantity.Quantities;
 import io.company.brewcraft.utils.SupportedUnits;
@@ -42,7 +42,7 @@ public class ShipmentMapperTest {
             2L,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            List.of(new UpdateShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), 1L, 1)),
+            List.of(new UpdateMaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), 1L, 1)),
             1
         );
 
@@ -59,7 +59,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), null, null, 1)),
+            List.of(new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), null, null, 1)),
             1
         );
 
@@ -84,7 +84,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new MaterialLot(1L, Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
 
@@ -99,7 +99,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new ShipmentItemDto(1L, new QuantityDto("kg", new BigDecimal("10")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new MaterialLotDto(1L, new QuantityDto("kg", new BigDecimal("10")), new MaterialDto(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
         

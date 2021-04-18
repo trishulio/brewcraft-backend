@@ -5,16 +5,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-import io.company.brewcraft.dto.ShipmentItemDto;
-import io.company.brewcraft.dto.UpdateShipmentItemDto;
-import io.company.brewcraft.model.ShipmentItem;
+import io.company.brewcraft.dto.MaterialLotDto;
+import io.company.brewcraft.dto.UpdateMaterialLotDto;
+import io.company.brewcraft.model.MaterialLot;
 
 @Mapper(uses = {QuantityMapper.class, MaterialMapper.class})
-public interface ShipmentItemMapper {
+public interface MaterialLotMapper {
 
-    ShipmentItemMapper INSTANCE = Mappers.getMapper(ShipmentItemMapper.class);
+    MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
 
-    ShipmentItemDto toDto(ShipmentItem item);
+    MaterialLotDto toDto(MaterialLot lot);
     
     @Mappings({
         @Mapping(target = "lastUpdated", ignore = true),
@@ -22,5 +22,5 @@ public interface ShipmentItemMapper {
         @Mapping(target = "shipment", ignore = true),
         @Mapping(target = "material", source = "materialId")
     })
-    ShipmentItem fromDto(UpdateShipmentItemDto item);
+    MaterialLot fromDto(UpdateMaterialLotDto item);
 }

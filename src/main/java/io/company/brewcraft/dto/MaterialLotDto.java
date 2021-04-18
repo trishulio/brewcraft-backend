@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-public class ShipmentItemDto extends BaseDto{
+public class MaterialLotDto extends BaseDto{
     private Long id;
     private QuantityDto qty;
     private MaterialDto material;
@@ -10,15 +10,15 @@ public class ShipmentItemDto extends BaseDto{
     private LocalDateTime lastUpdated;
     private Integer version;
 
-    public ShipmentItemDto() {
+    public MaterialLotDto() {
     }
 
-    public ShipmentItemDto(Long id) {
+    public MaterialLotDto(Long id) {
         this();
         setId(id);
     }
 
-    public ShipmentItemDto(Long id, QuantityDto qty, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLotDto(Long id, QuantityDto qty, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setQuantity(qty);
         setMaterial(material);

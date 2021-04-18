@@ -45,8 +45,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService, UtilityProvider utilProvider) {
-        return new InvoiceService(invoiceRepo, invoiceItemService, utilProvider);
+    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService) {
+        return new InvoiceService(invoiceRepo, invoiceItemService);
     }
 
     @Bean
@@ -111,16 +111,16 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ShipmentService.class)
-    public ShipmentService shipmentService(ShipmentRepository repo, ShipmentItemService itemService, UtilityProvider utilProvider) {
-        ShipmentService shipmentService = new ShipmentService(repo, itemService, utilProvider);
+    public ShipmentService shipmentService(ShipmentRepository repo, MaterialLotService itemService) {
+        ShipmentService shipmentService = new ShipmentService(repo, itemService);
 
         return shipmentService;
     }
 
     @Bean
-    @ConditionalOnMissingBean(ShipmentItemService.class)
-    public ShipmentItemService shipmentItemService(UtilityProvider utilProvider) {
-        ShipmentItemService itemService = new ShipmentItemService(utilProvider);
+    @ConditionalOnMissingBean(MaterialLotService.class)
+    public MaterialLotService materialLotService(UtilityProvider utilProvider) {
+        MaterialLotService itemService = new MaterialLotService(utilProvider);
 
         return itemService;
     }

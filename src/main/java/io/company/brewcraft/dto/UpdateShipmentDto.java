@@ -11,10 +11,10 @@ public class UpdateShipmentDto extends BaseDto {
     private Long invoiceId;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
-    private Collection<UpdateShipmentItemDto> items;
+    private Collection<UpdateMaterialLotDto> items;
     private Integer version;
 
-    public UpdateShipmentDto(String shipmentNumber, String lotNumber, String description, String status, Long invoiceId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateShipmentItemDto> items, Integer version) {
+    public UpdateShipmentDto(String shipmentNumber, String lotNumber, String description, String status, Long invoiceId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateMaterialLotDto> items, Integer version) {
         setShipmentNumber(shipmentNumber);
         setLotNumber(lotNumber);
         setDescription(description);
@@ -82,11 +82,11 @@ public class UpdateShipmentDto extends BaseDto {
         this.deliveredDate = deliveredDate;
     }
 
-    public Collection<UpdateShipmentItemDto> getItems() {
+    public Collection<UpdateMaterialLotDto> getItems() {
         return items;
     }
 
-    public void setItems(Collection<UpdateShipmentItemDto> items) {
+    public void setItems(Collection<UpdateMaterialLotDto> items) {
         this.items = items;
     }
 

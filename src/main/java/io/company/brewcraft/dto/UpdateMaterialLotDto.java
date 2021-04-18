@@ -1,19 +1,19 @@
 package io.company.brewcraft.dto;
 
-public class UpdateShipmentItemDto extends BaseDto {
+public class UpdateMaterialLotDto extends BaseDto {
     private Long id;
     private QuantityDto qty;
     private Long materialId;
     private Integer version;
 
-    public UpdateShipmentItemDto() {
+    public UpdateMaterialLotDto() {
     }
 
-    public UpdateShipmentItemDto(Long id) {
+    public UpdateMaterialLotDto(Long id) {
         setId(id);
     }
 
-    public UpdateShipmentItemDto(Long id, QuantityDto qty, Long materialId, Integer version) {
+    public UpdateMaterialLotDto(Long id, QuantityDto qty, Long materialId, Integer version) {
         this(id);
         setQuantity(qty);
         setMaterialId(materialId);

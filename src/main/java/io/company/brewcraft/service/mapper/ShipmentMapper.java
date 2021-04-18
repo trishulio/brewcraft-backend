@@ -9,7 +9,7 @@ import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
 import io.company.brewcraft.model.Shipment;
 
-@Mapper(uses = {ShipmentItemMapper.class, ShipmentStatusMapper.class, InvoiceMapper.class, ShipmentStatusMapper.class, QuantityMapper.class})
+@Mapper(uses = {MaterialLotMapper.class, ShipmentStatusMapper.class, InvoiceMapper.class, ShipmentStatusMapper.class, QuantityMapper.class})
 public interface ShipmentMapper {
     ShipmentMapper INSTANCE = Mappers.getMapper(ShipmentMapper.class);
 

@@ -3,7 +3,7 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface BaseShipment<T extends BaseShipmentItem> {
+public interface BaseShipment<T extends BaseMaterialLot> {
     String getShipmentNumber();
 
     void setShipmentNumber(String shipmentNumber);
@@ -32,7 +32,7 @@ public interface BaseShipment<T extends BaseShipmentItem> {
 
     void setDeliveredDate(LocalDateTime deliveredDate);
 
-    List<T> getItems();
+    List<T> getLots();
 
-    void setItems(List<T> items);
+    void setLots(List<T> items);
 }

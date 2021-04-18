@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -50,19 +50,19 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
         log.debug("Shipment status fetched from repository with name: {}", status.getName());
         shipment.setStatus(status);
 
-        if (shipment.getItems() != null && shipment.getItems().size() > 0) {
-            Map<Long, List<ShipmentItem>> materialIdToItemLookup = shipment.getItems().stream().filter(i -> i != null && i.getMaterial() != null).collect(Collectors.groupingBy(item -> item.getMaterial().getId()));
-            log.debug("Material to Items Mapping: {}", materialIdToItemLookup);
+        if (shipment.getLots() != null && shipment.getLots().size() > 0) {
+            Map<Long, List<MaterialLot>> materialIdToLotLookup = shipment.getLots().stream().filter(i -> i != null && i.getMaterial() != null).collect(Collectors.groupingBy(lot -> lot.getMaterial().getId()));
+            log.debug("Material to Lots Mapping: {}", materialIdToLotLookup);
 
-            List<Material> materials = materialRepo.findAllById(materialIdToItemLookup.keySet());
+            List<Material> materials = materialRepo.findAllById(materialIdToLotLookup.keySet());
             log.debug("Total materials fetched: {}", materials.size());
 
-            if (materialIdToItemLookup.keySet().size() != materials.size()) {
+            if (materialIdToLotLookup.keySet().size() != materials.size()) {
                 List<Long> materialIds = materials.stream().map(material -> material.getId()).collect(Collectors.toList());
-                throw new EntityNotFoundException(String.format("Cannot find all materials in Id-Set: %s. Materials found with Ids: %s", materialIdToItemLookup.keySet(), materialIds));
+                throw new EntityNotFoundException(String.format("Cannot find all materials in Id-Set: %s. Materials found with Ids: %s", materialIdToLotLookup.keySet(), materialIds));
             }
 
-            materials.forEach(material -> materialIdToItemLookup.get(material.getId()).forEach(item -> item.setMaterial(material)));
+            materials.forEach(material -> materialIdToLotLookup.get(material.getId()).forEach(lot -> lot.setMaterial(material)));
         }
     }
 }

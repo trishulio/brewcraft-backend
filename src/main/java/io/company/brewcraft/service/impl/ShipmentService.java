@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.ShipmentRepository;
@@ -30,11 +30,11 @@ public class ShipmentService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
     private ShipmentRepository repo;
-    private ShipmentItemService itemService;
+    private MaterialLotService lotService;
 
-    public ShipmentService(ShipmentRepository repo, ShipmentItemService itemService) {
+    public ShipmentService(ShipmentRepository repo, MaterialLotService lotService) {
         this.repo = repo;
-        this.itemService = itemService;
+        this.lotService = lotService;
     }
 
     public Page<Shipment> getShipments(
@@ -102,13 +102,13 @@ public class ShipmentService extends BaseService {
     }
 
     public Shipment add(Long invoiceId, Shipment shipment) {
-        log.debug("Adding a new shipment under invoice: {} with {} items", invoiceId, shipment.getItems() == null ? null : shipment.getItems().size());
+        log.debug("Adding a new shipment under invoice: {} with {} lots", invoiceId, shipment.getLots() == null ? null : shipment.getLots().size());
         Shipment addition = new Shipment();
-        List<ShipmentItem> itemAdditions = itemService.getAddItems(shipment.getItems());
-        log.debug("Number of item additions: {}", itemAdditions == null ? null : itemAdditions.size());
+        List<MaterialLot> lotAdditions = lotService.getAddLots(shipment.getLots());
+        log.debug("Number of lot additions: {}", lotAdditions == null ? null : lotAdditions.size());
 
         addition.override(shipment, getPropertyNames(BaseShipment.class));
-        addition.setItems(itemAdditions);
+        addition.setLots(lotAdditions);
 
         repo.refresh(invoiceId, addition);
 
@@ -128,15 +128,15 @@ public class ShipmentService extends BaseService {
             shipmentClz = UpdateShipment.class;
         }
 
-        log.debug("Shipment with Id: {} has {} existing items", existing == null ? null : invoiceId, existing.getItems() == null ? null : existing.getItems().size());
-        log.debug("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
+        log.debug("Shipment with Id: {} has {} existing lots", existing == null ? null : invoiceId, existing.getLots() == null ? null : existing.getLots().size());
+        log.debug("Update payload has {} lot updates", update.getLots() == null ? null : update.getLots().size());
 
-        List<ShipmentItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
-        log.debug("Total UpdateItems: {}", updatedItems == null ? null : updatedItems.size());
+        List<MaterialLot> updatedLots = lotService.getPutLots(existing.getLots(), update.getLots());
+        log.debug("Total UpdateLots: {}", updatedLots == null ? null : updatedLots.size());
 
         Shipment temp = new Shipment();
         temp.override(update, getPropertyNames(shipmentClz));
-        temp.setItems(updatedItems);
+        temp.setLots(updatedLots);
         repo.refresh(invoiceId, temp);
 
         existing.override(temp, getPropertyNames(shipmentClz));
@@ -154,13 +154,13 @@ public class ShipmentService extends BaseService {
             invoiceId = existing.getInvoice().getId();
         }
 
-        List<ShipmentItem> existingItems = existing.getItems();
-        List<ShipmentItem> updatedItems = itemService.getPatchItems(existingItems, update.getItems());
+        List<MaterialLot> existingLots = existing.getLots();
+        List<MaterialLot> updatedLots = lotService.getPatchLots(existingLots, update.getLots());
 
         Shipment temp = new Shipment();
         temp.override(existing);
         temp.outerJoin(update, getPropertyNames(UpdateShipment.class));
-        temp.setItems(updatedItems);        
+        temp.setLots(updatedLots);        
         repo.refresh(invoiceId, temp);
 
         existing.override(temp, getPropertyNames(UpdateShipment.class));
