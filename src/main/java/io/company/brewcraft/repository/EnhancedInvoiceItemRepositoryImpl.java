@@ -37,7 +37,7 @@ public class EnhancedInvoiceItemRepositoryImpl implements EnhancedInvoiceItemRep
 
             if (lookupAccessorByItemId.keySet().size() != items.size()) {
                 List<Long> itemIds = items.stream().map(item -> item.getId()).collect(Collectors.toList());
-                throw new EntityNotFoundException(String.format("Cannot find all materials in Id-Set: %s. InvoiceItems found with Ids: %s", lookupAccessorByItemId.keySet(), itemIds));
+                throw new EntityNotFoundException(String.format("Cannot find all invoice items in Id-Set: %s. InvoiceItems found with Ids: %s", lookupAccessorByItemId.keySet(), itemIds));
             }
 
             accessors.forEach(accessor -> accessor.setInvoiceItem(null));

@@ -8,6 +8,7 @@ public class MaterialLotDto extends BaseDto{
     private QuantityDto qty;
     private MaterialDto material;
     private InvoiceItemDto invoiceItem;
+    private StorageDto storage;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private Integer version;
@@ -20,12 +21,13 @@ public class MaterialLotDto extends BaseDto{
         setId(id);
     }
 
-    public MaterialLotDto(Long id, String lotNumber, QuantityDto qty, MaterialDto material, InvoiceItemDto invoiceItem, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLotDto(Long id, String lotNumber, QuantityDto qty, MaterialDto material, InvoiceItemDto invoiceItem, StorageDto storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setLotNumber(lotNumber);
         setQuantity(qty);
         setMaterial(material);
         setInvoiceItem(invoiceItem);
+        setStorage(storage);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -69,6 +71,14 @@ public class MaterialLotDto extends BaseDto{
 
     public void setInvoiceItem(InvoiceItemDto invoiceItem) { 
         this.invoiceItem = invoiceItem;
+    }
+
+    public StorageDto getStorage() {
+        return this.storage;
+    }
+
+    public void setStorage(StorageDto storage) {
+        this.storage = storage;
     }
 
     public LocalDateTime getCreatedAt() {

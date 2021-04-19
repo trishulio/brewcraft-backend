@@ -18,17 +18,20 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
     private InvoiceItemRepository itemRepo;
     private MaterialRepository materialRepo;
     private MaterialLotRepository lotRepo;
+    private StorageRepository storageRepo;
     
-    public EnhancedMaterialLotRepositoryImpl(MaterialLotRepository lotRepo, InvoiceItemRepository itemRepo, MaterialRepository materialRepo) {
+    public EnhancedMaterialLotRepositoryImpl(MaterialLotRepository lotRepo, InvoiceItemRepository itemRepo, MaterialRepository materialRepo, StorageRepository storageRepo) {
         this.lotRepo = lotRepo;
         this.itemRepo = itemRepo;
         this.materialRepo = materialRepo;
+        this.storageRepo = storageRepo;
     }
 
     @Override
     public void refresh(Collection<MaterialLot> lots) {
         this.itemRepo.refreshAccessors(lots);
         this.materialRepo.refreshAccessors(lots);
+        this.storageRepo.refreshAccessor(lots);
     }
     
     @Override

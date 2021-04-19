@@ -20,6 +20,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
     public static final String FIELD_MATERIAL = "material";
     public static final String FIELD_SHIPMENT = "shipment";
     public static final String FIELD_INVOICE_ITEM = "invoiceItem";
+    public static final String FIELD_LOCATION = "location";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_lot_generator")
@@ -45,6 +46,10 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "id")
     private InvoiceItem invoiceItem;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "storage_id", referencedColumnName = "id")
+    private Storage storage;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -64,13 +69,14 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
         setId(id);
     }
 
-    public MaterialLot(Long id, String lotNumber, Quantity<?> qty, Material material, Shipment shipment, InvoiceItem item, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLot(Long id, String lotNumber, Quantity<?> qty, Material material, Shipment shipment, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setLotNumber(lotNumber);
         setQuantity(qty);
         setMaterial(material);
         setShipment(shipment);
         setInvoiceItem(item);
+        setStorage(storage);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -145,6 +151,14 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
     @Override
     public void setInvoiceItem(InvoiceItem invoiceItem) {
         this.invoiceItem = invoiceItem;
+    }
+
+    public Storage getStorage() {
+        return this.storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
     }
 
     @Override

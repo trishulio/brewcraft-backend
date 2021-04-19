@@ -19,6 +19,7 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -56,7 +57,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -131,7 +132,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -205,7 +206,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L)
+                new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 3L)
             )
         );
         
@@ -241,7 +242,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 1)
+                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 3L, 1)
             ),
             1
         );
@@ -278,7 +279,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
-                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 1)
+                new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 1L, 3L, 1)
             ),
             1
         );

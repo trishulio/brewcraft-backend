@@ -14,6 +14,7 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
@@ -28,7 +29,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
