@@ -10,7 +10,7 @@ import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.UpdateMaterialLotDto;
 import io.company.brewcraft.model.MaterialLot;
 
-@Mapper(uses = {QuantityMapper.class, MaterialMapper.class, InvoiceItemMapper.class})
+@Mapper(uses = {QuantityMapper.class, MaterialMapper.class, InvoiceItemMapper.class, StorageMapper.class})
 public interface MaterialLotMapper {
 
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
@@ -22,7 +22,8 @@ public interface MaterialLotMapper {
         @Mapping(target = "createdAt", ignore = true),
         @Mapping(target = "shipment", ignore = true),
         @Mapping(target = "material", source = "materialId"),
-        @Mapping(target = "invoiceItem", source = "invoiceItemId")
+        @Mapping(target = "invoiceItem", source = "invoiceItemId"),
+        @Mapping(target = "storage", source = "storageId")
     })
     MaterialLot fromDto(UpdateMaterialLotDto item);
 
@@ -33,6 +34,7 @@ public interface MaterialLotMapper {
         @Mapping(target = "shipment", ignore = true),
         @Mapping(target = "material", source = "materialId"),
         @Mapping(target = "invoiceItem", source = "invoiceItemId"),
+        @Mapping(target = "storage", source = "storageId"),
         @Mapping(target = "version", ignore = true)
     })
     MaterialLot fromDto(AddMaterialLotDto item);

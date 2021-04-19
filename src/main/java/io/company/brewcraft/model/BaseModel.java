@@ -1,6 +1,5 @@
 package io.company.brewcraft.model;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 import io.company.brewcraft.util.entity.ReflectionManipulator;
@@ -25,20 +24,7 @@ public abstract class BaseModel {
     }
     
     public void copyToNullFields(Object existingEntity) {
-        //TODO: util.copy below causing unit test to fail, need to investigate why
-        //util.copy(this, existingEntity, pd -> pd.getReadMethod().invoke(this) == null);
-        for (Field field : this.getClass().getDeclaredFields()) {
-            try {
-                field.setAccessible(true);
-                Object value = field.get(this);
-
-                if (value == null) {
-                    field.set(this, field.get(existingEntity));
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+        util.copy(this, existingEntity, pd -> pd.getReadMethod().invoke(this) == null);
     }
 
     public void override(Object other) {

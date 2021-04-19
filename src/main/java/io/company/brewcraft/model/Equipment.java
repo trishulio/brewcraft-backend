@@ -7,18 +7,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Mass;
 import javax.measure.quantity.Volume;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -193,7 +182,11 @@ public class Equipment extends BaseEntity {
     }
     
     public Quantity<?> getMaxCapacity() {
-        return Quantities.getQuantity(this.maxCapacityValue, QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit));
+        Quantity<?> qty = null;
+        if (this.maxCapacityValue != null && this.maxCapacityUnit != null) {
+            qty = Quantities.getQuantity(this.maxCapacityValue, QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit));
+        }
+        return qty;
     }
     
     public Quantity<?> getMaxCapacityInDisplayUnit() {
