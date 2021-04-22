@@ -58,8 +58,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     @Column(name = "payment_due_date")
     private LocalDateTime paymentDueDate;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "freight_id", referencedColumnName = "id")
+    @Embedded
     private Freight freight;
 
     @CreationTimestamp

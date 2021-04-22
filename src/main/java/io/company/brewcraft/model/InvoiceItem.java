@@ -33,16 +33,13 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "qty_id", referencedColumnName = "id")
+    @Embedded
     private QuantityEntity quantity;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "price_id", referencedColumnName = "id")
+    @Embedded
     private MoneyEntity price;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
-    @JoinColumn(name = "tax_id", referencedColumnName = "id")
+    @Embedded
     private Tax tax;
 
     @ManyToOne(fetch= FetchType.LAZY)

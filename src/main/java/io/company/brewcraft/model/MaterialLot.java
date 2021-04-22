@@ -30,8 +30,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
     @Column(name = "lot_number")
     private String lotNumber;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "qty_id", referencedColumnName = "id")
+    @Embedded
     private QuantityEntity qty;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
