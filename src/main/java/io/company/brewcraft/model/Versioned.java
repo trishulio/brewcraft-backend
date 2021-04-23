@@ -3,7 +3,7 @@ package io.company.brewcraft.model;
 import javax.persistence.OptimisticLockException;
 
 public interface Versioned {
-    final String FIELD_VERSION = "version";
+    final String ATTR_VERSION = "version";
 
     Integer getVersion();
 

@@ -17,24 +17,10 @@ public class QuantityEntityTest {
     }
 
     @Test
-    public void testIdArgConstructor_SetsId() {
-        quantity = new QuantityEntity(1L);
-        assertEquals(1L, quantity.getId());
-    }
-
-    @Test
     public void testAllArgsConstructor() {
-        quantity = new QuantityEntity(1L, new UnitEntity("KG"), new BigDecimal("100"));
-        assertEquals(1L, quantity.getId());
+        quantity = new QuantityEntity(new UnitEntity("KG"), new BigDecimal("100"));
         assertEquals(new UnitEntity("KG"), quantity.getUnit());
         assertEquals(new BigDecimal("100"), quantity.getValue());
-    }
-
-    @Test
-    public void testAccessId() {
-        assertNull(quantity.getId());
-        quantity.setId(1L);
-        assertEquals(1L, quantity.getId());
     }
 
     @Test

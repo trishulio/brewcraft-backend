@@ -3,6 +3,7 @@ package io.company.brewcraft.service.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -38,7 +39,9 @@ public class InvoiceItemMapperTest {
             Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L, null, null, null, null, null, null, null, null),
+            new Material(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(1999, 1, 1, 1, 1), 
             1
         );
         InvoiceItemDto dto = mapper.toDto(item);

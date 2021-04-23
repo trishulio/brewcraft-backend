@@ -20,7 +20,7 @@ import io.company.brewcraft.service.MoneySupplier;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified<Long>, Audited, MoneySupplier {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -59,6 +59,9 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     private LocalDateTime paymentDueDate;
 
     @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "", column = "")
+    })
     private Freight freight;
 
     @CreationTimestamp
@@ -78,7 +81,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Version
     private Integer version;
-    
+
     public Invoice() {
     }
 

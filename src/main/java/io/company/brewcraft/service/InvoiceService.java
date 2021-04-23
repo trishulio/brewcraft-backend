@@ -99,17 +99,13 @@ public class InvoiceService extends BaseService {
         return invoice;
     }
 
-    public boolean exists(Long id) {
-        return repo.existsById(id);
+    public boolean exists(Set<Long> ids) {
+        return repo.existsByIds(ids);
     }
 
-    public void delete(Long id) {
-        log.debug("Attempting to delete Invoice with Id: {}", id);
-        if (!exists(id)) {
-            log.error("Failed to delete non-existing Invoice with Id: {}", id);
-            throw new EntityNotFoundException("Invoice", id.toString());
-        }
-        repo.deleteById(id);
+    public int delete(Set<Long> ids) {
+        log.debug("Attempting to delete Invoice with Ids: {}", ids);
+        return repo.deleteByIds(ids);
     }
 
     public Invoice put(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {

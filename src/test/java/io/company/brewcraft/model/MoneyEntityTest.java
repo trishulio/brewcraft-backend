@@ -17,24 +17,10 @@ public class MoneyEntityTest {
     }
 
     @Test
-    public void testIdArgConstructor_SetsId() {
-        money = new MoneyEntity(1L);
-        assertEquals(1L, money.getId());
-    }
-
-    @Test
     public void testAllArgsConstructor() {
-        money = new MoneyEntity(1L, new Currency(123, "CAD"), new BigDecimal("100"));
-        assertEquals(1L, money.getId());
+        money = new MoneyEntity(new Currency(123, "CAD"), new BigDecimal("100"));
         assertEquals(new Currency(123, "CAD"), money.getCurrency());
         assertEquals(new BigDecimal("100"), money.getAmount());
-    }
-
-    @Test
-    public void testAccessId() {
-        assertNull(money.getId());
-        money.setId(1L);
-        assertEquals(1L, money.getId());
     }
 
     @Test

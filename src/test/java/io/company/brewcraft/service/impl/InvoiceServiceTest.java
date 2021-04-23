@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.OptimisticLockException;
 
@@ -28,7 +29,6 @@ import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
@@ -46,7 +46,7 @@ public class InvoiceServiceTest {
            @SuppressWarnings("unchecked")
            List<Invoice> invoices = inv.getArgument(0, List.class);
            invoices.forEach(i -> {
-               i.setStatus(new InvoiceStatus(99L, "FINAL"));
+               i.setStatus(new InvoiceStatus("FINAL"));
                i.setPurchaseOrder(new PurchaseOrder(99L));
            });
            return null;
@@ -85,36 +85,29 @@ public class InvoiceServiceTest {
 
    @Test
    public void testExists_ReturnsTrue_WhenRepoReturnsTrue() {
-       doReturn(true).when(mRepo).existsById(12345L);
-
-       assertTrue(service.exists(12345L));
+       doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
+       
+       assertTrue(service.exists(Set.of(1L, 2L, 3L)));
    }
 
    @Test
    public void testExists_ReturnsFalse_WhenRepoReturnsFalse() {
-       doReturn(false).when(mRepo).existsById(12345L);
+       doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
 
-       assertFalse(service.exists(12345L));
+       assertTrue(service.exists(Set.of(1L, 2L, 3L)));
    }
 
    @Test
    public void testDelete_CallsRepoDeleteById_WhenInvoiceExists() {
-       doReturn(true).when(mRepo).existsById(12345L);
-       service.delete(12345L);
+       doReturn(123).when(mRepo).deleteByIds(Set.of(1L, 2L, 3L));
 
-       verify(mRepo, times(1)).deleteById(12345L);
-   }
-
-   @Test
-   public void testDelete_ThrowsEntityNotFoundException_WhenInvoiceDoesNotExist() {
-       doReturn(false).when(mRepo).existsById(12345L);
-
-       assertThrows(EntityNotFoundException.class, () -> service.delete(12345L));
+       int count = service.delete(Set.of(1L, 2L, 3L));
+       assertEquals(123, count);
    }
 
    @Test
    public void testPut_CreatesAndSaveNewEntityWithUpdates_WhenInvoiceWithGivenIdDoesNotExist() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
        Invoice update = new Invoice(
            1L,
            "ABCDE-12345",
@@ -123,10 +116,10 @@ public class InvoiceServiceTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(1L),
+           new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(2L, "FINAL"),
+           new InvoiceStatus("FINAL"),
            List.of(itemUpdate),
            1
        );
@@ -143,10 +136,10 @@ public class InvoiceServiceTest {
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(1L), invoice.getFreight());
+       assertEquals(new Freight(), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -166,7 +159,7 @@ public class InvoiceServiceTest {
        Invoice mExisting = new Invoice(1L);
        mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
        mExisting.setVersion(1);
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(1L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
        Invoice update = new Invoice(
            1L,
            "ABCDE-12345",
@@ -175,10 +168,10 @@ public class InvoiceServiceTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(1L),
+           new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(2L, "FINAL"),
+           new InvoiceStatus("FINAL"),
            List.of(itemUpdate),
            1
        );
@@ -197,10 +190,10 @@ public class InvoiceServiceTest {
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(1L), invoice.getFreight());
+       assertEquals(new Freight(), invoice.getFreight());
        assertEquals(LocalDateTime.of(2100, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -237,15 +230,15 @@ public class InvoiceServiceTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(1L),
+           new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(2L, "FINAL"),
+           new InvoiceStatus("FINAL"),
            null,
            1  
        );
 
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
        Invoice update = new Invoice(1L);
        update.setDescription("New description value");
        update.setCreatedAt(LocalDateTime.of(9999, 12, 31, 12, 0));
@@ -267,10 +260,10 @@ public class InvoiceServiceTest {
        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(1L), invoice.getFreight());
+       assertEquals(new Freight(), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -299,7 +292,7 @@ public class InvoiceServiceTest {
 
    @Test
    public void testAdd_SavesTheNewEntity() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), 1);
+       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
        Invoice addition = new Invoice(
            1L,
            "ABCDE-12345",
@@ -311,7 +304,7 @@ public class InvoiceServiceTest {
            new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(2L, "FINAL"),
+           new InvoiceStatus("FINAL"),
            List.of(itemUpdate),
            1
        );
@@ -331,7 +324,7 @@ public class InvoiceServiceTest {
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L, "FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 

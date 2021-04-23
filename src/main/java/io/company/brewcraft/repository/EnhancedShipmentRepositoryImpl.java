@@ -25,11 +25,8 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
 
     @Override
     public void refresh(Collection<Shipment> shipments) {
-        if (shipments != null && shipments.size() > 0) {
-            this.statusRepo.refreshAccessors(shipments);
-
-            List<MaterialLot> lots = shipments.stream().filter(s -> s.getLots() != null && s.getLots().size() > 0).flatMap(s -> s.getLots().stream()).collect(Collectors.toList());
-            this.materialLotRepo.refresh(lots);
-        }
+        this.statusRepo.refreshAccessors(shipments);
+        List<MaterialLot> lots = shipments == null ? null : shipments.stream().filter(s -> s != null && s.getLots() != null && s.getLots().size() > 0).flatMap(s -> s.getLots().stream()).collect(Collectors.toList());
+        this.materialLotRepo.refresh(lots);
     }
 }

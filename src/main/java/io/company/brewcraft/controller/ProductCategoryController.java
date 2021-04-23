@@ -43,7 +43,7 @@ public class ProductCategoryController {
     public ProductCategoryController(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<CategoryDto> getCategories(
             @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false, name = "parent_category_ids") Set<Long> parentCategoryIds,
@@ -58,7 +58,7 @@ public class ProductCategoryController {
             
             return dto;
     }
-    
+
     @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)
     public CategoryWithParentDto getCategory(@PathVariable Long categoryId) {
         Validator validator = new Validator();

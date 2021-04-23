@@ -43,7 +43,7 @@ public interface MoneyMapper {
         MoneyEntity entity = null;
         if (money != null) {
             Currency curr = CurrencyMapper.INSTANCE.toEntity(money.getCurrencyUnit());
-            entity = new MoneyEntity(null, curr, money.getAmount());
+            entity = new MoneyEntity(curr, money.getAmount());
         }
         return entity;
     }

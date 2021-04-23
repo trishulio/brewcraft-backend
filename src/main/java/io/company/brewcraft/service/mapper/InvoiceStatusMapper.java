@@ -6,6 +6,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.InvoiceStatusDto;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.InvoiceStatus;
 
 @Mapper
@@ -13,12 +14,12 @@ public interface InvoiceStatusMapper {
     InvoiceStatusMapper INSTANCE = Mappers.getMapper(InvoiceStatusMapper.class);
 
     @Mappings({
-        @Mapping(target = "id", ignore = true)
+        @Mapping(target = InvoiceStatus.ATTR_ID, ignore = true)
     })
     InvoiceStatus fromDto(String name);
 
     @Mappings({
-        @Mapping(target = "id", ignore = true)
+        @Mapping(target = InvoiceStatus.ATTR_ID, ignore = true)
     })
     InvoiceStatus fromDto(InvoiceStatusDto status);
     

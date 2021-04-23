@@ -15,7 +15,7 @@ import io.company.brewcraft.dto.UpdateSupplier;
 
 @Entity
 @Table(name = "SUPPLIER")
-public class Supplier extends BaseEntity implements UpdateSupplier, Identified, Audited {
+public class Supplier extends BaseEntity implements UpdateSupplier, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_CONTACTS = "contacts";
@@ -61,26 +61,32 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified, 
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public List<SupplierContact> getContacts() {
         return contacts;
     }
 
+    @Override
     public void setContacts(List<SupplierContact> contacts) {
         if (contacts != null) {
             contacts.stream().forEach(contact -> contact.setSupplier(this));
@@ -94,10 +100,12 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified, 
         }
     }
 
+    @Override
     public SupplierAddress getAddress() {
         return address;
     }
 
+    @Override
     public void setAddress(SupplierAddress address) {
         this.address = address;
     }
@@ -123,26 +131,32 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified, 
         }
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

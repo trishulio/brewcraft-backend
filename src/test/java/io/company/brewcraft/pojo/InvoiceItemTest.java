@@ -3,6 +3,7 @@ package io.company.brewcraft.pojo;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -12,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
-import tec.uom.se.quantity.Quantities;
 import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemTest {
 
@@ -32,7 +33,9 @@ public class InvoiceItemTest {
             Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L, null, null, null, null, null, null, null, null),
+            new Material(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
             1
         );
 
@@ -42,7 +45,7 @@ public class InvoiceItemTest {
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
         assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
         assertEquals(Money.parse("CAD 20"), item.getAmount());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new Material(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 
@@ -84,8 +87,8 @@ public class InvoiceItemTest {
     @Test
     public void testAccessMaterial() {
         assertNull(item.getMaterial());
-        item.setMaterial(new Material(1L, null, null, null, null, null, null, null, null));
-        assertEquals(new Material(1L, null, null, null, null, null, null, null, null), item.getMaterial());
+        item.setMaterial(new Material(1L));
+        assertEquals(new Material(1L), item.getMaterial());
     }
 
     @Test

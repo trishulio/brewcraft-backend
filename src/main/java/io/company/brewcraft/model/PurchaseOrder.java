@@ -1,9 +1,14 @@
 package io.company.brewcraft.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 @Entity(name = "purchase_order")
 @Table
-public class PurchaseOrder extends BaseEntity {
+public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, UpdatePurchaseOrder, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";
     public static final String FIELD_SUPPLIER = "supplier";    
@@ -20,6 +25,15 @@ public class PurchaseOrder extends BaseEntity {
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    
+    @UpdateTimestamp
+    private LocalDateTime lastUpdated;
+    
+    @Version
+    private Integer version;
+
     public PurchaseOrder() {
     }
 
@@ -34,27 +48,63 @@ public class PurchaseOrder extends BaseEntity {
         setSupplier(supplier);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getOrderNumber() {
         return orderNumber;
     }
 
+    @Override
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
+    @Override
     public Supplier getSupplier() {
         return supplier;
     }
 
+    @Override
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return this.lastUpdated;
+    }
+
+    @Override
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public Integer getVersion() {
+        return this.version;
+    }
+
+    @Override
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

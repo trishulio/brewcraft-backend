@@ -13,7 +13,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "shipment_lot")
 @Table
-public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audited {
+public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_QTY = "qty";
@@ -152,10 +152,12 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
         this.invoiceItem = invoiceItem;
     }
 
+    @Override
     public Storage getStorage() {
         return this.storage;
     }
 
+    @Override
     public void setStorage(Storage storage) {
         this.storage = storage;
     }
@@ -176,8 +178,8 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
     }
 
     @Override
-    public void setLastUpdated(LocalDateTime updatedAt) {
-        this.lastUpdated = updatedAt;
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     @Override

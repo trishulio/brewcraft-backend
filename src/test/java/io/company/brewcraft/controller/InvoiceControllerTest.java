@@ -56,11 +56,11 @@ public class InvoiceControllerTest {
                LocalDateTime.of(1999, 1, 1, 12, 0),
                LocalDateTime.of(2000, 1, 1, 12, 0),
                LocalDateTime.of(2001, 1, 1, 12, 0),
-               new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+               new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
                LocalDateTime.of(2002, 1, 1, 12, 0),
                LocalDateTime.of(2003, 1, 1, 12, 0),
-               new InvoiceStatus(4L, "FINAL"),
-               List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
+               new InvoiceStatus("FINAL"),
+               List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                1
            )
        );
@@ -152,11 +152,11 @@ public class InvoiceControllerTest {
                LocalDateTime.of(1999, 1, 1, 12, 0),
                LocalDateTime.of(2000, 1, 1, 12, 0),
                LocalDateTime.of(2001, 1, 1, 12, 0),
-               new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+               new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
                LocalDateTime.of(2002, 1, 1, 12, 0),
                LocalDateTime.of(2003, 1, 1, 12, 0),
-               new InvoiceStatus(4L, "FINAL"),
-               List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
+               new InvoiceStatus("FINAL"),
+               List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                1
            )
        );
@@ -239,11 +239,11 @@ public class InvoiceControllerTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+           new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(4L, "FINAL"),
-           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
+           new InvoiceStatus("FINAL"),
+           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
            1
        );
        doReturn(mInvoice).when(mService).getInvoice(1L);
@@ -281,11 +281,11 @@ public class InvoiceControllerTest {
            LocalDateTime.of(1999, 1, 1, 12, 0),
            LocalDateTime.of(2000, 1, 1, 12, 0),
            LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+           new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(4L, "FINAL"),
-           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L, null, null, null, null, null, null, null, null), 1)),
+           new InvoiceStatus("FINAL"),
+           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
            1
        );
        doReturn(mInvoice).when(mService).getInvoice(1L);
@@ -313,17 +313,10 @@ public class InvoiceControllerTest {
    }
 
    @Test
-   public void testDeleteInvoice_CallsServiceWithId() {
-       doNothing().when(mService).delete(1L);
-       controller.deleteInvoice(1L);
-
-       verify(mService, times(1)).delete(1L);
-   }
-
-   @Test
-   public void testDeleteInvoices_ThrowsEntityNotFoundException_WhenSupplierThrowsEntityNotFoundException() {
-       doThrow(new EntityNotFoundException("Invoice", "1")).when(mService).delete(1L);
-       assertThrows(EntityNotFoundException.class, () -> controller.deleteInvoice(1L), "Invoice not found with id: 1");
+   public void testDeleteInvoice_ReturnsDeleteByIdsFromService() {
+       doReturn(99).when(mService).delete(Set.of(1L, 11L, 111L));
+       int count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
+       assertEquals(99, count);
    }
 
    @Test

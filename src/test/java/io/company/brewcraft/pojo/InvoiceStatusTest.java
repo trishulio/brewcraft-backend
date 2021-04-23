@@ -17,14 +17,8 @@ public class InvoiceStatusTest {
     }
 
     @Test
-    public void testIdArgConstructor() {
-        status = new InvoiceStatus(1L);
-        assertEquals(1L, status.getId());
-    }
-
-    @Test
     public void testAllArgConstructor() {
-        status = new InvoiceStatus(2L, "FINAL");
+        status = new InvoiceStatus("FINAL");
         assertEquals(2L, status.getId());
         assertEquals("FINAL", status.getName());
     }

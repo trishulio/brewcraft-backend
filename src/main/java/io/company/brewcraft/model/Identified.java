@@ -1,9 +1,9 @@
 package io.company.brewcraft.model;
 
-public interface Identified {
-    final String FIELD_ID = "id";
+public interface Identified<T> {
+    final String ATTR_ID = "id";
 
-    Long getId();
+    T getId();
 
-    void setId(Long id);
+    void setId(T id);
 }

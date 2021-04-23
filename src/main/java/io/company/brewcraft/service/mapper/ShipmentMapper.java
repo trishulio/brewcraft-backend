@@ -15,17 +15,17 @@ public interface ShipmentMapper {
     ShipmentMapper INSTANCE = Mappers.getMapper(ShipmentMapper.class);
 
     @Mappings({
-        @Mapping(target = "id", ignore = true),
-        @Mapping(target = "createdAt", ignore = true),
-        @Mapping(target = "lastUpdated", ignore = true),
+        @Mapping(target = Shipment.ATTR_ID, ignore = true),
+        @Mapping(target = Shipment.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = Shipment.ATTR_LAST_UPDATED, ignore = true),
     })
     Shipment fromDto(UpdateShipmentDto dto);
 
     @Mappings({
-        @Mapping(target = "id", ignore = true),
-        @Mapping(target = "createdAt", ignore = true),
-        @Mapping(target = "lastUpdated", ignore = true),
-        @Mapping(target = "version", ignore = true)
+        @Mapping(target = Shipment.ATTR_ID, ignore = true),
+        @Mapping(target = Shipment.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = Shipment.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Shipment.ATTR_VERSION, ignore = true)
     })
     Shipment fromDto(AddShipmentDto dto);
 

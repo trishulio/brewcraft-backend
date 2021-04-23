@@ -103,10 +103,10 @@ public class InvoiceController extends BaseController {
         return dto;
     }
 
-    @DeleteMapping("/invoices/{invoiceId}")
+    @DeleteMapping("/invoices")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public void deleteInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId) {
-        invoiceService.delete(invoiceId);
+    public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
+        return invoiceService.delete(invoiceIds);
     }
 
     @PostMapping("/invoices")

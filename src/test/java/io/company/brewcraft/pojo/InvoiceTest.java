@@ -38,10 +38,10 @@ public class InvoiceTest {
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
-            new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+            new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
-            new InvoiceStatus(4L, "FINAL"),
+            new InvoiceStatus("FINAL"),
             List.of(new InvoiceItem()),
             1
         );
@@ -53,10 +53,10 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-        assertEquals(new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
+        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-        assertEquals(new InvoiceStatus(4L, "FINAL"), invoice.getStatus());
+        assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
         assertNull(invoice.getAmount());
         assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
@@ -131,15 +131,15 @@ public class InvoiceTest {
     @Test
     public void testAccessStatus() {
         assertNull(invoice.getStatus());
-        invoice.setStatus(new InvoiceStatus(1L, "FINAL"));
-        assertEquals(new InvoiceStatus(1L, "FINAL"), invoice.getStatus());
+        invoice.setStatus(new InvoiceStatus("FINAL"));
+        assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
     }
 
     @Test
     public void testAccessFreight() {
         assertNull(invoice.getFreight());
-        invoice.setFreight(new Freight(1L, Money.parse("CAD 10")));
-        assertEquals(new Freight(1L, Money.parse("CAD 10")), invoice.getFreight());
+        invoice.setFreight(new Freight(Money.parse("CAD 10")));
+        assertEquals(new Freight(Money.parse("CAD 10")), invoice.getFreight());
     }
 
     @Test

@@ -22,9 +22,9 @@ public interface SupplierMapper {
     SupplierDto toDto(Supplier supplier);
     
     @Mappings({
-        @Mapping(target = Audited.FIELD_CREATED_AT, ignore = true),
-//        @Mapping(target = Audited.FIELD_LAST_UPDATED_AT, ignore = true), // Make sure that each entity follows the same variable names 
-        @Mapping(target = Versioned.FIELD_VERSION, ignore = true),
+        @Mapping(target = Supplier.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = Supplier.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Supplier.ATTR_VERSION, ignore = true),
     })
     Supplier fromDto(AddSupplierDto supplierDto);
     

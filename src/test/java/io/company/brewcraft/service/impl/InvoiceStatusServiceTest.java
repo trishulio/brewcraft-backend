@@ -27,11 +27,11 @@ public class InvoiceStatusServiceTest {
 
     @Test
     public void testGetInvoiceStatus_ReturnsPojo_WhenEntityExists() {
-        InvoiceStatus mEntity = new InvoiceStatus(1L, "FINAL");
+        InvoiceStatus mEntity = new InvoiceStatus("FINAL");
         doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
 
         InvoiceStatus status = service.getStatus("FINAL");
-        assertEquals(new InvoiceStatus(1L, "FINAL"), status);
+        assertEquals(new InvoiceStatus("FINAL"), status);
     }
 
     @Test
@@ -49,12 +49,12 @@ public class InvoiceStatusServiceTest {
 
     @Test
     public void testGetStatuses_ReturnTheListOfStatuses_WhenArgIsNotNull() {
-        InvoiceStatus mEntity = new InvoiceStatus(1L, "FINAL");
+        InvoiceStatus mEntity = new InvoiceStatus("FINAL");
         doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
 
         List<InvoiceStatus> statuses = service.getStatuses(Set.of("FINAL"));
         assertEquals(1, statuses.size());
-        assertEquals(new InvoiceStatus(1L, "FINAL"), statuses.get(0));
+        assertEquals(new InvoiceStatus("FINAL"), statuses.get(0));
     }
 
     @Test

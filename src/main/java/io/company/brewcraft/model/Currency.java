@@ -5,10 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity(name = "currency")
-public class Currency extends BaseEntity {
-
-    public static final String FIELD_NUMERIC_CODE = "numericCode";
-    public static final String FIELD_CODE = "code";
+public class Currency extends BaseEntity implements BaseCurrency, UpdateCurrency {
+    final String FIELD_NUMERIC_CODE = "numericCode";
+    final String FIELD_CODE = "code";
 
     @Id
     @Column(name = "numeric_code")
@@ -26,18 +25,22 @@ public class Currency extends BaseEntity {
         setCode(code);
     }
 
+    @Override
     public Integer getNumericCode() {
         return numericCode;
     }
 
+    @Override
     public void setNumericCode(Integer numericCode) {
         this.numericCode = numericCode;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }

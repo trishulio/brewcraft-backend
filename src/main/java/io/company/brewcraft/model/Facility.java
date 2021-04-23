@@ -4,18 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,7 +15,7 @@ import io.company.brewcraft.dto.UpdateFacility;
 
 @Entity
 @Table(name="FACILITY")
-public class Facility extends BaseModel implements UpdateFacility, Identified, Audited {
+public class Facility extends BaseModel implements UpdateFacility, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_ADDRESS = "address";
@@ -88,50 +77,62 @@ public class Facility extends BaseModel implements UpdateFacility, Identified, A
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
     
+    @Override
     public FacilityAddress getAddress() {
         return address;
     }
 
+    @Override
     public void setAddress(FacilityAddress address) {
         this.address = address;
     }
     
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @Override
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
     public String getFaxNumber() {
         return faxNumber;
     }
 
+    @Override
     public void setFaxNumber(String faxNumber) {
         this.faxNumber = faxNumber;
     }
     
+    @Override
     public List<Equipment> getEquipment() {
         return equipment;
     }
     
+    @Override
     public void setEquipment(List<Equipment> equipment) {
         if (equipment != null) {
             equipment.stream().forEach(eqpt -> eqpt.setFacility(this));
@@ -166,10 +167,12 @@ public class Facility extends BaseModel implements UpdateFacility, Identified, A
         }
     }
     
+    @Override
     public List<Storage> getStorages() {
         return storages;
     }
     
+    @Override
     public void setStorages(List<Storage> storages) {
         if (storages != null) {
             storages.stream().forEach(storage -> storage.setFacility(this));
@@ -204,26 +207,32 @@ public class Facility extends BaseModel implements UpdateFacility, Identified, A
         }
     }
     
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

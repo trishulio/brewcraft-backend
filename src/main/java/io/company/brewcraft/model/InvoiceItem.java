@@ -1,10 +1,13 @@
 package io.company.brewcraft.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.measure.Quantity;
 import javax.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 
 import io.company.brewcraft.service.MoneySupplier;
@@ -13,7 +16,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "invoice_item")
 @Table
-public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem, Identified {
+public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_QUANTITY = "quantity";
@@ -42,9 +45,15 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     @Embedded
     private Tax tax;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
     private Material material;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdated;
 
     @Version
     private Integer version;
@@ -57,13 +66,15 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
         setId(id);
     }
 
-    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
+    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
         setTax(tax);
         setMaterial(material);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setVersion(version);
     }
 
@@ -86,12 +97,12 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public Invoice getInvoice() {
         return this.invoice;
     }
-    
+
     @Override
     public void setInvoice(Invoice invoice) {
         if (this.invoice != null) {
@@ -102,7 +113,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
             if (invoice.getItems() == null) {
                 invoice.setItems(new ArrayList<>(0));
             }
-            invoice.getItems().add(this);            
+            invoice.getItems().add(this);
         }
 
         this.invoice = invoice;
@@ -165,10 +176,30 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
         Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
         Money price = this.getPrice() != null ? this.getPrice() : null;
 
-        if (qty != null && price != null) {            
+        if (qty != null && price != null) {
             amount = price.multipliedBy(qty.longValue());
         }
 
         return amount;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return this.lastUpdated;
+    }
+
+    @Override
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }
