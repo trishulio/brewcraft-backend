@@ -26,9 +26,11 @@ public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, Upda
     private Supplier supplier;
 
     @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
     @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
     
     @Version

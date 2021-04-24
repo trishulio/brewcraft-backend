@@ -30,9 +30,11 @@ public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, Upd
     private String name;
 
     @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
     @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
     
     @Version

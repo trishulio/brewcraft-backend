@@ -65,7 +65,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     private Freight freight;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp

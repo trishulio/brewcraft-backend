@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "invoice_status")
 @Table
@@ -25,10 +29,15 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
     @Column(nullable = false, unique = true)
     private String name;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
+    @Version
     private Integer version;
 
     public InvoiceStatus() {

@@ -42,6 +42,9 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     @Column(name = "delivered_date")
     private LocalDateTime deliveredDate;
 
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MaterialLot> lots;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -49,9 +52,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-
-    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<MaterialLot> lots;
 
     @Version
     private Integer version;
