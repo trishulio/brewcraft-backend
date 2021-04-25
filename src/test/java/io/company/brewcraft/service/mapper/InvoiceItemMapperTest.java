@@ -51,7 +51,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), dto.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), dto.getTax());
-        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), dto.getMaterial());
+        assertEquals(new MaterialDto(7L), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
     
@@ -70,7 +70,7 @@ public class InvoiceItemMapperTest {
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             new MoneyDto("CAD", new BigDecimal("20")),
-            new MaterialDto(7L, null, null, null, null, null, null, null, null),
+            new MaterialDto(7L),
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
@@ -80,7 +80,7 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new Material(7L), item.getMaterial());
         assertEquals(1, dto.getVersion());
     }
 
@@ -107,7 +107,7 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new Material(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 

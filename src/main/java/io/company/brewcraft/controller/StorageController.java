@@ -29,23 +29,29 @@ import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.StorageMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class StorageController {
+public class StorageController extends BaseController {
    
     private StorageService storageService;
         
     private StorageMapper storageMapper = StorageMapper.INSTANCE;
     
-    public StorageController(StorageService storageService) {
+    public StorageController(StorageService storageService, AttributeFilter filter) {
+        super(filter);
         this.storageService = storageService;
     }
     
     @GetMapping(value = "/storages" , consumes = MediaType.ALL_VALUE)
-    public PageDto<StorageDto> getAllStorages(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, 
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {        
+    public PageDto<StorageDto> getAllStorages(
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {        
         Page<Storage> storagePage = storageService.getAllStorages(page, size, sort, orderAscending);
         
         List<StorageDto> storageList = storagePage.stream().map(storage -> storageMapper.toDto(storage)).collect(Collectors.toList());

@@ -24,7 +24,6 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
     private Set<Long> facilityIds;
 
     public EquipmentRepositoryGetAllEquipmentSpecification() {
-        this(null, null, null, null);
     }
 
     public EquipmentRepositoryGetAllEquipmentSpecification(Set<Long> ids, Set<String> types, Set<String> statuses, Set<Long> facilityIds) {

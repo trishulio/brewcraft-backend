@@ -50,7 +50,7 @@ public class MaterialCategoryServiceImplTest {
 
     @Test
     public void testGetMaterialCategories_returnsMaterialCategories() throws Exception {
-        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L, null, null, null, null, null, null), Set.of(new MaterialCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L), Set.of(new MaterialCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<MaterialCategory> materialCategoryEntities = Arrays.asList(materialCategoryEntity);
         
@@ -83,7 +83,7 @@ public class MaterialCategoryServiceImplTest {
     @Test
     public void testGetMaterialCategory_returnsMaterialCategory() throws Exception {
         Long id = 1L;
-        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L, null, null, null, null, null, null), Set.of(new MaterialCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(2L), Set.of(new MaterialCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<MaterialCategory> expectedMaterialCategoryEntity = Optional.ofNullable(materialCategoryEntity);
 
         when(materialCategoryRepository.findById(id)).thenReturn(expectedMaterialCategoryEntity);
@@ -225,9 +225,9 @@ public class MaterialCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(1L, null, null, null, null, null, null), Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory putCategory = new MaterialCategory(null, "testName", new MaterialCategory(1L), Set.of(new MaterialCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialCategory materialCategoryParent = new MaterialCategory();
-        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(1L, null, null, null, null, null, null), Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory materialCategoryEntity = new MaterialCategory(1L, "testName", new MaterialCategory(1L), Set.of(new MaterialCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
         
@@ -279,8 +279,8 @@ public class MaterialCategoryServiceImplTest {
     public void testPatchMaterialCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
         MaterialCategory patchedCategory = new MaterialCategory(1L, "updatedName", null, null, null, null, null);
-        MaterialCategory existingMaterialCategoryEntity = new MaterialCategory(1L, "testName", null, Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        MaterialCategory persistedMaterialCategoryEntity = new MaterialCategory(1L, "updatedName", null, Set.of(new MaterialCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory existingMaterialCategoryEntity = new MaterialCategory(1L, "testName", null, Set.of(new MaterialCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory persistedMaterialCategoryEntity = new MaterialCategory(1L, "updatedName", null, Set.of(new MaterialCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<MaterialCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
 

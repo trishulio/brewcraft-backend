@@ -30,33 +30,42 @@ import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.MaterialCategoryMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/materials/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class MaterialCategoryController {
+public class MaterialCategoryController extends BaseController {
     
     private MaterialCategoryService materialCategoryService;
     
     private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         
-    public MaterialCategoryController(MaterialCategoryService materialCategoryService) {
+    public MaterialCategoryController(MaterialCategoryService materialCategoryService, AttributeFilter filter) {
+        super(filter);
         this.materialCategoryService = materialCategoryService;
     }
     
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<CategoryDto> getCategories(
-            @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false) Set<Long> parentCategoryIds,
-            @RequestParam(required = false) Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
-            Page<MaterialCategory> materialCategoriesPage = materialCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
+        @RequestParam(required = false) Set<Long> ids,
+        @RequestParam(required = false) Set<String> names,
+        @RequestParam(required = false) Set<Long> parentCategoryIds,
+        @RequestParam(required = false) Set<String> parentNames,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {
+        Page<MaterialCategory> materialCategoriesPage = materialCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
 
-            List<CategoryDto> materialCategoriesList = materialCategoriesPage.stream()
-                    .map(materialCategory -> materialCategoryMapper.toDto(materialCategory)).collect(Collectors.toList());
+        List<CategoryDto> materialCategoriesList = materialCategoriesPage.stream()
+                                                   .map(materialCategory -> materialCategoryMapper.toDto(materialCategory))
+                                                   .collect(Collectors.toList());
 
-            PageDto<CategoryDto> dto = new PageDto<CategoryDto>(materialCategoriesList, materialCategoriesPage.getTotalPages(), materialCategoriesPage.getTotalElements());
-            
-            return dto;
+        PageDto<CategoryDto> dto = new PageDto<CategoryDto>(materialCategoriesList, materialCategoriesPage.getTotalPages(), materialCategoriesPage.getTotalElements());
+        
+        return dto;
     }
     
     @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)

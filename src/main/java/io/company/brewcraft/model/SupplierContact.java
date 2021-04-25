@@ -57,12 +57,15 @@ public class SupplierContact extends BaseEntity implements UpdateSupplierContact
     private Integer version;
 
     public SupplierContact() {
-        
+    }
+    
+    public SupplierContact(Long id) {
+        setId(id);
     }
     
     public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
             String phoneNumber, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        setId(id);
+        this(id);
         setSupplier(supplier);
         setFirstName(firstName);
         setLastName(lastName);

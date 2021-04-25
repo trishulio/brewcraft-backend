@@ -1,6 +1,7 @@
 package io.company.brewcraft.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
@@ -17,12 +18,13 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.ProductMeasureDto;
 import io.company.brewcraft.dto.UpdateProductDto;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasure;
 import io.company.brewcraft.model.ProductMeasureValue;
-import io.company.brewcraft.model.Product;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class ProductControllerTest {
@@ -35,7 +37,7 @@ public class ProductControllerTest {
    public void init() {
        productService = mock(ProductService.class);
 
-       productController = new ProductController(productService);
+       productController = new ProductController(productService, new AttributeFilter());
    }
 
    @Test
@@ -66,10 +68,10 @@ public class ProductControllerTest {
                Set.of(1L),
                Set.of(2L),
                Set.of("Beer"),
-               1,
-               10,
                Set.of("id"),
-               true
+               true,
+               1,
+               10
        );
 
        assertEquals(100, dto.getTotalPages());

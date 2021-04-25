@@ -24,6 +24,7 @@ import io.company.brewcraft.dto.TenantDto;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.util.UtilityProvider;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @WebMvcTest(TenantManagementController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -38,6 +39,9 @@ public class TenantManagementControllerTest {
 
     @MockBean
     private UtilityProvider utilityProvider;
+
+    @MockBean
+    private AttributeFilter filter;
 
     @MockBean
     private TenantManagementService tenantManagementServiceMock;

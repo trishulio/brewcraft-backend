@@ -68,7 +68,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testGetProducts_returnsProducts() throws Exception {
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<Product> productEntities = Arrays.asList(productEntity);
         
@@ -101,7 +101,7 @@ public class ProductServiceImplTest {
     @Test
     public void testGetProduct_returnsProduct() throws Exception {
         Long id = 1L;
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Product> expectedProductEntity = Optional.ofNullable(productEntity);
 
         when(productRepositoryMock.findById(id)).thenReturn(expectedProductEntity);
@@ -120,9 +120,9 @@ public class ProductServiceImplTest {
 
     @Test
     public void testAddProduct_SavesProduct() throws Exception {
-        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -155,7 +155,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testAddProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(productMeasureServiceMock.getAllProductMeasures()).thenReturn(List.of(new ProductMeasure("abv")));
               
@@ -168,8 +168,8 @@ public class ProductServiceImplTest {
     @Test
     public void testPutProduct_successWhenNoExistingEntity() throws Exception {
         Long id = 1L;        
-        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L, null, null, null, null, null, null), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("ibu"), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("ibu"), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -209,9 +209,9 @@ public class ProductServiceImplTest {
         List<ProductMeasureValue> list = new ArrayList<>();
         list.add(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
         
-        Product putProduct = new Product(1L, "testProductupdated", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product putProduct = new Product(1L, "testProductupdated", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -248,7 +248,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testPutProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(productMeasureServiceMock.getAllProductMeasures()).thenReturn(List.of(new ProductMeasure("abv")));
               
@@ -262,8 +262,8 @@ public class ProductServiceImplTest {
     public void testPatchProduct_success() throws Exception {
         Long id = 1L;
         Product patchedProduct = new Product(null, "updatedName", null, null, new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("ibu"), "200", new Product()))), null, null, null, 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("ibu"), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new ProductMeasure("ibu"), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -313,7 +313,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testPatchProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(productMeasureServiceMock.getAllProductMeasures()).thenReturn(List.of(new ProductMeasure("abv")));
               
@@ -327,7 +327,7 @@ public class ProductServiceImplTest {
     public void testPatchProduct_throwsOptimisticLockingException() throws Exception {
         Long id = 1L;        
         Product patchedProduct = new Product(null, "updatedName", null, null, null, null, null, null, 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L, null, null, null, null, null, null), null, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), null, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
 
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
  

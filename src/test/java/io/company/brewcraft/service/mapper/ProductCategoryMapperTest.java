@@ -24,7 +24,7 @@ public class ProductCategoryMapperTest {
 
     @Test
     public void testoDto_ReturnsDto() {
-        ProductCategory entity = new ProductCategory(1L, "testName", new ProductCategory(2L, null, null, null, null, null, null), Set.of(new ProductCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory entity = new ProductCategory(1L, "testName", new ProductCategory(2L), Set.of(new ProductCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         CategoryDto category = productCategoryMapper.toDto(entity);
 
         assertEquals(new CategoryDto(1L, 2L, "testName", 1), category);

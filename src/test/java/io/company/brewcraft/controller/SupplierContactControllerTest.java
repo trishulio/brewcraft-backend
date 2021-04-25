@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import io.company.brewcraft.model.SupplierContact;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.util.UtilityProvider;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @WebMvcTest(SupplierContactController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -41,6 +43,9 @@ public class SupplierContactControllerTest {
 
     @MockBean
     public UtilityProvider utilityProvider;
+
+    @MockBean
+    private AttributeFilter filter;
 
     @MockBean
     private SupplierContactService supplierContactServiceMock;
@@ -59,7 +64,7 @@ public class SupplierContactControllerTest {
        
        Page<SupplierContact> pagedResponse = new PageImpl<>(contacts);
         
-       when(supplierContactServiceMock.getSupplierContacts(0, 100, new String[]{"id"}, true)).thenReturn(pagedResponse);
+       when(supplierContactServiceMock.getSupplierContacts(0, 100, Set.of("id"), true)).thenReturn(pagedResponse);
         
        this.mockMvc.perform(get("/api/v1/suppliers/contacts").header("Authorization", "Bearer " + "test"))
        .andExpect(status().isOk())
@@ -119,7 +124,7 @@ public class SupplierContactControllerTest {
                + "}"));
        
         
-        verify(supplierContactServiceMock, times(1)).getSupplierContacts(0, 100, new String[]{"id"}, true);
+        verify(supplierContactServiceMock, times(1)).getSupplierContacts(0, 100, Set.of("id"), true);
     } 
     
     @Test

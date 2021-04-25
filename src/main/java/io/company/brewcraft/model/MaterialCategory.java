@@ -53,13 +53,16 @@ public class MaterialCategory extends BaseEntity {
     private Integer version;
     
     public MaterialCategory() {
-        
+        super();
+    }
+
+    public MaterialCategory(Long id) {
+        this.id = id;
     }
 
     public MaterialCategory(Long id, String name, MaterialCategory parentCategory, Set<MaterialCategory> subcategories,
             LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.parentCategory = parentCategory;
         this.subcategories = subcategories;

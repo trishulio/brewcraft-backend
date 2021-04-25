@@ -1,14 +1,13 @@
 package io.company.brewcraft.service.impl;
 
+import static io.company.brewcraft.repository.RepositoryUtil.*;
+
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Supplier;
@@ -28,10 +27,8 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
 
     @Override
-    public Page<Supplier> getSuppliers(int page, int size, String[] sort, boolean order_asc) {
-        Pageable paging = PageRequest.of(page, size, Sort.by(order_asc ? Direction.ASC : Direction.DESC, sort));
-
-        Page<Supplier> suppliers = supplierRepository.findAll(paging);
+    public Page<Supplier> getSuppliers(int page, int size, Set<String> sort, boolean orderAscending) {
+        Page<Supplier> suppliers = supplierRepository.findAll(pageRequest(sort, orderAscending, page, size));
 
         return suppliers;
     }

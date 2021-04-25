@@ -17,9 +17,12 @@ public class CategoryDto extends BaseDto {
         super();
     }
     
-    public CategoryDto(Long id, Long parentCategoryId, String name, Integer version) {
-        super();
+    public CategoryDto(Long id) {
         this.id = id;
+    }
+
+    public CategoryDto(Long id, Long parentCategoryId, String name, Integer version) {
+        this(id);
         this.parentCategoryId = parentCategoryId;
         this.name = name;
         this.version = version;

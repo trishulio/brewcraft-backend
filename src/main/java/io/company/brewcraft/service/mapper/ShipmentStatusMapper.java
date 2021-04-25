@@ -1,6 +1,8 @@
 package io.company.brewcraft.service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.ShipmentStatusDto;
@@ -21,5 +23,11 @@ public interface ShipmentStatusMapper {
 
     ShipmentStatusDto toDto(ShipmentStatus status);
 
+    @Mappings({
+        @Mapping(target = ShipmentStatus.ATTR_ID, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_VERSION, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true)
+    })
     ShipmentStatus fromDto(ShipmentStatusDto status);
 }

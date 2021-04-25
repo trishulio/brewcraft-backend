@@ -61,11 +61,14 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     private Integer version;
     
     public Facility() {
-        
+    }
+
+    public Facility(Long id) {
+        setId(id);
     }
     
     public Facility(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<Equipment> equipment, List<Storage> storages, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        setId(id);
+        this(id);
         setName(name);
         setAddress(address);
         setPhoneNumber(phoneNumber);

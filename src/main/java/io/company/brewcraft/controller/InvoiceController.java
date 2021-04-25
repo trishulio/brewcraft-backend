@@ -61,11 +61,11 @@ public class InvoiceController extends BaseController {
         @RequestParam(required = false, name = "freight_amt_to") BigDecimal freightAmtTo,
         @RequestParam(required = false, name = "status") Set<String> status,
         @RequestParam(required = false, name = "supplier_id") Set<Long> supplierIds,
-        @RequestParam(required = false, name = "sort") Set<String> sort,         
-        @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
-        @RequestParam(name="page", defaultValue = "0") int page,
-        @RequestParam(name="size", defaultValue = "10") int size,
-        @RequestParam(defaultValue = "", name="attr") Set<String> attributes
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<Invoice> invoices = invoiceService.getInvoices(
             ids,

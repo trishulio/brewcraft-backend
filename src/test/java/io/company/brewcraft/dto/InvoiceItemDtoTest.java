@@ -25,7 +25,7 @@ public class InvoiceItemDtoTest {
             new MoneyDto("CAD", new BigDecimal("5")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
             new MoneyDto("CAD", new BigDecimal("8")),
-            new MaterialDto(7L, null, null, null, null, null, null, null, null),
+            new MaterialDto(7L),
             1
         );
 
@@ -35,7 +35,7 @@ public class InvoiceItemDtoTest {
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
         assertEquals(new MoneyDto("CAD", new BigDecimal("8")), item.getAmount());
-        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new MaterialDto(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 

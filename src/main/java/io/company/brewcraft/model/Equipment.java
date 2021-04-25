@@ -69,12 +69,16 @@ public class Equipment extends BaseEntity {
     private Integer version;
     
     public Equipment() {
-        
+    }
+
+    public Equipment(Long id) {
+        this();
+        setId(id);
     }
     
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, BigDecimal maxCapacityValue,
             Unit<?> maxCapacityUnit, Unit<?> maxCapacityDisplayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        setId(id);
+        this(id);
         setFacility(facility);
         setName(name);
         setType(type);

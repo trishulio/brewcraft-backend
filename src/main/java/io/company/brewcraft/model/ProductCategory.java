@@ -54,13 +54,17 @@ public class ProductCategory extends BaseEntity {
     private Integer version;
     
     public ProductCategory() {
-        
+        super();
+    }
+
+    public ProductCategory(Long id) {
+        this();
+        this.id = id;
     }
 
     public ProductCategory(Long id, String name, ProductCategory parentCategory, Set<ProductCategory> subcategories,
             LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.parentCategory = parentCategory;
         this.subcategories = subcategories;

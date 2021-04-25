@@ -20,7 +20,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
     public static final String FIELD_NAME = "name";
     public static final String FIELD_CONTACTS = "contacts";
     public static final String FIELD_ADDRESS = "address";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_generator")
     @SequenceGenerator(name = "supplier_generator", sequenceName = "supplier_sequence", allocationSize = 1)
@@ -48,11 +48,14 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
     private Integer version;
 
     public Supplier() {
+    }
 
+    public Supplier(Long id) {
+        setId(id);
     }
 
     public Supplier(Long id, String name, List<SupplierContact> contacts, SupplierAddress address, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        setId(id);
+        this(id);
         setName(name);
         setContacts(contacts);
         setAddress(address);
@@ -91,7 +94,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
         if (contacts != null) {
             contacts.stream().forEach(contact -> contact.setSupplier(this));
         }
-        
+
         if (this.getContacts() != null) {
             this.getContacts().clear();
             this.getContacts().addAll(contacts);
@@ -114,7 +117,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
         if (contacts == null) {
             contacts = new ArrayList<>();
         }
-        
+
         if (contact.getSupplier() != this) {
             contact.setSupplier(this);
         }
@@ -123,7 +126,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
             this.contacts.add(contact);
         }
     }
-    
+
     public void removeContect(SupplierContact contact) {
         if (contacts != null) {
             contact.setSupplier(null);

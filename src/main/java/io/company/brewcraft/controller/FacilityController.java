@@ -29,23 +29,29 @@ import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.FacilityMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class FacilityController {
+public class FacilityController extends BaseController {
     
     private FacilityService facilityService;
     
     private FacilityMapper facilityMapper = FacilityMapper.INSTANCE;
 
-    public FacilityController(FacilityService facilityService) {
+    public FacilityController(FacilityService facilityService, AttributeFilter filter) {
+        super(filter);
         this.facilityService = facilityService;
     }
     
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
-    public PageDto<FacilityDto> getAllFacilities(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, 
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {        
+    public PageDto<FacilityDto> getAllFacilities(
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {        
         Page<Facility> facilitiesPage = facilityService.getAllFacilities(page, size, sort, orderAscending);
         
         List<FacilityDto> facilitiesList = facilitiesPage.stream().map(facility -> facilityMapper.toDto(facility)).collect(Collectors.toList());

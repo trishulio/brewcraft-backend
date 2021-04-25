@@ -19,7 +19,10 @@ public class SupplierAddress extends AddressEntity {
     private Long id;
     
     public SupplierAddress() {
-        
+    }
+    
+    public SupplierAddress(Long id) {
+        this.id = id;
     }
     
     public SupplierAddress(Long id, String addressLine1, String addressLine2, String country, String province, String city,

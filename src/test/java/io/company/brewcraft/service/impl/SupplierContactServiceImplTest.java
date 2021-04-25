@@ -1,19 +1,14 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +46,7 @@ public class SupplierContactServiceImplTest {
 
     @Test
     public void testGetContacts_returnsContacts() throws Exception {
-        SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<SupplierContact> contactEntities = Arrays.asList(contactEntity);
         
@@ -61,7 +56,7 @@ public class SupplierContactServiceImplTest {
 
         when(supplierContactRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedContactEntity);
 
-        Page<SupplierContact> actualContacts = supplierContactService.getSupplierContacts(0, 100, new String[]{"id"}, true);
+        Page<SupplierContact> actualContacts = supplierContactService.getSupplierContacts(0, 100, Set.of("id"), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());
@@ -86,7 +81,7 @@ public class SupplierContactServiceImplTest {
     @Test
     public void testGetContact_returnsContact() throws Exception {
         Long id = 1L;
-        SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<SupplierContact> expectedContactEntity = Optional.ofNullable(contactEntity);
 
         when(supplierContactRepositoryMock.findById(id)).thenReturn(expectedContactEntity);
@@ -109,9 +104,9 @@ public class SupplierContactServiceImplTest {
     public void testAddContact_Success() throws Exception {
         Long supplierId = 2L;
         
-        SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
-        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L, null, null, null, null, null, null));
+        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L));
         
         when(supplierContactRepositoryMock.saveAndFlush(supplierContact)).thenReturn(supplierContact);
 
@@ -133,7 +128,7 @@ public class SupplierContactServiceImplTest {
     public void testAddContact_throwsWhenSupplierDoesNotExist() throws Exception {
         Long supplierId = 2L;
         
-        SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(supplierServiceMock.getSupplier(supplierId)).thenReturn(null);
 
@@ -148,12 +143,12 @@ public class SupplierContactServiceImplTest {
         Long supplierId = 2L;
         Long id = 1L;
 
-        SupplierContact putContact = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        SupplierContact supplierEntity = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact putContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact supplierEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<SupplierContact> persistedContactCaptor = ArgumentCaptor.forClass(SupplierContact.class);
 
-        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L, null, null, null, null, null, null));
+        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L));
 
         when(supplierContactRepositoryMock.saveAndFlush(persistedContactCaptor.capture())).thenReturn(supplierEntity);
 
@@ -189,7 +184,7 @@ public class SupplierContactServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        SupplierContact putContact = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact putContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(supplierContactRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
@@ -204,14 +199,14 @@ public class SupplierContactServiceImplTest {
         Long supplierId = 2L;
         Long id = 1L;
         SupplierContact patchedContact = new SupplierContact(1L, null, "updatedName", null, null, null, null, null, null, null);
-        SupplierContact existingContactEntity = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        SupplierContact persistedContactEntity = new SupplierContact(1L, new Supplier(2L, null, null, null, null, null, null), "updatedName", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact existingContactEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        SupplierContact persistedContactEntity = new SupplierContact(1L, new Supplier(2L), "updatedName", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<SupplierContact> persistedContactCaptor = ArgumentCaptor.forClass(SupplierContact.class);
 
         when(supplierContactRepositoryMock.findById(id)).thenReturn(Optional.of(existingContactEntity));
 
-        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L, null, null, null, null, null, null));
+        when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L));
         
         when(supplierContactRepositoryMock.saveAndFlush(persistedContactCaptor.capture())).thenReturn(persistedContactEntity);
 

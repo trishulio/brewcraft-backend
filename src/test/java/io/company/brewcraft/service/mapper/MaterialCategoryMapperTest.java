@@ -35,7 +35,7 @@ public class MaterialCategoryMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
-        MaterialCategory category = new MaterialCategory(1L, "testName", new MaterialCategory(2L, null, null, null, null, null, null), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MaterialCategory category = new MaterialCategory(1L, "testName", new MaterialCategory(2L), Set.of(new MaterialCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         CategoryDto dto = materialCategoryMapper.toDto(category);
 
         assertEquals(new CategoryDto(1L, 2L, "testName", 1), dto);

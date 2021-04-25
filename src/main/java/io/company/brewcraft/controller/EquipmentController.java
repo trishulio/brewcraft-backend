@@ -29,28 +29,33 @@ import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class EquipmentController {
+public class EquipmentController extends BaseController {
     
     private EquipmentService equipmentService;
     
     private EquipmentMapper equipmentMapper = EquipmentMapper.INSTANCE;
         
-    public EquipmentController(EquipmentService equipmentService) {
+    public EquipmentController(EquipmentService equipmentService, AttributeFilter filter) {
+        super(filter);
         this.equipmentService = equipmentService;
     }
     
     @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
-            @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false) Set<String> types,
-            @RequestParam(required = false) Set<String> statuses,
-            @RequestParam(required = false) Set<Long> facilityIds,
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
+        @RequestParam(required = false) Set<Long> ids,
+        @RequestParam(required = false) Set<String> types,
+        @RequestParam(required = false) Set<String> statuses,
+        @RequestParam(required = false) Set<Long> facilityIds,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {
         
         Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 

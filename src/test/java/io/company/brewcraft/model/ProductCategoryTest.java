@@ -94,10 +94,10 @@ public class ProductCategoryTest {
     public void testGetDescendantCategoryIds() {
         Set<ProductCategory> subcategories = Set.of(
                 new ProductCategory(1L, null, null,
-                        Set.of(new ProductCategory(3L, null, null, null, null, null, null),
-                                new ProductCategory(4L, null, null, null, null, null, null)),
+                        Set.of(new ProductCategory(3L),
+                                new ProductCategory(4L)),
                         null, null, null),
-                new ProductCategory(2L, null, null, null, null, null, null));
+                new ProductCategory(2L));
 
         ProductCategory category = new ProductCategory(null, null, null, subcategories, null, null, null);
 

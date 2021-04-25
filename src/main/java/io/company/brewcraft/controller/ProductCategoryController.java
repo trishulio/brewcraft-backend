@@ -30,33 +30,41 @@ import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.ProductCategoryMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/products/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProductCategoryController {
+public class ProductCategoryController extends BaseController {
     
     private ProductCategoryService productCategoryService;
     
     private ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         
-    public ProductCategoryController(ProductCategoryService productCategoryService) {
+    public ProductCategoryController(ProductCategoryService productCategoryService, AttributeFilter filter) {
+        super(filter);
         this.productCategoryService = productCategoryService;
     }
 
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<CategoryDto> getCategories(
-            @RequestParam(required = false) Set<Long> ids,  @RequestParam(required = false) Set<String> names,  @RequestParam(required = false, name = "parent_category_ids") Set<Long> parentCategoryIds,
-            @RequestParam(required = false, name = "parent_names") Set<String> parentNames, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true", name = "order_asc") boolean orderAscending) {
-            Page<ProductCategory> categoriesPage = productCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
+            @RequestParam(required = false) Set<Long> ids,
+            @RequestParam(required = false) Set<String> names,
+            @RequestParam(required = false, name = "parent_category_ids") Set<Long> parentCategoryIds,
+            @RequestParam(required = false, name = "parent_names") Set<String> parentNames,
+            @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+            @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+            @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+            @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {
+        Page<ProductCategory> categoriesPage = productCategoryService.getCategories(ids, names, parentCategoryIds, parentNames, page, size, sort, orderAscending);
 
-            List<CategoryDto> productCategoriesList = categoriesPage.stream()
-                    .map(productCategory -> productCategoryMapper.toDto(productCategory)).collect(Collectors.toList());
+        List<CategoryDto> productCategoriesList = categoriesPage.stream()
+                .map(productCategory -> productCategoryMapper.toDto(productCategory)).collect(Collectors.toList());
 
-            PageDto<CategoryDto> dto = new PageDto<CategoryDto>(productCategoriesList, categoriesPage.getTotalPages(), categoriesPage.getTotalElements());
-            
-            return dto;
+        PageDto<CategoryDto> dto = new PageDto<CategoryDto>(productCategoriesList, categoriesPage.getTotalPages(), categoriesPage.getTotalElements());
+        
+        return dto;
     }
 
     @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)

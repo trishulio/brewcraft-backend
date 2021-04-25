@@ -62,11 +62,11 @@ public class ShipmentController extends BaseController {
         @RequestParam(required = false, name = "delivery_due_date_to") LocalDateTime deliveryDueDateTo,
         @RequestParam(required = false, name = "delivered_date_from") LocalDateTime deliveredDateFrom,
         @RequestParam(required = false, name = "delivered_date_to") LocalDateTime deliveredDateTo,
-        @RequestParam(required = false, name = "sort") Set<String> sort,
-        @RequestParam(name = "order_asc", defaultValue = "true") boolean orderAscending,
-        @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "10") int size,
-        @RequestParam(name = "attr", defaultValue = "") Set<String> attributes
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statuses, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
         List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());

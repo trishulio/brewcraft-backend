@@ -112,7 +112,7 @@ public class InvoiceControllerTest {
            true,
            1,
            10,
-           Set.of() // empty means no fields should be filtered out, a.k.a none should be null
+           Set.of() // empty means no fields should be filtered out, i.e. no field should be null
        );
 
        assertEquals(100, dto.getTotalPages());
@@ -313,10 +313,14 @@ public class InvoiceControllerTest {
    }
 
    @Test
-   public void testDeleteInvoice_ReturnsDeleteByIdsFromService() {
+   public void testDeleteInvoices_ReturnsDeleteCountFromService() {
        doReturn(99).when(mService).delete(Set.of(1L, 11L, 111L));
        int count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
        assertEquals(99, count);
+       
+       doReturn(9999).when(mService).delete(Set.of(1L, 11L, 111L));
+       count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
+       assertEquals(9999, count);
    }
 
    @Test
@@ -326,7 +330,6 @@ public class InvoiceControllerTest {
            invoice.setId(1L);
            return invoice;
        }).when(mService).add(any(Invoice.class));
-
 
        AddInvoiceDto payload = new AddInvoiceDto(
            "ABCDE-12345",
@@ -404,7 +407,7 @@ public class InvoiceControllerTest {
        assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+       assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 
@@ -449,7 +452,7 @@ public class InvoiceControllerTest {
        assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+       assertEquals(new MaterialDto(7L), item.getMaterial());
        assertEquals(1, item.getVersion());
    }
 }

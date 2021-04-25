@@ -20,13 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import io.company.brewcraft.dto.TenantDto;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
 @RequestMapping(path = "/operations")
-public class TenantManagementController {
+public class TenantManagementController extends BaseController {
     private TenantManagementService tenantService;
 
-    public TenantManagementController(TenantManagementService tenantService) {
+    public TenantManagementController(TenantManagementService tenantService, AttributeFilter filter) {
+        super(filter);
         this.tenantService = tenantService;
     }
 
