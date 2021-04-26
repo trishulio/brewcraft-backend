@@ -1,11 +1,12 @@
 package io.company.brewcraft.dto.user;
 
 import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.model.Versioned;
-import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.model.user.UserTitle;
+import io.company.brewcraft.dto.common.FixedTypeDto;
 
-public class UpdateUserDto extends BaseDto implements BaseUserDto, Versioned {
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+public class UpdateUserDto extends BaseDto implements BaseUserDto {
 
     private String displayName;
 
@@ -15,31 +16,18 @@ public class UpdateUserDto extends BaseDto implements BaseUserDto, Versioned {
 
     private String email;
 
-    private UserTitle title;
+    private FixedTypeDto status;
 
-    private String imageUrl;
+    private FixedTypeDto salutation;
 
     private String phoneNumber;
 
-    private UserStatus status;
+    private List<AddUserRoleDto> roles;
 
+    private String imageUrl;
+
+    @NotNull
     private Integer version;
-
-    public UpdateUserDto() {
-
-    }
-
-    public UpdateUserDto(String displayName, String firstName, String lastName, String email, UserTitle title, String imageUrl, String phoneNumber, UserStatus status, Integer version) {
-        this.displayName = displayName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.phoneNumber = phoneNumber;
-        this.status = status;
-        this.version = version;
-    }
 
     @Override
     public String getDisplayName() {
@@ -78,21 +66,21 @@ public class UpdateUserDto extends BaseDto implements BaseUserDto, Versioned {
     }
 
     @Override
-    public UserTitle getTitle() {
-        return title;
+    public FixedTypeDto getStatus() {
+        return status;
     }
 
-    public void setTitle(UserTitle title) {
-        this.title = title;
+    public void setStatus(FixedTypeDto status) {
+        this.status = status;
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public FixedTypeDto getSalutation() {
+        return salutation;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setSalutation(FixedTypeDto salutation) {
+        this.salutation = salutation;
     }
 
     @Override
@@ -105,20 +93,27 @@ public class UpdateUserDto extends BaseDto implements BaseUserDto, Versioned {
     }
 
     @Override
-    public UserStatus getStatus() {
-        return status;
+    public List<AddUserRoleDto> getRoles() {
+        return roles;
     }
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    public void setRoles(List<AddUserRoleDto> roles) {
+        this.roles = roles;
     }
 
     @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Integer getVersion() {
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

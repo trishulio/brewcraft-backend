@@ -1,12 +1,15 @@
 package io.company.brewcraft.dto.user;
 
 import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.model.user.UserTitle;
+import io.company.brewcraft.dto.common.FixedTypeDto;
+
+import java.util.List;
 
 public class UserDto extends BaseDto implements BaseUserDto {
 
     private Long id;
+
+    private String userName;
 
     private String displayName;
 
@@ -16,32 +19,17 @@ public class UserDto extends BaseDto implements BaseUserDto {
 
     private String email;
 
-    private UserTitle title;
+    private FixedTypeDto status;
 
-    private String imageUrl;
+    private FixedTypeDto salutation;
 
     private String phoneNumber;
 
-    private UserStatus status;
+    private List<UserRoleDto> roles;
+
+    private String imageUrl;
 
     private Integer version;
-
-    public UserDto(){
-
-    }
-
-    public UserDto(Long id, String displayName, String firstName, String lastName, String email, UserTitle title, String imageUrl, String phoneNumber, UserStatus status, Integer version) {
-        this.id = id;
-        this.displayName = displayName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.phoneNumber = phoneNumber;
-        this.status = status;
-        this.version = version;
-    }
 
     public Long getId() {
         return id;
@@ -49,6 +37,14 @@ public class UserDto extends BaseDto implements BaseUserDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -88,21 +84,21 @@ public class UserDto extends BaseDto implements BaseUserDto {
     }
 
     @Override
-    public UserTitle getTitle() {
-        return title;
+    public FixedTypeDto getStatus() {
+        return status;
     }
 
-    public void setTitle(UserTitle title) {
-        this.title = title;
+    public void setStatus(FixedTypeDto status) {
+        this.status = status;
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public FixedTypeDto getSalutation() {
+        return salutation;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setSalutation(FixedTypeDto salutation) {
+        this.salutation = salutation;
     }
 
     @Override
@@ -115,12 +111,21 @@ public class UserDto extends BaseDto implements BaseUserDto {
     }
 
     @Override
-    public UserStatus getStatus() {
-        return status;
+    public List<UserRoleDto> getRoles() {
+        return roles;
     }
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    public void setRoles(List<UserRoleDto> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Integer getVersion() {

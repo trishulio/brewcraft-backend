@@ -1,24 +1,16 @@
 package io.company.brewcraft.model.user;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserStatus {
-    ENABLED("enabled"),
-    DISABLED("disabled");
+import io.company.brewcraft.model.common.FixedTypeEntity;
 
-    private final String name;
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-    UserStatus(String name) {
-        this.name = name;
-    }
+@Entity(name = "user_status")
+@Table
+@SequenceGenerator(name = "fixed_type_generator", sequenceName = "user_status_sequence", allocationSize = 1)
+public class UserStatus extends FixedTypeEntity {
 
-    @JsonValue
-    public String getUserStatusName() {
-        return this.name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+    public static final String DEFAULT_STATUS_NAME = "DISABLED";
 }

@@ -1,13 +1,16 @@
 package io.company.brewcraft.dto.user;
 
 import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.model.user.UserTitle;
+import io.company.brewcraft.dto.common.FixedTypeDto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class AddUserDto extends BaseDto implements BaseUserDto {
+
+    @NotEmpty
+    private String userName;
 
     @NotEmpty
     private String displayName;
@@ -21,27 +24,25 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
     @NotEmpty
     private String email;
 
-    private UserTitle title;
+    @NotNull
+    private FixedTypeDto status;
+
+    @NotNull
+    private FixedTypeDto salutation;
+
+    @NotEmpty
+    private String phoneNumber;
+
+    private List<AddUserRoleDto> roles;
 
     private String imageUrl;
 
-    private String phoneNumber;
-
-    @NotNull
-    private UserStatus status;
-
-    public AddUserDto() {
+    public String getUserName() {
+        return userName;
     }
 
-    public AddUserDto(String displayName, String firstName, String lastName, String email, UserTitle title, String imageUrl, String phoneNumber, UserStatus status) {
-        this.displayName = displayName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.phoneNumber = phoneNumber;
-        this.status = status;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -81,15 +82,6 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
     }
 
     @Override
-    public UserTitle getTitle() {
-        return title;
-    }
-
-    public void setTitle(UserTitle title) {
-        this.title = title;
-    }
-
-    @Override
     public String getImageUrl() {
         return imageUrl;
     }
@@ -108,11 +100,29 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
     }
 
     @Override
-    public UserStatus getStatus() {
+    public FixedTypeDto getStatus() {
         return status;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(FixedTypeDto status) {
         this.status = status;
+    }
+
+    @Override
+    public FixedTypeDto getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(FixedTypeDto salutation) {
+        this.salutation = salutation;
+    }
+
+    @Override
+    public List<AddUserRoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<AddUserRoleDto> roles) {
+        this.roles = roles;
     }
 }
