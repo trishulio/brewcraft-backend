@@ -1,4 +1,6 @@
 package io.company.brewcraft.model;
 
-public interface UpdateInvoiceItem extends Identified<Long>, BaseInvoiceItem, Versioned {
+import io.company.brewcraft.dto.UpdateInvoice;
+
+public interface UpdateInvoiceItem<T extends UpdateInvoice<? extends UpdateInvoiceItem<T>>> extends Identified<Long>, BaseInvoiceItem<T>, Versioned {
 }

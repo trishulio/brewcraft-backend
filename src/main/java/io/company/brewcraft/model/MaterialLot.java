@@ -11,9 +11,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
-@Entity(name = "shipment_lot")
+@Entity(name = "material_lot")
 @Table
-public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audited, Identified<Long> {
+public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_QTY = "qty";
@@ -68,12 +68,11 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot, Audite
         setId(id);
     }
 
-    public MaterialLot(Long id, String lotNumber, Quantity<?> qty, Material material, Shipment shipment, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLot(Long id, String lotNumber, Quantity<?> qty, Material material, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setLotNumber(lotNumber);
         setQuantity(qty);
         setMaterial(material);
-        setShipment(shipment);
         setInvoiceItem(item);
         setStorage(storage);
         setCreatedAt(createdAt);

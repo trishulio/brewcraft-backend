@@ -152,12 +152,14 @@ public class InvoiceTest {
     @Test
     public void testAccessItems() {
         assertNull(invoice.getItems());
-        invoice.setItems(List.of(new InvoiceItem(2L)));
+        InvoiceItem item = new InvoiceItem(2L);
+        invoice.setItems(List.of(item));
 
         InvoiceItem expected = new InvoiceItem(2L);
         expected.setInvoice(new Invoice());
 
         assertEquals(List.of(expected), invoice.getItems());
+        assertEquals(invoice, item.getInvoice());
     }
 
     @Test

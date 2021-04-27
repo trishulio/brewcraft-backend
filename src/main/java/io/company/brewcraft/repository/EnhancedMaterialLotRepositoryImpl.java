@@ -15,9 +15,9 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
     private MaterialRepository materialRepo;
     private StorageRepository storageRepo;
     
-    private final AccessorRefresher<MaterialLotAccessor, MaterialLot> refresher;
+    private final AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher;
 
-    public EnhancedMaterialLotRepositoryImpl(InvoiceItemRepository itemRepo, MaterialRepository materialRepo, StorageRepository storageRepo, AccessorRefresher<MaterialLotAccessor, MaterialLot> refresher) {
+    public EnhancedMaterialLotRepositoryImpl(InvoiceItemRepository itemRepo, MaterialRepository materialRepo, StorageRepository storageRepo, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
         this.itemRepo = itemRepo;
         this.materialRepo = materialRepo;
         this.storageRepo = storageRepo;
@@ -28,7 +28,7 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
     public void refresh(Collection<MaterialLot> lots) {
         this.itemRepo.refreshAccessors(lots);
         this.materialRepo.refreshAccessors(lots);
-        this.storageRepo.refreshAccessor(lots);
+        this.storageRepo.refreshAccessors(lots);
     }
     
     @Override

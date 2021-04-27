@@ -16,7 +16,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "invoice_item")
 @Table
-public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem, Identified<Long>, Audited {
+public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem<Invoice>, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_QUANTITY = "quantity";

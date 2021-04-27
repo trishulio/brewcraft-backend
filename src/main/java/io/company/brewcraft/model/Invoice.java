@@ -60,7 +60,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "", column = "")
+//        @AttributeOverride(name = "", column = "")
     })
     private Freight freight;
 

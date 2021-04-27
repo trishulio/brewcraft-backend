@@ -101,7 +101,7 @@ public class ShipmentServiceTest {
     @Test
     public void testAdd_RetainsBaseValuesAndAddsShipmentToRepository_WhenObjectIsNotNull() {
         List<MaterialLot> additionLots = new ArrayList<>();
-        additionLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        additionLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment addition = new Shipment(
             1L,
             "SHIPMENT_1",
@@ -116,7 +116,7 @@ public class ShipmentServiceTest {
         );
         
         doReturn(List.of(
-            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), null, null, null)
+            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), null, null, null)
         )).when(mLotService).getAddLots(additionLots);
 
         Shipment shipment = service.add(addition);
@@ -148,7 +148,7 @@ public class ShipmentServiceTest {
     @Test
     public void testPut_OverridesAnExistingShipmentEntity_WhenInputIsNotNull() {
         List<MaterialLot> existingLots = new ArrayList<>();
-        existingLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        existingLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
@@ -164,7 +164,7 @@ public class ShipmentServiceTest {
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
         List<MaterialLot> updateLots = List.of( 
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         Shipment update = new Shipment(
             null,
@@ -180,7 +180,7 @@ public class ShipmentServiceTest {
         );
         
         doReturn(List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         )).when(mLotService).getPutLots(existingLots, updateLots);
 
         Shipment shipment = service.put(1L, update);
@@ -214,7 +214,7 @@ public class ShipmentServiceTest {
         doReturn(Optional.empty()).when(mRepo).findById(1L);
 
         List<MaterialLot> updateLots = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         Shipment update = new Shipment(
             1L,
@@ -230,7 +230,7 @@ public class ShipmentServiceTest {
         );
 
         doReturn(List.of(
-            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), null, null, null)
+            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), null, null, null)
         )).when(mLotService).getPutLots(null, updateLots);
 
         Shipment shipment = service.put(1L, update);
@@ -273,7 +273,7 @@ public class ShipmentServiceTest {
 
     @Test
     public void testPatch_PatchesExistingEntity_WhenExistingIsNotNull() {
-        List<MaterialLot> existingLots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> existingLots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
@@ -289,7 +289,7 @@ public class ShipmentServiceTest {
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
         List<MaterialLot> updateLots = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, null, new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
         Shipment update = new Shipment(
             null,
@@ -305,7 +305,7 @@ public class ShipmentServiceTest {
         );
 
         doReturn(List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         )).when(mLotService).getPatchLots(existingLots, updateLots);
 
         Shipment shipment = service.patch(1L, update);

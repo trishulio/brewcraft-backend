@@ -1,8 +1,7 @@
 package io.company.brewcraft.repository;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,5 +18,5 @@ public interface InvoiceStatusRepository extends JpaRepository<InvoiceStatus, Lo
     Optional<InvoiceStatus> findByName(@Param("name") String name);
     
     @Query("select s from invoice_status s where s.name in (:names)")
-    Collection<InvoiceStatus> findByNames(@Param("names") Set<String> names);
+    List<InvoiceStatus> findByNames(@Param("names") Iterable<String> names);
 }

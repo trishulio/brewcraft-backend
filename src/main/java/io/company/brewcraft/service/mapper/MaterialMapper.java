@@ -6,6 +6,7 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -13,8 +14,8 @@ import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.UpdateMaterialDto;
-import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 
 @Mapper(uses = { QuantityUnitMapper.class, MaterialCategoryMapper.class })
 public interface MaterialMapper {
@@ -37,15 +38,10 @@ public interface MaterialMapper {
     @Mapping(target = "category", ignore = true)
     MaterialDto toDto(Material material);
     
-    default Material fromDto(Long id) {
-        Material material = null;
-        if (id != null) {
-            material = new Material();
-            material.setId(id);    
-        }
-        
-        return material;
-    }
+    @Mappings({
+        @Mapping(target = Material.ATTR_ID)
+    })
+    Material fromDto(Long id);
 
     @BeforeMapping
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {

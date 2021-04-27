@@ -13,9 +13,9 @@ import io.company.brewcraft.model.Invoice;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice>, EnhancedInvoiceRepository {
     @Query("select count(i) > 0 from invoice i where i.id in (:ids)")
-    boolean existsByIds(Collection<Long> ids);
+    boolean existsByIds(Iterable<Long> ids);
 
     @Modifying
     @Query("delete from invoice i where i.id in (:ids)")
-    int deleteByIds(Collection<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

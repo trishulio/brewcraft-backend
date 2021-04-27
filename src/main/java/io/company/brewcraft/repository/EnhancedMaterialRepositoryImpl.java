@@ -12,10 +12,10 @@ import io.company.brewcraft.service.MaterialAccessor;
 public class EnhancedMaterialRepositoryImpl implements EnhancedMaterialRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedMaterialRepositoryImpl.class);
 
-    private AccessorRefresher<MaterialAccessor, Material> refresher;
+    private AccessorRefresher<Long, MaterialAccessor, Material> refresher;
 
     @Autowired
-    public EnhancedMaterialRepositoryImpl(AccessorRefresher<MaterialAccessor, Material> refresher) {
+    public EnhancedMaterialRepositoryImpl(AccessorRefresher<Long, MaterialAccessor, Material> refresher) {
         this.refresher = refresher;
     }
 

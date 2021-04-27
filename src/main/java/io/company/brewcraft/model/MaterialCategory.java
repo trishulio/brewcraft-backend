@@ -5,23 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.dto.BaseMaterialCategory;
+import io.company.brewcraft.dto.UpdateMaterialCategory;
+
 @Entity(name = "MATERIAL_CATEGORY")
-public class MaterialCategory extends BaseEntity {
+public class MaterialCategory extends BaseEntity implements UpdateMaterialCategory<MaterialCategory>, BaseMaterialCategory<MaterialCategory>, Audited, Identified<Long>{
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";
@@ -71,26 +64,32 @@ public class MaterialCategory extends BaseEntity {
         this.version = version;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public MaterialCategory getParentCategory() {
         return parentCategory;
     }
 
+    @Override
     public void setParentCategory(MaterialCategory parentCategory) {
         this.parentCategory = parentCategory;
         
@@ -99,10 +98,12 @@ public class MaterialCategory extends BaseEntity {
         }
     }
 
+    @Override
     public Set<MaterialCategory> getSubcategories() {
         return subcategories;
     }
 
+    @Override
     public void setSubcategories(Set<MaterialCategory> subcategories) {
         if (subcategories != null) {
             subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
@@ -137,26 +138,32 @@ public class MaterialCategory extends BaseEntity {
         }
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime created) {
         this.createdAt = created;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

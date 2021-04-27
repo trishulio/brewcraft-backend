@@ -132,7 +132,7 @@ public class InvoiceControllerTest {
        assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
        InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(2L, item.getId());
+       assertEquals(1L, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
        assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());

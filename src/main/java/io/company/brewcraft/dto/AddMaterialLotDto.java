@@ -10,7 +10,6 @@ public class AddMaterialLotDto extends BaseDto {
     public AddMaterialLotDto() {
     }
 
-
     public AddMaterialLotDto(String lotNumber, QuantityDto qty, Long materialId, Long invoiceItemId, Long storageId) {
         setLotNumber(lotNumber);
         setQuantity(qty);

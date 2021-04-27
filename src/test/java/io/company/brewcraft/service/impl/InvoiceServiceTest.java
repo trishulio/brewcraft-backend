@@ -199,7 +199,7 @@ public class InvoiceServiceTest {
 
        Iterator<InvoiceItem> it = invoice.getItems().iterator();
        InvoiceItem item = it.next();
-       assertEquals(2L, item.getId());
+       assertEquals(1L, item.getId());
        assertEquals("Item description", item.getDescription());
        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
        assertEquals(Money.parse("CAD 10"), item.getPrice());

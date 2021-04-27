@@ -1,6 +1,8 @@
 package io.company.brewcraft.service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.PurchaseOrderDto;
@@ -10,14 +12,10 @@ import io.company.brewcraft.model.PurchaseOrder;
 public interface PurchaseOrderMapper {
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
-    default PurchaseOrder fromDto(Long id) {
-        PurchaseOrder po = null;
-        if (id != null) {
-            po = new PurchaseOrder(id);
-        }
-        
-        return po;
-    }
+    @Mappings({
+        @Mapping(target = PurchaseOrder.ATTR_ID)
+    })
+    PurchaseOrder fromDto(Long id);
     
     PurchaseOrder fromDto(PurchaseOrderDto dto);
 

@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "shipment")
 @Table
-public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, Identified<Long>, Audited {
+public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, BaseShipment<MaterialLot>, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_DESCRIPTION = "description";

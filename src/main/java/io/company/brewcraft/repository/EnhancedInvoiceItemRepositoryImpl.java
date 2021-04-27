@@ -13,9 +13,9 @@ public class EnhancedInvoiceItemRepositoryImpl implements EnhancedInvoiceItemRep
 
     private MaterialRepository materialRepo;
 
-    private final AccessorRefresher<InvoiceItemAccessor, InvoiceItem> refresher;
+    private final AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> refresher;
 
-    public EnhancedInvoiceItemRepositoryImpl(MaterialRepository materialRepo, AccessorRefresher<InvoiceItemAccessor, InvoiceItem> refresher) {
+    public EnhancedInvoiceItemRepositoryImpl(MaterialRepository materialRepo, AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> refresher) {
         this.materialRepo = materialRepo;
         this.refresher = refresher;
     }

@@ -11,9 +11,9 @@ import io.company.brewcraft.service.InvoiceStatusAccessor;
 public class EnhancedInvoiceStatusRepositoryImpl implements EnhancedInvoiceStatusRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedInvoiceStatusRepositoryImpl.class);
     
-    private AccessorRefresher<InvoiceStatusAccessor, InvoiceStatus> refresher;
+    private AccessorRefresher<String, InvoiceStatusAccessor, InvoiceStatus> refresher;
     
-    public EnhancedInvoiceStatusRepositoryImpl(AccessorRefresher<InvoiceStatusAccessor, InvoiceStatus> refresher) {
+    public EnhancedInvoiceStatusRepositoryImpl(AccessorRefresher<String, InvoiceStatusAccessor, InvoiceStatus> refresher) {
         this.refresher = refresher;
     }
 

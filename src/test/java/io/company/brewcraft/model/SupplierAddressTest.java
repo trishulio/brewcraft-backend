@@ -1,8 +1,9 @@
 package io.company.brewcraft.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,13 @@ public class SupplierAddressTest {
     @BeforeEach
     public void init() {
         supplierAddress = new SupplierAddress();
+    }
+
+    @Test
+    public void testIdArgConstructor() {
+        supplierAddress = new SupplierAddress(1L);
+
+        assertEquals(1L, supplierAddress.getId());
     }
 
     @Test

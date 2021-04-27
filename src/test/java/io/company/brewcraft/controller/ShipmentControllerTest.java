@@ -57,7 +57,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithAllAttributes_WhenServiceAttributesAreEmptyString() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,
@@ -132,7 +132,7 @@ public class ShipmentControllerTest {
     @Test
     public void testGetShipments_ReturnsPageDtoWithIdFieldOnly_WhenAttributesHaveIdOnly() {
         List<MaterialLot> lots = List.of( 
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
         );
         Shipment shipment = new Shipment(
             1L,

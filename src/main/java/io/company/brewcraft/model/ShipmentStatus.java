@@ -19,7 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, UpdateShipmentStatus, Identified<String>, Audited {
     public static final String FIELD_NAME = "name";
     
-    public static final String DEFAULT_STATUS = "DELIVERED";
+    public static final String DEFAULT_STATUS_NAME = "DELIVERED";
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")
@@ -41,32 +41,25 @@ public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, Upd
     private Integer version;
 
     public ShipmentStatus() {
+        this(null);
     }
 
-    public ShipmentStatus(String name) {
-        this();
-        setName(name);
+    public ShipmentStatus(String id) {
+        setId(id);
     }
-
 
     @Override
     public String getId() {
-        return getName();
-    }
-
-    @Override
-    public void setId(String id) {
-        setName(id);
-    }
-
-    @Override
-    public String getName() {
         return name;
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        if (id == null) {
+            id = ShipmentStatus.DEFAULT_STATUS_NAME;
+        }
+        
+        this.name = id;
     }
 
     @Override

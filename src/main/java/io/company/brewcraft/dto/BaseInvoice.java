@@ -8,7 +8,7 @@ import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 
-public interface BaseInvoice<T extends BaseInvoiceItem> extends InvoiceStatusAccessor, PurchaseOrderAccessor {
+public interface BaseInvoice<T extends BaseInvoiceItem<? extends BaseInvoice<T>>> extends InvoiceStatusAccessor, PurchaseOrderAccessor {
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_GENERATED_ON = "generatedOn";
     final String ATTR_RECEIVED_ON = "receivedOn";

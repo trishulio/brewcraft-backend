@@ -3,7 +3,6 @@ package io.company.brewcraft.repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,24 +13,24 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
-public class AccessorRefresher<A, V extends Identified<?>> {
+public class AccessorRefresher<I, A, V extends Identified<I>> {
     private static final Logger log = LoggerFactory.getLogger(AccessorRefresher.class);
     
     private Function<A, V> getter;
     private BiConsumer<A, V> setter;
-    private Function<Set<?>, List<V>> entityRetriever;
+    private Function<Iterable<I>, List<V>> entityRetriever;
 
-    public AccessorRefresher(Function<A, V> getter, BiConsumer<A, V> setter, Function<Set<?>, List<V>> entityRetriever) {
+    public AccessorRefresher(Function<A, V> getter, BiConsumer<A, V> setter, Function<Iterable<I>, List<V>> entityRetriever) {
         this.getter = getter;
         this.setter = setter;
         this.entityRetriever = entityRetriever;
     }
-    
+
     public void refreshAccessors(Collection<? extends A> accessors) {
         if (accessors != null && accessors.size() > 0) {
-            Map<?, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
+            Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
             log.debug("accessMap: {}", lookupAccessorsByValueId);
-            
+
             List<V> values = entityRetriever.apply(lookupAccessorsByValueId.keySet());
             log.debug("Entities: {}", values);
 

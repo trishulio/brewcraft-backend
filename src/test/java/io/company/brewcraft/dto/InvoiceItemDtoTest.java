@@ -17,7 +17,14 @@ public class InvoiceItemDtoTest {
     }
 
     @Test
-    public void testAllArgs() {
+    public void testIdConstructor_SetsIdValue() {
+        item = new InvoiceItemDto(1L);
+
+        assertEquals(1L, item.getId());
+    }
+
+    @Test
+    public void testAllArgsConstructor() {
         item = new InvoiceItemDto(
             2L,
             "desc2",

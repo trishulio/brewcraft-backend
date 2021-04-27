@@ -12,19 +12,18 @@ import io.company.brewcraft.model.ShipmentStatus;
 public interface ShipmentStatusMapper {
     ShipmentStatusMapper INSTANCE = Mappers.getMapper(ShipmentStatusMapper.class);
 
-    default ShipmentStatus fromDto(String statusName) {
-        ShipmentStatus status = null;
-        if (statusName != null) {
-            status = new ShipmentStatus(statusName);
-        }
-        
-        return status;
-    }
+    @Mappings({
+        @Mapping(target = ShipmentStatus.ATTR_ID)
+    })
+    ShipmentStatus fromDto(String id);
 
+    @Mappings({
+        @Mapping(target = "name", source = ShipmentStatus.ATTR_ID)
+    })
     ShipmentStatusDto toDto(ShipmentStatus status);
 
     @Mappings({
-        @Mapping(target = ShipmentStatus.ATTR_ID, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_ID, source = "name"),
         @Mapping(target = ShipmentStatus.ATTR_VERSION, ignore = true),
         @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true)

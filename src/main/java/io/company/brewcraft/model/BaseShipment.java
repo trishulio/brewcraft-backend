@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.company.brewcraft.service.ShipmentStatusAccessor;
 
-public interface BaseShipment<T extends BaseMaterialLot> extends ShipmentStatusAccessor {
+public interface BaseShipment<T extends BaseMaterialLot<? extends BaseShipment<T>>> extends ShipmentStatusAccessor {
     String getShipmentNumber();
 
     void setShipmentNumber(String shipmentNumber);

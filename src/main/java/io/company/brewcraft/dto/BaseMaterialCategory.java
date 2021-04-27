@@ -5,7 +5,7 @@ import java.util.Set;
 import io.company.brewcraft.model.MaterialCategory;
 
 
-public interface BaseMaterialCategory {
+public interface BaseMaterialCategory<T extends BaseMaterialCategory<T>> {
 
     public String getName();
     
@@ -15,8 +15,8 @@ public interface BaseMaterialCategory {
 
     public void setParentCategory(MaterialCategory parentCategory);
 
-    public Set<MaterialCategory> getSubcategories();
+    public Set<T> getSubcategories();
 
-    public void setSubcategories(Set<MaterialCategory> subcategories);
+    public void setSubcategories(Set<T> subcategories);
     
 }

@@ -23,14 +23,8 @@ public interface StorageMapper {
     FacilityStorageDto toFacilityStorageDto(Storage storage);
     
     StorageDto toDto(Storage storage);
-    
-    default Storage fromDto(Long id) {
-        Storage storage = null;
-        if (id != null) {
-            storage = new Storage(id);
-        }
-        return storage;
-    }
+
+    Storage fromDto(Long id);
 
     Storage fromDto(AddStorageDto storage);
     

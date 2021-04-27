@@ -2,6 +2,8 @@ package io.company.brewcraft.pojo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,11 +40,32 @@ public class PurchaseOrderTest {
         order.setOrderNumber("ABCD-123");
         assertEquals("ABCD-123", order.getOrderNumber());
     }
-    
+
     @Test
     public void testAccessSupplier() {
         assertNull(order.getSupplier());
         order.setSupplier(new Supplier());
         assertEquals(new Supplier(), order.getSupplier());
+    }
+
+    @Test
+    public void testAccessCreatedAt() {
+        assertNull(order.getCreatedAt());
+        order.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), order.getCreatedAt());
+    }
+
+    @Test
+    public void testAccessLastUpdated() {
+        assertNull(order.getLastUpdated());
+        order.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), order.getLastUpdated());
+    }
+
+    @Test
+    public void testAccessVersion() {
+        assertNull(order.getVersion());
+        order.setVersion(1);
+        assertEquals(1, order.getVersion());
     }
 }

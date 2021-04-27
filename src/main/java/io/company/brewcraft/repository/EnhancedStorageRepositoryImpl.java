@@ -11,14 +11,14 @@ import io.company.brewcraft.service.StorageAccessor;
 public class EnhancedStorageRepositoryImpl implements EnhancedStorageRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedStorageRepositoryImpl.class);
     
-    private AccessorRefresher<StorageAccessor, Storage> refresher;
+    private AccessorRefresher<Long, StorageAccessor, Storage> refresher;
     
-    public EnhancedStorageRepositoryImpl(AccessorRefresher<StorageAccessor, Storage> refresher) {
+    public EnhancedStorageRepositoryImpl(AccessorRefresher<Long, StorageAccessor, Storage> refresher) {
         this.refresher = refresher;
     }
 
     @Override
-    public void refreshAccessor(Collection<? extends StorageAccessor> accessors) {
+    public void refreshAccessors(Collection<? extends StorageAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
 }

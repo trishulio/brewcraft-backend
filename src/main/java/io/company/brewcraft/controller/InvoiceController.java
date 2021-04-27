@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -93,7 +92,7 @@ public class InvoiceController extends BaseController {
     }
 
     @GetMapping("/invoices/{invoiceId}")
-    public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Size(min = 1) @NotNull @RequestParam(required = false, name = "attr") Set<String> attributes) {
+    public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         Invoice invoice = invoiceService.getInvoice(invoiceId);
         Validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
@@ -111,7 +110,7 @@ public class InvoiceController extends BaseController {
 
     @PostMapping("/invoices")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@Valid @RequestBody @NotNull AddInvoiceDto payload) {
+    public InvoiceDto addInvoice(@Valid @NotNull @RequestBody AddInvoiceDto payload) {
         BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
         Invoice added = invoiceService.add(addition);
 
