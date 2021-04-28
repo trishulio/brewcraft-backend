@@ -3,6 +3,7 @@ package io.company.brewcraft.dto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ public class InvoiceItemDtoTest {
             new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
             new MoneyDto("CAD", new BigDecimal("8")),
             new MaterialDto(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(2000, 1, 1, 1, 1), 
             1
         );
 
@@ -43,6 +46,8 @@ public class InvoiceItemDtoTest {
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
         assertEquals(new MoneyDto("CAD", new BigDecimal("8")), item.getAmount());
         assertEquals(new MaterialDto(7L), item.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), item.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), item.getLastUpdated());
         assertEquals(1, item.getVersion());
     }
 

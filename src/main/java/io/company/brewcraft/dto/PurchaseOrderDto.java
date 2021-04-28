@@ -12,9 +12,10 @@ public class PurchaseOrderDto extends BaseDto {
         setId(id);
     }
 
-    public PurchaseOrderDto(Long id, String orderNumber) {
+    public PurchaseOrderDto(Long id, String orderNumber, SupplierDto supplier) {
         this(id);
-        this.orderNumber = orderNumber;
+        setOrderNumber(orderNumber);
+        setSupplier(supplier);
     }
 
     public Long getId() {

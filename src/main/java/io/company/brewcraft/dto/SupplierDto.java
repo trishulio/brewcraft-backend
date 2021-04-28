@@ -18,10 +18,14 @@ public class SupplierDto extends BaseDto {
         super();
     }
     
+    public SupplierDto(Long id) {
+        this();
+        this.id = id;
+    }
+    
     public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
             AddressDto address, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.contacts = contacts;
         this.address = address;

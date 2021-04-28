@@ -1,5 +1,7 @@
 package io.company.brewcraft.dto;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -11,6 +13,8 @@ public class InvoiceItemDto extends BaseDto {
     private TaxDto tax;
     private MoneyDto amount;
     private MaterialDto material;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastUpdated;
     private Integer version;
 
     public InvoiceItemDto() {
@@ -21,7 +25,7 @@ public class InvoiceItemDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, Integer version) {
+    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setDescription(description);
         setQuantity(quantity);
@@ -29,6 +33,8 @@ public class InvoiceItemDto extends BaseDto {
         setTax(tax);
         setAmount(amount);
         setMaterial(material);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setVersion(version);
     }
 
@@ -90,6 +96,22 @@ public class InvoiceItemDto extends BaseDto {
 
     public Integer getVersion() {
         return version;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setVersion(Integer version) {

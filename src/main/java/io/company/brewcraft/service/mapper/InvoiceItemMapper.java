@@ -25,8 +25,6 @@ public interface InvoiceItemMapper {
 
     @Mappings({
         @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
-        @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     })
     InvoiceItem fromDto(InvoiceItemDto dto);
 

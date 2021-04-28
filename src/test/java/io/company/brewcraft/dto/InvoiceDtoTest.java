@@ -48,8 +48,8 @@ public class InvoiceDtoTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getLastUpdated());
-        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
+        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
         assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
         assertEquals(1, invoice.getItems().size());
         assertEquals(new InvoiceItemDto(), invoice.getItems().get(0));
