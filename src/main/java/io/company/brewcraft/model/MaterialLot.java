@@ -31,6 +31,10 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     private String lotNumber;
 
     @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "unit.symbol", column = @Column(name = "qty_unit_symbol")),
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+    })
     private QuantityEntity qty;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

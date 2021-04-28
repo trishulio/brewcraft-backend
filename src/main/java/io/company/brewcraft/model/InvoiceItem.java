@@ -37,6 +37,10 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     private Invoice invoice;
 
     @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "unit.symbol", column = @Column(name = "qty_unit_symbol")),
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+    })
     private QuantityEntity quantity;
 
     @Embedded

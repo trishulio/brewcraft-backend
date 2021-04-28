@@ -59,9 +59,6 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     private LocalDateTime paymentDueDate;
 
     @Embedded
-    @AttributeOverrides({
-//        @AttributeOverride(name = "", column = "")
-    })
     private Freight freight;
 
     @CreationTimestamp
