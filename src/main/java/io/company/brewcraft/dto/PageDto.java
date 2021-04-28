@@ -3,8 +3,6 @@ package io.company.brewcraft.dto;
 import java.util.Iterator;
 import java.util.List;
 
-import io.company.brewcraft.dto.BaseDto;
-
 public class PageDto<T extends BaseDto> extends BaseDto implements Iterable<T> {
     private List<T> content;
     private long totalElements;

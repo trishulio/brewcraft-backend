@@ -15,6 +15,7 @@ public class EnhancedShipmentStatusRepositoryImplTest {
 
     private AccessorRefresher<String, ShipmentStatusAccessor, ShipmentStatus> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);

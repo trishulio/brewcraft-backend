@@ -16,6 +16,7 @@ public class EnhancedInvoiceItemRepositoryImplTest {
     private MaterialRepository mMaterialRepo;
     private AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mMaterialRepo = mock(MaterialRepository.class);

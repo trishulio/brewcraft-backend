@@ -10,7 +10,7 @@ import io.company.brewcraft.model.Currency;
 
 @Mapper
 public abstract class CurrencyMapper {
-    private static final Logger logger = LoggerFactory.getLogger(CurrencyMapper.class);
+    private static final Logger log = LoggerFactory.getLogger(CurrencyMapper.class);
 
     public static final CurrencyMapper INSTANCE = Mappers.getMapper(CurrencyMapper.class);
     
@@ -18,16 +18,10 @@ public abstract class CurrencyMapper {
         Currency entity = null;
         if (code != null) {
             CurrencyUnit unit = CurrencyUnit.of(code);
-            entity = toEntity(unit);    
+            entity = fromUnit(unit);    
         }
         return entity;
     }    
-    
-    public Currency toEntity(CurrencyUnit unit) {
-        Currency entity = null;
-        if (unit != null) {
-            entity = new Currency(unit.getNumericCode(), unit.getCode());
-        }
-        return entity;
-    }
+
+    public abstract Currency fromUnit(CurrencyUnit unit);   
 }

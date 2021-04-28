@@ -20,7 +20,7 @@ public class MaterialLotService extends BaseService {
         this.utilProvider = utilProvider;
     }
 
-    public List<MaterialLot> getAddLots(List<? extends BaseMaterialLot> additionLots) {
+    public List<MaterialLot> getAddLots(List<? extends BaseMaterialLot<?>> additionLots) {
         List<MaterialLot> targetLots = null;
         if (additionLots != null) {
             targetLots = additionLots.stream().map(addition -> {
@@ -33,7 +33,7 @@ public class MaterialLotService extends BaseService {
         return targetLots;
     }
 
-    public List<MaterialLot> getPutLots(List<MaterialLot> existingLots, List<? extends UpdateMaterialLot> updateLots) {
+    public List<MaterialLot> getPutLots(List<MaterialLot> existingLots, List<? extends UpdateMaterialLot<?>> updateLots) {
         Validator validator = this.utilProvider.getValidator();
 
         if (updateLots == null) {
@@ -45,8 +45,8 @@ public class MaterialLotService extends BaseService {
 
         // Separating the put payloads into additions (without Id param) and updates
         // (with Ids that match and existing lot)
-        List<UpdateMaterialLot> updates = new ArrayList<UpdateMaterialLot>(updateLots.size());
-        for (UpdateMaterialLot update : updateLots) {
+        List<UpdateMaterialLot<?>> updates = new ArrayList<UpdateMaterialLot<?>>(updateLots.size());
+        for (UpdateMaterialLot<?> update : updateLots) {
             if (update.getId() != null) {
                 updates.add(update);
             } else {
@@ -72,7 +72,7 @@ public class MaterialLotService extends BaseService {
         return targetLots;
     }
 
-    public List<MaterialLot> getPatchLots(List<MaterialLot> existingLots, List<? extends UpdateMaterialLot> updateLots) {
+    public List<MaterialLot> getPatchLots(List<MaterialLot> existingLots, List<? extends UpdateMaterialLot<?>> updateLots) {
         Validator validator = this.utilProvider.getValidator();
 
         existingLots = existingLots == null ? new ArrayList<>() : existingLots;

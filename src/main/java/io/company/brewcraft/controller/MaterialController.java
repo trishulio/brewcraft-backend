@@ -9,17 +9,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.MaterialDto;
@@ -68,11 +58,9 @@ public class MaterialController extends BaseController {
         
     @GetMapping(value = "/{materialId}", consumes = MediaType.ALL_VALUE)
     public MaterialDto getMaterial(@PathVariable Long materialId) {
-        Validator validator = new Validator();
-
         Material material = materialService.getMaterial(materialId);
         
-        validator.assertion(material != null, EntityNotFoundException.class, "Material", materialId.toString());
+        Validator.assertion(material != null, EntityNotFoundException.class, "Material", materialId.toString());
 
         return materialMapper.toDto(material);
     }

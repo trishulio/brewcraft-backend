@@ -16,6 +16,7 @@ public class EnhancedStorageRepositoryImplTest {
 
     private AccessorRefresher<Long, StorageAccessor, Storage> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);

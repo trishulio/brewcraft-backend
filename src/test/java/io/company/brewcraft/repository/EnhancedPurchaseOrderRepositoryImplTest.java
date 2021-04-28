@@ -16,6 +16,7 @@ public class EnhancedPurchaseOrderRepositoryImplTest {
 
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);

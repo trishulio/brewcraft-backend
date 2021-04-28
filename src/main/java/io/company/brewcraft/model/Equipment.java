@@ -206,6 +206,7 @@ public class Equipment extends BaseEntity {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void setMaxCapacity(Quantity<?> maxCapacity) throws IllegalArgumentException {
         Quantity<?> maxCapacityInPersistedUnit = null;
 

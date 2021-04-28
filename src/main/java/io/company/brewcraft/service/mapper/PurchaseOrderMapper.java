@@ -13,10 +13,13 @@ public interface PurchaseOrderMapper {
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
     @Mappings({
-        @Mapping(target = PurchaseOrder.ATTR_ID)
+        @Mapping(target = PurchaseOrder.ATTR_ID),
+        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true)
     })
     PurchaseOrder fromDto(Long id);
-    
+
     PurchaseOrder fromDto(PurchaseOrderDto dto);
 
     PurchaseOrderDto toDto(PurchaseOrder po);

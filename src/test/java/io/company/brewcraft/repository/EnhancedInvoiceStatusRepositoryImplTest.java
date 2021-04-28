@@ -15,6 +15,7 @@ public class EnhancedInvoiceStatusRepositoryImplTest {
 
     private AccessorRefresher<String, InvoiceStatusAccessor, InvoiceStatus> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);

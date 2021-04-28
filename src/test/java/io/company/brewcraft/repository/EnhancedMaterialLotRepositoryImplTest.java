@@ -20,6 +20,7 @@ public class EnhancedMaterialLotRepositoryImplTest {
 
     private AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mItemRepo =  mock(InvoiceItemRepository.class);

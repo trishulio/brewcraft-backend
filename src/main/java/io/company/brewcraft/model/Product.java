@@ -4,23 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "PRODUCT")
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements BaseProduct, UpdateProduct, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
@@ -76,42 +66,52 @@ public class Product extends BaseEntity {
         this.version = version;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Override
     public ProductCategory getCategory() {
         return category;
     }
 
+    @Override
     public void setCategory(ProductCategory category) {
         this.category = category;
     }
 
+    @Override
     public List<ProductMeasureValue> getTargetMeasures() {
         return targetMeasures;
     }
 
+    @Override
     public void setTargetMeasures(List<ProductMeasureValue> trgtMeasures) {
         if (trgtMeasures != null) {
             trgtMeasures.stream().forEach(measure -> measure.setProduct(this));
@@ -125,7 +125,8 @@ public class Product extends BaseEntity {
         }    
     }
     
-    public void AddTargetMeasure(ProductMeasureValue productMeasureValue) {
+    @Override
+    public void addTargetMeasure(ProductMeasureValue productMeasureValue) {
         if (targetMeasures == null) {
             targetMeasures = new ArrayList<>();
         }
@@ -139,18 +140,22 @@ public class Product extends BaseEntity {
         }
     }
     
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
@@ -163,10 +168,12 @@ public class Product extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     } 

@@ -58,11 +58,9 @@ public class ProductController extends BaseController {
         
     @GetMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
     public ProductDto getProduct(@PathVariable Long productId) {
-        Validator validator = new Validator();
-        
         Product product = productService.getProduct(productId);
                 
-        validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
+        Validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
 
         return productMapper.toDto(product);
     }

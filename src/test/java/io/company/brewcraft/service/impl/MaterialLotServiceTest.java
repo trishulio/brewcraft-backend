@@ -42,7 +42,7 @@ public class MaterialLotServiceTest {
 
     @Test
     public void testGetAddLots_ReturnsListOfMaterialLotsWithBaseShipmentValues_WhenLotsAreNotNull() {
-        List<BaseMaterialLot> additionLots = List.of(
+        List<BaseMaterialLot<?>> additionLots = List.of(
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L),LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
      
@@ -70,7 +70,7 @@ public class MaterialLotServiceTest {
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        List<UpdateMaterialLot> updateLots = List.of(
+        List<UpdateMaterialLot<?>> updateLots = List.of(
             new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2),
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new Material(2L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
@@ -123,7 +123,7 @@ public class MaterialLotServiceTest {
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
         
-        List<UpdateMaterialLot> updateLots = List.of(
+        List<UpdateMaterialLot<?>> updateLots = List.of(
             new MaterialLot(2L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new Material(2L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         
@@ -156,7 +156,7 @@ public class MaterialLotServiceTest {
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
-        List<UpdateMaterialLot> updateLots = List.of(
+        List<UpdateMaterialLot<?>> updateLots = List.of(
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
 
@@ -181,7 +181,7 @@ public class MaterialLotServiceTest {
             new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
         );
 
-        List<UpdateMaterialLot> updateLots = List.of(
+        List<UpdateMaterialLot<?>> updateLots = List.of(
             new MaterialLot(2L, "LOT_1", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), null, new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), null)
         );
 

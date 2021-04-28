@@ -9,17 +9,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddStorageDto;
 import io.company.brewcraft.dto.PageDto;
@@ -63,11 +53,9 @@ public class StorageController extends BaseController {
         
     @GetMapping(value = "/storages/{storageId}", consumes = MediaType.ALL_VALUE)
     public StorageDto getStorage(@PathVariable Long storageId) {
-        Validator validator = new Validator();
-
         Storage storage = storageService.getStorage(storageId);
         
-        validator.assertion(storage != null, EntityNotFoundException.class, "Storage", storageId.toString());
+        Validator.assertion(storage != null, EntityNotFoundException.class, "Storage", storageId.toString());
         
         StorageDto storageDto = storageMapper.toDto(storage);
         

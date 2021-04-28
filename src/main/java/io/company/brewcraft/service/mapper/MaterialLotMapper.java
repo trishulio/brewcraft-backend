@@ -8,12 +8,9 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddMaterialLotDto;
 import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.UpdateMaterialLotDto;
-import io.company.brewcraft.model.Audited;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.MaterialLot;
-import io.company.brewcraft.model.Versioned;
 
-@Mapper(uses = {QuantityMapper.class, MaterialMapper.class, InvoiceItemMapper.class, StorageMapper.class})
+@Mapper(uses = { MaterialMapper.class, InvoiceItemMapper.class, StorageMapper.class, QuantityMapper.class })
 public interface MaterialLotMapper {
 
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);

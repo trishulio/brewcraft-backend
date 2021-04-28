@@ -24,7 +24,7 @@ public class InvoiceItemService extends BaseService {
         this.utilProvider = utilProvider;
     }
 
-    public List<InvoiceItem> getPutItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> updates) {
+    public List<InvoiceItem> getPutItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem<?>> updates) {
         Validator validator = this.utilProvider.getValidator();
 
         if (updates == null) {
@@ -32,7 +32,7 @@ public class InvoiceItemService extends BaseService {
         }
 
         List<InvoiceItem> targetItems = new ArrayList<>();        
-        List<UpdateInvoiceItem> itemUpdates = new ArrayList<>(updates.size());
+        List<UpdateInvoiceItem<?>> itemUpdates = new ArrayList<>(updates.size());
         
         updates.forEach(update -> {
             if (update.getId() == null) {
@@ -61,7 +61,7 @@ public class InvoiceItemService extends BaseService {
         return targetItems;
     }
 
-    public List<InvoiceItem> getPatchItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem> patches) {
+    public List<InvoiceItem> getPatchItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem<?>> patches) {
         Validator validator = this.utilProvider.getValidator();
 
         existingItems = existingItems == null ? new ArrayList<>() : existingItems;
@@ -83,7 +83,7 @@ public class InvoiceItemService extends BaseService {
         return targetItems;
     }
 
-    public List<InvoiceItem> getAddItems(Collection<? extends BaseInvoiceItem> additions) {
+    public List<InvoiceItem> getAddItems(Collection<? extends BaseInvoiceItem<?>> additions) {
         List<InvoiceItem> targetItems = null;
         if (additions != null) {
             targetItems = additions.stream().map(i -> {

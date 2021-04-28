@@ -26,6 +26,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
+@SuppressWarnings("unchecked")
 public class ShipmentControllerTest {
 
     ShipmentController controller;
@@ -107,23 +108,23 @@ public class ShipmentControllerTest {
                                     true,
                                     1,
                                     10,
-                                    Set.of("")
+                                    Set.of()
                                 );
-        assertEquals(1L, shipment.getId());
-        assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
-        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
-        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getLots().size());
-        assertEquals(1, shipment.getVersion());
-        MaterialLot lot = shipment.getLots().iterator().next();
+        ShipmentDto shipmentDto = dto.getContent().get(0);
+        assertEquals(1L, shipmentDto.getId());
+        assertEquals("SHIPMENT_1", shipmentDto.getShipmentNumber());
+        assertEquals("DESCRIPTION_1", shipmentDto.getDescription());
+        assertEquals(new ShipmentStatusDto("RECEIVED"), shipmentDto.getStatus());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipmentDto.getDeliveryDueDate());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipmentDto.getDeliveredDate());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipmentDto.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipmentDto.getLastUpdated());
+        assertEquals(1, shipmentDto.getLots().size());
+        assertEquals(1, shipmentDto.getVersion());
+        MaterialLotDto lot = shipmentDto.getLots().iterator().next();
         assertEquals(1L, lot.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
-        assertEquals(shipment, lot.getShipment());
-        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(new QuantityDto("kg", new BigDecimal("1")), lot.getQuantity());
+        assertEquals(new MaterialDto(1L), lot.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
         assertEquals(2, lot.getVersion());

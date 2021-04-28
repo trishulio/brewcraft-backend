@@ -46,7 +46,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
         
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
@@ -79,7 +79,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
 
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(null, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), null)
         );
@@ -111,7 +111,7 @@ public class InvoiceItemServiceTest {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
-        List<UpdateInvoiceItem> itemUpdates = List.of();
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of();
 
         List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
 
@@ -122,7 +122,7 @@ public class InvoiceItemServiceTest {
     public void testGetPutItems_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of();
         
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L),
             new InvoiceItem(2L),
             new InvoiceItem()
@@ -140,7 +140,7 @@ public class InvoiceItemServiceTest {
         existingItems.get(0).setVersion(1);
         existingItems.get(1).setVersion(1);
 
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L),
             new InvoiceItem(2L)
         );
@@ -157,7 +157,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
         
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
 
@@ -185,7 +185,7 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
         
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(2L),
             new InvoiceItem(3L)
         );
@@ -208,7 +208,7 @@ public class InvoiceItemServiceTest {
         existingItems.get(0).setVersion(1);
         existingItems.get(1).setVersion(1);
 
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L),
             new InvoiceItem(2L)
         );
@@ -221,7 +221,7 @@ public class InvoiceItemServiceTest {
 
     @Test
     public void testAddCollection_ReturnsCollectionOfBaseItems_WhenInputIsNotNull() {
-        List<UpdateInvoiceItem> itemUpdates = List.of(
+        List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );

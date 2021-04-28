@@ -16,6 +16,7 @@ public class EnhancedMaterialRepositoryImplTest {
 
     private AccessorRefresher<Long, MaterialAccessor, Material> mRefresher;
 
+    @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);

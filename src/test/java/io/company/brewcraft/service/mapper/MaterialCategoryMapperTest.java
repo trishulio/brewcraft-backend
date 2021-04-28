@@ -11,9 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.model.MaterialCategory;
 
-import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
-
-
 public class MaterialCategoryMapperTest {
 
     private MaterialCategoryMapper materialCategoryMapper;

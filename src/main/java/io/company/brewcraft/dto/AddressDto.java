@@ -1,33 +1,26 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-
-import javax.validation.constraints.Null;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class AddressDto {
-    
+
     private Long id;
-    
+
     private String addressLine1;
-    
+
     private String addressLine2;
-    
+
     private String country;
-    
+
     private String province;
-    
+
     private String city;
-    
+
     private String postalCode;
-    
+
     public AddressDto() {
-        
+
     }
-    
-    public AddressDto(Long id, String addressLine1, String addressLine2, String country, String province,
-            String city, String postalCode) {
+
+    public AddressDto(Long id, String addressLine1, String addressLine2, String country, String province, String city, String postalCode) {
         this.id = id;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;

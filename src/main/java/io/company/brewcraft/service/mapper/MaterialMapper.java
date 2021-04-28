@@ -22,24 +22,44 @@ public interface MaterialMapper {
 
     MaterialMapper INSTANCE = Mappers.getMapper(MaterialMapper.class);
 
-    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mappings({
+        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
+        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
+    })
     Material fromDto(MaterialDto dto);
 
-    @Mapping(target = "category.id", source = "categoryId")
-    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mappings({
+        @Mapping(target = "category.id", source = "categoryId"),
+        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
+        @Mapping(target = Material.ATTR_ID, ignore = true),
+        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = Material.ATTR_VERSION, ignore = true)
+    })
     Material fromDto(AddMaterialDto dto);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    @Mapping(target = "category.id", source = "categoryId")
-    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mappings({
+        @Mapping(target = "category.id", source = "categoryId"),
+        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
+        @Mapping(target = Material.ATTR_ID, ignore = true),
+        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
+    })
     Material fromDto(UpdateMaterialDto dto);
 
-    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit.symbol")
-    @Mapping(target = "category", ignore = true)
+    @Mappings({
+        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit.symbol"),
+        @Mapping(target = "category", ignore = true)
+    })
     MaterialDto toDto(Material material);
     
     @Mappings({
-        @Mapping(target = Material.ATTR_ID)
+        @Mapping(target = Material.ATTR_ID),
+        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = Material.ATTR_VERSION, ignore = true)
     })
     Material fromDto(Long id);
 

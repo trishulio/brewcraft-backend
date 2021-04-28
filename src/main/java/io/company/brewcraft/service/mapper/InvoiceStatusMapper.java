@@ -18,7 +18,7 @@ public interface InvoiceStatusMapper {
     InvoiceStatus fromDto(String id);
 
     @Mappings({
-        @Mapping(target = InvoiceStatus.ATTR_ID, source = "name")
+        @Mapping(target = InvoiceStatus.ATTR_ID, source = "name"),
     })
     InvoiceStatus fromDto(InvoiceStatusDto status);
 

@@ -10,9 +10,7 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddSupplierDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdateSupplierDto;
-import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.Versioned;
 
 @Mapper(uses = { SupplierContactMapper.class, AddressMapper.class})
 public interface SupplierMapper {

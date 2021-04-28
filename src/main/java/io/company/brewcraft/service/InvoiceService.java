@@ -108,7 +108,7 @@ public class InvoiceService extends BaseService {
         return repo.deleteByIds(ids);
     }
 
-    public Invoice put(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> update) {
+    public Invoice put(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem<?>> update) {
         log.debug("Updating the Invoice with Id: {}", invoiceId);
 
         Invoice existing = getInvoice(invoiceId);
@@ -138,7 +138,7 @@ public class InvoiceService extends BaseService {
         return repo.saveAndFlush(existing);
     }
 
-    public Invoice patch(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem> patch) {
+    public Invoice patch(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem<?>> patch) {
         log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
@@ -161,7 +161,7 @@ public class InvoiceService extends BaseService {
         return repo.saveAndFlush(existing);
     }
 
-    public Invoice add(BaseInvoice<? extends BaseInvoiceItem> addition) {
+    public Invoice add(BaseInvoice<? extends BaseInvoiceItem<?>> addition) {
         Invoice invoice = new Invoice();
         List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
         log.debug("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
