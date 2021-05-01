@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import javax.measure.Quantity;
 import javax.persistence.*;
@@ -46,6 +45,12 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     private QuantityEntity quantity;
 
     @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "amount", column = @Column(name = "price_amount"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "price_currency_code", referencedColumnName = "numeric_code"))
+    })
     private MoneyEntity price;
 
     @Embedded
@@ -114,17 +119,14 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     @Override
     public void setInvoice(Invoice invoice) {
         if (this.invoice != null) {
-            this.invoice.getItems().remove(this);
-        }
-
-        if (invoice != null) {
-            if (invoice.getItems() == null) {
-                invoice.setItems(new ArrayList<>(0));
-            }
-            invoice.getItems().add(this);
+            this.invoice.removeItem(this);
         }
 
         this.invoice = invoice;
+
+        if (this.invoice != null) {
+            this.invoice.addItem(this);
+        }
     }
 
     @Override

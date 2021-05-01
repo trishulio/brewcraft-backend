@@ -6,8 +6,8 @@ import javax.persistence.Id;
 
 @Entity(name = "currency")
 public class Currency extends BaseEntity implements BaseCurrency, UpdateCurrency {
-    final String FIELD_NUMERIC_CODE = "numericCode";
-    final String FIELD_CODE = "code";
+    public static final String FIELD_NUMERIC_CODE = "numericCode";
+    public static final String FIELD_CODE = "code";
 
     @Id
     @Column(name = "numeric_code")

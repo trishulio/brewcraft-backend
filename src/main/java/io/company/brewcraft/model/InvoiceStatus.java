@@ -54,11 +54,11 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
     }
 
     @Override
-    public void setId(String id) {
-        if (id == null) {
-            id = DEFAULT_STATUS_NAME;
+    public void setId(String name) {
+        if (name == null) {
+            name = DEFAULT_STATUS_NAME;
         }
-        this.name = id;
+        this.name = name;
     }
 
     @Override

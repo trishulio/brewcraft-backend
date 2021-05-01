@@ -205,6 +205,10 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public List<InvoiceItem> getItems() {
+        List<InvoiceItem> items = null;
+        if (this.items != null) {
+            items = this.items.stream().collect(Collectors.toList());
+        }
         return items;
     }
 
@@ -213,12 +217,44 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
         if (this.items == null) {
             this.items = new ArrayList<>();
         } else {
-            this.items.clear();            
+            this.items.stream().collect(Collectors.toList()).forEach(this::removeItem);
         }
 
         if (items != null) {
-            items.stream().collect(Collectors.toList()).forEach(item -> item.setInvoice(this));
+            items.stream().collect(Collectors.toList()).forEach(this::addItem);
         }
+    }
+
+    public void addItem(InvoiceItem item) {
+        if (item == null) {
+            return;
+        }
+
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
+
+        if (item.getInvoice() != this) {            
+            item.setInvoice(this);
+        }
+        
+        if (!this.items.contains(item)) {
+            this.items.add(item);            
+        }
+    }
+
+    public boolean removeItem(InvoiceItem item) {
+        if (item == null || this.items == null) {
+            return false;
+        }
+
+        boolean removed = this.items.remove(item);
+        
+        if (removed) {            
+            item.setInvoice(null);
+        }
+        
+        return removed;
     }
 
     @Override
@@ -245,14 +281,14 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     public Money getAmount() {
         return MoneyService.total(this.getItems());
     }
-    
+
     public Tax getTax() {
         Tax tax = null;
         if (getItems() != null) {
             Collection<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
-        
+
         return tax;
     }
 }

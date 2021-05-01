@@ -20,7 +20,7 @@ public class AddressEntity {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "provice")
+    @Column(name = "province")
     private String province;
 
     @Column(name = "city")
