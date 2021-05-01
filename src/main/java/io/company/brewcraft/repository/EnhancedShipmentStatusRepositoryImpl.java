@@ -11,9 +11,9 @@ import io.company.brewcraft.service.ShipmentStatusAccessor;
 public class EnhancedShipmentStatusRepositoryImpl implements EnhancedShipmentStatusRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedShipmentStatusRepositoryImpl.class);
     
-    private AccessorRefresher<String, ShipmentStatusAccessor, ShipmentStatus> refresher;
+    private AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher;
 
-    public EnhancedShipmentStatusRepositoryImpl(AccessorRefresher<String, ShipmentStatusAccessor, ShipmentStatus> refresher) {
+    public EnhancedShipmentStatusRepositoryImpl(AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher) {
         this.refresher = refresher;
     }
 

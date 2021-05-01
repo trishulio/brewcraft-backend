@@ -62,7 +62,7 @@ public class InvoiceService extends BaseService {
             Set<Long> purchaseOrderIds,
             BigDecimal freightAmtFrom,
             BigDecimal freightAmtTo,
-            Set<String> status,
+            Set<Long> statusIds,
             Set<Long> supplierIds,
             Set<String> sort,
             boolean orderAscending,
@@ -81,7 +81,7 @@ public class InvoiceService extends BaseService {
                                             .between(Invoice.FIELD_PAYMENT_DUE_DATE, paymentDueDateFrom, paymentDueDateTo)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID }, purchaseOrderIds)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
-                                            .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_NAME }, status)
+                                            .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
         return repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
@@ -153,7 +153,7 @@ public class InvoiceService extends BaseService {
         Invoice temp = new Invoice(invoiceId);
         temp.override(existing);
         temp.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
-        temp.setItems(updatedItems);
+//        temp.setItems(updatedItems);
         repo.refresh(List.of(temp));
 
         existing.override(temp);

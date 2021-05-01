@@ -13,7 +13,7 @@ import io.company.brewcraft.service.ShipmentStatusAccessor;
 public class EnhancedShipmentStatusRepositoryImplTest {
     private EnhancedShipmentStatusRepository repo;
 
-    private AccessorRefresher<String, ShipmentStatusAccessor, ShipmentStatus> mRefresher;
+    private AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> mRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach

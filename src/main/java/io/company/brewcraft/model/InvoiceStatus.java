@@ -16,10 +16,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "invoice_status")
 @Table
-public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Audited, Identified<String> {
+public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Audited, Identified<Long> {
+    public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
-
-    public static final String DEFAULT_STATUS_NAME = "PENDING";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_status_generator")
@@ -41,23 +40,38 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
     private Integer version;
 
     public InvoiceStatus() {
-        this(null);
     }
-
-    public InvoiceStatus(String name) {
-        setId(name);
+    
+    public InvoiceStatus(Long id) {
+        this();
+        setId(id);
+    }
+    
+    public InvoiceStatus(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setName(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     @Override
-    public String getId() {
-        return name;
+    public Long getId() {
+        return this.id;
     }
 
     @Override
-    public void setId(String name) {
-        if (name == null) {
-            name = DEFAULT_STATUS_NAME;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
         this.name = name;
     }
 

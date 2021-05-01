@@ -22,6 +22,7 @@ public interface InvoiceMapper {
     @Mappings({
         @Mapping(target = Invoice.ATTR_ID, ignore = true),
         @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId"),
+        @Mapping(target = Invoice.ATTR_STATUS, source = "statusId"),
         @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true),
     })
@@ -31,6 +32,7 @@ public interface InvoiceMapper {
         @Mapping(target = Invoice.ATTR_ID, ignore = true),
         @Mapping(target = Invoice.ATTR_VERSION, ignore = true),
         @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId"),
+        @Mapping(target = Invoice.ATTR_STATUS, source = "statusId"),
         @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
     })

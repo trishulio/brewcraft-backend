@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,44 +27,17 @@ public class InvoiceStatusServiceTest {
 
     @Test
     public void testGetInvoiceStatus_ReturnsPojo_WhenEntityExists() {
-        InvoiceStatus mEntity = new InvoiceStatus("FINAL");
-        doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
+        doReturn(Optional.of(new InvoiceStatus(99L))).when(mRepo).findById(99L);
 
-        InvoiceStatus status = service.getStatus("FINAL");
-        assertEquals(new InvoiceStatus("FINAL"), status);
+        InvoiceStatus status = service.getStatus(99L);
+        assertEquals(new InvoiceStatus(99L), status);
     }
 
     @Test
     public void testGetInvoiceStatus_ReturnsNull_WhenEntityDoesNotExists() {
-        doReturn(new ArrayList<>()).when(mRepo).findByNames(Set.of("FINAL"));
+        doReturn(new ArrayList<>()).when(mRepo).findAllById(Set.of(99L));
 
-        InvoiceStatus status = service.getStatus("FINAL");
+        InvoiceStatus status = service.getStatus(99L);
         assertNull(status);
-    }
-
-    @Test
-    public void testGetInvoiceStatus_ThrowsNPE_WhenNameIsNull() {
-        assertThrows(NullPointerException.class, () -> service.getStatus(null));
-    }
-
-    @Test
-    public void testGetStatuses_ReturnTheListOfStatuses_WhenArgIsNotNull() {
-        InvoiceStatus mEntity = new InvoiceStatus("FINAL");
-        doReturn(List.of(mEntity)).when(mRepo).findByNames(Set.of("FINAL"));
-
-        List<InvoiceStatus> statuses = service.getStatuses(Set.of("FINAL"));
-        assertEquals(1, statuses.size());
-        assertEquals(new InvoiceStatus("FINAL"), statuses.get(0));
-    }
-
-    @Test
-    public void testGetStatuses_ReturnsNull_WhenArgIsEmptySet() {
-        List<InvoiceStatus> statuses = service.getStatuses(Set.of());
-        assertNull(statuses);
-    }
-
-    @Test
-    public void testGetStatuses_ThrowsNullPointerExceptioN_WhenArgIsNull() {
-        assertThrows(NullPointerException.class, () -> service.getStatus(null));
     }
 }

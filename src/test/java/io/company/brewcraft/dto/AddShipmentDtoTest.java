@@ -19,11 +19,11 @@ public class AddShipmentDtoTest {
     @Test
     public void testAllArgConstructor_SetsAllFieldValues() {
         List<AddMaterialLotDto> items = List.of(new AddMaterialLotDto());
-        dto = new AddShipmentDto("SHIPMENT_1", "DESCRIPTION_1", "STATUS", LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), items);
+        dto = new AddShipmentDto("SHIPMENT_1", "DESCRIPTION_1", 99L, LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), items);
 
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
-        assertEquals("STATUS", dto.getStatus());
+        assertEquals(99L, dto.getStatusId());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getDeliveredDate());
         assertEquals(List.of(new AddMaterialLotDto()), dto.getLots());
@@ -45,9 +45,9 @@ public class AddShipmentDtoTest {
 
     @Test
     public void testAccessStatus() {
-        assertNull(dto.getStatus());
-        dto.setStatus("RECEIVED");
-        assertEquals("RECEIVED", dto.getStatus());
+        assertNull(dto.getStatusId());
+        dto.setStatusId(99L);
+        assertEquals(99L, dto.getStatusId());
     }
 
     @Test

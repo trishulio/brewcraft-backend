@@ -41,7 +41,7 @@ public class ShipmentServiceTest {
         doAnswer(i -> i.getArgument(0, Shipment.class)).when(mRepo).saveAndFlush(any(Shipment.class));
         doAnswer(i -> {
             Collection<Shipment> coll = i.getArgument(0, Collection.class);
-            coll.forEach(s -> s.setStatus(new ShipmentStatus("FINAL")));
+            coll.forEach(s -> s.setStatus(new ShipmentStatus(99L)));
             return null;
         }).when(mRepo).refresh(anyCollection());
         
@@ -106,7 +106,7 @@ public class ShipmentServiceTest {
             1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -124,7 +124,7 @@ public class ShipmentServiceTest {
         assertEquals(null, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("FINAL"), shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(null, shipment.getCreatedAt());
@@ -153,7 +153,7 @@ public class ShipmentServiceTest {
             1L,
             "SHIPMENT_0",
             "DESCRIPTION_0",
-            new ShipmentStatus("IN-TRANSIT"),
+            new ShipmentStatus(101L),
             LocalDateTime.of(1999, 12, 31, 12, 0),
             LocalDateTime.of(2000, 12, 31, 12, 0),
             LocalDateTime.of(2001, 12, 31, 12, 0),
@@ -170,7 +170,7 @@ public class ShipmentServiceTest {
             null,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -188,7 +188,7 @@ public class ShipmentServiceTest {
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("FINAL"), shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 12, 31, 12, 0), shipment.getCreatedAt());
@@ -220,7 +220,7 @@ public class ShipmentServiceTest {
             1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -238,7 +238,7 @@ public class ShipmentServiceTest {
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("FINAL"), shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(null, shipment.getCreatedAt());
@@ -278,7 +278,7 @@ public class ShipmentServiceTest {
             1L,
             "SHIPMENT_0",
             "DESCRIPTION_0",
-            new ShipmentStatus("IN-TRANSIT"),
+            new ShipmentStatus(101L),
             LocalDateTime.of(1999, 12, 31, 12, 0),
             LocalDateTime.of(2000, 12, 31, 12, 0),
             LocalDateTime.of(2001, 12, 31, 12, 0),
@@ -295,7 +295,7 @@ public class ShipmentServiceTest {
             null,
             null,
             null,
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(100L),
             null,
             null,
             null,
@@ -313,7 +313,7 @@ public class ShipmentServiceTest {
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_0", shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_0", shipment.getDescription());
-        assertEquals(new ShipmentStatus("FINAL"), shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 12, 31, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 12, 31, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 12, 31, 12, 0), shipment.getCreatedAt());

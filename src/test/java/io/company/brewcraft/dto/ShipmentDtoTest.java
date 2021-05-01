@@ -28,7 +28,7 @@ public class ShipmentDtoTest {
         dto = new ShipmentDto(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatusDto("STATUS"),
+            new ShipmentStatusDto(99L),
             LocalDateTime.of(1999, 1, 1, 0, 0),
             LocalDateTime.of(2000, 1, 1, 0, 0),
             LocalDateTime.of(2001, 1, 1, 0, 0),
@@ -40,7 +40,7 @@ public class ShipmentDtoTest {
         assertEquals(1L, dto.getId());
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
-        assertEquals(new ShipmentStatusDto("STATUS"), dto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), dto.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), dto.getCreatedAt());
@@ -73,8 +73,8 @@ public class ShipmentDtoTest {
     @Test
     public void testAccessStatus() {
         assertNull(dto.getStatus());
-        dto.setStatus(new ShipmentStatusDto("RECEIVED"));
-        assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
+        dto.setStatus(new ShipmentStatusDto(99L));
+        assertEquals(new ShipmentStatusDto(99L), dto.getStatus());
     }
 
     @Test

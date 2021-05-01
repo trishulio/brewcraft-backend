@@ -57,7 +57,7 @@ public class ShipmentController extends BaseController {
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "shipment_numbers") Set<String> shipmentNumbers,
         @RequestParam(required = false, name = "descriptions") Set<String> descriptions,
-        @RequestParam(required = false, name = "statuses") Set<String> statuses,
+        @RequestParam(required = false, name = "status_ids") Set<Long> statusIds,
         @RequestParam(required = false, name = "delivery_due_date_from") LocalDateTime deliveryDueDateFrom,
         @RequestParam(required = false, name = "delivery_due_date_to") LocalDateTime deliveryDueDateTo,
         @RequestParam(required = false, name = "delivered_date_from") LocalDateTime deliveredDateFrom,
@@ -68,7 +68,7 @@ public class ShipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
-        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statuses, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
+        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statusIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
         List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
         shipments.stream().forEach(shipment -> filter(shipment, attributes));
         

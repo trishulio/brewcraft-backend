@@ -1,32 +1,31 @@
-package io.company.brewcraft.pojo;
+package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.InvoiceStatus;
+public class InvoiceStatusDtoTest {
 
-public class InvoiceStatusTest {
-
-    private InvoiceStatus status;
+    private InvoiceStatusDto status;
 
     @BeforeEach
     public void init() {
-        status = new InvoiceStatus();
+        status = new InvoiceStatusDto();
     }
 
     @Test
     public void testIdArgConstructor() {
-        status = new InvoiceStatus(99L);
+        status = new InvoiceStatusDto(99L);
         assertEquals(99L, status.getId());
     }
     
     @Test
     public void testAllArgConstructor() {
-        status = new InvoiceStatus(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
+        status = new InvoiceStatusDto(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
         
         assertEquals(99L, status.getId());
         assertEquals("FINAL", status.getName());

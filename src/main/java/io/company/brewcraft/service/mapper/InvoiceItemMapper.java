@@ -19,7 +19,14 @@ public interface InvoiceItemMapper {
     @Mappings({
         @Mapping(target = InvoiceItem.ATTR_ID),
         @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
+        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_VERSION, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_DESCRIPTION, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_MATERIAL, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_PRICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_QUANTITY, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_TAX, ignore = true)
     })
     InvoiceItem fromDto(Long id);
 

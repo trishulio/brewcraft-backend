@@ -33,7 +33,7 @@ public class ShipmentTest {
         shipment = new Shipment(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -45,7 +45,7 @@ public class ShipmentTest {
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
@@ -80,8 +80,8 @@ public class ShipmentTest {
     @Test
     public void testAccessStatus() {
         assertNull(shipment.getStatus());
-        shipment.setStatus(new ShipmentStatus("RECEIVED"));
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
+        shipment.setStatus(new ShipmentStatus(99L));
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
     }
 
     @Test

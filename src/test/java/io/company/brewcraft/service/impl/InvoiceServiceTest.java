@@ -46,7 +46,7 @@ public class InvoiceServiceTest {
            @SuppressWarnings("unchecked")
            List<Invoice> invoices = inv.getArgument(0, List.class);
            invoices.forEach(i -> {
-               i.setStatus(new InvoiceStatus("FINAL"));
+               i.setStatus(new InvoiceStatus(99L));
                i.setPurchaseOrder(new PurchaseOrder(99L));
            });
            return null;
@@ -119,7 +119,7 @@ public class InvoiceServiceTest {
            new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus("FINAL"),
+           new InvoiceStatus(99L),
            List.of(itemUpdate),
            1
        );
@@ -139,7 +139,7 @@ public class InvoiceServiceTest {
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -171,7 +171,7 @@ public class InvoiceServiceTest {
            new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus("FINAL"),
+           new InvoiceStatus(99L),
            List.of(itemUpdate),
            1
        );
@@ -193,7 +193,7 @@ public class InvoiceServiceTest {
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(LocalDateTime.of(2100, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -233,7 +233,7 @@ public class InvoiceServiceTest {
            new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus("FINAL"),
+           new InvoiceStatus(99L),
            null,
            1  
        );
@@ -263,7 +263,7 @@ public class InvoiceServiceTest {
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
        assertEquals(1, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 
@@ -304,7 +304,7 @@ public class InvoiceServiceTest {
            new Freight(),
            LocalDateTime.of(2002, 1, 1, 12, 0),
            LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus("FINAL"),
+           new InvoiceStatus(99L),
            List.of(itemUpdate),
            1
        );
@@ -324,7 +324,7 @@ public class InvoiceServiceTest {
        assertEquals(new Freight(), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
        assertEquals(null, invoice.getVersion());
        assertEquals(1, invoice.getItems().size());
 

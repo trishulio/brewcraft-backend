@@ -41,7 +41,7 @@ public class InvoiceTest {
             new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
-            new InvoiceStatus("FINAL"),
+            new InvoiceStatus(99L),
             List.of(new InvoiceItem()),
             1
         );
@@ -56,7 +56,7 @@ public class InvoiceTest {
         assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-        assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
         assertNull(invoice.getAmount());
         assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
@@ -131,8 +131,8 @@ public class InvoiceTest {
     @Test
     public void testAccessStatus() {
         assertNull(invoice.getStatus());
-        invoice.setStatus(new InvoiceStatus("FINAL"));
-        assertEquals(new InvoiceStatus("FINAL"), invoice.getStatus());
+        invoice.setStatus(new InvoiceStatus(99L));
+        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
     }
 
     @Test

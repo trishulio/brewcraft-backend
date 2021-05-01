@@ -13,7 +13,7 @@ import io.company.brewcraft.service.InvoiceStatusAccessor;
 public class EnhancedInvoiceStatusRepositoryImplTest {
     private EnhancedInvoiceStatusRepository repo;
 
-    private AccessorRefresher<String, InvoiceStatusAccessor, InvoiceStatus> mRefresher;
+    private AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> mRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach

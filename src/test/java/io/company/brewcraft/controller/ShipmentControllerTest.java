@@ -64,7 +64,7 @@ public class ShipmentControllerTest {
             1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -83,7 +83,7 @@ public class ShipmentControllerTest {
             Set.of(2L),
             Set.of("SHIPMENT_1"),
             Set.of("DESC_1"),
-            Set.of("RECEIVED"),
+            Set.of(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -99,7 +99,7 @@ public class ShipmentControllerTest {
                                     Set.of(2L),
                                     Set.of("SHIPMENT_1"),
                                     Set.of("DESC_1"),
-                                    Set.of("RECEIVED"),
+                                    Set.of(99L),
                                     LocalDateTime.of(1999, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -114,7 +114,7 @@ public class ShipmentControllerTest {
         assertEquals(1L, shipmentDto.getId());
         assertEquals("SHIPMENT_1", shipmentDto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipmentDto.getDescription());
-        assertEquals(new ShipmentStatusDto("RECEIVED"), shipmentDto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), shipmentDto.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipmentDto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipmentDto.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipmentDto.getCreatedAt());
@@ -139,7 +139,7 @@ public class ShipmentControllerTest {
             1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
+            new ShipmentStatus(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -158,7 +158,7 @@ public class ShipmentControllerTest {
             Set.of(2L),
             Set.of("SHIPMENT_1"),
             Set.of("DESC_1"),
-            Set.of("RECEIVED"),
+            Set.of(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -174,7 +174,7 @@ public class ShipmentControllerTest {
                                         Set.of(2L),
                                         Set.of("SHIPMENT_1"),
                                         Set.of("DESC_1"),
-                                        Set.of("RECEIVED"),
+                                        Set.of(99L),
                                         LocalDateTime.of(1999, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2001, 1, 1, 12, 0, 0),
@@ -203,7 +203,7 @@ public class ShipmentControllerTest {
         AddShipmentDto addDto = new AddShipmentDto(
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            "RECEIVED",
+            99L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
@@ -218,7 +218,7 @@ public class ShipmentControllerTest {
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
-        assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), dto.getStatus());
         assertEquals(null, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();
@@ -239,7 +239,7 @@ public class ShipmentControllerTest {
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            "RECEIVED",
+            99L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
@@ -255,7 +255,7 @@ public class ShipmentControllerTest {
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
-        assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), dto.getStatus());
         assertEquals(1, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();
@@ -276,7 +276,7 @@ public class ShipmentControllerTest {
         UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
             "DESCRIPTION_1",
-            "RECEIVED",
+            99L,
             LocalDateTime.of(1999, 1, 1, 12, 0, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             Set.of(
@@ -292,7 +292,7 @@ public class ShipmentControllerTest {
         assertEquals("DESCRIPTION_1", dto.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), dto.getDeliveredDate());
-        assertEquals(new ShipmentStatusDto("RECEIVED"), dto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), dto.getStatus());
         assertEquals(1, dto.getVersion());
         assertEquals(1, dto.getLots().size());
         MaterialLotDto lot = dto.getLots().iterator().next();

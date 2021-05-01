@@ -13,17 +13,21 @@ public interface ShipmentStatusMapper {
     ShipmentStatusMapper INSTANCE = Mappers.getMapper(ShipmentStatusMapper.class);
 
     @Mappings({
-        @Mapping(target = ShipmentStatus.ATTR_ID)
+        @Mapping(target = ShipmentStatus.ATTR_ID),
+        @Mapping(target = ShipmentStatus.ATTR_VERSION, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = ShipmentStatus.ATTR_NAME, ignore = true)
     })
-    ShipmentStatus fromDto(String id);
+    ShipmentStatus fromDto(Long id);
 
     @Mappings({
-        @Mapping(target = "name", source = ShipmentStatus.ATTR_ID)
+        @Mapping(target = "id", source = ShipmentStatus.ATTR_ID)
     })
     ShipmentStatusDto toDto(ShipmentStatus status);
 
     @Mappings({
-        @Mapping(target = ShipmentStatus.ATTR_ID, source = "name"),
+        @Mapping(target = ShipmentStatus.ATTR_ID, source = "id"),
         @Mapping(target = ShipmentStatus.ATTR_VERSION, ignore = true),
         @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true)

@@ -28,7 +28,7 @@ public class UpdateInvoiceDtoTest {
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
-            new InvoiceStatusDto("FINAL"),
+            99L,
             List.of(new UpdateInvoiceItemDto()),
             1
         );
@@ -40,7 +40,7 @@ public class UpdateInvoiceDtoTest {
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
-        assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
+        assertEquals(99L, invoice.getStatusId());
         assertEquals(1, invoice.getItems().size());
         assertEquals(new UpdateInvoiceItemDto(), invoice.getItems().get(0));
     }
@@ -95,10 +95,10 @@ public class UpdateInvoiceDtoTest {
     }
 
     @Test
-    public void testAccessStatus() {
-        assertNull(invoice.getStatus());
-        invoice.setStatus(new InvoiceStatusDto("FINAL"));
-        assertEquals(new InvoiceStatusDto("FINAL"), invoice.getStatus());
+    public void testAccessStatusId() {
+        assertNull(invoice.getStatusId());
+        invoice.setStatusId(99L);
+        assertEquals(99L, invoice.getStatusId());
     }
 
     @Test

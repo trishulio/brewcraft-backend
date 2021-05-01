@@ -39,11 +39,11 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<String, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusRefresher(InvoiceStatusRepository repo) {
+    public AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusRefresher(InvoiceStatusRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
-            names -> repo.findByNames(names)
+            ids -> repo.findAllById(ids)
         );
     }
 
@@ -75,11 +75,11 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<String, ShipmentStatusAccessor, ShipmentStatus> shipmentStatusRefresher(ShipmentStatusRepository repo) {
+    public AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> shipmentStatusRefresher(ShipmentStatusRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
-            names -> repo.findByNames(names)
+            ids -> repo.findAllById(ids)
         );
     }
 
@@ -88,7 +88,7 @@ public class RepositoryConfiguration {
         return new AccessorRefresher<>(
             accessor -> accessor.getStorage(),
             (accessor, status) -> accessor.setStorage(status),
-            names -> repo.findAllById(names)
+            ids -> repo.findAllById(ids)
         );
     }
 }

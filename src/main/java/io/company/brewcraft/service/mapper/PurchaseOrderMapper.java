@@ -16,10 +16,17 @@ public interface PurchaseOrderMapper {
         @Mapping(target = PurchaseOrder.ATTR_ID),
         @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true)
+        @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_ORDER_NUMBER, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, ignore = true)
     })
     PurchaseOrder fromDto(Long id);
 
+    @Mappings({
+        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true)
+    })
     PurchaseOrder fromDto(PurchaseOrderDto dto);
 
     PurchaseOrderDto toDto(PurchaseOrder po);

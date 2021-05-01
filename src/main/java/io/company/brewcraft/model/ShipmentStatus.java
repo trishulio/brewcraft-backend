@@ -16,50 +16,63 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "shipment_status")
 @Table
-public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, UpdateShipmentStatus, Identified<String>, Audited {
+public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, UpdateShipmentStatus, Audited, Identified<Long> {
+    public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
-    
-    public static final String DEFAULT_STATUS_NAME = "DELIVERED";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")
     @SequenceGenerator(name = "shipment_status_generator", sequenceName = "shipment_status_sequence", allocationSize = 1)
     private Long id;
-    
-    @Column(name = "name")
+
+    @Column(nullable = false, unique = true)
     private String name;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
     public ShipmentStatus() {
-        this(null);
     }
-
-    public ShipmentStatus(String id) {
+    
+    public ShipmentStatus(Long id) {
+        this();
         setId(id);
     }
-
-    @Override
-    public String getId() {
-        return name;
+    
+    public ShipmentStatus(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setName(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     @Override
-    public void setId(String id) {
-        if (id == null) {
-            id = ShipmentStatus.DEFAULT_STATUS_NAME;
-        }
-        
-        this.name = id;
+    public Long getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

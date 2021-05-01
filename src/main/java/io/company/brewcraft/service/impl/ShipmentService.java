@@ -41,7 +41,7 @@ public class ShipmentService extends BaseService {
         Set<Long> excludeIds,
         Set<String> shipmentNumbers,
         Set<String> descriptions,
-        Set<String> statuses,
+        Set<Long> statusIds,
         LocalDateTime deliveryDueDateFrom,
         LocalDateTime deliveryDueDateTo,
         LocalDateTime deliveredDateFrom,
@@ -57,7 +57,7 @@ public class ShipmentService extends BaseService {
                                                         .not().in(Shipment.FIELD_ID, excludeIds)
                                                         .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
                                                         .in(Shipment.FIELD_DESCRIPTION, descriptions)
-                                                        .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_NAME}, statuses)
+                                                        .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
                                                         .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
                                                         .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
                                                         .build();
