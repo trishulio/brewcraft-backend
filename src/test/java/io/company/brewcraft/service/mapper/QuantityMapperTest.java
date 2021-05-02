@@ -10,8 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.QuantityDto;
+import io.company.brewcraft.model.QuantityEntity;
+import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
 public class QuantityMapperTest {
 
@@ -33,6 +36,16 @@ public class QuantityMapperTest {
     @Test
     public void testToDto_ReturnsNull_WhenQuantityIsNull() {
         assertNull(mapper.toDto(null));
+    }
+
+    @Test
+    public void testToEntity_ReturnsEntity_WhenQuantityIsNotNull() {
+        Quantity<?> qty = Quantities.getQuantity(new BigDecimal("10.00"), Units.AMPERE);
+
+        QuantityEntity entity = mapper.toEntity(qty);
+        QuantityEntity expected = new QuantityEntity(new UnitEntity("A", null), new BigDecimal("10.00"));
+
+        assertEquals(expected, entity);
     }
 
     @Test

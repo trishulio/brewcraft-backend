@@ -22,8 +22,8 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     public static final String FIELD_LOCATION = "location";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_lot_generator")
-    @SequenceGenerator(name = "shipment_lot_generator", sequenceName = "shipment_lot_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_lot_generator")
+    @SequenceGenerator(name = "material_lot_generator", sequenceName = "material_lot_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "lot_number")
