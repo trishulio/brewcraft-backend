@@ -160,6 +160,10 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public List<MaterialLot> getLots() {
+        List<MaterialLot> lots = null;
+        if (this.lots != null) {
+            lots = this.lots.stream().collect(Collectors.toList());
+        }
         return lots;
     }
 
@@ -168,14 +172,45 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         if (this.lots == null) {
             this.lots = new ArrayList<>();
         } else {
-            this.lots.clear();
+            this.lots.stream().collect(Collectors.toList()).forEach(this::removeLot);
         }
 
         if (lots != null) {
-            lots.stream().collect(Collectors.toList()).forEach(item -> item.setShipment(this));
+            lots.stream().collect(Collectors.toList()).forEach(this::addLot);
         }
     }
 
+    public void addLot(MaterialLot lot) {
+        if (lot == null) {
+            return;
+        }
+
+        if (this.lots == null) {
+            this.lots = new ArrayList<>();
+        }
+
+        if (lot.getShipment() != this) {            
+            lot.setShipment(this);
+        }
+        
+        if (!this.lots.contains(lot)) {
+            this.lots.add(lot);            
+        }
+    }
+
+    public boolean removeLot(MaterialLot lot) {
+        if (lot == null || this.lots == null) {
+            return false;
+        }
+
+        boolean removed = this.lots.remove(lot);
+        
+        if (removed) {            
+            lot.setShipment(null);
+        }
+
+        return removed;
+    }
     @Override
     public Integer getVersion() {
         return version;

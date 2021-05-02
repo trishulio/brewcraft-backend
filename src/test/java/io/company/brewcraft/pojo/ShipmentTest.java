@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -127,5 +128,79 @@ public class ShipmentTest {
         assertNull(shipment.getVersion());
         shipment.setVersion(1);
         assertEquals(1, shipment.getVersion());
+    }
+    
+
+    @Test
+    public void testAddLot_CreatesNewLotList_WhenLotIsNotNull() {
+        assertNull(shipment.getLots());
+
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testAddLot_AddsLotsToList_WhenLotIsNotNull() {
+        MaterialLot existing = new MaterialLot(0L);
+        shipment.setLots(List.of(existing));
+        assertEquals(List.of(existing), shipment.getLots());
+
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+
+        assertEquals(List.of(existing, lot), shipment.getLots());
+        assertEquals(shipment, existing.getShipment());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testAddLot_AddsLotOnlyOnce_WhenMultipleAdditionsArePerformed() {
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+        shipment.addLot(lot);
+        shipment.addLot(lot);
+
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenListIsNull() {
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenListIsEmpty() {
+        shipment.setLots(new ArrayList<>());
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenLotExistInList() {
+        shipment.setLots(List.of(new MaterialLot(2L)));
+
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsTrueAndUpdatesLotShipment_WhenLotExist() {
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+
+        assertTrue(shipment.removeLot(lot));
+        assertNull(lot.getShipment());
     }
 }

@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import javax.measure.Quantity;
 import javax.persistence.*;
@@ -134,17 +133,14 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @Override
     public void setShipment(Shipment shipment) {
         if (this.shipment != null) {
-            this.shipment.getLots().remove(this);
-        }
-
-        if (shipment != null) {
-            if (shipment.getLots() == null) {
-                shipment.setLots(new ArrayList<>(0));
-            }
-            shipment.getLots().add(this);
+            this.shipment.removeLot(this);
         }
 
         this.shipment = shipment;
+
+        if (this.shipment != null) {
+            this.shipment.addLot(this);
+        }
     }
 
     @Override
