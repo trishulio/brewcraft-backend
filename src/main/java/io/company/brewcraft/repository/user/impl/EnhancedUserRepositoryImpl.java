@@ -44,41 +44,41 @@ public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
     public User mapAndSave(final User user) {
 
         final String statusName;
-        if (Objects.nonNull(user.getStatus()) && Objects.nonNull(user.getStatus().getName())) {
+        if (Objects.nonNull(user.getStatus()) && StringUtils.isNotEmpty(user.getStatus().getName())) {
             statusName = user.getStatus().getName();
         } else {
             statusName = UserStatus.DEFAULT_STATUS_NAME;
         }
 
-        logger.debug("Target User Status Name: {} of User {}", statusName, user.getDisplayName());
+        logger.debug("Target User Status Name: {} of User {}", statusName, user.getUserName());
         UserStatus status = userStatusRepository.findByName(statusName).orElseThrow(() -> new EntityNotFoundException("UserStatus", "name", statusName));
         user.setStatus(status);
 
         if (Objects.nonNull(user.getSalutation())) {
             if (StringUtils.isNotEmpty(user.getSalutation().getName())) {
                 final String salutationName = user.getSalutation().getName();
-                logger.debug("Target User Salutation Name: {} of User {}", salutationName, user.getDisplayName());
+                logger.debug("Target User Salutation Name: {} of User {}", salutationName, user.getUserName());
                 final UserSalutation userSalutation = userSalutationRepository.findByName(salutationName).orElseThrow(() -> new EntityNotFoundException("UserSalutation", "name", salutationName));
                 user.setSalutation(userSalutation);
             } else {
-                throw new IllegalArgumentException("name field cannot be null or empty in user " + user.getDisplayName() + " Salutation");
+                throw new IllegalArgumentException("name field cannot be null or empty in user " + user.getUserName() + " Salutation");
             }
         }
 
         final List<UserRole> userRoles = user.getRoles();
         if (Objects.nonNull(userRoles)) {
-            userRoles.forEach(userRole -> userRole.setUserRoleType(getMappedUserRoleType(userRole.getUserRoleType(), user.getDisplayName())));
+            userRoles.forEach(userRole -> userRole.setUserRoleType(getMappedUserRoleType(userRole.getUserRoleType(), user.getUserName())));
         }
         return userRepository.saveAndFlush(user);
     }
 
-    private UserRoleType getMappedUserRoleType(final UserRoleType userRoleType, final String displayName) {
+    private UserRoleType getMappedUserRoleType(final UserRoleType userRoleType, final String userName) {
         if (Objects.nonNull(userRoleType) && StringUtils.isNotEmpty(userRoleType.getName())) {
             final String roleTypeName = userRoleType.getName();
-            logger.debug("Target User Role Type Name: {} of User {}", roleTypeName, displayName);
+            logger.debug("Target User Role Type Name: {} of User {}", roleTypeName, userName);
             return userRoleTypeRepository.findByName(roleTypeName).orElseThrow(() -> new EntityNotFoundException("UserRoleType", "name", roleTypeName));
         } else {
-            throw new IllegalArgumentException("user role type or name field of user role type cannot be null or empty in user " + displayName + " Role");
+            throw new IllegalArgumentException("user role type or name field of user role type cannot be null or empty in user " + userName + " Role");
         }
     }
 }

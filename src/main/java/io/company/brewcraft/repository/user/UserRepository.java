@@ -6,11 +6,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>, EnhancedUserRepository {
 
     @Query("select u.userName from User u where u.id = :id")
-    String findUserNamePerId(@Param("id") Long id);
+    Optional<String> findUserNamePerId(@Param("id") Long id);
 
     @Query("select u.email from User u where u.id = :id")
-    String findEmailPerId(@Param("id") Long id);
+    Optional<String> findEmailPerId(@Param("id") Long id);
 }

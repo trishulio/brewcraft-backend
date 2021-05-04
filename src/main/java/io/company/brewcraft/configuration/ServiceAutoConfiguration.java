@@ -20,6 +20,8 @@ import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.security.idp.AWSCognitoIdentityProviderFactory;
+import io.company.brewcraft.security.idp.AWSCognitoIdentityProviderFactoryImpl;
 import io.company.brewcraft.security.idp.AwsCognitoIdentityProviderClient;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.service.EquipmentService;
@@ -211,9 +213,15 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(AWSCognitoIdentityProviderFactory.class)
+    public AWSCognitoIdentityProviderFactory awsCognitoIdentityProviderFactory(@Value("${aws.cognito.region}") final String cognitoRegion, @Value("${aws.cognito.url}") final String cognitoUrl, @Value("${aws.cognito.accessKey}") final String cognitoAccessKey, @Value("${aws.cognito.secretKey}") final String cognitoSecretKey) {
+        return new AWSCognitoIdentityProviderFactoryImpl(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoSecretKey);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(IdentityProviderClient.class)
-    public IdentityProviderClient identityProvider(@Value("${aws.cognito.region}") final String cognitoRegion, @Value("${aws.cognito.url}") final String cognitoUrl, @Value("${aws.cognito.accessKey}") final String cognitoAccessKey, @Value("${aws.cognito.secretKey}") final String cognitoSecretKey, @Value("${aws.cognito.userPoolId}") final String cognitoUserPoolId) {
-        return new AwsCognitoIdentityProviderClient(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoSecretKey, cognitoUserPoolId);
+    public IdentityProviderClient identityProvider(final AWSCognitoIdentityProviderFactory awsCognitoIdentityProviderFactory, @Value("${aws.cognito.userPoolId}") final String cognitoUserPoolId) {
+        return new AwsCognitoIdentityProviderClient(awsCognitoIdentityProviderFactory, cognitoUserPoolId);
     }
 
     @Bean

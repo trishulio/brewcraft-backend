@@ -131,7 +131,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public void deleteUser(Long id) {
         logger.debug("Attempting to delete Invoice with Id: {}", id);
-        final String deletingUserName = userRepository.findUserNamePerId(id);
+        final String deletingUserName = userRepository.findUserNamePerId(id).orElseThrow(() -> new EntityNotFoundException("User", id));;
         userRepository.deleteById(id);
         identityProviderClient.deleteUser(deletingUserName);
     }
@@ -146,13 +146,14 @@ public class UserServiceImpl extends BaseService implements UserService {
     private boolean isEmailUpdated(final Long userId, final String newEmail) {
         boolean emailUpdated = false;
         if (StringUtils.isNotEmpty(newEmail)) {
-            emailUpdated = !userRepository.findEmailPerId(userId).equalsIgnoreCase(newEmail);
+            final String userEmail = userRepository.findEmailPerId(userId).orElseThrow(() -> new EntityNotFoundException("User", userId));
+            emailUpdated = !userEmail.equalsIgnoreCase(newEmail);
         }
         return emailUpdated;
     }
 
     private void updateEmailAttributeInIdentityProvider(final Long userId, final String email) {
-        final String userNameById = userRepository.findUserNamePerId(userId);
+        final String userNameById = userRepository.findUserNamePerId(userId).orElseThrow(() -> new EntityNotFoundException("User", userId));;
         logger.debug("Attempting to update email of user : {} in identity provider", userNameById);
         identityProviderClient.updateUser(userNameById, Collections.singletonList(getUserAttributeType(ATTRIBUTE_EMAIL, email)));
     }
