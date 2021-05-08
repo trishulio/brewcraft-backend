@@ -9,6 +9,8 @@ public class CognitoPrincipalContext implements PrincipalContext {
     public static final String CLAIM_GROUPS = "cognito:groups";
     public static final String CLAIM_USERNAME = "username";
     public static final String CLAIM_SCOPE = "scope";
+    public static final String ATTRIBUTE_EMAIL = "email";
+    public static final String ATTRIBUTE_EMAIL_VERIFIED = "email_verified";
 
     private Jwt jwt;
 
