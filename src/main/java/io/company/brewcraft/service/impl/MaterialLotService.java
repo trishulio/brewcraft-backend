@@ -62,7 +62,7 @@ public class MaterialLotService extends BaseService {
         updates.forEach(update -> {
             MaterialLot lot = existingLotsLookup.get(update.getId());
             if (validator.rule(lot != null, "No existing lot found with Id: %s. For adding a new lot, don't include Id in the payload.", update.getId())) {
-                lot.optimisicLockCheck(update);
+                lot.optimisticLockCheck(update);
                 lot.override(update, getPropertyNames(UpdateMaterialLot.class));
                 targetLots.add(lot);
             }
@@ -84,7 +84,7 @@ public class MaterialLotService extends BaseService {
             updateLots.forEach(update -> {
                 MaterialLot lot = existingLotsLookup.get(update.getId());
                 if (validator.rule(lot != null, "No existing lot found with Id: %s. Use the put method to add new payload lot. Patch can only perform patches on existing lots.", update.getId())) {
-                    lot.optimisicLockCheck(update);
+                    lot.optimisticLockCheck(update);
                     lot.outerJoin(update, getPropertyNames(UpdateMaterialLot.class));
                 }
             });

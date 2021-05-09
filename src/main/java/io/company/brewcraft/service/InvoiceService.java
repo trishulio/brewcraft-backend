@@ -118,7 +118,7 @@ public class InvoiceService extends BaseService {
             existing = new Invoice(invoiceId); // Gotcha: The save function ignores this ID
 
         } else {
-            existing.optimisicLockCheck(update);
+            existing.optimisticLockCheck(update);
             invoiceClz = UpdateInvoice.class;
         }
 
@@ -142,7 +142,7 @@ public class InvoiceService extends BaseService {
         log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
 
         Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
-        existing.optimisicLockCheck(patch);
+        existing.optimisticLockCheck(patch);
 
         log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
         log.debug("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
@@ -153,7 +153,7 @@ public class InvoiceService extends BaseService {
         Invoice temp = new Invoice(invoiceId);
         temp.override(existing);
         temp.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
-//        temp.setItems(updatedItems);
+       temp.setItems(updatedItems);
         repo.refresh(List.of(temp));
 
         existing.override(temp);

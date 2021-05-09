@@ -51,7 +51,7 @@ public class InvoiceItemService extends BaseService {
         itemUpdates.forEach(update -> {
             InvoiceItem item = idToItemLookup.get(update.getId());
             if (validator.rule(item != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {
-                item.optimisicLockCheck(update);
+                item.optimisticLockCheck(update);
                 item.override(update, getPropertyNames(UpdateInvoiceItem.class));
                 targetItems.add(item);
             }
@@ -73,7 +73,7 @@ public class InvoiceItemService extends BaseService {
             patches.forEach(patch -> {
                 InvoiceItem item = idToItemLookup.get(patch.getId());
                 if (validator.rule(item != null, "No existing invoice item found with Id: %s.", patch.getId())) {
-                    item.optimisicLockCheck(patch);
+                    item.optimisticLockCheck(patch);
                     item.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
                 }
             });

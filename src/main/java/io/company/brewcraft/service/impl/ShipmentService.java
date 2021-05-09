@@ -119,7 +119,7 @@ public class ShipmentService extends BaseService {
         if (existing == null) {
             existing = new Shipment(shipmentId); //TODO: Hibernate ignores the id.
         } else {
-            existing.optimisicLockCheck(update);
+            existing.optimisticLockCheck(update);
             shipmentClz = UpdateShipment.class;
         }
 
@@ -143,7 +143,7 @@ public class ShipmentService extends BaseService {
         log.debug("Performing patch on Shipment with Id: {}", shipmentId);
 
         Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
-        existing.optimisicLockCheck(update);
+        existing.optimisticLockCheck(update);
 
         List<MaterialLot> existingLots = existing.getLots();
         List<MaterialLot> updatedLots = lotService.getPatchLots(existingLots, update.getLots());

@@ -19,7 +19,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
     public static final String FIELD_DELIVERED_DATE = "deliveredDate";
-    public static final String FIELD_ITEMS = "lots";
+    public static final String FIELD_LOTS = "lots";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_generator")

@@ -31,16 +31,16 @@ public class AccessorRefresher<I, A, V extends Identified<I>> {
             Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
             log.debug("accessMap: {}", lookupAccessorsByValueId);
 
-            List<V> values = entityRetriever.apply(lookupAccessorsByValueId.keySet());
-            log.debug("Entities: {}", values);
+            List<V> entities = entityRetriever.apply(lookupAccessorsByValueId.keySet());
+            log.debug("Entities: {}", entities);
 
-            if (lookupAccessorsByValueId.keySet().size() != values.size()) {
-                List<?> valueIds = values.stream().map(material -> material.getId()).collect(Collectors.toList());
-                throw new EntityNotFoundException(String.format("Cannot find all objects in Id-Set: %s. Objects found with Ids: %s", lookupAccessorsByValueId.keySet(), valueIds));
+            if (lookupAccessorsByValueId.keySet().size() != entities.size()) {
+                List<?> entityIds = entities.stream().map(entity -> entity.getId()).collect(Collectors.toList());
+                throw new EntityNotFoundException(String.format("Cannot find all entities in Id-Set: %s. Entities found with Ids: %s", lookupAccessorsByValueId.keySet(), entityIds));
             }
 
             accessors.forEach(accessor -> setter.accept(accessor, null));
-            values.forEach(value -> lookupAccessorsByValueId.get(value.getId()).forEach(accessor -> setter.accept(accessor, value)));
+            entities.forEach(value -> lookupAccessorsByValueId.get(value.getId()).forEach(accessor -> setter.accept(accessor, value)));
         }
     }
 }

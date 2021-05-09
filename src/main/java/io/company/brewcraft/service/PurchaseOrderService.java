@@ -23,10 +23,4 @@ public class PurchaseOrderService extends BaseService {
         }
         return po;
     }
-
-//    public void add(PurchaseOrder po) {
-//        PurchaseOrder addition = new PurchaseOrder();
-//        
-//        addition.override(po, getPropertyNames(BasePurchas));
-//    }
 }
