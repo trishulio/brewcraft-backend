@@ -32,7 +32,7 @@ public class ProductCategory extends BaseEntity {
     @SequenceGenerator(name = "product_category_generator", sequenceName = "product_category_sequence", allocationSize = 1)
     private Long id;
     
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

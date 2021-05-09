@@ -1,5 +1,20 @@
 package io.company.brewcraft.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.common.FixedTypeDto;
 import io.company.brewcraft.dto.user.AddUserDto;
@@ -15,24 +30,7 @@ import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.user.UserMapper;
 import io.company.brewcraft.service.user.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class UserControllerTest {
 
@@ -43,7 +41,7 @@ public class UserControllerTest {
     @BeforeEach
     public void init() {
         userService = mock(UserService.class);
-        userController = new UserController(userService);
+        userController = new UserController(userService, new AttributeFilter());
     }
 
     @Test
@@ -85,7 +83,7 @@ public class UserControllerTest {
         Page<User> userPage = new PageImpl<>(Collections.singletonList(matchedUser));
         when(userService.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, status, salutations, roles, page, size, sort, orderAscending)).thenReturn(userPage);
 
-        final PageDto<UserDto> usersPage = userController.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, status, salutations, roles, page, size, sort, orderAscending);
+        final PageDto<UserDto> usersPage = userController.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, status, salutations, roles, sort, orderAscending, page, size);
         assertEquals(page, usersPage.getTotalPages());
 
         final List<UserDto> users = usersPage.getContent();

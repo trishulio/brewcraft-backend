@@ -20,7 +20,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class StorageServiceImpl extends BaseService implements StorageService {
-    public static final Logger log = LoggerFactory.getLogger(StorageServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(StorageServiceImpl.class);
     
     private StorageRepository storageRepository;
     

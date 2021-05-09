@@ -4,11 +4,8 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
-import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.CreateSecretRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
@@ -24,9 +21,8 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
 
     private static final Logger logger = LoggerFactory.getLogger(AwsSecretsManagerClient.class);
 
-    public AwsSecretsManagerClient(@Value("${aws.secretsmanager.region}") String region, @Value("${aws.secretsmanager.url}") String url) {
-        AwsClientBuilder.EndpointConfiguration endpointConfig = new AwsClientBuilder.EndpointConfiguration(url, region);
-        client = AWSSecretsManagerClientBuilder.standard().withEndpointConfiguration(endpointConfig).build();
+    public AwsSecretsManagerClient(AWSSecretsManager client) {
+        this.client = client;
     }
 
     @Override
@@ -61,6 +57,7 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
         }
     }
     
+    @Override
     public void create(String secretId, String secret) throws IOException {    
         CreateSecretRequest createSecretRequest = new CreateSecretRequest().withName(secretId).withSecretString(secret);
 
@@ -72,6 +69,7 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
         }
     }
     
+    @Override
     public void update(String secretId, String secret) throws IOException { 
         UpdateSecretRequest updateSecretRequest = new UpdateSecretRequest().withSecretId(secretId).withSecretString(secret);
 

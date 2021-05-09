@@ -1,6 +1,17 @@
 package io.company.brewcraft.security.idp;
 
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.AdminCreateUserRequest;
 import com.amazonaws.services.cognitoidp.model.AdminCreateUserResult;
@@ -10,35 +21,17 @@ import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesRequest;
 import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesResult;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.UserType;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+public class AwsCognitoIdpClientTest {
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-public class AwsCognitoIdentityProviderClientTest {
-
-    private AwsCognitoIdentityProviderClient awsCognitoIdentityProviderClient;
-
-    private AWSCognitoIdentityProviderFactory awsCognitoIdentityProviderFactory;
-
-    private AWSCognitoIdentityProvider awsCognitoIdentityProvider;
+    private AwsCognitoIdpClient awsCognitoIdpClient;
+    private AWSCognitoIdentityProvider awsCognitoIdp;
 
     @BeforeEach
     public void init() {
         final String userPoolId = "testUserPoolId";
-        awsCognitoIdentityProviderFactory = mock(AWSCognitoIdentityProviderFactory.class);
-        awsCognitoIdentityProvider = mock(AWSCognitoIdentityProvider.class);
-        doReturn(awsCognitoIdentityProvider).when(awsCognitoIdentityProviderFactory).getInstance();
-        awsCognitoIdentityProviderClient = new AwsCognitoIdentityProviderClient(awsCognitoIdentityProviderFactory, userPoolId);
+        awsCognitoIdp = mock(AWSCognitoIdentityProvider.class);
+        awsCognitoIdpClient = new AwsCognitoIdpClient(awsCognitoIdp, userPoolId);
     }
 
     @Test
@@ -47,9 +40,9 @@ public class AwsCognitoIdentityProviderClientTest {
         final UserAttributeType userAttributeForEmail = getUserAttributeTypeForEmail();
         ArgumentCaptor<AdminCreateUserRequest> cognitoCreateUserRequestCaptor = ArgumentCaptor.forClass(AdminCreateUserRequest.class);
         final AdminCreateUserResult adminCreateUserResult = getAdminCreateUserResult();
-        when(awsCognitoIdentityProvider.adminCreateUser(cognitoCreateUserRequestCaptor.capture())).thenReturn(adminCreateUserResult);
+        when(awsCognitoIdp.adminCreateUser(cognitoCreateUserRequestCaptor.capture())).thenReturn(adminCreateUserResult);
 
-        awsCognitoIdentityProviderClient.createUser(userName, Collections.singletonList(userAttributeForEmail));
+        awsCognitoIdpClient.createUser(userName, Collections.singletonList(userAttributeForEmail));
 
         final AdminCreateUserRequest adminCreateUserRequest = cognitoCreateUserRequestCaptor.getValue();
         assertEquals(userName, adminCreateUserRequest.getUsername());
@@ -64,9 +57,9 @@ public class AwsCognitoIdentityProviderClientTest {
         final UserAttributeType userAttributeForEmail = getUserAttributeTypeForEmail();
         ArgumentCaptor<AdminUpdateUserAttributesRequest> cognitoUpdateUserAttributesRequestCaptor = ArgumentCaptor.forClass(AdminUpdateUserAttributesRequest.class);
         final AdminUpdateUserAttributesResult adminUpdateUserAttributesResult = mock(AdminUpdateUserAttributesResult.class);
-        when(awsCognitoIdentityProvider.adminUpdateUserAttributes(cognitoUpdateUserAttributesRequestCaptor.capture())).thenReturn(adminUpdateUserAttributesResult);
+        when(awsCognitoIdp.adminUpdateUserAttributes(cognitoUpdateUserAttributesRequestCaptor.capture())).thenReturn(adminUpdateUserAttributesResult);
 
-        awsCognitoIdentityProviderClient.updateUser(userName, Collections.singletonList(userAttributeForEmail));
+        awsCognitoIdpClient.updateUser(userName, Collections.singletonList(userAttributeForEmail));
 
         final AdminUpdateUserAttributesRequest adminUpdateUserAttributesRequest = cognitoUpdateUserAttributesRequestCaptor.getValue();
         assertEquals(userName, adminUpdateUserAttributesRequest.getUsername());
@@ -80,9 +73,9 @@ public class AwsCognitoIdentityProviderClientTest {
         final String userName = "testUserName";
         ArgumentCaptor<AdminDeleteUserRequest> cognitoDeleteUserRequestCaptor = ArgumentCaptor.forClass(AdminDeleteUserRequest.class);
         final AdminDeleteUserResult adminDeleteUserResult = mock(AdminDeleteUserResult.class);
-        when(awsCognitoIdentityProvider.adminDeleteUser(cognitoDeleteUserRequestCaptor.capture())).thenReturn(adminDeleteUserResult);
+        when(awsCognitoIdp.adminDeleteUser(cognitoDeleteUserRequestCaptor.capture())).thenReturn(adminDeleteUserResult);
 
-        awsCognitoIdentityProviderClient.deleteUser(userName);
+        awsCognitoIdpClient.deleteUser(userName);
 
         final AdminDeleteUserRequest adminDeleteUserRequest = cognitoDeleteUserRequestCaptor.getValue();
         assertEquals(userName, adminDeleteUserRequest.getUsername());

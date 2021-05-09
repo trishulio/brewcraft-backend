@@ -43,7 +43,7 @@ public class UserServiceImplTest {
 
     private UserRepository userRepository;
 
-    private IdentityProviderClient identityProviderClient;
+    private IdentityProviderClient idpClient;
 
     private UtilityProvider utilProvider;
 
@@ -53,10 +53,10 @@ public class UserServiceImplTest {
     @BeforeEach
     public void init() {
         userRepository = mock(UserRepository.class);
-        identityProviderClient = mock(IdentityProviderClient.class);
+        idpClient = mock(IdentityProviderClient.class);
         utilProvider = mock(UtilityProvider.class);
         when(utilProvider.getValidator()).thenReturn(new Validator());
-        userService = new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
+        userService = new UserServiceImpl(userRepository, idpClient, utilProvider);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class UserServiceImplTest {
         final User addingUser = createUser(null);
         final Long userId = 1L;
         when(userRepository.mapAndSave(addingUser)).thenReturn(createUser(userId));
-        doNothing().when(identityProviderClient).createUser(anyString(), anyList());
+        doNothing().when(idpClient).createUser(anyString(), anyList());
 
         final User persistedUser = userService.addUser(addingUser);
 
@@ -154,7 +154,7 @@ public class UserServiceImplTest {
         ArgumentCaptor<String> userNameCaptor = ArgumentCaptor.forClass(String.class);
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<UserAttributeType>> userAttributesCaptor = ArgumentCaptor.forClass(List.class);
-        doNothing().when(identityProviderClient).createUser(userNameCaptor.capture(), userAttributesCaptor.capture());
+        doNothing().when(idpClient).createUser(userNameCaptor.capture(), userAttributesCaptor.capture());
 
         userService.addUser(addingUser);
 
@@ -195,7 +195,7 @@ public class UserServiceImplTest {
 
         userService.putUser(userId, updatingUser);
 
-        verifyNoInteractions(identityProviderClient);
+        verifyNoInteractions(idpClient);
     }
 
     @Test
@@ -209,7 +209,7 @@ public class UserServiceImplTest {
 
         userService.putUser(userId, updatingUser);
 
-        verifyNoInteractions(identityProviderClient);
+        verifyNoInteractions(idpClient);
     }
 
     @Test
@@ -250,7 +250,7 @@ public class UserServiceImplTest {
         ArgumentCaptor<String> userNameCaptor = ArgumentCaptor.forClass(String.class);
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<UserAttributeType>> userAttributesCaptor = ArgumentCaptor.forClass(List.class);
-        doNothing().when(identityProviderClient).updateUser(userNameCaptor.capture(), userAttributesCaptor.capture());
+        doNothing().when(idpClient).updateUser(userNameCaptor.capture(), userAttributesCaptor.capture());
 
         userService.putUser(userId, updatingUser);
 
@@ -303,7 +303,7 @@ public class UserServiceImplTest {
 
         userService.patchUser(userId, updatingUser);
 
-        verifyNoInteractions(identityProviderClient);
+        verifyNoInteractions(idpClient);
     }
 
     @Test
@@ -317,7 +317,7 @@ public class UserServiceImplTest {
 
         userService.patchUser(userId, updatingUser);
 
-        verifyNoInteractions(identityProviderClient);
+        verifyNoInteractions(idpClient);
     }
 
     @Test
@@ -348,7 +348,7 @@ public class UserServiceImplTest {
         ArgumentCaptor<String> userNameCaptor = ArgumentCaptor.forClass(String.class);
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<UserAttributeType>> userAttributesCaptor = ArgumentCaptor.forClass(List.class);
-        doNothing().when(identityProviderClient).updateUser(userNameCaptor.capture(), userAttributesCaptor.capture());
+        doNothing().when(idpClient).updateUser(userNameCaptor.capture(), userAttributesCaptor.capture());
 
         userService.patchUser(userId, updatingUser);
 
@@ -377,7 +377,7 @@ public class UserServiceImplTest {
 
         ArgumentCaptor<Long> userIdCaptor = ArgumentCaptor.forClass(Long.class);
         doNothing().when(userRepository).deleteById(userIdCaptor.capture());
-        doNothing().when(identityProviderClient).deleteUser(userName);
+        doNothing().when(idpClient).deleteUser(userName);
 
         userService.deleteUser(userId);
 
@@ -393,7 +393,7 @@ public class UserServiceImplTest {
 
         ArgumentCaptor<String> userNameCaptor = ArgumentCaptor.forClass(String.class);
         doNothing().when(userRepository).deleteById(userId);
-        doNothing().when(identityProviderClient).deleteUser(userNameCaptor.capture());
+        doNothing().when(idpClient).deleteUser(userNameCaptor.capture());
 
         userService.deleteUser(userId);
 

@@ -13,11 +13,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.Versioned;
 
 @Entity
 @Table(name = "user_role")
-public class UserRole extends BaseEntity implements Identified<Long>, Audited, Versioned {
+public class UserRole extends BaseEntity implements Identified<Long>, Audited, UpdateUserRole<UserRoleType, User> {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_USER_ROLE_TYPE = "roleType";
+    public static final String FIELD_USER = "user";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_generator")
     @SequenceGenerator(name = "user_role_generator", sequenceName = "user_role_sequence", allocationSize = 1)
@@ -25,7 +28,7 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_role_type_id", referencedColumnName = "id")
-    private UserRoleType userRoleType;
+    private UserRoleType roleType;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -53,18 +56,22 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
         this.id = id;
     }
 
-    public UserRoleType getUserRoleType() {
-        return userRoleType;
+    @Override
+    public UserRoleType getRoleType() {
+        return roleType;
     }
 
-    public void setUserRoleType(UserRoleType userRoleType) {
-        this.userRoleType = userRoleType;
+    @Override
+    public void setRoleType(UserRoleType userRoleType) {
+        this.roleType = userRoleType;
     }
 
+    @Override
     public User getUser() {
         return user;
     }
 
+    @Override
     public void setUser(User user) {
         this.user = user;
     }
@@ -97,9 +104,5 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public enum Property {
-        userRoleType
     }
 }

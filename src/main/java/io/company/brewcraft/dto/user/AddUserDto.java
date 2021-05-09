@@ -1,13 +1,13 @@
 package io.company.brewcraft.dto.user;
 
-import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.dto.common.FixedTypeDto;
+import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
-public class AddUserDto extends BaseDto implements BaseUserDto {
+import io.company.brewcraft.dto.BaseDto;
+
+public class AddUserDto extends BaseDto {
 
     @NotEmpty
     private String userName;
@@ -25,15 +25,15 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
     private String email;
 
     @NotNull
-    private FixedTypeDto status;
+    private Long statusId;
 
     @NotNull
-    private FixedTypeDto salutation;
+    private Long salutationId;
 
     @NotEmpty
     private String phoneNumber;
 
-    private List<AddUserRoleDto> roles;
+    private List<Long> roleTypeIds;
 
     private String imageUrl;
 
@@ -45,7 +45,6 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.userName = userName;
     }
 
-    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -54,7 +53,6 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.displayName = displayName;
     }
 
-    @Override
     public String getFirstName() {
         return firstName;
     }
@@ -63,7 +61,6 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.firstName = firstName;
     }
 
-    @Override
     public String getLastName() {
         return lastName;
     }
@@ -72,7 +69,6 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.lastName = lastName;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
@@ -81,16 +77,22 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.email = email;
     }
 
-    @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public Long getStatusId() {
+        return statusId;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
     }
 
-    @Override
+    public Long getSalutationId() {
+        return salutationId;
+    }
+
+    public void setSalutationId(Long salutationId) {
+        this.salutationId = salutationId;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -99,30 +101,19 @@ public class AddUserDto extends BaseDto implements BaseUserDto {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public FixedTypeDto getStatus() {
-        return status;
+    public List<Long> getRoleTypeIds() {
+        return roleTypeIds;
     }
 
-    public void setStatus(FixedTypeDto status) {
-        this.status = status;
+    public void setRoleTypeIds(List<Long> roleTypeIds) {
+        this.roleTypeIds = roleTypeIds;
     }
 
-    @Override
-    public FixedTypeDto getSalutation() {
-        return salutation;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setSalutation(FixedTypeDto salutation) {
-        this.salutation = salutation;
-    }
-
-    @Override
-    public List<AddUserRoleDto> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<AddUserRoleDto> roles) {
-        this.roles = roles;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

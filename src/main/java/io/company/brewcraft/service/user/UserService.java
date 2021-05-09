@@ -1,9 +1,10 @@
 package io.company.brewcraft.service.user;
 
-import io.company.brewcraft.model.user.User;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 
-import java.util.Set;
+import io.company.brewcraft.model.user.User;
 
 public interface UserService {
 
@@ -17,5 +18,5 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<String> status, Set<String> salutations, Set<String> roles, int page, int size, Set<String> sort, boolean orderAscending);
+    Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<Long> statusIds, Set<Long> salutationIds, Set<String> roles, int page, int size, Set<String> sort, boolean orderAscending);
 }

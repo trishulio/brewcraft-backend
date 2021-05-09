@@ -168,13 +168,13 @@ public class EnhancedUserRepositoryImplTest {
 
     private User getUser(final String statusName, final String salutationName, final String roleName) {
         final User user = new User();
-        if (Objects.nonNull(statusName)) {
+        if (statusName != null) {
             user.setStatus(getUserStatus(statusName));
         }
-        if (Objects.nonNull(salutationName)) {
+        if (salutationName != null) {
             user.setSalutation(getUserSalutation(salutationName));
         }
-        if (Objects.nonNull(roleName)) {
+        if (roleName != null) {
             user.setRoles(Collections.singletonList(getUserRole(roleName)));
         }
         return user;

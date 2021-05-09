@@ -18,7 +18,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class FacilityServiceImpl extends BaseService implements FacilityService {
-    public static final Logger log = LoggerFactory.getLogger(FacilityServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(FacilityServiceImpl.class);
     
     private FacilityRepository facilityRepository;
                     

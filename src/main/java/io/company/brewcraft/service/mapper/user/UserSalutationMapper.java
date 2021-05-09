@@ -1,20 +1,26 @@
 package io.company.brewcraft.service.mapper.user;
 
-import io.company.brewcraft.dto.common.FixedTypeDto;
-import io.company.brewcraft.model.user.UserSalutation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+
+import io.company.brewcraft.dto.user.UserSalutationDto;
+import io.company.brewcraft.model.user.UserSalutation;
 
 @Mapper
 public interface UserSalutationMapper {
     UserSalutationMapper INSTANCE = Mappers.getMapper(UserSalutationMapper.class);
 
     @Mappings({
-            @Mapping(target = "id", ignore = true)
+        @Mapping(target = UserSalutation.ATTR_TITLE, ignore = true),
+        @Mapping(target = UserSalutation.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = UserSalutation.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = UserSalutation.ATTR_VERSION, ignore = true)
     })
-    UserSalutation fromDto(FixedTypeDto salutationDto);
+    UserSalutation fromDto(Long id);
 
-    FixedTypeDto toDto(UserSalutation salutation);
+    UserSalutation fromDto(UserSalutationDto salutationDto);
+
+    UserSalutationDto toDto(UserSalutation salutation);
 }

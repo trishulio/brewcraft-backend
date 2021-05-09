@@ -1,30 +1,31 @@
 package io.company.brewcraft.model.user;
 
-import io.company.brewcraft.model.BaseEntity;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.URL;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
+
+import io.company.brewcraft.model.Audited;
+import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.model.Identified;
+
 @Entity
 @Table(name = "_users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited, Identified<Long> {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_USER_NAME = "userName";
+    public static final String FIELD_DISPLAY_NAME = "displayName";
+    public static final String FIELD_EMAIL = "email";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
+    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_SALUTATION = "salutation";
+    public static final String FIELD_ROLES = "roles";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
     @SequenceGenerator(name = "user_generator", sequenceName = "app_user_sequence", allocationSize = 1)
@@ -73,130 +74,157 @@ public class User extends BaseEntity {
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getDisplayName() {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @Override
     public String getFirstName() {
         return firstName;
     }
 
+    @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    @Override
     public String getLastName() {
         return lastName;
     }
 
+    @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
+    @Override
     public String getImageUrl() {
         return imageUrl;
     }
 
+    @Override
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    @Override
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
     public UserStatus getStatus() {
         return status;
     }
 
+    @Override
     public void setStatus(UserStatus status) {
         this.status = status;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }
 
+    @Override
     public String getUserName() {
         return userName;
     }
 
+    @Override
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    @Override
     public List<UserRole> getRoles() {
         return roles;
     }
 
+    @Override
     public void setRoles(List<UserRole> roles) {
         if (this.getRoles() != null) {
-            this.getRoles().clear();
-            this.getRoles().addAll(roles);
-        } else if (roles != null) {
+            this.roles.clear();
+        } else {
             this.roles = new ArrayList<>();
+        }
+        
+        if (roles != null) {
             this.roles.addAll(roles);
         } else {
-            this.roles = null;
+            this.roles = roles;
         }
-        if (this.getRoles() != null) {
-            this.getRoles().forEach(role -> role.setUser(this));
+
+        if (this.roles != null) {
+            this.roles.forEach(role -> role.setUser(this));
         }
     }
 
+    @Override
     public UserSalutation getSalutation() {
         return salutation;
     }
 
+    @Override
     public void setSalutation(UserSalutation salutation) {
         this.salutation = salutation;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public enum Property {
-        id, userName, displayName, email, phoneNumber, status, salutation, roles
     }
 }

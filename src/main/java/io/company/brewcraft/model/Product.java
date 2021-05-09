@@ -22,7 +22,7 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
     @SequenceGenerator(name = "product_generator", sequenceName = "product_sequence", allocationSize = 1)
     private Long id;
     
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     
     private String description;

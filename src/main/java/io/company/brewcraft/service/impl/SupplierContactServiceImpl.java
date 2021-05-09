@@ -21,7 +21,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class SupplierContactServiceImpl extends BaseService implements SupplierContactService {
-    public static final Logger log = LoggerFactory.getLogger(SupplierContactServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SupplierContactServiceImpl.class);
     
     private SupplierContactRepository supplierContactRepository;
     
