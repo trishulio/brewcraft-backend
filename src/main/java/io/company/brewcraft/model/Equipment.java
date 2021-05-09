@@ -7,18 +7,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Mass;
 import javax.measure.quantity.Volume;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,7 +34,7 @@ public class Equipment extends BaseEntity {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name="facility_id", referencedColumnName="id", nullable = false)
+    @JoinColumn(name="facility_id", referencedColumnName = "id", nullable = false)
     @JsonManagedReference
     private Facility facility;
     
@@ -80,12 +69,16 @@ public class Equipment extends BaseEntity {
     private Integer version;
     
     public Equipment() {
-        
+    }
+
+    public Equipment(Long id) {
+        this();
+        setId(id);
     }
     
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, BigDecimal maxCapacityValue,
             Unit<?> maxCapacityUnit, Unit<?> maxCapacityDisplayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-        setId(id);
+        this(id);
         setFacility(facility);
         setName(name);
         setType(type);
@@ -193,7 +186,11 @@ public class Equipment extends BaseEntity {
     }
     
     public Quantity<?> getMaxCapacity() {
-        return Quantities.getQuantity(this.maxCapacityValue, QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit));
+        Quantity<?> qty = null;
+        if (this.maxCapacityValue != null && this.maxCapacityUnit != null) {
+            qty = Quantities.getQuantity(this.maxCapacityValue, QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit));
+        }
+        return qty;
     }
     
     public Quantity<?> getMaxCapacityInDisplayUnit() {
@@ -209,6 +206,7 @@ public class Equipment extends BaseEntity {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void setMaxCapacity(Quantity<?> maxCapacity) throws IllegalArgumentException {
         Quantity<?> maxCapacityInPersistedUnit = null;
 

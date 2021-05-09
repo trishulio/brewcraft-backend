@@ -20,7 +20,7 @@ import io.company.brewcraft.service.MoneySupplier;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified, Audited, MoneySupplier {
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified<Long>, Audited, MoneySupplier {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -58,12 +58,11 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     @Column(name = "payment_due_date")
     private LocalDateTime paymentDueDate;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "freight_id", referencedColumnName = "id")
+    @Embedded
     private Freight freight;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -79,7 +78,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Version
     private Integer version;
-    
+
     public Invoice() {
     }
 
@@ -134,10 +133,12 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
         this.description = description;
     }
 
+    @Override
     public PurchaseOrder getPurchaseOrder() {
         return purchaseOrder;
     }
 
+    @Override
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
     }
@@ -204,24 +205,56 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public List<InvoiceItem> getItems() {
+        List<InvoiceItem> items = null;
+        if (this.items != null) {
+            items = this.items.stream().collect(Collectors.toList());
+        }
         return items;
     }
 
     @Override
     public void setItems(List<InvoiceItem> items) {
-        if (this.getItems() != null) {
-            this.getItems().clear();
-            this.getItems().addAll(items);
-        } else if (items != null){
+        if (this.items == null) {
             this.items = new ArrayList<>();
-            items.forEach(item -> this.items.add(item));
         } else {
-            this.items = null;
+            this.items.stream().collect(Collectors.toList()).forEach(this::removeItem);
         }
 
-        if (this.getItems() != null) {
-            this.getItems().forEach(item -> item.setInvoice(this));
+        if (items != null) {
+            items.stream().collect(Collectors.toList()).forEach(this::addItem);
         }
+    }
+
+    public void addItem(InvoiceItem item) {
+        if (item == null) {
+            return;
+        }
+
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
+
+        if (item.getInvoice() != this) {            
+            item.setInvoice(this);
+        }
+        
+        if (!this.items.contains(item)) {
+            this.items.add(item);            
+        }
+    }
+
+    public boolean removeItem(InvoiceItem item) {
+        if (item == null || this.items == null) {
+            return false;
+        }
+
+        boolean removed = this.items.remove(item);
+        
+        if (removed) {            
+            item.setInvoice(null);
+        }
+        
+        return removed;
     }
 
     @Override
@@ -248,14 +281,14 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     public Money getAmount() {
         return MoneyService.total(this.getItems());
     }
-    
+
     public Tax getTax() {
         Tax tax = null;
         if (getItems() != null) {
             Collection<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
-        
+
         return tax;
     }
 }

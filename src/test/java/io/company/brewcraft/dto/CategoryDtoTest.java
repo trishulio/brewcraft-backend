@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,29 +13,36 @@ public class CategoryDtoTest {
     public void init() {
         category = new CategoryDto();
     }
-    
+
     @Test
-    public void testConstructor() {
+    public void testIdConstructor_SetsIdFieldValue() {
+        category = new CategoryDto(1L);
+
+        assertEquals(1L, category.getId());
+    }
+
+    @Test
+    public void testAllArgConstructor() {
         Long id = 1L;
         Long parentCategoryId = 2L;
         String name = "testName";
         int version = 1;
 
         CategoryDto category = new CategoryDto(id, parentCategoryId, name, version);
-        
+
         assertSame(id, category.getId());
         assertSame(parentCategoryId, category.getParentCategoryId());
         assertSame(name, category.getName());
-        assertSame(version, category.getVersion());        
+        assertSame(version, category.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
         category.setId(id);
         assertSame(id, category.getId());
     }
-    
+
     @Test
     public void testGetSetParentCategoryId() {
         Long parentCategoryId = 1L;
@@ -48,7 +56,7 @@ public class CategoryDtoTest {
         category.setName(name);
         assertSame(name, category.getName());
     }
-  
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

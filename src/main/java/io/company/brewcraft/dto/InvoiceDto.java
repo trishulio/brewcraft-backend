@@ -31,7 +31,7 @@ public class InvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime lastUpdated, LocalDateTime createdAt, InvoiceStatusDto status, List<InvoiceItemDto> items, Integer version) {
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto status, List<InvoiceItemDto> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -42,8 +42,8 @@ public class InvoiceDto extends BaseDto {
         setGeneratedOn(generatedOn);
         setPaymentDueDate(paymentDueDate);
         setReceivedOn(receivedOn);
-        setLastUpdated(lastUpdated);
         setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setStatus(status);
         setItems(items);
         setVersion(version);

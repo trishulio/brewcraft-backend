@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,15 +18,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.ShipmentRepository;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.ValidationException;
-import io.company.brewcraft.util.validator.Validator;
 import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
@@ -34,18 +33,21 @@ public class ShipmentServiceTest {
     private ShipmentService service;
     
     private ShipmentRepository mRepo;
-    private ShipmentItemService mItemService;
-    private UtilityProvider mUtilProvider;
-    
+    private MaterialLotService mLotService;
+
     @BeforeEach
     public void init() {
         mRepo = mock(ShipmentRepository.class);
-        mItemService = mock(ShipmentItemService.class);
-        mUtilProvider = mock(UtilityProvider.class);
+        doAnswer(i -> i.getArgument(0, Shipment.class)).when(mRepo).saveAndFlush(any(Shipment.class));
+        doAnswer(i -> {
+            Collection<Shipment> coll = i.getArgument(0, Collection.class);
+            coll.forEach(s -> s.setStatus(new ShipmentStatus(99L)));
+            return null;
+        }).when(mRepo).refresh(anyCollection());
+        
+        mLotService = mock(MaterialLotService.class);
 
-        doReturn(new Validator()).when(mUtilProvider).getValidator();
-
-        service = new ShipmentService(mRepo, mItemService, mUtilProvider);
+        service = new ShipmentService(mRepo, mLotService);
     }
     
     @Test
@@ -63,11 +65,6 @@ public class ShipmentServiceTest {
         Shipment shipment = service.getShipment(1L);
         
         assertNull(shipment);
-    }
-    
-    @Test
-    public void testGetShipment_ThrowsValidationException_WhenIdIsNull() {
-        assertThrows(ValidationException.class, () -> service.getShipment(null), "1. Non-null Id expected.");
     }
     
     @Test
@@ -95,11 +92,6 @@ public class ShipmentServiceTest {
     }
     
     @Test
-    public void testExists_ThrowsValidationException_WhenIdCollectionIsNull() {
-        assertThrows(ValidationException.class, () -> service.existsByIds(null));
-    }
-    
-    @Test
     public void testDelete_CallsDeleteByIdOnRepository() {
         service.delete(Set.of(1L, 2L, 3L));
         
@@ -107,211 +99,166 @@ public class ShipmentServiceTest {
     }
     
     @Test
-    public void testDelete_ThrowsValidation_WhenIdsAreNull() {
-        assertThrows(ValidationException.class, () -> service.delete(null), "Cannot retrieve Ids to delete from a null collection");
-    }
-    
-    @Test
     public void testAdd_RetainsBaseValuesAndAddsShipmentToRepository_WhenObjectIsNotNull() {
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
-
-        List<ShipmentItem> additionItems = new ArrayList<>();
-        additionItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> additionLots = new ArrayList<>();
+        additionLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment addition = new Shipment(
             1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
-            null,
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            additionItems,
+            additionLots,
             1
         );
         
         doReturn(List.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), addition, new Material(1L), null, null, null)
-        )).when(mItemService).getAddItems(
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), addition, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1))
-        );
+            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), null, null, null)
+        )).when(mLotService).getAddLots(additionLots);
 
-        Shipment shipment = service.add(2L, addition);
+        Shipment shipment = service.add(addition);
         
         assertEquals(null, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(null, shipment.getCreatedAt());
         assertEquals(null, shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(null, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(null, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(null, item.getCreatedAt());
-        assertEquals(null, item.getLastUpdated());
-        assertEquals(null, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(null, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(null, lot.getCreatedAt());
+        assertEquals(null, lot.getLastUpdated());
+        assertEquals(null, lot.getVersion());
         
-        verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getAddItems(anyList());
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(List.of(shipment));
+        verify(mLotService, times(1)).getAddLots(anyList());
     }
-    
-    @Test
-    public void testAdd_ThrowsValidationError_WhenRequiredFieldsAreNull() {
-        String err = "1. InvoiceId cannot be null\n"
-                + "2. Shipment cannot be null#n";
-        
-        assertThrows(ValidationException.class, () -> service.add(null, null), err);
-    }
-    
+
     @Test
     public void testPut_OverridesAnExistingShipmentEntity_WhenInputIsNotNull() {
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
-
-        List<ShipmentItem> existingitems = new ArrayList<>();
-        existingitems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> existingLots = new ArrayList<>();
+        existingLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
-            "LOT_0",
             "DESCRIPTION_0",
-            new ShipmentStatus("IN-TRANSIT"),
-            null,
+            new ShipmentStatus(101L),
             LocalDateTime.of(1999, 12, 31, 12, 0),
             LocalDateTime.of(2000, 12, 31, 12, 0),
             LocalDateTime.of(2001, 12, 31, 12, 0),
             LocalDateTime.of(2002, 12, 31, 12, 0),
-            existingitems,
+            existingLots,
             1
         );
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
-        List<ShipmentItem> updateItems = List.of( 
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+        List<MaterialLot> updateLots = List.of( 
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
         );
         Shipment update = new Shipment(
             null,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
-            null,
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            updateItems,
+            updateLots,
             1
         );
         
         doReturn(List.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
-        )).when(mItemService).getPutItems(
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
-        ));
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
+        )).when(mLotService).getPutLots(existingLots, updateLots);
 
-        Shipment shipment = service.put(2L, 1L, update);
+        Shipment shipment = service.put(1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 12, 31, 12, 0), shipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2002, 12, 31, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(1, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(2, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(2, lot.getVersion());
         
-        verify(mRepo, times(1)).save(2L, existing);
-        verify(mItemService, times(1)).getPutItems(anyList(), anyList());
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(anyList());
+        verify(mLotService, times(1)).getPutLots(anyList(), anyList());
     }
-    
+
     @Test
     public void testPut_AddsANewEntity_WhenExistingEntityDoesNotExists() {
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
         doReturn(Optional.empty()).when(mRepo).findById(1L);
 
-        List<ShipmentItem> updateItems = new ArrayList<>(); 
-        updateItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2));
+        List<MaterialLot> updateLots = List.of(
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
+        );
         Shipment update = new Shipment(
             1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
-            null,
+            new ShipmentStatus(100L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            updateItems,
+            updateLots,
             1
         );
-        
-        doReturn(List.of(
-            new ShipmentItem(null, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), null, null, null)
-        )).when(mItemService).getPutItems(
-            null,
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2))
-        );
 
-        Shipment shipment = service.put(2L, 1L, update);
+        doReturn(List.of(
+            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), null, null, null)
+        )).when(mLotService).getPutLots(null, updateLots);
+
+        Shipment shipment = service.put(1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(null, shipment.getCreatedAt());
         assertEquals(null, shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(null, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(null, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(null, item.getCreatedAt());
-        assertEquals(null, item.getLastUpdated());
-        assertEquals(null, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(null, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(null, lot.getCreatedAt());
+        assertEquals(null, lot.getLastUpdated());
+        assertEquals(null, lot.getVersion());
         
-        verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPutItems(isNull(), anyList());
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(anyList());
+        verify(mLotService, times(1)).getPutLots(isNull(), anyList());
     }
-    
-    @Test
-    public void testPut_ThrowsValidationException_WhenRequiredInputsAreNull() {
-        String err = "1. InvoiceId cannot be null\n"
-                + "2. ShipmentId cannot be null\n"
-                + "3. Shipment cannot be null\n";
-        
-        assertThrows(ValidationException.class, () -> service.put(null, null, null), err);
-    }
-    
+
     @Test
     public void testPut_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
         Shipment existing = new Shipment(1L);
@@ -321,106 +268,92 @@ public class ShipmentServiceTest {
         Shipment update = new Shipment(1L);
         existing.setVersion(2);
 
-        assertThrows(OptimisticLockException.class, () -> service.put(2L, 1L, update));
+        assertThrows(OptimisticLockException.class, () -> service.put(1L, update));
     }
 
     @Test
     public void testPatch_PatchesExistingEntity_WhenExistingIsNotNull() {
-        List<ShipmentItem> existingItems = new ArrayList<>();
-        existingItems.add(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> existingLots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         Shipment existing = new Shipment(
             1L,
             "SHIPMENT_0",
-            "LOT_0",
             "DESCRIPTION_0",
-            new ShipmentStatus("IN-TRANSIT"),
-            null,
+            new ShipmentStatus(101L),
             LocalDateTime.of(1999, 12, 31, 12, 0),
             LocalDateTime.of(2000, 12, 31, 12, 0),
             LocalDateTime.of(2001, 12, 31, 12, 0),
             LocalDateTime.of(2002, 12, 31, 12, 0),
-            existingItems,
+            existingLots,
             1
         );
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
-
-        List<ShipmentItem> updateItems = List.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
+        List<MaterialLot> updateLots = List.of(
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
         );
         Shipment update = new Shipment(
             null,
             null,
             null,
-            null,
-            new ShipmentStatus("RECEIVED"),
-            null,
+            new ShipmentStatus(100L),
             null,
             null,
             null,
             null,
-            updateItems,
+            updateLots,
             1
         );
 
         doReturn(List.of(
-            new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
-        )).when(mItemService).getPatchItems(
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), existing, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
-            List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), update, null, LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1))
-        );
+            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
+        )).when(mLotService).getPatchLots(existingLots, updateLots);
 
-        Shipment shipment = service.patch(2L, 1L, update);
+        Shipment shipment = service.patch(1L, update);
         
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_0", shipment.getShipmentNumber());
-        assertEquals("LOT_0", shipment.getLotNumber());
         assertEquals("DESCRIPTION_0", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 12, 31, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 12, 31, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 12, 31, 12, 0), shipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2002, 12, 31, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(1, shipment.getVersion());
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(1, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(1, lot.getVersion());
         
-        verify(mRepo, times(1)).save(2L, shipment);
-        verify(mItemService, times(1)).getPatchItems(anyList(), anyList());
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(anyList());
+        verify(mLotService, times(1)).getPatchLots(anyList(), anyList());
     }
 
     @Test
     public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(anyLong(), any(Shipment.class));
-
         Shipment existing = new Shipment(1L);
-        existing.setInvoice(new Invoice(2L));
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
         Shipment update = new Shipment(1L);
-        Shipment shipment = service.patch(null, 1L, update);        
-        verify(mRepo, times(1)).save(2L, shipment);
+        Shipment shipment = service.patch(1L, update);        
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(List.of(shipment));
     }
 
     @Test
     public void testPatch_SavesWithNullInvoiceId_WhenInvoiceIdArgIsNullAndExistingInvoiceIsNull() {
-        doAnswer(i -> i.getArgument(1, Shipment.class)).when(mRepo).save(isNull(), any(Shipment.class));
-
         Shipment existing = new Shipment(1L);
         doReturn(Optional.of(existing)).when(mRepo).findById(1L);
 
         Shipment update = new Shipment(1L);
-        Shipment shipment = service.patch(null, 1L, update);
-        verify(mRepo, times(1)).save(null, shipment);
+        Shipment shipment = service.patch(1L, update);
+        verify(mRepo, times(1)).saveAndFlush(shipment);
+        verify(mRepo, times(1)).refresh(List.of(shipment));
     }
 
     @Test
@@ -432,6 +365,6 @@ public class ShipmentServiceTest {
         Shipment update = new Shipment(1L);
         existing.setVersion(2);
 
-        assertThrows(OptimisticLockException.class, () -> service.patch(2L, 1L, update));
+        assertThrows(OptimisticLockException.class, () -> service.patch(1L, update));
     }
 }

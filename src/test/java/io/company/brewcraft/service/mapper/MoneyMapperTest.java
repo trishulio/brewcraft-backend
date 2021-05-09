@@ -45,7 +45,7 @@ public class MoneyMapperTest {
 
     @Test
     public void testFromEntity_ReturnsMoney_WhenEntityIsNotNull() {
-        MoneyEntity entity = new MoneyEntity(1L, new Currency(124, "CAD"), new BigDecimal("10"));
+        MoneyEntity entity = new MoneyEntity(new Currency(124, "CAD"), new BigDecimal("10"));
 
         assertEquals(Money.parse("CAD 10"), mapper.fromEntity(entity));
     }
@@ -60,7 +60,7 @@ public class MoneyMapperTest {
         Money money = Money.parse("CAD 10");
 
         MoneyEntity entity = mapper.toEntity(money);
-        assertEquals(new MoneyEntity(null, new Currency(124, "CAD"), new BigDecimal("10.00")), entity);
+        assertEquals(new MoneyEntity(new Currency(124, "CAD"), new BigDecimal("10.00")), entity);
     }
 
     @Test

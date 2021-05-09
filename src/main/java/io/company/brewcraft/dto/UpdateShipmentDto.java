@@ -5,24 +5,23 @@ import java.util.Collection;
 
 public class UpdateShipmentDto extends BaseDto {
     private String shipmentNumber;
-    private String lotNumber;
     private String description;
-    private String status;
-    private Long invoiceId;
+    private Long statusId;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
-    private Collection<UpdateShipmentItemDto> items;
+    private Collection<UpdateMaterialLotDto> lots;
     private Integer version;
 
-    public UpdateShipmentDto(String shipmentNumber, String lotNumber, String description, String status, Long invoiceId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateShipmentItemDto> items, Integer version) {
+    public UpdateShipmentDto() {
+    }
+
+    public UpdateShipmentDto(String shipmentNumber, String description, Long statusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateMaterialLotDto> lots, Integer version) {
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
         setDescription(description);
-        setStatus(status);
-        setInvoiceId(invoiceId);
+        setStatusId(statusId);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
-        setItems(items);
+        setLots(lots);
         setVersion(version);
     }
 
@@ -33,15 +32,6 @@ public class UpdateShipmentDto extends BaseDto {
     public void setShipmentNumber(String shipmentNumber) {
         this.shipmentNumber = shipmentNumber;
     }
-
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
-    }
-    
     public String getDescription() {
         return this.description;
     }
@@ -50,20 +40,12 @@ public class UpdateShipmentDto extends BaseDto {
         this.description = description;
     }
 
-    public String getStatus() {
-        return status;
+    public Long getStatusId() {
+        return statusId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(Long invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
     }
 
     public LocalDateTime getDeliveryDueDate() {
@@ -82,12 +64,12 @@ public class UpdateShipmentDto extends BaseDto {
         this.deliveredDate = deliveredDate;
     }
 
-    public Collection<UpdateShipmentItemDto> getItems() {
-        return items;
+    public Collection<UpdateMaterialLotDto> getLots() {
+        return lots;
     }
 
-    public void setItems(Collection<UpdateShipmentItemDto> items) {
-        this.items = items;
+    public void setLots(Collection<UpdateMaterialLotDto> lots) {
+        this.lots = lots;
     }
 
     public Integer getVersion() {
@@ -97,5 +79,4 @@ public class UpdateShipmentDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

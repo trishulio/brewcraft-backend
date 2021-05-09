@@ -3,6 +3,9 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 
 public interface Audited {
+    final String ATTR_CREATED_AT = "createdAt";
+    final String ATTR_LAST_UPDATED = "lastUpdated";
+    
     LocalDateTime getCreatedAt();
 
     void setCreatedAt(LocalDateTime createdAt);

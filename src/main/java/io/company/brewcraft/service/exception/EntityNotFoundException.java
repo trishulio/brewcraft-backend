@@ -15,7 +15,7 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public EntityNotFoundException(String entity, Object entityId) {
-        this(entity, entityId.toString());
+        this(entity, entityId == null ? null : entityId.toString());
     }
 
     public EntityNotFoundException(String entity, String field, String value) {

@@ -51,7 +51,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
+            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of(ProductCategory.FIELD_ID), true);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no products with those categories assigned

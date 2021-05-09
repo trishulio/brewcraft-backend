@@ -3,6 +3,7 @@ package io.company.brewcraft.service.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -38,7 +39,9 @@ public class InvoiceItemMapperTest {
             Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
-            new Material(7L, null, null, null, null, null, null, null, null),
+            new Material(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(1999, 1, 1, 1, 1), 
             1
         );
         InvoiceItemDto dto = mapper.toDto(item);
@@ -48,7 +51,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new QuantityDto("KG", new BigDecimal("4")), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), dto.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), dto.getTax());
-        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), dto.getMaterial());
+        assertEquals(new MaterialDto(7L), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
     
@@ -59,7 +62,6 @@ public class InvoiceItemMapperTest {
 
     @Test
     public void testFromDto_ReturnsInvoice_WhenInvoiceItemDtoIsNotNull() {
-
         InvoiceItemDto dto = new InvoiceItemDto(
             2L,
             "desc2",
@@ -67,7 +69,9 @@ public class InvoiceItemMapperTest {
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             new MoneyDto("CAD", new BigDecimal("20")),
-            new MaterialDto(7L, null, null, null, null, null, null, null, null),
+            new MaterialDto(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(2000, 1, 1, 1, 1), 
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
@@ -77,7 +81,9 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new Material(7L), item.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), item.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), item.getLastUpdated());
         assertEquals(1, dto.getVersion());
     }
 
@@ -104,7 +110,7 @@ public class InvoiceItemMapperTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
         assertEquals(Money.parse("CAD 101"), item.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new Material(7L), item.getMaterial());
         assertEquals(1, item.getVersion());
     }
 

@@ -25,7 +25,7 @@ public class FreightMapperTest {
         FreightDto dto = new FreightDto(new MoneyDto("CAD", new BigDecimal("10")));
         Freight freight = mapper.fromDto(dto);
 
-        assertEquals(new Freight(null, Money.parse("CAD 10")), freight);
+        assertEquals(new Freight(Money.parse("CAD 10")), freight);
     }
     
     @Test
@@ -35,7 +35,7 @@ public class FreightMapperTest {
 
     @Test
     public void testToDto_ReturnsDtoFromPojo() {
-        Freight freight = new Freight(1L, Money.parse("CAD 10"));
+        Freight freight = new Freight(Money.parse("CAD 10"));
         FreightDto dto = mapper.toDto(freight);
 
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10.00"))), dto);

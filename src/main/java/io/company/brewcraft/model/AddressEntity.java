@@ -10,36 +10,38 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 public class AddressEntity {
-    
+
     @Column(name = "address_line_1")
     private String addressLine1;
-    
+
     @Column(name = "address_line_2")
     private String addressLine2;
-    
+
+    @Column(name = "country")
     private String country;
-    
+
+    @Column(name = "province")
     private String province;
-    
+
+    @Column(name = "city")
     private String city;
-    
+
     @Column(name = "postal_code")
     private String postalCode;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     public AddressEntity() {
-        
     }
-    
-    public AddressEntity(String addressLine1, String addressLine2, String country, String province, String city,
-            String postalCode, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+
+    public AddressEntity(String addressLine1, String addressLine2, String country, String province, String city, String postalCode, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+        this();
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.country = country;

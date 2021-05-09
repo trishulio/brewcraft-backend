@@ -1,13 +1,14 @@
 package io.company.brewcraft.service;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.UpdateSupplier;
 import io.company.brewcraft.model.Supplier;
 
 public interface SupplierService {
 
-    public Page<Supplier> getSuppliers(int page, int size, String[] sort, boolean order_asc);
+    public Page<Supplier> getSuppliers(int page, int size, Set<String> sort, boolean orderAscending);
     
     public Supplier getSupplier(Long id);
 

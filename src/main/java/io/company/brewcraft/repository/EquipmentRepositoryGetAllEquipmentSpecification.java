@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 public class EquipmentRepositoryGetAllEquipmentSpecification implements Specification<Equipment> {
@@ -23,7 +24,6 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
     private Set<Long> facilityIds;
 
     public EquipmentRepositoryGetAllEquipmentSpecification() {
-        this(null, null, null, null);
     }
 
     public EquipmentRepositoryGetAllEquipmentSpecification(Set<Long> ids, Set<String> types, Set<String> statuses, Set<Long> facilityIds) {
@@ -44,19 +44,19 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
         List<Predicate> predicates = new ArrayList<Predicate>(10);
         
         if (ids != null && ids.size() > 0) {
-            predicates.add(criteriaBuilder.and(root.get("id").in(ids)));
+            predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_ID).in(ids)));
         }
 
         if (types != null && types.size() > 0) {
-            predicates.add(criteriaBuilder.and(root.get("type").in(types)));
+            predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_TYPE).in(types)));
         }
         
         if (statuses != null && statuses.size() > 0) {
-            predicates.add(criteriaBuilder.and(root.get("status").in(statuses)));
+            predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_STATUS).in(statuses)));
         }
 
         if (facilityIds != null && facilityIds.size() > 0) {
-            predicates.add(criteriaBuilder.and(root.get("facility").get("id").in(facilityIds)));
+            predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_FACILITY).get(Facility.FIELD_ID).in(facilityIds)));
         }
 
         return predicates.toArray(new Predicate[predicates.size()]);

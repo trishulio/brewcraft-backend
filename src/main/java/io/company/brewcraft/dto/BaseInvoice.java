@@ -5,9 +5,17 @@ import java.util.List;
 
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
-import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.service.InvoiceStatusAccessor;
+import io.company.brewcraft.service.PurchaseOrderAccessor;
 
-public interface BaseInvoice<T extends BaseInvoiceItem> {
+public interface BaseInvoice<T extends BaseInvoiceItem<? extends BaseInvoice<T>>> extends InvoiceStatusAccessor, PurchaseOrderAccessor {
+    final String ATTR_DESCRIPTION = "description";
+    final String ATTR_GENERATED_ON = "generatedOn";
+    final String ATTR_RECEIVED_ON = "receivedOn";
+    final String ATTR_PAYMENT_DUE_DATE = "paymentDueDate";
+    final String ATTR_ITEMS = "items";
+    final String ATTR_FREIGHT = "freight";
+
     String getInvoiceNumber();
 
     void setInvoiceNumber(String invoiceNumber);
@@ -27,10 +35,6 @@ public interface BaseInvoice<T extends BaseInvoiceItem> {
     LocalDateTime getPaymentDueDate();
 
     void setPaymentDueDate(LocalDateTime paymentDueDate);
-
-    InvoiceStatus getStatus();
-
-    void setStatus(InvoiceStatus status);
 
     List<T> getItems();
 

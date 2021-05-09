@@ -3,6 +3,7 @@ package io.company.brewcraft.dto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,14 @@ public class InvoiceItemDtoTest {
     }
 
     @Test
-    public void testAllArgs() {
+    public void testIdConstructor_SetsIdValue() {
+        item = new InvoiceItemDto(1L);
+
+        assertEquals(1L, item.getId());
+    }
+
+    @Test
+    public void testAllArgsConstructor() {
         item = new InvoiceItemDto(
             2L,
             "desc2",
@@ -25,7 +33,9 @@ public class InvoiceItemDtoTest {
             new MoneyDto("CAD", new BigDecimal("5")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
             new MoneyDto("CAD", new BigDecimal("8")),
-            new MaterialDto(7L, null, null, null, null, null, null, null, null),
+            new MaterialDto(7L),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            LocalDateTime.of(2000, 1, 1, 1, 1), 
             1
         );
 
@@ -35,7 +45,9 @@ public class InvoiceItemDtoTest {
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
         assertEquals(new MoneyDto("CAD", new BigDecimal("8")), item.getAmount());
-        assertEquals(new MaterialDto(7L, null, null, null, null, null, null, null, null), item.getMaterial());
+        assertEquals(new MaterialDto(7L), item.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), item.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), item.getLastUpdated());
         assertEquals(1, item.getVersion());
     }
 

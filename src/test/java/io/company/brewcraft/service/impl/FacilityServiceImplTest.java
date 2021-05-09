@@ -1,14 +1,7 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -28,10 +21,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Facility;
-import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.model.FacilityAddress;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -51,7 +44,7 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testGetAllFacilities_returnsFacilities() throws Exception {
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         List<Facility> facilityList = Arrays.asList(facility);
         
@@ -88,7 +81,7 @@ public class FacilityServiceImplTest {
     @Test
     public void testGetFacility_returnsFacility() throws Exception {
         Long id = 1L;
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         Optional<Facility> expectedFacilityEntity = Optional.ofNullable(facility);
 
@@ -112,9 +105,9 @@ public class FacilityServiceImplTest {
 
     @Test
     public void testAddFacility_SavesFacility() throws Exception {
-        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
@@ -155,9 +148,9 @@ public class FacilityServiceImplTest {
     public void testPutFacility_Success() throws Exception {
         Long id = 1L;
         
-        Facility putFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility putFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
@@ -199,8 +192,8 @@ public class FacilityServiceImplTest {
         Long id = 1L;
         
         Facility patchedFacility = new Facility(1L, "updatedName", null, null, null, null, null, null, null, null);
-        Facility existingFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Facility persistedFacilityEntity = new Facility(1L, "updatedName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L, null, null, null, null, null, null, null, null, null, null)), List.of(new Storage(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility existingFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Facility persistedFacilityEntity = new Facility(1L, "updatedName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 

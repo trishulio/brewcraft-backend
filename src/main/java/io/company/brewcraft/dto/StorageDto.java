@@ -15,12 +15,14 @@ public class StorageDto extends BaseDto {
     private Integer version;
     
     public StorageDto() {
-        super();
+    }
+
+    public StorageDto(Long id) {
+        setId(id);
     }
     
     public StorageDto(Long id, FacilityBaseDto facility, String name, StorageType type, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.facility = facility;
         this.name = name;
         this.type = type;

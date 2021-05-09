@@ -44,7 +44,7 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
     public Page<Material> getMaterials(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {       
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of("id"), true);            
+            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of(MaterialCategory.FIELD_ID), true);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no materials with those categories assigned

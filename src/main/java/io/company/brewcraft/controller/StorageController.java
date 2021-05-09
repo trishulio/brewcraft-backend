@@ -9,17 +9,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddStorageDto;
 import io.company.brewcraft.dto.PageDto;
@@ -29,23 +19,29 @@ import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.StorageMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class StorageController {
+public class StorageController extends BaseController {
    
     private StorageService storageService;
         
     private StorageMapper storageMapper = StorageMapper.INSTANCE;
     
-    public StorageController(StorageService storageService) {
+    public StorageController(StorageService storageService, AttributeFilter filter) {
+        super(filter);
         this.storageService = storageService;
     }
     
     @GetMapping(value = "/storages" , consumes = MediaType.ALL_VALUE)
-    public PageDto<StorageDto> getAllStorages(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, 
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {        
+    public PageDto<StorageDto> getAllStorages(
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {        
         Page<Storage> storagePage = storageService.getAllStorages(page, size, sort, orderAscending);
         
         List<StorageDto> storageList = storagePage.stream().map(storage -> storageMapper.toDto(storage)).collect(Collectors.toList());
@@ -57,11 +53,9 @@ public class StorageController {
         
     @GetMapping(value = "/storages/{storageId}", consumes = MediaType.ALL_VALUE)
     public StorageDto getStorage(@PathVariable Long storageId) {
-        Validator validator = new Validator();
-
         Storage storage = storageService.getStorage(storageId);
         
-        validator.assertion(storage != null, EntityNotFoundException.class, "Storage", storageId.toString());
+        Validator.assertion(storage != null, EntityNotFoundException.class, "Storage", storageId.toString());
         
         StorageDto storageDto = storageMapper.toDto(storage);
         

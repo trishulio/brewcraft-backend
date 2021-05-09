@@ -58,7 +58,7 @@ public class EquipmentServiceImplTest {
 
     @Test
     public void testGetAllEquipment_returnsEquipment() throws Exception {
-        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         List<Equipment> equipmentList = Arrays.asList(equipmentEntity);
         
         Page<Equipment> expectedEquipmentEntity = new PageImpl<>(equipmentList);
@@ -93,7 +93,7 @@ public class EquipmentServiceImplTest {
     @Test
     public void testGetEquipment_returnsEquipment() throws Exception {
         Long id = 1L;
-        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Equipment> expectedEquipmentEntity = Optional.ofNullable(equipmentEntity);
 
         when(equipmentRepositoryMock.findById(id)).thenReturn(expectedEquipmentEntity);
@@ -117,13 +117,13 @@ public class EquipmentServiceImplTest {
     public void testAddEquipment_Success() throws Exception {
         Long facilityId = 2L;
                 
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
         
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
         
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(equipmentEntity);
 
@@ -160,7 +160,7 @@ public class EquipmentServiceImplTest {
     public void testAddEquipment_throwsWhenFacilityDoesNotExist() throws Exception {
         Long facilityId = 2L;
         
-        Equipment equipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(null);
 
@@ -175,12 +175,12 @@ public class EquipmentServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
 
-        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Equipment equipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment putEquipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
 
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
 
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(equipmentEntity);
 
@@ -218,7 +218,7 @@ public class EquipmentServiceImplTest {
         Long id = 1L;
         Long facilityId = 2L;
 
-        Equipment putEquipment = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment putEquipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(equipmentRepositoryMock.findById(facilityId)).thenReturn(Optional.ofNullable(null));
 
@@ -233,14 +233,14 @@ public class EquipmentServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
         Equipment patchedEquipment = new Equipment(1L, null, "updatedName", null, null, null, null, null, null, null, null);
-        Equipment existingEquipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Equipment persistedEquipmentEntity = new Equipment(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "updatedName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment existingEquipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Equipment persistedEquipmentEntity = new Equipment(1L, new Facility(2L), "updatedName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
 
         when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.of(existingEquipmentEntity));
 
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
         
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(persistedEquipmentEntity);
 

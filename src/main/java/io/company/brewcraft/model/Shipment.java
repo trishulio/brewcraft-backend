@@ -3,6 +3,7 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -11,56 +12,47 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "shipment")
 @Table
-public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>, Identified, Audited {
+public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, BaseShipment<MaterialLot>, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
-    public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_STATUS = "status";
-    public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
     public static final String FIELD_DELIVERED_DATE = "deliveredDate";
-    public static final String FIELD_ITEMS = "items";
+    public static final String FIELD_LOTS = "lots";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_generator")
     @SequenceGenerator(name = "shipment_generator", sequenceName = "shipment_sequence", allocationSize = 1)
     private Long id;
-    
+
     @Column(name = "shipment_number")
     private String shipmentNumber;
-    
-    @Column(name = "lot_number")
-    private String lotNumber;
-    
+
     @Column(name = "description")
     private String description;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipment_status_id", referencedColumnName = "id")
     private ShipmentStatus status;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
-    private Invoice invoice;
-    
+
     @Column(name = "delivery_due_date")
     private LocalDateTime deliveryDueDate;
-    
+
     @Column(name = "delivered_date")
     private LocalDateTime deliveredDate;
-    
+
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MaterialLot> lots;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
-    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ShipmentItem> items;
-    
+
     @Version
     private Integer version;
 
@@ -72,19 +64,17 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
         setId(id);
     }
 
-    public Shipment(Long id, String shipmentNumber, String lotNumber, String description, ShipmentStatus shipmentStatus, Invoice invoice, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
-            List<ShipmentItem> items, Integer version) {
+    public Shipment(Long id, String shipmentNumber, String description, ShipmentStatus shipmentStatus, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
+            List<MaterialLot> lots, Integer version) {
         this(id);
         setShipmentNumber(shipmentNumber);
-        setLotNumber(lotNumber);
         setDescription(description);
         setStatus(shipmentStatus);
-        setInvoice(invoice);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
-        setItems(items);
+        setLots(lots);
         setVersion(version);
     }
 
@@ -109,16 +99,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     }
 
     @Override
-    public String getLotNumber() {
-        return lotNumber;
-    }
-
-    @Override
-    public void setLotNumber(String lotNumber) {
-        this.lotNumber = lotNumber;
-    }
-
-    @Override
     public String getDescription() {
         return description;
     }
@@ -136,16 +116,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     @Override
     public void setStatus(ShipmentStatus status) {
         this.status = status;
-    }
-
-    @Override
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    @Override
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
     }
 
     @Override
@@ -189,27 +159,58 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     }
 
     @Override
-    public List<ShipmentItem> getItems() {
-        return items;
+    public List<MaterialLot> getLots() {
+        List<MaterialLot> lots = null;
+        if (this.lots != null) {
+            lots = this.lots.stream().collect(Collectors.toList());
+        }
+        return lots;
     }
 
     @Override
-    public void setItems(List<ShipmentItem> items) {
-        if (this.getItems() != null) {
-            this.getItems().clear();
-            this.getItems().addAll(items);
-        } else if (items != null) {
-            this.items = new ArrayList<>();
-            items.forEach(item -> this.items.add(item));
+    public void setLots(List<MaterialLot> lots) {
+        if (this.lots == null) {
+            this.lots = new ArrayList<>();
         } else {
-            this.items = null;
+            this.lots.stream().collect(Collectors.toList()).forEach(this::removeLot);
         }
 
-        if (this.getItems() != null) {
-            this.getItems().forEach(item -> item.setShipment(this));
+        if (lots != null) {
+            lots.stream().collect(Collectors.toList()).forEach(this::addLot);
         }
     }
 
+    public void addLot(MaterialLot lot) {
+        if (lot == null) {
+            return;
+        }
+
+        if (this.lots == null) {
+            this.lots = new ArrayList<>();
+        }
+
+        if (lot.getShipment() != this) {            
+            lot.setShipment(this);
+        }
+        
+        if (!this.lots.contains(lot)) {
+            this.lots.add(lot);            
+        }
+    }
+
+    public boolean removeLot(MaterialLot lot) {
+        if (lot == null || this.lots == null) {
+            return false;
+        }
+
+        boolean removed = this.lots.remove(lot);
+        
+        if (removed) {            
+            lot.setShipment(null);
+        }
+
+        return removed;
+    }
     @Override
     public Integer getVersion() {
         return version;
@@ -218,10 +219,5 @@ public class Shipment extends BaseEntity implements UpdateShipment<ShipmentItem>
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    @Override
-    public Shipment clone() {
-        return (Shipment) super.clone();
     }
 }

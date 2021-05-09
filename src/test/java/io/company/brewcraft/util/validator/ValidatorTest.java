@@ -54,19 +54,19 @@ public class ValidatorTest {
     @Test
     public void testAssertion_CreatesAndThrowsExceptionObjectWithMsg_WhenConditionIsFalse() {
         assertThrows(RuntimeException.class, () -> {
-            validator.assertion(false, RuntimeException.class, "This is the error message");
+            Validator.assertion(false, RuntimeException.class, "This is the error message");
         }, "This is the error message");
     }
 
     @Test
     public void testAssertion_ThrowsSpecifiedExceptionType_WhenConditionIsFalse() {
-        assertThrows(RuntimeException.class, () -> validator.assertion(false, RuntimeException.class));
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> validator.assertion(false, ArrayIndexOutOfBoundsException.class));
-        assertThrows(IndexOutOfBoundsException.class, () -> validator.assertion(false, IndexOutOfBoundsException.class));
+        assertThrows(RuntimeException.class, () -> Validator.assertion(false, RuntimeException.class));
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> Validator.assertion(false, ArrayIndexOutOfBoundsException.class));
+        assertThrows(IndexOutOfBoundsException.class, () -> Validator.assertion(false, IndexOutOfBoundsException.class));
     }
 
     @Test
     public void testAssertion_DoesNotThrowException_WhenConditionIsTrue() {
-        validator.assertion(true, RuntimeException.class, "This will never be thrown");
+        Validator.assertion(true, RuntimeException.class, "This will never be thrown");
     }
 }

@@ -1,6 +1,7 @@
 package io.company.brewcraft.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -11,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.*;
+import io.company.brewcraft.dto.AddCategoryDto;
+import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
+import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class ProductCategoryControllerTest {
@@ -27,12 +33,12 @@ public class ProductCategoryControllerTest {
    public void init() {
        productCategoryService = mock(ProductCategoryService.class);
 
-       productCategoryController = new ProductCategoryController(productCategoryService);
+       productCategoryController = new ProductCategoryController(productCategoryService, new AttributeFilter());
    }
 
    @Test
    public void testGetProductCategories() {
-       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, null);
+       ProductCategory category = new ProductCategory(1L, "root", new ProductCategory(2L), null, null, null, null);
    
        List<ProductCategory> categoryList = List.of(category);
        Page<ProductCategory> mPage = mock(Page.class);
@@ -55,10 +61,10 @@ public class ProductCategoryControllerTest {
            Set.of("Lager"),
            Set.of(2L),
            Set.of("Beer"),
-           1,
-           10,
            Set.of("id"),
-           true
+           true,
+           1,
+           10
        );
 
        assertEquals(100, dto.getTotalPages());
@@ -97,7 +103,7 @@ public class ProductCategoryControllerTest {
    public void testAddProductCategory() {
        AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
-       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L), null, null, null, 1);
        
        ArgumentCaptor<ProductCategory> addedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        
@@ -121,7 +127,7 @@ public class ProductCategoryControllerTest {
    public void testPutProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
-       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L), null, null, null, 1);
 
        ArgumentCaptor<ProductCategory> putCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        
@@ -146,7 +152,7 @@ public class ProductCategoryControllerTest {
    public void testPatchProductCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
-       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       ProductCategory category = new ProductCategory(1L, "categoryName", new ProductCategory(2L), null, null, null, 1);
 
        ArgumentCaptor<ProductCategory> patchCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
        

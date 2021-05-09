@@ -4,18 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentItem;
 import io.company.brewcraft.model.ShipmentStatus;
-import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.utils.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class ShipmentTest {
 
@@ -28,42 +30,38 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        List<ShipmentItem> items = List.of(new ShipmentItem(1L, Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), null, new Material(1L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
-            "LOT_1",
             "DESCRIPTION_1",
-            new ShipmentStatus("RECEIVED"),
-            null,
+            new ShipmentStatus(99L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            items,
+            lots,
             1
         );
 
         assertEquals(1L, shipment.getId());
         assertEquals("SHIPMENT_1", shipment.getShipmentNumber());
-        assertEquals("LOT_1", shipment.getLotNumber());
         assertEquals("DESCRIPTION_1", shipment.getDescription());
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-        assertEquals(null, shipment.getInvoice());
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipment.getCreatedAt());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), shipment.getLastUpdated());
-        assertEquals(1, shipment.getItems().size());
+        assertEquals(1, shipment.getLots().size());
         assertEquals(1, shipment.getVersion());
 
-        ShipmentItem item = shipment.getItems().iterator().next();
-        assertEquals(1L, item.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(shipment, item.getShipment());
-        assertEquals(new Material(1L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), item.getLastUpdated());
-        assertEquals(1, item.getVersion());
+        MaterialLot lot = shipment.getLots().iterator().next();
+        assertEquals(1L, lot.getId());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
+        assertEquals(1, lot.getVersion());
     }
 
     @Test
@@ -81,24 +79,10 @@ public class ShipmentTest {
     }
 
     @Test
-    public void testAccessLotNumber() {
-        assertNull(shipment.getLotNumber());
-        shipment.setLotNumber("ABCD-123");
-        assertEquals("ABCD-123", shipment.getLotNumber());
-    }
-
-    @Test
     public void testAccessStatus() {
         assertNull(shipment.getStatus());
-        shipment.setStatus(new ShipmentStatus("RECEIVED"));
-        assertEquals(new ShipmentStatus("RECEIVED"), shipment.getStatus());
-    }
-
-    @Test
-    public void testAccessInvoice() {
-        assertNull(shipment.getInvoice());
-        shipment.setInvoice(new Invoice(1L));
-        assertEquals(new Invoice(1L), shipment.getInvoice());
+        shipment.setStatus(new ShipmentStatus(99L));
+        assertEquals(new ShipmentStatus(99L), shipment.getStatus());
     }
 
     @Test
@@ -130,13 +114,13 @@ public class ShipmentTest {
     }
 
     @Test
-    public void testAccessItems() {
-        assertNull(shipment.getItems());
-        shipment.setItems(List.of(new ShipmentItem(1L)));
+    public void testAccessLots() {
+        assertNull(shipment.getLots());
+        shipment.setLots(List.of(new MaterialLot(1L)));
 
-        ShipmentItem expected = new ShipmentItem(1L);
-        expected.setShipment(shipment);
-        assertEquals(List.of(expected), shipment.getItems());
+        MaterialLot expected = new MaterialLot(1L);
+        expected.setShipment(new Shipment());
+        assertEquals(List.of(expected), shipment.getLots());
     }
 
     @Test
@@ -144,5 +128,79 @@ public class ShipmentTest {
         assertNull(shipment.getVersion());
         shipment.setVersion(1);
         assertEquals(1, shipment.getVersion());
+    }
+    
+
+    @Test
+    public void testAddLot_CreatesNewLotList_WhenLotIsNotNull() {
+        assertNull(shipment.getLots());
+
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testAddLot_AddsLotsToList_WhenLotIsNotNull() {
+        MaterialLot existing = new MaterialLot(0L);
+        shipment.setLots(List.of(existing));
+        assertEquals(List.of(existing), shipment.getLots());
+
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+
+        assertEquals(List.of(existing, lot), shipment.getLots());
+        assertEquals(shipment, existing.getShipment());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testAddLot_AddsLotOnlyOnce_WhenMultipleAdditionsArePerformed() {
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+        shipment.addLot(lot);
+        shipment.addLot(lot);
+
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenListIsNull() {
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenListIsEmpty() {
+        shipment.setLots(new ArrayList<>());
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsFalse_WhenLotExistInList() {
+        shipment.setLots(List.of(new MaterialLot(2L)));
+
+        assertFalse(shipment.removeLot(new MaterialLot(1L)));
+    }
+
+    @Test
+    public void testRemoveLot_ReturnsTrueAndUpdatesLotShipment_WhenLotExist() {
+        MaterialLot lot = new MaterialLot(1L);
+        assertNull(lot.getShipment());
+
+        shipment.addLot(lot);
+        assertEquals(List.of(lot), shipment.getLots());
+        assertEquals(shipment, lot.getShipment());
+
+        assertTrue(shipment.removeLot(lot));
+        assertNull(lot.getShipment());
     }
 }

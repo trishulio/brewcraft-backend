@@ -3,26 +3,16 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface BaseShipment<T extends BaseShipmentItem> {
+import io.company.brewcraft.service.ShipmentStatusAccessor;
+
+public interface BaseShipment<T extends BaseMaterialLot<? extends BaseShipment<T>>> extends ShipmentStatusAccessor {
     String getShipmentNumber();
 
     void setShipmentNumber(String shipmentNumber);
 
-    String getLotNumber();
-
-    void setLotNumber(String lotNumber);
-    
     String getDescription();
-    
+
     void setDescription(String description);
-
-    ShipmentStatus getStatus();
-
-    void setStatus(ShipmentStatus status);
-
-    Invoice getInvoice();
-
-    void setInvoice(Invoice invoice);
 
     LocalDateTime getDeliveryDueDate();
 
@@ -32,7 +22,7 @@ public interface BaseShipment<T extends BaseShipmentItem> {
 
     void setDeliveredDate(LocalDateTime deliveredDate);
 
-    List<T> getItems();
+    List<T> getLots();
 
-    void setItems(List<T> items);
+    void setLots(List<T> items);
 }

@@ -1,6 +1,7 @@
 package io.company.brewcraft.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -11,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
-import io.company.brewcraft.dto.*;
+import io.company.brewcraft.dto.AddCategoryDto;
+import io.company.brewcraft.dto.CategoryDto;
+import io.company.brewcraft.dto.CategoryWithParentDto;
+import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class MaterialCategoryControllerTest {
@@ -27,12 +33,12 @@ public class MaterialCategoryControllerTest {
    public void init() {
        materialCategoryService = mock(MaterialCategoryService.class);
 
-       materialCategoryController = new MaterialCategoryController(materialCategoryService);
+       materialCategoryController = new MaterialCategoryController(materialCategoryService, new AttributeFilter());
    }
 
    @Test
    public void testGetMaterialCategories() {
-       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, null);
+       MaterialCategory category = new MaterialCategory(1L, "root", new MaterialCategory(2L), null, null, null, null);
    
        List<MaterialCategory> categoryList = List.of(category);
        Page<MaterialCategory> mPage = mock(Page.class);
@@ -55,10 +61,10 @@ public class MaterialCategoryControllerTest {
                Set.of("Hop"),
                Set.of(2L),
                Set.of("Ingredient"),
-               1,
-               10,
                Set.of("id"),
-               true
+               true,
+               1,
+               10
        );
 
        assertEquals(100, dto.getTotalPages());
@@ -97,7 +103,7 @@ public class MaterialCategoryControllerTest {
    public void testAddMaterialCategory() {
        AddCategoryDto addCategoryDto = new AddCategoryDto(2L, "categoryName");
               
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L), null, null, null, 1);
        
        ArgumentCaptor<MaterialCategory> addedCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        
@@ -121,7 +127,7 @@ public class MaterialCategoryControllerTest {
    public void testPutMaterialCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
               
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L), null, null, null, 1);
 
        ArgumentCaptor<MaterialCategory> putCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        
@@ -146,7 +152,7 @@ public class MaterialCategoryControllerTest {
    public void testPatchMaterialCategory() {
        UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(2L, "categoryName", 1);
        
-       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L, null, null, null, null, null, null), null, null, null, 1);
+       MaterialCategory category = new MaterialCategory(1L, "categoryName", new MaterialCategory(2L), null, null, null, 1);
 
        ArgumentCaptor<MaterialCategory> patchCategoryCaptor = ArgumentCaptor.forClass(MaterialCategory.class);
        

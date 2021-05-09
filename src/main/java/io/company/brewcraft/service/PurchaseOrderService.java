@@ -6,7 +6,7 @@ import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.service.mapper.PurchaseOrderMapper;
 
-public class PurchaseOrderService {
+public class PurchaseOrderService extends BaseService {
     private static final PurchaseOrderMapper mapper = PurchaseOrderMapper.INSTANCE;
 
     private PurchaseOrderRepository repo;

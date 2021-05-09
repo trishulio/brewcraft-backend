@@ -27,7 +27,7 @@ services:
     restart: always
     volumes:
       - ./db-init-scripts:/docker-entrypoint-initdb.d
-    container_name: postgresdb
+    container_name: brewcraft_postgresdb
     ports:
       - "54321:${POSTGRES_PORT}"
     environment:
@@ -42,7 +42,7 @@ services:
     restart: always
     depends_on: 
       - postgresdb
-    container_name: pgadmin
+    container_name: brewcraft_pgadmin
     ports:
         - "8443:443"
     logging:

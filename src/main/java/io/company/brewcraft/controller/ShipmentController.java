@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import io.company.brewcraft.dto.AddShipmentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
@@ -55,21 +56,19 @@ public class ShipmentController extends BaseController {
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "shipment_numbers") Set<String> shipmentNumbers,
-        @RequestParam(required = false, name = "lot_numbers") Set<String> lotNumbers,
         @RequestParam(required = false, name = "descriptions") Set<String> descriptions,
-        @RequestParam(required = false, name = "statuses") Set<String> statuses,
-        @RequestParam(required = false, name = "invoice_ids") Set<Long> invoiceIds,
+        @RequestParam(required = false, name = "status_ids") Set<Long> statusIds,
         @RequestParam(required = false, name = "delivery_due_date_from") LocalDateTime deliveryDueDateFrom,
         @RequestParam(required = false, name = "delivery_due_date_to") LocalDateTime deliveryDueDateTo,
         @RequestParam(required = false, name = "delivered_date_from") LocalDateTime deliveredDateFrom,
         @RequestParam(required = false, name = "delivered_date_to") LocalDateTime deliveredDateTo,
-        @RequestParam(required = false, name = "sort") Set<String> sort,
-        @RequestParam(name = "order_asc", defaultValue = "true") boolean orderAscending,
-        @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "10") int size,
-        @RequestParam(name = "attr", defaultValue = "") Set<String> attributes
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
-        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, lotNumbers, descriptions, statuses, invoiceIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
+        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statusIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
         List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
         shipments.stream().forEach(shipment -> filter(shipment, attributes));
         
@@ -90,7 +89,7 @@ public class ShipmentController extends BaseController {
         log.debug("Updating shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
 
-        Shipment updated = service.put(updateDto.getInvoiceId(), shipmentId, update);
+        Shipment updated = service.put(shipmentId, update);
 
         log.debug("Put successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
@@ -101,18 +100,18 @@ public class ShipmentController extends BaseController {
         log.debug("Patching shipment with Id: {}", shipmentId);
         Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
 
-        Shipment updated = service.patch(updateDto.getInvoiceId(), shipmentId, update);
+        Shipment updated = service.patch(shipmentId, update);
 
         log.debug("Patch successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
     }
 
     @PostMapping("/shipments")
-    public ShipmentDto addShipment(@RequestBody @Valid @NotNull UpdateShipmentDto addDto) {
+    public ShipmentDto addShipment(@RequestBody @Valid @NotNull AddShipmentDto addDto) {
         log.debug("Adding a new shipment item");
         Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
 
-        Shipment added = service.add(addDto.getInvoiceId(), shipment);
+        Shipment added = service.add(shipment);
 
         log.debug("Added a new shipment item with Id: {}", shipment.getId());
         return ShipmentMapper.INSTANCE.toDto(added);

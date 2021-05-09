@@ -7,22 +7,52 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 
 import io.company.brewcraft.data.CheckedFunction;
 
 public class ReflectionManipulator {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionManipulator.class);
 
+    private LoadingCache<Class<?>, Set<String>> propNamesCache;
+
     public boolean equals(Object o, Object that) {      
         return EqualsBuilder.reflectionEquals(o, that);
     }
 
     public static final ReflectionManipulator INSTANCE = new ReflectionManipulator();
+
+    public ReflectionManipulator() {
+        this.propNamesCache = CacheBuilder
+                              .newBuilder()
+                              .build(new CacheLoader<Class<?>, Set<String>>() {
+                                    @Override
+                                    public Set<String> load(Class<?> clazz) throws Exception {
+                                        Set<String> propertyNames = null;
+                        
+                                        Method[] methods = clazz.getMethods();
+                                        propertyNames = Arrays.stream(methods)
+                                                        .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
+                                                        .map(method -> method.getName().replaceFirst("get|set", ""))
+                                                        .map(prop -> {
+                                                            char c = Character.toLowerCase(prop.charAt(0));
+                                                            String l = Character.toString(c);
+                                                            return prop.replaceFirst("\\w", l);
+                                                        })
+                                                        .collect(ImmutableSet.toImmutableSet());
+                                        return propertyNames;
+                                    }
+        });
+    }
 
     public void copy(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
         if (o1 == null || o2 == null) {
@@ -60,34 +90,13 @@ public class ReflectionManipulator {
         }
     }
 
-    public Set<String> getPropertyNames(Object o) {
-        Set<String> propertyNames = null;
-        try {
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(o.getClass(), Object.class).getPropertyDescriptors();
-
-            propertyNames = Arrays.stream(pds).map(pd -> pd.getName()).collect(Collectors.toSet());
-        } catch (IntrospectionException e) {
-            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
-            handleException(msg, e);
-        }
-
-        return propertyNames;
-    }
-
     public Set<String> getPropertyNames(Class<?> clazz) {
-        Set<String> propertyNames = null;
+        try {
+            return this.propNamesCache.get(clazz);
 
-        Method[] methods = clazz.getMethods();
-        propertyNames = Arrays.stream(methods)
-                        .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
-                        .map(method -> method.getName().replaceFirst("get|set", ""))
-                        .map(prop -> {
-                            char c = Character.toLowerCase(prop.charAt(0));
-                            String l = Character.toString(c);
-                            return prop.replaceFirst("\\w", l);
-                        }).collect(Collectors.toSet());
-
-        return propertyNames;
+        } catch (ExecutionException e) {
+            throw new RuntimeException(String.format("Failed to fetch properties names because: %s", e.getMessage()), e);
+        }
     }
 
     private void handleException(String msg, Exception e) {

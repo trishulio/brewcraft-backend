@@ -4,14 +4,23 @@ import javax.measure.Quantity;
 
 import org.joda.money.Money;
 
-public interface BaseInvoiceItem {
+import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.service.MaterialAccessor;
+
+public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem<T>>> extends MaterialAccessor {
+    final String ATTR_DESCRIPTION = "description";
+    final String ATTR_INVOICE = "invoice";
+    final String ATTR_QUANTITY = "quantity";
+    final String ATTR_PRICE = "price";
+    final String ATTR_TAX = "tax";
+
     String getDescription();
 
     void setDescription(String description);
     
-    Invoice getInvoice();
+    T getInvoice();
     
-    void setInvoice(Invoice invoice);
+    void setInvoice(T invoice);
 
     Quantity<?> getQuantity();
 
@@ -24,8 +33,4 @@ public interface BaseInvoiceItem {
     Tax getTax();
 
     void setTax(Tax tax);
-
-    Material getMaterial();
-
-    void setMaterial(Material material);
 }

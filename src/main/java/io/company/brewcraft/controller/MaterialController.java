@@ -9,17 +9,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.MaterialDto;
@@ -29,27 +19,32 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.MaterialMapper;
+import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/materials", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class MaterialController {
+public class MaterialController extends BaseController {
     
     private MaterialService materialService;
     
     private MaterialMapper materialMapper = MaterialMapper.INSTANCE;
         
-    public MaterialController(MaterialService materialService) {
+    public MaterialController(MaterialService materialService, AttributeFilter filter) {
+        super(filter);
         this.materialService = materialService;
     }
     
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<MaterialDto> getMaterials(
-            @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false) Set<Long> categoryIds,
-            @RequestParam(required = false) Set<String> categoryNames,
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "id") Set<String> sort, @RequestParam(defaultValue = "true") boolean orderAscending) {
+        @RequestParam(required = false) Set<Long> ids,
+        @RequestParam(required = false) Set<Long> categoryIds,
+        @RequestParam(required = false) Set<String> categoryNames,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+    ) {
         
         Page<Material> materialsPage = materialService.getMaterials(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
         
@@ -63,11 +58,9 @@ public class MaterialController {
         
     @GetMapping(value = "/{materialId}", consumes = MediaType.ALL_VALUE)
     public MaterialDto getMaterial(@PathVariable Long materialId) {
-        Validator validator = new Validator();
-
         Material material = materialService.getMaterial(materialId);
         
-        validator.assertion(material != null, EntityNotFoundException.class, "Material", materialId.toString());
+        Validator.assertion(material != null, EntityNotFoundException.class, "Material", materialId.toString());
 
         return materialMapper.toDto(material);
     }

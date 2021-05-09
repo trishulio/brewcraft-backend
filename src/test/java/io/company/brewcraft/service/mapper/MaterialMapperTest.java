@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.MaterialDto;
-import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.utils.SupportedUnits;
 
 public class MaterialMapperTest {
@@ -24,10 +24,10 @@ public class MaterialMapperTest {
 
     @Test
     public void testFromDto_ReturnsEntity_WhenDtoIsNotNull() {
-        MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L, null, null, null), null, null, "testUPC", "kg", 1);
+        MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", 1);
         Material material = materialMapper.fromDto(dto);
         
-        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, null, null, 1), material);
+        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, null, null, 1), material);
     }
 
     @Test
@@ -44,10 +44,10 @@ public class MaterialMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L, null, null, null, null, null, null), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialDto dto = materialMapper.toDto(material);
 
-        assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L, null, null, null), null, null, "testUPC", "kg", 1), dto);
+        assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", 1), dto);
     }
 
     

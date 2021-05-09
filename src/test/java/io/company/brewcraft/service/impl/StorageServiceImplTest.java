@@ -52,7 +52,7 @@ public class StorageServiceImplTest {
 
     @Test
     public void testGetStorages_returnsStorages() throws Exception {
-        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<Storage> storageList = Arrays.asList(storageEntity);
         
@@ -84,7 +84,7 @@ public class StorageServiceImplTest {
     @Test
     public void testGetStorage_returnsStorage() throws Exception {
         Long id = 1L;
-        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Storage> expectedStorageEntity = Optional.ofNullable(storageEntity);
 
         when(storageRepositoryMock.findById(id)).thenReturn(expectedStorageEntity);
@@ -104,13 +104,13 @@ public class StorageServiceImplTest {
     public void testAddStorage_Success() throws Exception {
         Long facilityId = 2L;
         
-        Storage storage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storage = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
         
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
         
         when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(storageEntity);
 
@@ -139,7 +139,7 @@ public class StorageServiceImplTest {
     public void testAddStorage_throwsWhenFacilityDoesNotExist() throws Exception {
         Long facilityId = 2L;
         
-        Storage storage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storage = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(null);
 
@@ -154,12 +154,12 @@ public class StorageServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
 
-        Storage putStorage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Storage storageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage putStorage = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage storageEntity = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
 
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
 
         when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(storageEntity);
 
@@ -189,7 +189,7 @@ public class StorageServiceImplTest {
         Long id = 1L;
         Long facilityId = 2L;
 
-        Storage putStorage = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage putStorage = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(storageRepositoryMock.findById(facilityId)).thenReturn(Optional.ofNullable(null));
 
@@ -204,14 +204,14 @@ public class StorageServiceImplTest {
         Long facilityId = 2L;
         Long id = 1L;
         Storage patchedStorage = new Storage(1L, null, "updatedName", null, null, null, null);
-        Storage existingStorageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Storage persistedStorageEntity = new Storage(1L, new Facility(2L, null, null, null, null, null, null, null, null, null), "updatedName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage existingStorageEntity = new Storage(1L, new Facility(2L), "testName1", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Storage persistedStorageEntity = new Storage(1L, new Facility(2L), "updatedName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Storage> persistedStorageCaptor = ArgumentCaptor.forClass(Storage.class);
 
         when(storageRepositoryMock.findById(id)).thenReturn(Optional.of(existingStorageEntity));
 
-        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L, null, null, null, null, null, null, null, null, null));
+        when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
         
         when(storageRepositoryMock.saveAndFlush(persistedStorageCaptor.capture())).thenReturn(persistedStorageEntity);
 

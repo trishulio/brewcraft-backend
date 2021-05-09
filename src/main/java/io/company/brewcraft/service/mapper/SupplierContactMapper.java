@@ -2,6 +2,8 @@ package io.company.brewcraft.service.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -27,11 +29,27 @@ public interface SupplierContactMapper {
     
     SupplierContactWithSupplierDto toDtoWithSupplier(SupplierContact contact);
     
+    @Mappings({
+        @Mapping(target = SupplierContact.ATTR_ID, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_VERSION, ignore = true)
+    })
     SupplierContact fromDto(AddSupplierContactDto contactDto);
     
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mappings({
+        @Mapping(target = SupplierContact.ATTR_ID, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_CREATED_AT, ignore = true),
+    })
     SupplierContact fromDto(UpdateSupplierContactDto contactDto);
     
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mappings({
+        @Mapping(target = SupplierContact.ATTR_ID, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = SupplierContact.ATTR_CREATED_AT, ignore = true),
+    })
     SupplierContact fromDto(UpdateSupplierContactWithSupplierDto contactDto);        
 }

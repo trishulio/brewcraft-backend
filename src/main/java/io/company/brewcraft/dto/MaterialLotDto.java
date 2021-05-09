@@ -2,26 +2,32 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-public class ShipmentItemDto extends BaseDto{
+public class MaterialLotDto extends BaseDto{
     private Long id;
+    private String lotNumber;
     private QuantityDto qty;
     private MaterialDto material;
+    private InvoiceItemDto invoiceItem;
+    private StorageDto storage;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private Integer version;
 
-    public ShipmentItemDto() {
+    public MaterialLotDto() {
     }
 
-    public ShipmentItemDto(Long id) {
+    public MaterialLotDto(Long id) {
         this();
         setId(id);
     }
 
-    public ShipmentItemDto(Long id, QuantityDto qty, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLotDto(Long id, String lotNumber, QuantityDto qty, MaterialDto material, InvoiceItemDto invoiceItem, StorageDto storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        setLotNumber(lotNumber);
         setQuantity(qty);
         setMaterial(material);
+        setInvoiceItem(invoiceItem);
+        setStorage(storage);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -33,6 +39,14 @@ public class ShipmentItemDto extends BaseDto{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLotNumber() {
+        return this.lotNumber;
+    }
+    
+    public void setLotNumber(String lotNumber) {
+        this.lotNumber = lotNumber;
     }
 
     public QuantityDto getQuantity() {
@@ -49,6 +63,22 @@ public class ShipmentItemDto extends BaseDto{
 
     public void setMaterial(MaterialDto material) {
         this.material = material;
+    }
+
+    public InvoiceItemDto getInvoiceItem() {
+        return this.invoiceItem;
+    }
+
+    public void setInvoiceItem(InvoiceItemDto invoiceItem) { 
+        this.invoiceItem = invoiceItem;
+    }
+
+    public StorageDto getStorage() {
+        return this.storage;
+    }
+
+    public void setStorage(StorageDto storage) {
+        this.storage = storage;
     }
 
     public LocalDateTime getCreatedAt() {

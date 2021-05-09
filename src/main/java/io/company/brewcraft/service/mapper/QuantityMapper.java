@@ -22,7 +22,6 @@ public abstract class QuantityMapper {
     @Mappings({ @Mapping(source = "unit.symbol", target = "symbol") })
     public abstract QuantityDto toDto(Quantity<?> quantity);
 
-    @Mappings({ @Mapping(target = "id", ignore = true) })
     public abstract QuantityEntity toEntity(Quantity<?> quantity);
 
     public Quantity<?> fromDto(QuantityDto dto) {

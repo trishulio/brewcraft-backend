@@ -1,13 +1,12 @@
 package io.company.brewcraft.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,14 @@ public class SupplierTest {
     }
     
     @Test
-    public void testConstructor() {
+    public void testIdArgConstructor() {
+        supplier = new Supplier(1L);
+        
+        assertEquals(1L, supplier.getId());
+    }
+    
+    @Test
+    public void testAllArgConstructor() {
         Long id = 1L;
         String name = "Supplier1";
         SupplierAddress address = new SupplierAddress();

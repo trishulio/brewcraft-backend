@@ -50,7 +50,7 @@ public class ProductCategoryServiceImplTest {
 
     @Test
     public void testGetProductCategories_returnsProductCategories() throws Exception {
-        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(2L, null, null, null, null, null, null), Set.of(new ProductCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(2L), Set.of(new ProductCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<ProductCategory> productCategoryEntities = Arrays.asList(productCategoryEntity);
         
@@ -83,7 +83,7 @@ public class ProductCategoryServiceImplTest {
     @Test
     public void testGetProductCategory_returnsProductCategory() throws Exception {
         Long id = 1L;
-        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(2L, null, null, null, null, null, null), Set.of(new ProductCategory(3L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(2L), Set.of(new ProductCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<ProductCategory> expectedProductCategoryEntity = Optional.ofNullable(productCategoryEntity);
 
         when(productCategoryRepositoryMock.findById(id)).thenReturn(expectedProductCategoryEntity);
@@ -225,9 +225,9 @@ public class ProductCategoryServiceImplTest {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
-        ProductCategory putCategory = new ProductCategory(null, "testName", new ProductCategory(1L, null, null, null, null, null, null), Set.of(new ProductCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory putCategory = new ProductCategory(null, "testName", new ProductCategory(1L), Set.of(new ProductCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         ProductCategory productCategoryParent = new ProductCategory();
-        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(1L, null, null, null, null, null, null), Set.of(new ProductCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(1L), Set.of(new ProductCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
         
@@ -279,8 +279,8 @@ public class ProductCategoryServiceImplTest {
     public void testPatchProductCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
         ProductCategory patchedCategory = new ProductCategory(1L, "updatedName", null, null, null, null, null);
-        ProductCategory existingProductCategoryEntity = new ProductCategory(1L, "testName", null, Set.of(new ProductCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        ProductCategory persistedProductCategoryEntity = new ProductCategory(1L, "updatedName", null, Set.of(new ProductCategory(2L, null, null, null, null, null, null)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory existingProductCategoryEntity = new ProductCategory(1L, "testName", null, Set.of(new ProductCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        ProductCategory persistedProductCategoryEntity = new ProductCategory(1L, "updatedName", null, Set.of(new ProductCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
 

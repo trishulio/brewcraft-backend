@@ -1,8 +1,12 @@
 package io.company.brewcraft.model;
 
+import java.time.LocalDateTime;
+
 import javax.measure.Quantity;
 import javax.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 
 import io.company.brewcraft.service.MoneySupplier;
@@ -11,7 +15,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "invoice_item")
 @Table
-public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem, Identified {
+public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem<Invoice>, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_QUANTITY = "quantity";
@@ -31,21 +35,38 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "qty_id", referencedColumnName = "id")
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol"))
+    })
     private QuantityEntity quantity;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
-    @JoinColumn(name = "price_id", referencedColumnName = "id")
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "amount", column = @Column(name = "price_amount"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "price_currency_code", referencedColumnName = "numeric_code"))
+    })
     private MoneyEntity price;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
-    @JoinColumn(name = "tax_id", referencedColumnName = "id")
+    @Embedded
     private Tax tax;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
     private Material material;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
 
     @Version
     private Integer version;
@@ -58,13 +79,15 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
         setId(id);
     }
 
-    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, Integer version) {
+    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setDescription(description);
         setQuantity(quantity);
         setPrice(price);
         setTax(tax);
         setMaterial(material);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setVersion(version);
     }
 
@@ -87,15 +110,23 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public Invoice getInvoice() {
         return this.invoice;
     }
-    
+
     @Override
     public void setInvoice(Invoice invoice) {
+        if (this.invoice != null) {
+            this.invoice.removeItem(this);
+        }
+
         this.invoice = invoice;
+
+        if (this.invoice != null) {
+            this.invoice.addItem(this);
+        }
     }
 
     @Override
@@ -155,10 +186,30 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
         Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
         Money price = this.getPrice() != null ? this.getPrice() : null;
 
-        if (qty != null && price != null) {            
+        if (qty != null && price != null) {
             amount = price.multipliedBy(qty.longValue());
         }
 
         return amount;
+    }
+
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public LocalDateTime getLastUpdated() {
+        return this.lastUpdated;
+    }
+
+    @Override
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

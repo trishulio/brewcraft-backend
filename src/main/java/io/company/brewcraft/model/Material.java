@@ -19,7 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 
 @Entity(name = "MATERIAL")
-public class Material extends BaseEntity {
+public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";
@@ -78,74 +78,92 @@ public class Material extends BaseEntity {
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
     
+    @Override
     public MaterialCategory getCategory() {
         return category;
     }
 
+    @Override
     public void setCategory(MaterialCategory category) {
         this.category = category;
     }
 
+    @Override
     public String getUPC() {
         return upc;
     }
 
+    @Override
     public void setUPC(String upc) {
         this.upc = upc;
     }
     
+    @Override
     public Unit<?> getBaseQuantityUnit() {
         return QuantityUnitMapper.INSTANCE.fromEntity(this.baseQuantityUnit);
     }
 
+    @Override
     public void setBaseQuantityUnit(Unit<?> baseQuantityUnit) {
         this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);    
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime created) {
         this.createdAt = created;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }
 
+    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,13 +58,13 @@ public class InvoiceController extends BaseController {
         @RequestParam(required = false, name = "purchase_order_ids") Set<Long> purchaseOrderIds,
         @RequestParam(required = false, name = "freight_amt_from") BigDecimal freightAmtFrom,
         @RequestParam(required = false, name = "freight_amt_to") BigDecimal freightAmtTo,
-        @RequestParam(required = false, name = "status") Set<String> status,
-        @RequestParam(required = false, name = "supplier_id") Set<Long> supplierIds,
-        @RequestParam(required = false, name = "sort") Set<String> sort,         
-        @RequestParam(name="order_asc", defaultValue = "true") boolean orderAscending,
-        @RequestParam(name="page", defaultValue = "0") int page,
-        @RequestParam(name="size", defaultValue = "10") int size,
-        @RequestParam(defaultValue = "", name="attr") Set<String> attributes
+        @RequestParam(required = false, name = "status_ids") Set<Long> statusIds,
+        @RequestParam(required = false, name = "supplier_ids") Set<Long> supplierIds,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<Invoice> invoices = invoiceService.getInvoices(
             ids,
@@ -82,7 +81,7 @@ public class InvoiceController extends BaseController {
             purchaseOrderIds,
             freightAmtFrom,
             freightAmtTo,
-            status,
+            statusIds,
             supplierIds,
             sort,
             orderAscending,
@@ -93,7 +92,7 @@ public class InvoiceController extends BaseController {
     }
 
     @GetMapping("/invoices/{invoiceId}")
-    public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Size(min = 1) @NotNull @RequestParam(required = false, name = "attr") Set<String> attributes) {
+    public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         Invoice invoice = invoiceService.getInvoice(invoiceId);
         Validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
@@ -103,17 +102,17 @@ public class InvoiceController extends BaseController {
         return dto;
     }
 
-    @DeleteMapping("/invoices/{invoiceId}")
+    @DeleteMapping("/invoices")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public void deleteInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId) {
-        invoiceService.delete(invoiceId);
+    public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
+        return invoiceService.delete(invoiceIds);
     }
 
     @PostMapping("/invoices")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@Valid @RequestBody @NotNull AddInvoiceDto payload) {
+    public InvoiceDto addInvoice(@Valid @NotNull @RequestBody AddInvoiceDto payload) {
         BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice added = invoiceService.add(payload.getPurchaseOrderId(), addition);
+        Invoice added = invoiceService.add(addition);
 
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
 
@@ -125,7 +124,7 @@ public class InvoiceController extends BaseController {
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        Invoice invoice = invoiceService.put(payload.getPurchaseOrderId(), invoiceId, update);
+        Invoice invoice = invoiceService.put(invoiceId, update);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;
@@ -136,7 +135,7 @@ public class InvoiceController extends BaseController {
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
         UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
 
-        Invoice invoice = invoiceService.patch(payload.getPurchaseOrderId(), invoiceId, patch);
+        Invoice invoice = invoiceService.patch(invoiceId, patch);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;        

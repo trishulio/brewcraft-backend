@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import io.company.brewcraft.data.CheckedFunction;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
+@SuppressWarnings("unchecked")
 public class BaseEntityTest {
     class TestBaseEntity extends BaseEntity {
         private Integer x;

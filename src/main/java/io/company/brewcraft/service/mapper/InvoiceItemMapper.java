@@ -16,17 +16,40 @@ public interface InvoiceItemMapper {
 
     InvoiceItemDto toDto(InvoiceItem item);
 
+    @Mappings({
+        @Mapping(target = InvoiceItem.ATTR_ID),
+        @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_VERSION, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_DESCRIPTION, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_MATERIAL, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_PRICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_QUANTITY, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_TAX, ignore = true)
+    })
+    InvoiceItem fromDto(Long id);
+
+    @Mappings({
+        @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
+    })
     InvoiceItem fromDto(InvoiceItemDto dto);
 
     @Mappings({
-        @Mapping(source = "materialId", target = "material")
+        @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId"),
+        @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     })
     InvoiceItem fromDto(UpdateInvoiceItemDto dto);
 
     @Mappings({
-        @Mapping(source = "materialId", target = "material"),
-        @Mapping(target = "id", ignore = true),
-        @Mapping(target = "version", ignore = true)
+        @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId"),
+        @Mapping(target = InvoiceItem.ATTR_ID, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_VERSION, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     })
     InvoiceItem fromDto(AddInvoiceItemDto dto);
 }

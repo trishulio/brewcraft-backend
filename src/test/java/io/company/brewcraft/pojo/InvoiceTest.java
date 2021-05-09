@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.money.CurrencyUnit;
@@ -30,18 +31,17 @@ public class InvoiceTest {
 
     @Test
     public void testAllArgsConstructor() {
-        invoice = new Invoice(
-            12345L,
+        invoice = new Invoice(12345L,
             "ABCDE-12345",
             "desc1",
             new PurchaseOrder(1L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
-            new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+            new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
-            new InvoiceStatus(4L, "FINAL"),
+            new InvoiceStatus(99L),
             List.of(new InvoiceItem()),
             1
         );
@@ -53,10 +53,10 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-        assertEquals(new Freight(1L, Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
+        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-        assertEquals(new InvoiceStatus(4L, "FINAL"), invoice.getStatus());
+        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
         assertNull(invoice.getAmount());
         assertNull(invoice.getTax());
         assertEquals(1, invoice.getItems().size());
@@ -131,15 +131,15 @@ public class InvoiceTest {
     @Test
     public void testAccessStatus() {
         assertNull(invoice.getStatus());
-        invoice.setStatus(new InvoiceStatus(1L, "FINAL"));
-        assertEquals(new InvoiceStatus(1L, "FINAL"), invoice.getStatus());
+        invoice.setStatus(new InvoiceStatus(99L));
+        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
     }
 
     @Test
     public void testAccessFreight() {
         assertNull(invoice.getFreight());
-        invoice.setFreight(new Freight(1L, Money.parse("CAD 10")));
-        assertEquals(new Freight(1L, Money.parse("CAD 10")), invoice.getFreight());
+        invoice.setFreight(new Freight(Money.parse("CAD 10")));
+        assertEquals(new Freight(Money.parse("CAD 10")), invoice.getFreight());
     }
 
     @Test
@@ -152,12 +152,14 @@ public class InvoiceTest {
     @Test
     public void testAccessItems() {
         assertNull(invoice.getItems());
-        invoice.setItems(List.of(new InvoiceItem(2L)));
+        InvoiceItem item = new InvoiceItem(2L);
+        invoice.setItems(List.of(item));
 
         InvoiceItem expected = new InvoiceItem(2L);
-        expected.setInvoice(invoice);
+        expected.setInvoice(new Invoice());
 
         assertEquals(List.of(expected), invoice.getItems());
+        assertEquals(invoice, item.getInvoice());
     }
 
     @Test
@@ -182,5 +184,78 @@ public class InvoiceTest {
 
         invoice.setItems(List.of(item1, item2));
         assertEquals(new Tax(Money.parse("CAD 300")), invoice.getTax());
+    }
+
+    @Test
+    public void testAddItem_CreatesNewItemList_WhenItemIsNotNull() {
+        assertNull(invoice.getItems());
+
+        InvoiceItem item = new InvoiceItem(1L);
+        assertNull(item.getInvoice());
+
+        invoice.addItem(item);
+
+        assertEquals(List.of(item), invoice.getItems());
+        assertEquals(invoice, item.getInvoice());
+    }
+
+    @Test
+    public void testAddItem_AddsItemsToList_WhenItemIsNotNull() {
+        InvoiceItem existing = new InvoiceItem(0L);
+        invoice.setItems(List.of(existing));
+        assertEquals(List.of(existing), invoice.getItems());
+
+        InvoiceItem item = new InvoiceItem(1L);
+        assertNull(item.getInvoice());
+
+        invoice.addItem(item);
+
+        assertEquals(List.of(existing, item), invoice.getItems());
+        assertEquals(invoice, existing.getInvoice());
+        assertEquals(invoice, item.getInvoice());
+    }
+
+    @Test
+    public void testAddItem_AddsItemOnlyOnce_WhenMultipleAdditionsArePerformed() {
+        InvoiceItem item = new InvoiceItem(1L);
+        assertNull(item.getInvoice());
+
+        invoice.addItem(item);
+        invoice.addItem(item);
+        invoice.addItem(item);
+
+        assertEquals(List.of(item), invoice.getItems());
+        assertEquals(invoice, item.getInvoice());
+    }
+
+    @Test
+    public void testRemoveItem_ReturnsFalse_WhenListIsNull() {
+        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+    }
+
+    @Test
+    public void testRemoveItem_ReturnsFalse_WhenListIsEmpty() {
+        invoice.setItems(new ArrayList<>());
+        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+    }
+
+    @Test
+    public void testRemoveItem_ReturnsFalse_WhenItemExistInList() {
+        invoice.setItems(List.of(new InvoiceItem(2L)));
+
+        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+    }
+
+    @Test
+    public void testRemoveItem_ReturnsTrueAndUpdatesItemInvoice_WhenItemExist() {
+        InvoiceItem item = new InvoiceItem(1L);
+        assertNull(item.getInvoice());
+
+        invoice.addItem(item);
+        assertEquals(List.of(item), invoice.getItems());
+        assertEquals(invoice, item.getInvoice());
+
+        assertTrue(invoice.removeItem(item));
+        assertNull(item.getInvoice());
     }
 }
