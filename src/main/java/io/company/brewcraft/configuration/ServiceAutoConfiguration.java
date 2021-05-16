@@ -1,5 +1,8 @@
 package io.company.brewcraft.configuration;
 
+import io.company.brewcraft.service.factory.ShipmentFactory;
+import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
+import io.company.brewcraft.service.procurement.ProcurementService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -183,5 +186,17 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(UserService.class)
     public UserService userService(UserRepository userRepository, IdentityProviderClient identityProviderClient, UtilityProvider utilProvider) {
         return new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ShipmentFactory.class)
+    public ShipmentFactory shipmentFactory() {
+        return new ShipmentFactory();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ProcurementService.class)
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService, UtilityProvider utilProvider) {
+        return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService, shipmentFactory(), utilProvider);
     }
 }
