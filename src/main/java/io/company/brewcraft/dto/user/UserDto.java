@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto.user;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.company.brewcraft.dto.BaseDto;
@@ -17,18 +18,46 @@ public class UserDto extends BaseDto {
     private String lastName;
 
     private String email;
+    
+    private String phoneNumber;
+    
+    private String imageUrl;
 
     private UserStatusDto status;
 
     private UserSalutationDto salutation;
 
-    private String phoneNumber;
-
     private List<UserRoleDto> roles;
-
-    private String imageUrl;
+    
+    private LocalDateTime createdAt;
+    
+    private LocalDateTime lastUpdated;
 
     private Integer version;
+    
+    public UserDto() {
+    }
+    
+    public UserDto(Long id) {
+        this();
+        setId(id);
+    }
+    
+    public UserDto(Long id, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setDisplayName(displayName);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setImageUrl(imageUrl);
+        setStatus(status);
+        setSalutation(salutation);
+        setRoles(roles);
+        setCreatedAt(createdAt);
+        setLastName(lastName);
+        setVersion(version);
+    }
 
     public Long getId() {
         return id;
@@ -116,6 +145,22 @@ public class UserDto extends BaseDto {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public Integer getVersion() {

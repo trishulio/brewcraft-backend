@@ -45,6 +45,18 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, U
 
     @Version
     private Integer version;
+    
+    public UserRole() {
+    }
+    
+    public UserRole(Long id) {
+        setId(id);
+    }
+    
+    public UserRole(UserRoleType roleType, User user) {
+        setRoleType(roleType);
+        setUser(user);
+    }
 
     @Override
     public Long getId() {

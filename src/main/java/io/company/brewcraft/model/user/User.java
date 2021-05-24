@@ -73,6 +73,30 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+    
+    public User() {
+    }
+    
+    public User(Long id) {
+        this();
+        setId(id);
+    }
+    
+    public User(Long id, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setDisplayName(displayName);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setStatus(status);
+        setImageUrl(imageUrl);
+        setRoles(roles);
+        setSalutation(salutation);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
+    }
 
     @Override
     public Long getId() {

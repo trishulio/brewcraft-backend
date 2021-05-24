@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -16,12 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.PageDto;
-import io.company.brewcraft.dto.common.FixedTypeDto;
 import io.company.brewcraft.dto.user.AddUserDto;
 import io.company.brewcraft.dto.user.AddUserRoleDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
 import io.company.brewcraft.dto.user.UserDto;
-import io.company.brewcraft.model.common.FixedTypeEntity;
+import io.company.brewcraft.dto.user.UserRoleDto;
+import io.company.brewcraft.dto.user.UserSalutationDto;
+import io.company.brewcraft.dto.user.UserStatusDto;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserRoleType;
@@ -34,79 +36,193 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class UserControllerTest {
 
-    private UserService userService;
+    private UserService mService;
 
-    private UserController userController;
+    private UserController controller;
 
     @BeforeEach
     public void init() {
-        userService = mock(UserService.class);
-        userController = new UserController(userService, new AttributeFilter());
+        mService = mock(UserService.class);
+        controller = new UserController(mService, new AttributeFilter());
     }
 
     @Test
     public void testGetUser_ThrowsEntityNotFoundException_WhenUserDoesNotExist() {
-        final Long userId = 1L;
-        when(userService.getUser(userId)).thenReturn(null);
+        when(mService.getUser(1L)).thenReturn(null);
 
-        assertThrows(EntityNotFoundException.class, () -> userController.getUser(userId));
+        assertThrows(EntityNotFoundException.class, () -> controller.getUser(1L));
     }
 
     @Test
     public void testGetUser_ReturnsUserDto_WhenUserExists() {
-        final Long userId = 1L;
-        final User user = createUser(userId);
-        when(userService.getUser(userId)).thenReturn(user);
+        User user = new User(
+            1L,
+            "DISPLAY_NAME",
+            "FIRST_NAME",
+            "LAST_NAME",
+            "EMAIL",
+            "PHONE_NUMBER",
+            "IMAGE_URL",
+            new UserStatus(1L),
+            new UserSalutation(2L),
+            List.of(new UserRole(3L)),
+            LocalDateTime.of(1999, 1, 1, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 0, 0),
+            1
+        );
 
-        final UserDto userDto = userController.getUser(userId);
+        doReturn(user).when(mService).getUser(1L);
 
-        assertEquals(userId, userDto.getId());
+        UserDto dto = controller.getUser(1L);
+
+        UserDto expected = new UserDto(
+            1L,
+            "DISPLAY_NAME",
+            "FIRST_NAME",
+            "LAST_NAME",
+            "EMAIL",
+            "PHONE_NUMBER",
+            "IMAGE_URL",
+            new UserStatusDto(1L),
+            new UserSalutationDto(2L),
+            List.of(new UserRoleDto(3L)),
+            LocalDateTime.of(1999, 1, 1, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 0, 0),
+            1            
+        );
+        
+        assertEquals(expected, dto);
     }
 
     @Test
     public void testGetUsers_ReturnsUserPageDtoMatchedRequestParameters_WhenAttributeValuesProvided() {
-        final Set<Long> ids = Collections.singleton(1L);
-        final Set<Long> excludeIds = Collections.singleton(2L);
-        final Set<String> userNames = Collections.singleton("testUserName");
-        final Set<String> displayNames = Collections.singleton("testDisplayName");
-        final Set<String> emails = Collections.singleton("testEmail");
-        final Set<String> phoneNumbers = Collections.singleton("testPhoneNumber");
-        final Set<String> status = Collections.singleton("testStatus");
-        final Set<String> salutations = Collections.singleton("testSalutation");
-        final Set<String> roles = Collections.singleton("testRole");
-        final int page = 1;
-        final int size = 100;
-        final Set<String> sort = Collections.singleton("testUserName");
-        final boolean orderAscending = true;
+        Page<User> userPage = new PageImpl<>(List.of(
+            new User(
+                1L,
+                "displayName",
+                "firstName",
+                "lastName",
+                "email",
+                "phoneNumber",
+                "imageUrl",
+                new UserStatus(1L),
+                new UserSalutation(2L),
+                List.of(new UserRole(3L)),
+                LocalDateTime.of(1999, 12, 12, 0, 0),
+                LocalDateTime.of(2000, 12, 12, 0, 0),
+                1
+            )
+        ));
+        doReturn(userPage).when(mService).getUsers(
+            Set.of(1L),
+            Set.of(2L),
+            Set.of("userName"),
+            Set.of("displayName"),
+            Set.of("email"),
+            Set.of("phoneNumber"),
+            Set.of(10L),
+            Set.of(20L),
+            Set.of("role"),
+            1,
+            100,
+            Set.of("username"),
+            true
+        );
 
-        final User matchedUser = createUser(ids.iterator().next());
-        Page<User> userPage = new PageImpl<>(Collections.singletonList(matchedUser));
-        when(userService.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, status, salutations, roles, page, size, sort, orderAscending)).thenReturn(userPage);
+        final PageDto<UserDto> pageDto = controller.getUsers(
+            Set.of(1L),
+            Set.of(2L),
+            Set.of("userName"),
+            Set.of("displayName"),
+            Set.of("email"),
+            Set.of("phoneNumber"),
+            Set.of(10L),
+            Set.of(20L),
+            Set.of("role"),
+            Set.of("username"),
+            true,
+            1,
+            100
+        );
+        
+        PageDto<UserDto> expected = new PageDto<UserDto>(
+            List.of(new UserDto(
+                1L,
+                "displayName",
+                "firstName",
+                "lastName",
+                "email",
+                "phoneNumber",
+                "imageUrl",
+                new UserStatusDto(1L),
+                new UserSalutationDto(2L),
+                List.of(new UserRoleDto(3L)),
+                LocalDateTime.of(1999, 12, 12, 0, 0),
+                LocalDateTime.of(2000, 12, 12, 0, 0),
+                1
+            )),
+            1,
+            1
+        );
 
-        final PageDto<UserDto> usersPage = userController.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, status, salutations, roles, sort, orderAscending, page, size);
-        assertEquals(page, usersPage.getTotalPages());
-
-        final List<UserDto> users = usersPage.getContent();
-        assertEquals(1, users.size());
-
-        final UserDto matchedUserDto = users.get(0);
-        assertEquals(ids.iterator().next(), matchedUserDto.getId());
-        assertEquals(userNames.iterator().next(), matchedUserDto.getUserName());
-        assertEquals(displayNames.iterator().next(), matchedUserDto.getDisplayName());
-        assertEquals(emails.iterator().next(), matchedUserDto.getEmail());
-        assertEquals(phoneNumbers.iterator().next(), matchedUserDto.getPhoneNumber());
-        assertEquals(salutations.iterator().next(), matchedUserDto.getSalutation().getName());
-        assertEquals(status.iterator().next(), matchedUserDto.getStatus().getName());
-        assertEquals(roles.iterator().next(), matchedUserDto.getRoles().get(0).getUserRoleType().getName());
+        assertEquals(expected, pageDto);
     }
+    
+    @Test
+    public void testGetUser_ReturnsUserDto_WhenServiceReturnUser() {
+        User user = new User(
+            1L,
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            "phoneNumber",
+            "imageUrl",
+            new UserStatus(1L),
+            new UserSalutation(2L),
+            List.of(new UserRole(3L)),
+            LocalDateTime.of(1999, 12, 12, 0, 0),
+            LocalDateTime.of(2000, 12, 12, 0, 0),
+            1
+        );
+        doReturn(user).when(mService).getUser(1L);
+
+        UserDto dto = controller.getUser(1L);
+
+        UserDto expected = new UserDto(
+            1L,
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            "phoneNumber",
+            "imageUrl",
+            new UserStatusDto(1L),
+            new UserSalutationDto(2L),
+            List.of(new UserRoleDto(3L)),
+            LocalDateTime.of(1999, 12, 12, 0, 0),
+            LocalDateTime.of(2000, 12, 12, 0, 0),
+            1
+        );
+        assertEquals(expected, dto);
+    }
+    
+    @Test
+    public void testGetUser_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
+        doReturn(null).when(mService).getUser(1L);
+        assertThrows(EntityNotFoundException.class, () -> controller.getUser(1L));
+    }
+    
+    @Test
+    public void testAddUser_
 
     @Test
     public void testAddUser_SavesUserAndReturnsUserDto_WhenAddUserDtoIsProvided() {
         final AddUserDto addUserDto = createAddUserDto();
         final Long userId = 1L;
-        when(userService.addUser(any(User.class))).thenReturn(createUserFromAddUserDto(userId, addUserDto));
+        when(mService.addUser(any(User.class))).thenReturn(createUserFromAddUserDto(userId, addUserDto));
 
-        final UserDto addedUserDto = userController.addUser(addUserDto);
+        final UserDto addedUserDto = controller.addUser(addUserDto);
 
         assertEquals(userId, addedUserDto.getId());
         assertAddUserValuesAgainstAddedUser(addUserDto, addedUserDto);
@@ -117,9 +233,9 @@ public class UserControllerTest {
         final Long userId = 1L;
         final UpdateUserDto updateUserDto = createUpdateUserDto();
 
-        when(userService.putUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, updateUserDto));
+        when(mService.putUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, updateUserDto));
 
-        final UserDto updatedUserDto = userController.putUser(userId, updateUserDto);
+        final UserDto updatedUserDto = controller.putUser(userId, updateUserDto);
 
         assertEquals(userId, updatedUserDto.getId());
         assertUpdateUserValuesAgainstUpdatedUser(updateUserDto, updatedUserDto);
@@ -130,9 +246,9 @@ public class UserControllerTest {
         final Long userId = 1L;
         final UpdateUserDto patchUserDto = createEmailAndDisplayNamePatchUserDto();
 
-        when(userService.patchUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, patchUserDto));
+        when(mService.patchUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, patchUserDto));
 
-        final UserDto updatedUserDto = userController.patchUser(userId, patchUserDto);
+        final UserDto updatedUserDto = controller.patchUser(userId, patchUserDto);
 
         assertEquals(userId, updatedUserDto.getId());
         assertEquals(patchUserDto.getDisplayName(), updatedUserDto.getDisplayName());
@@ -144,9 +260,9 @@ public class UserControllerTest {
     public void testDeleteUser_DeletesUser_WhenUserIdIsProvided() {
         final Long userId = 1L;
         ArgumentCaptor<Long> userIdCaptor = ArgumentCaptor.forClass(Long.class);
-        doNothing().when(userService).deleteUser(userIdCaptor.capture());
+        doNothing().when(mService).deleteUser(userIdCaptor.capture());
 
-        userController.deleteUser(userId);
+        controller.deleteUser(userId);
 
         assertEquals(userId, userIdCaptor.getValue());
     }
@@ -175,22 +291,6 @@ public class UserControllerTest {
         assertEquals(addUserDto.getRoles().size(), addedUserDto.getRoles().size());
         assertEquals(addUserDto.getRoles().get(0).getUserRoleType().getName(), addedUserDto.getRoles().get(0).getUserRoleType().getName());
         assertEquals(addUserDto.getVersion() + 1, addedUserDto.getVersion());
-    }
-
-    private User createUser(final Long userId) {
-        final User user = new User();
-        user.setId(userId);
-        user.setUserName("testUserName");
-        user.setDisplayName("testDisplayName");
-        user.setFirstName("testFirstName");
-        user.setLastName("testLastName");
-        user.setEmail("testEmail");
-        user.setPhoneNumber("testPhoneNumber");
-        user.setImageUrl("testImageUrl");
-        user.setStatus(createFixedType(UserStatus::new, "testStatus"));
-        user.setSalutation(createFixedType(UserSalutation::new, "testSalutation"));
-        user.setRoles(Collections.singletonList(createUserRole("testRole")));
-        return user;
     }
 
     private UserRole createUserRole(final String roleName) {
