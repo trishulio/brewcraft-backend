@@ -43,8 +43,9 @@ public class UserDto extends BaseDto {
         setId(id);
     }
     
-    public UserDto(Long id, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);
@@ -55,6 +56,7 @@ public class UserDto extends BaseDto {
         setSalutation(salutation);
         setRoles(roles);
         setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
         setLastName(lastName);
         setVersion(version);
     }

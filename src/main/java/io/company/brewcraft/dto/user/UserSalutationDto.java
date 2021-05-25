@@ -2,7 +2,9 @@ package io.company.brewcraft.dto.user;
 
 import java.time.LocalDateTime;
 
-public class UserSalutationDto {
+import io.company.brewcraft.dto.BaseDto;
+
+public class UserSalutationDto extends BaseDto {
     private Long id;
 
     private String title;

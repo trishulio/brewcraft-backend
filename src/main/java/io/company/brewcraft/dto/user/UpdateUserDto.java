@@ -22,12 +22,28 @@ public class UpdateUserDto extends BaseDto {
 
     private String phoneNumber;
 
-    private List<Long> roleIds;
-
     private String imageUrl;
+
+    private List<UpdateUserRoleDto> roles;
 
     @NotNull
     private Integer version;
+
+    public UpdateUserDto() { 
+    }
+
+    public UpdateUserDto(String displayName, String firstName, String lastName, String email, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<UpdateUserRoleDto> roles, @NotNull Integer version) {       
+        setDisplayName(displayName);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setStatusId(statusId);
+        setSalutationId(salutationId);
+        setPhoneNumber(phoneNumber);
+        setRoles(roles);
+        setImageUrl(imageUrl);
+        setVersion(version);
+    }
 
     public String getDisplayName() {
         return displayName;
@@ -85,12 +101,12 @@ public class UpdateUserDto extends BaseDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Long> getRoleIds() {
-        return roleIds;
+    public List<UpdateUserRoleDto> getRoles() {
+        return roles;
     }
 
-    public void setRoleIds(List<Long> roleIds) {
-        this.roleIds = roleIds;
+    public void setRoles(List<UpdateUserRoleDto> roles) {
+        this.roles = roles;
     }
 
     public String getImageUrl() {

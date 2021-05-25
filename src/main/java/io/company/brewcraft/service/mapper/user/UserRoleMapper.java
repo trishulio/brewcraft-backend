@@ -6,6 +6,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.user.AddUserRoleDto;
+import io.company.brewcraft.dto.user.UpdateUserRoleDto;
 import io.company.brewcraft.dto.user.UserRoleDto;
 import io.company.brewcraft.model.user.UserRole;
 
@@ -13,15 +14,20 @@ import io.company.brewcraft.model.user.UserRole;
 public interface UserRoleMapper {
     UserRoleMapper INSTANCE = Mappers.getMapper(UserRoleMapper.class);
 
+    UserRoleDto toDto(UserRole userRole);
+
     @Mappings({
-        @Mapping(target = UserRole.ATTR_ROLE_TYPE),
-        @Mapping(target = UserRole.ATTR_ID, ignore = true),
-        @Mapping(target = UserRole.ATTR_USER, ignore = true),
-        @Mapping(target = UserRole.ATTR_VERSION, ignore = true),
-        @Mapping(target = UserRole.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = UserRole.ATTR_CREATED_AT, ignore = true)
+        @Mapping(target = UserRole.ATTR_USER, ignore = true),        
     })
-    UserRole fromDto(Long roleType);
+    UserRole fromDto(UserRoleDto dto);
+
+    @Mappings({
+        @Mapping(target = UserRole.ATTR_USER, ignore = true),
+        @Mapping(target = UserRole.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = UserRole.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = UserRole.ATTR_ROLE_TYPE, source = "roleTypeId")
+    })
+    UserRole fromDto(UpdateUserRoleDto dto);
 
     @Mappings({
         @Mapping(target = UserRole.ATTR_ID, ignore = true),
@@ -32,6 +38,4 @@ public interface UserRoleMapper {
         @Mapping(target = UserRole.ATTR_ROLE_TYPE, source = "roleTypeId")
     })
     UserRole fromDto(AddUserRoleDto addUserRoleDto);
-
-    UserRoleDto fromDto(UserRole userRole);
 }

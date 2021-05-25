@@ -19,7 +19,6 @@ public interface UserMapper {
             @Mapping(target = User.ATTR_LAST_UPDATED, ignore = true),
             @Mapping(target = User.ATTR_CREATED_AT, ignore = true),
             @Mapping(target = User.ATTR_VERSION, ignore = true),
-            @Mapping(target = User.ATTR_ROLES, source = "roleTypeIds"),
             @Mapping(target = User.ATTR_STATUS, source = "statusId"),
             @Mapping(target = User.ATTR_SALUTATION, source = "salutationId")
     })
@@ -30,7 +29,6 @@ public interface UserMapper {
             @Mapping(target = User.ATTR_ID, ignore = true),
             @Mapping(target = User.ATTR_LAST_UPDATED, ignore = true),
             @Mapping(target = User.ATTR_CREATED_AT, ignore = true),
-            @Mapping(target = User.ATTR_ROLES, source = "roleIds"),
             @Mapping(target = User.ATTR_STATUS, source = "statusId"),
             @Mapping(target = User.ATTR_SALUTATION, source = "salutationId")
     })

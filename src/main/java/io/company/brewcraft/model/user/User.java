@@ -82,8 +82,9 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         setId(id);
     }
     
-    public User(Long id, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);

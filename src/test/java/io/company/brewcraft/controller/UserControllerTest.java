@@ -5,10 +5,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,17 +18,17 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.user.AddUserDto;
 import io.company.brewcraft.dto.user.AddUserRoleDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
+import io.company.brewcraft.dto.user.UpdateUserRoleDto;
 import io.company.brewcraft.dto.user.UserDto;
 import io.company.brewcraft.dto.user.UserRoleDto;
+import io.company.brewcraft.dto.user.UserRoleTypeDto;
 import io.company.brewcraft.dto.user.UserSalutationDto;
 import io.company.brewcraft.dto.user.UserStatusDto;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserRole;
-import io.company.brewcraft.model.user.UserRoleType;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.mapper.user.UserMapper;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -57,6 +55,7 @@ public class UserControllerTest {
     public void testGetUser_ReturnsUserDto_WhenUserExists() {
         User user = new User(
             1L,
+            "USER_NAME",
             "DISPLAY_NAME",
             "FIRST_NAME",
             "LAST_NAME",
@@ -77,6 +76,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             1L,
+            "USER_NAME",
             "DISPLAY_NAME",
             "FIRST_NAME",
             "LAST_NAME",
@@ -99,6 +99,7 @@ public class UserControllerTest {
         Page<User> userPage = new PageImpl<>(List.of(
             new User(
                 1L,
+                "userName",
                 "displayName",
                 "firstName",
                 "lastName",
@@ -148,6 +149,7 @@ public class UserControllerTest {
         PageDto<UserDto> expected = new PageDto<UserDto>(
             List.of(new UserDto(
                 1L,
+                "userName",
                 "displayName",
                 "firstName",
                 "lastName",
@@ -172,6 +174,7 @@ public class UserControllerTest {
     public void testGetUser_ReturnsUserDto_WhenServiceReturnUser() {
         User user = new User(
             1L,
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -191,6 +194,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             1L,
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -214,157 +218,126 @@ public class UserControllerTest {
     }
     
     @Test
-    public void testAddUser_
+    public void testAddUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
+        doAnswer(inv -> inv.getArgument(0, User.class)).when(mService).addUser(any(User.class));
+        AddUserDto additionDto = new AddUserDto(
+            "userName",
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            1L,
+            2L,
+            "phoneNumber",
+            "imageUrl",
+            List.of(new AddUserRoleDto(10L))
+        );
 
+        UserDto dto = controller.addUser(additionDto);
+        
+        UserDto expected = new UserDto(
+            null,
+            "userName",
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            "phoneNumber",
+            "imageUrl",
+            new UserStatusDto(1L),
+            new UserSalutationDto(2L),
+            List.of(new UserRoleDto(null, new UserRoleTypeDto(10L), null, null, null)),
+            null,
+            null,
+            null
+        );
+
+        assertEquals(expected, dto);
+    }
+    
     @Test
-    public void testAddUser_SavesUserAndReturnsUserDto_WhenAddUserDtoIsProvided() {
-        final AddUserDto addUserDto = createAddUserDto();
-        final Long userId = 1L;
-        when(mService.addUser(any(User.class))).thenReturn(createUserFromAddUserDto(userId, addUserDto));
+    public void testPutUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
+        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(User.class));
+        UpdateUserDto updateDto = new UpdateUserDto(
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            1L,
+            2L,
+            "phoneNumber",
+            "imageUrl",
+            List.of(new UpdateUserRoleDto(10L, 100L, 1)),
+            1
+        );
 
-        final UserDto addedUserDto = controller.addUser(addUserDto);
+        UserDto dto = controller.putUser(1L, updateDto);
+        
+        UserDto expected = new UserDto(
+            null,
+            null,
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            "phoneNumber",
+            "imageUrl",
+            new UserStatusDto(1L),
+            new UserSalutationDto(2L),
+            List.of(new UserRoleDto(10L, new UserRoleTypeDto(100L), null, null, 1)),
+            null,
+            null,
+            1
+        );
 
-        assertEquals(userId, addedUserDto.getId());
-        assertAddUserValuesAgainstAddedUser(addUserDto, addedUserDto);
+        assertEquals(expected, dto);
     }
 
     @Test
-    public void testPutUser_UpdateUserAndReturnsUserDto_WhenUpdateUserDtoIsProvidedForGivenUser() {
-        final Long userId = 1L;
-        final UpdateUserDto updateUserDto = createUpdateUserDto();
+    public void testPatchUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
+        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).patchUser(eq(1L), any(User.class));
+        UpdateUserDto updateDto = new UpdateUserDto(
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            1L,
+            2L,
+            "phoneNumber",
+            "imageUrl",
+            List.of(new UpdateUserRoleDto(10L, 100L, 1)),
+            1
+        );
 
-        when(mService.putUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, updateUserDto));
+        UserDto dto = controller.patchUser(1L, updateDto);
 
-        final UserDto updatedUserDto = controller.putUser(userId, updateUserDto);
+        UserDto expected = new UserDto(
+            null,
+            null,
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            "phoneNumber",
+            "imageUrl",
+            new UserStatusDto(1L),
+            new UserSalutationDto(2L),
+            List.of(new UserRoleDto(10L, new UserRoleTypeDto(100L), null, null, 1)),
+            null,
+            null,
+            1
+        );
 
-        assertEquals(userId, updatedUserDto.getId());
-        assertUpdateUserValuesAgainstUpdatedUser(updateUserDto, updatedUserDto);
-    }
-
-    @Test
-    public void testPatchUser_UpdateUserAndReturnsUserDto_WhenUpdateUserDtoIsProvidedForGivenUser() {
-        final Long userId = 1L;
-        final UpdateUserDto patchUserDto = createEmailAndDisplayNamePatchUserDto();
-
-        when(mService.patchUser(anyLong(), any(User.class))).thenReturn(createUserFromUpdateUserDto(userId, patchUserDto));
-
-        final UserDto updatedUserDto = controller.patchUser(userId, patchUserDto);
-
-        assertEquals(userId, updatedUserDto.getId());
-        assertEquals(patchUserDto.getDisplayName(), updatedUserDto.getDisplayName());
-        assertEquals(patchUserDto.getEmail(), updatedUserDto.getEmail());
-        assertEquals(patchUserDto.getVersion() + 1, updatedUserDto.getVersion());
+        assertEquals(expected, dto);
     }
 
     @Test
     public void testDeleteUser_DeletesUser_WhenUserIdIsProvided() {
-        final Long userId = 1L;
         ArgumentCaptor<Long> userIdCaptor = ArgumentCaptor.forClass(Long.class);
         doNothing().when(mService).deleteUser(userIdCaptor.capture());
 
-        controller.deleteUser(userId);
+        controller.deleteUser(1L);
 
-        assertEquals(userId, userIdCaptor.getValue());
-    }
-
-    private void assertAddUserValuesAgainstAddedUser(final AddUserDto addUserDto, final UserDto addedUserDto) {
-        assertEquals(addUserDto.getUserName(), addedUserDto.getUserName());
-        assertEquals(addUserDto.getDisplayName(), addedUserDto.getDisplayName());
-        assertEquals(addUserDto.getFirstName(), addedUserDto.getFirstName());
-        assertEquals(addUserDto.getLastName(), addedUserDto.getLastName());
-        assertEquals(addUserDto.getEmail(), addedUserDto.getEmail());
-        assertEquals(addUserDto.getPhoneNumber(), addedUserDto.getPhoneNumber());
-        assertEquals(addUserDto.getStatus().getName(), addedUserDto.getStatus().getName());
-        assertEquals(addUserDto.getSalutation().getName(), addedUserDto.getSalutation().getName());
-        assertEquals(addUserDto.getRoles().size(), addedUserDto.getRoles().size());
-        assertEquals(addUserDto.getRoles().get(0).getUserRoleType().getName(), addedUserDto.getRoles().get(0).getUserRoleType().getName());
-    }
-
-    private void assertUpdateUserValuesAgainstUpdatedUser(final UpdateUserDto addUserDto, final UserDto addedUserDto) {
-        assertEquals(addUserDto.getDisplayName(), addedUserDto.getDisplayName());
-        assertEquals(addUserDto.getFirstName(), addedUserDto.getFirstName());
-        assertEquals(addUserDto.getLastName(), addedUserDto.getLastName());
-        assertEquals(addUserDto.getEmail(), addedUserDto.getEmail());
-        assertEquals(addUserDto.getPhoneNumber(), addedUserDto.getPhoneNumber());
-        assertEquals(addUserDto.getStatus().getName(), addedUserDto.getStatus().getName());
-        assertEquals(addUserDto.getSalutation().getName(), addedUserDto.getSalutation().getName());
-        assertEquals(addUserDto.getRoles().size(), addedUserDto.getRoles().size());
-        assertEquals(addUserDto.getRoles().get(0).getUserRoleType().getName(), addedUserDto.getRoles().get(0).getUserRoleType().getName());
-        assertEquals(addUserDto.getVersion() + 1, addedUserDto.getVersion());
-    }
-
-    private UserRole createUserRole(final String roleName) {
-        final UserRole userRole = new UserRole();
-        userRole.setUserRoleType(createFixedType(UserRoleType::new, roleName));
-        return userRole;
-    }
-
-    private <T extends FixedTypeEntity> T createFixedType(final Supplier<T> fixedTypeSupplier, final String name) {
-        final T fixedType = fixedTypeSupplier.get();
-        fixedType.setName(name);
-        return fixedType;
-    }
-
-    private User createUserFromAddUserDto(final Long userId, final AddUserDto addUserDto) {
-        final User user = UserMapper.INSTANCE.fromDto(addUserDto);
-        user.setId(userId);
-        return user;
-    }
-
-    private User createUserFromUpdateUserDto(final Long userId, final UpdateUserDto updateUserDto) {
-        final User user = UserMapper.INSTANCE.fromDto(updateUserDto);
-        user.setId(userId);
-        user.setVersion(updateUserDto.getVersion() + 1);
-        return user;
-    }
-
-    private AddUserDto createAddUserDto() {
-        final AddUserDto addUser = new AddUserDto();
-        addUser.setUserName("testUserName");
-        addUser.setDisplayName("testDisplayName");
-        addUser.setFirstName("testFirstName");
-        addUser.setLastName("testLastName");
-        addUser.setEmail("testEmail");
-        addUser.setPhoneNumber("testPhoneNumber");
-        addUser.setImageUrl("testImageUrl");
-        addUser.setStatus(createFixedTypeDto("testStatus"));
-        addUser.setSalutation(createFixedTypeDto("testSalutation"));
-        addUser.setRoles(Collections.singletonList(createAddUserRoleDto("testRoleName")));
-        return addUser;
-    }
-
-    private AddUserRoleDto createAddUserRoleDto(final String roleName) {
-        final AddUserRoleDto addUserRoleDto = new AddUserRoleDto();
-        addUserRoleDto.setUserRoleType(createFixedTypeDto(roleName));
-        return addUserRoleDto;
-    }
-
-    private FixedTypeDto createFixedTypeDto(final String name) {
-        final FixedTypeDto fixedType = new FixedTypeDto();
-        fixedType.setName(name);
-        return fixedType;
-    }
-
-    private UpdateUserDto createEmailAndDisplayNamePatchUserDto() {
-        final UpdateUserDto patchUserDto = new UpdateUserDto();
-        patchUserDto.setDisplayName("patchingTestDisplayName");
-        patchUserDto.setEmail("patchingTestEmail");
-        patchUserDto.setVersion(1);
-        return patchUserDto;
-    }
-
-    private UpdateUserDto createUpdateUserDto() {
-        final UpdateUserDto updateUserDto = new UpdateUserDto();
-        updateUserDto.setDisplayName("updatingTestDisplayName");
-        updateUserDto.setFirstName("updatingTestFirstName");
-        updateUserDto.setLastName("updatingTestLastName");
-        updateUserDto.setEmail("updatingTestEmail");
-        updateUserDto.setPhoneNumber("updatingTestPhoneNumber");
-        updateUserDto.setImageUrl("updatingTestImageUrl");
-        updateUserDto.setStatus(createFixedTypeDto("updatingTestStatus"));
-        updateUserDto.setSalutation(createFixedTypeDto("updatingTestSalutation"));
-        updateUserDto.setRoles(Collections.singletonList(createAddUserRoleDto("updatingTestRoleName")));
-        updateUserDto.setVersion(0);
-        return updateUserDto;
+        assertEquals(1L, userIdCaptor.getValue());
     }
 }
