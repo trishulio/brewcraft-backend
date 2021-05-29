@@ -12,23 +12,23 @@ public class UserRoleTest {
     @Test
     public void testSetGetId() {
         final Long id = 1L;
-        final UserRole userRole = new UserRole();
+        final UserRoleBinding userRole = new UserRoleBinding();
         userRole.setId(id);
         assertEquals(id, userRole.getId());
     }
 
     @Test
-    public void testSetGetUserRoleType() {
-        final UserRoleType userRoleType = new UserRoleType();
+    public void testSetGetUserRole() {
         final UserRole userRole = new UserRole();
-        userRole.setUserRoleType(userRoleType);
-        assertEquals(userRoleType, userRole.getUserRoleType());
+        final UserRoleBinding userRole = new UserRoleBinding();
+        userRole.setUserRole(userRole);
+        assertEquals(userRole, userRole.getUserRole());
     }
 
     @Test
     public void testSetGetUser() {
         final User user = new User();
-        final UserRole userRole = new UserRole();
+        final UserRoleBinding userRole = new UserRoleBinding();
         userRole.setUser(user);
         assertEquals(user, userRole.getUser());
     }
@@ -36,7 +36,7 @@ public class UserRoleTest {
     @Test
     public void testSetGetVersion() {
         final Integer version = 1;
-        final UserRole userRole = new UserRole();
+        final UserRoleBinding userRole = new UserRoleBinding();
         userRole.setVersion(version);
         assertEquals(version, userRole.getVersion());
     }
@@ -44,7 +44,7 @@ public class UserRoleTest {
     @Test
     public void testSetGetLastUpdated() {
         final LocalDateTime lastUpdatedDateTime = LocalDateTime.now();
-        final UserRole userRole = new UserRole();
+        final UserRoleBinding userRole = new UserRoleBinding();
         userRole.setLastUpdated(lastUpdatedDateTime);
         assertEquals(lastUpdatedDateTime, userRole.getLastUpdated());
     }
@@ -52,7 +52,7 @@ public class UserRoleTest {
     @Test
     public void testSetGetCreatedAt() {
         final LocalDateTime createdAtDateTime = LocalDateTime.now();
-        final UserRole userRole = new UserRole();
+        final UserRoleBinding userRole = new UserRoleBinding();
         userRole.setCreatedAt(createdAtDateTime);
         assertEquals(createdAtDateTime, userRole.getCreatedAt());
     }

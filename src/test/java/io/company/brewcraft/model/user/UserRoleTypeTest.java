@@ -5,21 +5,21 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class UserRoleTypeTest {
+public class UserRoleTest {
 
     @Test
     public void testSetGetId() {
         final Long id = 1L;
-        final UserRoleType userRoleType = new UserRoleType();
-        userRoleType.setId(id);
-        assertEquals(id, userRoleType.getId());
+        final UserRole userRole = new UserRole();
+        userRole.setId(id);
+        assertEquals(id, userRole.getId());
     }
 
     @Test
     public void testSetGetName() {
         final String name = "name";
-        final UserRoleType userRoleType = new UserRoleType();
-        userRoleType.setName(name);
-        assertEquals(name, userRoleType.getName());
+        final UserRole userRole = new UserRole();
+        userRole.setName(name);
+        assertEquals(name, userRole.getName());
     }
 }

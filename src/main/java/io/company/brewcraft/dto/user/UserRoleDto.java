@@ -6,9 +6,13 @@ import io.company.brewcraft.dto.BaseDto;
 
 public class UserRoleDto extends BaseDto {
     private Long id;
-    private UserRoleTypeDto roleType;
+
+    private String name;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime lastUpdated;
+
     private Integer version;
 
     public UserRoleDto() {
@@ -18,9 +22,9 @@ public class UserRoleDto extends BaseDto {
         setId(id);
     }
 
-    public UserRoleDto(Long id, UserRoleTypeDto roleType, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public UserRoleDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdatedAt, Integer version) {
         this(id);
-        setRoleType(roleType);
+        setName(name);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -34,12 +38,12 @@ public class UserRoleDto extends BaseDto {
         this.id = id;
     }
 
-    public UserRoleTypeDto getRoleType() {
-        return roleType;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleType(UserRoleTypeDto roleType) {
-        this.roleType = roleType;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDateTime getCreatedAt() {

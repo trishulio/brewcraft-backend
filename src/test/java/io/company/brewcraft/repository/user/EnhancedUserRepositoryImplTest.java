@@ -1,8 +1,8 @@
 package io.company.brewcraft.repository.user;
 
 import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserRoleBinding;
 import io.company.brewcraft.model.user.UserRole;
-import io.company.brewcraft.model.user.UserRoleType;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.repository.user.impl.EnhancedUserRepositoryImpl;
@@ -29,7 +29,7 @@ public class EnhancedUserRepositoryImplTest {
 
     private UserSalutationRepository userSalutationRepository;
 
-    private UserRoleTypeRepository userRoleTypeRepository;
+    private UserRoleRepository userRoleRepository;
 
     private EnhancedUserRepositoryImpl enhancedUserRepositoryImpl;
 
@@ -38,8 +38,8 @@ public class EnhancedUserRepositoryImplTest {
         userRepository = mock(UserRepository.class);
         userStatusRepository = mock(UserStatusRepository.class);
         userSalutationRepository = mock(UserSalutationRepository.class);
-        userRoleTypeRepository = mock(UserRoleTypeRepository.class);
-        enhancedUserRepositoryImpl = new EnhancedUserRepositoryImpl(userRepository, userStatusRepository, userSalutationRepository, userRoleTypeRepository);
+        userRoleRepository = mock(UserRoleRepository.class);
+        enhancedUserRepositoryImpl = new EnhancedUserRepositoryImpl(userRepository, userStatusRepository, userSalutationRepository, userRoleRepository);
     }
 
     @Test
@@ -139,30 +139,30 @@ public class EnhancedUserRepositoryImplTest {
 
     @Test
     public void testMapAndSave_WhenUserRoleNameIsNotFoundForGivenUser_ThrowsEntityNotFoundException() {
-        final String invalidToleTypeName = "invalidRoleType";
+        final String invalidToleTypeName = "invalidRole";
         final User user = getUser(null, null, invalidToleTypeName);
         when(userStatusRepository.findByName(UserStatus.DEFAULT_STATUS_NAME)).thenReturn(Optional.of(new UserStatus()));
-        when(userRoleTypeRepository.findByName(invalidToleTypeName)).thenReturn(Optional.empty());
+        when(userRoleRepository.findByName(invalidToleTypeName)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> enhancedUserRepositoryImpl.mapAndSave(user));
     }
 
     @Test
-    public void testMapAndSave_WhenUserRoleTypeIsSetInGivenUser_SaveUserWithMappedUserRoleType() {
-        final String userRoleTypeName = "userRoleName";
-        final User user = getUser(null, null, userRoleTypeName);
+    public void testMapAndSave_WhenUserRoleIsSetInGivenUser_SaveUserWithMappedUserRole() {
+        final String userRoleName = "userRoleName";
+        final User user = getUser(null, null, userRoleName);
         when(userStatusRepository.findByName(UserStatus.DEFAULT_STATUS_NAME)).thenReturn(Optional.of(new UserStatus()));
-        final UserRoleType savedUserRole = new UserRoleType();
-        when(userRoleTypeRepository.findByName(userRoleTypeName)).thenReturn(Optional.of(savedUserRole));
+        final UserRole savedUserRole = new UserRole();
+        when(userRoleRepository.findByName(userRoleName)).thenReturn(Optional.of(savedUserRole));
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         when(userRepository.saveAndFlush(userCaptor.capture())).thenReturn(new User());
 
         enhancedUserRepositoryImpl.mapAndSave(user);
         final User mappedUser = userCaptor.getValue();
 
-        final Optional<UserRole> mappedUserRole = mappedUser.getRoles().stream().findFirst();
+        final Optional<UserRoleBinding> mappedUserRole = mappedUser.getRoles().stream().findFirst();
         assertTrue(mappedUserRole.isPresent());
-        assertEquals(savedUserRole, mappedUserRole.get().getUserRoleType());
+        assertEquals(savedUserRole, mappedUserRole.get().getUserRole());
     }
 
 
@@ -192,11 +192,11 @@ public class EnhancedUserRepositoryImplTest {
         return userSalutation;
     }
 
-    private UserRole getUserRole(final String roleName) {
-        final UserRoleType userRoleType = new UserRoleType();
-        userRoleType.setName(roleName);
+    private UserRoleBinding getUserRole(final String roleName) {
         final UserRole userRole = new UserRole();
-        userRole.setUserRoleType(userRoleType);
+        userRole.setName(roleName);
+        final UserRoleBinding userRole = new UserRoleBinding();
+        userRole.setUserRole(userRole);
         return userRole;
     }
 }

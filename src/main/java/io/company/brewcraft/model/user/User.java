@@ -3,6 +3,8 @@ package io.company.brewcraft.model.user;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -24,7 +26,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_SALUTATION = "salutation";
-    public static final String FIELD_ROLES = "roles";
+    public static final String FIELD_ROLES = "roleBindings";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
@@ -46,7 +48,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<UserRole> roles;
+    private List<UserRoleBinding> roleBindings;
 
     @Column(name = "image_url")
     @URL
@@ -200,27 +202,57 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     }
 
     @Override
-    public List<UserRole> getRoles() {
-        return roles;
+    public void setRoles(List<UserRole> roles) {
+        // Reusing existing bindings instead of adding new to avoid creating dangling child entities.
+        if (roleBindings == null) {
+            roleBindings = new ArrayList<>();
+        }
+
+        Map<Long, UserRoleBinding> existingBindings = roleBindings
+                                                      .stream()
+                                                      .collect(Collectors.toMap(
+                                                          binding -> binding.getRole().getId(),
+                                                          binding -> binding
+                                                      ));
+        
+        Map<Long, UserRoleBinding> newBindings = roles.stream().collect(Collectors.toMap(role -> role.getId(), role -> {
+            UserRoleBinding existing = existingBindings.remove(role.getId());
+            if (existing == null) {
+                existing = new UserRoleBinding();
+            }
+            
+            existing.setRole(role);
+            existing.setUser(this);
+            
+            return existing;
+        }));
+        
+        this.roleBindings.clear();
+        
+        newBindings.forEach((roleId, binding) -> {
+            this.roleBindings.add(binding);
+        });        
     }
 
     @Override
-    public void setRoles(List<UserRole> roles) {
-        if (this.getRoles() != null) {
-            this.roles.clear();
-        } else {
-            this.roles = new ArrayList<>();
+    public List<UserRole> getRoles() {
+        if (this.roleBindings == null) {
+            return null;
         }
         
-        if (roles != null) {
-            this.roles.addAll(roles);
-        } else {
-            this.roles = roles;
-        }
-
-        if (this.roles != null) {
-            this.roles.forEach(role -> role.setUser(this));
-        }
+        return this.roleBindings.stream()
+                                .map(binding -> binding.getRole())
+                                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Used by the repository to directly access the bindings.
+     * Refrain from using this is business logic. Prefer, getRoles()
+     * method. 
+     * @return
+     */
+    public List<UserRoleBinding> getRoleBindings() {
+        return this.roleBindings;
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.company.brewcraft.service.impl.user;
 
 import static io.company.brewcraft.repository.RepositoryUtil.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -11,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.company.brewcraft.model.user.BaseUser;
+import io.company.brewcraft.model.user.UpdateUser;
+import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.repository.SpecificationBuilder;
@@ -19,22 +23,17 @@ import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.user.UserService;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
 public class UserServiceImpl extends BaseService implements UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepo;
     private final IdpUserRepository idpRepo;
 
-    private final UtilityProvider utilProvider;
-
-    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo, final UtilityProvider utilProvider) {
+    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo) {
         this.userRepo = userRepo;
         this.idpRepo = idpRepo;
-        this.utilProvider = utilProvider;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class UserServiceImpl extends BaseService implements UserService {
                 .in(User.FIELD_PHONE_NUMBER, phoneNumbers)
                 .in(new String[]{User.FIELD_STATUS, UserStatus.FIELD_ID }, statusIds)
                 .in(new String[]{User.FIELD_SALUTATION, UserStatus.FIELD_ID }, salutationIds)
-//                .in(new String[]{User.Property.roles.name(), UserRole.Property.userRoleType.name(), UserRoleType.Property.name.name()}, roles)
+//                .in(new String[]{User.Property.roles.name(), UserRole.Property.userRole.name(), UserRole.Property.name.name()}, roles)
                 .build();
 
         return userRepo.findAll(userSpecification, pageRequest(sort, orderAscending, page, size));
@@ -58,64 +57,77 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public User getUser(Long id) {
-        logger.debug("Retrieving User with Id: {}", id);
+        log.debug("Retrieving User with Id: {}", id);
         User user = null;
         Optional<User> optional = userRepo.findById(id);
         if (optional.isPresent()) {
-            logger.debug("Found user with id: {}", id);
+            log.debug("Found user with id: {}", id);
             user = optional.get();
         }
         return user;
     }
 
     @Override
-    public User addUser(User user) {
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(user != null, "Add User Payload cannot be null");
-        validator.raiseErrors();
+    public User addUser(BaseUser<?> addition) {
+        log.debug("Attempting to persist user : {}", addition.getUserName());
 
-        logger.debug("Attempting to persist user : {}", user.getUserName());
+        User user = new User();
+        user.override(addition, getPropertyNames(BaseUser.class));
+        userRepo.refresh(List.of(user));
 
-        userRepo.refresh(Set.of(user));
         User addedUser = userRepo.saveAndFlush(user);
-
-        logger.debug("Attempting to save user : {} in identity provider", user.getUserName());
         idpRepo.createUser(addedUser);
+
         return addedUser;
     }
 
     @Override
-    public User putUser(final Long id, final User updatingUser) {
-        logger.debug("Updating the User with Id: {}", id);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(updatingUser != null, "Update User Payload cannot be null");
-        validator.raiseErrors();
+    public User putUser(final Long userId, final UpdateUser<? extends UpdateUserRole> update) {
+        log.debug("Updating the User with Id: {}", userId);
 
-        updatingUser.setId(id);
-        userRepo.refresh(Set.of(updatingUser));
-        final User updatedUser = userRepo.saveAndFlush(updatingUser);
-        
-        idpRepo.updateUser(updatingUser);
+        User existing = getUser(userId);
+        Class<? super User> userClz = BaseUser.class;
+        boolean isNewUser = true;
 
-        return updatedUser;
+        if (existing == null) {
+            existing = new User(userId); // Gotcha: The save function ignores this ID
+
+        } else {
+            existing.optimisticLockCheck(update);
+            userClz = UpdateUser.class;
+            isNewUser = false;
+        }
+
+        User temp = new User();
+        temp.override(update, getPropertyNames(userClz));
+        userRepo.refresh(List.of(temp));
+
+        existing.override(temp, getPropertyNames(userClz));
+
+        User updated = userRepo.saveAndFlush(existing);
+
+        if (isNewUser) {
+            idpRepo.createUser(updated);
+        }
+
+        return updated;
     }
 
     @Override
-    public User patchUser(Long id, User updatingUser) {
-        logger.debug("Performing Patch on User with Id: {}", id);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(updatingUser != null, "Update Payload cannot be null");
-        validator.raiseErrors();
+    public User patchUser(Long userId, UpdateUser<? extends UpdateUserRole> patch) {
+        log.debug("Performing Patch on User with Id: {}", userId);
 
-        User existingUser = Optional.ofNullable(getUser(id)).orElseThrow(() -> new EntityNotFoundException("User", id.toString()));
+        User existing = userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
+        existing.optimisticLockCheck(patch);
 
-        updatingUser.copyToNullFields(existingUser);
-        userRepo.refresh(Set.of(updatingUser));
-        final User updatedUser = userRepo.saveAndFlush(updatingUser);
+        User temp = new User(userId);
+        temp.override(existing);
+        temp.outerJoin(patch, getPropertyNames(UpdateUser.class));
+        userRepo.refresh(List.of(temp));
 
-        idpRepo.updateUser(updatingUser);
+        existing.override(temp);
 
-        return updatedUser;
+        return userRepo.saveAndFlush(existing);
     }
 
     @Override

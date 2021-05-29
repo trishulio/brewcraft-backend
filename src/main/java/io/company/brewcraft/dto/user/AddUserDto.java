@@ -33,14 +33,14 @@ public class AddUserDto extends BaseDto {
     @NotEmpty
     private String phoneNumber;
 
-    private List<AddUserRoleDto> roles;
+    private List<Long> roleIds;
 
     private String imageUrl;
 
     public AddUserDto() {
     }
 
-    public AddUserDto(@NotEmpty String userName, @NotEmpty String displayName, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, @NotNull Long statusId, @NotNull Long salutationId, @NotEmpty String phoneNumber, String imageUrl, List<AddUserRoleDto> roles) {
+    public AddUserDto(@NotEmpty String userName, @NotEmpty String displayName, @NotEmpty String firstName, @NotEmpty String lastName, @NotEmpty String email, @NotNull Long statusId, @NotNull Long salutationId, @NotEmpty String phoneNumber, String imageUrl, List<Long> roleIds) {
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -50,7 +50,7 @@ public class AddUserDto extends BaseDto {
         setSalutationId(salutationId);
         setPhoneNumber(phoneNumber);
         setImageUrl(imageUrl);
-        setRoles(roles);
+        setRoleIds(roleIds);
     }
 
     public String getUserName() {
@@ -117,12 +117,12 @@ public class AddUserDto extends BaseDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<AddUserRoleDto> getRoles() {
-        return roles;
+    public List<Long> getRoleIds() {
+        return roleIds;
     }
 
-    public void setRoles(List<AddUserRoleDto> roles) {
-        this.roles = roles;
+    public void setRoleIds(List<Long> roleIds) {
+        this.roleIds = roleIds;
     }
 
     public String getImageUrl() {

@@ -92,11 +92,11 @@ public class UserTest {
 
     @Test
     public void testSetRoles_ReplacesExistingRolesWithNewRoles_WhenExistingRolesAlreadySet() {
-        final UserRole existingRole = new UserRole();
+        final UserRoleBinding existingRole = new UserRoleBinding();
         final User user = new User();
         user.setRoles(Collections.singletonList(existingRole));
 
-        final UserRole newRole = new UserRole();
+        final UserRoleBinding newRole = new UserRoleBinding();
         user.setRoles(Collections.singletonList(newRole));
 
         assertEquals(Collections.singletonList(newRole), user.getRoles());
@@ -105,7 +105,7 @@ public class UserTest {
     @Test
     public void testSetRoles_AddNewRoles_WhenRolesAreNotSet() {
         final User user = new User();
-        final UserRole newRole = new UserRole();
+        final UserRoleBinding newRole = new UserRoleBinding();
         user.setRoles(Collections.singletonList(newRole));
         assertEquals(Collections.singletonList(newRole), user.getRoles());
     }
@@ -120,7 +120,7 @@ public class UserTest {
     @Test
     public void testSetRoles_SetUserForRoles_WhenRolesAreSet() {
         final User user = new User();
-        final UserRole newRole = new UserRole();
+        final UserRoleBinding newRole = new UserRoleBinding();
         user.setRoles(Collections.singletonList(newRole));
         assertEquals(user, user.getRoles().get(0).getUser());
     }

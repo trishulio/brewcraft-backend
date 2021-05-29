@@ -16,6 +16,8 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.user.AddUserDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
 import io.company.brewcraft.dto.user.UserDto;
+import io.company.brewcraft.model.user.UpdateUser;
+import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.user.UserMapper;
@@ -77,7 +79,7 @@ public class UserController extends BaseController {
 
     @PutMapping("/{userId}")
     public UserDto putUser(@PathVariable Long userId, @Valid @RequestBody @NotNull UpdateUserDto userDto) {
-        User user = UserMapper.INSTANCE.fromDto(userDto);
+        UpdateUser<? extends UpdateUserRole> user = UserMapper.INSTANCE.fromDto(userDto);
         User updatedUser = userService.putUser(userId, user);
         return UserMapper.INSTANCE.toDto(updatedUser);
     }

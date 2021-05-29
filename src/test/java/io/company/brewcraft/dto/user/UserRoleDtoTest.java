@@ -16,10 +16,10 @@ public class UserRoleDtoTest {
     }
 
     @Test
-    public void testSetGetUserRoleType() {
-        final FixedTypeDto userRoleType = new FixedTypeDto();
+    public void testSetGetUserRole() {
+        final FixedTypeDto userRole = new FixedTypeDto();
         final UserRoleDto userRole = new UserRoleDto();
-        userRole.setUserRoleType(userRoleType);
-        assertEquals(userRoleType, userRole.getUserRoleType());
+        userRole.setUserRole(userRole);
+        assertEquals(userRole, userRole.getUserRole());
     }
 }

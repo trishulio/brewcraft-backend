@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AddUserRoleDtoTest {
 
     @Test
-    public void testSetGetUserRoleType() {
-        final FixedTypeDto userRoleType = new FixedTypeDto();
+    public void testSetGetUserRole() {
+        final FixedTypeDto userRole = new FixedTypeDto();
         final AddUserRoleDto userRole = new AddUserRoleDto();
-        userRole.setUserRoleType(userRoleType);
-        assertEquals(userRoleType, userRole.getUserRoleType());
+        userRole.setUserRole(userRole);
+        assertEquals(userRole, userRole.getUserRole());
     }
 }

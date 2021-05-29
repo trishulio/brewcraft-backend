@@ -16,14 +16,12 @@ import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.user.AddUserDto;
-import io.company.brewcraft.dto.user.AddUserRoleDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
-import io.company.brewcraft.dto.user.UpdateUserRoleDto;
 import io.company.brewcraft.dto.user.UserDto;
 import io.company.brewcraft.dto.user.UserRoleDto;
-import io.company.brewcraft.dto.user.UserRoleTypeDto;
 import io.company.brewcraft.dto.user.UserSalutationDto;
 import io.company.brewcraft.dto.user.UserStatusDto;
+import io.company.brewcraft.model.user.UpdateUser;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserSalutation;
@@ -230,7 +228,7 @@ public class UserControllerTest {
             2L,
             "phoneNumber",
             "imageUrl",
-            List.of(new AddUserRoleDto(10L))
+            List.of(10L)
         );
 
         UserDto dto = controller.addUser(additionDto);
@@ -246,7 +244,7 @@ public class UserControllerTest {
             "imageUrl",
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
-            List.of(new UserRoleDto(null, new UserRoleTypeDto(10L), null, null, null)),
+            List.of(new UserRoleDto(10L)),
             null,
             null,
             null
@@ -257,7 +255,7 @@ public class UserControllerTest {
     
     @Test
     public void testPutUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(User.class));
+        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(UpdateUser.class));
         UpdateUserDto updateDto = new UpdateUserDto(
             "displayName",
             "firstName",
@@ -267,7 +265,7 @@ public class UserControllerTest {
             2L,
             "phoneNumber",
             "imageUrl",
-            List.of(new UpdateUserRoleDto(10L, 100L, 1)),
+            List.of(10L),
             1
         );
 
@@ -284,7 +282,7 @@ public class UserControllerTest {
             "imageUrl",
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
-            List.of(new UserRoleDto(10L, new UserRoleTypeDto(100L), null, null, 1)),
+            List.of(new UserRoleDto(10L)),
             null,
             null,
             1
@@ -295,7 +293,7 @@ public class UserControllerTest {
 
     @Test
     public void testPatchUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).patchUser(eq(1L), any(User.class));
+        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).patchUser(eq(1L), any(UpdateUser.class));
         UpdateUserDto updateDto = new UpdateUserDto(
             "displayName",
             "firstName",
@@ -305,7 +303,7 @@ public class UserControllerTest {
             2L,
             "phoneNumber",
             "imageUrl",
-            List.of(new UpdateUserRoleDto(10L, 100L, 1)),
+            List.of(10L),
             1
         );
 
@@ -322,7 +320,7 @@ public class UserControllerTest {
             "imageUrl",
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
-            List.of(new UserRoleDto(10L, new UserRoleTypeDto(100L), null, null, 1)),
+            List.of(new UserRoleDto(10L)),
             null,
             null,
             1

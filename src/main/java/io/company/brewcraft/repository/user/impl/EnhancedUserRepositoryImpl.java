@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
-import io.company.brewcraft.model.user.UserRole;
+import io.company.brewcraft.model.user.UserRoleBinding;
 import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.EnhancedUserRepository;
-import io.company.brewcraft.repository.user.UserRoleRepository;
+import io.company.brewcraft.repository.user.UserRoleBindingRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.repository.user.UserStatusRepository;
 
@@ -24,22 +24,22 @@ public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
     private final AccessorRefresher<Long, UserAccessor, Identified<Long>> refresher;
     private final UserStatusRepository statusRepo;
     private final UserSalutationRepository salutationRepo;
-    private final UserRoleRepository roleRepo;
+    private final UserRoleBindingRepository roleBindingRepo;
 
     @Autowired
-    public EnhancedUserRepositoryImpl(AccessorRefresher<Long, UserAccessor, Identified<Long>> refresher, UserStatusRepository statusRepo, UserSalutationRepository salutationRepo, UserRoleRepository roleRepo) {
+    public EnhancedUserRepositoryImpl(AccessorRefresher<Long, UserAccessor, Identified<Long>> refresher, UserStatusRepository statusRepo, UserSalutationRepository salutationRepo, UserRoleBindingRepository roleBindingRepo) {
         this.refresher = refresher;
         this.statusRepo = statusRepo;
         this.salutationRepo = salutationRepo;
-        this.roleRepo = roleRepo;
+        this.roleBindingRepo = roleBindingRepo;
     }
 
     @Override
     public void refresh(Collection<User> users) {
         this.statusRepo.refreshAccessors(users);
         this.salutationRepo.refreshAccessors(users);
-        List<UserRole> roles = users == null ? null : users.stream().filter(u -> u != null && u.getRoles() != null && u.getRoles().size() > 0).flatMap(u -> u.getRoles().stream()).collect(Collectors.toList());
-        this.roleRepo.refresh(roles);        
+        List<UserRoleBinding> bindings = users.stream().filter(u -> u != null && u.getRoleBindings() != null && u.getRoleBindings().size() > 0).flatMap(u -> u.getRoleBindings().stream()).collect(Collectors.toList());
+        this.roleBindingRepo.refresh(bindings);
     }
 
     @Override

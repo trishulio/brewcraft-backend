@@ -1,6 +1,35 @@
 package io.company.brewcraft.model.user;
 
+import java.util.List;
+
 import io.company.brewcraft.model.Versioned;
 
-public interface UpdateUser<T extends UpdateUserRole<? extends UpdateUserRoleType,? extends UpdateUser<T>>> extends BaseUser<T>, Versioned {
+public interface UpdateUser<R extends UpdateUserRole> extends Versioned, UserStatusAccessor, UserSalutationAccessor {
+    String getDisplayName();
+
+    void setDisplayName(String displayName);
+
+    String getFirstName();
+
+    void setFirstName(String firstName);
+
+    String getLastName();
+
+    void setLastName(String lastName);
+
+    String getEmail();
+
+    void setEmail(String email);
+
+    String getImageUrl();
+
+    void setImageUrl(String imageUrl);
+
+    String getPhoneNumber();
+
+    void setPhoneNumber(String phoneNumber);
+
+    List<R> getRoles();
+
+    void setRoles(List<R> roles);
 }
