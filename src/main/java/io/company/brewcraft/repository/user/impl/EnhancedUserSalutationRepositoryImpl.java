@@ -8,9 +8,13 @@ import io.company.brewcraft.model.user.UserSalutationAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.EnhancedUserSalutationRepository;
 
-public class EnhancedUserSalutationTypeRepository implements EnhancedUserSalutationRepository {
+public class EnhancedUserSalutationRepositoryImpl implements EnhancedUserSalutationRepository {
     
     private AccessorRefresher<Long, UserSalutationAccessor, Identified<Long>> refresher;
+
+    public EnhancedUserSalutationRepositoryImpl (AccessorRefresher<Long, UserSalutationAccessor, Identified<Long>> refresher) {
+        this.refresher = refresher;
+    }
 
     @Override
     public void refresh(Collection<UserSalutation> salutations) {

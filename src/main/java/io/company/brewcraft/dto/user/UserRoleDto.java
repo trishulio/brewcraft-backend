@@ -22,7 +22,7 @@ public class UserRoleDto extends BaseDto {
         setId(id);
     }
 
-    public UserRoleDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdatedAt, Integer version) {
+    public UserRoleDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
         setCreatedAt(createdAt);

@@ -1,151 +1,168 @@
 package io.company.brewcraft.model.user;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UserTest {
-
+    
+    private User user;
+    
+    @BeforeEach
+    public void init() {
+        user = new User();
+    }
+    
     @Test
-    public void testSetGetId() {
-        final Long id = 1L;
-        final User user = new User();
-        user.setId(id);
-        assertEquals(id, user.getId());
+    public void testAllArgConstructor_SetsAllFields() {
+        user = new User(
+            1L,
+            "USER_NAME",
+            "DISPLAY_NAME",
+            "FIRST_NAME",
+            "LAST_NAME",
+            "EMAIL",
+            "PHONE_NUMBER",
+            "IMAGE_URL",
+            new UserStatus(1L),
+            new UserSalutation(2L),
+            List.of(new UserRole(3L)),
+            LocalDateTime.of(1999, 1, 1, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 0, 0),
+            1            
+        );
+        
+        assertEquals(1L, user.getId());
+        assertEquals("USER_NAME", user.getUserName());
+        assertEquals("DISPLAY_NAME", user.getDisplayName());
+        assertEquals("FIRST_NAME", user.getFirstName());
+        assertEquals("LAST_NAME", user.getLastName());
+        assertEquals("EMAIL", user.getEmail());
+        assertEquals("PHONE_NUMBER", user.getPhoneNumber());
+        assertEquals("IMAGE_URL", user.getImageUrl());
+        assertEquals(new UserStatus(1L), user.getStatus());
+        assertEquals(new UserSalutation(2L), user.getSalutation());
+        assertEquals(List.of(new UserRole(3L)), user.getRoles());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), user.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), user.getLastUpdated());
+        assertEquals(1, user.getVersion());
     }
 
     @Test
-    public void testSetGetUserName() {
-        final String userName = "userName";
-        final User user = new User();
-        user.setUserName(userName);
-        assertEquals(userName, user.getUserName());
+    public void testAccessId() {
+        assertNull(user.getId());
+        user.setId(1L);
+        assertEquals(1L, user.getId());
     }
 
     @Test
-    public void testSetGetDisplayName() {
-        final String displayName = "displayName";
-        final User user = new User();
-        user.setDisplayName(displayName);
-        assertEquals(displayName, user.getDisplayName());
+    public void testAccessUserName() {
+        assertNull(user.getUserName());
+        user.setUserName("userName");
+        assertEquals("userName", user.getUserName());
     }
 
     @Test
-    public void testSetGetFirstName() {
-        final String firstName = "firstName";
-        final User user = new User();
-        user.setFirstName(firstName);
-        assertEquals(firstName, user.getFirstName());
+    public void testAccessDisplayName() {
+        assertNull(user.getDisplayName());
+        user.setDisplayName("displayName");
+        assertEquals("displayName", user.getDisplayName());
     }
 
     @Test
-    public void testSetGetLastName() {
-        final String lastName = "lastName";
-        final User user = new User();
-        user.setLastName(lastName);
-        assertEquals(lastName, user.getLastName());
+    public void testAccessFirstName() {
+        assertNull(user.getFirstName());
+        user.setFirstName("firstName");
+        assertEquals("firstName", user.getFirstName());
     }
 
     @Test
-    public void testSetGetEmail() {
-        final String email = "email";
-        final User user = new User();
-        user.setEmail(email);
-        assertEquals(email, user.getEmail());
+    public void testAccessLastName() {
+        assertNull(user.getLastName());
+        user.setLastName("lastName");
+        assertEquals("lastName", user.getLastName());
     }
 
     @Test
-    public void testSetGetImageUrl() {
-        final String imageUrl = "imageUrl";
-        final User user = new User();
-        user.setImageUrl(imageUrl);
-        assertEquals(imageUrl, user.getImageUrl());
+    public void testAccessEmail() {
+        assertNull(user.getEmail());
+        user.setEmail("email");
+        assertEquals("email", user.getEmail());
     }
 
     @Test
-    public void testSetGetPhoneNumber() {
-        final String phoneNumber = "phoneNumber";
-        final User user = new User();
-        user.setPhoneNumber(phoneNumber);
-        assertEquals(phoneNumber, user.getPhoneNumber());
+    public void testAccessImageUrl() {
+        assertNull(user.getImageUrl());
+        user.setImageUrl("imageUrl");
+        assertEquals("imageUrl", user.getImageUrl());
     }
 
     @Test
-    public void testSetGetStatus() {
-        final UserStatus status = new UserStatus();
-        final User user = new User();
-        user.setStatus(status);
-        assertEquals(status, user.getStatus());
+    public void testAccessPhoneNumber() {
+        assertNull(user.getPhoneNumber());
+        user.setPhoneNumber("phoneNumber");
+        assertEquals("phoneNumber", user.getPhoneNumber());
     }
 
     @Test
-    public void testSetGetSalutation() {
-        final UserSalutation salutation = new UserSalutation();
-        final User user = new User();
-        user.setSalutation(salutation);
-        assertEquals(salutation, user.getSalutation());
+    public void testAccessStatus() {
+        assertNull(user.getStatus());
+        user.setStatus(new UserStatus(1L));
+        assertEquals(new UserStatus(1L), user.getStatus());
     }
 
     @Test
-    public void testSetRoles_ReplacesExistingRolesWithNewRoles_WhenExistingRolesAlreadySet() {
-        final UserRoleBinding existingRole = new UserRoleBinding();
-        final User user = new User();
-        user.setRoles(Collections.singletonList(existingRole));
-
-        final UserRoleBinding newRole = new UserRoleBinding();
-        user.setRoles(Collections.singletonList(newRole));
-
-        assertEquals(Collections.singletonList(newRole), user.getRoles());
+    public void testAccessSalutation() {
+        assertNull(user.getSalutation());
+        user.setSalutation(new UserSalutation(1L));
+        assertEquals(new UserSalutation(1L), user.getSalutation());
     }
 
     @Test
-    public void testSetRoles_AddNewRoles_WhenRolesAreNotSet() {
-        final User user = new User();
-        final UserRoleBinding newRole = new UserRoleBinding();
-        user.setRoles(Collections.singletonList(newRole));
-        assertEquals(Collections.singletonList(newRole), user.getRoles());
-    }
-
-    @Test
-    public void testSetRoles_SetRolesToNull_WhenBothExistingAndNewlyAddingRolesAreNull() {
-        final User user = new User();
-        user.setRoles(null);
+    public void testAccessRoles() {
         assertNull(user.getRoles());
+        user.setRoles(List.of(new UserRole(1L), new UserRole(2L)));
+        assertEquals(List.of(new UserRole(1L), new UserRole(2L)), user.getRoles());
+
+        user.setRoles(List.of(new UserRole(10L), new UserRole(20L)));
+        assertEquals(List.of(new UserRole(20L), new UserRole(10L)), user.getRoles());
+    }
+    
+    @Test
+    public void testGetRoleBindings() {
+        assertNull(user.getRoles());
+        user.setRoles(List.of(new UserRole(1L), new UserRole(2L)));
+        
+        List<UserRoleBinding> expected = List.of(
+            new UserRoleBinding(null, new UserRole(1L), user),
+            new UserRoleBinding(null, new UserRole(2L), user)
+        );
+
+        assertEquals(expected, user.getRoleBindings());
+    }
+    
+    @Test
+    public void testAccessLastUpdated() {
+        assertNull(user.getLastUpdated());
+        user.setLastUpdated(LocalDateTime.of(1999, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), user.getLastUpdated());
+    }
+    
+    @Test
+    public void testAccessCreatedAt() {
+        assertNull(user.getCreatedAt());
+        user.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), user.getCreatedAt());
     }
 
     @Test
-    public void testSetRoles_SetUserForRoles_WhenRolesAreSet() {
-        final User user = new User();
-        final UserRoleBinding newRole = new UserRoleBinding();
-        user.setRoles(Collections.singletonList(newRole));
-        assertEquals(user, user.getRoles().get(0).getUser());
-    }
-
-    @Test
-    public void testSetGetVersion() {
-        final Integer version = 1;
-        final User user = new User();
-        user.setVersion(version);
-        assertEquals(version, user.getVersion());
-    }
-
-    @Test
-    public void testSetGetLastUpdated() {
-        final LocalDateTime lastUpdatedDateTime = LocalDateTime.now();
-        final User user = new User();
-        user.setLastUpdated(lastUpdatedDateTime);
-        assertEquals(lastUpdatedDateTime, user.getLastUpdated());
-    }
-
-    @Test
-    public void testSetGetCreatedAt() {
-        final LocalDateTime createdAtDateTime = LocalDateTime.now();
-        final User user = new User();
-        user.setCreatedAt(createdAtDateTime);
-        assertEquals(createdAtDateTime, user.getCreatedAt());
+    public void testAccessVersion() {
+        assertNull(user.getVersion());
+        user.setVersion(1);
+        assertEquals(1, user.getVersion());
     }
 }

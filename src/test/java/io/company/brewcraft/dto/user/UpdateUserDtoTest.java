@@ -1,92 +1,120 @@
 package io.company.brewcraft.dto.user;
 
-import io.company.brewcraft.dto.common.FixedTypeDto;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class UpdateUserDtoTest {
-
+    
+    private UpdateUserDto dto;
+    
+    @BeforeEach
+    public void init() {
+        dto = new UpdateUserDto();
+    }
+    
     @Test
-    public void testSetGetDisplayName() {
-        final String displayName = "displayName";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setDisplayName(displayName);
-        assertEquals(displayName, user.getDisplayName());
+    public void testAllArgConstructor_SetsAllFields() {
+        dto = new UpdateUserDto(
+            "displayName",
+            "firstName",
+            "lastName",
+            "email",
+            1L,
+            2L,
+            "phoneNumber",
+            "imageUrl",
+            List.of(10L),
+            1
+        );
+        
+        assertEquals("displayName", dto.getDisplayName());
+        assertEquals("firstName", dto.getFirstName());
+        assertEquals("lastName", dto.getLastName());
+        assertEquals("email", dto.getEmail());
+        assertEquals(1L, dto.getStatusId());
+        assertEquals(2L, dto.getSalutationId());
+        assertEquals("phoneNumber", dto.getPhoneNumber());
+        assertEquals("imageUrl", dto.getImageUrl());
+        assertEquals(List.of(10L), dto.getRoleIds());
+        assertEquals(1, dto.getVersion());
     }
 
     @Test
-    public void testSetGetFirstName() {
-        final String firstName = "firstName";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setFirstName(firstName);
-        assertEquals(firstName, user.getFirstName());
+    public void testAccessDisplayName() {
+        assertNull(dto.getDisplayName());
+        dto.setDisplayName("displayName");
+        assertEquals("displayName", dto.getDisplayName());
     }
 
     @Test
-    public void testSetGetLastName() {
-        final String lastName = "lastName";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setLastName(lastName);
-        assertEquals(lastName, user.getLastName());
+    public void testAccessFirstName() {
+        assertNull(dto.getFirstName());
+        dto.setFirstName("firstName");
+        assertEquals("firstName", dto.getFirstName());
     }
 
     @Test
-    public void testSetGetEmail() {
-        final String email = "email";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setEmail(email);
-        assertEquals(email, user.getEmail());
+    public void testAccessLastName() {
+        assertNull(dto.getLastName());
+        dto.setLastName("lastName");
+        assertEquals("lastName", dto.getLastName());
     }
 
     @Test
-    public void testSetGetImageUrl() {
-        final String imageUrl = "imageUrl";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setImageUrl(imageUrl);
-        assertEquals(imageUrl, user.getImageUrl());
+    public void testAccessEmail() {
+        assertNull(dto.getEmail());
+        dto.setEmail("email");
+        assertEquals("email", dto.getEmail());
     }
 
     @Test
-    public void testSetGetPhoneNumber() {
-        final String phoneNumber = "phoneNumber";
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setPhoneNumber(phoneNumber);
-        assertEquals(phoneNumber, user.getPhoneNumber());
+    public void testAccessStatusId() {
+        assertNull(dto.getStatusId());
+        dto.setStatusId(1L);
+        assertEquals(1L, dto.getStatusId());
     }
 
     @Test
-    public void testSetGetStatus() {
-        final FixedTypeDto status = new FixedTypeDto();
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setStatus(status);
-        assertEquals(status, user.getStatus());
+    public void testAccessSalutationId() {
+        assertNull(dto.getSalutationId());
+        dto.setSalutationId(10L);
+        assertEquals(10L, dto.getSalutationId());
     }
 
     @Test
-    public void testSetGetSalutation() {
-        final FixedTypeDto salutation = new FixedTypeDto();
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setSalutation(salutation);
-        assertEquals(salutation, user.getSalutation());
+    public void testAccessPhoneNumber() {
+        assertNull(dto.getPhoneNumber());
+        dto.setPhoneNumber("phoneNumber");
+        assertEquals("phoneNumber", dto.getPhoneNumber());
     }
 
     @Test
-    public void testSetGetRoles() {
-        final AddUserRoleDto userRole = new AddUserRoleDto();
-        final UpdateUserDto user = new UpdateUserDto();
-        user.setRoles(Collections.singletonList(userRole));
-        assertEquals(Collections.singletonList(userRole), user.getRoles());
+    public void testAccessImageUrl() {
+        assertNull(dto.getImageUrl());
+        dto.setImageUrl("imageUrl");
+        assertEquals("imageUrl", dto.getImageUrl());
     }
 
     @Test
-    public void testSetGetVersion() {
-        final Integer version = 1;
-        final UpdateUserDto userRole = new UpdateUserDto();
-        userRole.setVersion(version);
-        assertEquals(version, userRole.getVersion());
+    public void testAccessRoleIds() {
+        assertNull(dto.getRoleIds());
+        dto.setRoleIds(List.of(10L));
+        assertEquals(List.of(10L), dto.getRoleIds());
+        
+        dto.setRoleIds(List.of(20L));
+        assertEquals(List.of(20L), dto.getRoleIds());
+    }
+    
+    @Test
+    public void testAccessVersion() {
+        assertNull(dto.getVersion());
+        dto.setVersion(1);
+        assertEquals(1, dto.getVersion());
     }
 }

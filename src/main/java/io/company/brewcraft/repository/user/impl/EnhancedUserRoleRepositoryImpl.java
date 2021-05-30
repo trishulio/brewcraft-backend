@@ -9,9 +9,12 @@ import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.EnhancedUserRoleRepository;
 
 public class EnhancedUserRoleRepositoryImpl implements EnhancedUserRoleRepository {
-    
     private AccessorRefresher<Long, UserRoleAccessor, Identified<Long>> refresher;
 
+    public EnhancedUserRoleRepositoryImpl(AccessorRefresher<Long, UserRoleAccessor, Identified<Long>> refresher) {
+        this.refresher = refresher;
+    }
+    
     @Override
     public void refresh(Collection<UserRole> roles) {
         // Role has no child entity, hence, skipping.

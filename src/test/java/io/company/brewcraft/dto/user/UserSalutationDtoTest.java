@@ -8,32 +8,33 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserRoleDtoTest {
-    
-    private UserRoleDto dto;
+
+public class UserSalutationDtoTest {
+
+    private UserSalutationDto dto;
     
     @BeforeEach
     public void init() {
-        dto = new UserRoleDto();
+        dto = new UserSalutationDto();
     }
     
     @Test
-    public void testAllArgs_SetsAllFields() {
-        dto = new UserRoleDto(
+    public void testAllArgConstructor() {
+        dto = new UserSalutationDto(
             1L,
-            "ROLE_NAME",
-            LocalDateTime.of(1999, 1, 1, 0, 0),
+            "TITLE",
             LocalDateTime.of(2000, 1, 1, 0, 0),
+            LocalDateTime.of(2001, 1, 1, 0, 0),
             1
         );
-
+        
         assertEquals(1L, dto.getId());
-        assertEquals("ROLE_NAME", dto.getName());
+        assertEquals("TITLE", dto.getTitle());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getLastUpdated());
         assertEquals(1, dto.getVersion());
     }
-
+    
     @Test
     public void testAccessId() {
         assertNull(dto.getId());
@@ -42,10 +43,10 @@ public class UserRoleDtoTest {
     }
     
     @Test
-    public void testAccessName() {
-        assertNull(dto.getName());
-        dto.setName("roleName");
-        assertEquals("roleName", dto.getName());
+    public void testAccessTitle() {
+        assertNull(dto.getTitle());
+        dto.setTitle("title");
+        assertEquals("title", dto.getTitle());
     }
     
     @Test
@@ -58,8 +59,8 @@ public class UserRoleDtoTest {
     @Test
     public void testAccessLastUpdated() {
         assertNull(dto.getLastUpdated());
-        dto.setLastUpdated(LocalDateTime.of(1999, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getLastUpdated());
+        dto.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), dto.getLastUpdated());
     }
     
     @Test

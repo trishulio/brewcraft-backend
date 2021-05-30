@@ -12,6 +12,10 @@ public class EnhancedUserStatusRepositoryImpl implements EnhancedUserStatusRepos
 
     private AccessorRefresher<Long, UserStatusAccessor, Identified<Long>> refresher;
     
+    public EnhancedUserStatusRepositoryImpl(AccessorRefresher<Long, UserStatusAccessor, Identified<Long>> refresher) {
+        this.refresher = refresher;
+    }
+    
     @Override
     public void refresh(Collection<UserStatus> statuses) {
         // No child entities, hence skipping.
