@@ -7,7 +7,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
@@ -17,7 +16,7 @@ import io.company.brewcraft.repository.user.impl.EnhancedUserRepositoryImpl;
 
 public class EnhancedUserRepositoryImplTest {
 
-    private AccessorRefresher<Long, UserAccessor, Identified<Long>> mRefresher;
+    private AccessorRefresher<Long, UserAccessor, User> mRefresher;
     private UserStatusRepository mStatusRepo;
     private UserSalutationRepository mSalutationRepo;
     private UserRoleBindingRepository mRoleBindingRepo;

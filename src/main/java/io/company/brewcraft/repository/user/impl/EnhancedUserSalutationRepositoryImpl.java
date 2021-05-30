@@ -2,7 +2,6 @@ package io.company.brewcraft.repository.user.impl;
 
 import java.util.Collection;
 
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserSalutationAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
@@ -10,9 +9,9 @@ import io.company.brewcraft.repository.user.EnhancedUserSalutationRepository;
 
 public class EnhancedUserSalutationRepositoryImpl implements EnhancedUserSalutationRepository {
     
-    private AccessorRefresher<Long, UserSalutationAccessor, Identified<Long>> refresher;
+    private AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher;
 
-    public EnhancedUserSalutationRepositoryImpl (AccessorRefresher<Long, UserSalutationAccessor, Identified<Long>> refresher) {
+    public EnhancedUserSalutationRepositoryImpl (AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher) {
         this.refresher = refresher;
     }
 

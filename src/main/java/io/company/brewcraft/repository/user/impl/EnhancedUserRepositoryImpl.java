@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRoleBinding;
@@ -21,13 +20,13 @@ import io.company.brewcraft.repository.user.UserStatusRepository;
 public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
     private static final Logger logger = LoggerFactory.getLogger(EnhancedUserRepositoryImpl.class);
 
-    private final AccessorRefresher<Long, UserAccessor, Identified<Long>> refresher;
+    private final AccessorRefresher<Long, UserAccessor, User> refresher;
     private final UserStatusRepository statusRepo;
     private final UserSalutationRepository salutationRepo;
     private final UserRoleBindingRepository roleBindingRepo;
 
     @Autowired
-    public EnhancedUserRepositoryImpl(AccessorRefresher<Long, UserAccessor, Identified<Long>> refresher, UserStatusRepository statusRepo, UserSalutationRepository salutationRepo, UserRoleBindingRepository roleBindingRepo) {
+    public EnhancedUserRepositoryImpl(AccessorRefresher<Long, UserAccessor, User> refresher, UserStatusRepository statusRepo, UserSalutationRepository salutationRepo, UserRoleBindingRepository roleBindingRepo) {
         this.refresher = refresher;
         this.statusRepo = statusRepo;
         this.salutationRepo = salutationRepo;
