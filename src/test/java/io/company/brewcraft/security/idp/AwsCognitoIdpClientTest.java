@@ -41,8 +41,8 @@ public class AwsCognitoIdpClientTest {
         client.createUser("USERNAME", Map.of("key-1", "value-1", "key-2", "value-2"));
         
         List<AttributeType> expected = List.of(
-            new AttributeType().withName("key-1").withValue("value-1"),
-            new AttributeType().withName("key-2").withValue("value-2")
+            new AttributeType().withName("key-2").withValue("value-2"),
+            new AttributeType().withName("key-1").withValue("value-1")
         );
         assertEquals(expected, captor.getValue().getUserAttributes());
         assertEquals("USERNAME", captor.getValue().getUsername());
@@ -57,8 +57,8 @@ public class AwsCognitoIdpClientTest {
         client.updateUser("USERNAME", Map.of("key-1", "value-1", "key-2", "value-2"));
 
         List<AttributeType> expected = List.of(
-            new AttributeType().withName("key-1").withValue("value-1"),
-            new AttributeType().withName("key-2").withValue("value-2")
+            new AttributeType().withName("key-2").withValue("value-2"),
+            new AttributeType().withName("key-1").withValue("value-1")
         );
         assertEquals(expected, captor.getValue().getUserAttributes());
         assertEquals("USERNAME", captor.getValue().getUsername());
