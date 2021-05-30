@@ -22,4 +22,9 @@ public class EnhancedUserRoleBindingRepositoryImpl implements EnhancedUserRoleBi
         this.userRepo.refreshAccessors(bindings);
         this.userRoleRepo.refreshAccessors(bindings);
     }
+
+    @Override
+    public void refreshRoles(Collection<UserRoleBinding> bindings) {
+        this.userRoleRepo.refreshAccessors(bindings);
+    }
 }

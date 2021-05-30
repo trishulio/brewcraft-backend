@@ -45,6 +45,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "email")
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

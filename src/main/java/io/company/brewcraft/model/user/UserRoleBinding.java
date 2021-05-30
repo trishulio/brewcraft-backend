@@ -38,7 +38,7 @@ public class UserRoleBinding extends BaseEntity implements Identified<Long>, Aud
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_role_id", referencedColumnName = "id")
     private UserRole role;
 
     @ManyToOne

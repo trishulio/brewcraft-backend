@@ -49,7 +49,7 @@ public class EnhancedUserRepositoryImplTest {
             new UserRoleBinding(null, new UserRole(10L), users.get(0)),
             new UserRoleBinding(null, new UserRole(20L), users.get(1))
         );
-        verify(mRoleBindingRepo, times(1)).refresh(expected);
+        verify(mRoleBindingRepo, times(1)).refreshRoles(expected);
 
         verify(mStatusRepo, times(1)).refreshAccessors(users);
         verify(mSalutationRepo, times(1)).refreshAccessors(users);

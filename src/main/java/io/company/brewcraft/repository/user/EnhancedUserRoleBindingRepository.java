@@ -5,5 +5,7 @@ import java.util.Collection;
 import io.company.brewcraft.model.user.UserRoleBinding;
 
 public interface EnhancedUserRoleBindingRepository {
-    void refresh(Collection<UserRoleBinding> user);
+    void refresh(Collection<UserRoleBinding> bindings);
+
+    void refreshRoles(Collection<UserRoleBinding> bindings);
 }

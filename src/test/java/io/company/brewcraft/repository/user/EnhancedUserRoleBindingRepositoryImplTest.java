@@ -32,4 +32,13 @@ public class EnhancedUserRoleBindingRepositoryImplTest {
         verify(mUserRepo, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
         verify(mRoleRepo, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
     }
+
+    @Test
+    public void testRefreshRoles_RefreshesRoleChildEntities() {
+        List<UserRoleBinding> bindings = List.of(new UserRoleBinding(1L), new UserRoleBinding(2L));
+        repo.refresh(bindings);
+
+        verifyNoInteractions(mUserRepo);
+        verify(mRoleRepo, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));        
+    }
 }

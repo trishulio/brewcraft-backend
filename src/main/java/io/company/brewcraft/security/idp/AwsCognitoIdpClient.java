@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
+import com.amazonaws.services.cognitoidp.model.AWSCognitoIdentityProviderException;
 import com.amazonaws.services.cognitoidp.model.AdminCreateUserRequest;
 import com.amazonaws.services.cognitoidp.model.AdminCreateUserResult;
 import com.amazonaws.services.cognitoidp.model.AdminDeleteUserRequest;
@@ -32,8 +33,14 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
         final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withMessageAction(MessageActionType.SUPPRESS).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
-        final AdminCreateUserResult adminCreateUserResult = this.delegate.adminCreateUser(adminCreateUserRequest);;
-        logger.debug("Successfully Saved user {} in cognito user pool {} with status : {}", userName, userPoolId, adminCreateUserResult.getUser().getUserStatus());
+        try {
+            final AdminCreateUserResult adminCreateUserResult = this.delegate.adminCreateUser(adminCreateUserRequest);
+            logger.debug("Successfully Saved user {} in cognito user pool {} with status : {}", userName, userPoolId, adminCreateUserResult.getUser().getUserStatus());
+        } catch (AWSCognitoIdentityProviderException e) {
+            String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
+            logger.error(msg);
+            throw new RuntimeException(msg, e);
+        }
     }
 
     @Override
