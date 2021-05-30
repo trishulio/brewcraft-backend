@@ -20,7 +20,5 @@ public interface UserRoleMapper {
     })
     UserRole fromDto(Long id);
 
-    UserRole fromDto(UserRoleDto roleDto);
-
     UserRoleDto toDto(UserRole userRole);
 }

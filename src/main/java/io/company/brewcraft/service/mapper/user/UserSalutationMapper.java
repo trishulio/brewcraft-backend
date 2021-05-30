@@ -20,7 +20,5 @@ public interface UserSalutationMapper {
     })
     UserSalutation fromDto(Long id);
 
-    UserSalutation fromDto(UserSalutationDto salutationDto);
-
     UserSalutationDto toDto(UserSalutation salutation);
 }

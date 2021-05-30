@@ -22,7 +22,7 @@ public class UserStatusDto extends BaseDto {
         setId(id);
     }
 
-    public UserStatusDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdatedAt, Integer version) {
+    public UserStatusDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
         setCreatedAt(createdAt);

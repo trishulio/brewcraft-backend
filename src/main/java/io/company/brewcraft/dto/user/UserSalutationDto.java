@@ -22,7 +22,7 @@ public class UserSalutationDto extends BaseDto {
         setId(id);
     }
 
-    public UserSalutationDto(Long id, String title, LocalDateTime createdAt, LocalDateTime lastUpdatedAt, Integer version) {
+    public UserSalutationDto(Long id, String title, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setTitle(title);
         setCreatedAt(createdAt);

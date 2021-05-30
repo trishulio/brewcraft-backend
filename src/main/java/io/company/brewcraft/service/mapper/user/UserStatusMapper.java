@@ -20,7 +20,5 @@ public interface UserStatusMapper {
     })
     UserStatus fromDto(Long id);
 
-    UserStatus fromDto(UserStatusDto statusDto);
-
     UserStatusDto toDto(UserStatus status);
 }
