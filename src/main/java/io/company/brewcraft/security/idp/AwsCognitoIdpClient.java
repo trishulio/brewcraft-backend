@@ -32,7 +32,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
         final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withMessageAction(MessageActionType.SUPPRESS).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
-        final AdminCreateUserResult adminCreateUserResult = this.delegate.adminCreateUser(adminCreateUserRequest);
+        final AdminCreateUserResult adminCreateUserResult = this.delegate.adminCreateUser(adminCreateUserRequest);;
         logger.debug("Successfully Saved user {} in cognito user pool {} with status : {}", userName, userPoolId, adminCreateUserResult.getUser().getUserStatus());
     }
 
