@@ -23,8 +23,8 @@ public class UserSalutationTest {
         salutation = new UserSalutation(
             1L,
             "TITLE",
+            LocalDateTime.of(1999, 1, 1, 0, 0),
             LocalDateTime.of(2000, 1, 1, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 0, 0),
             1
         );
         

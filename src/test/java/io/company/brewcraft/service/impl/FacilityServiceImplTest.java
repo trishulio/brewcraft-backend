@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class FacilityServiceImplTest {
 
         when(facilityRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedFacilities);
 
-        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, Set.of("id"), true);
+        Page<Facility> actualFacilities = facilityService.getAllFacilities(0, 100, new TreeSet<>(List.of("id")), true);
 
         assertSame(0, pageableArgument.getValue().getPageNumber());
         assertSame(100, pageableArgument.getValue().getPageSize());

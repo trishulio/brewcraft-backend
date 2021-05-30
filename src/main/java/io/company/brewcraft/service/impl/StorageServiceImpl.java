@@ -1,9 +1,9 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class StorageServiceImpl extends BaseService implements StorageService {
     }
 
     @Override
-    public Page<Storage> getAllStorages(int page, int size, Set<String> sort, boolean orderAscending) {        
+    public Page<Storage> getAllStorages(int page, int size, SortedSet<String> sort, boolean orderAscending) {        
         Page<Storage> storagePage = storageRepository.findAll(pageRequest(sort, orderAscending, page, size));
         
         return storagePage;

@@ -114,7 +114,7 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, UserRoleAccessor, UserRole> userRefresher(UserRoleRepository repo) {
+    public AccessorRefresher<Long, UserRoleAccessor, UserRole> userRoleRefresher(UserRoleRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getRole(),
             (accessor, role) -> accessor.setRole(role),
@@ -123,7 +123,7 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> userRefresher(UserSalutationRepository repo) {
+    public AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> userSalutationRefresher(UserSalutationRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getSalutation(),
             (accessor, salutation) -> accessor.setSalutation(salutation),
@@ -132,7 +132,7 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, UserStatusAccessor, UserStatus> userRefresher(UserStatusRepository repo) {
+    public AccessorRefresher<Long, UserStatusAccessor, UserStatus> userStatusRefresher(UserStatusRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),

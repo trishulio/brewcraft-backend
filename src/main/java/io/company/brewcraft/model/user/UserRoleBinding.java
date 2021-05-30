@@ -33,8 +33,8 @@ public class UserRoleBinding extends BaseEntity implements Identified<Long>, Aud
     public static final String FIELD_USER = "user";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_generator")
-    @SequenceGenerator(name = "user_role_generator", sequenceName = "user_role_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_binding_generator")
+    @SequenceGenerator(name = "user_role_binding_generator", sequenceName = "user_role_binding_sequence", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

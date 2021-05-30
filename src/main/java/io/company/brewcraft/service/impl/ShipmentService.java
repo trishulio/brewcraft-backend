@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,7 @@ public class ShipmentService extends BaseService {
         LocalDateTime deliveryDueDateTo,
         LocalDateTime deliveredDateFrom,
         LocalDateTime deliveredDateTo,
-        Set<String> sort,
+        SortedSet<String> sort,
         boolean orderAscending,
         int page,
         int size

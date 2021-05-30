@@ -1,9 +1,10 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
 
     @Override
     public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types, Set<String> statuses, Set<Long> facilityIds,
-            int page, int size, Set<String> sort, boolean orderAscending) {
+            int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Page<Equipment> equipmentPage = equipmentRepository.findAll(new EquipmentRepositoryGetAllEquipmentSpecification(ids, types, statuses, facilityIds), pageRequest(sort, orderAscending, page, size));
 
         return equipmentPage;

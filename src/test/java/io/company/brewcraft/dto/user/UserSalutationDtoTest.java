@@ -30,8 +30,8 @@ public class UserSalutationDtoTest {
         
         assertEquals(1L, dto.getId());
         assertEquals("TITLE", dto.getTitle());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getLastUpdated());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getCreatedAt());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), dto.getLastUpdated());
         assertEquals(1, dto.getVersion());
     }
     

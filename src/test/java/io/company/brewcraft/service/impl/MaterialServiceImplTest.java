@@ -1,21 +1,14 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +23,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
@@ -70,7 +63,7 @@ public class MaterialServiceImplTest {
 
         when(materialRepositoryMock.findAll(ArgumentMatchers.<Specification<Material>>any(), pageableArgument.capture())).thenReturn(expectedMaterialEntities);
 
-        Page<Material> actualMaterials = materialService.getMaterials(null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<Material> actualMaterials = materialService.getMaterials(null, null, null, 0, 100, new TreeSet<>(List.of("id")), true);
 
         assertSame(0, pageableArgument.getValue().getPageNumber());
         assertSame(100, pageableArgument.getValue().getPageSize());

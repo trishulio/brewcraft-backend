@@ -3,7 +3,7 @@ package io.company.brewcraft.service.impl;
 import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,8 @@ public class SupplierContactServiceImpl extends BaseService implements SupplierC
         this.supplierService = supplierService;
     }
     
-    public Page<SupplierContact> getSupplierContacts(int page, int size, Set<String> sort, boolean orderAscending) {
+    @Override
+    public Page<SupplierContact> getSupplierContacts(int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Page<SupplierContact> supplierContacts = supplierContactRepository.findAll(pageRequest(sort, orderAscending, page, size));
         
         return supplierContacts;

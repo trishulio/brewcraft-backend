@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 
@@ -9,7 +10,7 @@ import io.company.brewcraft.model.MaterialCategory;
 public interface MaterialCategoryService {
 
     public Page<MaterialCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentIds, Set<String> parentNames, 
-            int page, int size, Set<String> sort, boolean orderAscending);
+            int page, int size, SortedSet<String> sort, boolean orderAscending);
     
     public MaterialCategory getCategory(Long categoryId);
 

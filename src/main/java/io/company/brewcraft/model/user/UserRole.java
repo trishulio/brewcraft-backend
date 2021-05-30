@@ -20,14 +20,13 @@ import io.company.brewcraft.model.Identified;
 
 @Entity(name = "user_role")
 @Table
-@SequenceGenerator(name = "fixed_type_generator", sequenceName = "user_role_type_sequence", allocationSize = 1)
 public class UserRole extends BaseEntity implements BaseUserRole, UpdateUserRole, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipment_status_generator")
-    @SequenceGenerator(name = "shipment_status_generator", sequenceName = "shipment_status_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_generator")
+    @SequenceGenerator(name = "user_role_generator", sequenceName = "user_role_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true)

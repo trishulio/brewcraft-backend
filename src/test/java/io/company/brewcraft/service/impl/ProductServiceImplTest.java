@@ -1,23 +1,16 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +26,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasure;
 import io.company.brewcraft.model.ProductMeasureValue;
-import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductMeasureService;
@@ -78,7 +71,7 @@ public class ProductServiceImplTest {
 
         when(productRepositoryMock.findAll(ArgumentMatchers.<Specification<Product>>any(), pageableArgument.capture())).thenReturn(expectedProductEntities);
 
-        Page<Product> actualProducts = productService.getProducts(null, null, null, 0, 100, new HashSet<>(Arrays.asList("id")), true);
+        Page<Product> actualProducts = productService.getProducts(null, null, null, 0, 100, new TreeSet<>(List.of("id")), true);
 
         assertSame(0, pageableArgument.getValue().getPageNumber());
         assertSame(100, pageableArgument.getValue().getPageSize());

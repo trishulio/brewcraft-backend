@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,7 @@ public class UserControllerTest {
             Set.of("role"),
             1,
             100,
-            Set.of("username"),
+            new TreeSet<>(List.of("username")),
             true
         );
 
@@ -138,7 +139,7 @@ public class UserControllerTest {
             Set.of(10L),
             Set.of(20L),
             Set.of("role"),
-            Set.of("username"),
+            new TreeSet<>(List.of("username")),
             true,
             1,
             100

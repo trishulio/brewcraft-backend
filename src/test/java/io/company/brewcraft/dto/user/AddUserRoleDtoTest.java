@@ -18,6 +18,7 @@ public class AddUserRoleDtoTest {
     
     @Test
     public void testAllArgConstructor_SetsAllFields() {
+        dto = new AddUserRoleDto("NAME");
         assertEquals("NAME", dto.getName());
     }
     

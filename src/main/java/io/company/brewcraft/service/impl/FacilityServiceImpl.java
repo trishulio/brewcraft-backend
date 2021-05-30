@@ -1,9 +1,9 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class FacilityServiceImpl extends BaseService implements FacilityService 
     }
     
     @Override
-    public Page<Facility> getAllFacilities(int page, int size, Set<String> sort, boolean orderAscending) {        
+    public Page<Facility> getAllFacilities(int page, int size, SortedSet<String> sort, boolean orderAscending) {        
         Page<Facility> facilityPage = facilityRepository.findAll(pageRequest(sort, orderAscending, page, size));
     
         return facilityPage;

@@ -17,7 +17,7 @@ import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.Identified;
 
 @Entity
-@Table(name = "_users")
+@Table(name = "_user")
 public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_NAME = "userName";
@@ -30,7 +30,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
-    @SequenceGenerator(name = "user_generator", sequenceName = "app_user_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "user_name", updatable = false)

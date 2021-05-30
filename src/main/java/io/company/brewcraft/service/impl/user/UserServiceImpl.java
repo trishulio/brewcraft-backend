@@ -5,6 +5,7 @@ import static io.company.brewcraft.repository.RepositoryUtil.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<Long> statusIds, Set<Long> salutationIds, Set<String> roles, int page, int size, Set<String> sort, boolean orderAscending) {
+    public Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<Long> statusIds, Set<Long> salutationIds, Set<String> roles, int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
         final Specification<User> userSpecification = SpecificationBuilder
                 .builder()
