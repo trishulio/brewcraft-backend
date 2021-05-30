@@ -165,7 +165,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UserService.class)
-    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo, UtilityProvider utilProvider) {
-        return new UserServiceImpl(userRepository, idpRepo, utilProvider);
+    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo) {
+        return new UserServiceImpl(userRepository, idpRepo);
     }
 }
