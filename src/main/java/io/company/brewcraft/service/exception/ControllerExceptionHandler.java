@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.persistence.OptimisticLockException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionFailedException;
@@ -49,9 +51,9 @@ public class ControllerExceptionHandler {
         return message;
     }
 
-    @ExceptionHandler(value = { ObjectOptimisticLockingFailureException.class })
+    @ExceptionHandler(value = { ObjectOptimisticLockingFailureException.class, OptimisticLockException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorResponse objectOptimisticLockingFailureException(ObjectOptimisticLockingFailureException e, HttpServletRequest request) {
+    public ErrorResponse objectOptimisticLockingFailureException(Exception e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         log.debug("Optimistic Locking Failure Exception", e);

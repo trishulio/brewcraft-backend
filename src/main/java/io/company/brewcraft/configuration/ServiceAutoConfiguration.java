@@ -182,4 +182,53 @@ public class ServiceAutoConfiguration {
     public MaterialLotInventoryService lotInventoryService(MaterialLotAggregationRepository lotAggrRepo) {
         return new MaterialLotInventoryService(lotAggrRepo);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewService.class)
+    public BrewService brewService(BrewRepository brewRepository) {
+        BrewService brewService = new BrewServiceImpl(brewRepository);
+        return brewService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewTaskService.class)
+    public BrewTaskService brewTaskService(BrewTaskRepository brewTaskRepository) {
+        BrewTaskService brewTaskService = new BrewTaskServiceImpl(brewTaskRepository);
+        return brewTaskService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewStageService.class)
+    public BrewStageService brewStageService(BrewStageRepository brewStageRepository, BrewService brewService) {
+        BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository, brewService);
+        return brewStageService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewStageStatusService.class)
+    public BrewStageStatusService brewStageStatusService(BrewStageStatusRepository brewStageStatusRepository) {
+        BrewStageStatusService brewStageStatusService = new BrewStageStatusServiceImpl(brewStageStatusRepository);
+        return brewStageStatusService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(MixtureService.class)
+    public MixtureService mixtureService(MixtureRepository mixtureRepository) {
+    	MixtureService mixtureService = new MixtureServiceImpl(mixtureRepository);
+        return mixtureService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(MaterialPortionService.class)
+    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository) {
+    	MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
+        return materialPortionService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(MixtureRecordingService.class)
+    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
+    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
+        return mixtureRecordingService;
+    }
 }

@@ -2,7 +2,7 @@ package io.company.brewcraft.model;
 
 import java.util.List;
 
-interface BaseProduct {
+public interface BaseProduct {
     final String ATTR_NAME = "name";
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_CATEGORY = "category";

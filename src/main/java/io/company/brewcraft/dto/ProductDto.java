@@ -23,11 +23,15 @@ public class ProductDto extends BaseDto {
     public ProductDto() {
         super();
     }
+    
+    public ProductDto(Long id) {
+    	this();
+    	this.id = id;
+    }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
             CategoryDto style, List<ProductMeasureDto> targetMeasures, Integer version) {
-        super();
-        this.id = id;
+    	this(id);
         this.name = name;
         this.description = description;
         this.productClass = productClass;

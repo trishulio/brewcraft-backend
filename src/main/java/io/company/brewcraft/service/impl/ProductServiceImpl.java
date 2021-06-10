@@ -14,13 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.company.brewcraft.dto.BaseProduct;
-import io.company.brewcraft.dto.UpdateProduct;
-import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.BaseProduct;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasure;
 import io.company.brewcraft.model.ProductMeasureValue;
+import io.company.brewcraft.model.UpdateProduct;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
