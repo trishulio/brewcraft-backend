@@ -1,0 +1,12 @@
+package io.company.brewcraft.repository;
+
+import java.util.Collection;
+
+import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.service.ParentBrewAccessor;
+
+public interface EnhancedBrewRepository {
+    void refresh(Collection<Brew> brews);
+    
+    void refreshAccessors(Collection<? extends ParentBrewAccessor> accessors);
+}

@@ -5,17 +5,20 @@ import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserRoleType;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
+import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.EnhancedUserRepository;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleTypeRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.repository.user.UserStatusRepository;
+import io.company.brewcraft.service.UserAccessor;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,10 +33,11 @@ public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
     private final UserSalutationRepository userSalutationRepository;
 
     private final UserRoleTypeRepository userRoleTypeRepository;
-
+    
+    private AccessorRefresher<Long, UserAccessor, User> refresher;
 
     @Autowired
-    public EnhancedUserRepositoryImpl(UserRepository userRepository, UserStatusRepository userStatusRepository, UserSalutationRepository userSalutationRepository, UserRoleTypeRepository userRoleTypeRepository) {
+    public EnhancedUserRepositoryImpl(UserRepository userRepository, UserStatusRepository userStatusRepository, UserSalutationRepository userSalutationRepository, UserRoleTypeRepository userRoleTypeRepository, AccessorRefresher<Long, UserAccessor, User> refresher) {
         this.userRepository = userRepository;
         this.userStatusRepository = userStatusRepository;
         this.userSalutationRepository = userSalutationRepository;
@@ -81,4 +85,9 @@ public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
             throw new IllegalArgumentException("user role type or name field of user role type cannot be null or empty in user " + userName + " Role");
         }
     }
+
+	@Override
+	public void refreshAccessors(Collection<? extends UserAccessor> accessors) {
+        this.refresher.refreshAccessors(accessors);		
+	}
 }

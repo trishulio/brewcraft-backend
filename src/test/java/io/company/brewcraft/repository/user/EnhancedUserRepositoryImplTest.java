@@ -39,7 +39,7 @@ public class EnhancedUserRepositoryImplTest {
         userStatusRepository = mock(UserStatusRepository.class);
         userSalutationRepository = mock(UserSalutationRepository.class);
         userRoleTypeRepository = mock(UserRoleTypeRepository.class);
-        enhancedUserRepositoryImpl = new EnhancedUserRepositoryImpl(userRepository, userStatusRepository, userSalutationRepository, userRoleTypeRepository);
+        enhancedUserRepositoryImpl = new EnhancedUserRepositoryImpl(userRepository, userStatusRepository, userSalutationRepository, userRoleTypeRepository, null);
     }
 
     @Test

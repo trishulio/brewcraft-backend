@@ -20,7 +20,7 @@ import tec.uom.se.quantity.Quantities;
 
 @Entity
 @Table(name="EQUIPMENT")
-public class Equipment extends BaseEntity {
+public class Equipment extends BaseEntity implements Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_FACILITY = "facility";
     public static final String FIELD_NAME = "name";

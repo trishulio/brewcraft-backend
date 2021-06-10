@@ -1,6 +1,8 @@
 package io.company.brewcraft.model.user;
 
 import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.model.Identified;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
@@ -24,7 +26,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "_users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Identified<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
     @SequenceGenerator(name = "user_generator", sequenceName = "app_user_sequence", allocationSize = 1)

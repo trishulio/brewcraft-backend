@@ -184,4 +184,53 @@ public class ServiceAutoConfiguration {
     public UserService userService(UserRepository userRepository, IdentityProviderClient identityProviderClient, UtilityProvider utilProvider) {
         return new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewService.class)
+    public BrewService brewService(BrewRepository brewRepository) {
+        BrewService brewService = new BrewServiceImpl(brewRepository);
+        return brewService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewTaskService.class)
+    public BrewTaskService brewTaskService(BrewTaskRepository brewTaskRepository) {
+        BrewTaskService brewTaskService = new BrewTaskServiceImpl(brewTaskRepository);
+        return brewTaskService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewStageService.class)
+    public BrewStageService brewStageService(BrewStageRepository brewStageRepository, BrewService brewService) {
+        BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository, brewService);
+        return brewStageService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewStageStatusService.class)
+    public BrewStageStatusService brewStageStatusService(BrewStageStatusRepository brewStageStatusRepository) {
+        BrewStageStatusService brewStageStatusService = new BrewStageStatusServiceImpl(brewStageStatusRepository);
+        return brewStageStatusService;
+    }
+    
+//    @Bean
+//    @ConditionalOnMissingBean(BrewEventService.class)
+//    public BrewEventService brewEventService(BrewService brewService,  BrewStageService brewStageService, BrewLogService brewLogService) {
+//        BrewEventService brewEventService = new BrewEventServiceImpl(brewService, brewStageService, brewLogService);
+//        return brewEventService;
+//    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewLogService.class)
+    public BrewLogService brewLogService(BrewLogRepository brewLogRepository, BrewStageService brewStageService, BrewLogTypeService brewLogTypeService) {
+        BrewLogService brewLogService = new BrewLogServiceImpl(brewLogRepository, brewStageService, brewLogTypeService);
+        return brewLogService;
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(BrewLogTypeService.class)
+    public BrewLogTypeService brewLogTypeService(BrewLogTypeRepository brewLogRepository) {
+        BrewLogTypeService brewLogTypeService = new BrewLogTypeServiceImpl(brewLogRepository);
+        return brewLogTypeService;
+    }
 }
