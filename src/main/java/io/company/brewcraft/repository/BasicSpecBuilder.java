@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -30,7 +29,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     
     @Override
     public BasicSpecBuilder isNull(String[] paths) {
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(get(root, paths));
+        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(new DeepRoot(root).get(paths));
         accumulator.add(func);
 
         accumulator.setIsNot(false);
@@ -45,7 +44,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     @Override
     public BasicSpecBuilder in(String[] paths, Collection<?> collection) {
         if (collection != null) {
-            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> get(root, paths).in(collection);
+            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> new DeepRoot(root).get(paths).in(collection);
             accumulator.add(func);
         }
 
@@ -68,11 +67,11 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     public <C extends Comparable<C>> BasicSpecBuilder between(String[] paths, C start, C end) {
         TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = null;
         if (start != null && end != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.between(get(root, paths), start, end);
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.between(new DeepRoot(root).get(paths), start, end);
         } else if (start != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(get(root, paths), start);
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(new DeepRoot(root).get(paths), start);
         } else if (end != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(get(root, paths), end);
+            func = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(new DeepRoot(root).get(paths), end);
         }
 
         if (func != null) {
@@ -96,28 +95,12 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         };
     }
 
-    private <C> Path<C> get(Root<?> root, String[] fieldNames) {
-        if (fieldNames == null || fieldNames.length <= 0) {
-            String msg = String.format("No field names provided: %s", fieldNames.toString());
-            log.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
-
-        Path<C> path = root.get(fieldNames[0]);
-
-        for (int i = 1; i < fieldNames.length; i++) {
-            path = path.get(fieldNames[i]);
-        }
-
-        return path;
-    }
-
     @Override
     public SpecificationBuilder like(String[] paths, Set<String> queries) {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.like(get(root, paths), String.format("%%%s%%", text));
+                    TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.like(new DeepRoot(root).get(paths), String.format("%%%s%%", text));
                     accumulator.add(func);
                 }
             }

@@ -14,7 +14,7 @@ COPY ${WAIT_FOR_IT_FILE} wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 
 ENTRYPOINT [ "/bin/sh", "-c" ]
-CMD ["./wait-for-it.sh --strict --timeout=20 localstack:4566 && java -jar brewcraftapp.jar"]
+CMD ["java -jar brewcraftapp.jar"]
 
 # Stage 2 - Dev - Adds dev tools compatibility
 FROM prod AS dev
