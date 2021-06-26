@@ -9,7 +9,6 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
@@ -18,7 +17,6 @@ import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 
-@Service
 public class MaterialLotInventoryService {
     
     private MaterialLotAggregationRepository repo;

@@ -184,4 +184,10 @@ public class ServiceAutoConfiguration {
     public UserService userService(UserRepository userRepository, IdentityProviderClient identityProviderClient, UtilityProvider utilProvider) {
         return new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(MaterialLotInventoryService.class)
+    public MaterialLotInventoryService lotInventoryService(MaterialLotAggregationRepository lotAggrRepo) {
+        return new MaterialLotInventoryService(lotAggrRepo);
+    }
 }
