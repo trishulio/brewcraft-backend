@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -97,6 +98,14 @@ public class ControllerExceptionHandler {
         
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
+        return message;
+    }
+    
+    @ExceptionHandler(value = { ConversionFailedException.class })
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse conversionFailedErrorResponse(ConversionFailedException e, HttpServletRequest request) {
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+        
         return message;
     }
 }
