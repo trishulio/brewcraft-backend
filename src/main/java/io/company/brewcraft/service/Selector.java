@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
@@ -34,9 +35,9 @@ public class Selector extends BaseModel {
         return select(new SumAggregation(path));
     }
     
-    public List<Selection<?>> getSelection(Root<?> root, CriteriaBuilder cb) {
+    public List<Selection<?>> getSelection(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         List<Selection<?>> selection = this.aggregations.stream()
-                                                        .map(aggr -> aggr.getExpression(root, cb))
+                                                        .map(aggr -> aggr.getExpression(root, cq, cb))
                                                         .collect(Collectors.toList());
         return selection;
     }    

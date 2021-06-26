@@ -83,11 +83,11 @@ public class AggregationRepositoryTest {
         
         Selector mSelector = mock(Selector.class);
         List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCb);
+        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
         
         Selector mGroupBySelector = mock(Selector.class);
         List<Expression<?>> mGroupSelection = List.of(mock(Expression.class));
-        doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCb);
+        doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCq, mCb);
 
         doAnswer(inv -> {
             InOrder order = inOrder(mCq, mTq);
@@ -96,6 +96,8 @@ public class AggregationRepositoryTest {
             order.verify(mCq, times(1)).groupBy(mGroupSelection);
             order.verify(mTq).setFirstResult(990);
             order.verify(mTq).setMaxResults(99);
+            order.verify(mTq).getResultList();
+            order.verifyNoMoreInteractions();
 
             return List.of(new TestEntity(100));
         }).when(mTq).getResultList();
@@ -112,4 +114,69 @@ public class AggregationRepositoryTest {
         assertEquals(expected, page);
     }
     
+    @Test
+    public void testGetAggregation_DoesNotGroupBy_WhenGroupByIsNull() {
+        Specification<TestEntity> mSpec = mock(Specification.class);
+        Predicate mPred = mock(Predicate.class);
+        doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
+        
+        Selector mSelector = mock(Selector.class);
+        List<Selection<?>> mSelection = List.of(mock(Selection.class));
+        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        
+        doAnswer(inv -> {
+            InOrder order = inOrder(mCq, mTq);
+            order.verify(mCq, times(1)).where(mPred);
+            order.verify(mCq, times(1)).multiselect(mSelection);
+            order.verify(mTq).setFirstResult(990);
+            order.verify(mTq).setMaxResults(99);
+            order.verify(mTq).getResultList();
+            order.verifyNoMoreInteractions();
+
+            return List.of(new TestEntity(100));
+        }).when(mTq).getResultList();
+
+        Page<TestEntity> page = repo.getAggregation(
+            TestEntity.class,
+            mSelector,
+            null,
+            mSpec,
+            PageRequest.of(10, 99)
+        );
+        
+        Page<TestEntity> expected = new PageImpl<>(List.of(new TestEntity(100)));
+        assertEquals(expected, page);
+    }
+
+    @Test
+    public void testGetAggregation_DoesSetLimitOffset_WhenPageableIsNull() {
+        Specification<TestEntity> mSpec = mock(Specification.class);
+        Predicate mPred = mock(Predicate.class);
+        doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
+        
+        Selector mSelector = mock(Selector.class);
+        List<Selection<?>> mSelection = List.of(mock(Selection.class));
+        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        
+        doAnswer(inv -> {
+            InOrder order = inOrder(mCq, mTq);
+            order.verify(mCq, times(1)).where(mPred);
+            order.verify(mCq, times(1)).multiselect(mSelection);
+            order.verify(mTq).getResultList();
+            order.verifyNoMoreInteractions();
+
+            return List.of(new TestEntity(100));
+        }).when(mTq).getResultList();
+
+        Page<TestEntity> page = repo.getAggregation(
+            TestEntity.class,
+            mSelector,
+            null,
+            mSpec,
+            null
+        );
+        
+        Page<TestEntity> expected = new PageImpl<>(List.of(new TestEntity(100)));
+        assertEquals(expected, page);
+    }
 }

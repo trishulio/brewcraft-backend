@@ -42,6 +42,90 @@ public class MaterialLotTest {
     }
 
     @Test
+    public void testLotQuantityConstructor() {
+        lot = new MaterialLot("LOT_1", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals("LOT_1", lot.getLotNumber());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testShipmentQuantityConstructor() {
+        Shipment shipment = new Shipment(1L);
+        lot = new MaterialLot(shipment, new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testMaterialQuantityConstructo() {
+        lot = new MaterialLot(new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testStorageQuantityConstructor() {
+        lot = new MaterialLot(new Storage(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals(new Storage(1L), lot.getStorage());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+
+    @Test
+    public void testLotMaterialQtyConstructor() {
+        lot = new MaterialLot("LOT_1", new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals("LOT_1", lot.getLotNumber());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+
+    @Test
+    public void testShipmentMaterialQtyConstructor() {
+        Shipment shipment = new Shipment(1L);
+        lot = new MaterialLot(shipment, new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+
+    @Test
+    public void testStorageMaterialQtyConstructor() {
+        lot = new MaterialLot(new Storage(1L), new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals(new Storage(1L), lot.getStorage());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testLotShipmentMaterialQtyConstructor() {
+        Shipment shipment = new Shipment(1L);
+        lot = new MaterialLot("LOT_1", shipment, new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals("LOT_1", lot.getLotNumber());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testLotShipmentStorageMaterialQtyConstructor() {
+        Shipment shipment = new Shipment(1L);
+        lot = new MaterialLot("LOT_1", shipment, new Storage(1L), new Material(1L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        
+        assertEquals("LOT_1", lot.getLotNumber());
+        assertEquals(shipment, lot.getShipment());
+        assertEquals(new Storage(1L), lot.getStorage());
+        assertEquals(new Material(1L), lot.getMaterial());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), lot.getQuantity());
+    }
+
+    @Test
     public void testAccessId() {
         assertNull(lot.getId());
         lot.setId(1L);
@@ -59,6 +143,13 @@ public class MaterialLotTest {
     public void testAccessQuantity() {
         assertNull(lot.getQuantity());
         lot.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), lot.getQuantity());
+    }
+    
+    @Test
+    public void testAccessQuantityOverloadedEntity() {
+        assertNull(lot.getQuantity());
+        lot.setQuantity(new QuantityEntity(new UnitEntity("kg"), new BigDecimal("10.00")));
         assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), lot.getQuantity());
     }
 

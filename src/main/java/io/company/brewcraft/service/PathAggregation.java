@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
@@ -15,7 +16,7 @@ public class PathAggregation extends BaseModel implements Aggregation {
     }
 
     @Override
-    public Expression<? extends Number> getExpression(Root<?> root, CriteriaBuilder cb) {
+    public Expression<? extends Number> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         return new DeepRoot(root).get(path);
     }
 }

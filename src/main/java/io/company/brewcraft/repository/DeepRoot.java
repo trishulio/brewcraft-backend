@@ -17,7 +17,7 @@ public class DeepRoot {
     
     public <C> Path<C> get(String[] paths) {
         if (paths == null || paths.length <= 0) {
-            String msg = String.format("No field names provided: %s", paths.toString());
+            String msg = String.format("No field names provided: %s", paths == null ? null : paths.toString());
             log.error(msg);
             throw new IllegalArgumentException(msg);
         }

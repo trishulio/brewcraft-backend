@@ -3,16 +3,13 @@ package io.company.brewcraft.repository;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.data.TriFunction;
+import io.company.brewcraft.service.Aggregation;
 
 public class BasicSpecBuilder implements SpecificationBuilder {
     private static final Logger log = LoggerFactory.getLogger(BasicSpecBuilder.class);
@@ -29,8 +26,8 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     
     @Override
     public BasicSpecBuilder isNull(String[] paths) {
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(new DeepRoot(root).get(paths));
-        accumulator.add(func);
+        Aggregation aggr = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(new DeepRoot(root).get(paths));
+        accumulator.add(aggr);
 
         accumulator.setIsNot(false);
         return this;
@@ -44,8 +41,8 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     @Override
     public BasicSpecBuilder in(String[] paths, Collection<?> collection) {
         if (collection != null) {
-            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> new DeepRoot(root).get(paths).in(collection);
-            accumulator.add(func);
+            Aggregation aggr = (root, query, criteriaBuilder) -> new DeepRoot(root).get(paths).in(collection);
+            accumulator.add(aggr);
         }
 
         accumulator.setIsNot(false);
@@ -65,17 +62,17 @@ public class BasicSpecBuilder implements SpecificationBuilder {
 
     @Override
     public <C extends Comparable<C>> BasicSpecBuilder between(String[] paths, C start, C end) {
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = null;
+        Aggregation aggr = null;
         if (start != null && end != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.between(new DeepRoot(root).get(paths), start, end);
+            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.between(new DeepRoot(root).get(paths), start, end);
         } else if (start != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(new DeepRoot(root).get(paths), start);
+            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(new DeepRoot(root).get(paths), start);
         } else if (end != null) {
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(new DeepRoot(root).get(paths), end);
+            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(new DeepRoot(root).get(paths), end);
         }
 
-        if (func != null) {
-            accumulator.add(func);
+        if (aggr != null) {
+            accumulator.add(aggr);
         }
 
         accumulator.setIsNot(false);
@@ -100,8 +97,8 @@ public class BasicSpecBuilder implements SpecificationBuilder {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func = (root, query, criteriaBuilder) -> criteriaBuilder.like(new DeepRoot(root).get(paths), String.format("%%%s%%", text));
-                    accumulator.add(func);
+                    Aggregation aggr = (root, query, criteriaBuilder) -> criteriaBuilder.like(new DeepRoot(root).get(paths), String.format("%%%s%%", text));
+                    accumulator.add(aggr);
                 }
             }
         }

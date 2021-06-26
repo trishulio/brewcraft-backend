@@ -3,11 +3,14 @@ package io.company.brewcraft.util.entity;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
@@ -97,6 +100,60 @@ public class ReflectionManipulator {
         } catch (ExecutionException e) {
             throw new RuntimeException(String.format("Failed to fetch properties names because: %s", e.getMessage()), e);
         }
+    }
+
+    public <T> T construct(Class<T> clazz, Map<String, Object> props) {
+        T obj = null;
+        try {
+            Constructor<T> constructor = clazz.getConstructor();
+            obj = constructor.newInstance();
+            
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+            for (PropertyDescriptor pd : pds) {
+                if (props.containsKey(pd.getName())) {
+                    Method setter = pd.getWriteMethod();
+                    setter.invoke(obj, props.get(pd.getName()));
+                }
+            }
+        } catch (IntrospectionException e) {
+            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            handleException(msg, e);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
+            handleException(msg, e);
+        } catch (ReflectiveOperationException e) {
+            String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
+            handleException(msg, e);
+        }
+
+        return obj;
+    }
+    
+    public <T> T construct(Class<T> clazz, String[] fields, Object[] values) {
+        T obj = null;
+        try {
+            Constructor<T> constructor = clazz.getConstructor();
+            obj = constructor.newInstance();
+            
+            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+            Map<String, PropertyDescriptor> pdLookup = Arrays.stream(pds).collect(Collectors.toMap(pd -> pd.getName(), pd -> pd));
+            
+            for (int i = 0; i < fields.length; i++) {
+                Method setter = pdLookup.get(fields[i]).getWriteMethod();
+                setter.invoke(obj, values[i]);
+            }
+        } catch (IntrospectionException e) {
+            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            handleException(msg, e);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
+            handleException(msg, e);
+        } catch (ReflectiveOperationException e) {
+            String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
+            handleException(msg, e);
+        }
+
+        return obj;
     }
 
     private void handleException(String msg, Exception e) {

@@ -12,29 +12,29 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.data.TriFunction;
+import io.company.brewcraft.service.Aggregation;
 
 public class SpecAccumulator {
     private static final Logger log = LoggerFactory.getLogger(SpecAccumulator.class);
 
-    private List<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> funcs;
+    private List<Aggregation> aggregations;
     private boolean isNot;
 
     public SpecAccumulator() {
-        this.funcs = new ArrayList<>();
+        this.aggregations = new ArrayList<>();
         this.isNot = false;
     }
 
-    public void add(TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> func) {
+    public void add(Aggregation aggr) {
         log.debug("Not = {}", isNot);
         if (this.isNot) {
-            TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> orig = func;
-            func = (root, query, criteriaBuilder) -> criteriaBuilder.not(orig.apply(root, query, criteriaBuilder));
+            Aggregation orig = aggr;
+            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.not((Predicate) orig.getExpression(root, query, criteriaBuilder));
         }
 
-        final TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> ref = func;
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> combined = (root, query, criteriaBuilder) -> criteriaBuilder.and(ref.apply(root, query, criteriaBuilder));
-        this.funcs.add(combined);
+        final Aggregation ref = aggr;
+        Aggregation combined = (root, query, criteriaBuilder) -> criteriaBuilder.and((Predicate) ref.getExpression(root, query, criteriaBuilder));
+        this.aggregations.add(combined);
     }
 
     public void setIsNot(boolean isNot) {
@@ -42,9 +42,9 @@ public class SpecAccumulator {
     }
 
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        Predicate[] predicates = new Predicate[this.funcs.size()];
+        Predicate[] predicates = new Predicate[this.aggregations.size()];
         log.debug("Total Predicates = {}", predicates.length);
-        predicates = this.funcs.stream().map(func -> func.apply(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
+        predicates = this.aggregations.stream().map(aggr -> aggr.getExpression(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
 
         return predicates;
     }

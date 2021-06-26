@@ -36,12 +36,12 @@ public class AggregationRepository {
 
         q.where(spec.toPredicate(root, q, cb));
 
-        List<Selection<?>> selectAttrs = selection.getSelection(root, cb);
+        List<Selection<?>> selectAttrs = selection.getSelection(root, q, cb);
         q.multiselect(selectAttrs);
         
         if (groupBy != null) {
             @SuppressWarnings("unchecked")
-            List<Expression<?>> groupByAttrs = (List<Expression<?>>) (List<? extends Selection<?>>) groupBy.getSelection(root, cb);
+            List<Expression<?>> groupByAttrs = (List<Expression<?>>) (List<? extends Selection<?>>) groupBy.getSelection(root, q, cb);
             q.groupBy(groupByAttrs);
         }
         
