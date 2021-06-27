@@ -32,4 +32,9 @@ public class EnhancedPurchaseOrderRepositoryImplTest {
         
         verify(mRefresher, times(1)).refreshAccessors(accessors);
     }
+
+    @Test
+    public void testRefresh_DoesNothing() {
+        repo.refresh(null);
+    }
 }

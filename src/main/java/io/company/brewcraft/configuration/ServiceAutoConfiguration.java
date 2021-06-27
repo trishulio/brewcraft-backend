@@ -10,8 +10,10 @@ import io.company.brewcraft.repository.*;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.service.*;
 import io.company.brewcraft.service.impl.*;
+import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -167,5 +169,11 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(UserService.class)
     public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo) {
         return new UserServiceImpl(userRepository, idpRepo);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ProcurementService.class)
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
+        return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
     }
 }

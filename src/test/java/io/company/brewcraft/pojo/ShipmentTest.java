@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
@@ -62,6 +63,28 @@ public class ShipmentTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
         assertEquals(1, lot.getVersion());
+    }
+
+    @Test
+    public void testInvoiceConstructor() {
+        InvoiceItem item = new InvoiceItem();
+        item.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
+        item.setMaterial(new Material(1L));
+
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNumber("ORDER_1");
+        invoice.setItems(List.of(item));
+
+        shipment = new Shipment(invoice);
+
+        MaterialLot expectedLot = new MaterialLot();
+        expectedLot.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
+        expectedLot.setMaterial(new Material(1L));
+        expectedLot.setInvoiceItem(item);
+        expectedLot.setShipment(shipment);
+
+        assertEquals("ORDER_1", invoice.getInvoiceNumber());
+        assertEquals(List.of(expectedLot), shipment.getLots());
     }
 
     @Test
