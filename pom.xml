@@ -18,7 +18,7 @@
         <javax.measure.version>2.0</javax.measure.version>
         <javax.measure.impl.version>1.0.10</javax.measure.impl.version>
         <org.joda.money.version>1.0.1</org.joda.money.version>
-        <version.aws-java-sdk-cognitoidp>1.11.870</version.aws-java-sdk-cognitoidp>
+        <aws.sdk.version>1.12.12</aws.sdk.version>
     </properties>
 
     <parent>
@@ -99,13 +99,13 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-secretsmanager</artifactId>
-            <version>1.11.870</version>
+            <version>${aws.sdk.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-cognitoidp</artifactId>
-            <version>${version.aws-java-sdk-cognitoidp}</version>
+            <version>${aws.sdk.version}</version>
         </dependency>
 
         <dependency>
