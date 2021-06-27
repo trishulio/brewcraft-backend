@@ -19,12 +19,12 @@ import com.amazonaws.services.cognitoidp.model.MessageActionType;
 public class AwsCognitoIdpClient implements IdentityProviderClient {
     private static final Logger logger = LoggerFactory.getLogger(AwsCognitoIdpClient.class);
 
-    private final AWSCognitoIdentityProvider delegate;
+    private final AWSCognitoIdentityProvider awsIdpProvider;
 
     private final String userPoolId;
 
-    public AwsCognitoIdpClient(final AWSCognitoIdentityProvider delegate, final String userPoolId) {
-        this.delegate = delegate;
+    public AwsCognitoIdpClient(final AWSCognitoIdentityProvider awsIdpProvider, final String userPoolId) {
+        this.awsIdpProvider = awsIdpProvider;
         this.userPoolId = userPoolId;
     }
 
@@ -34,7 +34,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withMessageAction(MessageActionType.SUPPRESS).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
         try {
-            final AdminCreateUserResult adminCreateUserResult = this.delegate.adminCreateUser(adminCreateUserRequest);
+            final AdminCreateUserResult adminCreateUserResult = this.awsIdpProvider.adminCreateUser(adminCreateUserRequest);
             logger.debug("Successfully Saved user {} in cognito user pool {} with status : {}", userName, userPoolId, adminCreateUserResult.getUser().getUserStatus());
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
@@ -48,7 +48,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
         final AdminUpdateUserAttributesRequest adminUpdateUserRequest = new AdminUpdateUserAttributesRequest().withUserPoolId(userPoolId).withUsername(userName).withUserAttributes(attributeTypes);
         logger.debug("Attempting to update user {} in cognito user pool {} ", userName, userPoolId);
-        this.delegate.adminUpdateUserAttributes(adminUpdateUserRequest);
+        this.awsIdpProvider.adminUpdateUserAttributes(adminUpdateUserRequest);
         logger.debug("Successfully Updated user {} in cognito user pool {}", userName, userPoolId);
     }
 
@@ -57,7 +57,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     public void deleteUser(final String userName) {
         final AdminDeleteUserRequest adminDeleteUserRequest = new AdminDeleteUserRequest().withUserPoolId(userPoolId).withUsername(userName);
         logger.debug("Attempting to delete user {} in cognito user pool {} ", userName, userPoolId);
-        this.delegate.adminDeleteUser(adminDeleteUserRequest);
+        this.awsIdpProvider.adminDeleteUser(adminDeleteUserRequest);
         logger.debug("Successfully deleted user {} from cognito user pool {}", userName, userPoolId);
     }
 

@@ -204,6 +204,14 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
     @Override
     public void setRoles(List<UserRole> roles) {
+        if (roles == null) {
+            if (this.roleBindings != null) {
+                this.roleBindings.clear();
+            }
+            this.roleBindings = null;
+            return;
+        }
+
         // Reusing existing bindings instead of adding new to avoid creating dangling child entities.
         if (roleBindings == null) {
             roleBindings = new ArrayList<>();
@@ -215,24 +223,18 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
                                                           binding -> binding.getRole().getId(),
                                                           binding -> binding
                                                       ));
-        
-        Map<Long, UserRoleBinding> newBindings = roles.stream().collect(Collectors.toMap(role -> role.getId(), role -> {
+        this.roleBindings.clear();
+        roles.forEach(role -> {
             UserRoleBinding existing = existingBindings.remove(role.getId());
             if (existing == null) {
                 existing = new UserRoleBinding();
             }
-            
+
             existing.setRole(role);
             existing.setUser(this);
             
-            return existing;
-        }));
-        
-        this.roleBindings.clear();
-        
-        newBindings.forEach((roleId, binding) -> {
-            this.roleBindings.add(binding);
-        });        
+            this.roleBindings.add(existing);
+        });
     }
 
     @Override

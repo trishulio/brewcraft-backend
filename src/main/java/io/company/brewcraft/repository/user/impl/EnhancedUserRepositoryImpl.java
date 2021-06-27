@@ -18,7 +18,7 @@ import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.repository.user.UserStatusRepository;
 
 public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
-    private static final Logger logger = LoggerFactory.getLogger(EnhancedUserRepositoryImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(EnhancedUserRepositoryImpl.class);
 
     private final AccessorRefresher<Long, UserAccessor, User> refresher;
     private final UserStatusRepository statusRepo;

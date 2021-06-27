@@ -129,7 +129,24 @@ public class UserTest {
         assertEquals(List.of(new UserRole(1L), new UserRole(2L)), user.getRoles());
 
         user.setRoles(List.of(new UserRole(10L), new UserRole(20L)));
-        assertEquals(List.of(new UserRole(20L), new UserRole(10L)), user.getRoles());
+        assertEquals(List.of(new UserRole(10L), new UserRole(20L)), user.getRoles());
+    }
+
+    @Test
+    public void testAccessRoles_NullValues() {
+        assertNull(user.getRoles());
+        user.setRoles(null);
+        assertNull(user.getRoles());
+    }
+
+    @Test
+    public void testAccessRoles_OverridesOldRoleAndAddNewOnes() {
+        assertNull(user.getRoles());
+        user.setRoles(List.of(new UserRole(1L)));
+        assertEquals(List.of(new UserRole(1L)), user.getRoles());
+
+        user.setRoles(List.of(new UserRole(10L), new UserRole(20L)));
+        assertEquals(List.of(new UserRole(10L), new UserRole(20L)), user.getRoles());
     }
     
     @Test
