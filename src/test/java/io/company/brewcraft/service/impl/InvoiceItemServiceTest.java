@@ -87,15 +87,6 @@ public class InvoiceItemServiceTest {
         List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
 
-        InvoiceItem item1 = it.next();
-        assertEquals(1L, item1.getId());
-        assertEquals("New_Description_1", item1.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), item1.getQuantity());
-        assertEquals(Money.parse("CAD 101"), item1.getPrice());
-        assertEquals(null, item1.getTax());
-        assertEquals(new Material(11L), item1.getMaterial());
-        assertEquals(1, item1.getVersion());
-
         InvoiceItem item2 = it.next();
         assertEquals(null, item2.getId());
         assertEquals("Description_2", item2.getDescription());
@@ -104,6 +95,15 @@ public class InvoiceItemServiceTest {
         assertEquals(new Tax(), item2.getTax());
         assertEquals(new Material(20L), item2.getMaterial());
         assertEquals(null, item2.getVersion());
+        
+        InvoiceItem item1 = it.next();
+        assertEquals(1L, item1.getId());
+        assertEquals("New_Description_1", item1.getDescription());
+        assertEquals(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), item1.getQuantity());
+        assertEquals(Money.parse("CAD 101"), item1.getPrice());
+        assertEquals(null, item1.getTax());
+        assertEquals(new Material(11L), item1.getMaterial());
+        assertEquals(1, item1.getVersion());
     }
 
     @Test

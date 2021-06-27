@@ -1,10 +1,11 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.measure.Unit;
 
@@ -15,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.dto.BaseMaterial;
 import io.company.brewcraft.dto.UpdateMaterial;
-import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
@@ -41,10 +42,10 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
     }
 
     @Override
-    public Page<Material> getMaterials(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {       
+    public Page<Material> getMaterials(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, SortedSet<String> sort, boolean orderAscending) {       
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of(MaterialCategory.FIELD_ID), true);            
+            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, page, size, sort, orderAscending);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no materials with those categories assigned

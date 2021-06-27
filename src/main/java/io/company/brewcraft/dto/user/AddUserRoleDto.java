@@ -1,22 +1,22 @@
 package io.company.brewcraft.dto.user;
 
-
-import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.dto.common.FixedTypeDto;
-
-import javax.validation.constraints.NotNull;
-
-public class AddUserRoleDto extends BaseDto implements BaseUserRoleDto {
-
-    @NotNull
-    private FixedTypeDto userRoleType;
-
-    @Override
-    public FixedTypeDto getUserRoleType() {
-        return userRoleType;
+public class AddUserRoleDto {
+    private String name;
+    
+    public AddUserRoleDto() {
+        
+    }
+    
+    public AddUserRoleDto(String name) {
+        this();
+        setName(name);
     }
 
-    public void setUserRoleType(FixedTypeDto userRoleType) {
-        this.userRoleType = userRoleType;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

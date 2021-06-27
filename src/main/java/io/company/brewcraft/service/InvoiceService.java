@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.transaction.Transactional;
 
@@ -64,7 +65,7 @@ public class InvoiceService extends BaseService {
             BigDecimal freightAmtTo,
             Set<Long> statusIds,
             Set<Long> supplierIds,
-            Set<String> sort,
+            SortedSet<String> sort,
             boolean orderAscending,
             int page,
             int size

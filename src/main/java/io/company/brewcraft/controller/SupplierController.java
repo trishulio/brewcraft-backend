@@ -1,7 +1,7 @@
 package io.company.brewcraft.controller;
 
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -35,7 +35,7 @@ public class SupplierController extends BaseController {
 
     @GetMapping("/suppliers")
     public GetSuppliersDto getSuppliers(
-        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size

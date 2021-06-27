@@ -1,6 +1,5 @@
 package io.company.brewcraft.configuration;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,14 +8,12 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.repository.*;
 import io.company.brewcraft.repository.user.UserRepository;
-import io.company.brewcraft.security.idp.AWSCognitoIdentityProviderFactory;
-import io.company.brewcraft.security.idp.AWSCognitoIdentityProviderFactoryImpl;
-import io.company.brewcraft.security.idp.AwsCognitoIdentityProviderClient;
-import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.service.*;
 import io.company.brewcraft.service.impl.*;
+import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -167,22 +164,17 @@ public class ServiceAutoConfiguration {
         return productMeasureService;
     }
 
-    @Bean
-    @ConditionalOnMissingBean(AWSCognitoIdentityProviderFactory.class)
-    public AWSCognitoIdentityProviderFactory awsCognitoIdentityProviderFactory(@Value("${aws.cognito.region}") final String cognitoRegion, @Value("${aws.cognito.url}") final String cognitoUrl, @Value("${aws.cognito.accessKey}") final String cognitoAccessKey, @Value("${aws.cognito.secretKey}") final String cognitoSecretKey) {
-        return new AWSCognitoIdentityProviderFactoryImpl(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoSecretKey);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(IdentityProviderClient.class)
-    public IdentityProviderClient identityProvider(final AWSCognitoIdentityProviderFactory awsCognitoIdentityProviderFactory, @Value("${aws.cognito.userPoolId}") final String cognitoUserPoolId) {
-        return new AwsCognitoIdentityProviderClient(awsCognitoIdentityProviderFactory, cognitoUserPoolId);
-    }
 
     @Bean
     @ConditionalOnMissingBean(UserService.class)
-    public UserService userService(UserRepository userRepository, IdentityProviderClient identityProviderClient, UtilityProvider utilProvider) {
-        return new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
+    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo) {
+        return new UserServiceImpl(userRepository, idpRepo);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ProcurementService.class)
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
+        return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
     }
     
     @Bean

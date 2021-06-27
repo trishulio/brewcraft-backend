@@ -160,6 +160,12 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         setQuantity(new QuantityEntity(unit, value));
     }
 
+    public MaterialLot(InvoiceItem item) {
+        setInvoiceItem(item);
+        setMaterial(item.getMaterial());
+        setQuantity(item.getQuantity());
+    }
+
     @Override
     public Long getId() {
         return id;

@@ -3,7 +3,7 @@ package io.company.brewcraft.service.impl;
 import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class SupplierServiceImpl extends BaseService implements SupplierService {
-    public static final Logger log = LoggerFactory.getLogger(SupplierServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SupplierServiceImpl.class);
     
     private SupplierRepository supplierRepository;
       
@@ -27,7 +27,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
 
     @Override
-    public Page<Supplier> getSuppliers(int page, int size, Set<String> sort, boolean orderAscending) {
+    public Page<Supplier> getSuppliers(int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Page<Supplier> suppliers = supplierRepository.findAll(pageRequest(sort, orderAscending, page, size));
 
         return suppliers;

@@ -1,13 +1,34 @@
 package io.company.brewcraft.dto.user;
 
+import java.time.LocalDateTime;
+
 import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.dto.common.FixedTypeDto;
 
-public class UserRoleDto extends BaseDto implements BaseUserRoleDto {
-
+public class UserRoleDto extends BaseDto {
     private Long id;
 
-    private FixedTypeDto userRoleType;
+    private String name;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime lastUpdated;
+
+    private Integer version;
+
+    public UserRoleDto() {
+    }
+
+    public UserRoleDto(Long id) {
+        setId(id);
+    }
+
+    public UserRoleDto(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setName(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
+    }
 
     public Long getId() {
         return id;
@@ -17,12 +38,35 @@ public class UserRoleDto extends BaseDto implements BaseUserRoleDto {
         this.id = id;
     }
 
-    @Override
-    public FixedTypeDto getUserRoleType() {
-        return userRoleType;
+    public String getName() {
+        return name;
     }
 
-    public void setUserRoleType(FixedTypeDto userRoleType) {
-        this.userRoleType = userRoleType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

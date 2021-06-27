@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.data.TenantDataSourceManager;
 
 public class FlywayMigrationRegister implements MigrationRegister {
-    public static final Logger log = LoggerFactory.getLogger(FlywayMigrationRegister.class);
+    private static final Logger log = LoggerFactory.getLogger(FlywayMigrationRegister.class);
 
     private TenantDataSourceManager dsMgr;
     private String dbScriptPathTenant;

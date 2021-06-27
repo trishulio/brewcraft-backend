@@ -17,8 +17,6 @@ import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
 import io.company.brewcraft.data.SchemaDataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManager;
-import io.company.brewcraft.security.store.AwsSecretsManagerClient;
-import io.company.brewcraft.security.store.SecretsManager;
 
 public class DataAutoConfigurationTest {
 
@@ -27,12 +25,6 @@ public class DataAutoConfigurationTest {
     @BeforeEach
     public void init() {
         config = new DataAutoConfiguration();
-    }
-
-    @Test
-    public void testSecretsManager_ReturnsInstanceOfAwsSecretsManager() {
-        SecretsManager<String, String> mgr = config.secretManager("url", "region");
-        assertTrue(mgr instanceof AwsSecretsManagerClient);
     }
 
     @Test

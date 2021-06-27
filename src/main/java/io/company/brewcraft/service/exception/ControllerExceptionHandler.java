@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-
-    public static final Logger log = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

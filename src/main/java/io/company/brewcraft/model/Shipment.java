@@ -78,6 +78,15 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         setVersion(version);
     }
 
+    public Shipment(Invoice invoice) {
+        List<MaterialLot> lots = null;
+        if (invoice.getItems() != null && invoice.getItems().size() != 0) {
+            lots = invoice.getItems().stream().map(item -> new MaterialLot(item)).collect(Collectors.toList());
+        }
+        setShipmentNumber(invoice.getInvoiceNumber());
+        setLots(lots);
+    }
+
     @Override
     public Long getId() {
         return id;
