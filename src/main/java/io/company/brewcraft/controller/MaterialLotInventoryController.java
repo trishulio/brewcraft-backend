@@ -3,6 +3,7 @@ package io.company.brewcraft.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public class MaterialLotInventoryController extends BaseController {
         @RequestParam(name = "delivered_date_to", required = false) LocalDateTime deliveredDateTo,
         @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
         @RequestParam(name = "group_by", defaultValue = "MATERIAL") MaterialLot.AggregationField[] groupBy,
-        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) Set<String> sort,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,

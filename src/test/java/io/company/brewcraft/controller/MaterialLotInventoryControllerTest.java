@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ public class MaterialLotInventoryControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new MaterialLot.AggregationField[] { MaterialLot.AggregationField.MATERIAL }, // groupBy
-            Set.of("id"), // sortBy
+            new TreeSet<>(List.of("id")), // sortBy
             true, // orderAscending
             1, // page
             10 // size
@@ -64,7 +65,7 @@ public class MaterialLotInventoryControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new MaterialLot.AggregationField[] { MaterialLot.AggregationField.MATERIAL }, // groupBy
-            Set.of("id"), // sortBy
+            new TreeSet<>(List.of("id")), // sortBy
             true, // orderAscending
             1, // page
             10, // size

@@ -5,6 +5,7 @@ import static io.company.brewcraft.repository.RepositoryUtil.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +38,7 @@ public class MaterialLotInventoryService {
         LocalDateTime deliveredDateTo,
         AggregationFunction aggrFn,
         MaterialLot.AggregationField[] groupBy,
-        Set<String> sort,
+        SortedSet<String> sort,
         boolean orderAscending,
         int page,
         int size
