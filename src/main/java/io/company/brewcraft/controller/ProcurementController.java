@@ -1,11 +1,8 @@
 package io.company.brewcraft.controller;
 
-import io.company.brewcraft.dto.procurement.AddProcurementDto;
-import io.company.brewcraft.dto.procurement.ProcurementDto;
-import io.company.brewcraft.model.procurement.Procurement;
-import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
-import io.company.brewcraft.service.procurement.ProcurementService;
-import io.company.brewcraft.util.controller.AttributeFilter;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import io.company.brewcraft.dto.procurement.AddProcurementDto;
+import io.company.brewcraft.dto.procurement.ProcurementDto;
+import io.company.brewcraft.model.procurement.Procurement;
+import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
+import io.company.brewcraft.service.procurement.ProcurementService;
+import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/procurements", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/procurements", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProcurementController extends BaseController {
 
     private final ProcurementService service;

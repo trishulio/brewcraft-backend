@@ -1,19 +1,33 @@
 package io.company.brewcraft.model.procurement;
 
-
+import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 
-
-public class Procurement {
+public class Procurement extends BaseEntity {
+    private PurchaseOrder purchaseOrder;
 
     private Invoice invoice;
 
     private Shipment shipment;
 
-    public Procurement(final Invoice invoice, final Shipment shipment) {
+    public Procurement() {
+    }
+
+    public Procurement(final PurchaseOrder purchaseOrder, final Invoice invoice, final Shipment shipment) {
+        this();
+        setPurchaseOrder(purchaseOrder);
         setInvoice(invoice);
         setShipment(shipment);
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public Invoice getInvoice() {
