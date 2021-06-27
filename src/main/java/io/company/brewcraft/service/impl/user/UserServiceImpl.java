@@ -77,7 +77,9 @@ public class UserServiceImpl extends BaseService implements UserService {
         userRepo.refresh(List.of(user));
 
         User addedUser = userRepo.saveAndFlush(user);
-        idpRepo.createUser(addedUser);
+        // TODO: Revert this change back when the StatusCode: 302 is resolved.
+        // https://github.com/northstacksoftware/brewcraft-backend/projects/1#card-63885392
+        // idpRepo.createUser(addedUser);
 
         return addedUser;
     }
