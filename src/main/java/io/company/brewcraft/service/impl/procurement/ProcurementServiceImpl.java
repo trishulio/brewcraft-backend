@@ -47,19 +47,6 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
             invoice.setPurchaseOrder(order);
         }
 
-//        if (order != null) {
-//            if (order.getId() == null) {
-//                order = purchaseOrderService.add(order);
-//                invoice.setPurchaseOrder(order);
-//            }
-//            TODO: Test this use-case. The refresher accessor should take care of making sure the purchaseOrder exists (has a valid id).
-//            else if (!purchaseOrderService.exists(order.getId())) {
-//                String msg = String.format("Non-existing purchaseOrder Id used: '%s'", order.getId());
-//                logger.error(msg);
-//                throw new IllegalArgumentException(msg);
-//            }
-//        }
-
         invoice = invoiceService.add(invoice);
         Shipment shipment = new Shipment(invoice);
         shipment = shipmentService.add(shipment);
