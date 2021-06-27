@@ -25,7 +25,7 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
     @SequenceGenerator(name = "invoice_status_generator", sequenceName = "invoice_status_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @CreationTimestamp

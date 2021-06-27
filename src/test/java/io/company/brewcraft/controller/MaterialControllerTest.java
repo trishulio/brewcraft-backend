@@ -1,11 +1,13 @@
 package io.company.brewcraft.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +18,8 @@ import io.company.brewcraft.dto.AddMaterialDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateMaterialDto;
-import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -54,7 +56,7 @@ public class MaterialControllerTest {
            Set.of("Ingredient"),
            1,
            10,
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true
        );
 
@@ -62,7 +64,7 @@ public class MaterialControllerTest {
                Set.of(1L),
                Set.of(2L),
                Set.of("Ingredient"),
-               Set.of("id"),
+               new TreeSet<>(List.of("id")),
                true,
                1,
                10

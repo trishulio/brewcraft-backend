@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-            Set.of("col_1"),
+            new TreeSet<>(List.of("col_1")),
             true,
             1,
             10
@@ -104,7 +105,7 @@ public class ShipmentControllerTest {
                                     LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2001, 1, 1, 12, 0, 0),
                                     LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-                                    Set.of("col_1"),
+                                    new TreeSet<>(List.of("col_1")),
                                     true,
                                     1,
                                     10,
@@ -163,7 +164,7 @@ public class ShipmentControllerTest {
             LocalDateTime.of(2000, 1, 1, 12, 0, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-            Set.of("col_1"),
+            new TreeSet<>(List.of("col_1")),
             true,
             1,
             10
@@ -179,7 +180,7 @@ public class ShipmentControllerTest {
                                         LocalDateTime.of(2000, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2001, 1, 1, 12, 0, 0),
                                         LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-                                        Set.of("col_1"),
+                                        new TreeSet<>(List.of("col_1")),
                                         true,
                                         1,
                                         10,

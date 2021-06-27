@@ -10,7 +10,7 @@ import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class TenantUserRegister implements TenantRegister {
-    public static final Logger log = LoggerFactory.getLogger(TenantUserRegister.class);
+    private static final Logger log = LoggerFactory.getLogger(TenantUserRegister.class);
 
     public static final int LENGTH_PASSWORD = 32;
 

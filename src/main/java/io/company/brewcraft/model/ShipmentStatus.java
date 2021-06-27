@@ -25,7 +25,7 @@ public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, Upd
     @SequenceGenerator(name = "shipment_status_generator", sequenceName = "shipment_status_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @CreationTimestamp

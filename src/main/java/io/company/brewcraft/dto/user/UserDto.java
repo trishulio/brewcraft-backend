@@ -1,11 +1,11 @@
 package io.company.brewcraft.dto.user;
 
-import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.dto.common.FixedTypeDto;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
-public class UserDto extends BaseDto implements BaseUserDto {
+import io.company.brewcraft.dto.BaseDto;
+
+public class UserDto extends BaseDto {
 
     private Long id;
 
@@ -18,18 +18,48 @@ public class UserDto extends BaseDto implements BaseUserDto {
     private String lastName;
 
     private String email;
-
-    private FixedTypeDto status;
-
-    private FixedTypeDto salutation;
-
+    
     private String phoneNumber;
-
-    private List<UserRoleDto> roles;
-
+    
     private String imageUrl;
 
+    private UserStatusDto status;
+
+    private UserSalutationDto salutation;
+
+    private List<UserRoleDto> roles;
+    
+    private LocalDateTime createdAt;
+    
+    private LocalDateTime lastUpdated;
+
     private Integer version;
+    
+    public UserDto() {
+    }
+    
+    public UserDto(Long id) {
+        this();
+        setId(id);
+    }
+    
+    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setUserName(userName);
+        setDisplayName(displayName);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+        setImageUrl(imageUrl);
+        setStatus(status);
+        setSalutation(salutation);
+        setRoles(roles);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setLastName(lastName);
+        setVersion(version);
+    }
 
     public Long getId() {
         return id;
@@ -47,7 +77,6 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.userName = userName;
     }
 
-    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -56,7 +85,6 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.displayName = displayName;
     }
 
-    @Override
     public String getFirstName() {
         return firstName;
     }
@@ -65,7 +93,6 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.firstName = firstName;
     }
 
-    @Override
     public String getLastName() {
         return lastName;
     }
@@ -74,7 +101,6 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.lastName = lastName;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
@@ -83,25 +109,22 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.email = email;
     }
 
-    @Override
-    public FixedTypeDto getStatus() {
+    public UserStatusDto getStatus() {
         return status;
     }
 
-    public void setStatus(FixedTypeDto status) {
+    public void setStatus(UserStatusDto status) {
         this.status = status;
     }
 
-    @Override
-    public FixedTypeDto getSalutation() {
+    public UserSalutationDto getSalutation() {
         return salutation;
     }
 
-    public void setSalutation(FixedTypeDto salutation) {
+    public void setSalutation(UserSalutationDto salutation) {
         this.salutation = salutation;
     }
 
-    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -110,7 +133,6 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
     public List<UserRoleDto> getRoles() {
         return roles;
     }
@@ -119,13 +141,28 @@ public class UserDto extends BaseDto implements BaseUserDto {
         this.roles = roles;
     }
 
-    @Override
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public Integer getVersion() {

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ public class MaterialCategoryControllerTest {
            Set.of("Ingredient"),
            1,
            10,
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true
        );
 
@@ -61,7 +62,7 @@ public class MaterialCategoryControllerTest {
                Set.of("Hop"),
                Set.of(2L),
                Set.of("Ingredient"),
-               Set.of("id"),
+               new TreeSet<>(List.of("id")),
                true,
                1,
                10

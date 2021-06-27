@@ -1,9 +1,10 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,7 +28,7 @@ public class ProductCategoryServiceImpl extends BaseService implements ProductCa
 
     @Override
     public Page<ProductCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames, 
-            int page, int size, Set<String> sort, boolean orderAscending) {
+            int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
         Specification<ProductCategory> spec = SpecificationBuilder.builder()
                 .in(ProductCategory.FIELD_ID, ids)

@@ -1,164 +1,142 @@
 package io.company.brewcraft.service.impl.user;
 
-import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.model.user.UserSalutation;
-import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.repository.SpecificationBuilder;
-import io.company.brewcraft.repository.user.UserRepository;
-import io.company.brewcraft.security.idp.IdentityProviderClient;
-import io.company.brewcraft.security.idp.UserAttributeType;
-import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.user.UserService;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
-import org.apache.commons.lang3.StringUtils;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
-import static io.company.brewcraft.security.session.CognitoPrincipalContext.ATTRIBUTE_EMAIL;
-import static io.company.brewcraft.security.session.CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED;
+import io.company.brewcraft.model.user.BaseUser;
+import io.company.brewcraft.model.user.UpdateUser;
+import io.company.brewcraft.model.user.UpdateUserRole;
+import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserStatus;
+import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.service.BaseService;
+import io.company.brewcraft.service.IdpUserRepository;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.service.user.UserService;
 
 @Transactional
 public class UserServiceImpl extends BaseService implements UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final UserRepository userRepo;
+    private final IdpUserRepository idpRepo;
 
-    private final UserRepository userRepository;
-
-    private final IdentityProviderClient identityProviderClient;
-
-    private final UtilityProvider utilProvider;
-
-    public UserServiceImpl(final UserRepository userRepository, final IdentityProviderClient identityProviderClient, final UtilityProvider utilProvider) {
-        this.userRepository = userRepository;
-        this.identityProviderClient = identityProviderClient;
-        this.utilProvider = utilProvider;
+    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo) {
+        this.userRepo = userRepo;
+        this.idpRepo = idpRepo;
     }
 
     @Override
-    public Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<String> status, Set<String> salutations, Set<String> roles, int page, int size, Set<String> sort, boolean orderAscending) {
+    public Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<Long> statusIds, Set<Long> salutationIds, Set<String> roles, int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
         final Specification<User> userSpecification = SpecificationBuilder
                 .builder()
-                .in(User.Property.id.name(), ids)
-                .not().in(User.Property.id.name(), excludeIds)
-                .in(User.Property.userName.name(), userNames)
-                .in(User.Property.displayName.name(), displayNames)
-                .in(User.Property.email.name(), emails)
-                .in(User.Property.phoneNumber.name(), phoneNumbers)
-                .in(new String[]{User.Property.status.name(), UserStatus.Property.name.name()}, status)
-                .in(new String[]{User.Property.salutation.name(), UserSalutation.Property.name.name()}, salutations)
-//                .in(new String[]{User.Property.roles.name(), UserRole.Property.userRoleType.name(), UserRoleType.Property.name.name()}, roles)
+                .in(User.FIELD_ID, ids)
+                .not().in(User.FIELD_ID, excludeIds)
+                .in(User.FIELD_USER_NAME, userNames)
+                .in(User.FIELD_DISPLAY_NAME, displayNames)
+                .in(User.FIELD_EMAIL, emails)
+                .in(User.FIELD_PHONE_NUMBER, phoneNumbers)
+                .in(new String[]{User.FIELD_STATUS, UserStatus.FIELD_ID }, statusIds)
+                .in(new String[]{User.FIELD_SALUTATION, UserStatus.FIELD_ID }, salutationIds)
+//                .in(new String[]{User.Property.roles.name(), UserRole.Property.userRole.name(), UserRole.Property.name.name()}, roles)
                 .build();
 
-        return userRepository.findAll(userSpecification, pageRequest(sort, orderAscending, page, size));
+        return userRepo.findAll(userSpecification, pageRequest(sort, orderAscending, page, size));
     }
 
     @Override
     public User getUser(Long id) {
-        logger.debug("Retrieving User with Id: {}", id);
+        log.debug("Retrieving User with Id: {}", id);
         User user = null;
-        Optional<User> optional = userRepository.findById(id);
+        Optional<User> optional = userRepo.findById(id);
         if (optional.isPresent()) {
-            logger.debug("Found user with id: {}", id);
+            log.debug("Found user with id: {}", id);
             user = optional.get();
         }
         return user;
     }
 
     @Override
-    public User addUser(User user) {
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(user != null, "Add User Payload cannot be null");
-        validator.raiseErrors();
+    public User addUser(BaseUser<?> addition) {
+        log.debug("Attempting to persist user : {}", addition.getUserName());
 
-        logger.debug("Attempting to persist user : {}", user.getUserName());
+        User user = new User();
+        user.override(addition, getPropertyNames(BaseUser.class));
+        userRepo.refresh(List.of(user));
 
-        final User addedUser = userRepository.mapAndSave(user);
+        User addedUser = userRepo.saveAndFlush(user);
+        // TODO: Revert this change back when the StatusCode: 302 is resolved.
+        // https://github.com/northstacksoftware/brewcraft-backend/projects/1#card-63885392
+        // idpRepo.createUser(addedUser);
 
-        logger.debug("Attempting to save user : {} in identity provider", user.getUserName());
-        createUserInIdentityProvider(addedUser);
         return addedUser;
     }
 
     @Override
-    public User putUser(final Long id, final User updatingUser) {
-        logger.debug("Updating the User with Id: {}", id);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(updatingUser != null, "Update User Payload cannot be null");
-        validator.raiseErrors();
+    public User putUser(final Long userId, final UpdateUser<? extends UpdateUserRole> update) {
+        log.debug("Updating the User with Id: {}", userId);
 
-        final boolean emailUpdated = isEmailUpdated(id, updatingUser.getEmail());
+        User existing = getUser(userId);
+        Class<? super User> userClz = BaseUser.class;
+        boolean isNewUser = true;
 
-        updatingUser.setId(id);
-        final User updatedUser = userRepository.mapAndSave(updatingUser);
-        if (emailUpdated) {
-            updateEmailAttributeInIdentityProvider(id, updatedUser.getEmail());
+        if (existing == null) {
+            existing = new User(userId); // Gotcha: The save function ignores this ID
+
+        } else {
+            existing.optimisticLockCheck(update);
+            userClz = UpdateUser.class;
+            isNewUser = false;
         }
-        return updatedUser;
+
+        User temp = new User();
+        temp.override(update, getPropertyNames(userClz));
+        userRepo.refresh(List.of(temp));
+
+        existing.override(temp, getPropertyNames(userClz));
+
+        User updated = userRepo.saveAndFlush(existing);
+
+        if (isNewUser) {
+            idpRepo.createUser(updated);
+        }
+
+        return updated;
     }
 
     @Override
-    public User patchUser(Long id, User updatingUser) {
-        logger.debug("Performing Patch on User with Id: {}", id);
-        Validator validator = this.utilProvider.getValidator();
-        validator.rule(updatingUser != null, "Update Payload cannot be null");
-        validator.raiseErrors();
+    public User patchUser(Long userId, UpdateUser<? extends UpdateUserRole> patch) {
+        log.debug("Performing Patch on User with Id: {}", userId);
 
-        User existingUser = Optional.ofNullable(getUser(id)).orElseThrow(() -> new EntityNotFoundException("User", id.toString()));
+        User existing = userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
+        existing.optimisticLockCheck(patch);
 
-        final boolean emailUpdated = StringUtils.isNoneEmpty(updatingUser.getEmail()) && !existingUser.getEmail().equalsIgnoreCase(updatingUser.getEmail());
+        User temp = new User(userId);
+        temp.override(existing);
+        temp.outerJoin(patch, getPropertyNames(UpdateUser.class));
+        userRepo.refresh(List.of(temp));
 
-        updatingUser.copyToNullFields(existingUser);
-        final User updatedUser = userRepository.mapAndSave(updatingUser);
-        if (emailUpdated) {
-            updateEmailAttributeInIdentityProvider(id, updatedUser.getEmail());
-        }
-        return updatedUser;
+        existing.override(temp);
+
+        return userRepo.saveAndFlush(existing);
     }
 
     @Override
     public void deleteUser(Long id) {
-        logger.debug("Attempting to delete Invoice with Id: {}", id);
-        final String deletingUserName = userRepository.findUserNamePerId(id).orElseThrow(() -> new EntityNotFoundException("User", id));;
-        userRepository.deleteById(id);
-        identityProviderClient.deleteUser(deletingUserName);
-    }
-
-    private void createUserInIdentityProvider(final User createdUser) {
-        final List<UserAttributeType> userAttributeTypes = new ArrayList<>();
-        userAttributeTypes.add(getUserAttributeType(ATTRIBUTE_EMAIL, createdUser.getEmail()));
-        userAttributeTypes.add(getUserAttributeType(ATTRIBUTE_EMAIL_VERIFIED, "true"));
-        identityProviderClient.createUser(createdUser.getUserName(), userAttributeTypes);
-    }
-
-    private boolean isEmailUpdated(final Long userId, final String newEmail) {
-        boolean emailUpdated = false;
-        if (StringUtils.isNotEmpty(newEmail)) {
-            final String userEmail = userRepository.findEmailPerId(userId).orElseThrow(() -> new EntityNotFoundException("User", userId));
-            emailUpdated = !userEmail.equalsIgnoreCase(newEmail);
-        }
-        return emailUpdated;
-    }
-
-    private void updateEmailAttributeInIdentityProvider(final Long userId, final String email) {
-        final String userNameById = userRepository.findUserNamePerId(userId).orElseThrow(() -> new EntityNotFoundException("User", userId));;
-        logger.debug("Attempting to update email of user : {} in identity provider", userNameById);
-        identityProviderClient.updateUser(userNameById, Collections.singletonList(getUserAttributeType(ATTRIBUTE_EMAIL, email)));
-    }
-
-    private UserAttributeType getUserAttributeType(final String name, final String value) {
-        return new UserAttributeType(name, value);
+        User user = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
+        userRepo.deleteById(id);
+        idpRepo.deleteUser(user);
     }
 }

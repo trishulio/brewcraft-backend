@@ -18,7 +18,7 @@ import io.company.brewcraft.service.mapper.TenantMapper;
 
 @Transactional
 public class TenantManagementServiceImpl implements TenantManagementService {
-    public static final Logger log = LoggerFactory.getLogger(TenantManagementServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(TenantManagementServiceImpl.class);
 
     private TenantRepository tenantRepository;
     

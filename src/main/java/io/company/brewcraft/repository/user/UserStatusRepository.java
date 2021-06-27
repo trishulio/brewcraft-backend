@@ -1,14 +1,9 @@
 package io.company.brewcraft.repository.user;
 
-import io.company.brewcraft.model.user.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.Optional;
+import io.company.brewcraft.model.user.UserStatus;
 
-public interface UserStatusRepository extends JpaRepository<UserStatus, Long> {
-
-    @Query("select s from user_status s where s.name = :name")
-    Optional<UserStatus> findByName(@Param("name") String name);
+public interface UserStatusRepository extends JpaRepository<UserStatus, Long>, JpaSpecificationExecutor<UserStatus>, EnhancedUserStatusRepository{
 }

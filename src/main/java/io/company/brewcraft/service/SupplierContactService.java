@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 
@@ -8,7 +8,7 @@ import io.company.brewcraft.model.SupplierContact;
 
 public interface SupplierContactService {
     
-    public Page<SupplierContact> getSupplierContacts(int page, int size, Set<String> sort, boolean orderAscending);
+    public Page<SupplierContact> getSupplierContacts(int page, int size, SortedSet<String> sort, boolean orderAscending);
     
     public SupplierContact getContact(Long contactId);
     

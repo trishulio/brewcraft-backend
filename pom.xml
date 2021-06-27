@@ -18,7 +18,7 @@
         <javax.measure.version>2.0</javax.measure.version>
         <javax.measure.impl.version>1.0.10</javax.measure.impl.version>
         <org.joda.money.version>1.0.1</org.joda.money.version>
-        <version.aws-java-sdk-cognitoidp>1.11.870</version.aws-java-sdk-cognitoidp>
+        <aws.sdk.version>1.12.12</aws.sdk.version>
     </properties>
 
     <parent>
@@ -65,6 +65,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
@@ -99,13 +105,13 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-secretsmanager</artifactId>
-            <version>1.11.870</version>
+            <version>${aws.sdk.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-cognitoidp</artifactId>
-            <version>${version.aws-java-sdk-cognitoidp}</version>
+            <version>${aws.sdk.version}</version>
         </dependency>
 
         <dependency>
@@ -187,13 +193,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*Invoice*Test.java</exclude>
-                        <exclude>**/*Quantity*Test.java</exclude>
-                        <exclude>**/*RepositoryUtil*Test.java</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

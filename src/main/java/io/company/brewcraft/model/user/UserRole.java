@@ -1,39 +1,39 @@
 package io.company.brewcraft.model.user;
 
-
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.Versioned;
 
-@Entity
-@Table(name = "user_role")
-public class UserRole extends BaseEntity implements Identified<Long>, Audited, Versioned {
+@Entity(name = "user_role")
+@Table
+public class UserRole extends BaseEntity implements BaseUserRole, UpdateUserRole, Identified<Long>, Audited {
+    public static final String FIELD_ID = "id";
+    public static final String FIELD_NAME = "name";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_generator")
     @SequenceGenerator(name = "user_role_generator", sequenceName = "user_role_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_role_type_id", referencedColumnName = "id")
-    private UserRoleType userRoleType;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
-    private User user;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -43,35 +43,45 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
     @Version
     private Integer version;
 
+    public UserRole() {
+    }
+    
+    public UserRole(Long id) {
+        this();
+        setId(id);
+    }
+    
+    public UserRole(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+        this(id);
+        setName(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
+    }
+
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
     public void setId(Long id) {
         this.id = id;
     }
-
-    public UserRoleType getUserRoleType() {
-        return userRoleType;
+    
+    @Override
+    public String getName() {
+        return this.name;
     }
 
-    public void setUserRoleType(UserRoleType userRoleType) {
-        this.userRoleType = userRoleType;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     @Override
@@ -81,7 +91,7 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
 
     @Override
     public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+        return this.lastUpdated;
     }
 
     @Override
@@ -91,15 +101,11 @@ public class UserRole extends BaseEntity implements Identified<Long>, Audited, V
 
     @Override
     public Integer getVersion() {
-        return version;
+        return this.version;
     }
 
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public enum Property {
-        userRoleType
     }
 }

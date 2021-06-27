@@ -13,7 +13,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
 
 @Configuration
@@ -24,12 +23,6 @@ public class DataAutoConfiguration {
     public JdbcDialect jdbcDialect() {
         PostgresJdbcDialectSql sql = new PostgresJdbcDialectSql();
         return new PostgresJdbcDialect(sql);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(SecretsManager.class)
-    public SecretsManager<String, String> secretManager(@Value("${aws.secretsmanager.region}") String region, @Value("${aws.secretsmanager.url}") String url) {
-        return new AwsSecretsManagerClient(region, url);
     }
 
     @Bean

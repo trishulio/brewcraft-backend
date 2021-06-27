@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 
@@ -9,7 +10,7 @@ import io.company.brewcraft.model.Equipment;
 public interface EquipmentService {
 
     public Page<Equipment> getAllEquipment(Set<Long> ids, Set<String> types,
-            Set<String> statuses, Set<Long> facilityIds, int page, int size, Set<String> sort, boolean orderAscending);
+            Set<String> statuses, Set<Long> facilityIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
     
     public Equipment getEquipment(Long equipmentId);
     

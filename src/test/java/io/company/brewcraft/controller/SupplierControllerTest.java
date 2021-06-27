@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class SupplierControllerTest {
        
        Page<Supplier> pagedResponse = new PageImpl<>(suppliers);
         
-       when(supplierServiceMock.getSuppliers(0, 100, Set.of("id"), true)).thenReturn(pagedResponse);
+       when(supplierServiceMock.getSuppliers(0, 100, new TreeSet<>(List.of("id")), true)).thenReturn(pagedResponse);
         
        this.mockMvc.perform(get("/api/v1/suppliers").header("Authorization", "Bearer " + "test"))
         .andExpect(status().isOk())
@@ -148,7 +148,7 @@ public class SupplierControllerTest {
                 + "'totalPages': 1"
                 + "}"));
         
-        verify(supplierServiceMock, times(1)).getSuppliers(0, 100, Set.of("id"), true);
+        verify(supplierServiceMock, times(1)).getSuppliers(0, 100, new TreeSet<>(List.of("id")), true);
     }
     
     @Test

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -85,7 +86,7 @@ public class InvoiceControllerTest {
            new BigDecimal("2"),
            Set.of(99L),
            Set.of(4L),
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true,
            1,
            10
@@ -108,7 +109,7 @@ public class InvoiceControllerTest {
            new BigDecimal("2"),
            Set.of(99L),
            Set.of(4L),
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true,
            1,
            10,
@@ -181,7 +182,7 @@ public class InvoiceControllerTest {
            new BigDecimal("2"),
            Set.of(99L),
            Set.of(4L),
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true,
            1,
            10
@@ -204,7 +205,7 @@ public class InvoiceControllerTest {
            new BigDecimal("2"),
            Set.of(99L),
            Set.of(4L),
-           Set.of("id"),
+           new TreeSet<>(List.of("id")),
            true,
            1,
            10,

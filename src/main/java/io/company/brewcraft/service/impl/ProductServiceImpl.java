@@ -1,6 +1,6 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,18 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.ProductMeasure;
-import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.dto.BaseProduct;
 import io.company.brewcraft.dto.UpdateProduct;
 import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.ProductCategory;
+import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
@@ -48,10 +49,10 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, Set<String> sort, boolean orderAscending) {
+    public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
-        if (categoryIds != null || categoryNames != null) {           
-            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, Set.of(ProductCategory.FIELD_ID), true);            
+        if (categoryIds != null || categoryNames != null) {
+            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, page, size, sort, orderAscending);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no products with those categories assigned
