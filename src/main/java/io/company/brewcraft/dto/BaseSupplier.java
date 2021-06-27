@@ -6,6 +6,9 @@ import io.company.brewcraft.model.SupplierAddress;
 import io.company.brewcraft.model.SupplierContact;
 
 public interface BaseSupplier {
+    final String ATTR_NAME = "name";
+    final String ATTR_CONTACTS = "contacts";
+    final String ATTR_ADDRESS = "address";
     
     public String getName();
 

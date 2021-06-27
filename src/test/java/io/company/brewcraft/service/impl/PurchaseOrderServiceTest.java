@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,5 +39,33 @@ public class PurchaseOrderServiceTest {
 
         PurchaseOrder po = service.getPurchaseOrder(1L);
         assertNull(po);
+    }
+
+    @Test
+    public void testExistsById_ReturnsTrue_WhenRepositoryReturnsTrue() {
+        doReturn(true).when(mRepo).existsById(1L);
+        
+        assertTrue(service.exists(1L));
+    }
+
+    @Test
+    public void testExistsById_ReturnsFalse_WhenRepositoryReturnsFalse() {
+        doReturn(false).when(mRepo).existsById(1L);
+        
+        assertFalse(service.exists(1L));
+    }
+
+    @Test
+    public void testExistsByIds_ReturnsTrue_WhenRepositoryReturnsTrue() {
+        doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L));
+        
+        assertTrue(service.exists(Set.of(1L, 2L)));
+    }
+
+    @Test
+    public void testExistsByIds_ReturnsFalse_WhenRepositoryReturnsFalse() {
+        doReturn(false).when(mRepo).existsByIds(Set.of(1L, 2L));
+        
+        assertFalse(service.exists(Set.of(1L, 2L)));
     }
 }

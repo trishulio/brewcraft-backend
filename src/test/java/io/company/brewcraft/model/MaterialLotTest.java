@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -39,6 +40,19 @@ public class MaterialLotTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), lot.getLastUpdated());
         assertEquals(1, lot.getVersion());
+    }
+
+    @Test
+    public void testInvoiceItemConstructor() {
+        InvoiceItem item = new InvoiceItem();
+        item.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
+        item.setMaterial(new Material(1L));
+
+        lot = new MaterialLot(item);
+
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(item, lot.getInvoiceItem());
+        assertEquals(new Material(1L), lot.getMaterial());
     }
 
     @Test

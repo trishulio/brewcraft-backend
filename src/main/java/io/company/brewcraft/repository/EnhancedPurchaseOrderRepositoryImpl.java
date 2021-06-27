@@ -23,4 +23,9 @@ public class EnhancedPurchaseOrderRepositoryImpl implements EnhancedPurchaseOrde
     public void refreshAccessors(Collection<? extends PurchaseOrderAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
+
+    @Override
+    public void refresh(Collection<PurchaseOrder> purchaseOrders) {
+        // No child entity to refresh.
+    }
 }

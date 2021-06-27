@@ -15,8 +15,10 @@ import io.company.brewcraft.security.idp.AwsCognitoIdentityProviderClient;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.service.*;
 import io.company.brewcraft.service.impl.*;
+import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
+import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -183,5 +185,11 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(UserService.class)
     public UserService userService(UserRepository userRepository, IdentityProviderClient identityProviderClient, UtilityProvider utilProvider) {
         return new UserServiceImpl(userRepository, identityProviderClient, utilProvider);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ProcurementService.class)
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
+        return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
     }
 }
