@@ -1,6 +1,7 @@
 package io.company.brewcraft.security.idp;
 
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -44,7 +45,8 @@ public class AwsCognitoIdpClientTest {
             new AttributeType().withName("key-2").withValue("value-2"),
             new AttributeType().withName("key-1").withValue("value-1")
         );
-        assertEquals(expected, captor.getValue().getUserAttributes());
+
+        assertThat(captor.getValue().getUserAttributes()).hasSameElementsAs(expected);
         assertEquals("USERNAME", captor.getValue().getUsername());
         assertEquals("USER_POOL", captor.getValue().getUserPoolId());
     }
@@ -60,7 +62,8 @@ public class AwsCognitoIdpClientTest {
             new AttributeType().withName("key-2").withValue("value-2"),
             new AttributeType().withName("key-1").withValue("value-1")
         );
-        assertEquals(expected, captor.getValue().getUserAttributes());
+
+        assertThat(captor.getValue().getUserAttributes()).hasSameElementsAs(expected);
         assertEquals("USERNAME", captor.getValue().getUsername());
         assertEquals("USER_POOL", captor.getValue().getUserPoolId());
     }
