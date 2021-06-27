@@ -8,7 +8,7 @@ public class AddProcurementDto extends BaseDto {
     private AddInvoiceDto invoice;
     private AddPurchaseOrderDto purchaseOrder;
 
-    public AddProcurementDto() {    
+    public AddProcurementDto() {
     }
     
     public AddProcurementDto(AddPurchaseOrderDto purchaseOrder, AddInvoiceDto invoice) {
