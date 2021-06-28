@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.data.TriFunction;
+import io.company.brewcraft.service.Aggregation;
 
 @SuppressWarnings({ "unchecked" })
 public class BasicSpecBuilderTest {
@@ -43,7 +43,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testIn_AddsInClauseToAccumulator_WhenInputsAreValid() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.in(new String[] { "layer-1" }, List.of("V1", "V2")).build();
@@ -55,7 +55,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mLayer1).in(List.of("V1", "V2"));
 
-        Predicate ret = captor.getValue().apply(mRoot, null, null);
+        Predicate ret = (Predicate) captor.getValue().getExpression(mRoot, null, null);
 
         assertEquals(mInCollectionPredicate, ret);
         assertEquals(1, captor.getAllValues().size());
@@ -65,7 +65,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testIn_DoesNotAddsCriteria_WhenCollectionIsNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.in(new String[] { "layer-1" }, null).build();
@@ -76,7 +76,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testIn_ThrowsIllegalArgumentException_WhenFieldsArrayIsEmptyOrNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.in(new String[] {}, List.of("V1"));
@@ -84,8 +84,8 @@ public class BasicSpecBuilderTest {
 
         Root<?> mRoot = mock(Root.class);
 
-        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).apply(mRoot, null, null));
-        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).apply(mRoot, null, null));
+        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).getExpression(mRoot, null, null));
+        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).getExpression(mRoot, null, null));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testBetween_DoesNotAddCriteria_WhenStartAndEndIsNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "layer-1" }, null, null);
@@ -116,7 +116,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testBetween_AddBetweenCriteria_WhenStartAndEndAreBothNotNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "layer-1" }, 10, 50);
@@ -129,7 +129,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).between(mLayer1, 10, 50);
 
-        captor.getValue().apply(mRoot, null, mCriteriaBuilder);
+        captor.getValue().getExpression(mRoot, null, mCriteriaBuilder);
 
         assertEquals(1, captor.getAllValues().size());
         verify(mAccumulator, times(1)).setIsNot(false);
@@ -137,7 +137,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testBetween_AddsGreaterThanEqualToCriteria_WhenEndIsNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "layer-1" }, 10, null);
@@ -150,7 +150,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).greaterThanOrEqualTo(mLayer1, 10);
 
-        captor.getValue().apply(mRoot, null, mCriteriaBuilder);
+        captor.getValue().getExpression(mRoot, null, mCriteriaBuilder);
 
         assertEquals(1, captor.getAllValues().size());
         verify(mAccumulator, times(1)).setIsNot(false);
@@ -158,7 +158,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testBetween_AddsLessThanEqualToCriteria_WhenStartIsNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "layer-1" }, null, 50);
@@ -171,7 +171,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).lessThanOrEqualTo(mLayer1, 50);
 
-        captor.getValue().apply(mRoot, null, mCriteriaBuilder);
+        captor.getValue().getExpression(mRoot, null, mCriteriaBuilder);
 
         assertEquals(1, captor.getAllValues().size());
         verify(mAccumulator, times(1)).setIsNot(false);
@@ -179,7 +179,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testBetween_ThrowsException_WhenFieldsAreEmptyOrNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] {}, 10, 20);
@@ -187,8 +187,8 @@ public class BasicSpecBuilderTest {
 
         Root<?> mRoot = mock(Root.class);
 
-        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).apply(mRoot, null, null));
-        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).apply(mRoot, null, null));
+        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).getExpression(mRoot, null, null));
+        assertThrows(IllegalArgumentException.class, () -> captor.getAllValues().get(0).getExpression(mRoot, null, null));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testLike_AddLikeCriteriaQuery_WhenQueriesAreNotNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.like(new String[] { "layer-1" }, Set.of("HELLO"));
@@ -214,14 +214,14 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(mLayer1, "%HELLO%");
 
-        captor.getValue().apply(mRoot, null, mCriteriaBuilder);
+        captor.getValue().getExpression(mRoot, null, mCriteriaBuilder);
 
         assertEquals(1, captor.getAllValues().size());
     }
 
     @Test
     public void testLike_AddLikeCriteriaForMultipleQuery_WhenQueriesAreNotNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.like(new String[] { "layer-1" }, Set.of("HELLO", "BYE", "FOO"));
@@ -234,7 +234,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(eq(mLayer1), anyString());
 
-        captor.getAllValues().forEach(func -> func.apply(mRoot, null, mCriteriaBuilder));
+        captor.getAllValues().forEach(func -> func.getExpression(mRoot, null, mCriteriaBuilder));
 
         assertEquals(3, captor.getAllValues().size());
         verify(mCriteriaBuilder, times(1)).like(mLayer1, "%HELLO%");
@@ -244,7 +244,7 @@ public class BasicSpecBuilderTest {
 
     @Test
     public void testLike_AddLikeCriteriaIgnoresNullQueries_WhenQueriesAreNotNull() {
-        ArgumentCaptor<TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder>> captor = ArgumentCaptor.forClass(TriFunction.class);
+        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         Set<String> queries = new HashSet<String>();
@@ -261,7 +261,7 @@ public class BasicSpecBuilderTest {
         Predicate mInCollectionPredicate = mock(Predicate.class);
         doReturn(mInCollectionPredicate).when(mCriteriaBuilder).like(eq(mLayer1), anyString());
 
-        captor.getAllValues().forEach(func -> func.apply(mRoot, null, mCriteriaBuilder));
+        captor.getAllValues().forEach(func -> func.getExpression(mRoot, null, mCriteriaBuilder));
 
         assertEquals(2, captor.getAllValues().size());
         verify(mCriteriaBuilder, times(1)).like(mLayer1, "%HELLO%");

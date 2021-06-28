@@ -176,4 +176,10 @@ public class ServiceAutoConfiguration {
     public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
         return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(MaterialLotInventoryService.class)
+    public MaterialLotInventoryService lotInventoryService(MaterialLotAggregationRepository lotAggrRepo) {
+        return new MaterialLotInventoryService(lotAggrRepo);
+    }
 }

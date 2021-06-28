@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
+import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
+import io.company.brewcraft.service.MaterialLotInventoryService;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
@@ -122,5 +124,13 @@ public class ServiceAutoConfigurationTest {
         UtilityProvider provider = serviceAutoConfiguration.utilityProvider();
         
         assertSame(ThreadLocalUtilityProvider.class, provider.getClass());
+    }
+    
+    @Test
+    public void testLotInventorySerivce_RetunrsInstanceOfMaterialLotInventoryServiceWithAggrRepo() {
+        MaterialLotAggregationRepository mRepo = mock(MaterialLotAggregationRepository.class);
+        MaterialLotInventoryService service = serviceAutoConfiguration.lotInventoryService(mRepo);
+        
+        assertSame(MaterialLotInventoryService.class, service.getClass());
     }
 }

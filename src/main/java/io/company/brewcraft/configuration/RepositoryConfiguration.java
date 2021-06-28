@@ -1,5 +1,8 @@
 package io.company.brewcraft.configuration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,14 +21,7 @@ import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserSalutationAccessor;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.model.user.UserStatusAccessor;
-import io.company.brewcraft.repository.AccessorRefresher;
-import io.company.brewcraft.repository.InvoiceItemRepository;
-import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.repository.MaterialLotRepository;
-import io.company.brewcraft.repository.MaterialRepository;
-import io.company.brewcraft.repository.PurchaseOrderRepository;
-import io.company.brewcraft.repository.ShipmentStatusRepository;
-import io.company.brewcraft.repository.StorageRepository;
+import io.company.brewcraft.repository.*;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
@@ -40,6 +36,17 @@ import io.company.brewcraft.service.StorageAccessor;
 
 @Configuration
 public class RepositoryConfiguration {
+
+    @Bean
+    @PersistenceContext
+    public AggregationRepository aggrRepo(EntityManager em) {
+        return new AggregationRepository(em);
+    }
+
+    @Bean
+    public MaterialLotAggregationRepository lotAggrRepo(AggregationRepository aggrRepo) {
+        return new MaterialLotAggregationRepository(aggrRepo);
+    }
 
     @Bean
     public AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> invoiceItemRefresher(InvoiceItemRepository repo) {

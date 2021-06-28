@@ -4,14 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.data.TriFunction;
+import io.company.brewcraft.service.Aggregation;
 
 public class SpecAccumulatorTest {
 
@@ -25,7 +23,7 @@ public class SpecAccumulatorTest {
     @Test
     public void testAdd_ConvertsSpecIntoAPredicateAndAddsToTheList_WhenIsNotIsFalse() {
         Predicate mPred = mock(Predicate.class);
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> spec = (root, query, cb) -> mPred;
+        Aggregation spec = (root, query, cb) -> mPred;
 
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
         Predicate mCombined = mock(Predicate.class);
@@ -41,7 +39,7 @@ public class SpecAccumulatorTest {
     @Test
     public void testNotAdd_ConvertsSpecIntoNegativePredicateAndAddsToTheList_WhenIsNotIsTrue() {
         Predicate mPred = mock(Predicate.class);
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> spec = (root, query, cb) -> mPred;
+        Aggregation spec = (root, query, cb) -> mPred;
 
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
         Predicate mNegation = mock(Predicate.class);
@@ -63,12 +61,12 @@ public class SpecAccumulatorTest {
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
 
         Predicate mPred1 = mock(Predicate.class);
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> spec1 = (root, query, cb) -> mPred1;
+        Aggregation spec1 = (root, query, cb) -> mPred1;
         Predicate mCombined1 = mock(Predicate.class);
         doReturn(mCombined1).when(mCb).and(mPred1);
 
         Predicate mPred2 = mock(Predicate.class);
-        TriFunction<Predicate, Root<?>, CriteriaQuery<?>, CriteriaBuilder> spec2 = (root, query, cb) -> mPred2;
+        Aggregation spec2 = (root, query, cb) -> mPred2;
         Predicate mCombined2 = mock(Predicate.class);
         doReturn(mCombined2).when(mCb).and(mPred2);
 

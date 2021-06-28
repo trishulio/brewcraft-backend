@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
@@ -8,18 +9,39 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.PathProvider;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "material_lot")
 @Table
 public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, Identified<Long> {
+    public static enum AggregationField implements PathProvider {
+        LOT_NUMBER("lotNumber"),
+        MATERIAL("material"),
+        SHIPMENT("shipment"),
+        STORAGE("storage"),
+        QUANTITY_UNIT("quantity", "unit"),
+        QUANTITY_VALUE("quantity", "value");
+
+        private String[] path; 
+
+        private AggregationField(String... path) {
+            this.path = path;
+        }
+
+        @Override
+        public String[] getPath() {
+            return this.path;
+        }
+    }
+
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_QTY = "qty";
     public static final String FIELD_MATERIAL = "material";
     public static final String FIELD_SHIPMENT = "shipment";
     public static final String FIELD_INVOICE_ITEM = "invoiceItem";
-    public static final String FIELD_LOCATION = "location";
+    public static final String FIELD_STORAGE = "storage";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_lot_generator")
@@ -36,7 +58,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @AssociationOverrides({
         @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol"))
     })
-    private QuantityEntity qty;
+    private QuantityEntity quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
@@ -85,6 +107,59 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         setVersion(version);
     }
 
+    public MaterialLot(String lotNumber, UnitEntity unit, BigDecimal value) {
+        setLotNumber(lotNumber);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(Shipment shipment, UnitEntity unit, BigDecimal value) {
+        setShipment(shipment);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(Material material, UnitEntity unit, BigDecimal value) {
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(Storage storage, UnitEntity unit, BigDecimal value) {
+        setStorage(storage);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public MaterialLot(String lotNumber, Material material, UnitEntity unit, BigDecimal value) {
+        setLotNumber(lotNumber);
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+        setShipment(shipment);
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+        setStorage(storage);
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+    
+    public MaterialLot(String lotNumber, Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+        setLotNumber(lotNumber);
+        setShipment(shipment);
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public MaterialLot(String lotNumber, Shipment shipment, Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+        setLotNumber(lotNumber);
+        setShipment(shipment);
+        setStorage(storage);
+        setMaterial(material);
+        setQuantity(new QuantityEntity(unit, value));
+    }
+
     public MaterialLot(InvoiceItem item) {
         setInvoiceItem(item);
         setMaterial(item.getMaterial());
@@ -113,12 +188,16 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.qty);
+        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
     }
 
     @Override
-    public void setQuantity(Quantity<?> qty) {
-        this.qty = QuantityMapper.INSTANCE.toEntity(qty);
+    public void setQuantity(Quantity<?> quantity) {
+        this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
+    }
+
+    public void setQuantity(QuantityEntity quantityEntity) {
+        this.quantity = quantityEntity;
     }
 
     @Override

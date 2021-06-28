@@ -4,8 +4,10 @@ services:
     build:
       context: .
     container_name: brewcraftapp
+    command: ["./wait-for-it.sh --strict --timeout=20 localstack:4566 && java -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000 -jar brewcraftapp.jar"]
     ports:
       - 9010:9010
+      - 8000:8000
     depends_on:
       - localstack
       - postgresdb
