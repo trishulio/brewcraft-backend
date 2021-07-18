@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.dto.UnitDto;
 import io.company.brewcraft.model.UnitEntity;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 @Mapper
 public abstract class QuantityUnitMapper {

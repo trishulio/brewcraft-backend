@@ -1,4 +1,4 @@
-package io.company.brewcraft.utils;
+package io.company.brewcraft.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

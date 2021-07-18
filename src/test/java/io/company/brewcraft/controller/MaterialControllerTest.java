@@ -22,8 +22,8 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.utils.SupportedUnits;
 
 @SuppressWarnings("unchecked")
 public class MaterialControllerTest {

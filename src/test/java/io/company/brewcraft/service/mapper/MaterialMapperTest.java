@@ -11,7 +11,7 @@ import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialCategory;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialMapperTest {
 

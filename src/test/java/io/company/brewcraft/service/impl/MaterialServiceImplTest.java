@@ -30,7 +30,7 @@ import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialServiceImplTest {
 

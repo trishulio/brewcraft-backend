@@ -8,7 +8,6 @@ import javax.measure.quantity.Volume;
 
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class SupportedUnitsTest {

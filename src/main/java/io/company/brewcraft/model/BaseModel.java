@@ -2,8 +2,8 @@ package io.company.brewcraft.model;
 
 import java.util.Set;
 
+import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
-import io.company.brewcraft.utils.JsonMapper;
 
 public abstract class BaseModel {
     protected ReflectionManipulator util;
@@ -43,4 +43,8 @@ public abstract class BaseModel {
         return util.equals(this, o);
     }
 
+    @Override
+    public String toString() {
+        return jsonMapper.writeString(this);
+    }
 }

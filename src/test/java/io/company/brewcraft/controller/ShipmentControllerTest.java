@@ -23,8 +23,8 @@ import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
+import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")

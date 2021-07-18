@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.model.UnitEntity;
 import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.service.QuantityUnitService;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class QuantityUnitServiceImplTest {
 

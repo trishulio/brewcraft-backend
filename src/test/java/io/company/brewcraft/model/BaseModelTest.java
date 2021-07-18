@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import io.company.brewcraft.data.CheckedFunction;
+import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
-import io.company.brewcraft.utils.JsonMapper;
 
 @SuppressWarnings("unchecked")
 public class BaseModelTest {
@@ -83,5 +83,14 @@ public class BaseModelTest {
         doReturn(idGetter).when(mPd).getReadMethod();
         other.setX(12345);
         assertTrue(captor.getValue().apply(mPd));
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedStringObject() {
+        doReturn("{\"key\": \"value\"}").when(jsonMapper).writeString(model);
+
+        String str = model.toString();
+
+        assertEquals("{\"key\": \"value\"}", str);
     }
 }
