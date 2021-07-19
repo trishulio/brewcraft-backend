@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.model.QuantityEntity;
 import io.company.brewcraft.model.UnitEntity;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 

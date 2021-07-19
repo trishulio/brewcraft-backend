@@ -15,7 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 @Entity

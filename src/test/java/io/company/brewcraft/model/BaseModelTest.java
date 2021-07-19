@@ -12,14 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import io.company.brewcraft.data.CheckedFunction;
+import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 @SuppressWarnings("unchecked")
-public class BaseEntityTest {
-    class TestBaseEntity extends BaseEntity {
+public class BaseModelTest {
+    class TestBaseModel extends BaseModel {
         private Integer x;
-        public TestBaseEntity(Integer x, ReflectionManipulator util) {
-            super(util);
+        public TestBaseModel(Integer x, ReflectionManipulator util, JsonMapper jsonMapper) {
+            super(util, jsonMapper);
             setX(x);
         }
 
@@ -32,36 +33,39 @@ public class BaseEntityTest {
         }
     }
 
-    private TestBaseEntity entity;
-    private TestBaseEntity other;
+    private TestBaseModel model;
+    private TestBaseModel other;
     private ReflectionManipulator util;
+    private JsonMapper jsonMapper;
 
     @BeforeEach
     public void init() {
         util = mock(ReflectionManipulator.class);
-        entity = new TestBaseEntity(0, util);
-        other = new TestBaseEntity(12345, util);
+        jsonMapper = mock(JsonMapper.class);
+        
+        model = new TestBaseModel(0, util, jsonMapper);
+        other = new TestBaseModel(12345, util, jsonMapper);
     }
 
     @Test
     public void testEquals_ReturnsTrue_WhenUtilReturnsTrue() {
-        doReturn(true).when(util).equals(entity, other);
-        assertTrue(entity.equals(other));
+        doReturn(true).when(util).equals(model, other);
+        assertTrue(model.equals(other));
     }
 
     @Test
     public void testEquals_ReturnsFalse_WhenUtilReturnsFalse() {
-        doReturn(false).when(util).equals(entity, other);
-        assertFalse(entity.equals(other));
+        doReturn(false).when(util).equals(model, other);
+        assertFalse(model.equals(other));
     }
 
     @Test
     public void testOuterJoin_CallsUtilOuterJoinWithPredicate_ThatReturnsFalseWhenGetterReturnsNull() throws ReflectiveOperationException {
         ArgumentCaptor<CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedFunction.class);
-        doNothing().when(util).copy(eq(entity), eq(other), captor.capture());
-        entity.outerJoin(other);
+        doNothing().when(util).copy(eq(model), eq(other), captor.capture());
+        model.outerJoin(other);
 
-        Method idGetter = TestBaseEntity.class.getDeclaredMethod("getX");
+        Method idGetter = TestBaseModel.class.getDeclaredMethod("getX");
         PropertyDescriptor mPd = mock(PropertyDescriptor.class);
         doReturn(idGetter).when(mPd).getReadMethod();
         other.setX(null);
@@ -71,13 +75,22 @@ public class BaseEntityTest {
     @Test
     public void testOuterJoin_CallsUtilOuterJoinWithPredicate_ThatReturnsTrueWhenGetterReturnsNonNull() throws ReflectiveOperationException {
         ArgumentCaptor<CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException>> captor = ArgumentCaptor.forClass(CheckedFunction.class);
-        doNothing().when(util).copy(eq(entity), eq(other), captor.capture());
-        entity.outerJoin(other);
+        doNothing().when(util).copy(eq(model), eq(other), captor.capture());
+        model.outerJoin(other);
 
-        Method idGetter = TestBaseEntity.class.getDeclaredMethod("getX");
+        Method idGetter = TestBaseModel.class.getDeclaredMethod("getX");
         PropertyDescriptor mPd = mock(PropertyDescriptor.class);
         doReturn(idGetter).when(mPd).getReadMethod();
         other.setX(12345);
         assertTrue(captor.getValue().apply(mPd));
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedStringObject() {
+        doReturn("{\"key\": \"value\"}").when(jsonMapper).writeString(model);
+
+        String str = model.toString();
+
+        assertEquals("{\"key\": \"value\"}", str);
     }
 }

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialTest {
 

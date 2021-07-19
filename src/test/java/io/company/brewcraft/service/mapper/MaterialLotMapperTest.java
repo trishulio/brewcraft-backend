@@ -19,7 +19,7 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Storage;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class MaterialLotMapperTest {

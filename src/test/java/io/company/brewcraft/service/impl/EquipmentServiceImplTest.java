@@ -32,7 +32,7 @@ import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.utils.SupportedUnits;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class EquipmentServiceImplTest {
 

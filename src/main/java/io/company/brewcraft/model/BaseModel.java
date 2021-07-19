@@ -2,17 +2,20 @@ package io.company.brewcraft.model;
 
 import java.util.Set;
 
+import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 public abstract class BaseModel {
     protected ReflectionManipulator util;
+    protected JsonMapper jsonMapper;
 
     protected BaseModel() {
-        this(ReflectionManipulator.INSTANCE);
+        this(ReflectionManipulator.INSTANCE, JsonMapper.INSTANCE);
     }
 
-    protected BaseModel(ReflectionManipulator util) {
+    protected BaseModel(ReflectionManipulator util, JsonMapper jsonMapper) {
         this.util = util;
+        this.jsonMapper = jsonMapper;
     }
 
     public void outerJoin(Object other) {
@@ -38,5 +41,10 @@ public abstract class BaseModel {
     @Override
     public boolean equals(Object o) {
         return util.equals(this, o);
+    }
+
+    @Override
+    public String toString() {
+        return jsonMapper.writeString(this);
     }
 }

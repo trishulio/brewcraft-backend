@@ -20,10 +20,10 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
-import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class MaterialLotServiceTest {

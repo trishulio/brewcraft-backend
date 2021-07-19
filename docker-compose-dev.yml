@@ -4,10 +4,13 @@ services:
     build:
       context: .
     container_name: brewcraftapp
+    entrypoint: ["/bin/bash", "-c"]
     command: ["./wait-for-it.sh --strict --timeout=20 localstack:4566 && java -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000 -jar brewcraftapp.jar"]
     ports:
       - 9010:9010
       - 8000:8000
+    volumes:
+      - ./wait-for-it.sh:/opt/app/wait-for-it.sh
     depends_on:
       - localstack
       - postgresdb
@@ -57,7 +60,7 @@ services:
     environment: 
         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-        PGADMIN_LISTEN_PORT: 443
+        PGADMIN_LISTEN_PORT: "443"
 
 volumes:
   db-admin-data:

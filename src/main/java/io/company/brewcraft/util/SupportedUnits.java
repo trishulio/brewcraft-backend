@@ -1,4 +1,4 @@
-package io.company.brewcraft.utils;
+package io.company.brewcraft.util;
 
 import javax.measure.Unit;
 import javax.measure.quantity.AmountOfSubstance;

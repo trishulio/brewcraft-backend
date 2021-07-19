@@ -19,10 +19,10 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceItemService;
+import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
-import io.company.brewcraft.utils.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemServiceTest {
