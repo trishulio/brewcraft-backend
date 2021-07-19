@@ -2,10 +2,13 @@ version: "3.3"
 services:
   app:
     restart: unless-stopped
+    entrypoint: ["/bin/bash", "-c"]
     command: ["./wait-for-it.sh --strict --timeout=20 localstack:4566 && java -jar brewcraftapp.jar"]
     depends_on:
       - localstack
       - postgresdb
+    volumes:
+      - ./wait-for-it.sh:/opt/app/wait-for-it.sh
 
   localstack:
     image: localstack/localstack
