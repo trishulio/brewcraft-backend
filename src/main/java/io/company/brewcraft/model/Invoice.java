@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
@@ -74,6 +76,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     private InvoiceStatus status;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<InvoiceItem> items;
 
     @Version

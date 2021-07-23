@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import javax.measure.Quantity;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
@@ -33,6 +35,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @JsonBackReference
     private Invoice invoice;
 
     @Embedded

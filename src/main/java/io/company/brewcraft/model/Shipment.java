@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,6 +45,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     private LocalDateTime deliveredDate;
 
     @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<MaterialLot> lots;
 
     @CreationTimestamp

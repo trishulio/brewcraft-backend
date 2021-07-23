@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import javax.measure.Quantity;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -66,6 +68,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id")
+    @JsonBackReference
     private Shipment shipment;
 
     @ManyToOne(fetch = FetchType.LAZY)
