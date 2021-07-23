@@ -103,7 +103,6 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
         return brewStage;
     }
     
-    
     @Override
     public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStagePatch) {           
         BrewStage existingBrewStage = Optional.ofNullable(getBrewStage(brewStageId)).orElseThrow(() -> new EntityNotFoundException("BrewStage", brewStageId.toString()));            

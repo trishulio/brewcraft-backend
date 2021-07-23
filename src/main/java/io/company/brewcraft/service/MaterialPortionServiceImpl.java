@@ -47,9 +47,9 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
 
 	@Override
 	public MaterialPortion getMaterialPortion(Long materialPortionId) {
-		MaterialPortion mixtureRecording = materialPortionRepository.findById(materialPortionId).orElse(null);
+		MaterialPortion materialPortion = materialPortionRepository.findById(materialPortionId).orElse(null);
 
-        return mixtureRecording;
+        return materialPortion;
 	}
 	
 	@Override

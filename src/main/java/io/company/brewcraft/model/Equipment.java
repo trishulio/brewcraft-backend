@@ -223,8 +223,8 @@ public class Equipment extends BaseEntity implements Identified<Long> {
             } 
         } 
 
-        this.maxCapacityValue = (BigDecimal) maxCapacityInPersistedUnit.getValue();
-        this.maxCapacityUnit = QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit());
+        this.maxCapacityValue = maxCapacityInPersistedUnit != null ? (BigDecimal) maxCapacityInPersistedUnit.getValue() : null;
+        this.maxCapacityUnit = maxCapacityInPersistedUnit != null ? QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit()) : null;
     }
     
     private boolean isValidUnit(Unit<?> displayUnit) {

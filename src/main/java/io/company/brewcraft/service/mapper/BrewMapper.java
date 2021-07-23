@@ -15,6 +15,7 @@ public interface BrewMapper {
 
     BrewMapper INSTANCE = Mappers.getMapper(BrewMapper.class);
 
+    @Mapping(target = "parentBrew.id", source = "parentBrewId")
     Brew fromDto(BrewDto dto);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)

@@ -26,9 +26,12 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingServiceImpl.class);
     
     private MixtureRecordingRepository mixtureRecordingRepository;
+    
+    private MixtureService mixtureService;
         
-    public MixtureRecordingServiceImpl(MixtureRecordingRepository mixtureRecordingRepository) {
+    public MixtureRecordingServiceImpl(MixtureRecordingRepository mixtureRecordingRepository, MixtureService mixtureService) {
         this.mixtureRecordingRepository = mixtureRecordingRepository;  
+        this.mixtureService = mixtureService;
     }
 
 	@Override
@@ -53,6 +56,9 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 	
 	@Override
 	public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings, Long mixtureId) {
+        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
+        mixtureRecordings.forEach(mixtureRecording -> mixtureRecording.setMixture(mixture));
+		
 		mixtureRecordingRepository.refresh(mixtureRecordings);
 
 		List<MixtureRecording> addedMixtureRecordings = mixtureRecordingRepository.saveAll(mixtureRecordings);
@@ -63,6 +69,10 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 
 	@Override
 	public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording, Long mixtureId) {
+        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
+
+        mixtureRecording.setMixture(mixture);
+        
 		mixtureRecordingRepository.refresh(List.of(mixtureRecording));
 
 		MixtureRecording addedMixture = mixtureRecordingRepository.saveAndFlush(mixtureRecording);
@@ -72,6 +82,8 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 
 	@Override
 	public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording putMixtureRecording, Long mixtureId) {
+        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
+		
 		mixtureRecordingRepository.refresh(List.of(putMixtureRecording));
 
 		MixtureRecording existingMixtureRecording = getMixtureRecording(mixtureRecordingId);          
@@ -83,6 +95,8 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
         	existingMixtureRecording.optimisticLockCheck(putMixtureRecording);
             existingMixtureRecording.override(putMixtureRecording, getPropertyNames(BaseMixtureRecording.class));       
         }
+        
+        existingMixtureRecording.setMixture(mixture);
         
         return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording); 
 	}
@@ -98,6 +112,9 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
                      
         existingMixtureRecording.outerJoin(patchMixtureRecording, getPropertyNames(UpdateMixtureRecording.class));
                 
+        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(existingMixtureRecording.getMixture().getId())).orElseThrow(() -> new EntityNotFoundException("Mixture", existingMixtureRecording.getMixture().getId().toString()));
+        existingMixtureRecording.setMixture(mixture);
+        
         return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording);
 	}
 

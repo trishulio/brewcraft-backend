@@ -23,11 +23,16 @@ public class FacilityEquipmentDto extends BaseDto {
     public FacilityEquipmentDto() {
         
     }
+    
+    public FacilityEquipmentDto(Long id) {
+    	super();
+        this.id = id;
+    }
 
     public FacilityEquipmentDto(Long id, String name, EquipmentType type, EquipmentStatus status, 
             QuantityDto maxCapacity, Integer version) {
-        this.id = id;
-        this.name = name;
+    	this(id);
+    	this.name = name;
         this.type = type;
         this.status = status;
         this.maxCapacity = maxCapacity;

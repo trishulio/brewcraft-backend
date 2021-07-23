@@ -15,9 +15,13 @@ public class AddMixtureRecordingDto extends BaseDto {
 
     private LocalDateTime recordedAt;
     
+    public AddMixtureRecordingDto() {
+    	super();
+    }
+    
 	public AddMixtureRecordingDto(@NotEmpty String name,
 			@Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank") String value, LocalDateTime recordedAt) {
-		super();
+		this();
 		this.name = name;
 		this.value = value;
 		this.recordedAt = recordedAt;

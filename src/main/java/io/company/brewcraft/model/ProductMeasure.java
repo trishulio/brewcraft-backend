@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity(name = "PRODUCT_MEASURE")
-public class ProductMeasure extends BaseEntity implements Identified<Long> {
+public class ProductMeasure extends BaseEntity {
     public static final String ABV = "abv";
     public static final String IBU = "ibu";
     public static final String PH = "ph";

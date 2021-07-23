@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MixtureRecordingDto extends BaseDto {
+	
+	private Long id;
 
     @NotEmpty
     private String name;
@@ -19,14 +21,31 @@ public class MixtureRecordingDto extends BaseDto {
     private LocalDateTime recordedAt;
     
     private Integer version;
+    
+    public MixtureRecordingDto() {
+    	super();
+    }
+    
+    public MixtureRecordingDto(Long id) {
+    	this();
+    	this.id = id;
+    }
 
-	public MixtureRecordingDto(@NotEmpty String name,
+	public MixtureRecordingDto(Long id, @NotEmpty String name,
 			@Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank") String value, LocalDateTime recordedAt, Integer version) {
-		super();
+		this(id);
 		this.name = name;
 		this.value = value;
 		this.recordedAt = recordedAt;
 		this.version = version;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

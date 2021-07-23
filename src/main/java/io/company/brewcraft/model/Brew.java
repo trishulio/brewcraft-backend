@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -164,7 +165,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
         this.parentBrew = parentBrew;
         
         if (parentBrew != null) {
-            parentBrew.AddChildBrew(this);
+            parentBrew.addChildBrew(this);
         }
     }
 
@@ -175,30 +176,47 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
     @Override
     public void setChildBrews(List<Brew> childBrews) {
+    	if (this.childBrews != null) {
+            this.childBrews.stream().collect(Collectors.toList()).forEach(this::removeChildBrew);
+    	}
+
         if (childBrews != null) {
-        	childBrews.stream().forEach(child -> child.setParentBrew(this));
-        }
-        
-        if (this.getChildBrews() != null) {
-            this.getChildBrews().clear();
-            this.getChildBrews().addAll(childBrews);
+        	childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
         } else {
-            this.childBrews = childBrews;
-        }    
+        	this.childBrews = childBrews;
+        }
     }
     
-    public void AddChildBrew(Brew childBrew) {
-        if (childBrews == null) {
-            childBrews = new ArrayList<>();
-        }
-        
-        if (childBrew.getParentBrew() != this) {
-            childBrew.setParentBrew(this);
+    public void addChildBrew(Brew childBrew) {
+        if (childBrew == null) {
+            return;
         }
 
-        if (!childBrews.contains(childBrew)) {
-            this.childBrews.add(childBrew);
+        if (this.childBrews == null) {
+            this.childBrews = new ArrayList<>();
         }
+
+        if (childBrew.getParentBrew() != this) {            
+            childBrew.setParentBrew(this);
+        }
+        
+        if (!this.childBrews.contains(childBrew)) {
+            this.childBrews.add(childBrew);            
+        }
+    }
+
+    public boolean removeChildBrew(Brew childBrew) {
+        if (childBrew == null || this.childBrews == null) {
+            return false;
+        }
+
+        boolean removed = this.childBrews.remove(childBrew);
+        
+        if (removed) {            
+            childBrew.setParentBrew(null);
+        }
+        
+        return removed;
     }
 
     @Override
@@ -215,16 +233,47 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
     @Override
     public void setBrewStages(List<BrewStage> brewStages) {
+    	if (this.brewStages != null) {
+            this.brewStages.stream().collect(Collectors.toList()).forEach(this::removeBrewStage);
+    	}
+
         if (brewStages != null) {
-        	brewStages.stream().forEach(stage -> stage.setBrew(this));
+        	brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
+        } else {
+        	this.brewStages = brewStages;
+        }
+    }
+    
+    public void addBrewStage(BrewStage item) {
+        if (item == null) {
+            return;
+        }
+
+        if (this.brewStages == null) {
+            this.brewStages = new ArrayList<>();
+        }
+
+        if (item.getBrew() != this) {            
+            item.setBrew(this);
         }
         
-        if (this.getBrewStages() != null) {
-            this.getBrewStages().clear();
-            this.getBrewStages().addAll(brewStages);
-        } else {
-            this.brewStages = brewStages;
+        if (!this.brewStages.contains(item)) {
+            this.brewStages.add(item);            
         }
+    }
+
+    public boolean removeBrewStage(BrewStage brewStage) {
+        if (brewStage == null || this.brewStages == null) {
+            return false;
+        }
+
+        boolean removed = this.brewStages.remove(brewStage);
+        
+        if (removed) {            
+            brewStage.setBrew(null);
+        }
+        
+        return removed;
     }
     
     @Override

@@ -1,7 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 public class AddMixtureDto extends BaseDto {
@@ -17,16 +15,17 @@ public class AddMixtureDto extends BaseDto {
     @NotNull
     private Long brewStageId;
     
-    private List<AddMaterialPortionDto> materialPortions;
-    
-	public AddMixtureDto(Long parentMixtureId, @NotNull QuantityDto quantity, @NotNull Long equipmentId,
-			@NotNull Long brewStageId, List<AddMaterialPortionDto> materialPortions) {
+    public AddMixtureDto() {
+    	
+    }
+        
+	public AddMixtureDto(Long parentMixtureId, QuantityDto quantity, Long equipmentId,
+			Long brewStageId) {
 		super();
 		this.parentMixtureId = parentMixtureId;
 		this.quantity = quantity;
 		this.equipmentId = equipmentId;
 		this.brewStageId = brewStageId;
-		this.materialPortions = materialPortions;
 	}
 
 	public Long getParentMixtureId() {
@@ -60,13 +59,4 @@ public class AddMixtureDto extends BaseDto {
 	public void setBrewStageId(Long brewStageId) {
 		this.brewStageId = brewStageId;
 	}
-
-	public List<AddMaterialPortionDto> getMaterialPortions() {
-		return materialPortions;
-	}
-
-	public void setMaterialPortions(List<AddMaterialPortionDto> materialPortions) {
-		this.materialPortions = materialPortions;
-	}
-
 }

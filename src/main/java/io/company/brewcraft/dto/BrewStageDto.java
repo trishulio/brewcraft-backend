@@ -21,11 +21,15 @@ public class BrewStageDto extends BaseDto {
     public BrewStageDto() {
     	super();
     }
+    
+    public BrewStageDto(Long id) {
+    	super();
+    	this.id = id;
+    }
 
     public BrewStageDto(Long id, Long brewId, BrewStageStatusDto status, BrewTaskDto task, LocalDateTime startedAt, LocalDateTime endedAt,
             Integer version) {
-        super();
-        this.id = id;
+    	this(id);
         this.brewId = brewId;
         this.status = status;
         this.task = task;

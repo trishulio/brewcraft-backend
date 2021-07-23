@@ -22,11 +22,15 @@ public class EquipmentDto extends BaseDto {
     public EquipmentDto() {
         super();
     }
+    
+    public EquipmentDto(Long id) {
+        super();
+        this.id = id;
+    }
 
     public EquipmentDto(Long id, FacilityBaseDto facility, String name, EquipmentType type, EquipmentStatus status, 
             QuantityDto maxCapacity, Integer version) {
-        super();
-        this.id = id;
+    	this(id);
         this.facility = facility;
         this.name = name;
         this.type = type;

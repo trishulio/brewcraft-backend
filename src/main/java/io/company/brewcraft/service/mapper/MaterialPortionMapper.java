@@ -12,8 +12,6 @@ public interface MaterialPortionMapper {
 
 	MaterialPortionMapper INSTANCE = Mappers.getMapper(MaterialPortionMapper.class);
 
-    MaterialPortion fromDto(MaterialPortionDto dto);
-
     MaterialPortion fromDto(AddMaterialPortionDto dto);
     
     //MaterialPortion fromDto(UpdateMaterialPortionDto dto);

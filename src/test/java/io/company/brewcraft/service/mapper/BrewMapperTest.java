@@ -2,6 +2,7 @@ package io.company.brewcraft.service.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class BrewMapperTest {
 		Brew brew = brewMapper.fromDto(dto);
 
 		Brew parentBrew = new Brew(3L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		Brew expectedBrew = new Brew(1L, "testName", "testDesc", 2L, new Product(), parentBrew, null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), null, 1);
 
 		assertEquals(expectedBrew, brew);
@@ -42,10 +43,10 @@ public class BrewMapperTest {
 		Brew brew = brewMapper.fromDto(dto);
 
 		Brew parentBrew = new Brew(3L);
-		parentBrew.AddChildBrew(brew);
-		Brew expectedBrew = new Brew(null, "testName", "testDesc", 2L, new Product(3L), parentBrew, null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
+		parentBrew.addChildBrew(brew);
+		Brew expectedBrew = new Brew(null, "testName", "testDesc", 2L, new Product(3L), parentBrew, List.of(), null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
 
-		assertEquals(expectedBrew, brew);
+		org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals(expectedBrew, brew);
 	}
 
 	@Test
@@ -55,7 +56,7 @@ public class BrewMapperTest {
 		Brew brew = brewMapper.fromDto(dto);
 
 		Brew parentBrew = new Brew(3L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		Brew expectedBrew = new Brew(null, "testName", "testDesc", 2L, new Product(3L), parentBrew, null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, 1);
 
 		assertEquals(expectedBrew, brew);

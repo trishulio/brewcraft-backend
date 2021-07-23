@@ -1,7 +1,9 @@
 package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -137,16 +139,47 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
 
     @Override
     public void setMixtures(List<Mixture> mixtures) {
+    	if (this.mixtures != null) {
+            this.mixtures.stream().collect(Collectors.toList()).forEach(this::removeMixture);
+    	}
+
         if (mixtures != null) {
-            mixtures.stream().forEach(mixture -> mixture.setBrewStage(this));
+        	mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
+        } else {
+        	this.mixtures = mixtures;
+        }
+    }
+    
+    public void addMixture(Mixture mixture) {
+        if (mixture == null) {
+            return;
+        }
+
+        if (this.mixtures == null) {
+            this.mixtures = new ArrayList<>();
+        }
+
+        if (mixture.getBrewStage() != this) {            
+            mixture.setBrewStage(this);
         }
         
-        if (this.getMixtures() != null) {
-            this.getMixtures().clear();
-            this.getMixtures().addAll(mixtures);
-        } else {
-            this.mixtures = mixtures;
-        }    
+        if (!this.mixtures.contains(mixture)) {
+            this.mixtures.add(mixture);            
+        }
+    }
+
+    public boolean removeMixture(Mixture mixture) {
+        if (mixture == null || this.mixtures == null) {
+            return false;
+        }
+
+        boolean removed = this.mixtures.remove(mixture);
+        
+        if (removed) {            
+            mixture.setBrewStage(null);
+        }
+        
+        return removed;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class MixtureController extends BaseController {
     public MixtureDto addMixture(@Valid @RequestBody AddMixtureDto addMixtureDto) {
         Mixture mixture = mixtureMapper.fromDto(addMixtureDto);
         
-        Mixture addedMixture = mixtureService.addMixture(mixture, addMixtureDto.getBrewStageId());
+        Mixture addedMixture = mixtureService.addMixture(mixture);
         
         return mixtureMapper.toDto(addedMixture);
     }
@@ -99,7 +99,7 @@ public class MixtureController extends BaseController {
     public MixtureDto putMixture(@Valid @RequestBody UpdateMixtureDto updateMixtureDto, @PathVariable Long mixtureId) {    	
     	Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
         
-        Mixture putMixture = mixtureService.putMixture(mixtureId, mixture, updateMixtureDto.getBrewStageId());
+        Mixture putMixture = mixtureService.putMixture(mixtureId, mixture);
 
         return mixtureMapper.toDto(putMixture);
     }
@@ -108,7 +108,7 @@ public class MixtureController extends BaseController {
     public MixtureDto patchMixture(@Valid @RequestBody UpdateMixtureDto updateMixtureDto, @PathVariable Long mixtureId) {        
     	Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
         
-        Mixture patchedMixture = mixtureService.patchMixture(mixtureId, mixture, updateMixtureDto.getBrewStageId());
+        Mixture patchedMixture = mixtureService.patchMixture(mixtureId, mixture);
         
         return mixtureMapper.toDto(patchedMixture);
     }

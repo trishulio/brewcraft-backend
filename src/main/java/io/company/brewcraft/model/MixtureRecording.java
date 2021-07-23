@@ -56,11 +56,15 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     public MixtureRecording() {
         super();
     }
-
-    public MixtureRecording(Long id, Mixture mixture, ProductMeasure productMeasure,  String value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
-            Integer version) {
+    
+    public MixtureRecording(Long id) {
         this();
-        setId(id);
+    	setId(id);
+    }
+
+    public MixtureRecording(Long id, Mixture mixture, ProductMeasure productMeasure, String value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
+            Integer version) {
+        this(id);
         setMixture(mixture);
         setProductMeasure(productMeasure);
         setValue(value);

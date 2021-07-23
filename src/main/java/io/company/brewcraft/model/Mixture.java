@@ -2,8 +2,8 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.measure.Quantity;
 import javax.persistence.AssociationOverride;
@@ -24,7 +24,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -92,7 +91,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 
 	public Mixture(Long id, Mixture parentMixture, List<Mixture> childMixtures, Quantity<?> quantity,
 			Equipment equipment, List<MaterialPortion> materialPortions, List<MixtureRecording> recordedMeasures,
-			BrewStage brewStage) {
+			BrewStage brewStage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
 		this(id);
 		setParentMixture(parentMixture);
 		setChildMixtures(childMixtures);
@@ -135,33 +134,50 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 		return childMixtures;
 	}
 
-	@Override
-	public void setChildMixtures(List<Mixture> childMixtures) {
-		if (childMixtures != null) {
-			childMixtures.stream().forEach(childMixture -> childMixture.setParentMixture(this));
-		}
+    @Override
+    public void setChildMixtures(List<Mixture> childMixtures) {
+    	if (this.childMixtures != null) {
+            this.childMixtures.stream().collect(Collectors.toList()).forEach(this::removeChildMixture);
+    	}
 
-		if (this.getChildMixtures() != null) {
-			this.getChildMixtures().clear();
-			this.getChildMixtures().addAll(childMixtures);
-		} else {
-			this.childMixtures = childMixtures;
-		}
-	}
+        if (childMixtures != null) {
+        	childMixtures.stream().collect(Collectors.toList()).forEach(this::addChildMixture);
+        } else {
+        	this.childMixtures = childMixtures;
+        }
+    }
+    
+    public void addChildMixture(Mixture childMixture) {
+        if (childMixture == null) {
+            return;
+        }
 
-	public void addChildMixture(Mixture childMixture) {
-		if (childMixtures == null) {
-			childMixtures = new ArrayList<>();
-		}
+        if (this.childMixtures == null) {
+            this.childMixtures = new ArrayList<>();
+        }
 
-		if (childMixture.getParentMixture() != this) {
-			childMixture.setParentMixture(this);
-		}
+        if (childMixture.getParentMixture() != this) {            
+            childMixture.setParentMixture(this);
+        }
+        
+        if (!this.childMixtures.contains(childMixture)) {
+            this.childMixtures.add(childMixture);            
+        }
+    }
 
-		if (!childMixtures.contains(childMixture)) {
-			this.childMixtures.add(childMixture);
-		}
-	}
+    public boolean removeChildMixture(Mixture childMixture) {
+        if (childMixture == null || this.childMixtures == null) {
+            return false;
+        }
+
+        boolean removed = this.childMixtures.remove(childMixture);
+        
+        if (removed) {            
+            childMixture.setParentMixture(null);
+        }
+        
+        return removed;
+    }
 
 	@Override
 	public Quantity<?> getQuantity() {
@@ -190,46 +206,98 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 
 	@Override
 	public void setMaterialPortions(List<MaterialPortion> materialPortions) {
-		if (materialPortions != null) {
-			materialPortions.stream().forEach(materialPortion -> materialPortion.setMixture(this));
-		}
+    	if (this.materialPortions != null) {
+            this.materialPortions.stream().collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+    	}
 
-		if (this.getMaterialPortions() != null) {
-			this.getMaterialPortions().clear();
-			this.getMaterialPortions().addAll(materialPortions);
-		} else {
-			this.materialPortions = materialPortions;
-		}
+        if (materialPortions != null) {
+        	materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
+        } else {
+        	this.materialPortions = materialPortions;
+        }
 	}
+	
+    public void addMaterialPortion(MaterialPortion materialPortion) {
+        if (materialPortion == null) {
+            return;
+        }
+
+        if (this.materialPortions == null) {
+            this.materialPortions = new ArrayList<>();
+        }
+
+        if (materialPortion.getMixture() != this) {            
+            materialPortion.setMixture(this);
+        }
+        
+        if (!this.materialPortions.contains(materialPortion)) {
+            this.materialPortions.add(materialPortion);            
+        }
+    }
+
+    public boolean removeMaterialPortion(MaterialPortion materialPortion) {
+        if (materialPortion == null || this.materialPortions == null) {
+            return false;
+        }
+
+        boolean removed = this.materialPortions.remove(materialPortion);
+        
+        if (removed) {            
+            materialPortion.setMixture(null);
+        }
+        
+        return removed;
+    }
 
 	@Override
 	public List<MixtureRecording> getRecordedMeasures() {
-		// TODO: should we sort before returning brew logs? is it neccessary since
-		// brewLogs has @OrderBy annotation?
-		if (recordedMeasures != null) {
-			recordedMeasures.sort(new Comparator<MixtureRecording>() {
-				public int compare(MixtureRecording o1, MixtureRecording o2) {
-					return new CompareToBuilder().append(o1.getRecordedAt(), o2.getRecordedAt())
-							.append(o1.getId(), o2.getId()).toComparison();
-				}
-			});
-		}
 		return recordedMeasures;
 	}
 
 	@Override
 	public void setRecordedMeasures(List<MixtureRecording> recordedMeasures) {
-		if (recordedMeasures != null) {
-			recordedMeasures.stream().forEach(recordedMeasure -> recordedMeasure.setMixture(this));
-		}
+    	if (this.recordedMeasures != null) {
+            this.recordedMeasures.stream().collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
+    	}
 
-		if (this.getRecordedMeasures() != null) {
-			this.getRecordedMeasures().clear();
-			this.getRecordedMeasures().addAll(recordedMeasures);
-		} else {
-			this.recordedMeasures = recordedMeasures;
-		}
+        if (recordedMeasures != null) {
+        	recordedMeasures.stream().collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+        } else {
+        	this.recordedMeasures = recordedMeasures;
+        }
 	}
+	
+    public void addRecordedMeasure(MixtureRecording recording) {
+        if (recording == null) {
+            return;
+        }
+
+        if (this.recordedMeasures == null) {
+            this.recordedMeasures = new ArrayList<>();
+        }
+
+        if (recording.getMixture() != this) {            
+            recording.setMixture(this);
+        }
+        
+        if (!this.recordedMeasures.contains(recording)) {
+            this.recordedMeasures.add(recording);            
+        }
+    }
+
+    public boolean removeRecordedMeasure(MixtureRecording item) {
+        if (item == null || this.recordedMeasures == null) {
+            return false;
+        }
+
+        boolean removed = this.recordedMeasures.remove(item);
+        
+        if (removed) {            
+            item.setMixture(null);
+        }
+        
+        return removed;
+    }
 
 	@Override
 	public BrewStage getBrewStage() {

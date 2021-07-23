@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMixture;
 import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.UpdateMixture;
 import io.company.brewcraft.repository.MixtureRepository;
@@ -61,7 +60,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 	}
 
 	@Override
-	public Mixture addMixture(Mixture mixture, Long brewStageId) {
+	public Mixture addMixture(Mixture mixture) {
 		mixtureRepository.refresh(List.of(mixture));
 
 		Mixture addedMixture = mixtureRepository.saveAndFlush(mixture);
@@ -70,7 +69,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 	}
 
 	@Override
-	public Mixture putMixture(Long mixtureId, Mixture putMixture, Long brewStageId) {
+	public Mixture putMixture(Long mixtureId, Mixture putMixture) {
 		mixtureRepository.refresh(List.of(putMixture));
 
 		Mixture existingMixture = getMixture(mixtureId);          
@@ -80,11 +79,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
             existingMixture.setId(mixtureId);
         } else {
         	existingMixture.optimisticLockCheck(putMixture);
-
-            List<MaterialPortion> updatedMaterialPortions = null; //materialPortionService.merge(existingMixture.getMaterialPortions(), putMixture.getMaterialPortions());
-
             existingMixture.override(putMixture, getPropertyNames(BaseMixture.class));       
-            existingMixture.setMaterialPortions(updatedMaterialPortions);
         }
         
         return mixtureRepository.saveAndFlush(existingMixture); 
@@ -92,17 +87,14 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
 
 	@Override
-	public Mixture patchMixture(Long mixtureId, Mixture patchMixture, Long brewStageId) {
+	public Mixture patchMixture(Long mixtureId, Mixture patchMixture) {
         Mixture existingMixture = Optional.ofNullable(getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));            
         
 		mixtureRepository.refresh(List.of(patchMixture));
         
         existingMixture.optimisticLockCheck(patchMixture);
-        
-        List<MaterialPortion> updatedMaterialPortions = null;//materialPortionService.merge(existingMixture.getMaterialPortions(), patchMixture.getMaterialPortions());
-             
+                     
         existingMixture.outerJoin(patchMixture, getPropertyNames(UpdateMixture.class));
-        existingMixture.setMaterialPortions(updatedMaterialPortions);
                 
         return mixtureRepository.saveAndFlush(existingMixture);
 	}

@@ -7,10 +7,18 @@ public class MaterialPortionDto extends BaseDto {
 	private MaterialLotDto materialLot;
     
     private QuantityDto quantity;
+    
+    public MaterialPortionDto() {
+    	super();
+    }
+    
+    public MaterialPortionDto(Long id) {
+    	this();
+    	this.id = id;
+    }
 
 	public MaterialPortionDto(Long id, MaterialLotDto materialLot, QuantityDto quantity) {
-		super();
-		this.id = id;
+		this(id);
 		this.materialLot = materialLot;
 		this.quantity = quantity;
 	}

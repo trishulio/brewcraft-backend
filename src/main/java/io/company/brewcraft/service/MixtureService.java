@@ -13,11 +13,11 @@ public interface MixtureService {
     
     public Mixture getMixture(Long mixtureId);
     
-    public Mixture addMixture(Mixture mixture, Long brewStageId);
+    public Mixture addMixture(Mixture mixture);
     
-    public Mixture putMixture(Long mixtureId, Mixture mixture, Long brewStageId);
+    public Mixture putMixture(Long mixtureId, Mixture mixture);
                 
-    public Mixture patchMixture(Long mixtureId, Mixture mixture, Long brewStageId);
+    public Mixture patchMixture(Long mixtureId, Mixture mixture);
                 
     public void deleteMixture(Long mixtureId);
     

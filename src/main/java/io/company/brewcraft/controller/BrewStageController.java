@@ -94,7 +94,7 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(addedBrewStage);
     }
     
-    @PutMapping("/stages/{stageId}")
+    @PutMapping("/{brewId}/stages/{stageId}")
     public BrewStageDto putBrewStage(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
         

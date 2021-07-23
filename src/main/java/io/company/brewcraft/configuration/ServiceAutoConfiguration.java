@@ -227,8 +227,8 @@ public class ServiceAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
-    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
-    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
+    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository, MixtureService mixtureService) {
+    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository, mixtureService);
         return mixtureRecordingService;
     }
 }

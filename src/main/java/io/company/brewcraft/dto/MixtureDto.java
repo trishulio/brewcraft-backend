@@ -3,6 +3,8 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class MixtureDto extends BaseDto {
+	
+    private Long id;
     
     private Long parentMixtureId;
     
@@ -18,10 +20,15 @@ public class MixtureDto extends BaseDto {
     
     private Integer version;
 
-	public MixtureDto(Long parentMixtureId, QuantityDto quantity, FacilityEquipmentDto equipment,
+    public MixtureDto() {
+    	
+    }
+    
+	public MixtureDto(Long id, Long parentMixtureId, QuantityDto quantity, FacilityEquipmentDto equipment,
 			BrewStageDto brewStage, List<MaterialPortionDto> materialPortions,
 			List<MixtureRecordingDto> recordedMeasures, Integer version) {
 		super();
+        this.id = id;
 		this.parentMixtureId = parentMixtureId;
 		this.quantity = quantity;
 		this.equipment = equipment;
@@ -30,6 +37,14 @@ public class MixtureDto extends BaseDto {
 		this.recordedMeasures = recordedMeasures;
 		this.version = version;
 	}
+	
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 	public Long getParentMixtureId() {
 		return parentMixtureId;

@@ -14,9 +14,13 @@ public class UpdateMixtureRecordingDto extends BaseDto {
     private LocalDateTime recordedAt;
     
     private Integer version;
+    
+    public UpdateMixtureRecordingDto() {
+    	super();
+    }
 
 	public UpdateMixtureRecordingDto(String name, String value, LocalDateTime recordedAt, Integer version) {
-		super();
+		this();
 		this.name = name;
 		this.value = value;
 		this.recordedAt = recordedAt;

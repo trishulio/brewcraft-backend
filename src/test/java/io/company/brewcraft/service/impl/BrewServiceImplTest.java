@@ -91,7 +91,7 @@ public class BrewServiceImplTest {
 		assertEquals(new Product(1L), addedBrew.getProduct());
 		
 		Brew parentBrew = new Brew(2L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		assertEquals(parentBrew, addedBrew.getParentBrew());
 		
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrew.getStartedAt());
@@ -125,7 +125,7 @@ public class BrewServiceImplTest {
 		assertEquals(new Product(1L), brew.getProduct());
 		
 		Brew parentBrew = new Brew(2L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		assertEquals(parentBrew, brew.getParentBrew());		
 		
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
@@ -155,7 +155,7 @@ public class BrewServiceImplTest {
 		assertEquals(new Product(1L), brew.getProduct());
 		
 		Brew parentBrew = new Brew(2L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		assertEquals(parentBrew, brew.getParentBrew());		
 		
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
@@ -201,7 +201,7 @@ public class BrewServiceImplTest {
 		assertEquals(new Product(1L), brew.getProduct());
 		
 		Brew parentBrew = new Brew(2L);
-		parentBrew.AddChildBrew(brew);
+		parentBrew.addChildBrew(brew);
 		assertEquals(parentBrew, brew.getParentBrew());		
 		
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());

@@ -123,7 +123,7 @@ public class BrewStageControllerTest {
        assertEquals(new BrewTask(4L), addBrewStageCaptor.getValue().getTask());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addBrewStageCaptor.getValue().getEndedAt());
-       assertEquals(1, brewStageDto.getVersion());
+       assertEquals(null, addBrewStageCaptor.getValue().getVersion());
        
        //Assert returned brew stage  
        assertEquals(1L, brewStageDto.getId());
@@ -154,7 +154,7 @@ public class BrewStageControllerTest {
        assertEquals(new BrewTask(4L), putBrewStageCaptor.getValue().getTask());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), putBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), putBrewStageCaptor.getValue().getEndedAt());
-       assertEquals(1, brewStageDto.getVersion());
+       assertEquals(1, putBrewStageCaptor.getValue().getVersion());
        
        //Assert returned brew stage  
        assertEquals(1L, brewStageDto.getId());
@@ -185,7 +185,7 @@ public class BrewStageControllerTest {
        assertEquals(new BrewTask(4L), patchBrewStageCaptor.getValue().getTask());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), patchBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), patchBrewStageCaptor.getValue().getEndedAt());
-       assertEquals(1, brewStageDto.getVersion());
+       assertEquals(1, patchBrewStageCaptor.getValue().getVersion());
        
        //Assert returned brew stage  
        assertEquals(1L, brewStageDto.getId());
