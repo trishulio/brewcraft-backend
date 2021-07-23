@@ -33,13 +33,13 @@ public class ProductMeasureServiceImplTest {
 
     @Test
     public void testGetAllProductMeasures_returnsProductsMeasures() throws Exception {                
-        List<ProductMeasure> productMeasures = List.of(new ProductMeasure("abv"));
+        List<ProductMeasure> productMeasures = List.of(new ProductMeasure(1L, "abv"));
         
         when(productMeasureRepositoryMock.findAll()).thenReturn(productMeasures);
 
         List<ProductMeasure> actualProductsMeasures = productMeasureService.getAllProductMeasures();
 
-        assertEquals(List.of(new ProductMeasure("abv")), actualProductsMeasures);
+        assertEquals(List.of(new ProductMeasure(1L, "abv")), actualProductsMeasures);
     }
     
     @Test

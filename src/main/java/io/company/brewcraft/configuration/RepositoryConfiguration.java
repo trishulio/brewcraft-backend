@@ -252,14 +252,14 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-//    
-//    @Bean
-//    public AccessorRefresher<Long, ProductMeasureAccessor, ProductMeasure> productMeasureRefresher(ProductMeasureRepository repo) {
-//        return new AccessorRefresher<>(
-//            accessor -> accessor.getProductMeasure(),
-//            (accessor, productMeasure) -> accessor.setProductMeasure(productMeasure),
-//            ids -> repo.findAllById(ids)
-//        );
-//    }
+    
+    @Bean
+    public AccessorRefresher<Long, ProductMeasureAccessor, ProductMeasure> productMeasureRefresher(ProductMeasureRepository repo) {
+        return new AccessorRefresher<>(
+            accessor -> accessor.getProductMeasure(),
+            (accessor, productMeasure) -> accessor.setProductMeasure(productMeasure),
+            ids -> repo.findAllById(ids)
+        );
+    }
     
 }

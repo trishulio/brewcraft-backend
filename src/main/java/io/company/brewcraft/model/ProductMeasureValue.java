@@ -23,7 +23,7 @@ public class ProductMeasureValue extends BaseEntity {
     private Product product;    
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_measure_name", referencedColumnName = "name")
+    @JoinColumn(name = "product_measure_id", referencedColumnName = "id")
     private ProductMeasure productMeasure;
     
     @Column(name = "product_measure_value")

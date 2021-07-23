@@ -20,7 +20,7 @@ public class MixtureRecordingTest {
     public void testConstructor() {
 		Long id = 1L;
 		Mixture mixture = new Mixture(2L);
-		ProductMeasure productMeasure = new ProductMeasure("abv");
+		ProductMeasure productMeasure = new ProductMeasure(3L);
 		String value = "100";
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
@@ -31,7 +31,7 @@ public class MixtureRecordingTest {
         
         assertEquals(1L, mixtureRecording.getId());       
         assertEquals(new Mixture(2L), mixtureRecording.getMixture());
-        assertEquals(new ProductMeasure("abv"), mixtureRecording.getProductMeasure());
+        assertEquals(new ProductMeasure(3L), mixtureRecording.getProductMeasure());
         assertEquals("100", mixtureRecording.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecording.getRecordedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), mixtureRecording.getCreatedAt());
@@ -53,9 +53,9 @@ public class MixtureRecordingTest {
     
     @Test
     public void testGetSetProductMeasure() {
-        mixtureRecording.setProductMeasure(new ProductMeasure("abv"));
+        mixtureRecording.setProductMeasure(new ProductMeasure(3L));
 
-        assertEquals(new ProductMeasure("abv"), mixtureRecording.getProductMeasure());
+        assertEquals(new ProductMeasure(3L), mixtureRecording.getProductMeasure());
     }
     
     @Test

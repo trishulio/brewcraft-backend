@@ -18,22 +18,22 @@ public class AddMixtureRecordingDtoTest {
     
     @Test
     public void testConstructor() {
-		String name = "abv";
+		Long measureId = 1L;
 		String value = "100";
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
 
-        AddMixtureRecordingDto addMixtureRecordingDto = new AddMixtureRecordingDto(name, value, recordedAt);
+        AddMixtureRecordingDto addMixtureRecordingDto = new AddMixtureRecordingDto(measureId, value, recordedAt);
         
-        assertEquals("abv", addMixtureRecordingDto.getName());
+        assertEquals(1L, addMixtureRecordingDto.getMeasureId());
         assertEquals("100", addMixtureRecordingDto.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addMixtureRecordingDto.getRecordedAt());
     }
     
     @Test
-    public void testGetSetName() {
-        addMixtureRecordingDto.setName("abv");
+    public void testGetSetMeasureId() {
+        addMixtureRecordingDto.setMeasureId(1L);
 
-        assertEquals("abv", addMixtureRecordingDto.getName());
+        assertEquals(1L, addMixtureRecordingDto.getMeasureId());
     }
     
     @Test

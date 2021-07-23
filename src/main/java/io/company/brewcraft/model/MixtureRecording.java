@@ -33,7 +33,7 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     private Mixture mixture;    
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "measure_name", referencedColumnName = "name")
+    @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private ProductMeasure productMeasure;
     
     @Column(name = "measure_value")

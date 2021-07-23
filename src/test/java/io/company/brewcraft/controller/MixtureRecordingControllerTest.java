@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.dto.AddMixtureRecordingDto;
 import io.company.brewcraft.dto.MixtureRecordingDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.ProductMeasureDto;
 import io.company.brewcraft.dto.UpdateMixtureRecordingDto;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
@@ -44,7 +45,7 @@ public class MixtureRecordingControllerTest {
 
 	@Test
 	public void testGetMixtureRecordings() {
-        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure("abv"), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure(3L), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
 		List<MixtureRecording> mixtureRecordingList = List.of(mixtureRecording);
 		Page<MixtureRecording> mPage = mock(Page.class);
@@ -61,7 +62,7 @@ public class MixtureRecordingControllerTest {
 		MixtureRecordingDto mixtureRecordingDto = dto.getContent().get(0);
 
 		assertEquals(1L, mixtureRecordingDto.getId());
-		assertEquals("abv", mixtureRecordingDto.getName());
+		assertEquals(new ProductMeasureDto(3L), mixtureRecordingDto.getMeasure());
 		assertEquals("100", mixtureRecordingDto.getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
 		assertEquals(1, mixtureRecordingDto.getVersion());
@@ -69,14 +70,14 @@ public class MixtureRecordingControllerTest {
 
 	@Test
 	public void testGetMixtureRecording() {
-        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure("abv"), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure(3L), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
 		doReturn(mixtureRecording).when(mixtureRecordingService).getMixtureRecording(1L);
 
 		MixtureRecordingDto mixtureRecordingDto = mixtureRecordingController.getMixtureRecording(1L);
 
 		assertEquals(1L, mixtureRecordingDto.getId());
-		assertEquals("abv", mixtureRecordingDto.getName());
+		assertEquals(new ProductMeasureDto(3L), mixtureRecordingDto.getMeasure());
 		assertEquals("100", mixtureRecordingDto.getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
 		assertEquals(1, mixtureRecordingDto.getVersion());
@@ -91,9 +92,9 @@ public class MixtureRecordingControllerTest {
 
 	@Test
 	public void testAddMixtureRecording() {
-		AddMixtureRecordingDto addMixtureRecordingDto = new AddMixtureRecordingDto("abv", "100", LocalDateTime.of(2018, 1, 2, 3, 4));
+		AddMixtureRecordingDto addMixtureRecordingDto = new AddMixtureRecordingDto(1L, "100", LocalDateTime.of(2018, 1, 2, 3, 4));
 
-        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure("abv"), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure(1L), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
 		ArgumentCaptor<MixtureRecording> addMixtureRecordingCaptor = ArgumentCaptor.forClass(MixtureRecording.class);
 
@@ -104,7 +105,7 @@ public class MixtureRecordingControllerTest {
 		// Assert added mixture recording
 		assertEquals(null, addMixtureRecordingCaptor.getValue().getId());
 		assertEquals(null, addMixtureRecordingCaptor.getValue().getMixture());
-		assertEquals(new ProductMeasure("abv"), addMixtureRecordingCaptor.getValue().getProductMeasure());
+		assertEquals(new ProductMeasure(1L), addMixtureRecordingCaptor.getValue().getProductMeasure());
 		assertEquals("100", addMixtureRecordingCaptor.getValue().getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addMixtureRecordingCaptor.getValue().getRecordedAt());
 		assertEquals(null, addMixtureRecordingCaptor.getValue().getCreatedAt());
@@ -113,7 +114,7 @@ public class MixtureRecordingControllerTest {
 
 		// Assert returned mixture recording
 		assertEquals(1L, mixtureRecordingDto.getId());
-		assertEquals("abv", mixtureRecordingDto.getName());
+		assertEquals(new ProductMeasureDto(1L), mixtureRecordingDto.getMeasure());
 		assertEquals("100", mixtureRecordingDto.getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
 		assertEquals(1, mixtureRecordingDto.getVersion());
@@ -121,9 +122,9 @@ public class MixtureRecordingControllerTest {
 
 	@Test
 	public void testPutMixtureRecording() {
-		UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto("abv", "100", LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+		UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(1L, "100", LocalDateTime.of(2018, 1, 2, 3, 4), 1);
         
-		MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure("abv"), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+		MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure(1L), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
 		ArgumentCaptor<MixtureRecording> putMixtureRecordingCaptor = ArgumentCaptor.forClass(MixtureRecording.class);
 
@@ -134,7 +135,7 @@ public class MixtureRecordingControllerTest {
 		// Assert put mixture recording
 		assertEquals(null, putMixtureRecordingCaptor.getValue().getId());
 		assertEquals(null, putMixtureRecordingCaptor.getValue().getMixture());
-		assertEquals(new ProductMeasure("abv"), putMixtureRecordingCaptor.getValue().getProductMeasure());
+		assertEquals(new ProductMeasure(1L), putMixtureRecordingCaptor.getValue().getProductMeasure());
 		assertEquals("100", putMixtureRecordingCaptor.getValue().getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), putMixtureRecordingCaptor.getValue().getRecordedAt());
 		assertEquals(null, putMixtureRecordingCaptor.getValue().getCreatedAt());
@@ -143,7 +144,7 @@ public class MixtureRecordingControllerTest {
 
 		// Assert returned mixture recording
 		assertEquals(1L, mixtureRecordingDto.getId());
-		assertEquals("abv", mixtureRecordingDto.getName());
+		assertEquals(new ProductMeasureDto(1L), mixtureRecordingDto.getMeasure());
 		assertEquals("100", mixtureRecordingDto.getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
 		assertEquals(1, mixtureRecordingDto.getVersion());
@@ -151,9 +152,9 @@ public class MixtureRecordingControllerTest {
 
 	@Test
 	public void testPatchMixtureRecording() {
-		UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto("abv", "100", LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+		UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(1L, "100", LocalDateTime.of(2018, 1, 2, 3, 4), 1);
         
-		MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure("abv"), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+		MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new ProductMeasure(1L), "100", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
 		ArgumentCaptor<MixtureRecording> patchMixtureRecordingCaptor = ArgumentCaptor.forClass(MixtureRecording.class);
 
@@ -164,7 +165,7 @@ public class MixtureRecordingControllerTest {
 		// Assert patch mixture recording
 		assertEquals(null, patchMixtureRecordingCaptor.getValue().getId());
 		assertEquals(null, patchMixtureRecordingCaptor.getValue().getMixture());
-		assertEquals(new ProductMeasure("abv"), patchMixtureRecordingCaptor.getValue().getProductMeasure());
+		assertEquals(new ProductMeasure(1L), patchMixtureRecordingCaptor.getValue().getProductMeasure());
 		assertEquals("100", patchMixtureRecordingCaptor.getValue().getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), patchMixtureRecordingCaptor.getValue().getRecordedAt());
 		assertEquals(null, patchMixtureRecordingCaptor.getValue().getCreatedAt());
@@ -173,7 +174,7 @@ public class MixtureRecordingControllerTest {
 
 		// Assert returned mixture recording
 		assertEquals(1L, mixtureRecordingDto.getId());
-		assertEquals("abv", mixtureRecordingDto.getName());
+		assertEquals(new ProductMeasureDto(1L), mixtureRecordingDto.getMeasure());
 		assertEquals("100", mixtureRecordingDto.getValue());
 		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
 		assertEquals(1, mixtureRecordingDto.getVersion());

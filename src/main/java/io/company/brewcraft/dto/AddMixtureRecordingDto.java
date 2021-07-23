@@ -2,13 +2,13 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class AddMixtureRecordingDto extends BaseDto {
 
-    @NotEmpty
-    private String name;
+    @NotNull
+    private Long measureId;
     
     @Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank")
     private String value;
@@ -19,20 +19,19 @@ public class AddMixtureRecordingDto extends BaseDto {
     	super();
     }
     
-	public AddMixtureRecordingDto(@NotEmpty String name,
-			@Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank") String value, LocalDateTime recordedAt) {
+	public AddMixtureRecordingDto(Long measureId, String value, LocalDateTime recordedAt) {
 		this();
-		this.name = name;
+		this.measureId = measureId;
 		this.value = value;
 		this.recordedAt = recordedAt;
 	}
 
-	public String getName() {
-		return name;
+	public Long getMeasureId() {
+		return measureId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMeasureId(Long measureId) {
+		this.measureId = measureId;
 	}
 
 	public String getValue() {

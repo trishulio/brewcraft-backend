@@ -3,6 +3,7 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,8 +13,8 @@ public class MixtureRecordingDto extends BaseDto {
 	
 	private Long id;
 
-    @NotEmpty
-    private String name;
+    @NotNull
+    private ProductMeasureDto measure;
     
     @Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank")
     private String value;
@@ -31,10 +32,10 @@ public class MixtureRecordingDto extends BaseDto {
     	this.id = id;
     }
 
-	public MixtureRecordingDto(Long id, @NotEmpty String name,
+	public MixtureRecordingDto(Long id, @NotEmpty ProductMeasureDto measure,
 			@Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank") String value, LocalDateTime recordedAt, Integer version) {
 		this(id);
-		this.name = name;
+		this.measure = measure;
 		this.value = value;
 		this.recordedAt = recordedAt;
 		this.version = version;
@@ -48,12 +49,12 @@ public class MixtureRecordingDto extends BaseDto {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public ProductMeasureDto getMeasure() {
+		return measure;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMeasure(ProductMeasureDto measure) {
+		this.measure = measure;
 	}
 
 	public String getValue() {
