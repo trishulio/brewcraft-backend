@@ -6,6 +6,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class AddMixtureRecordingDto extends BaseDto {
+	
+    @NotNull
+    private Long mixtureId;
 
     @NotNull
     private Long measureId;
@@ -19,11 +22,20 @@ public class AddMixtureRecordingDto extends BaseDto {
     	super();
     }
     
-	public AddMixtureRecordingDto(Long measureId, String value, LocalDateTime recordedAt) {
+	public AddMixtureRecordingDto(Long mixtureId, Long measureId, String value, LocalDateTime recordedAt) {
 		this();
+		this.mixtureId = mixtureId;
 		this.measureId = measureId;
 		this.value = value;
 		this.recordedAt = recordedAt;
+	}
+	
+	public Long getMixtureId() {
+		return mixtureId;
+	}
+
+	public void setMixtureId(Long mixtureId) {
+		this.mixtureId = mixtureId;
 	}
 
 	public Long getMeasureId() {

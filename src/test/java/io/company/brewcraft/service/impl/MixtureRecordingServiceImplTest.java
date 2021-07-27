@@ -85,12 +85,12 @@ public class MixtureRecordingServiceImplTest {
 
 	@Test
 	public void testAddMixtureRecording_AddsMixtureRecording() {
-		MixtureRecording mixtureRecording = new MixtureRecording(null, null, new ProductMeasure(1L), "100", LocalDateTime.of(2019, 1, 2, 3, 4),
+		MixtureRecording mixtureRecording = new MixtureRecording(null, new Mixture(1L), new ProductMeasure(1L), "100", LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
         when(mixtureServiceMock.getMixture(1L)).thenReturn(new Mixture(1L));
 
-        MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording, 1L);
+        MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
 		
 		assertEquals(null, addedMixtureRecording.getId());
 		assertEquals(new Mixture(1L), addedMixtureRecording.getMixture());
@@ -117,7 +117,7 @@ public class MixtureRecordingServiceImplTest {
         when(mixtureServiceMock.getMixture(3L)).thenReturn(new Mixture(3L));
         doReturn(Optional.of(existing)).when(mixtureRecordingRepositoryMock).findById(1L);
 		
-        MixtureRecording mixtureRecording = mixtureRecordingService.putMixtureRecording(1L, update, 3L);
+        MixtureRecording mixtureRecording = mixtureRecordingService.putMixtureRecording(1L, update);
 
 		assertEquals(1L, mixtureRecording.getId());
 		assertEquals(new Mixture(3L), mixtureRecording.getMixture());
@@ -140,7 +140,7 @@ public class MixtureRecordingServiceImplTest {
         when(mixtureServiceMock.getMixture(3L)).thenReturn(new Mixture(3L));
         doReturn(Optional.empty()).when(mixtureRecordingRepositoryMock).findById(1L);
 		
-        MixtureRecording mixtureRecording = mixtureRecordingService.putMixtureRecording(1L, update, 3L);
+        MixtureRecording mixtureRecording = mixtureRecordingService.putMixtureRecording(1L, update);
 
 		assertEquals(1L, mixtureRecording.getId());
 		assertEquals(new Mixture(3L), mixtureRecording.getMixture());
@@ -166,7 +166,7 @@ public class MixtureRecordingServiceImplTest {
 		MixtureRecording update = new MixtureRecording(1L);
 		existing.setVersion(2);
 
-		assertThrows(OptimisticLockException.class, () -> mixtureRecordingService.putMixtureRecording(1L, update, 2L));
+		assertThrows(OptimisticLockException.class, () -> mixtureRecordingService.putMixtureRecording(1L, update));
 	}
 
 	@Test

@@ -66,7 +66,7 @@ public class MixtureMapperTest {
 		
 		MixtureDto dto = mixtureMapper.toDto(mixture);
 
-		assertEquals(new MixtureDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), new FacilityEquipmentDto(3L), new BrewStageDto(4L), List.of(new MaterialPortionDto(6L)), List.of(new MixtureRecordingDto(7L)), 1), dto);
+		assertEquals(new MixtureDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), new FacilityEquipmentDto(3L), new BrewStageDto(4L), List.of(new MaterialPortionDto(6L)), List.of(new MixtureRecordingDto(7L, 1L)), 1), dto);
 	}
 
 }

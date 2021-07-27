@@ -11,13 +11,17 @@ public class EnhancedMixtureRecordingRepositoryImpl implements EnhancedMixtureRe
     private static final Logger log = LoggerFactory.getLogger(EnhancedMixtureRecordingRepositoryImpl.class);
     
     private ProductMeasureRepository productMeasureRepository;
+    
+    private MixtureRepository mixtureRepository;
         
-    public EnhancedMixtureRecordingRepositoryImpl(ProductMeasureRepository productMeasureRepository) {
+    public EnhancedMixtureRecordingRepositoryImpl(ProductMeasureRepository productMeasureRepository, MixtureRepository mixtureRepository) {
         this.productMeasureRepository = productMeasureRepository;
+        this.mixtureRepository = mixtureRepository;
     }
 
 	@Override
 	public void refresh(Collection<MixtureRecording> mixtureRecordings) {
         this.productMeasureRepository.refreshAccessors(mixtureRecordings);
+        this.mixtureRepository.refreshAccessors(mixtureRecordings);
 	}
 }

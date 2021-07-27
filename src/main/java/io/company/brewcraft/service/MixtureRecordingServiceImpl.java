@@ -55,10 +55,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 	}
 	
 	@Override
-	public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings, Long mixtureId) {
-        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
-        mixtureRecordings.forEach(mixtureRecording -> mixtureRecording.setMixture(mixture));
-		
+	public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings) {		
 		mixtureRecordingRepository.refresh(mixtureRecordings);
 
 		List<MixtureRecording> addedMixtureRecordings = mixtureRecordingRepository.saveAll(mixtureRecordings);
@@ -68,11 +65,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 	}
 
 	@Override
-	public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording, Long mixtureId) {
-        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
-
-        mixtureRecording.setMixture(mixture);
-        
+	public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording) {
 		mixtureRecordingRepository.refresh(List.of(mixtureRecording));
 
 		MixtureRecording addedMixture = mixtureRecordingRepository.saveAndFlush(mixtureRecording);
@@ -81,9 +74,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 	}
 
 	@Override
-	public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording putMixtureRecording, Long mixtureId) {
-        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
-		
+	public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording putMixtureRecording) {		
 		mixtureRecordingRepository.refresh(List.of(putMixtureRecording));
 
 		MixtureRecording existingMixtureRecording = getMixtureRecording(mixtureRecordingId);          
@@ -95,9 +86,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
         	existingMixtureRecording.optimisticLockCheck(putMixtureRecording);
             existingMixtureRecording.override(putMixtureRecording, getPropertyNames(BaseMixtureRecording.class));       
         }
-        
-        existingMixtureRecording.setMixture(mixture);
-        
+                
         return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording); 
 	}
 

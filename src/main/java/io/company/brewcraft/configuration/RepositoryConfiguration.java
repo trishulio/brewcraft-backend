@@ -60,6 +60,7 @@ import io.company.brewcraft.service.InvoiceStatusAccessor;
 import io.company.brewcraft.service.MaterialAccessor;
 import io.company.brewcraft.service.MaterialLotAccessor;
 import io.company.brewcraft.service.MaterialPortionAccessor;
+import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ParentMixtureAccessor;
 import io.company.brewcraft.service.ProductAccessor;
@@ -227,10 +228,19 @@ public class RepositoryConfiguration {
     }
     
     @Bean
-    public AccessorRefresher<Long, ParentMixtureAccessor, Mixture> mixtureRefresher(MixtureRepository repo) {
+    public AccessorRefresher<Long, ParentMixtureAccessor, Mixture> parentMixtureRefresher(MixtureRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getParentMixture(),
             (accessor, parentMixture) -> accessor.setParentMixture(parentMixture),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher(MixtureRepository repo) {
+        return new AccessorRefresher<>(
+            accessor -> accessor.getMixture(),
+            (accessor, mixture) -> accessor.setMixture(mixture),
             ids -> repo.findAllById(ids)
         );
     }

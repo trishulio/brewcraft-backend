@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentMixtureAccessor;
 
 public class EnhancedMixtureRepositoryImplTest {
@@ -21,7 +22,9 @@ public class EnhancedMixtureRepositoryImplTest {
     
     private BrewStageRepository brewStageRepositoryMock;
     
-    private AccessorRefresher<Long, ParentMixtureAccessor, Mixture> accessorMock;
+    private AccessorRefresher<Long, ParentMixtureAccessor, Mixture> parentMixtureAccessorMock;
+
+    private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
@@ -29,9 +32,10 @@ public class EnhancedMixtureRepositoryImplTest {
     	mixtureRepositoryMock = mock(MixtureRepository.class);
     	equipmentRepositoryMock = mock(EquipmentRepository.class);
     	brewStageRepositoryMock = mock(BrewStageRepository.class);
-        accessorMock = mock(AccessorRefresher.class);
+        parentMixtureAccessorMock = mock(AccessorRefresher.class);
+        mixtureAccessorMock = mock(AccessorRefresher.class);
 
-        repo = new EnhancedMixtureRepositoryImpl(mixtureRepositoryMock, equipmentRepositoryMock, brewStageRepositoryMock, accessorMock);
+        repo = new EnhancedMixtureRepositoryImpl(mixtureRepositoryMock, equipmentRepositoryMock, brewStageRepositoryMock, parentMixtureAccessorMock, mixtureAccessorMock);
     }
 
     @Test
@@ -40,7 +44,7 @@ public class EnhancedMixtureRepositoryImplTest {
 
         repo.refresh(mixtures);
 
-        verify(mixtureRepositoryMock, times(1)).refreshAccessors(mixtures);
+        verify(mixtureRepositoryMock, times(1)).refreshParentMixtureAccessors(mixtures);
         verify(equipmentRepositoryMock, times(1)).refreshAccessors(mixtures);
         verify(brewStageRepositoryMock, times(1)).refreshAccessors(mixtures);
     }
@@ -49,9 +53,9 @@ public class EnhancedMixtureRepositoryImplTest {
     public void testRefreshAccessors_CallsRefresherAccessor() {
         List<ParentMixtureAccessor> accessors = List.of(mock(ParentMixtureAccessor.class), mock(ParentMixtureAccessor.class));
 
-        repo.refreshAccessors(accessors);
+        repo.refreshParentMixtureAccessors(accessors);
 
-        verify(accessorMock, times(1)).refreshAccessors(accessors);
+        verify(parentMixtureAccessorMock, times(1)).refreshAccessors(accessors);
     }
 
 }

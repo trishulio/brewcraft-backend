@@ -14,11 +14,11 @@ public interface MixtureRecordingService {
     
     public MixtureRecording getMixtureRecording(Long mixtureRecordingId);
     
-    public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings, Long mixtureId);
+    public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings);
     
-    public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording, Long mixtureId);
+    public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording);
     
-    public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording mixtureRecording, Long mixtureId);
+    public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording mixtureRecording);
                 
     public MixtureRecording patchMixtureRecording(Long mixtureRecordingId, MixtureRecording mixtureRecording);
                 

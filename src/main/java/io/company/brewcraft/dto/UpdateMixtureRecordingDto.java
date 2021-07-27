@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateMixtureRecordingDto extends BaseDto {
+	
+	private Long mixtureId;
 
     private Long measureId;
     
@@ -19,12 +21,21 @@ public class UpdateMixtureRecordingDto extends BaseDto {
     	super();
     }
 
-	public UpdateMixtureRecordingDto(Long measureId, String value, LocalDateTime recordedAt, Integer version) {
+	public UpdateMixtureRecordingDto(Long mixtureId, Long measureId, String value, LocalDateTime recordedAt, Integer version) {
 		this();
+		this.mixtureId = mixtureId;
 		this.measureId = measureId;
 		this.value = value;
 		this.recordedAt = recordedAt;
 		this.version = version;
+	}
+	
+	public Long getMixtureId() {
+		return mixtureId;
+	}
+
+	public void setMixtureId(Long mixtureId) {
+		this.mixtureId = mixtureId;
 	}
 
 	public Long getMeasureId() {

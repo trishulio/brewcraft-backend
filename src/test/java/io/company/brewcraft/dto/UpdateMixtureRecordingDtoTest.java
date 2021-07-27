@@ -18,17 +18,26 @@ public class UpdateMixtureRecordingDtoTest {
     
     @Test
     public void testConstructor() {
+		Long mixtureId = 2L;
 		Long measureId = 1L;
 		String value = "100";
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
 
-        UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(measureId, value, recordedAt, version);
+        UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(mixtureId, measureId, value, recordedAt, version);
         
+        assertEquals(2L, updateMixtureRecordingDto.getMixtureId());
         assertEquals(1L, updateMixtureRecordingDto.getMeasureId());
         assertEquals("100", updateMixtureRecordingDto.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), updateMixtureRecordingDto.getRecordedAt());
         assertEquals(1, updateMixtureRecordingDto.getVersion());        
+    }
+    
+    @Test
+    public void testGetSetMixtureId() {
+    	updateMixtureRecordingDto.setMixtureId(2L);
+
+        assertEquals(2L, updateMixtureRecordingDto.getMixtureId());
     }
   
     @Test

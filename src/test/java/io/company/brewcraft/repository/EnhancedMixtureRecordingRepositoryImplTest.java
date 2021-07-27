@@ -17,12 +17,15 @@ public class EnhancedMixtureRecordingRepositoryImplTest {
     
     private ProductMeasureRepository productMeasureRepositoryMock;
     
+    private MixtureRepository mixtureRepositoryMock;
+    
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
     	productMeasureRepositoryMock = mock(ProductMeasureRepository.class);
+    	mixtureRepositoryMock = mock(MixtureRepository.class);
 
-        repo = new EnhancedMixtureRecordingRepositoryImpl(productMeasureRepositoryMock);
+        repo = new EnhancedMixtureRecordingRepositoryImpl(productMeasureRepositoryMock, mixtureRepositoryMock);
     }
 
     @Test
@@ -32,6 +35,7 @@ public class EnhancedMixtureRecordingRepositoryImplTest {
         repo.refresh(mixtureRecordings);
 
         verify(productMeasureRepositoryMock, times(1)).refreshAccessors(mixtureRecordings);
+        verify(mixtureRepositoryMock, times(1)).refreshAccessors(mixtureRecordings);
     }
 
 }

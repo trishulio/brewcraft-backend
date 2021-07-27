@@ -2,21 +2,17 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MixtureRecordingDto extends BaseDto {
 	
 	private Long id;
+	
+	private Long mixtureId;
 
-    @NotNull
     private ProductMeasureDto measure;
     
-    @Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank")
     private String value;
 
     private LocalDateTime recordedAt;
@@ -31,10 +27,15 @@ public class MixtureRecordingDto extends BaseDto {
     	this();
     	this.id = id;
     }
+    
+    public MixtureRecordingDto(Long id, Long mixtureId) {
+    	this(id);
+    	this.mixtureId = mixtureId;
+    }
 
-	public MixtureRecordingDto(Long id, @NotEmpty ProductMeasureDto measure,
-			@Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank") String value, LocalDateTime recordedAt, Integer version) {
-		this(id);
+	public MixtureRecordingDto(Long id, Long mixtureId, ProductMeasureDto measure,
+			String value, LocalDateTime recordedAt, Integer version) {
+		this(id, mixtureId);
 		this.measure = measure;
 		this.value = value;
 		this.recordedAt = recordedAt;
@@ -47,6 +48,14 @@ public class MixtureRecordingDto extends BaseDto {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getMixtureId() {
+		return this.mixtureId;
+	}
+	
+	public void setMixtureId(Long mixtureId) {
+		this.mixtureId = mixtureId;
 	}
 
 	public ProductMeasureDto getMeasure() {
