@@ -2,18 +2,13 @@ package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
-public interface BaseMaterialPortion {
-	
-	MaterialLot getMaterialLot();
+import io.company.brewcraft.service.MaterialLotAccessor;
+import io.company.brewcraft.service.MixtureAccessor;
 
-    void setMaterialLot(MaterialLot materialLot);
+public interface BaseMaterialPortion extends MixtureAccessor, MaterialLotAccessor {
     
     Quantity<?> getQuantity();
     
     void setQuantity(Quantity<?> quantity);
-    
-    Mixture getMixture();
-    
-    void setMixture(Mixture mixture);
 
 }
