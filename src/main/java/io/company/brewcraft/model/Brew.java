@@ -2,7 +2,6 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -221,13 +219,6 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
     @Override
     public List<BrewStage> getBrewStages() {
-        //TODO: should we sort before returning brew stages? is it neccessary since brewStages has @OrderBy annotation?
-//        if (brewStages != null && !brewStages.isEmpty()) {
-//            brewStages.sort(new Comparator<BrewStage>() {
-//                public int compare(BrewStage o1, BrewStage o2) {
-//                    return new CompareToBuilder().append(o1.getStartedAt(), o2.getStartedAt()).toComparison(); 
-//                }});
-//        }
         return brewStages;
     }
 
