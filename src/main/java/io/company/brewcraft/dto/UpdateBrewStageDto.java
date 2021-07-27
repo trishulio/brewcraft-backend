@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class UpdateBrewStageDto extends BaseDto {
 	
+	private Long brewId;
+	
     private Long statusId;
     
     private Long taskId;
@@ -18,14 +20,23 @@ public class UpdateBrewStageDto extends BaseDto {
     	super();
     }
 
-    public UpdateBrewStageDto(Long statusId, Long taskId, LocalDateTime startedAt, LocalDateTime endedAt, Integer version) {
-        super();
+    public UpdateBrewStageDto(Long brewId, Long statusId, Long taskId, LocalDateTime startedAt, LocalDateTime endedAt, Integer version) {
+        this();
+        this.brewId = brewId;
         this.statusId = statusId;
         this.taskId = taskId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.version = version;
     } 
+    
+    public Long getBrewId() {
+        return brewId;
+    }
+
+    public void setBrewId(Long brewId) {
+        this.brewId = brewId;
+    }
 
     public Long getStatusId() {
         return statusId;

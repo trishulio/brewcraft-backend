@@ -14,9 +14,9 @@ public interface BrewStageService {
     
     public BrewStage getBrewStage(Long brewStageId);
     
-    public BrewStage addBrewStage(Long brewId, BrewStage brewStage);
+    public BrewStage addBrewStage(BrewStage brewStage);
     
-    public BrewStage putBrewStage(Long brewId, Long brewStageId, BrewStage brewStage);
+    public BrewStage putBrewStage(Long brewStageId, BrewStage brewStage);
                 
     public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStage);
             

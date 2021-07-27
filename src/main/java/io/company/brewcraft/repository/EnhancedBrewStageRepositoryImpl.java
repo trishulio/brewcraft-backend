@@ -16,10 +16,13 @@ public class EnhancedBrewStageRepositoryImpl implements EnhancedBrewStageReposit
     private BrewTaskRepository brewTaskRepository;
     
     private BrewStageStatusRepository brewStageStatusRepository;
+    
+    private BrewRepository brewRepository;
         
-    public EnhancedBrewStageRepositoryImpl(BrewTaskRepository brewTaskRepository, BrewStageStatusRepository brewStageStatusRepository, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
+    public EnhancedBrewStageRepositoryImpl(BrewTaskRepository brewTaskRepository, BrewStageStatusRepository brewStageStatusRepository, BrewRepository brewRepository, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
         this.brewStageStatusRepository = brewStageStatusRepository;
         this.brewTaskRepository = brewTaskRepository;
+        this.brewRepository = brewRepository;
         this.refresher = refresher;
     }
 
@@ -27,6 +30,7 @@ public class EnhancedBrewStageRepositoryImpl implements EnhancedBrewStageReposit
 	public void refresh(Collection<BrewStage> brewStages) {
         this.brewStageStatusRepository.refreshAccessors(brewStages);
         this.brewTaskRepository.refreshAccessors(brewStages);
+        this.brewRepository.refreshAccessors(brewStages);
 	}
 	
 	@Override

@@ -18,17 +18,25 @@ public class AddBrewStageDtoTest {
 
 	@Test
 	public void testConstructor() {
+		Long brewId = 2L;
 		Long statusId = 3L;
 		Long taskId = 4L;
 		LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
 		LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
 
-		AddBrewStageDto addBrewStageDto = new AddBrewStageDto(statusId, taskId, startedAt, endedAt);
+		AddBrewStageDto addBrewStageDto = new AddBrewStageDto(brewId, statusId, taskId, startedAt, endedAt);
 
+		assertEquals(2L, addBrewStageDto.getBrewId());
 		assertEquals(3L, addBrewStageDto.getStatusId());
 		assertEquals(4L, addBrewStageDto.getTaskId());
 		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewStageDto.getStartedAt());
 		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewStageDto.getEndedAt());
+	}
+	
+	@Test
+	public void testGetBrewId() {
+		addBrewStageDto.setBrewId(3L);
+		assertEquals(3L, addBrewStageDto.getBrewId());
 	}
 
 	@Test

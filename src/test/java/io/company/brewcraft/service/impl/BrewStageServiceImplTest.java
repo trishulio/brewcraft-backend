@@ -41,12 +41,9 @@ public class BrewStageServiceImplTest {
 
 	private BrewStageRepository brewStageRepositoryMock;
 	
-    private BrewService brewServiceMock;
-
 	@BeforeEach
 	public void init() {
 		brewStageRepositoryMock = mock(BrewStageRepository.class);
-		brewServiceMock = mock(BrewServiceImpl.class);
 
 		doAnswer(i -> i.getArgument(0, BrewStage.class)).when(brewStageRepositoryMock).saveAndFlush(any(BrewStage.class));
 		doAnswer(i -> {
@@ -54,11 +51,12 @@ public class BrewStageServiceImplTest {
 			coll.forEach(s -> {
 				s.setStatus(new BrewStageStatus(1L));
 				s.setTask(new BrewTask(2L));
+				s.setBrew(new Brew(3L));
 			});
 			return null;
 		}).when(brewStageRepositoryMock).refresh(anyCollection());
 
-		brewStageService = new BrewStageServiceImpl(brewStageRepositoryMock, brewServiceMock);
+		brewStageService = new BrewStageServiceImpl(brewStageRepositoryMock);
 	}
 
 	@Test
@@ -86,16 +84,14 @@ public class BrewStageServiceImplTest {
 
 	@Test
 	public void testAddBrewStage_AddsBrewStage() {
-		BrewStage brewStage = new BrewStage(null, null, new BrewStageStatus(), new BrewTask(),
+		BrewStage brewStage = new BrewStage(null, new Brew(3L), new BrewStageStatus(1L), new BrewTask(2L),
 				null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
-        when(brewServiceMock.getBrew(1L)).thenReturn(new Brew(1L));
-
-		BrewStage addedBrewStage = brewStageService.addBrewStage(1L, brewStage);
+		BrewStage addedBrewStage = brewStageService.addBrewStage(brewStage);
 		
 		assertEquals(null, addedBrewStage.getId());
-		assertEquals(new Brew(1L), addedBrewStage.getBrew());
+		assertEquals(new Brew(3L), addedBrewStage.getBrew());
 		assertEquals(new BrewStageStatus(1L), addedBrewStage.getStatus());
 		assertEquals(new BrewTask(2L), addedBrewStage.getTask());
 		assertEquals(null, addedBrewStage.getMixtures());
@@ -111,21 +107,20 @@ public class BrewStageServiceImplTest {
 
 	@Test
 	public void testPutBrewStage_OverridesWhenBrewStageExists() {
-		BrewStage existing = new BrewStage(1L, new Brew(2L), new BrewStageStatus(), new BrewTask(),
+		BrewStage existing = new BrewStage(1L, new Brew(3L), new BrewStageStatus(1L), new BrewTask(2L),
 				null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 		
-		BrewStage update = new BrewStage(null, new Brew(2L), new BrewStageStatus(), new BrewTask(),
+		BrewStage update = new BrewStage(null, new Brew(3L), new BrewStageStatus(1L), new BrewTask(2L),
 				null, LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
 				LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
-        when(brewServiceMock.getBrew(2L)).thenReturn(new Brew(2L));
         doReturn(Optional.of(existing)).when(brewStageRepositoryMock).findById(1L);
 		
-		BrewStage brewStage = brewStageService.putBrewStage(2L, 1L, update);
+		BrewStage brewStage = brewStageService.putBrewStage(1L, update);
 
 		assertEquals(1L, brewStage.getId());
-		assertEquals(new Brew(2L), brewStage.getBrew());
+		assertEquals(new Brew(3L), brewStage.getBrew());
 		assertEquals(new BrewStageStatus(1L), brewStage.getStatus());
 		assertEquals(new BrewTask(2L), brewStage.getTask());
 		assertEquals(null, brewStage.getMixtures());
@@ -141,17 +136,16 @@ public class BrewStageServiceImplTest {
 
 	@Test
 	public void testPutBrewStage_AddsNewBrewStage_WhenNoBrewStageExists() {		
-		BrewStage update = new BrewStage(1L, new Brew(2L), new BrewStageStatus(), new BrewTask(),
+		BrewStage update = new BrewStage(1L, new Brew(), new BrewStageStatus(), new BrewTask(),
 				null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
-        when(brewServiceMock.getBrew(2L)).thenReturn(new Brew(2L));
         doReturn(Optional.empty()).when(brewStageRepositoryMock).findById(1L);
 		
-		BrewStage brewStage = brewStageService.putBrewStage(2L, 1L, update);
+		BrewStage brewStage = brewStageService.putBrewStage(1L, update);
 
 		assertEquals(1, brewStage.getId());
-		assertEquals(new Brew(2L), brewStage.getBrew());
+		assertEquals(new Brew(3L), brewStage.getBrew());
 		assertEquals(new BrewStageStatus(1L), brewStage.getStatus());
 		assertEquals(new BrewTask(2L), brewStage.getTask());
 		assertEquals(null, brewStage.getMixtures());
@@ -170,32 +164,30 @@ public class BrewStageServiceImplTest {
 		BrewStage existing = new BrewStage(1L);
 		existing.setVersion(1);
 		
-        when(brewServiceMock.getBrew(2L)).thenReturn(new Brew(2L));
 		doReturn(Optional.of(existing)).when(brewStageRepositoryMock).findById(1L);
 
 		BrewStage update = new BrewStage(1L);
 		existing.setVersion(2);
 
-		assertThrows(OptimisticLockException.class, () -> brewStageService.putBrewStage(2L, 1L, update));
+		assertThrows(OptimisticLockException.class, () -> brewStageService.putBrewStage(1L, update));
 	}
 
 	@Test
 	public void testPatchBrewStage_PatchesExistingBrewStage() {
-		BrewStage existing = new BrewStage(1L, new Brew(2L), new BrewStageStatus(), new BrewTask(),
+		BrewStage existing = new BrewStage(1L, new Brew(), new BrewStageStatus(), new BrewTask(),
 				null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 		
-		BrewStage update = new BrewStage(null, new Brew(2L), new BrewStageStatus(), new BrewTask(),
+		BrewStage update = new BrewStage(null, new Brew(), new BrewStageStatus(), new BrewTask(),
 				null, LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
 				LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
-        when(brewServiceMock.getBrew(2L)).thenReturn(new Brew(2L));
         doReturn(Optional.of(existing)).when(brewStageRepositoryMock).findById(1L);
 		
 		BrewStage brewStage = brewStageService.patchBrewStage(1L, update);
 
 		assertEquals(1L, brewStage.getId());
-		assertEquals(new Brew(2L), brewStage.getBrew());
+		assertEquals(new Brew(3L), brewStage.getBrew());
 		assertEquals(new BrewStageStatus(1L), brewStage.getStatus());
 		assertEquals(new BrewTask(2L), brewStage.getTask());
 		assertEquals(null, brewStage.getMixtures());
@@ -214,7 +206,6 @@ public class BrewStageServiceImplTest {
 		BrewStage existing = new BrewStage(1L);
 		existing.setVersion(1);
 		
-        when(brewServiceMock.getBrew(2L)).thenReturn(new Brew(2L));
 		doReturn(Optional.of(existing)).when(brewStageRepositoryMock).findById(1L);
 
 		BrewStage update = new BrewStage(1L);

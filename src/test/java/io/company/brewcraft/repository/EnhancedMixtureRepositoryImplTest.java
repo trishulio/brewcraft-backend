@@ -50,12 +50,21 @@ public class EnhancedMixtureRepositoryImplTest {
     }
 
     @Test
-    public void testRefreshAccessors_CallsRefresherAccessor() {
+    public void testRefreshParentMixtureAccessors_CallsRefresherAccessor() {
         List<ParentMixtureAccessor> accessors = List.of(mock(ParentMixtureAccessor.class), mock(ParentMixtureAccessor.class));
 
         repo.refreshParentMixtureAccessors(accessors);
 
         verify(parentMixtureAccessorMock, times(1)).refreshAccessors(accessors);
+    }
+    
+    @Test
+    public void testRefreshAccessors_CallsRefresherAccessor() {
+        List<MixtureAccessor> accessors = List.of(mock(MixtureAccessor.class), mock(MixtureAccessor.class));
+
+        repo.refreshAccessors(accessors);
+
+        verify(mixtureAccessorMock, times(1)).refreshAccessors(accessors);
     }
 
 }

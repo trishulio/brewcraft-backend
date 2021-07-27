@@ -84,21 +84,21 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(brewStage);
     }
 
-    @PostMapping("/{brewId}/stages")
+    @PostMapping("/stages")
     @ResponseStatus(HttpStatus.CREATED)
-    public BrewStageDto addBrewStage(@PathVariable Long brewId, @Valid @RequestBody AddBrewStageDto addBrewDto) {
+    public BrewStageDto addBrewStage(@Valid @RequestBody AddBrewStageDto addBrewDto) {
         BrewStage brewStage = brewStageMapper.fromDto(addBrewDto);
         
-        BrewStage addedBrewStage = brewStageService.addBrewStage(brewId, brewStage);
+        BrewStage addedBrewStage = brewStageService.addBrewStage(brewStage);
         
         return brewStageMapper.toDto(addedBrewStage);
     }
     
-    @PutMapping("/{brewId}/stages/{stageId}")
-    public BrewStageDto putBrewStage(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {
+    @PutMapping("/stages/{stageId}")
+    public BrewStageDto putBrewStage(@Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
         
-        BrewStage putBrewStage = brewStageService.putBrewStage(brewId, stageId, brewStage);
+        BrewStage putBrewStage = brewStageService.putBrewStage(stageId, brewStage);
 
         return brewStageMapper.toDto(putBrewStage);
     }

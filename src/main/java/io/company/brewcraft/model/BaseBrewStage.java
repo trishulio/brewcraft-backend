@@ -3,10 +3,11 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
 
-public interface BaseBrewStage extends BrewStageStatusAccessor, BrewTaskAccessor {
+public interface BaseBrewStage extends BrewStageStatusAccessor, BrewTaskAccessor, BrewAccessor {
 
     public Brew getBrew();
 

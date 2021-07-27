@@ -23,7 +23,6 @@ import io.company.brewcraft.model.UpdateBrewStage;
 import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,12 +31,9 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     private static final Logger log = LoggerFactory.getLogger(BrewStageServiceImpl.class);
         
     private BrewStageRepository brewStageRepository;
-    
-    private BrewService brewService;
-            
-    public BrewStageServiceImpl(BrewStageRepository brewStageRepository, BrewService brewService) {
+                
+    public BrewStageServiceImpl(BrewStageRepository brewStageRepository) {
         this.brewStageRepository = brewStageRepository;
-        this.brewService = brewService;
     }
 
 	@Override
@@ -69,10 +65,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     }
     
     @Override
-    public BrewStage addBrewStage(Long brewId, BrewStage brewStage) {
-        Brew brew = Optional.ofNullable(brewService.getBrew(brewId)).orElseThrow(() -> new EntityNotFoundException("Brew", brewId.toString()));
-        brewStage.setBrew(brew);
-        
+    public BrewStage addBrewStage(BrewStage brewStage) {        
         brewStageRepository.refresh(List.of(brewStage));
         
         BrewStage addedBrewStage = brewStageRepository.saveAndFlush(brewStage);
@@ -81,9 +74,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     }
     
     @Override
-    public BrewStage putBrewStage(Long brewId, Long brewStageId, BrewStage putBrewStage) {
-        Brew brew = Optional.ofNullable(brewService.getBrew(brewId)).orElseThrow(() -> new EntityNotFoundException("Brew", brewId.toString()));        
-       
+    public BrewStage putBrewStage(Long brewStageId, BrewStage putBrewStage) {       
         brewStageRepository.refresh(List.of(putBrewStage));
 
         BrewStage existingBrewStage = getBrewStage(brewStageId);          
@@ -95,9 +86,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
         	existingBrewStage.optimisticLockCheck(putBrewStage);
             existingBrewStage.override(putBrewStage, getPropertyNames(BaseBrewStage.class));
         }
-        
-        existingBrewStage.setBrew(brew);
-        
+                
         BrewStage brewStage = brewStageRepository.saveAndFlush(existingBrewStage);
         
         return brewStage;
@@ -112,9 +101,6 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     	existingBrewStage.optimisticLockCheck(brewStagePatch);
         
         existingBrewStage.outerJoin(brewStagePatch, getPropertyNames(UpdateBrewStage.class));
-        
-        Brew brew = Optional.ofNullable(brewService.getBrew(existingBrewStage.getBrew().getId())).orElseThrow(() -> new EntityNotFoundException("Brew", existingBrewStage.getBrew().getId().toString()));
-        existingBrewStage.setBrew(brew);
         
         BrewStage brewStage = brewStageRepository.saveAndFlush(existingBrewStage);
         

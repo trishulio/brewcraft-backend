@@ -41,22 +41,22 @@ public class BrewStageMapperTest {
 
 	@Test
 	public void testFromAddDto_ReturnsEntity() {
-		AddBrewStageDto dto = new AddBrewStageDto(3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
+		AddBrewStageDto dto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
 		
 		BrewStage brewStage = brewStageMapper.fromDto(dto);
 
-		BrewStage expectedBrewStage = new BrewStage(null, null, new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, null);
+		BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, null);
 
 		assertEquals(expectedBrewStage, brewStage);
 	}
 
 	@Test
 	public void testFromUpdateDto_ReturnsEntity() {
-		UpdateBrewStageDto dto = new UpdateBrewStageDto(3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+		UpdateBrewStageDto dto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 		
 		BrewStage brewStage = brewStageMapper.fromDto(dto);
 
-		BrewStage expectedBrewStage = new BrewStage(null, null, new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
+		BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
 
 		assertEquals(expectedBrewStage, brewStage);
 	}

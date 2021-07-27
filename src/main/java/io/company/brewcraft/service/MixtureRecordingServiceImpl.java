@@ -26,12 +26,9 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingServiceImpl.class);
     
     private MixtureRecordingRepository mixtureRecordingRepository;
-    
-    private MixtureService mixtureService;
-        
-    public MixtureRecordingServiceImpl(MixtureRecordingRepository mixtureRecordingRepository, MixtureService mixtureService) {
+            
+    public MixtureRecordingServiceImpl(MixtureRecordingRepository mixtureRecordingRepository) {
         this.mixtureRecordingRepository = mixtureRecordingRepository;  
-        this.mixtureService = mixtureService;
     }
 
 	@Override
@@ -100,9 +97,6 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
         existingMixtureRecording.optimisticLockCheck(patchMixtureRecording);
                      
         existingMixtureRecording.outerJoin(patchMixtureRecording, getPropertyNames(UpdateMixtureRecording.class));
-                
-        Mixture mixture = Optional.ofNullable(mixtureService.getMixture(existingMixtureRecording.getMixture().getId())).orElseThrow(() -> new EntityNotFoundException("Mixture", existingMixtureRecording.getMixture().getId().toString()));
-        existingMixtureRecording.setMixture(mixture);
         
         return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording);
 	}

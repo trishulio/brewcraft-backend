@@ -24,6 +24,7 @@ public interface BrewStageMapper {
     @Mapping(target = Brew.ATTR_VERSION, ignore = true)
     @Mapping(target = "task.id", source = "taskId")
     @Mapping(target = "status.id", source = "statusId")
+    @Mapping(target = "brew.id", source = "brewId")
     BrewStage fromDto(AddBrewStageDto dto);
     
     @Mapping(target = Brew.ATTR_ID, ignore = true)
@@ -31,6 +32,7 @@ public interface BrewStageMapper {
     @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "task.id", source = "taskId")
     @Mapping(target = "status.id", source = "statusId")
+    @Mapping(target = "brew.id", source = "brewId")
     BrewStage fromDto(UpdateBrewStageDto dto);
 
     @Mapping(target = "brewId", source = "brew.id")

@@ -199,8 +199,8 @@ public class ServiceAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(BrewStageService.class)
-    public BrewStageService brewStageService(BrewStageRepository brewStageRepository, BrewService brewService) {
-        BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository, brewService);
+    public BrewStageService brewStageService(BrewStageRepository brewStageRepository) {
+        BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository);
         return brewStageService;
     }
     
@@ -227,8 +227,8 @@ public class ServiceAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
-    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository, MixtureService mixtureService) {
-    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository, mixtureService);
+    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
+    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
         return mixtureRecordingService;
     }
 }

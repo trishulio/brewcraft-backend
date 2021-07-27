@@ -23,7 +23,7 @@ public class BrewStageDto extends BaseDto {
     }
     
     public BrewStageDto(Long id) {
-    	super();
+    	this();
     	this.id = id;
     }
 

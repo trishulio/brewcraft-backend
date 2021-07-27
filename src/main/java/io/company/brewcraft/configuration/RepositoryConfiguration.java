@@ -51,6 +51,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
 import io.company.brewcraft.repository.StorageRepository;
+import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
@@ -192,7 +193,16 @@ public class RepositoryConfiguration {
     }
     
     @Bean
-    public AccessorRefresher<Long, ParentBrewAccessor, Brew> brewRefresher(BrewRepository repo) {
+    public AccessorRefresher<Long, BrewAccessor, Brew> brewRefresher(BrewRepository repo) {
+        return new AccessorRefresher<>(
+            accessor -> accessor.getBrew(),
+            (accessor, brew) -> accessor.setBrew(brew),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher(BrewRepository repo) {
         return new AccessorRefresher<>(
             accessor -> accessor.getParentBrew(),
             (accessor, parentBrew) -> accessor.setParentBrew(parentBrew),

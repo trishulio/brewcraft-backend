@@ -249,9 +249,8 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testBrewStageService_ReturnsInstanceOfBrewStageService() {
     	BrewStageRepository brewStageRepositoryMock = mock(BrewStageRepository.class);
-    	BrewService brewServiceMock = mock(BrewService.class);
 
-    	BrewStageService service = serviceAutoConfiguration.brewStageService(brewStageRepositoryMock, brewServiceMock);
+    	BrewStageService service = serviceAutoConfiguration.brewStageService(brewStageRepositoryMock);
         
         assertTrue(service instanceof BrewStageServiceImpl);
     }
@@ -284,9 +283,8 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testMixtureRecordingService_ReturnsInstanceOfMixtureRecordingService() {
     	MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
-    	MixtureService mixtureServiceMock = mock(MixtureService.class);
 
-    	MixtureRecordingService service = serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock, mixtureServiceMock);
+    	MixtureRecordingService service = serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
         
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }

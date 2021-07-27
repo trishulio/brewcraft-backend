@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class AddBrewStageDto extends BaseDto {
+	
+    @NotNull
+    private Long brewId;
     
     @NotNull
     private Long statusId;
@@ -20,12 +23,21 @@ public class AddBrewStageDto extends BaseDto {
     	super();
     }
 
-    public AddBrewStageDto(@NotNull Long statusId, @NotNull Long taskId, LocalDateTime startedAt, LocalDateTime endedAt) {
-        super();
+    public AddBrewStageDto(Long brewId, Long statusId, Long taskId, LocalDateTime startedAt, LocalDateTime endedAt) {
+    	this();
+        this.brewId = brewId;
         this.statusId = statusId;
         this.taskId = taskId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+    }
+    
+    public Long getBrewId() {
+        return brewId;
+    }
+
+    public void setBrewId(Long brewId) {
+        this.brewId = brewId;
     }
     
     public Long getStatusId() {

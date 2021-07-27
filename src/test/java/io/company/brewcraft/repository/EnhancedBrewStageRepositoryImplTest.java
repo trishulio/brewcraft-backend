@@ -19,6 +19,8 @@ public class EnhancedBrewStageRepositoryImplTest {
     
     private BrewStageStatusRepository brewStageStatusRepositoryMock;
     
+    private BrewRepository brewRepositoryMock;
+    
     private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresherMock;
 
     @SuppressWarnings("unchecked")
@@ -26,9 +28,10 @@ public class EnhancedBrewStageRepositoryImplTest {
     public void init() {
     	brewTaskRepositoryMock = mock(BrewTaskRepository.class);
     	brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
+    	brewRepositoryMock = mock(BrewRepository.class);
         refresherMock = mock(AccessorRefresher.class);
 
-        brewStageRepository = new EnhancedBrewStageRepositoryImpl(brewTaskRepositoryMock, brewStageStatusRepositoryMock, refresherMock);
+        brewStageRepository = new EnhancedBrewStageRepositoryImpl(brewTaskRepositoryMock, brewStageStatusRepositoryMock, brewRepositoryMock, refresherMock);
     }
 
     @Test
@@ -39,6 +42,7 @@ public class EnhancedBrewStageRepositoryImplTest {
 
         verify(brewTaskRepositoryMock, times(1)).refreshAccessors(brewStages);
         verify(brewStageStatusRepositoryMock, times(1)).refreshAccessors(brewStages);
+        verify(brewRepositoryMock, times(1)).refreshAccessors(brewStages);
     }
 
     @Test
