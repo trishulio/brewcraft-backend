@@ -20,14 +20,6 @@ public interface BaseBrew extends ProductAccessor, ParentBrewAccessor {
 
     void setBatchId(Long batchId);
 
-    Product getProduct();
-
-    void setProduct(Product product);
-
-    Brew getParentBrew();
-
-    void setParentBrew(Brew parentBrew);
-
     List<Brew> getChildBrews();
 
     void setChildBrews(List<Brew> childBrews);

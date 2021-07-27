@@ -10,10 +10,6 @@ import io.company.brewcraft.service.ParentMixtureAccessor;
 
 public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, BrewStageAccessor {
 
-	Mixture getParentMixture();
-
-	void setParentMixture(Mixture parentMixture);
-
 	List<Mixture> getChildMixtures();
 
 	void setChildMixtures(List<Mixture> childMixtures);
@@ -24,10 +20,6 @@ public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, B
 
 	void setQuantity(Quantity<?> quantity);
 
-	Equipment getEquipment();
-
-	void setEquipment(Equipment equipment);
-
 	List<MaterialPortion> getMaterialPortions();
 
 	void setMaterialPortions(List<MaterialPortion> materialPortions);
@@ -36,7 +28,4 @@ public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, B
 
 	void setRecordedMeasures(List<MixtureRecording> recordedMeasures);
 	
-    BrewStage getBrewStage();
-
-	void setBrewStage(BrewStage brewStage);
 }

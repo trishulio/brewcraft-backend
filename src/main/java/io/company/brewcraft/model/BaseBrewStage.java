@@ -9,18 +9,6 @@ import io.company.brewcraft.service.BrewTaskAccessor;
 
 public interface BaseBrewStage extends BrewStageStatusAccessor, BrewTaskAccessor, BrewAccessor {
 
-    public Brew getBrew();
-
-    public void setBrew(Brew brew);
-
-    public BrewStageStatus getStatus();
-
-    public void setStatus(BrewStageStatus status);
-
-    public BrewTask getTask();
-
-    public void setTask(BrewTask task);
-
     public List<Mixture> getMixtures();
 
     public void setMixtures(List<Mixture> mixtures);
