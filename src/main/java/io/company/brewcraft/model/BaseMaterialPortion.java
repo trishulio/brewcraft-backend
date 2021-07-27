@@ -2,7 +2,7 @@ package io.company.brewcraft.model;
 
 import javax.measure.Quantity;
 
-public interface BaseMaterialPortion extends UpdateMaterialPortion, Versioned {
+public interface BaseMaterialPortion {
 	
 	MaterialLot getMaterialLot();
 

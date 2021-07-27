@@ -1,5 +1,5 @@
 package io.company.brewcraft.model;
 
-public interface UpdateMaterialPortion {
+public interface UpdateMaterialPortion extends BaseMaterialPortion, Versioned {
 
 }
