@@ -95,7 +95,7 @@ public class MixtureController extends BaseController {
     }
     
     @PutMapping("/{mixtureId}")
-    public MixtureDto putMixture(@Valid @RequestBody UpdateMixtureDto updateMixtureDto, @PathVariable Long mixtureId) {    	
+    public MixtureDto putMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {    	
     	Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
         
         Mixture putMixture = mixtureService.putMixture(mixtureId, mixture);
