@@ -67,11 +67,9 @@ public class MixtureRecordingController extends BaseController {
         
     @GetMapping(value = "/recordings/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
     public MixtureRecordingDto getMixtureRecording(@PathVariable Long mixtureRecordingId) {
-        Validator validator = new Validator();
-        
         MixtureRecording mixtureRecording = mixtureRecordingService.getMixtureRecording(mixtureRecordingId);
                 
-        validator.assertion(mixtureRecording != null, EntityNotFoundException.class, "MixtureRecording", mixtureRecordingId.toString());
+        Validator.assertion(mixtureRecording != null, EntityNotFoundException.class, "MixtureRecording", mixtureRecordingId.toString());
 
         return mixtureRecordingMapper.toDto(mixtureRecording);
     }
