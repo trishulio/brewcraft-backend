@@ -75,11 +75,9 @@ public class BrewStageController extends BaseController {
         
     @GetMapping(value = "/stages/{stageId}", consumes = MediaType.ALL_VALUE)
     public BrewStageDto getBrewStage(@PathVariable Long brewStageId) {
-        Validator validator = new Validator();
-        
         BrewStage brewStage = brewStageService.getBrewStage(brewStageId);
                 
-        validator.assertion(brewStage != null, EntityNotFoundException.class, "BrewStage", brewStageId.toString());
+        Validator.assertion(brewStage != null, EntityNotFoundException.class, "BrewStage", brewStageId.toString());
 
         return brewStageMapper.toDto(brewStage);
     }
