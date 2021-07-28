@@ -79,11 +79,9 @@ public class BrewController extends BaseController {
         
     @GetMapping(value = "/{brewId}", consumes = MediaType.ALL_VALUE)
     public BrewDto getBrew(@PathVariable Long brewId) {
-        Validator validator = new Validator();
-        
         Brew brew = brewService.getBrew(brewId);
                 
-        validator.assertion(brew != null, EntityNotFoundException.class, "Brew", brewId.toString());
+        Validator.assertion(brew != null, EntityNotFoundException.class, "Brew", brewId.toString());
 
         return brewMapper.toDto(brew);
     }
