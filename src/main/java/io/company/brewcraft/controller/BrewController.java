@@ -99,7 +99,7 @@ public class BrewController extends BaseController {
     }
     
     @PutMapping("/{brewId}")
-    public BrewDto putBrew(@Valid @RequestBody UpdateBrewDto updateBrewDto, @PathVariable Long brewId) {
+    public BrewDto putBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.fromDto(updateBrewDto);
         
         Brew putBrew = brewService.putBrew(brewId, brew);
