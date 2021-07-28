@@ -108,7 +108,7 @@ public class BrewController extends BaseController {
     }
     
     @PatchMapping("/{brewId}")
-    public BrewDto patchBrew(@Valid @RequestBody UpdateBrewDto updateBrewDto, @PathVariable Long brewId) {        
+    public BrewDto patchBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {        
         Brew brew = brewMapper.fromDto(updateBrewDto);
         
         Brew patchedBrew = brewService.patchBrew(brewId, brew);
