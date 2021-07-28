@@ -38,82 +38,82 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/mixtures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MixtureController extends BaseController {
-    private static final Logger log = LoggerFactory.getLogger(MixtureController.class);
-    
-    private MixtureService mixtureService;
-    
-    private MixtureMapper mixtureMapper = MixtureMapper.INSTANCE;
-            
-    public MixtureController(MixtureService mixtureService, AttributeFilter filter) {
-        super(filter);
-        this.mixtureService = mixtureService;
-    }
-    
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
-    public PageDto<MixtureDto> getMixtures(
-            @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false, name = "parent_mixture_ids") Set<Long> parentMixtureIds,
-            @RequestParam(required = false, name = "equipment_ids") Set<Long> equipmentIds,
-            @RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
-            @RequestParam(required = false, name = "brew_batch_ids") Set<Long> brewBatchIds,
-            @RequestParam(required = false, name = "stage_status_ids") Set<Long> stageStatusIds,
-            @RequestParam(required = false, name = "stage_task_ids") Set<Long> stageTaskIds,
-            @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
-            @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
-            @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
-            @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
-            @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-        
-        Page<Mixture> mixturePage = mixtureService.getMixtures(ids, parentMixtureIds, equipmentIds, brewIds, brewBatchIds, stageStatusIds, stageTaskIds, productIds, page, size, sort, orderAscending);
-        
-        List<MixtureDto> mixtureList = mixturePage.stream()
-                                                  .map(mixture -> mixtureMapper.toDto(mixture))
-                                                  .collect(Collectors.toList());
+	private static final Logger log = LoggerFactory.getLogger(MixtureController.class);
 
-        PageDto<MixtureDto> dto = new PageDto<MixtureDto>(mixtureList, mixturePage.getTotalPages(), mixturePage.getTotalElements());
-        
-        return dto;
-    }
-        
-    @GetMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
-    public MixtureDto getMixture(@PathVariable Long mixtureId) {
-        Mixture mixture = mixtureService.getMixture(mixtureId);
-                
-        Validator.assertion(mixture != null, EntityNotFoundException.class, "Mixture", mixtureId.toString());
+	private MixtureService mixtureService;
 
-        return mixtureMapper.toDto(mixture);
-    }
+	private MixtureMapper mixtureMapper = MixtureMapper.INSTANCE;
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MixtureDto addMixture(@Valid @RequestBody AddMixtureDto addMixtureDto) {
-        Mixture mixture = mixtureMapper.fromDto(addMixtureDto);
-        
-        Mixture addedMixture = mixtureService.addMixture(mixture);
-        
-        return mixtureMapper.toDto(addedMixture);
-    }
-    
-    @PutMapping("/{mixtureId}")
-    public MixtureDto putMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {    	
-    	Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
-        
-        Mixture putMixture = mixtureService.putMixture(mixtureId, mixture);
+	public MixtureController(MixtureService mixtureService, AttributeFilter filter) {
+		super(filter);
+		this.mixtureService = mixtureService;
+	}
 
-        return mixtureMapper.toDto(putMixture);
-    }
-    
-    @PatchMapping("/{mixtureId}")
-    public MixtureDto patchMixture(@Valid @RequestBody UpdateMixtureDto updateMixtureDto, @PathVariable Long mixtureId) {        
-    	Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
-        
-        Mixture patchedMixture = mixtureService.patchMixture(mixtureId, mixture);
-        
-        return mixtureMapper.toDto(patchedMixture);
-    }
+	@GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+	public PageDto<MixtureDto> getMixtures(@RequestParam(required = false) Set<Long> ids,
+			@RequestParam(required = false, name = "parent_mixture_ids") Set<Long> parentMixtureIds,
+			@RequestParam(required = false, name = "equipment_ids") Set<Long> equipmentIds,
+			@RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
+			@RequestParam(required = false, name = "brew_batch_ids") Set<Long> brewBatchIds,
+			@RequestParam(required = false, name = "stage_status_ids") Set<Long> stageStatusIds,
+			@RequestParam(required = false, name = "stage_task_ids") Set<Long> stageTaskIds,
+			@RequestParam(required = false, name = "product_ids") Set<Long> productIds,
+			@RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
+			@RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+			@RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+			@RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-    @DeleteMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
-    public void deleteMixture(@PathVariable Long mixtureId) {
-        mixtureService.deleteMixture(mixtureId);
-    }
+		Page<Mixture> mixturePage = mixtureService.getMixtures(ids, parentMixtureIds, equipmentIds, brewIds,
+				brewBatchIds, stageStatusIds, stageTaskIds, productIds, page, size, sort, orderAscending);
+
+		List<MixtureDto> mixtureList = mixturePage.stream().map(mixture -> mixtureMapper.toDto(mixture))
+				.collect(Collectors.toList());
+
+		PageDto<MixtureDto> dto = new PageDto<MixtureDto>(mixtureList, mixturePage.getTotalPages(),
+				mixturePage.getTotalElements());
+
+		return dto;
+	}
+
+	@GetMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
+	public MixtureDto getMixture(@PathVariable Long mixtureId) {
+		Mixture mixture = mixtureService.getMixture(mixtureId);
+
+		Validator.assertion(mixture != null, EntityNotFoundException.class, "Mixture", mixtureId.toString());
+
+		return mixtureMapper.toDto(mixture);
+	}
+
+	@PostMapping("")
+	@ResponseStatus(HttpStatus.CREATED)
+	public MixtureDto addMixture(@Valid @RequestBody AddMixtureDto addMixtureDto) {
+		Mixture mixture = mixtureMapper.fromDto(addMixtureDto);
+
+		Mixture addedMixture = mixtureService.addMixture(mixture);
+
+		return mixtureMapper.toDto(addedMixture);
+	}
+
+	@PutMapping("/{mixtureId}")
+	public MixtureDto putMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {
+		Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
+
+		Mixture putMixture = mixtureService.putMixture(mixtureId, mixture);
+
+		return mixtureMapper.toDto(putMixture);
+	}
+
+	@PatchMapping("/{mixtureId}")
+	public MixtureDto patchMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {
+		Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
+
+		Mixture patchedMixture = mixtureService.patchMixture(mixtureId, mixture);
+
+		return mixtureMapper.toDto(patchedMixture);
+	}
+
+	@DeleteMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
+	public void deleteMixture(@PathVariable Long mixtureId) {
+		mixtureService.deleteMixture(mixtureId);
+	}
 }

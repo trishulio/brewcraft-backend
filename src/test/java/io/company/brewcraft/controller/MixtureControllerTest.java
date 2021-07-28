@@ -192,7 +192,7 @@ public class MixtureControllerTest {
        
        doReturn(mixture).when(mixtureService).patchMixture(eq(1L), patchMixtureCaptor.capture());
 
-       MixtureDto mixtureDto = mixtureController.patchMixture(updateMixtureDto, 1L);
+       MixtureDto mixtureDto = mixtureController.patchMixture(1L, updateMixtureDto);
        
        //Assert patched mixture
        assertEquals(null, patchMixtureCaptor.getValue().getId());
