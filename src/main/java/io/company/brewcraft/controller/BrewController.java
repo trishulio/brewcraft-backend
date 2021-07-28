@@ -69,7 +69,8 @@ public class BrewController extends BaseController {
         Page<Brew> brewPage = brewService.getBrews(ids, batchIds, names, productIds, stageTaskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
         
         List<BrewDto> brewList = brewPage.stream()
-                .map(brew -> brewMapper.toDto(brew)).collect(Collectors.toList());
+                                         .map(brew -> brewMapper.toDto(brew))
+                                         .collect(Collectors.toList());
 
         PageDto<BrewDto> dto = new PageDto<BrewDto>(brewList, brewPage.getTotalPages(), brewPage.getTotalElements());
         
