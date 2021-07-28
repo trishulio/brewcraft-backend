@@ -153,7 +153,7 @@ public class BrewControllerTest {
        
        doReturn(brew).when(brewService).putBrew(eq(1L), putBrewCaptor.capture());
 
-       BrewDto brewDto = brewController.putBrew(updateBrewDto, 1L);
+       BrewDto brewDto = brewController.putBrew(1L, updateBrewDto);
        
        //Assert put brew
        assertEquals(null, putBrewCaptor.getValue().getId());
@@ -190,7 +190,7 @@ public class BrewControllerTest {
        
        doReturn(brew).when(brewService).patchBrew(eq(1L), patchBrewCaptor.capture());
 
-       BrewDto brewDto = brewController.patchBrew(updateBrewDto, 1L);
+       BrewDto brewDto = brewController.patchBrew(1L, updateBrewDto);
        
        //Assert patched brew
        assertEquals(null, patchBrewCaptor.getValue().getId());

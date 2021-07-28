@@ -157,7 +157,7 @@ public class MixtureControllerTest {
        
        doReturn(mixture).when(mixtureService).putMixture(eq(1L), putMixtureCaptor.capture());
 
-       MixtureDto mixtureDto = mixtureController.putMixture(updateMixtureDto, 1L);
+       MixtureDto mixtureDto = mixtureController.putMixture(1L, updateMixtureDto);
        
        //Assert put mixture
        assertEquals(null, putMixtureCaptor.getValue().getId());

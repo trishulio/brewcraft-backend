@@ -176,7 +176,7 @@ public class BrewStageControllerTest {
        
        doReturn(brewStage).when(brewStageService).patchBrewStage(eq(1L), patchBrewStageCaptor.capture());
 
-       BrewStageDto brewStageDto = brewStageController.patchBrewStage(updateBrewStageDto, 1L);
+       BrewStageDto brewStageDto = brewStageController.patchBrewStage(1L, updateBrewStageDto);
        
        //Assert patch brew stage
        assertEquals(null, patchBrewStageCaptor.getValue().getId());
