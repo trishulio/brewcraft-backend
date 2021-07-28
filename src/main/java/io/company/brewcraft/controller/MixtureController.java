@@ -77,11 +77,9 @@ public class MixtureController extends BaseController {
         
     @GetMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
     public MixtureDto getMixture(@PathVariable Long mixtureId) {
-        Validator validator = new Validator();
-        
         Mixture mixture = mixtureService.getMixture(mixtureId);
                 
-        validator.assertion(mixture != null, EntityNotFoundException.class, "Mixture", mixtureId.toString());
+        Validator.assertion(mixture != null, EntityNotFoundException.class, "Mixture", mixtureId.toString());
 
         return mixtureMapper.toDto(mixture);
     }
