@@ -102,7 +102,7 @@ public class BrewStageController extends BaseController {
     }
     
     @PatchMapping("/stages/{stageId}")
-    public BrewStageDto patchBrewStage(@Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {        
+    public BrewStageDto patchBrewStage(@PathVariable Long stageId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto) {        
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
         
         BrewStage patchedBrewStage = brewStageService.patchBrewStage(stageId, brewStage);
