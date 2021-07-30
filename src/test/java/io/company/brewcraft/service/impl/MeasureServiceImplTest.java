@@ -7,10 +7,17 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,14 +39,16 @@ public class MeasureServiceImplTest {
     }
 
     @Test
-    public void testGetAllMeasures_returnsProductsMeasures() throws Exception {                
-        List<Measure> measures = List.of(new Measure(1L, "abv"));
+    public void testGetAllMeasures_returnsMeasures() throws Exception {                        
+        Page<Measure> expectedMeasureEntities = new PageImpl<>(List.of(new Measure(1L, "abv")));
         
-        when(measureRepositoryMock.findAll()).thenReturn(measures);
+        ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
+        
+        when(measureRepositoryMock.findAll(ArgumentMatchers.<Specification<Measure>>any(), pageableArgument.capture())).thenReturn(expectedMeasureEntities);
 
-        List<Measure> actualMeasures = measureService.getAllMeasures();
+        Page<Measure> measuresPage = measureService.getMeasures(null, 0, 100, new TreeSet<>(List.of("id")), true);
 
-        assertEquals(List.of(new Measure(1L, "abv")), actualMeasures);
+        assertEquals(List.of(new Measure(1L, "abv")), measuresPage.getContent());
     }
     
     @Test

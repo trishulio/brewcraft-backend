@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -178,7 +179,8 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     
     private void validateTargetMeasures(List<ProductMeasureValue> targetMeasures) {
         if (targetMeasures != null) {
-            List<Measure> measures = measureService.getAllMeasures();
+            Page<Measure> measuresPage = measureService.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true);
+            List<Measure> measures = measuresPage.getContent();
             Map<String, Measure> measureMap = new HashMap<String, Measure>();
             measures.forEach(measure -> measureMap.put(measure.getName(), measure) );
                         

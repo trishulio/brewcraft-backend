@@ -113,13 +113,13 @@ public class ProductServiceImplTest {
 
     @Test
     public void testAddProduct_SavesProduct() throws Exception {
-        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
         
         when(productRepositoryMock.saveAndFlush(persistedProductCaptor.capture())).thenReturn(newProduct);
 
@@ -150,7 +150,7 @@ public class ProductServiceImplTest {
     public void testAddProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
               
         assertThrows(IllegalArgumentException.class, () -> {
             productService.addProduct(product);
@@ -166,7 +166,7 @@ public class ProductServiceImplTest {
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv"), new Measure(2L, "ibu")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"), new Measure(2L, "ibu"))));
         
         when(productMeasureValueServiceMock.merge(productEntity.getTargetMeasures(), putProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv"), "100", new Product())));
         
@@ -208,7 +208,7 @@ public class ProductServiceImplTest {
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
         
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
         
@@ -243,7 +243,7 @@ public class ProductServiceImplTest {
     public void testPutProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
               
         assertThrows(IllegalArgumentException.class, () -> {
             productService.putProduct(1L, product);
@@ -262,7 +262,7 @@ public class ProductServiceImplTest {
 
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
  
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv"), new Measure(2L, "ibu")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"), new Measure(2L, "ibu"))));
 
         when(productMeasureValueServiceMock.merge(existingProductEntity.getTargetMeasures(), patchedProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu"), "200", new Product())));
         
@@ -308,7 +308,7 @@ public class ProductServiceImplTest {
     public void testPatchProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
               
         assertThrows(IllegalArgumentException.class, () -> {
             productService.patchProduct(1L, product);
@@ -324,7 +324,7 @@ public class ProductServiceImplTest {
 
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
  
-        when(productMeasureServiceMock.getAllMeasures()).thenReturn(List.of(new Measure(1L, "abv")));
+        when(productMeasureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv"))));
        
         assertThrows(ObjectOptimisticLockingFailureException.class, () -> {
             productService.patchProduct(1L, patchedProduct);
