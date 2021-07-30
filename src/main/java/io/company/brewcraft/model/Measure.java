@@ -1,10 +1,17 @@
 package io.company.brewcraft.model;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "MEASURE")
 public class Measure extends BaseEntity implements Identified<Long> {
@@ -28,6 +35,17 @@ public class Measure extends BaseEntity implements Identified<Long> {
     
     private String name;
     
+	@CreationTimestamp
+	@Column(name = "created_at", updatable = false)
+	private LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	@Column(name = "last_updated")
+	private LocalDateTime lastUpdated;
+
+	@Version
+	private Integer version;
+    
     public Measure() {
         super();
     }
@@ -37,9 +55,12 @@ public class Measure extends BaseEntity implements Identified<Long> {
     	setId(id);
     }
         
-    public Measure(Long id, String name) {
+    public Measure(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
     	this(id);
         setName(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
     
     public Long getId() {
@@ -57,4 +78,28 @@ public class Measure extends BaseEntity implements Identified<Long> {
     public void setName(String name) {
         this.name = name;
     }
+    
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(LocalDateTime lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 }

@@ -19,10 +19,10 @@ public class ProductMeasureValueDtoTest {
     
     @Test
     public void testConstructor() {
-        productMeasureValueDto = new ProductMeasureValueDto(1L, new MeasureDto(2L, "abv"), "100");
+        productMeasureValueDto = new ProductMeasureValueDto(1L, new MeasureDto(2L, "abv", 1), "100");
         
         assertEquals(1L, productMeasureValueDto.getId());
-        assertEquals(new MeasureDto(2L, "abv"), productMeasureValueDto.getMeasure());
+        assertEquals(new MeasureDto(2L, "abv", 1), productMeasureValueDto.getMeasure());
         assertEquals("100", productMeasureValueDto.getValue());
     }
     
@@ -34,8 +34,8 @@ public class ProductMeasureValueDtoTest {
     
     @Test
     public void testGetSetMeasure() {
-    	productMeasureValueDto.setMeasure(new MeasureDto(2L, "abv"));
-    	assertEquals(new MeasureDto(2L, "abv"), productMeasureValueDto.getMeasure());
+    	productMeasureValueDto.setMeasure(new MeasureDto(2L, "abv", 1));
+    	assertEquals(new MeasureDto(2L, "abv", 1), productMeasureValueDto.getMeasure());
     }
     
     @Test

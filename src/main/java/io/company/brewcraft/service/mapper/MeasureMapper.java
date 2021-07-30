@@ -13,5 +13,5 @@ public interface MeasureMapper {
 
     Measure fromDto(MeasureDto dto);
 
-    MeasureDto toDto(Measure productMeasureValue); 
+    MeasureDto toDto(Measure measure); 
 }

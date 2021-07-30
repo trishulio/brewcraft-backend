@@ -311,18 +311,21 @@ CREATE SEQUENCE PRODUCT_CATEGORY_SEQUENCE START 7;
 
 CREATE TABLE MEASURE (
     ID INTEGER PRIMARY KEY,
-    NAME VARCHAR(255) UNIQUE NOT NULL
+    NAME VARCHAR(255) UNIQUE NOT NULL,
+    CREATED_AT TIMESTAMP NOT NULL,
+    LAST_UPDATED TIMESTAMP NOT NULL,
+    VERSION INTEGER,
 );
 INSERT INTO MEASURE VALUES 
-	(1, 'abv'),
-	(2, 'ibu'),
-	(3, 'ph'),
-	(4, 'mashTemperature'),
-	(5, 'gravity'),
-	(6, 'yield'),
-	(7, 'brewhouseDuration'),
-	(8, 'fermentationDays'),
-	(9, 'conditioningDays');
+	(1, 'abv', current_timestamp, current_timestamp, 1),
+	(2, 'ibu', current_timestamp, current_timestamp, 1),
+	(3, 'ph', current_timestamp, current_timestamp, 1),
+	(4, 'mashTemperature', current_timestamp, current_timestamp, 1),
+	(5, 'gravity', current_timestamp, current_timestamp, 1),
+	(6, 'yield', current_timestamp, current_timestamp, 1),
+	(7, 'brewhouseDuration', current_timestamp, current_timestamp, 1),
+	(8, 'fermentationDays', current_timestamp, current_timestamp, 1),
+	(9, 'conditioningDays', current_timestamp, current_timestamp, 1);
 CREATE SEQUENCE MEASURE_SEQUENCE START 10;
 
 CREATE TABLE PRODUCT (

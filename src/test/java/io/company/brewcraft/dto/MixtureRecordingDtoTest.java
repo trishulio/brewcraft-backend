@@ -20,7 +20,7 @@ public class MixtureRecordingDtoTest {
     public void testConstructor() {
 		Long id = 1L;
 		Long mixtureId = 2L;
-		MeasureDto measure = new MeasureDto(1L, "abv");
+		MeasureDto measure = new MeasureDto(1L, "abv", 1);
 		String value = "100";
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
@@ -29,7 +29,7 @@ public class MixtureRecordingDtoTest {
         
         assertEquals(1L, mixtureRecordingDto.getId()); 
         assertEquals(2L, mixtureRecordingDto.getMixtureId());       
-        assertEquals(new MeasureDto(1L, "abv"), mixtureRecordingDto.getMeasure());
+        assertEquals(new MeasureDto(1L, "abv", 1), mixtureRecordingDto.getMeasure());
         assertEquals("100", mixtureRecordingDto.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
         assertEquals(1, mixtureRecordingDto.getVersion());        
@@ -49,9 +49,9 @@ public class MixtureRecordingDtoTest {
     
     @Test
     public void testGetSetMeasure() {
-        mixtureRecordingDto.setMeasure(new MeasureDto(1L, "abv"));
+        mixtureRecordingDto.setMeasure(new MeasureDto(1L, "abv", 1));
 
-        assertEquals(new MeasureDto(1L, "abv"), mixtureRecordingDto.getMeasure());
+        assertEquals(new MeasureDto(1L, "abv", 1), mixtureRecordingDto.getMeasure());
     }
     
     @Test

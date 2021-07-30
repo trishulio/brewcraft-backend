@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -40,7 +41,7 @@ public class MeasureServiceImplTest {
 
     @Test
     public void testGetAllMeasures_returnsMeasures() throws Exception {                        
-        Page<Measure> expectedMeasureEntities = new PageImpl<>(List.of(new Measure(1L, "abv")));
+        Page<Measure> expectedMeasureEntities = new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)));
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
         
@@ -48,7 +49,7 @@ public class MeasureServiceImplTest {
 
         Page<Measure> measuresPage = measureService.getMeasures(null, 0, 100, new TreeSet<>(List.of("id")), true);
 
-        assertEquals(List.of(new Measure(1L, "abv")), measuresPage.getContent());
+        assertEquals(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), measuresPage.getContent());
     }
     
     @Test

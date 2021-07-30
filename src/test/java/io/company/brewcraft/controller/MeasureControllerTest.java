@@ -3,6 +3,7 @@ package io.company.brewcraft.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -33,7 +34,7 @@ public class MeasureControllerTest {
 
    @Test
    public void testGetMeasures() { 
-       Page<Measure> mPage = new PageImpl<>(List.of(new Measure(1L, "abv"), new Measure(2L, "ibu")));
+       Page<Measure> mPage = new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)));
 
        doReturn(mPage).when(measureService).getMeasures(
            null,
@@ -52,7 +53,7 @@ public class MeasureControllerTest {
        );
 
        assertEquals(1, dto.getTotalPages());
-       assertEquals(List.of(new MeasureDto(1L, "abv"), new MeasureDto(2L, "ibu")), dto.getContent());
+       assertEquals(List.of(new MeasureDto(1L, "abv", 1), new MeasureDto(2L, "ibu", 1)), dto.getContent());
    }
   
 }

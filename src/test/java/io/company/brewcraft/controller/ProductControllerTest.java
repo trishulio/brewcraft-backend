@@ -18,8 +18,6 @@ import io.company.brewcraft.dto.AddProductDto;
 import io.company.brewcraft.dto.AddProductMeasureValueDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
-import io.company.brewcraft.dto.MeasureDto;
-import io.company.brewcraft.dto.ProductMeasureValueDto;
 import io.company.brewcraft.dto.UpdateProductDto;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
@@ -48,7 +46,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv"), "100", new Product()));
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
    
@@ -108,7 +106,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv"), "100", new Product()));
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -151,7 +149,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(10L, new Measure(1L, "abv"), "100", new Product()));
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(10L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -201,7 +199,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv"), "100", new Product()));
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
@@ -253,7 +251,7 @@ public class ProductControllerTest {
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
-       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv"), "100", new Product()));
+       List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
        
        Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
    
