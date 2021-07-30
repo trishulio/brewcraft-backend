@@ -46,7 +46,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
                 .in(Brew.FIELD_ID, ids)
                 .in(Brew.FIELD_BATCH_ID, batchIds)
                 .in(Brew.FIELD_NAME, names)
-                .in(new String[] {Brew.FIELD_PRODUCT, Product.FIELD_ID}, stageTaskIds)
+                .in(new String[] {Brew.FIELD_PRODUCT, Product.FIELD_ID}, productIds)
                 .in(new String[] {Brew.FIELD_BREW_STAGES, BrewStage.FIELD_TASK, BrewTask.FIELD_ID}, stageTaskIds)
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
