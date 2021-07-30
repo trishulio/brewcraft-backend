@@ -6,8 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
-@Entity(name = "PRODUCT_MEASURE")
-public class ProductMeasure extends BaseEntity implements Identified<Long> {
+@Entity(name = "MEASURE")
+public class Measure extends BaseEntity implements Identified<Long> {
     public static final String ABV = "abv";
     public static final String IBU = "ibu";
     public static final String PH = "ph";
@@ -22,22 +22,22 @@ public class ProductMeasure extends BaseEntity implements Identified<Long> {
     public static final String FIELD_NAME = "name";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_measure_generator")
-    @SequenceGenerator(name = "product_measure_generator", sequenceName = "product_measure_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "measure_generator")
+    @SequenceGenerator(name = "measure_generator", sequenceName = "measure_sequence", allocationSize = 1)
     private Long id;
     
     private String name;
     
-    public ProductMeasure() {
+    public Measure() {
         super();
     }
     
-    public ProductMeasure(Long id) {
+    public Measure(Long id) {
     	this();
     	setId(id);
     }
         
-    public ProductMeasure(Long id, String name) {
+    public Measure(Long id, String name) {
     	this(id);
         setName(name);
     }

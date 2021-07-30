@@ -10,18 +10,18 @@ import io.company.brewcraft.model.MixtureRecording;
 public class EnhancedMixtureRecordingRepositoryImpl implements EnhancedMixtureRecordingRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedMixtureRecordingRepositoryImpl.class);
     
-    private ProductMeasureRepository productMeasureRepository;
+    private MeasureRepository measureRepository;
     
     private MixtureRepository mixtureRepository;
         
-    public EnhancedMixtureRecordingRepositoryImpl(ProductMeasureRepository productMeasureRepository, MixtureRepository mixtureRepository) {
-        this.productMeasureRepository = productMeasureRepository;
+    public EnhancedMixtureRecordingRepositoryImpl(MeasureRepository measureRepository, MixtureRepository mixtureRepository) {
+        this.measureRepository = measureRepository;
         this.mixtureRepository = mixtureRepository;
     }
 
 	@Override
 	public void refresh(Collection<MixtureRecording> mixtureRecordings) {
-        this.productMeasureRepository.refreshAccessors(mixtureRecordings);
+        this.measureRepository.refreshAccessors(mixtureRecordings);
         this.mixtureRepository.refreshAccessors(mixtureRecordings);
 	}
 }

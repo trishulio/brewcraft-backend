@@ -3,20 +3,20 @@ package io.company.brewcraft.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductMeasureDto extends BaseDto {
+public class MeasureDto extends BaseDto {
 	
 	private Long id;
 
     private String name;
     
-    public ProductMeasureDto() {
+    public MeasureDto() {
     }
     
-    public ProductMeasureDto(Long id) {
+    public MeasureDto(Long id) {
     	setId(id);
     }
 
-    public ProductMeasureDto(Long id, String name) {
+    public MeasureDto(Long id, String name) {
     	this(id);
     	setName(name);
     }

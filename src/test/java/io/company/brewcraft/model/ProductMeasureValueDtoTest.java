@@ -5,43 +5,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.dto.ProductMeasureDto;
+import io.company.brewcraft.dto.MeasureDto;
 import io.company.brewcraft.dto.ProductMeasureValueDto;
 
 public class ProductMeasureValueDtoTest {
     
-    ProductMeasureValueDto productMeasureDto;
+    ProductMeasureValueDto productMeasureValueDto;
     
     @BeforeEach
     public void init() {
-        productMeasureDto = new ProductMeasureValueDto();
+        productMeasureValueDto = new ProductMeasureValueDto();
     }
     
     @Test
     public void testConstructor() {
-        productMeasureDto = new ProductMeasureValueDto(1L, new ProductMeasureDto(2L, "abv"), "100");
+        productMeasureValueDto = new ProductMeasureValueDto(1L, new MeasureDto(2L, "abv"), "100");
         
-        assertEquals(1L, productMeasureDto.getId());
-        assertEquals(new ProductMeasureDto(2L, "abv"), productMeasureDto.getMeasure());
-        assertEquals("100", productMeasureDto.getValue());
+        assertEquals(1L, productMeasureValueDto.getId());
+        assertEquals(new MeasureDto(2L, "abv"), productMeasureValueDto.getMeasure());
+        assertEquals("100", productMeasureValueDto.getValue());
     }
     
     @Test
     public void testGetSetId() {
-        productMeasureDto.setId(1L);
-        assertEquals(1L, productMeasureDto.getId());
+        productMeasureValueDto.setId(1L);
+        assertEquals(1L, productMeasureValueDto.getId());
     }
     
     @Test
     public void testGetSetMeasure() {
-    	productMeasureDto.setMeasure(new ProductMeasureDto(2L, "abv"));
-    	assertEquals(new ProductMeasureDto(2L, "abv"), productMeasureDto.getMeasure());
+    	productMeasureValueDto.setMeasure(new MeasureDto(2L, "abv"));
+    	assertEquals(new MeasureDto(2L, "abv"), productMeasureValueDto.getMeasure());
     }
     
     @Test
     public void testGetSetValue() {
-        productMeasureDto.setValue("100");
-        assertEquals("100", productMeasureDto.getValue());
+        productMeasureValueDto.setValue("100");
+        assertEquals("100", productMeasureValueDto.getValue());
     }
 
 }

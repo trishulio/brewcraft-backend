@@ -20,18 +20,18 @@ public class MixtureRecordingTest {
     public void testConstructor() {
 		Long id = 1L;
 		Mixture mixture = new Mixture(2L);
-		ProductMeasure productMeasure = new ProductMeasure(3L);
+		Measure measure = new Measure(3L);
 		String value = "100";
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         Integer version = 1;
 
-        MixtureRecording mixtureRecording = new MixtureRecording(id, mixture, productMeasure, value, recordedAt, created, lastUpdated, version);
+        MixtureRecording mixtureRecording = new MixtureRecording(id, mixture, measure, value, recordedAt, created, lastUpdated, version);
         
         assertEquals(1L, mixtureRecording.getId());       
         assertEquals(new Mixture(2L), mixtureRecording.getMixture());
-        assertEquals(new ProductMeasure(3L), mixtureRecording.getProductMeasure());
+        assertEquals(new Measure(3L), mixtureRecording.getMeasure());
         assertEquals("100", mixtureRecording.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecording.getRecordedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), mixtureRecording.getCreatedAt());
@@ -52,10 +52,10 @@ public class MixtureRecordingTest {
     }
     
     @Test
-    public void testGetSetProductMeasure() {
-        mixtureRecording.setProductMeasure(new ProductMeasure(3L));
+    public void testGetSetMeasure() {
+        mixtureRecording.setMeasure(new Measure(3L));
 
-        assertEquals(new ProductMeasure(3L), mixtureRecording.getProductMeasure());
+        assertEquals(new Measure(3L), mixtureRecording.getMeasure());
     }
     
     @Test

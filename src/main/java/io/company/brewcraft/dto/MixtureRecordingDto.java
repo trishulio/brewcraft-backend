@@ -11,7 +11,7 @@ public class MixtureRecordingDto extends BaseDto {
 	
 	private Long mixtureId;
 
-    private ProductMeasureDto measure;
+    private MeasureDto measure;
     
     private String value;
 
@@ -33,7 +33,7 @@ public class MixtureRecordingDto extends BaseDto {
     	this.mixtureId = mixtureId;
     }
 
-	public MixtureRecordingDto(Long id, Long mixtureId, ProductMeasureDto measure,
+	public MixtureRecordingDto(Long id, Long mixtureId, MeasureDto measure,
 			String value, LocalDateTime recordedAt, Integer version) {
 		this(id, mixtureId);
 		this.measure = measure;
@@ -58,11 +58,11 @@ public class MixtureRecordingDto extends BaseDto {
 		this.mixtureId = mixtureId;
 	}
 
-	public ProductMeasureDto getMeasure() {
+	public MeasureDto getMeasure() {
 		return measure;
 	}
 
-	public void setMeasure(ProductMeasureDto measure) {
+	public void setMeasure(MeasureDto measure) {
 		this.measure = measure;
 	}
 

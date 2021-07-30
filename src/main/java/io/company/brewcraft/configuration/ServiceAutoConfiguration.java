@@ -138,7 +138,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ProductService.class)
-    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
+    public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, MeasureService productMeasureService) {
         ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
         return productService;
     }
@@ -151,17 +151,17 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ProductMeasureService.class)
-    public ProductMeasureService productMeasureService(ProductMeasureRepository productMeasureRepository) {
-        ProductMeasureService productMeasureService = new ProductMeasureServiceImpl(productMeasureRepository);
-        return productMeasureService;
+    @ConditionalOnMissingBean(MeasureService.class)
+    public MeasureService measureService(MeasureRepository measureRepository) {
+        MeasureService measureService = new MeasureServiceImpl(measureRepository);
+        return measureService;
     }
 
     @Bean
     @ConditionalOnMissingBean(ProductMeasureValueService.class)
     public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
-        ProductMeasureValueService productMeasureService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
-        return productMeasureService;
+        ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
+        return productMeasureValueService;
     }
 
 

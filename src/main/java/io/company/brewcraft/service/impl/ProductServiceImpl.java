@@ -16,7 +16,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.model.BaseProduct;
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.model.UpdateProduct;
 import io.company.brewcraft.model.Product;
@@ -24,7 +24,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.ProductCategoryService;
-import io.company.brewcraft.service.ProductMeasureService;
+import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -38,13 +38,13 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     
     private ProductMeasureValueService productMeasureValueService;
     
-    private ProductMeasureService productMeasureService;
+    private MeasureService measureService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, MeasureService measureService) {
         this.productRepository = productRepository;        
         this.productCategoryService = productCategoryService;
         this.productMeasureValueService = productMeasureValueService;
-        this.productMeasureService = productMeasureService;
+        this.measureService = measureService;
     }
 
     @Override
@@ -178,13 +178,13 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     
     private void validateTargetMeasures(List<ProductMeasureValue> targetMeasures) {
         if (targetMeasures != null) {
-            List<ProductMeasure> productMeasures = productMeasureService.getAllProductMeasures();
-            Map<String, ProductMeasure> productMeasureMap = new HashMap<String, ProductMeasure>();
-            productMeasures.forEach(measure -> productMeasureMap.put(measure.getName(), measure) );
+            List<Measure> measures = measureService.getAllMeasures();
+            Map<String, Measure> measureMap = new HashMap<String, Measure>();
+            measures.forEach(measure -> measureMap.put(measure.getName(), measure) );
                         
             targetMeasures.forEach(measure -> {
-                if(measure.getProductMeasure() == null || !productMeasureMap.containsKey(measure.getProductMeasure().getName())) {
-                    throw new IllegalArgumentException("Invalid target measure: " + measure.getProductMeasure().getName());
+                if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getName())) {
+                    throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getName());
                 }           
             });        
         }

@@ -23,8 +23,8 @@ public class ProductMeasureValue extends BaseEntity {
     private Product product;    
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_measure_id", referencedColumnName = "id")
-    private ProductMeasure productMeasure;
+    @JoinColumn(name = "measure_id", referencedColumnName = "id")
+    private Measure measure;
     
     @Column(name = "product_measure_value")
     private String value;
@@ -34,10 +34,10 @@ public class ProductMeasureValue extends BaseEntity {
         super();
     }
 
-    public ProductMeasureValue(Long id, ProductMeasure productMeasure,  String value, Product product) {
+    public ProductMeasureValue(Long id, Measure measure,  String value, Product product) {
         this();
         this.id = id;
-        this.productMeasure = productMeasure;
+        this.measure = measure;
         this.value = value;
         this.product = product;
     }
@@ -58,12 +58,12 @@ public class ProductMeasureValue extends BaseEntity {
         this.product = product;
     }
 
-    public ProductMeasure getProductMeasure() {
-        return productMeasure;
+    public Measure getMeasure() {
+        return measure;
     }
 
-    public void setProductMeasure(ProductMeasure productMeasure) {
-        this.productMeasure = productMeasure;
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
     }
 
     public String getValue() {

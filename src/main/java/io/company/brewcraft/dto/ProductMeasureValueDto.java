@@ -7,7 +7,7 @@ public class ProductMeasureValueDto extends BaseDto {
 	
 	private Long id;
 
-    private ProductMeasureDto measure;
+    private MeasureDto measure;
     
     private String value;
 
@@ -15,7 +15,7 @@ public class ProductMeasureValueDto extends BaseDto {
         this(null, null, null);
     }
 
-    public ProductMeasureValueDto(Long id, ProductMeasureDto measure, String value) {
+    public ProductMeasureValueDto(Long id, MeasureDto measure, String value) {
     	setId(id);
         setMeasure(measure);
         setValue(value);
@@ -29,11 +29,11 @@ public class ProductMeasureValueDto extends BaseDto {
         this.id = id;
     }
     
-    public ProductMeasureDto getMeasure() {
+    public MeasureDto getMeasure() {
         return measure;
     }
 
-    public void setMeasure(ProductMeasureDto measure) {
+    public void setMeasure(MeasureDto measure) {
         this.measure = measure;
     }
 

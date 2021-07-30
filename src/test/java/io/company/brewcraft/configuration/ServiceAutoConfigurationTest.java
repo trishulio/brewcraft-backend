@@ -17,7 +17,7 @@ import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
-import io.company.brewcraft.repository.ProductMeasureRepository;
+import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
@@ -42,7 +42,7 @@ import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
 import io.company.brewcraft.service.MixtureServiceImpl;
 import io.company.brewcraft.service.ProductCategoryService;
-import io.company.brewcraft.service.ProductMeasureService;
+import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.PurchaseOrderService;
@@ -54,7 +54,7 @@ import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.MaterialLotService;
 import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
-import io.company.brewcraft.service.impl.ProductMeasureServiceImpl;
+import io.company.brewcraft.service.impl.MeasureServiceImpl;
 import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
 import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.ShipmentService;
@@ -178,7 +178,7 @@ public class ServiceAutoConfigurationTest {
     	ProductRepository productRepositoryMock = mock(ProductRepository.class);
     	ProductCategoryService productCategoryServiceMock = mock(ProductCategoryService.class);
     	ProductMeasureValueService productMeasureValueServiceMock = mock(ProductMeasureValueService.class);
-    	ProductMeasureService productMeasureServiceMock = mock(ProductMeasureService.class);
+    	MeasureService productMeasureServiceMock = mock(MeasureService.class);
 
         ProductService service = serviceAutoConfiguration.productService(productRepositoryMock, productCategoryServiceMock, productMeasureValueServiceMock, productMeasureServiceMock);
         
@@ -194,11 +194,11 @@ public class ServiceAutoConfigurationTest {
     }
     
     @Test
-    public void testProductMeasureService_ReturnsInstanceOfProductMeasureService() {
-    	ProductMeasureRepository productMeasureRepositoryMock = mock(ProductMeasureRepository.class);
-        ProductMeasureService service = serviceAutoConfiguration.productMeasureService(productMeasureRepositoryMock);
+    public void testMeasureService_ReturnsInstanceOfMeasureService() {
+    	MeasureRepository measureRepositoryMock = mock(MeasureRepository.class);
+        MeasureService service = serviceAutoConfiguration.measureService(measureRepositoryMock);
         
-        assertTrue(service instanceof ProductMeasureServiceImpl);
+        assertTrue(service instanceof MeasureServiceImpl);
     }
     
     @Test

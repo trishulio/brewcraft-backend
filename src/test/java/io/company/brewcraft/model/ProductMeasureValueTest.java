@@ -16,10 +16,10 @@ public class ProductMeasureValueTest {
     
     @Test
     public void testConstructor() {
-        productMeasureValue = new ProductMeasureValue(1L,new ProductMeasure(), "100", new Product());
+        productMeasureValue = new ProductMeasureValue(1L,new Measure(), "100", new Product());
         
         assertEquals(1L, productMeasureValue.getId());
-        assertEquals(new ProductMeasure(), productMeasureValue.getProductMeasure());
+        assertEquals(new Measure(), productMeasureValue.getMeasure());
         assertEquals("100", productMeasureValue.getValue());
         assertEquals(new Product(), productMeasureValue.getProduct());
     }
@@ -32,8 +32,8 @@ public class ProductMeasureValueTest {
     
     @Test
     public void testGetSetProductMeasure() {
-        productMeasureValue.setProductMeasure(new ProductMeasure());
-        assertEquals(new ProductMeasure(), productMeasureValue.getProductMeasure());
+        productMeasureValue.setMeasure(new Measure());
+        assertEquals(new Measure(), productMeasureValue.getMeasure());
     }
     
     @Test

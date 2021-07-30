@@ -15,36 +15,36 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.ProductMeasure;
-import io.company.brewcraft.repository.ProductMeasureRepository;
-import io.company.brewcraft.service.ProductMeasureService;
+import io.company.brewcraft.model.Measure;
+import io.company.brewcraft.repository.MeasureRepository;
+import io.company.brewcraft.service.MeasureService;
 
-public class ProductMeasureServiceImplTest {
+public class MeasureServiceImplTest {
     
-    private ProductMeasureService productMeasureService;
+    private MeasureService measureService;
     
-    private ProductMeasureRepository productMeasureRepositoryMock;
+    private MeasureRepository measureRepositoryMock;
     
     @BeforeEach
     public void init() {
-        productMeasureRepositoryMock = Mockito.mock(ProductMeasureRepository.class);
-        productMeasureService = new ProductMeasureServiceImpl(productMeasureRepositoryMock);
+        measureRepositoryMock = Mockito.mock(MeasureRepository.class);
+        measureService = new MeasureServiceImpl(measureRepositoryMock);
     }
 
     @Test
-    public void testGetAllProductMeasures_returnsProductsMeasures() throws Exception {                
-        List<ProductMeasure> productMeasures = List.of(new ProductMeasure(1L, "abv"));
+    public void testGetAllMeasures_returnsProductsMeasures() throws Exception {                
+        List<Measure> measures = List.of(new Measure(1L, "abv"));
         
-        when(productMeasureRepositoryMock.findAll()).thenReturn(productMeasures);
+        when(measureRepositoryMock.findAll()).thenReturn(measures);
 
-        List<ProductMeasure> actualProductsMeasures = productMeasureService.getAllProductMeasures();
+        List<Measure> actualMeasures = measureService.getAllMeasures();
 
-        assertEquals(List.of(new ProductMeasure(1L, "abv")), actualProductsMeasures);
+        assertEquals(List.of(new Measure(1L, "abv")), actualMeasures);
     }
     
     @Test
     public void testProductService_classIsTransactional() throws Exception {
-        Transactional transactional = productMeasureService.getClass().getAnnotation(Transactional.class);
+        Transactional transactional = measureService.getClass().getAnnotation(Transactional.class);
         
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
@@ -53,7 +53,7 @@ public class ProductMeasureServiceImplTest {
     
     @Test
     public void testProductService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = productMeasureService.getClass().getMethods();  
+        Method[] methods = measureService.getClass().getMethods();  
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

@@ -20,7 +20,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class MixtureRecording extends BaseEntity implements BaseMixtureRecording, UpdateMixtureRecording, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_MIXTURE = "mixture";
-    public static final String FIELD_PRODUCT_MEASURE = "productMeasure";
+    public static final String FIELD_MEASURE = "measure";
     public static final String FIELD_VALUE = "value";
     
     @Id
@@ -34,7 +34,7 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
-    private ProductMeasure productMeasure;
+    private Measure measure;
     
     @Column(name = "measure_value")
     private String value;
@@ -62,11 +62,11 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     	setId(id);
     }
 
-    public MixtureRecording(Long id, Mixture mixture, ProductMeasure productMeasure, String value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
+    public MixtureRecording(Long id, Mixture mixture, Measure measure, String value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
             Integer version) {
         this(id);
         setMixture(mixture);
-        setProductMeasure(productMeasure);
+        setMeasure(measure);
         setValue(value);
         setRecordedAt(recordedAt);
         setCreatedAt(createdAt);
@@ -95,13 +95,13 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     }
 
     @Override
-    public ProductMeasure getProductMeasure() {
-        return productMeasure;
+    public Measure getMeasure() {
+        return measure;
     }
 
     @Override
-    public void setProductMeasure(ProductMeasure productMeasure) {
-        this.productMeasure = productMeasure;
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
     }
 
     @Override

@@ -18,7 +18,7 @@ import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.Product;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
@@ -46,7 +46,7 @@ import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialLotRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MixtureRepository;
-import io.company.brewcraft.repository.ProductMeasureRepository;
+import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
@@ -65,7 +65,7 @@ import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ParentMixtureAccessor;
 import io.company.brewcraft.service.ProductAccessor;
-import io.company.brewcraft.service.ProductMeasureAccessor;
+import io.company.brewcraft.service.MeasureAccessor;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.ShipmentStatusAccessor;
 import io.company.brewcraft.service.StorageAccessor;
@@ -274,10 +274,10 @@ public class RepositoryConfiguration {
     }
     
     @Bean
-    public AccessorRefresher<Long, ProductMeasureAccessor, ProductMeasure> productMeasureRefresher(ProductMeasureRepository repo) {
+    public AccessorRefresher<Long, MeasureAccessor, Measure> measureRefresher(MeasureRepository repo) {
         return new AccessorRefresher<>(
-            accessor -> accessor.getProductMeasure(),
-            (accessor, productMeasure) -> accessor.setProductMeasure(productMeasure),
+            accessor -> accessor.getMeasure(),
+            (accessor, measure) -> accessor.setMeasure(measure),
             ids -> repo.findAllById(ids)
         );
     }
