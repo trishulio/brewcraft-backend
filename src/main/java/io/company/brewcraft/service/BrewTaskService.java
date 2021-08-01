@@ -6,8 +6,8 @@ import io.company.brewcraft.model.BrewTask;
 
 public interface BrewTaskService {
     
-    public BrewTask getTask(String name);
+    BrewTask getTask(String name);
     
-    public List<BrewTask> getTasks();
+    List<BrewTask> getTasks();
 
 }

@@ -92,9 +92,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {         
-        validateTargetMeasures(product.getTargetMeasures());
-        
+    public Product addProduct(Product product) {                 
         Product savedEntity = productRepository.saveAndFlush(product);
         
         return savedEntity;
@@ -108,9 +106,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product putProduct(Long productId, Product putProduct) {                
-        validateTargetMeasures(putProduct.getTargetMeasures());
-        
+    public Product putProduct(Long productId, Product putProduct) {                        
         Product existingProduct = getProduct(productId);          
 
         if (existingProduct != null && existingProduct.getVersion() != putProduct.getVersion()) {
@@ -131,9 +127,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
     
     @Override
-    public Product patchProduct(Long productId, Product productPatch) {   
-        validateTargetMeasures(productPatch.getTargetMeasures());
-        
+    public Product patchProduct(Long productId, Product productPatch) {           
         Product existingProduct = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));            
   
         if (existingProduct.getVersion() != productPatch.getVersion()) {
@@ -175,20 +169,22 @@ public class ProductServiceImpl extends BaseService implements ProductService {
             ProductCategory category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
             product.setCategory(category);
         }
-    }
-    
-    private void validateTargetMeasures(List<ProductMeasureValue> targetMeasures) {
-        if (targetMeasures != null) {
+        
+        if (product.getTargetMeasures() != null && !product.getTargetMeasures().isEmpty()) {
             Page<Measure> measuresPage = measureService.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true);
             List<Measure> measures = measuresPage.getContent();
-            Map<String, Measure> measureMap = new HashMap<String, Measure>();
-            measures.forEach(measure -> measureMap.put(measure.getName(), measure) );
-                        
-            targetMeasures.forEach(measure -> {
-                if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getName())) {
-                    throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getName());
-                }           
-            });        
+            Map<Long, Measure> measureMap = new HashMap<Long, Measure>();
+            measures.forEach(measure -> measureMap.put(measure.getId(), measure));
+            
+            for (int i = 0; i < product.getTargetMeasures().size(); i++) {
+            	ProductMeasureValue measure = product.getTargetMeasures().get(i);
+                if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getId())) {
+                    throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getId());
+                } else {
+                	product.getTargetMeasures().get(i).setMeasure(measureMap.get(measure.getMeasure().getId()));
+                }
+            }
         }
     }
+
 }

@@ -10,6 +10,7 @@ import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -20,7 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
@@ -47,7 +47,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 	@JoinColumn(name = "parent_mixture_id", referencedColumnName = "id")
 	private Mixture parentMixture;
 
-	@OneToMany(mappedBy = "parentMixture")
+	@OneToMany(mappedBy = "parentMixture", fetch = FetchType.LAZY)
 	private List<Mixture> childMixtures;
 
 	@Embedded
@@ -56,14 +56,14 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 			@AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol")) })
 	private QuantityEntity quantity;
 
-	@OneToOne()
+	@ManyToOne()
 	@JoinColumn(name = "equipment_id", referencedColumnName = "id")
 	private Equipment equipment;
 
-	@OneToMany(mappedBy = "mixture", orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<MaterialPortion> materialPortions;
 
-	@OneToMany(mappedBy = "mixture", orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<MixtureRecording> recordedMeasures;
 
 	@ManyToOne()
@@ -142,8 +142,6 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 
         if (childMixtures != null) {
         	childMixtures.stream().collect(Collectors.toList()).forEach(this::addChildMixture);
-        } else {
-        	this.childMixtures = childMixtures;
         }
     }
     
@@ -212,8 +210,6 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 
         if (materialPortions != null) {
         	materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
-        } else {
-        	this.materialPortions = materialPortions;
         }
 	}
 	
@@ -262,8 +258,6 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 
         if (recordedMeasures != null) {
         	recordedMeasures.stream().collect(Collectors.toList()).forEach(this::addRecordedMeasure);
-        } else {
-        	this.recordedMeasures = recordedMeasures;
         }
 	}
 	

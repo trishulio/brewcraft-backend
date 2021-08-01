@@ -151,10 +151,12 @@ public class ProductServiceImplTest {
     public void testAddProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
+        when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
+        
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               
         assertThrows(IllegalArgumentException.class, () -> {
-            productService.addProduct(product);
+            productService.addProduct(product, 1L);
             verify(productRepositoryMock, times(0)).saveAndFlush(Mockito.any(Product.class));
         });
     }
@@ -244,10 +246,12 @@ public class ProductServiceImplTest {
     public void testPutProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
+        when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
+        
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               
         assertThrows(IllegalArgumentException.class, () -> {
-            productService.putProduct(1L, product);
+            productService.putProduct(1L, product, 1L);
             verify(productRepositoryMock, times(0)).saveAndFlush(Mockito.any(Product.class));
         });
     }
@@ -309,10 +313,12 @@ public class ProductServiceImplTest {
     public void testPatchProduct_throwsIllegalArgumentException() throws Exception {
         Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
+        when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
+        
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               
         assertThrows(IllegalArgumentException.class, () -> {
-            productService.patchProduct(1L, product);
+            productService.patchProduct(1L, product, 1L);
             verify(productRepositoryMock, times(0)).saveAndFlush(Mockito.any(Product.class));
         });
     }

@@ -6,8 +6,8 @@ import io.company.brewcraft.model.BrewStageStatus;
 
 public interface BrewStageStatusService {
     
-	public List<BrewStageStatus> getStatuses();
+	List<BrewStageStatus> getStatuses();
     
-    public BrewStageStatus getStatus(String name);
+    BrewStageStatus getStatus(String name);
     
 }

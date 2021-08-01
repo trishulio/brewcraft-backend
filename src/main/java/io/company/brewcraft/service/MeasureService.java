@@ -9,6 +9,6 @@ import io.company.brewcraft.model.Measure;
 
 public interface MeasureService {
     
-    public Page<Measure> getMeasures(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    Page<Measure> getMeasures(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
 }

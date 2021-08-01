@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -57,7 +58,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @OneToMany(mappedBy = "parentBrew")
     private List<Brew> childBrews;
     
-    @OneToMany(mappedBy="brew", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="brew", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("startedAt ASC")
     private List<BrewStage> brewStages;
     
@@ -180,8 +181,6 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
         if (childBrews != null) {
         	childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
-        } else {
-        	this.childBrews = childBrews;
         }
     }
     
@@ -230,13 +229,11 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
         if (brewStages != null) {
         	brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
-        } else {
-        	this.brewStages = brewStages;
         }
     }
     
-    public void addBrewStage(BrewStage item) {
-        if (item == null) {
+    public void addBrewStage(BrewStage brewStage) {
+        if (brewStage == null) {
             return;
         }
 
@@ -244,12 +241,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
             this.brewStages = new ArrayList<>();
         }
 
-        if (item.getBrew() != this) {            
-            item.setBrew(this);
+        if (brewStage.getBrew() != this) {            
+            brewStage.setBrew(this);
         }
         
-        if (!this.brewStages.contains(item)) {
-            this.brewStages.add(item);            
+        if (!this.brewStages.contains(brewStage)) {
+            this.brewStages.add(brewStage);            
         }
     }
 

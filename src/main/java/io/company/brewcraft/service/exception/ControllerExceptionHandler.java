@@ -53,7 +53,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = { ObjectOptimisticLockingFailureException.class, OptimisticLockException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorResponse objectOptimisticLockingFailureException(Exception e, HttpServletRequest request) {
+    public ErrorResponse objectOptimisticLockingFailureException(RuntimeException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         log.debug("Optimistic Locking Failure Exception", e);

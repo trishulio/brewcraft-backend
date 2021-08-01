@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,7 +49,7 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     @JoinColumn(name = "brew_task_id", referencedColumnName = "id")
     private BrewTask task;
     
-    @OneToMany(mappedBy = "brewStage", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "brewStage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("recordedAt ASC, id ASC")
     private List<Mixture> mixtures;
     
@@ -145,8 +146,6 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
 
         if (mixtures != null) {
         	mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
-        } else {
-        	this.mixtures = mixtures;
         }
     }
     

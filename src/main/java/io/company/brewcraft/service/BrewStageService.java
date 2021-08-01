@@ -10,19 +10,19 @@ import io.company.brewcraft.model.BrewStage;
 
 public interface BrewStageService {
 
-    public Page<BrewStage> getBrewStages(Set<Long> ids, Set<Long> brewIds, Set<Long> statusIds, Set<Long> taskIds, Set<Long> brewLogIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom, LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    Page<BrewStage> getBrewStages(Set<Long> ids, Set<Long> brewIds, Set<Long> statusIds, Set<Long> taskIds, Set<Long> brewLogIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom, LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending);
     
-    public BrewStage getBrewStage(Long brewStageId);
+    BrewStage getBrewStage(Long brewStageId);
     
-    public BrewStage addBrewStage(BrewStage brewStage);
+    BrewStage addBrewStage(BrewStage brewStage);
     
-    public BrewStage putBrewStage(Long brewStageId, BrewStage brewStage);
+    BrewStage putBrewStage(Long brewStageId, BrewStage brewStage);
                 
-    public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStage);
+    BrewStage patchBrewStage(Long brewStageId, BrewStage brewStage);
             
-    public void deleteBrewStage(Long brewStageId);
+    void deleteBrewStage(Long brewStageId);
     
-    public boolean brewStageExists(Long brewStageId);
+    boolean brewStageExists(Long brewStageId);
 
  }
 
