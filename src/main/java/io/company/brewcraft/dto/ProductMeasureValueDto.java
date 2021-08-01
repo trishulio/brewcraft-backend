@@ -1,5 +1,7 @@
 package io.company.brewcraft.dto;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,13 +11,13 @@ public class ProductMeasureValueDto extends BaseDto {
 
     private MeasureDto measure;
     
-    private String value;
+    private BigDecimal value;
 
     public ProductMeasureValueDto() {
         this(null, null, null);
     }
 
-    public ProductMeasureValueDto(Long id, MeasureDto measure, String value) {
+    public ProductMeasureValueDto(Long id, MeasureDto measure, BigDecimal value) {
     	setId(id);
         setMeasure(measure);
         setValue(value);
@@ -37,11 +39,11 @@ public class ProductMeasureValueDto extends BaseDto {
         this.measure = measure;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

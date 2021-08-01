@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +62,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testGetProducts_returnsProducts() throws Exception {
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
                 
         List<Product> productEntities = Arrays.asList(productEntity);
         
@@ -94,7 +95,7 @@ public class ProductServiceImplTest {
     @Test
     public void testGetProduct_returnsProduct() throws Exception {
         Long id = 1L;
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Product> expectedProductEntity = Optional.ofNullable(productEntity);
 
         when(productRepositoryMock.findById(id)).thenReturn(expectedProductEntity);
@@ -113,9 +114,9 @@ public class ProductServiceImplTest {
 
     @Test
     public void testAddProduct_SavesProduct() throws Exception {
-        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
-        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -148,7 +149,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testAddProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               
@@ -161,14 +162,14 @@ public class ProductServiceImplTest {
     @Test
     public void testPutProduct_successWhenNoExistingEntity() throws Exception {
         Long id = 1L;        
-        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
         
-        when(productMeasureValueServiceMock.merge(productEntity.getTargetMeasures(), putProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())));
+        when(productMeasureValueServiceMock.merge(productEntity.getTargetMeasures(), putProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())));
         
         when(productRepositoryMock.saveAndFlush(persistedProductCaptor.capture())).thenReturn(putProduct);
 
@@ -200,7 +201,7 @@ public class ProductServiceImplTest {
         Long id = 1L;
         
         List<ProductMeasureValue> list = new ArrayList<>();
-        list.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()));
+        list.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
         
         Product putProduct = new Product(1L, "testProductupdated", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -212,7 +213,7 @@ public class ProductServiceImplTest {
         
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
         
-        when(productMeasureValueServiceMock.merge(productEntity.getTargetMeasures(), putProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())));
+        when(productMeasureValueServiceMock.merge(productEntity.getTargetMeasures(), putProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())));
         
         when(productRepositoryMock.saveAndFlush(persistedProductCaptor.capture())).thenReturn(putProduct);
 
@@ -241,7 +242,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testPutProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               
@@ -254,9 +255,9 @@ public class ProductServiceImplTest {
     @Test
     public void testPatchProduct_success() throws Exception {
         Long id = 1L;
-        Product patchedProduct = new Product(null, "updatedName", null, null, new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "200", new Product()))), null, null, null, 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "200", new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product patchedProduct = new Product(null, "updatedName", null, null, new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), null, null, null, 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -264,7 +265,7 @@ public class ProductServiceImplTest {
  
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
 
-        when(productMeasureValueServiceMock.merge(existingProductEntity.getTargetMeasures(), patchedProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "200", new Product())));
+        when(productMeasureValueServiceMock.merge(existingProductEntity.getTargetMeasures(), patchedProduct.getTargetMeasures())).thenReturn(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product())));
         
         when(productRepositoryMock.saveAndFlush(persistedProductCaptor.capture())).thenReturn(persistedProductEntity);
 
@@ -306,7 +307,7 @@ public class ProductServiceImplTest {
     
     @Test
     public void testPatchProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         when(measureServiceMock.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true)).thenReturn(new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1))));
               

@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,15 +28,15 @@ public class ProductMeasureValue extends BaseEntity {
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private Measure measure;
     
-    @Column(name = "product_measure_value")
-    private String value;
+    @Column(name = "product_measure_value", precision = 20, scale = 4)
+    private BigDecimal value;
     
     
     public ProductMeasureValue() {
         super();
     }
 
-    public ProductMeasureValue(Long id, Measure measure,  String value, Product product) {
+    public ProductMeasureValue(Long id, Measure measure,  BigDecimal value, Product product) {
         this();
         this.id = id;
         this.measure = measure;
@@ -66,11 +68,11 @@ public class ProductMeasureValue extends BaseEntity {
         this.measure = measure;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }
