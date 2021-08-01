@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -36,8 +37,8 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private Measure measure;
     
-    @Column(name = "measure_value")
-    private String value;
+    @Column(name = "measure_value", precision = 20, scale = 4)
+    private BigDecimal value;
     
     @Column(name = "recorded_at")
     private LocalDateTime recordedAt;
@@ -62,7 +63,7 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     	setId(id);
     }
 
-    public MixtureRecording(Long id, Mixture mixture, Measure measure, String value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
+    public MixtureRecording(Long id, Mixture mixture, Measure measure, BigDecimal value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
             Integer version) {
         this(id);
         setMixture(mixture);
@@ -105,12 +106,12 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     }
 
     @Override
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
     @Override
-    public void setValue(String value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

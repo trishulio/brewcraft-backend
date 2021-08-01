@@ -15,6 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -81,7 +82,7 @@ public class MixtureRecordingServiceImplTest {
 
 	@Test
 	public void testAddMixtureRecording_AddsMixtureRecording() {
-		MixtureRecording mixtureRecording = new MixtureRecording(null, new Mixture(5L), new Measure(1L), "100", LocalDateTime.of(2019, 1, 2, 3, 4),
+		MixtureRecording mixtureRecording = new MixtureRecording(null, new Mixture(5L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2019, 1, 2, 3, 4),
 				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
         MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
@@ -89,7 +90,7 @@ public class MixtureRecordingServiceImplTest {
 		assertEquals(null, addedMixtureRecording.getId());
 		assertEquals(new Mixture(5L), addedMixtureRecording.getMixture());
 		assertEquals(new Measure(1L), addedMixtureRecording.getMeasure());
-		assertEquals("100", addedMixtureRecording.getValue());
+		assertEquals(new BigDecimal("100"), addedMixtureRecording.getValue());
 		assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedMixtureRecording.getRecordedAt());
 		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedMixtureRecording.getCreatedAt());
 		assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedMixtureRecording.getLastUpdated());
@@ -105,7 +106,7 @@ public class MixtureRecordingServiceImplTest {
 		existing.setCreatedAt(LocalDateTime.of(2020, 1, 2, 3, 4));
 		existing.setVersion(1);
 		
-		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), "150", LocalDateTime.of(2010, 1, 2, 3, 4),
+		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2010, 1, 2, 3, 4),
 				LocalDateTime.of(2011, 1, 2, 3, 4), LocalDateTime.of(2012, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(mixtureRecordingRepositoryMock).findById(1L);
@@ -115,7 +116,7 @@ public class MixtureRecordingServiceImplTest {
 		assertEquals(1L, mixtureRecording.getId());
 		assertEquals(new Mixture(5L), mixtureRecording.getMixture());
 		assertEquals(new Measure(1L), mixtureRecording.getMeasure());
-		assertEquals("150", mixtureRecording.getValue());
+		assertEquals(new BigDecimal("100"), mixtureRecording.getValue());
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), mixtureRecording.getRecordedAt());
 		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), mixtureRecording.getCreatedAt());
 		assertEquals(null, mixtureRecording.getLastUpdated());
@@ -127,7 +128,7 @@ public class MixtureRecordingServiceImplTest {
 
 	@Test
 	public void testPutMixtureRecording_AddsNewMixtureRecording_WhenNoMixtureRecordingExists() {		
-		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), "150", LocalDateTime.of(2010, 1, 2, 3, 4),
+		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2010, 1, 2, 3, 4),
 				LocalDateTime.of(2011, 1, 2, 3, 4), LocalDateTime.of(2012, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(mixtureRecordingRepositoryMock).findById(1L);
@@ -137,7 +138,7 @@ public class MixtureRecordingServiceImplTest {
 		assertEquals(1L, mixtureRecording.getId());
 		assertEquals(new Mixture(5L), mixtureRecording.getMixture());
 		assertEquals(new Measure(1L), mixtureRecording.getMeasure());
-		assertEquals("150", mixtureRecording.getValue());
+		assertEquals(new BigDecimal("100"), mixtureRecording.getValue());
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), mixtureRecording.getRecordedAt());
 		assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), mixtureRecording.getCreatedAt());
 		assertEquals(LocalDateTime.of(2012, 1, 2, 3, 4), mixtureRecording.getLastUpdated());
@@ -166,7 +167,7 @@ public class MixtureRecordingServiceImplTest {
 		existing.setCreatedAt(LocalDateTime.of(2020, 1, 2, 3, 4));
 		existing.setVersion(1);
 		
-		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), "150", LocalDateTime.of(2010, 1, 2, 3, 4),
+		MixtureRecording update = new MixtureRecording(null, new Mixture(5L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2010, 1, 2, 3, 4),
 				LocalDateTime.of(2011, 1, 2, 3, 4), LocalDateTime.of(2012, 1, 2, 3, 4), 1);
 
 
@@ -177,7 +178,7 @@ public class MixtureRecordingServiceImplTest {
 		assertEquals(1L, mixtureRecording.getId());
 		assertEquals(new Mixture(5L), mixtureRecording.getMixture());
 		assertEquals(new Measure(1L), mixtureRecording.getMeasure());
-		assertEquals("150", mixtureRecording.getValue());
+		assertEquals(new BigDecimal("100"), mixtureRecording.getValue());
 		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), mixtureRecording.getRecordedAt());
 		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), mixtureRecording.getCreatedAt());
 		assertEquals(null, mixtureRecording.getLastUpdated());

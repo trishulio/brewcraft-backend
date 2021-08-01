@@ -64,7 +64,7 @@ public class SupplierContactControllerTest {
        
        Page<SupplierContact> pagedResponse = new PageImpl<>(contacts);
         
-       when(supplierContactServiceMock.getSupplierContacts(0, 100, new TreeSet<>(List.of("id")), true)).thenReturn(pagedResponse);
+       when(supplierContactServiceMock.getSupplierContacts(null, null, 0, 100, new TreeSet<>(List.of("id")), true)).thenReturn(pagedResponse);
         
        this.mockMvc.perform(get("/api/v1/suppliers/contacts").header("Authorization", "Bearer " + "test"))
        .andExpect(status().isOk())
@@ -124,7 +124,7 @@ public class SupplierContactControllerTest {
                + "}"));
        
         
-        verify(supplierContactServiceMock, times(1)).getSupplierContacts(0, 100, new TreeSet<>(List.of("id")), true);
+        verify(supplierContactServiceMock, times(1)).getSupplierContacts(null, null, 0, 100, new TreeSet<>(List.of("id")), true);
     } 
     
     @Test

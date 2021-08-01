@@ -1,6 +1,7 @@
 package io.company.brewcraft.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,14 @@ public class SupplierContactController extends BaseController {
     
     @GetMapping("/contacts")
     public GetSupplierContactsDto getContacts(
+    	@RequestParam(required = false, name = "ids") Set<Long> ids,
+		@RequestParam(required = false, name = "supplier_ids") Set<Long> supplierIds,
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {                
-        Page<SupplierContact> supplierContacts = supplierContactService.getSupplierContacts(page, size, sort, orderAscending);
+        Page<SupplierContact> supplierContacts = supplierContactService.getSupplierContacts(ids, supplierIds, page, size, sort, orderAscending);
       
         List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).collect(Collectors.toList());
     

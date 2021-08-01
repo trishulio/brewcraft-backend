@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
@@ -13,10 +12,12 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,16 +48,14 @@ public class SupplierContactServiceImplTest {
     @Test
     public void testGetContacts_returnsContacts() throws Exception {
         SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-                
-        List<SupplierContact> contactEntities = Arrays.asList(contactEntity);
         
-        Page<SupplierContact> expectedContactEntity = new PageImpl<>(contactEntities);
+        Page<SupplierContact> expectedContactEntity = new PageImpl<>(List.of(contactEntity));
         
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
-        when(supplierContactRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedContactEntity);
+        when(supplierContactRepositoryMock.findAll(ArgumentMatchers.<Specification<SupplierContact>>any(), pageableArgument.capture())).thenReturn(expectedContactEntity);
 
-        Page<SupplierContact> actualContacts = supplierContactService.getSupplierContacts(0, 100, new TreeSet<>(List.of("id")), true);
+        Page<SupplierContact> actualContacts = supplierContactService.getSupplierContacts(null, null, 0, 100, new TreeSet<>(List.of("id")), true);
 
         assertEquals(0, pageableArgument.getValue().getPageNumber());
         assertEquals(100, pageableArgument.getValue().getPageSize());

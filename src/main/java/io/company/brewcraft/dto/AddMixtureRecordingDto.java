@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
@@ -13,8 +14,8 @@ public class AddMixtureRecordingDto extends BaseDto {
     @NotNull
     private Long measureId;
     
-    @Pattern(regexp = "^(?!\\s*$).+", message = "must not be blank")
-    private String value;
+    @NotNull
+    private BigDecimal value;
 
     private LocalDateTime recordedAt;
     
@@ -22,7 +23,7 @@ public class AddMixtureRecordingDto extends BaseDto {
     	super();
     }
     
-	public AddMixtureRecordingDto(Long mixtureId, Long measureId, String value, LocalDateTime recordedAt) {
+	public AddMixtureRecordingDto(Long mixtureId, Long measureId, BigDecimal value, LocalDateTime recordedAt) {
 		this();
 		this.mixtureId = mixtureId;
 		this.measureId = measureId;
@@ -46,11 +47,11 @@ public class AddMixtureRecordingDto extends BaseDto {
 		this.measureId = measureId;
 	}
 
-	public String getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 

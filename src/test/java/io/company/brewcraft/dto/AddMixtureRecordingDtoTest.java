@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +21,14 @@ public class AddMixtureRecordingDtoTest {
     public void testConstructor() {
 		Long mixtureId = 2L;
 		Long measureId = 1L;
-		String value = "100";
+		BigDecimal value = new BigDecimal("100");
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
 
         AddMixtureRecordingDto addMixtureRecordingDto = new AddMixtureRecordingDto(mixtureId, measureId, value, recordedAt);
         
         assertEquals(2L, addMixtureRecordingDto.getMixtureId());
         assertEquals(1L, addMixtureRecordingDto.getMeasureId());
-        assertEquals("100", addMixtureRecordingDto.getValue());
+        assertEquals(new BigDecimal("100"), addMixtureRecordingDto.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addMixtureRecordingDto.getRecordedAt());
     }
     
@@ -47,8 +48,8 @@ public class AddMixtureRecordingDtoTest {
     
     @Test
     public void testGetSetValue() {
-        addMixtureRecordingDto.setValue("100");
-        assertEquals("100", addMixtureRecordingDto.getValue());
+        addMixtureRecordingDto.setValue(new BigDecimal("100"));
+        assertEquals(new BigDecimal("100"), addMixtureRecordingDto.getValue());
     } 
     
     @Test

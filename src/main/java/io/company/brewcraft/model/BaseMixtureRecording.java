@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import io.company.brewcraft.service.MixtureAccessor;
@@ -7,9 +8,9 @@ import io.company.brewcraft.service.MeasureAccessor;
 
 public interface BaseMixtureRecording extends MixtureAccessor, MeasureAccessor {
 
-    String getValue();
+	BigDecimal getValue();
     
-    void setValue(String value);
+    void setValue(BigDecimal value);
 
 	LocalDateTime getRecordedAt();
 

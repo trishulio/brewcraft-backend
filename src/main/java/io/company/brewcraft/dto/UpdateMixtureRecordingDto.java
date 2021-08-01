@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,7 +12,7 @@ public class UpdateMixtureRecordingDto extends BaseDto {
 
     private Long measureId;
     
-    private String value;
+    private BigDecimal value;
 
     private LocalDateTime recordedAt;
     
@@ -21,7 +22,7 @@ public class UpdateMixtureRecordingDto extends BaseDto {
     	super();
     }
 
-	public UpdateMixtureRecordingDto(Long mixtureId, Long measureId, String value, LocalDateTime recordedAt, Integer version) {
+	public UpdateMixtureRecordingDto(Long mixtureId, Long measureId, BigDecimal value, LocalDateTime recordedAt, Integer version) {
 		this();
 		this.mixtureId = mixtureId;
 		this.measureId = measureId;
@@ -46,11 +47,11 @@ public class UpdateMixtureRecordingDto extends BaseDto {
 		this.measureId = measureId;
 	}
 
-	public String getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
 
