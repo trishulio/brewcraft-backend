@@ -34,7 +34,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/mixtures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/mixtures/recordings", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MixtureRecordingController extends BaseController {
     
     private MixtureRecordingService mixtureRecordingService;
@@ -46,10 +46,10 @@ public class MixtureRecordingController extends BaseController {
         this.mixtureRecordingService = mixtureRecordingService;
     }
     
-    @GetMapping(value = "/recordings", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<MixtureRecordingDto> getMixtureRecordings(
-            @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false, name = "mixture_ids") Set<Long> mixtureIds,
+            @RequestParam(name = "ids", required = false) Set<Long> ids,
+            @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
@@ -60,12 +60,12 @@ public class MixtureRecordingController extends BaseController {
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()
                 .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording)).collect(Collectors.toList());
 
-        PageDto<MixtureRecordingDto> dto = new PageDto<MixtureRecordingDto>(mixtureRecordingList, mixtureRecordingPage.getTotalPages(), mixtureRecordingPage.getTotalElements());
+        PageDto<MixtureRecordingDto> dto = new PageDto<>(mixtureRecordingList, mixtureRecordingPage.getTotalPages(), mixtureRecordingPage.getTotalElements());
         
         return dto;
     }
         
-    @GetMapping(value = "/recordings/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
     public MixtureRecordingDto getMixtureRecording(@PathVariable Long mixtureRecordingId) {
         MixtureRecording mixtureRecording = mixtureRecordingService.getMixtureRecording(mixtureRecordingId);
                 
@@ -74,7 +74,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(mixtureRecording);
     }
 
-    @PostMapping("/recordings")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public MixtureRecordingDto addMixtureRecording(@Valid @RequestBody AddMixtureRecordingDto addBrewDto) {
     	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addBrewDto);
@@ -84,7 +84,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(addedMixtureRecording);
     }
     
-    @PutMapping("/recordings/{mixtureRecordingId}")
+    @PutMapping("/{mixtureRecordingId}")
     public MixtureRecordingDto putMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
     	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         
@@ -93,7 +93,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(putMixtureRecording);
     }
     
-    @PatchMapping("/recordings/{mixtureRecordingId}")
+    @PatchMapping("/{mixtureRecordingId}")
     public MixtureRecordingDto patchMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {        
     	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         
@@ -102,7 +102,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(patchedMixtureRecording);
     }
 
-    @DeleteMapping(value = "/recordings/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
+    @DeleteMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
     public void deleteMixtureRecording(@PathVariable Long mixtureRecordingId) {
         mixtureRecordingService.deleteMixtureRecording(mixtureRecordingId);
     }

@@ -36,7 +36,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/mixtures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/mixtures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MixtureController extends BaseController {
 	private static final Logger log = LoggerFactory.getLogger(MixtureController.class);
 
@@ -69,7 +69,7 @@ public class MixtureController extends BaseController {
 		List<MixtureDto> mixtureList = mixturePage.stream().map(mixture -> mixtureMapper.toDto(mixture))
 				.collect(Collectors.toList());
 
-		PageDto<MixtureDto> dto = new PageDto<MixtureDto>(mixtureList, mixturePage.getTotalPages(),
+		PageDto<MixtureDto> dto = new PageDto<>(mixtureList, mixturePage.getTotalPages(),
 				mixturePage.getTotalElements());
 
 		return dto;

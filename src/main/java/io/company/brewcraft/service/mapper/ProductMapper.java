@@ -21,6 +21,8 @@ public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     Product fromDto(ProductDto dto);
+    
+    Product fromDto(Long id);
 
     @Mappings({
         @Mapping(target = "category.id", source = "categoryId"),

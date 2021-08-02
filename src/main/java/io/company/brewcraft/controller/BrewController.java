@@ -72,7 +72,7 @@ public class BrewController extends BaseController {
                                          .map(brew -> brewMapper.toDto(brew))
                                          .collect(Collectors.toList());
 
-        PageDto<BrewDto> dto = new PageDto<BrewDto>(brewList, brewPage.getTotalPages(), brewPage.getTotalElements());
+        PageDto<BrewDto> dto = new PageDto<>(brewList, brewPage.getTotalPages(), brewPage.getTotalElements());
         
         return dto;
     }

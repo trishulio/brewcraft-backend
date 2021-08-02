@@ -14,22 +14,24 @@ import io.company.brewcraft.model.Mixture;
 public interface MixtureMapper {
 
 	MixtureMapper INSTANCE = Mappers.getMapper(MixtureMapper.class);
+	
+    Mixture fromDto(Long id);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)
     @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = Brew.ATTR_VERSION, ignore = true)
-    @Mapping(target = "parentMixture.id", source = "parentMixtureId")
-    @Mapping(target = "equipment.id", source = "equipmentId")
-    @Mapping(target = "brewStage.id", source = "brewStageId")
+    @Mapping(target = "parentMixture", source = "parentMixtureId")
+    @Mapping(target = "equipment", source = "equipmentId")
+    @Mapping(target = "brewStage", source = "brewStageId")
     Mixture fromDto(AddMixtureDto dto);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)
     @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = "parentMixture.id", source = "parentMixtureId")
-    @Mapping(target = "equipment.id", source = "equipmentId")
-    @Mapping(target = "brewStage.id", source = "brewStageId")
+    @Mapping(target = "parentMixture", source = "parentMixtureId")
+    @Mapping(target = "equipment", source = "equipmentId")
+    @Mapping(target = "brewStage", source = "brewStageId")
     Mixture fromDto(UpdateMixtureDto dto);
 
     @Mapping(target = "parentMixtureId", source = "parentMixture.id")

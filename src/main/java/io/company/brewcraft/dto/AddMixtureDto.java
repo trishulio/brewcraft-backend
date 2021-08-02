@@ -16,12 +16,12 @@ public class AddMixtureDto extends BaseDto {
     private Long brewStageId;
     
     public AddMixtureDto() {
-    	
+    	super();
     }
         
 	public AddMixtureDto(Long parentMixtureId, QuantityDto quantity, Long equipmentId,
 			Long brewStageId) {
-		super();
+		this();
 		this.parentMixtureId = parentMixtureId;
 		this.quantity = quantity;
 		this.equipmentId = equipmentId;

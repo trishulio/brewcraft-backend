@@ -35,7 +35,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/stages", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class BrewStageController extends BaseController {
     
     private BrewStageService brewStageService;
@@ -47,7 +47,7 @@ public class BrewStageController extends BaseController {
         this.brewStageService = brewStageService;
     }
     
-    @GetMapping(value = "/stages", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<BrewStageDto> getBrewStages(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
@@ -68,12 +68,12 @@ public class BrewStageController extends BaseController {
         List<BrewStageDto> brewStageList = brewStagePage.stream()
                 .map(brewStage -> brewStageMapper.toDto(brewStage)).collect(Collectors.toList());
 
-        PageDto<BrewStageDto> dto = new PageDto<BrewStageDto>(brewStageList, brewStagePage.getTotalPages(), brewStagePage.getTotalElements());
+        PageDto<BrewStageDto> dto = new PageDto<>(brewStageList, brewStagePage.getTotalPages(), brewStagePage.getTotalElements());
         
         return dto;
     }
         
-    @GetMapping(value = "/stages/{stageId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{stageId}", consumes = MediaType.ALL_VALUE)
     public BrewStageDto getBrewStage(@PathVariable Long brewStageId) {
         BrewStage brewStage = brewStageService.getBrewStage(brewStageId);
                 
@@ -82,7 +82,7 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(brewStage);
     }
 
-    @PostMapping("/stages")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public BrewStageDto addBrewStage(@Valid @RequestBody AddBrewStageDto addBrewDto) {
         BrewStage brewStage = brewStageMapper.fromDto(addBrewDto);
@@ -92,7 +92,7 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(addedBrewStage);
     }
     
-    @PutMapping("/stages/{stageId}")
+    @PutMapping("/{stageId}")
     public BrewStageDto putBrewStage(@Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
         
@@ -101,7 +101,7 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(putBrewStage);
     }
     
-    @PatchMapping("/stages/{stageId}")
+    @PatchMapping("/{stageId}")
     public BrewStageDto patchBrewStage(@PathVariable Long stageId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto) {        
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
         
@@ -110,7 +110,7 @@ public class BrewStageController extends BaseController {
         return brewStageMapper.toDto(patchedBrewStage);
     }
 
-    @DeleteMapping(value = "/stages/{stageId}", consumes = MediaType.ALL_VALUE)
+    @DeleteMapping(value = "/{stageId}", consumes = MediaType.ALL_VALUE)
     public void deleteBrewStage(@PathVariable Long stageId) {
         brewStageService.deleteBrewStage(stageId);
     }
