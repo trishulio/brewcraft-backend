@@ -1,14 +1,11 @@
 package io.company.brewcraft.model;
 
-public interface BasePurchaseOrder {
+import io.company.brewcraft.service.SupplierAccessor;
+
+public interface BasePurchaseOrder extends SupplierAccessor {
     final String ATTR_ORDER_NUMBER = "orderNumber";
-    final String ATTR_SUPPLIER = "supplier";
 
-    public String getOrderNumber();
+    String getOrderNumber();
 
-    public void setOrderNumber(String orderNumber);
-
-    public Supplier getSupplier();
-
-    public void setSupplier(Supplier supplier);
+    void setOrderNumber(String orderNumber);
 }

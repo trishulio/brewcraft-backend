@@ -56,7 +56,7 @@ public class PurchaseOrderMapperTest {
 
         PurchaseOrderDto dto = mapper.toDto(order);
 
-        PurchaseOrderDto expected = new PurchaseOrderDto(1L, "ORDER_1", new SupplierDto(1L));
+        PurchaseOrderDto expected = new PurchaseOrderDto(1L, "ORDER_1", new SupplierDto(1L), 1);
         assertEquals(expected, dto);
     }
 

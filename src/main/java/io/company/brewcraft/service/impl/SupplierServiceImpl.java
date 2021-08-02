@@ -36,7 +36,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     @Override
     public Supplier getSupplier(Long id) {
         Supplier supplier = supplierRepository.findById(id).orElse(null);
-        
+
         return supplier;
     }
 

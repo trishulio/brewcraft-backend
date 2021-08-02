@@ -4,6 +4,7 @@ public class PurchaseOrderDto extends BaseDto {
     private Long id;
     private String orderNumber;
     private SupplierDto supplier;
+    private Integer version;
 
     public PurchaseOrderDto() {
     }
@@ -12,10 +13,11 @@ public class PurchaseOrderDto extends BaseDto {
         setId(id);
     }
 
-    public PurchaseOrderDto(Long id, String orderNumber, SupplierDto supplier) {
+    public PurchaseOrderDto(Long id, String orderNumber, SupplierDto supplier, Integer version) {
         this(id);
         setOrderNumber(orderNumber);
         setSupplier(supplier);
+        setVersion(version);
     }
 
     public Long getId() {
@@ -40,5 +42,13 @@ public class PurchaseOrderDto extends BaseDto {
 
     public void setSupplier(SupplierDto supplier) {
         this.supplier = supplier;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

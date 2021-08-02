@@ -13,6 +13,7 @@ import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
@@ -33,6 +34,7 @@ import io.company.brewcraft.service.MaterialLotAccessor;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.ShipmentStatusAccessor;
 import io.company.brewcraft.service.StorageAccessor;
+import io.company.brewcraft.service.SupplierAccessor;
 
 @Configuration
 public class RepositoryConfiguration {
@@ -154,6 +156,16 @@ public class RepositoryConfiguration {
             UserStatus.class,
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, SupplierAccessor, Supplier> supplierrefresher(SupplierRepository repo) {
+        return new AccessorRefresher<>(
+            Supplier.class,
+            accessor -> accessor.getSupplier(),
+            (accessor, supplier) -> accessor.setSupplier(supplier),
             ids -> repo.findAllById(ids)
         );
     }

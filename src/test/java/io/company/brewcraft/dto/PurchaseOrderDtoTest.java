@@ -16,11 +16,12 @@ public class PurchaseOrderDtoTest {
 
     @Test
     public void testAllArgsConstructor() {
-        dto = new PurchaseOrderDto(1L, "ORDER_1", new SupplierDto(2L));
+        dto = new PurchaseOrderDto(1L, "ORDER_1", new SupplierDto(2L), 1);
 
         assertEquals(1L, dto.getId());
         assertEquals("ORDER_1", dto.getOrderNumber());
         assertEquals(new SupplierDto(2L), dto.getSupplier());
+        assertEquals(1, dto.getVersion());
     }
 
     @Test

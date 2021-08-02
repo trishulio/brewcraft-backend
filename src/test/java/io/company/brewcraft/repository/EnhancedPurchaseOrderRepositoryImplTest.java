@@ -15,13 +15,15 @@ public class EnhancedPurchaseOrderRepositoryImplTest {
     private EnhancedPurchaseOrderRepository repo;
 
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> mRefresher;
+    private SupplierRepository mSupplierRepo;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
+        mSupplierRepo = mock(SupplierRepository.class);
 
-        repo = new EnhancedPurchaseOrderRepositoryImpl(mRefresher);
+        repo = new EnhancedPurchaseOrderRepositoryImpl(mRefresher, mSupplierRepo);
     }
 
     @Test
