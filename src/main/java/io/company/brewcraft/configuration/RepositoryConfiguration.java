@@ -51,6 +51,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> invoiceItemRefresher(InvoiceItemRepository repo) {
         return new AccessorRefresher<>(
+            InvoiceItem.class,
             accessor -> accessor.getInvoiceItem(),
             (accessor, invoiceItem) -> accessor.setInvoiceItem(invoiceItem),
             ids -> repo.findAllById(ids)
@@ -60,6 +61,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusRefresher(InvoiceStatusRepository repo) {
         return new AccessorRefresher<>(
+            InvoiceStatus.class,
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
             ids -> repo.findAllById(ids)
@@ -69,6 +71,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> materialLotRefresher(MaterialLotRepository repo) {
         return new AccessorRefresher<>(
+            MaterialLot.class,
             accessor -> accessor.getMaterialLot(),
             (accessor, lot) -> accessor.setMaterialLot(lot),
             ids -> repo.findAllById(ids)
@@ -78,6 +81,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, MaterialAccessor, Material> materialRefresher(MaterialRepository repo) {
         return new AccessorRefresher<>(
+            Material.class,
             accessor -> accessor.getMaterial(),
             (accessor, material) -> accessor.setMaterial(material),
             ids -> repo.findAllById(ids)
@@ -87,6 +91,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> purchaseOrderRefresher(PurchaseOrderRepository repo) {
         return new AccessorRefresher<>(
+            PurchaseOrder.class,
             accessor -> accessor.getPurchaseOrder(),
             (accessor, purchaseOrder) -> accessor.setPurchaseOrder(purchaseOrder),
             ids -> repo.findAllById(ids)
@@ -96,6 +101,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> shipmentStatusRefresher(ShipmentStatusRepository repo) {
         return new AccessorRefresher<>(
+            ShipmentStatus.class,
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
             ids -> repo.findAllById(ids)
@@ -105,6 +111,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, StorageAccessor, Storage> storageRefresher(StorageRepository repo) {
         return new AccessorRefresher<>(
+            Storage.class,
             accessor -> accessor.getStorage(),
             (accessor, status) -> accessor.setStorage(status),
             ids -> repo.findAllById(ids)
@@ -114,6 +121,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, UserAccessor, User> userRefresher(UserRepository repo) {
         return new AccessorRefresher<>(
+            User.class,
             accessor -> accessor.getUser(),
             (accessor, user) -> accessor.setUser(user),
             ids -> repo.findAllById(ids)
@@ -123,6 +131,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, UserRoleAccessor, UserRole> userRoleRefresher(UserRoleRepository repo) {
         return new AccessorRefresher<>(
+            UserRole.class,
             accessor -> accessor.getRole(),
             (accessor, role) -> accessor.setRole(role),
             ids -> repo.findAllById(ids)
@@ -132,6 +141,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> userSalutationRefresher(UserSalutationRepository repo) {
         return new AccessorRefresher<>(
+            UserSalutation.class,
             accessor -> accessor.getSalutation(),
             (accessor, salutation) -> accessor.setSalutation(salutation),
             ids -> repo.findAllById(ids)
@@ -141,6 +151,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, UserStatusAccessor, UserStatus> userStatusRefresher(UserStatusRepository repo) {
         return new AccessorRefresher<>(
+            UserStatus.class,
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
             ids -> repo.findAllById(ids)
