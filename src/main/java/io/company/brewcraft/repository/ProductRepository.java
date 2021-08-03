@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import io.company.brewcraft.model.Product;
 
-public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> , EnhancedProductRepository {
 
   @Query("update PRODUCT p set p.deletedAt=CURRENT_TIMESTAMP where p.id in (:ids)")
   @Modifying

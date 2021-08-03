@@ -13,7 +13,7 @@ public class UpdateProductDto extends BaseDto {
     private Long categoryId;
         
     @Valid
-    private List<ProductMeasureDto> targetMeasures;
+    private List<AddProductMeasureValueDto> targetMeasures;
         
     private Integer version;
     
@@ -21,7 +21,7 @@ public class UpdateProductDto extends BaseDto {
         super();
     }
 
-    public UpdateProductDto(String name, String description, Long categoryId, List<ProductMeasureDto> targetMeasures,
+    public UpdateProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures,
             Integer version) {
         super();
         this.name = name;
@@ -55,11 +55,11 @@ public class UpdateProductDto extends BaseDto {
         this.categoryId = categoryId;
     }
 
-    public List<ProductMeasureDto> getTargetMeasures() {
+    public List<AddProductMeasureValueDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
+    public void setTargetMeasures(List<AddProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
 

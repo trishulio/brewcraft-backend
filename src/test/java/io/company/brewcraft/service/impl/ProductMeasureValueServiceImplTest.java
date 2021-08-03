@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Product;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.service.ProductMeasureValueService;
@@ -36,48 +38,48 @@ public class ProductMeasureValueServiceImplTest {
     @Test
     public void testMerge_returnsUpdatedValues() throws Exception {  
         List<ProductMeasureValue> existingValues = new ArrayList<>();
-        existingValues.add(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+        existingValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
         
         List<ProductMeasureValue> updatedValues = new ArrayList<>();
-        updatedValues.add(new ProductMeasureValue(1L,new ProductMeasure("abv"), "150", new Product()));
-        updatedValues.add(new ProductMeasureValue(2L,new ProductMeasure("ibu"), "200", new Product()));
+        updatedValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("150"), new Product()));
+        updatedValues.add(new ProductMeasureValue(2L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()));
       
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(existingValues, updatedValues);
         
         assertEquals(2, returnedValues.size());
         assertEquals(1L, returnedValues.get(0).getId());
         assertEquals(new Product(), returnedValues.get(0).getProduct());
-        assertEquals(new ProductMeasure("abv"), returnedValues.get(0).getProductMeasure());
-        assertEquals("150", returnedValues.get(0).getValue());
+        assertEquals(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(0).getMeasure());
+        assertEquals(new BigDecimal("150"), returnedValues.get(0).getValue());
         assertEquals(2L, returnedValues.get(1).getId());
         assertEquals(new Product(), returnedValues.get(1).getProduct());
-        assertEquals(new ProductMeasure("ibu"), returnedValues.get(1).getProductMeasure());
-        assertEquals("200", returnedValues.get(1).getValue());
+        assertEquals(new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(1).getMeasure());
+        assertEquals(new BigDecimal("200"), returnedValues.get(1).getValue());
     }
     
     @Test
     public void testMerge_successWhenExistingValuesIsNull() throws Exception {  
         List<ProductMeasureValue> updatedValues = new ArrayList<>();
-        updatedValues.add(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
-        updatedValues.add(new ProductMeasureValue(2L,new ProductMeasure("ibu"), "200", new Product()));
+        updatedValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
+        updatedValues.add(new ProductMeasureValue(2L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()));
     
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(null, updatedValues);
         
         assertEquals(2, returnedValues.size());
         assertEquals(1L, returnedValues.get(0).getId());
         assertEquals(new Product(), returnedValues.get(0).getProduct());
-        assertEquals(new ProductMeasure("abv"), returnedValues.get(0).getProductMeasure());
-        assertEquals("100", returnedValues.get(0).getValue());
+        assertEquals(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(0).getMeasure());
+        assertEquals(new BigDecimal("100"), returnedValues.get(0).getValue());
         assertEquals(2L, returnedValues.get(1).getId());
         assertEquals(new Product(), returnedValues.get(1).getProduct());
-        assertEquals(new ProductMeasure("ibu"), returnedValues.get(1).getProductMeasure());
-        assertEquals("200", returnedValues.get(1).getValue());
+        assertEquals(new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(1).getMeasure());
+        assertEquals(new BigDecimal("200"), returnedValues.get(1).getValue());
     }
     
     @Test
     public void testMerge_successWhenUpdatedValuesIsNull() throws Exception {  
         List<ProductMeasureValue> existingValues = new ArrayList<>();
-        existingValues.add(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product()));
+        existingValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
    
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(existingValues, null);
         

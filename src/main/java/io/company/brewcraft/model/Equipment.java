@@ -20,7 +20,7 @@ import tec.uom.se.quantity.Quantities;
 
 @Entity
 @Table(name="EQUIPMENT")
-public class Equipment extends BaseEntity {
+public class Equipment extends BaseEntity implements Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_FACILITY = "facility";
     public static final String FIELD_NAME = "name";
@@ -223,8 +223,8 @@ public class Equipment extends BaseEntity {
             } 
         } 
 
-        this.maxCapacityValue = (BigDecimal) maxCapacityInPersistedUnit.getValue();
-        this.maxCapacityUnit = QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit());
+        this.maxCapacityValue = maxCapacityInPersistedUnit != null ? (BigDecimal) maxCapacityInPersistedUnit.getValue() : null;
+        this.maxCapacityUnit = maxCapacityInPersistedUnit != null ? QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit()) : null;
     }
     
     private boolean isValidUnit(Unit<?> displayUnit) {

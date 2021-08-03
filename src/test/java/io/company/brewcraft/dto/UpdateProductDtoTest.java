@@ -21,7 +21,7 @@ public class UpdateProductDtoTest {
         String name = "testName";
         String description = "testDesc";
         Long categoryId = 1L;
-        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
+        List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
         Integer version = 1;
 
         UpdateProductDto productDto = new UpdateProductDto(name, description, categoryId, targetMeasures, version);
@@ -29,7 +29,7 @@ public class UpdateProductDtoTest {
         assertEquals("testName", productDto.getName());
         assertEquals("testDesc", productDto.getDescription());
         assertEquals(1L, productDto.getCategoryId());
-        assertEquals(List.of(new ProductMeasureDto()), productDto.getTargetMeasures());
+        assertEquals(List.of(new AddProductMeasureValueDto()), productDto.getTargetMeasures());
         assertEquals(1, productDto.getVersion());        
     }
 
@@ -57,9 +57,9 @@ public class UpdateProductDtoTest {
     
     @Test
     public void testGetSetTargetMeasures() {
-        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
+        List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
         updateProductDto.setTargetMeasures(targetMeasures);
-        assertEquals(List.of(new ProductMeasureDto()), updateProductDto.getTargetMeasures());
+        assertEquals(List.of(new AddProductMeasureValueDto()), updateProductDto.getTargetMeasures());
     }
     
     @Test

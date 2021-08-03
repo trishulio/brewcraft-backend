@@ -39,22 +39,51 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
             
             return secret;
             
-        } catch (ResourceNotFoundException | InvalidRequestException | InvalidParameterException e) {
+        } catch (ResourceNotFoundException e) {
+        	return null;        	
+        } catch (InvalidRequestException | InvalidParameterException e) {
             logger.error("Error geting secret value for secretId: {}", secretId);
             throw new IOException(e);
         }
     }
+    
+    @Override
+    public Boolean exists(String secretId) throws IOException {
+        GetSecretValueRequest getSecretRequest = new GetSecretValueRequest().withSecretId(secretId);
+        GetSecretValueResult getSecretValueResult = null;
+        Boolean secretExists = false;
+
+        try {
+            getSecretValueResult = client.getSecretValue(getSecretRequest);
+            if (getSecretValueResult != null && getSecretValueResult.getSecretString() != null) {
+            	secretExists = true;
+            }
+        } catch (ResourceNotFoundException e) {
+        	secretExists = false;        	
+        } catch (InvalidRequestException | InvalidParameterException e) {
+            logger.error("Error checking if secret exists for secretId: {}", secretId);
+            throw new IOException(e);
+        }
+        
+        return secretExists;
+    }
 
     @Override
     public void put(String secretId, String secret) throws IOException {
-        PutSecretValueRequest updateSecretRequest = new PutSecretValueRequest().withSecretId(secretId).withSecretString(secret);
+    	Boolean secretExists = this.exists(secretId);
+    	
+    	if (!secretExists) {
+    		this.create(secretId, secret);
+    	} else {
+            PutSecretValueRequest updateSecretRequest = new PutSecretValueRequest().withSecretId(secretId).withSecretString(secret);
 
-        try {
-            client.putSecretValue(updateSecretRequest);
-        } catch (InvalidRequestException | InvalidParameterException e) {
-            logger.error("Error updating secret with secretId: {}", secretId);
-            throw new IOException(e);
-        }
+            try {
+                client.putSecretValue(updateSecretRequest);
+            } catch (InvalidRequestException | InvalidParameterException e) {
+                logger.error("Error updating secret with secretId: {}", secretId);
+                throw new IOException(e);
+            }	
+    	}
     }
     
     @Override

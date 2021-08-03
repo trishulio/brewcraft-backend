@@ -6,80 +6,85 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class FacilityEquipmentDto extends BaseDto {
-    
-    private Long id;
-        
-    @NotEmpty
-    private String name;
-    
-    private EquipmentType type;
-    
-    private EquipmentStatus status;
-    
-    private QuantityDto maxCapacity;
-    
-    private Integer version;
-    
-    public FacilityEquipmentDto() {
-        
-    }
 
-    public FacilityEquipmentDto(Long id, String name, EquipmentType type, EquipmentStatus status, 
-            QuantityDto maxCapacity, Integer version) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.status = status;
-        this.maxCapacity = maxCapacity;
-        this.version = version;
-    }
+	private Long id;
 
-    public Long getId() {
-        return id;
-    }
+	@NotEmpty
+	private String name;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private EquipmentType type;
 
-    public String getName() {
-        return name;
-    }
+	private EquipmentStatus status;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	private QuantityDto maxCapacity;
 
-    public EquipmentType getType() {
-        return type;
-    }
+	private Integer version;
 
-    public void setType(EquipmentType type) {
-        this.type = type;
-    }
+	public FacilityEquipmentDto() {
 
-    public EquipmentStatus getStatus() {
-        return status;
-    }
+	}
 
-    public void setStatus(EquipmentStatus status) {
-        this.status = status;
-    }
+	public FacilityEquipmentDto(Long id) {
+		super();
+		this.id = id;
+	}
 
-    public QuantityDto getMaxCapacity() {
-        return maxCapacity;
-    }
+	public FacilityEquipmentDto(Long id, String name, EquipmentType type, EquipmentStatus status,
+			QuantityDto maxCapacity, Integer version) {
+		this(id);
+		this.name = name;
+		this.type = type;
+		this.status = status;
+		this.maxCapacity = maxCapacity;
+		this.version = version;
+	}
 
-    public void setMaxCapacity(QuantityDto maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-    
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public EquipmentType getType() {
+		return type;
+	}
+
+	public void setType(EquipmentType type) {
+		this.type = type;
+	}
+
+	public EquipmentStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(EquipmentStatus status) {
+		this.status = status;
+	}
+
+	public QuantityDto getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public void setMaxCapacity(QuantityDto maxCapacity) {
+		this.maxCapacity = maxCapacity;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 }

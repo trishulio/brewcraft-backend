@@ -17,13 +17,13 @@ public class AddProductDto extends BaseDto {
     private Long categoryId;
             
     @Valid
-    private List<ProductMeasureDto> targetMeasures;
+    private List<AddProductMeasureValueDto> targetMeasures;
     
     public AddProductDto() {
         super();
     }
 
-    public AddProductDto(String name, String description, Long categoryId, List<ProductMeasureDto> targetMeasures) {
+    public AddProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures) {
         super();
         this.name = name;
         this.description = description;
@@ -55,11 +55,11 @@ public class AddProductDto extends BaseDto {
         this.categoryId = categoryId;
     }
 
-    public List<ProductMeasureDto> getTargetMeasures() {
+    public List<AddProductMeasureValueDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
+    public void setTargetMeasures(List<AddProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }        
     
