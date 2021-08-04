@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
 import io.company.brewcraft.model.Product;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 
 public interface BaseProductMeasureValue {
     
@@ -9,9 +9,9 @@ public interface BaseProductMeasureValue {
 
     public void setProduct(Product product);
 
-    public ProductMeasure getProductMeasure();
+    public Measure getProductMeasure();
 
-    public void setProductMeasure(ProductMeasure productMeasure);
+    public void setProductMeasure(Measure productMeasure);
 
     public String getValue();
 

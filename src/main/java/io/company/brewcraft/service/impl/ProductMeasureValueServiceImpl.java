@@ -31,11 +31,11 @@ public class ProductMeasureValueServiceImpl extends BaseService implements Produ
         List<ProductMeasureValue> updatedProductMeasureValues = new ArrayList<>();
         
         Map<String, ProductMeasureValue> nameToMeasureLookup = new HashMap<String, ProductMeasureValue>();
-        existingValues.stream().filter(value -> value != null && value.getProductMeasure() != null && value.getProductMeasure().getName() != null).forEach(measure -> nameToMeasureLookup.put(measure.getProductMeasure().getName(), measure));
+        existingValues.stream().filter(value -> value != null && value.getMeasure() != null && value.getMeasure().getName() != null).forEach(measure -> nameToMeasureLookup.put(measure.getMeasure().getName(), measure));
                          
         if (newValues != null) {
             newValues.forEach(measureValue -> {
-                ProductMeasureValue exisingValue = nameToMeasureLookup.get(measureValue.getProductMeasure().getName());
+                ProductMeasureValue exisingValue = nameToMeasureLookup.get(measureValue.getMeasure().getName());
                 if (exisingValue != null) {
                     exisingValue.override(measureValue, getPropertyNames(UpdateProductMeasureValue.class));
                     updatedProductMeasureValues.add(exisingValue);

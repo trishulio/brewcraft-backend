@@ -2,6 +2,7 @@ package io.company.brewcraft.service.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,13 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.AddProductDto;
+import io.company.brewcraft.dto.AddProductMeasureValueDto;
 import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.dto.ProductDto;
-import io.company.brewcraft.dto.ProductMeasureDto;
+import io.company.brewcraft.dto.MeasureDto;
+import io.company.brewcraft.dto.ProductMeasureValueDto;
 import io.company.brewcraft.dto.UpdateProductDto;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
 
 public class ProductMapperTest {
@@ -29,10 +32,10 @@ public class ProductMapperTest {
 
     @Test
     public void testFromDto_ReturnsEntity() {
-        ProductDto dto = new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureDto("abv", "100")), 1);
+        ProductDto dto = new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureValueDto(1L, new MeasureDto(1L, "abv", 1), new BigDecimal("100"))), 1);
         Product product = productMapper.fromDto(dto);
         
-        Product expectedProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null ,new ProductMeasure("abv"), "100", null)), null, null, null, 1);
+        Product expectedProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L ,new Measure(1L, "abv", null, null, 1), new BigDecimal("100"), null)), null, null, null, 1);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
         
         assertEquals(expectedProduct, product);
@@ -40,10 +43,10 @@ public class ProductMapperTest {
     
     @Test
     public void testFromAddDto_ReturnsEntity() {
-        AddProductDto dto = new AddProductDto("testProduct", "testDescription", 1L, List.of(new ProductMeasureDto("abv", "100")));
+        AddProductDto dto = new AddProductDto("testProduct", "testDescription", 1L, List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100"))));
         Product product = productMapper.fromDto(dto);
         
-        Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null ,new ProductMeasure("abv"), "100", null)), null, null, null, null);
+        Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null ,new Measure(1L), new BigDecimal("100"), null)), null, null, null, null);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
         
         assertEquals(expectedProduct, product);
@@ -51,10 +54,10 @@ public class ProductMapperTest {
     
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
-        UpdateProductDto dto = new UpdateProductDto("testProduct", "testDescription", 1L, List.of(new ProductMeasureDto("abv", "100")), 1);
+        UpdateProductDto dto = new UpdateProductDto("testProduct", "testDescription", 1L, List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100"))), 1);
         Product product = productMapper.fromDto(dto);
         
-        Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null, new ProductMeasure("abv"), "100", null)), null, null, null, 1);
+        Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null, new Measure(1L), new BigDecimal("100"), null)), null, null, null, 1);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
         
         assertEquals(expectedProduct, product);
@@ -62,10 +65,10 @@ public class ProductMapperTest {
 
     @Test
     public void testToDto_ReturnsDto() {
-        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         ProductDto dto = productMapper.toDto(product);
 
-        assertEquals(new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureDto("abv", "100")), 1), dto);
+        assertEquals(new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureValueDto(1L, new MeasureDto(1L, "abv", 1), new BigDecimal("100"))), 1), dto);
     }
     
     @Test
@@ -76,7 +79,7 @@ public class ProductMapperTest {
         ProductCategory subcategory1 = new ProductCategory(2L, "subcategory1", rootCategory, null, null, null, null);
         ProductCategory subcategory2 = new ProductCategory(3L, "subcategory2", subcategory1, null, null, null, null);
 
-        Product product = new Product(1L, "testProduct", "testDescription", subcategory2, List.of(new ProductMeasureValue(1L,new ProductMeasure("abv"), "100", new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", subcategory2, List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         
         productMapper.beforetoDto(productDto, product);
 

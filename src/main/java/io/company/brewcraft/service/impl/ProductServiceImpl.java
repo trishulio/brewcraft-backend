@@ -9,23 +9,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.company.brewcraft.dto.BaseProduct;
-import io.company.brewcraft.dto.UpdateProduct;
-import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.BaseProduct;
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.ProductMeasure;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
+import io.company.brewcraft.model.UpdateProduct;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.ProductCategoryService;
-import io.company.brewcraft.service.ProductMeasureService;
+import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -39,13 +39,13 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     
     private ProductMeasureValueService productMeasureValueService;
     
-    private ProductMeasureService productMeasureService;
+    private MeasureService measureService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, ProductMeasureService productMeasureService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, MeasureService measureService) {
         this.productRepository = productRepository;        
         this.productCategoryService = productCategoryService;
         this.productMeasureValueService = productMeasureValueService;
-        this.productMeasureService = productMeasureService;
+        this.measureService = measureService;
     }
 
     @Override
@@ -92,9 +92,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {         
-        validateTargetMeasures(product.getTargetMeasures());
-        
+    public Product addProduct(Product product) {                 
         Product savedEntity = productRepository.saveAndFlush(product);
         
         return savedEntity;
@@ -108,9 +106,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
 
     @Override
-    public Product putProduct(Long productId, Product putProduct) {                
-        validateTargetMeasures(putProduct.getTargetMeasures());
-        
+    public Product putProduct(Long productId, Product putProduct) {                        
         Product existingProduct = getProduct(productId);          
 
         if (existingProduct != null && existingProduct.getVersion() != putProduct.getVersion()) {
@@ -131,9 +127,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     }
     
     @Override
-    public Product patchProduct(Long productId, Product productPatch) {   
-        validateTargetMeasures(productPatch.getTargetMeasures());
-        
+    public Product patchProduct(Long productId, Product productPatch) {           
         Product existingProduct = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));            
   
         if (existingProduct.getVersion() != productPatch.getVersion()) {
@@ -175,19 +169,22 @@ public class ProductServiceImpl extends BaseService implements ProductService {
             ProductCategory category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
             product.setCategory(category);
         }
-    }
-    
-    private void validateTargetMeasures(List<ProductMeasureValue> targetMeasures) {
-        if (targetMeasures != null) {
-            List<ProductMeasure> productMeasures = productMeasureService.getAllProductMeasures();
-            Map<String, ProductMeasure> productMeasureMap = new HashMap<String, ProductMeasure>();
-            productMeasures.forEach(measure -> productMeasureMap.put(measure.getName(), measure) );
-                        
-            targetMeasures.forEach(measure -> {
-                if(measure.getProductMeasure() == null || !productMeasureMap.containsKey(measure.getProductMeasure().getName())) {
-                    throw new IllegalArgumentException("Invalid target measure: " + measure.getProductMeasure().getName());
-                }           
-            });        
+        
+        if (product.getTargetMeasures() != null && !product.getTargetMeasures().isEmpty()) {
+            Page<Measure> measuresPage = measureService.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true);
+            List<Measure> measures = measuresPage.getContent();
+            Map<Long, Measure> measureMap = new HashMap<Long, Measure>();
+            measures.forEach(measure -> measureMap.put(measure.getId(), measure));
+            
+            for (int i = 0; i < product.getTargetMeasures().size(); i++) {
+            	ProductMeasureValue measure = product.getTargetMeasures().get(i);
+                if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getId())) {
+                    throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getId());
+                } else {
+                	product.getTargetMeasures().get(i).setMeasure(measureMap.get(measure.getMeasure().getId()));
+                }
+            }
         }
     }
+
 }

@@ -19,6 +19,8 @@ public interface EquipmentMapper {
     
     EquipmentMapper INSTANCE = Mappers.getMapper(EquipmentMapper.class);
     
+    Equipment fromDto(Long id);
+    
     FacilityBaseDto facilityToFacilityBaseDto(Facility facility);
 
     @Mapping(target = "maxCapacity", source = "maxCapacityInDisplayUnit")

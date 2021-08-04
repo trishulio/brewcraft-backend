@@ -16,18 +16,22 @@ public class ProductDto extends BaseDto {
 
     private CategoryDto style;
 
-    private List<ProductMeasureDto> targetMeasures;
+    private List<ProductMeasureValueDto> targetMeasures;
         
     private Integer version;
     
     public ProductDto() {
         super();
     }
+    
+    public ProductDto(Long id) {
+    	this();
+    	this.id = id;
+    }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
-            CategoryDto style, List<ProductMeasureDto> targetMeasures, Integer version) {
-        super();
-        this.id = id;
+            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, Integer version) {
+    	this(id);
         this.name = name;
         this.description = description;
         this.productClass = productClass;
@@ -85,11 +89,11 @@ public class ProductDto extends BaseDto {
         this.style = style;
     }
 
-    public List<ProductMeasureDto> getTargetMeasures() {
+    public List<ProductMeasureValueDto> getTargetMeasures() {
         return targetMeasures;
     }
 
-    public void setTargetMeasures(List<ProductMeasureDto> targetMeasures) {
+    public void setTargetMeasures(List<ProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
     

@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,21 +28,21 @@ public class ProductMeasureValue extends BaseEntity {
     private Product product;    
     
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_measure_name", referencedColumnName = "name")
-    private ProductMeasure productMeasure;
+    @JoinColumn(name = "measure_id", referencedColumnName = "id")
+    private Measure measure;
     
-    @Column(name = "product_measure_value")
-    private String value;
+    @Column(name = "product_measure_value", precision = 20, scale = 4)
+    private BigDecimal value;
     
     
     public ProductMeasureValue() {
         super();
     }
 
-    public ProductMeasureValue(Long id, ProductMeasure productMeasure,  String value, Product product) {
+    public ProductMeasureValue(Long id, Measure measure,  BigDecimal value, Product product) {
         this();
         this.id = id;
-        this.productMeasure = productMeasure;
+        this.measure = measure;
         this.value = value;
         this.product = product;
     }
@@ -61,19 +63,19 @@ public class ProductMeasureValue extends BaseEntity {
         this.product = product;
     }
 
-    public ProductMeasure getProductMeasure() {
-        return productMeasure;
+    public Measure getMeasure() {
+        return measure;
     }
 
-    public void setProductMeasure(ProductMeasure productMeasure) {
-        this.productMeasure = productMeasure;
+    public void setMeasure(Measure measure) {
+        this.measure = measure;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

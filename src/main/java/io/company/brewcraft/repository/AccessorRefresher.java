@@ -30,7 +30,8 @@ public class AccessorRefresher<I, A, V extends Identified<I>> {
 
     public void refreshAccessors(Collection<? extends A> accessors) {
         if (accessors != null && accessors.size() > 0) {
-            Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
+        	Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
+            log.debug("accessMap: {}", lookupAccessorsByValueId);
 
             List<V> entities = entityRetriever.apply(lookupAccessorsByValueId.keySet());
 

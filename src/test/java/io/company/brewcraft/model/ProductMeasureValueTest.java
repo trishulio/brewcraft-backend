@@ -2,6 +2,8 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +18,11 @@ public class ProductMeasureValueTest {
     
     @Test
     public void testConstructor() {
-        productMeasureValue = new ProductMeasureValue(1L,new ProductMeasure(), "100", new Product());
+        productMeasureValue = new ProductMeasureValue(1L,new Measure(), new BigDecimal("100"), new Product());
         
         assertEquals(1L, productMeasureValue.getId());
-        assertEquals(new ProductMeasure(), productMeasureValue.getProductMeasure());
-        assertEquals("100", productMeasureValue.getValue());
+        assertEquals(new Measure(), productMeasureValue.getMeasure());
+        assertEquals(new BigDecimal("100"), productMeasureValue.getValue());
         assertEquals(new Product(), productMeasureValue.getProduct());
     }
     
@@ -32,14 +34,14 @@ public class ProductMeasureValueTest {
     
     @Test
     public void testGetSetProductMeasure() {
-        productMeasureValue.setProductMeasure(new ProductMeasure());
-        assertEquals(new ProductMeasure(), productMeasureValue.getProductMeasure());
+        productMeasureValue.setMeasure(new Measure());
+        assertEquals(new Measure(), productMeasureValue.getMeasure());
     }
     
     @Test
     public void testGetSetValue() {
-        productMeasureValue.setValue("100");
-        assertEquals("100", productMeasureValue.getValue());
+        productMeasureValue.setValue(new BigDecimal("100"));
+        assertEquals(new BigDecimal("100"), productMeasureValue.getValue());
     }
     
     @Test

@@ -11,5 +11,7 @@ public interface SecretsManager<K, V> {
     public void create(K secretId, V secret) throws IOException;
 
     public void update(K secretId, V secret) throws IOException;
+    
+    public Boolean exists(K secretId) throws IOException;
 
 }

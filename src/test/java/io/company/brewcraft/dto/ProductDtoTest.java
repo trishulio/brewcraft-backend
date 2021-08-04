@@ -24,7 +24,7 @@ public class ProductDtoTest {
         CategoryDto productClass = new CategoryDto();
         CategoryDto type = new CategoryDto();
         CategoryDto style = new CategoryDto();
-        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
+        List<ProductMeasureValueDto> targetMeasures = List.of(new ProductMeasureValueDto());
         Integer version = 1;
 
         ProductDto productDto = new ProductDto(id, name, description, productClass, type, style, targetMeasures, version);
@@ -35,7 +35,7 @@ public class ProductDtoTest {
         assertEquals(new CategoryDto(), productDto.getProductClass());
         assertEquals(new CategoryDto(), productDto.getType());
         assertEquals(new CategoryDto(), productDto.getStyle());
-        assertEquals(List.of(new ProductMeasureDto()), productDto.getTargetMeasures());
+        assertEquals(List.of(new ProductMeasureValueDto()), productDto.getTargetMeasures());
         assertEquals(1, productDto.getVersion());        
     }
     
@@ -83,9 +83,9 @@ public class ProductDtoTest {
     
     @Test
     public void testGetSetTargetMeasures() {
-        List<ProductMeasureDto> targetMeasures = List.of(new ProductMeasureDto());
+        List<ProductMeasureValueDto> targetMeasures = List.of(new ProductMeasureValueDto());
         productDto.setTargetMeasures(targetMeasures);
-        assertEquals(List.of(new ProductMeasureDto()), productDto.getTargetMeasures());
+        assertEquals(List.of(new ProductMeasureValueDto()), productDto.getTargetMeasures());
     }
     
     @Test

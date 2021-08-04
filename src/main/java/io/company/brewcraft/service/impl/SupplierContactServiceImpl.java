@@ -3,16 +3,19 @@ package io.company.brewcraft.service.impl;
 import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.dto.UpdateSupplierContact;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.SupplierContactService;
@@ -33,8 +36,14 @@ public class SupplierContactServiceImpl extends BaseService implements SupplierC
     }
     
     @Override
-    public Page<SupplierContact> getSupplierContacts(int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Page<SupplierContact> supplierContacts = supplierContactRepository.findAll(pageRequest(sort, orderAscending, page, size));
+    public Page<SupplierContact> getSupplierContacts(Set<Long> ids, Set<Long> supplierIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+		Specification<SupplierContact> spec = SpecificationBuilder
+                .builder()
+                .in(SupplierContact.FIELD_ID, ids)
+                .in(new String[] {SupplierContact.FIELD_SUPPLIER, Supplier.FIELD_ID}, supplierIds)
+                .build();
+    	
+    	Page<SupplierContact> supplierContacts = supplierContactRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
         
         return supplierContacts;
     }

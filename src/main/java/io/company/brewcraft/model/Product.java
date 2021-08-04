@@ -54,11 +54,15 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
     public Product() {
         super();
     }
+    
+    public Product(Long id) {
+    	this();
+    	this.id = id;
+    }
 
     public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures, 
             LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
-        super();
-        this.id = id;
+    	this(id);
         this.name = name;
         this.description = description;
         this.category = category;
