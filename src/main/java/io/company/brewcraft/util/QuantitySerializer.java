@@ -21,9 +21,13 @@ public class QuantitySerializer extends JsonSerializer<Quantity> {
     @Override
     public void serialize(Quantity value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeStartObject();
-        QuantityDto dto = QuantityMapper.INSTANCE.toDto(value);
-        gen.writeStringField("symbol", dto.getSymbol());
-        gen.writeNumberField("value", (BigDecimal) dto.getValue());
+        if (value == null) {
+            gen.writeNull();
+        } else {
+            QuantityDto dto = QuantityMapper.INSTANCE.toDto(value);
+            gen.writeStringField("symbol", dto.getSymbol());
+            gen.writeNumberField("value", (BigDecimal) dto.getValue());            
+        }
         gen.writeEndObject();
     }
 }

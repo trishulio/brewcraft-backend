@@ -1,8 +1,9 @@
 .PHONY: install containerize pack upload unpack deploy run start stop remove restart
 
-HOST_APP_DIR := /var/server/brewcraft
-APP_NAME := brewcraft
-TARGET := ./dist
+HOST_APP_DIR:=/var/server/brewcraft
+APP_NAME:=brewcraft
+TARGET:=./dist
+VERSION:=1.0.0-SNAPSHOT
 
 install:
 	docker-compose -f docker-compose-install.yml run --rm install
