@@ -40,7 +40,7 @@ public class PurchaseOrderMapperTest {
 
         PurchaseOrder po = mapper.fromDto(dto);
 
-        PurchaseOrder expected = new PurchaseOrder(null, "ORDER_1", new Supplier(1L));
+        PurchaseOrder expected = new PurchaseOrder(null, "ORDER_1", new Supplier(1L), null);
 
         assertEquals(expected, po);
     }
@@ -52,7 +52,7 @@ public class PurchaseOrderMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        PurchaseOrder order = new PurchaseOrder(1L, "ORDER_1", new Supplier(1L));
+        PurchaseOrder order = new PurchaseOrder(1L, "ORDER_1", new Supplier(1L), 1);
 
         PurchaseOrderDto dto = mapper.toDto(order);
 

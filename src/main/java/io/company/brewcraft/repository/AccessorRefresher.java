@@ -37,7 +37,7 @@ public class AccessorRefresher<I, A, V extends Identified<I>> {
 
             if (lookupAccessorsByValueId.keySet().size() != entities.size()) {
                 List<?> entityIds = entities.stream().map(entity -> entity.getId()).collect(Collectors.toList());
-                throw new EntityNotFoundException(String.format("Cannot find all %ss in Id-Set: %s. Entities found with Ids: %s", this.clazz.getSimpleName(), lookupAccessorsByValueId.keySet(), entityIds));
+                throw new EntityNotFoundException(String.format("Cannot find all %ss in Id-Set: %s. Only found the ones with Ids: %s", this.clazz.getSimpleName(), lookupAccessorsByValueId.keySet(), entityIds));
             }
 
             accessors.forEach(accessor -> setter.accept(accessor, null));

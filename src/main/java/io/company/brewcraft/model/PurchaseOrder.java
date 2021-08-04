@@ -44,10 +44,11 @@ public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, Upda
         setId(id);
     }
 
-    public PurchaseOrder(Long id, String orderNumber, Supplier supplier) {
+    public PurchaseOrder(Long id, String orderNumber, Supplier supplier, Integer version) {
         this(id);
         setOrderNumber(orderNumber);
         setSupplier(supplier);
+        setVersion(version);
     }
 
     @Override
