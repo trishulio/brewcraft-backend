@@ -15,7 +15,7 @@ public class EnhancedSupplierRepositoryImpl implements EnhancedSupplierRepositor
 
     @Override
     public void refresh(Collection<Supplier> purchaseOrders) {
-        // TODO: Supplier entity needs to be refactored to work with refreshAccessor.
+        // TODO: Supplier entity doesn't use accessor refresher yet.
     }
 
     @Override
