@@ -9,7 +9,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.company.brewcraft.dto.UpdateFacility;
 
@@ -42,11 +42,11 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     private String faxNumber;
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonIgnore
     private List<Equipment> equipment;
     
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonIgnore
     private List<Storage> storages;
         
     @CreationTimestamp

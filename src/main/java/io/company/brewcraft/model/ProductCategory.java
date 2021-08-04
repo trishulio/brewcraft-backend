@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -40,6 +42,7 @@ public class ProductCategory extends BaseEntity {
     private ProductCategory parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
+    @JsonIgnore
     private Set<ProductCategory> subcategories;
     
     @CreationTimestamp

@@ -35,7 +35,6 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     
     @ManyToOne
     @JoinColumn(name="facility_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     private Facility facility;
     
     private String name;

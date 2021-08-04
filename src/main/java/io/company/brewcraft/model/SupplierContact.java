@@ -29,7 +29,6 @@ public class SupplierContact extends BaseEntity implements UpdateSupplierContact
     
     @ManyToOne
     @JoinColumn(name="supplier_id", referencedColumnName = "id", nullable=false)
-    @JsonManagedReference
     private Supplier supplier;
     
     @Column(name = "first_name")

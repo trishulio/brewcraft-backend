@@ -24,7 +24,6 @@ public class Storage extends BaseEntity implements Identified<Long>, BaseStorage
 
     @ManyToOne
     @JoinColumn(name = "facility_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     private Facility facility;
 
     private String name;

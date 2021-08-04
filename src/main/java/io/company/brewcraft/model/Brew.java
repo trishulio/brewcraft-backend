@@ -19,6 +19,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -56,10 +58,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     private Brew parentBrew;
 
     @OneToMany(mappedBy = "parentBrew")
+    @JsonIgnore
     private List<Brew> childBrews;
     
     @OneToMany(mappedBy="brew", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("startedAt ASC")
+    @JsonIgnore
     private List<BrewStage> brewStages;
     
     @Column(name = "started_at")

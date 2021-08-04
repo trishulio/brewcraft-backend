@@ -9,7 +9,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.company.brewcraft.dto.UpdateSupplier;
 
@@ -29,7 +29,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Identified<L
     private String name;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonIgnore
     private List<SupplierContact> contacts;
 
     @JoinColumn(name = "address_id")
