@@ -1,13 +1,18 @@
 package io.company.brewcraft.service;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedSet;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
+import io.company.brewcraft.repository.SpecificationBuilder;
 
 @Transactional
 public class BrewStageStatusServiceImpl implements BrewStageStatusService {
@@ -16,9 +21,16 @@ public class BrewStageStatusServiceImpl implements BrewStageStatusService {
     public BrewStageStatusServiceImpl(BrewStageStatusRepository brewStageStatusRepository) {
         this.brewStageStatusRepository = brewStageStatusRepository;
     }
-    
-    public List<BrewStageStatus> getStatuses() {
-    	return this.brewStageStatusRepository.findAll();
+
+    public Page<BrewStageStatus> getStatuses(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+        Specification<BrewStageStatus> spec = SpecificationBuilder
+                .builder()
+                .in(BrewStageStatus.FIELD_ID, ids)
+                .build();
+
+        Page<BrewStageStatus> brewStageStatusPage = brewStageStatusRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
+
+        return brewStageStatusPage;
     }
 
     public BrewStageStatus getStatus(String name) {
@@ -31,7 +43,7 @@ public class BrewStageStatusServiceImpl implements BrewStageStatusService {
         if (it.hasNext()) {
             status = it.next();
         }
-        
+
         return status;
     }
 }
