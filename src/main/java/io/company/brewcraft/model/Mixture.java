@@ -6,26 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.measure.Quantity;
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
@@ -48,6 +34,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 	private Mixture parentMixture;
 
 	@OneToMany(mappedBy = "parentMixture", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Mixture> childMixtures;
 
 	@Embedded
@@ -61,9 +48,11 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 	private Equipment equipment;
 
 	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<MaterialPortion> materialPortions;
 
 	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<MixtureRecording> recordedMeasures;
 
 	@ManyToOne()
@@ -145,6 +134,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
     }
     
+    @Override
     public void addChildMixture(Mixture childMixture) {
         if (childMixture == null) {
             return;

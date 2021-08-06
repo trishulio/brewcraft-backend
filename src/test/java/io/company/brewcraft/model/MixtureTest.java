@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -142,5 +142,25 @@ public class MixtureTest {
         Integer version = 1;
         mixture.setVersion(version);
         assertEquals(version, mixture.getVersion());
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        Long id = 1L;
+        Mixture parentMixture = new Mixture(2L);
+        List<Mixture> childMixtures = List.of(new Mixture(9L));
+        Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
+        Equipment equipment = new Equipment(3L);
+        BrewStage brewStage = new BrewStage(4L);
+        List<MaterialPortion> materialPortions = List.of(new MaterialPortion(5L));
+        List<MixtureRecording> recordedMeasures = List.of(new MixtureRecording(6L));
+        LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        Mixture mixture = new Mixture(id, parentMixture, childMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
+        
+        final String json = "{\"id\":1,\"parentMixture\":{\"id\":2,\"parentMixture\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"equipment\":{\"id\":3,\"facility\":null,\"name\":null,\"type\":null,\"status\":null,\"maxCapacityValue\":null,\"maxCapacityUnit\":null,\"maxCapacityDisplayUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"maxCapacity\":null,\"maxCapacityInDisplayUnit\":null},\"brewStage\":{\"id\":4,\"brew\":null,\"status\":null,\"task\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":{\"nano\":0,\"year\":2019,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"WEDNESDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        assertEquals(json, mixture.toString());
     }
 }

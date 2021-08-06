@@ -10,6 +10,8 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.company.brewcraft.dto.BaseMaterialCategory;
 import io.company.brewcraft.dto.UpdateMaterialCategory;
 
@@ -32,6 +34,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     private MaterialCategory parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
+    @JsonIgnore
     private Set<MaterialCategory> subcategories;
     
     @CreationTimestamp
@@ -168,6 +171,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
         this.version = version;
     }
     
+    @JsonIgnore
     public MaterialCategory getRootCategory() {
         MaterialCategory root = this;
         
@@ -181,6 +185,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     /*
      * Returns all descendant category id's using iterative DFS
      */
+    @JsonIgnore
     public Set<Long> getDescendantCategoryIds() {
         Set<Long> ids = new HashSet<>();
         Stack<MaterialCategory> stack = new Stack<MaterialCategory>();

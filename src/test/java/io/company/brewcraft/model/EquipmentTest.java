@@ -157,4 +157,24 @@ public class EquipmentTest {
             testEquipment.setMaxCapacityDisplayUnit(Units.AMPERE);
         });
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        Long id = 1L;
+        Facility facility = new Facility();
+        String name = "equipment1";
+        EquipmentType type = EquipmentType.BARREL;
+        EquipmentStatus status = EquipmentStatus.ACTIVE;
+        BigDecimal maxCapacityValue = BigDecimal.valueOf(100.0);
+        Unit<?> maxCapacityUnit = SupportedUnits.LITRE;
+        Unit<?> maxcapacityDisplayUnit = SupportedUnits.LITRE;
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        Integer version = 1;
+
+        Equipment equipment = new Equipment(id, facility, name, type, status, maxCapacityValue, maxCapacityUnit, maxcapacityDisplayUnit, created, lastUpdated, version);
+
+        final String json = "{\"id\":1,\"facility\":{\"id\":null,\"name\":null,\"address\":null,\"phoneNumber\":null,\"faxNumber\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"name\":\"equipment1\",\"type\":\"Barrel\",\"status\":\"Active\",\"maxCapacityValue\":100.0,\"maxCapacityUnit\":{\"symbol\":\"l\"},\"maxCapacityDisplayUnit\":{\"symbol\":\"l\"},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1,\"maxCapacity\":{\"symbol\":\"l\",\"value\":100},\"maxCapacityInDisplayUnit\":{\"symbol\":\"l\",\"value\":100}}";
+        assertEquals(json, equipment.toString());
+    }
 }

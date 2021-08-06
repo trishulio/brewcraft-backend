@@ -162,7 +162,7 @@ public class TenantManagementServiceImplTest {
         assertEquals(id, tenantArgument.getValue().getId());
         assertEquals("testNameNew", tenantArgument.getValue().getName());
         assertEquals("testUrlNew", tenantArgument.getValue().getUrl());
-        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), tenantArgument.getValue().getCreated());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), tenantArgument.getValue().getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 5, 6, 7, 8), tenantArgument.getValue().getLastUpdated());
     }
     

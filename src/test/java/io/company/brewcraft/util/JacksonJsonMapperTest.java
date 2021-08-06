@@ -80,4 +80,11 @@ public class JacksonJsonMapperTest {
         
         assertEquals("{\"symbol\":\"kg\",\"value\":10.99}", json);
     }
+    
+    @Test
+    public void testUnitSerialization_ReturnsJsonWithSymbol_WhenUnitIsNotNull() {
+        String json = mapper.writeString(Units.KILOGRAM);
+        
+        assertEquals("{\"symbol\":\"kg\"}", json);
+    }
 }

@@ -90,4 +90,20 @@ public class StorageTest {
         storage.setLastUpdated(lastUpdated);
         assertSame(lastUpdated, storage.getLastUpdated());
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        Long id = 1L;
+        Facility facility = new Facility();
+        String name = "storage1";
+        StorageType type = StorageType.GENERAL;
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        Storage storage = new Storage(id, facility, name, type, created, lastUpdated, version);
+
+        final String json = "{\"id\":1,\"facility\":{\"id\":null,\"name\":null,\"address\":null,\"phoneNumber\":null,\"faxNumber\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"name\":\"storage1\",\"type\":\"General\",\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        assertEquals(json, storage.toString());
+    }
 }

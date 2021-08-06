@@ -34,4 +34,12 @@ public class CurrencyTest {
         currency.setCode("USD");
         assertEquals("USD", currency.getCode());
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        currency = new Currency(1234, "CAD");
+        
+        final String json = "{\"numericCode\":1234,\"code\":\"CAD\"}";
+        assertEquals(json, currency.toString());
+    }
 }

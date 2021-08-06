@@ -5,22 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "BREW_STAGE")
 public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewStage, Audited, Identified<Long> {
@@ -51,6 +41,7 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     
     @OneToMany(mappedBy = "brewStage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("recordedAt ASC, id ASC")
+    @JsonIgnore
     private List<Mixture> mixtures;
     
     @Column(name = "started_at")

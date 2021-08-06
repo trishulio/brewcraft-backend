@@ -1,6 +1,7 @@
 package io.company.brewcraft.util;
 
 import javax.measure.Quantity;
+import javax.measure.Unit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +14,10 @@ public class JacksonJsonMapper implements JsonMapper {
 
     public JacksonJsonMapper(ObjectMapper mapper) {
         this.mapper = mapper
-                        .registerModule(new SimpleModule().addSerializer(Quantity.class, new QuantitySerializer()))
+                        .registerModule(new SimpleModule()
+                                            .addSerializer(Quantity.class, new QuantitySerializer())
+                                            .addSerializer(Unit.class, new UnitSerializer())
+                        )
                         .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 

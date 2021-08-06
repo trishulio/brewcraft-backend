@@ -36,4 +36,12 @@ public class QuantityEntityTest {
         quantity.setValue(new BigDecimal("99"));
         assertEquals(new BigDecimal("99"), quantity.getValue());
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        quantity = new QuantityEntity(new UnitEntity("KG"), new BigDecimal("100"));
+        
+        final String json = "{\"unit\":{\"symbol\":\"KG\",\"name\":null},\"value\":100}";
+        assertEquals(json, quantity.toString());
+    }
 }

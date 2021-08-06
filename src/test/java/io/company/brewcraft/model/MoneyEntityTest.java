@@ -36,4 +36,12 @@ public class MoneyEntityTest {
         money.setCurrency(new Currency(123, "CAD"));
         assertEquals(new Currency(123, "CAD"), money.getCurrency());
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        money = new MoneyEntity(new Currency(123, "CAD"), new BigDecimal("100"));
+        
+        final String json = "{\"currency\":{\"numericCode\":123,\"code\":\"CAD\"},\"amount\":100}";
+        assertEquals(json, money.toString());
+    }
 }

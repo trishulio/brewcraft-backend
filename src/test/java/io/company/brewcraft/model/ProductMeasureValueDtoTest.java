@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
@@ -46,4 +46,11 @@ public class ProductMeasureValueDtoTest {
         assertEquals(new BigDecimal("100"), productMeasureValueDto.getValue());
     }
 
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        productMeasureValueDto = new ProductMeasureValueDto(1L, new MeasureDto(2L, "abv", 1), new BigDecimal("100"));
+        
+        final String json = "{\"id\":1,\"measure\":{\"id\":2,\"name\":\"abv\",\"version\":1},\"value\":100}";
+        assertEquals(json, productMeasureValueDto.toString());
+    }
 }

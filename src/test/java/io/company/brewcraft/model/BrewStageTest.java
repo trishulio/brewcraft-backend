@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -121,5 +121,24 @@ public class BrewStageTest {
         Integer version = 1;
         brewStage.setVersion(version);
         assertEquals(version, brewStage.getVersion());
+    }
+    
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        Long id = 1L;
+        Brew brew = new Brew(1L);
+        BrewStageStatus status = new BrewStageStatus(1L);
+        BrewTask task = new BrewTask(1L);
+        List<Mixture> mixtures = List.of(new Mixture());
+        LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        BrewStage brewStage = new BrewStage(id,brew, status, task, mixtures, startedAt, endedAt, created, lastUpdated, version);
+        
+        final String json = "{\"id\":1,\"brew\":{\"id\":1,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"status\":{\"id\":1,\"name\":null},\"task\":{\"id\":1,\"name\":null},\"startedAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"endedAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        assertEquals(json, brewStage.toString());
     }
 }

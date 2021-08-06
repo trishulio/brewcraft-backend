@@ -120,4 +120,20 @@ public class SupplierTest {
         verify(contactsMock, times(1)).addAll(newContactsMock);
         assertSame(supplier.getContacts(), contactsMock);
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        Long id = 1L;
+        String name = "Supplier1";
+        SupplierAddress address = new SupplierAddress();
+        List<SupplierContact> contacts = new ArrayList<>();
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        Supplier supplier = new Supplier(id, name, contacts, address, created, lastUpdated, version);
+        
+        final String json = "{\"id\":1,\"name\":\"Supplier1\",\"address\":{\"addressLine1\":null,\"addressLine2\":null,\"country\":null,\"province\":null,\"city\":null,\"postalCode\":null,\"createdAt\":null,\"lastUpdated\":null,\"id\":null},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        assertEquals(json, supplier.toString());
+    }
 }

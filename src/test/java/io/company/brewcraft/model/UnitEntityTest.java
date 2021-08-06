@@ -34,4 +34,12 @@ public class UnitEntityTest {
         unit.setName("Kilogram");
         assertEquals("Kilogram", unit.getName());
     }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() {
+        unit = new UnitEntity("KG", "Kilogram");
+
+        final String json = "{\"symbol\":\"KG\",\"name\":\"Kilogram\"}";
+        assertEquals(json, unit.toString());
+    }
 }

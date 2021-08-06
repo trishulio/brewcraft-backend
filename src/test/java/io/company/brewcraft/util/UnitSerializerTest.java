@@ -3,25 +3,23 @@ package io.company.brewcraft.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
-import javax.measure.Quantity;
+import javax.measure.Unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
 
-import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
-public class QuantitySerializerTest {
-    private JsonSerializer<Quantity> serializer;
+public class UnitSerializerTest {
+    private JsonSerializer<Unit> serializer;
     private MockJsonGenerator mGen;
     
     @BeforeEach
     public void init() {
-        serializer = new QuantitySerializer();
+        serializer = new UnitSerializer();
         mGen = new MockJsonGenerator();
     }
     
@@ -33,9 +31,9 @@ public class QuantitySerializerTest {
     }
     
     @Test
-    public void testSerialize_ReturnsJsonQuantity_WhenValueIsNotNull() throws IOException {
-        serializer.serialize(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), mGen, null);
+    public void testSerialize_ReturnsJsonUnit_WhenValueIsNotNull() throws IOException {
+        serializer.serialize(Units.KILOGRAM, mGen, null);
         
-        assertEquals("{\"symbol\":\"kg\",\"value\":10}", mGen.json());
+        assertEquals("{\"symbol\":\"kg\"}", mGen.json());
     }
 }
