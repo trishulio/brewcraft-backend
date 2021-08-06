@@ -1,14 +1,20 @@
 package io.company.brewcraft.util;
 
+import javax.measure.Quantity;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class JacksonJsonMapper implements JsonMapper {
 
     public ObjectMapper mapper;
 
     public JacksonJsonMapper(ObjectMapper mapper) {
-        this.mapper = mapper;
+        this.mapper = mapper
+                        .registerModule(new SimpleModule().addSerializer(Quantity.class, new QuantitySerializer()))
+                        .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Override

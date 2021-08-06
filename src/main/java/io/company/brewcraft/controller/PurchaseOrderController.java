@@ -29,7 +29,7 @@ public class PurchaseOrderController extends BaseController {
 
     private PurchaseOrderService service;
 
-    public PurchaseOrderController(AttributeFilter filter, PurchaseOrderService service) {
+    public PurchaseOrderController(PurchaseOrderService service, AttributeFilter filter) {
         super(filter);
         this.service = service;
     }

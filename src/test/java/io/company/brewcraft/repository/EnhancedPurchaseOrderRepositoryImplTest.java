@@ -29,14 +29,16 @@ public class EnhancedPurchaseOrderRepositoryImplTest {
     @Test
     public void testRefreshAccessors_CallsRefreshAccessor() {
         List<PurchaseOrderAccessor> accessors = List.of(mock(PurchaseOrderAccessor.class), mock(PurchaseOrderAccessor.class));
-        
+
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(accessors);
     }
 
     @Test
-    public void testRefresh_DoesNothing() {
-        repo.refresh(null);
+    public void testRefresh_RefreshesSuppliers() {
+        repo.refresh(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L)));
+
+        verify(mSupplierRepo, times(1)).refreshAccessors(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L)));
     }
 }

@@ -20,11 +20,13 @@ public class PurchaseOrderTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        order = new PurchaseOrder(1L, "ABCD-123", new Supplier(), 1);
+        order = new PurchaseOrder(1L, "ABCD-123", new Supplier(), LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
         assertEquals(1L, order.getId());
         assertEquals("ABCD-123", order.getOrderNumber());
         assertEquals(new Supplier(), order.getSupplier());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), order.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), order.getLastUpdated());
         assertEquals(1, order.getVersion());
     }
 
