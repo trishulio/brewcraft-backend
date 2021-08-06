@@ -16,6 +16,7 @@ pack:
 	rm -rf ${TARGET}/* ; true
 	docker save -o ${TARGET}/${APP_NAME}_${VERSION}.image ${APP_NAME}:${VERSION}
 	cp -r ./db-init-scripts ${TARGET}
+	cp -r ./wait-for-it.sh ${TARGET}
 	cp ./docker-compose.yml ${TARGET}
 	cp ./docker-compose-prod-test.yml ${TARGET}
 	cp ./Makefile ${TARGET}
