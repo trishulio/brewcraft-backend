@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class SupplierTest {
 
@@ -122,7 +125,7 @@ public class SupplierTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
         String name = "Supplier1";
         SupplierAddress address = new SupplierAddress();
@@ -134,6 +137,6 @@ public class SupplierTest {
         Supplier supplier = new Supplier(id, name, contacts, address, created, lastUpdated, version);
         
         final String json = "{\"id\":1,\"name\":\"Supplier1\",\"address\":{\"addressLine1\":null,\"addressLine2\":null,\"country\":null,\"province\":null,\"city\":null,\"postalCode\":null,\"createdAt\":null,\"lastUpdated\":null,\"id\":null},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
-        assertEquals(json, supplier.toString());
+        JSONAssert.assertEquals(json, supplier.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

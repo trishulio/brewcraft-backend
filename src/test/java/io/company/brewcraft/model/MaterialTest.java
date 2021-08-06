@@ -6,8 +6,11 @@ import java.time.LocalDateTime;
 
 import javax.measure.Unit;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import io.company.brewcraft.util.SupportedUnits;
 
@@ -109,7 +112,7 @@ public class MaterialTest {
     }
     
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
@@ -124,6 +127,6 @@ public class MaterialTest {
 
         final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"kg\"},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
         
-        assertEquals(json, material.toString());
+        JSONAssert.assertEquals(json, material.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

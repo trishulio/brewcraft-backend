@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class StorageTest {
 
@@ -92,7 +95,7 @@ public class StorageTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
         Facility facility = new Facility();
         String name = "storage1";
@@ -104,6 +107,6 @@ public class StorageTest {
         Storage storage = new Storage(id, facility, name, type, created, lastUpdated, version);
 
         final String json = "{\"id\":1,\"facility\":{\"id\":null,\"name\":null,\"address\":null,\"phoneNumber\":null,\"faxNumber\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"name\":\"storage1\",\"type\":\"General\",\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
-        assertEquals(json, storage.toString());
+        JSONAssert.assertEquals(json, storage.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

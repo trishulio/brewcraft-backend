@@ -2,8 +2,11 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class UnitEntityTest {
 
@@ -36,10 +39,10 @@ public class UnitEntityTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         unit = new UnitEntity("KG", "Kilogram");
 
         final String json = "{\"symbol\":\"KG\",\"name\":\"Kilogram\"}";
-        assertEquals(json, unit.toString());
+        JSONAssert.assertEquals(json, unit.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

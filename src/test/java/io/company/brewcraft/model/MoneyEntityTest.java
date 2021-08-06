@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class MoneyEntityTest {
 
@@ -38,10 +41,10 @@ public class MoneyEntityTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         money = new MoneyEntity(new Currency(123, "CAD"), new BigDecimal("100"));
         
         final String json = "{\"currency\":{\"numericCode\":123,\"code\":\"CAD\"},\"amount\":100}";
-        assertEquals(json, money.toString());
+        JSONAssert.assertEquals(json, money.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ShipmentStatusTest {
     private ShipmentStatus status;
@@ -69,10 +72,10 @@ public class ShipmentStatusTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         status = new ShipmentStatus(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
         
         final String json = "{\"id\":99,\"name\":\"FINAL\",\"createdAt\":{\"nano\":0,\"year\":1999,\"monthValue\":12,\"dayOfMonth\":12,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"SUNDAY\",\"dayOfYear\":346,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2000,\"monthValue\":12,\"dayOfMonth\":12,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"TUESDAY\",\"dayOfYear\":347,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
-        assertEquals(json, status.toString());
+        JSONAssert.assertEquals(json, status.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

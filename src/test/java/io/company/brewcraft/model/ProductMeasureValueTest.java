@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ProductMeasureValueTest {
     
@@ -51,10 +54,10 @@ public class ProductMeasureValueTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() {
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
         productMeasureValue = new ProductMeasureValue(1L,new Measure(), new BigDecimal("100"), new Product());
         
         final String json = "{\"id\":1,\"measure\":{\"id\":null,\"name\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"value\":100}";
-        assertEquals(json, productMeasureValue.toString());
+        JSONAssert.assertEquals(json, productMeasureValue.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
