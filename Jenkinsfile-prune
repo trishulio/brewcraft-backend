@@ -1,0 +1,40 @@
+pipeline {
+    agent {
+        label 'docker'
+    }
+
+    parameters {
+        string(name: 'HOST_URL', defaultValue: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
+    }
+
+    environment {
+        SSH_CREDS = credentials('jaas_user')
+    }
+
+    stages {
+        stage ('Setup SSH') {
+            steps {
+                sh """
+                    mkdir -p ~/.ssh/
+                    ssh-keyscan -H ${env.HOST_URL} > ~/.ssh/known_hosts
+                """
+            }
+        }
+
+        stage ('Prune') {
+            steps {
+                sh """
+                    ssh -i '${SSH_CREDS}' ${SSH_CREDS_USR}@${params.HOST_URL} "/var/server/scripts/cleanup-docker.sh"
+                """
+            }
+        }
+
+        stage ('Deploy UI') {
+            steps {
+                sh """
+                    ssh -i '${SSH_CREDS}' ${SSH_CREDS_USR}@${params.HOST_URL} "cd /var/server/brewcraft-ui && make restart"
+                """
+            }
+        }
+    }
+}

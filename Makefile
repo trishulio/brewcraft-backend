@@ -29,7 +29,7 @@ unpack:
 	docker load -i ${APP_NAME}_${VERSION}.image
 
 deploy:
-	ssh -i '${ID_KEY}' ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && export VERSION=${VERSION} && make unpack && make restart"
+	ssh -i '${ID_KEY}' ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && make unpack restart VERSION=${VERSION}"
 
 run:
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml down &&\
