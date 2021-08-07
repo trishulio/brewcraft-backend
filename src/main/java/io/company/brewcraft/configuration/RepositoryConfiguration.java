@@ -147,7 +147,7 @@ public class RepositoryConfiguration {
     }
     
     @Bean
-    public AccessorRefresher<Long, SupplierAccessor, Supplier> supplierrefresher(SupplierRepository repo) {
+    public AccessorRefresher<Long, SupplierAccessor, Supplier> supplierRefresher(SupplierRepository repo) {
         return new AccessorRefresher<>(
             Supplier.class,
             accessor -> accessor.getSupplier(),
