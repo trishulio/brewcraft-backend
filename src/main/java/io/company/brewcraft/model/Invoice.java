@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.service.MoneyService;
