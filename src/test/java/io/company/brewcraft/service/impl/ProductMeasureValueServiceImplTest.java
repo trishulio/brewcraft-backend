@@ -1,8 +1,6 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -17,8 +15,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.Measure;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.service.ProductMeasureValueService;

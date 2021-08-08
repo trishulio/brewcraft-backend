@@ -1,8 +1,9 @@
 package io.company.brewcraft.dto;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

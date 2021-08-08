@@ -1,15 +1,14 @@
 package io.company.brewcraft.service.mapper;
 
-import java.util.Map;
-
-import javax.measure.Unit;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.measure.Unit;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

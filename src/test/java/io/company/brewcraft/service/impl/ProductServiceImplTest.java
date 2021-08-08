@@ -27,13 +27,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.repository.ProductRepository;
-import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.MeasureService;
+import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
