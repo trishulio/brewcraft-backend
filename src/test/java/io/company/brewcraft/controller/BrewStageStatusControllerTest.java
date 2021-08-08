@@ -35,9 +35,9 @@ public class BrewStageStatusControllerTest {
     public void testGetBrewStageStatuses() {
         Page<BrewStageStatus> mPage = new PageImpl<>(List.of(new BrewStageStatus(1L, "IN-PROGRESS"), new BrewStageStatus(2L, "COMPLETE")));
 
-        doReturn(mPage).when(brewStageStatusService).getStatuses(null, 1, 10, new TreeSet<>(List.of("id")), true);
+        doReturn(mPage).when(brewStageStatusService).getStatuses(null, null, 1, 10, new TreeSet<>(List.of("id")), true);
 
-        PageDto<BrewStageStatusDto> dto = brewStageStatusController.getStatuses(null, new TreeSet<>(List.of("id")), true, 1, 10);
+        PageDto<BrewStageStatusDto> dto = brewStageStatusController.getStatuses(null, null, new TreeSet<>(List.of("id")), true, 1, 10);
 
         assertEquals(1, dto.getTotalPages());
         assertEquals(List.of(new BrewStageStatusDto(1L, "IN-PROGRESS"), new BrewStageStatusDto(2L, "COMPLETE")), dto.getContent());

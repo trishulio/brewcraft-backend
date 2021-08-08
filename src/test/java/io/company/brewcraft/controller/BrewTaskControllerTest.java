@@ -35,9 +35,9 @@ public class BrewTaskControllerTest {
     public void testGetBrewTasks() {
         Page<BrewTask> mPage = new PageImpl<>(List.of(new BrewTask(1L, "MASH"), new BrewTask(2L, "BOIL")));
 
-        doReturn(mPage).when(brewTaskService).getTasks(null, 1, 10, new TreeSet<>(List.of("id")), true);
+        doReturn(mPage).when(brewTaskService).getTasks(null, null, 1, 10, new TreeSet<>(List.of("id")), true);
 
-        PageDto<BrewTaskDto> dto = brewTaskController.getBrewTasks(null, new TreeSet<>(List.of("id")), true, 1, 10);
+        PageDto<BrewTaskDto> dto = brewTaskController.getBrewTasks(null, null, new TreeSet<>(List.of("id")), true, 1, 10);
 
         assertEquals(1, dto.getTotalPages());
         assertEquals(List.of(new BrewTaskDto(1L, "MASH"), new BrewTaskDto(2L, "BOIL")), dto.getContent());

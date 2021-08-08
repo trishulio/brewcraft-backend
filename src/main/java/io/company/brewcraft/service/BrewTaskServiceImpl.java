@@ -2,7 +2,6 @@ package io.company.brewcraft.service;
 
 import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -22,10 +21,11 @@ public class BrewTaskServiceImpl implements BrewTaskService {
         this.brewTaskRepository = brewTaskRepository;
     }
 
-    public Page<BrewTask> getTasks(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+    public Page<BrewTask> getTasks(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<BrewTask> spec = SpecificationBuilder
                 .builder()
                 .in(BrewTask.FIELD_ID, ids)
+                .in(BrewTask.FIELD_NAME, names)
                 .build();
 
         Page<BrewTask> brewTasks = brewTaskRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
@@ -33,18 +33,8 @@ public class BrewTaskServiceImpl implements BrewTaskService {
         return brewTasks;
     }
 
-    public BrewTask getTask(String name) {
-        if (name == null) {
-            throw new NullPointerException("Non-null status name expected");
-        }
-
-        BrewTask task = null;
-        Iterator<BrewTask> it = this.brewTaskRepository.findByNames(Set.of(name)).iterator();
-        if (it.hasNext()) {
-            task = it.next();
-        }
-
-        return task;
+    public BrewTask getTask(Long id) {
+        return brewTaskRepository.findById(id).orElse(null);
     }
 
 }

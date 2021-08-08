@@ -38,12 +38,13 @@ public class BrewTaskController extends BaseController {
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<BrewTaskDto> getBrewTasks(
             @RequestParam(required = false) Set<Long> ids,
+            @RequestParam(required = false) Set<String> names,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<BrewTask> brewTaskPage = brewTaskService.getTasks(ids, page, size, sort, orderAscending);
+        Page<BrewTask> brewTaskPage = brewTaskService.getTasks(ids, names, page, size, sort, orderAscending);
 
         List<BrewTaskDto> brewTaskList = brewTaskPage.stream().map(brewTask -> brewTaskMapper.toDto(brewTask)).collect(Collectors.toList());
 

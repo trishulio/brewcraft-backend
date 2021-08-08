@@ -9,8 +9,8 @@ import io.company.brewcraft.model.BrewStageStatus;
 
 public interface BrewStageStatusService {
 
-    Page<BrewStageStatus> getStatuses(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    Page<BrewStageStatus> getStatuses(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
-    BrewStageStatus getStatus(String name);
+    BrewStageStatus getStatus(Long id);
 
 }

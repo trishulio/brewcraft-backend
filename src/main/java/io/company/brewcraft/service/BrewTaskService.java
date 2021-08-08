@@ -9,8 +9,8 @@ import io.company.brewcraft.model.BrewTask;
 
 public interface BrewTaskService {
 
-    BrewTask getTask(String name);
+    BrewTask getTask(Long id);
 
-    Page<BrewTask> getTasks(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    Page<BrewTask> getTasks(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
 }
