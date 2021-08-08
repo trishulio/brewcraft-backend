@@ -1,12 +1,15 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class BrewTest {
 
@@ -155,5 +158,27 @@ public class BrewTest {
         Integer version = 1;
         brew.setVersion(version);
         assertEquals(version, brew.getVersion());
+    }
+    
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        Long id = 1L;
+        String name = "testName";
+        String description = "testDesc";
+        Long batchId = 1L;
+        Product product = new Product();
+        Brew parentBrew = new Brew();
+        List<Brew> childBrews = List.of(new Brew());
+        List<BrewStage> brewStages = List.of(new BrewStage());
+        LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, created, lastUpdated, version);
+       
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"batchId\":1,\"product\":{\"id\":null,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"parentBrew\":{\"id\":null,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"startedAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"endedAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        JSONAssert.assertEquals(json, brew.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
-import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.Measure;
+import io.company.brewcraft.model.Product;
 
 public interface BaseProductMeasureValue {
     

@@ -3,9 +3,8 @@ package io.company.brewcraft.service.exception;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import javax.persistence.OptimisticLockException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

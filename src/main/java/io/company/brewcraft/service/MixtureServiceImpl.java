@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.List;
 import java.util.Optional;

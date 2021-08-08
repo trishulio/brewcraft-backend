@@ -2,8 +2,11 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class CurrencyTest {
 
@@ -33,5 +36,13 @@ public class CurrencyTest {
         assertNull(currency.getCode());
         currency.setCode("USD");
         assertEquals("USD", currency.getCode());
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        currency = new Currency(1234, "CAD");
+        
+        final String json = "{\"numericCode\":1234,\"code\":\"CAD\"}";
+        JSONAssert.assertEquals(json, currency.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

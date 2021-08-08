@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class QuantityEntityTest {
 
@@ -35,5 +38,13 @@ public class QuantityEntityTest {
         assertNull(quantity.getValue());
         quantity.setValue(new BigDecimal("99"));
         assertEquals(new BigDecimal("99"), quantity.getValue());
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        quantity = new QuantityEntity(new UnitEntity("KG"), new BigDecimal("100"));
+        
+        final String json = "{\"unit\":{\"symbol\":\"KG\",\"name\":null},\"value\":100}";
+        JSONAssert.assertEquals(json, quantity.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

@@ -68,6 +68,7 @@ public class AccessorRefresherTest {
         mRepo = mock(EntityRepository.class);
 
         refresher = new AccessorRefresher<Long, EntityAccessor, Entity>(
+            Entity.class,
             accessor -> accessor.getEntity(),
             (accessor, e) -> accessor.setEntity(e),
             ids -> mRepo.findAllById(ids)

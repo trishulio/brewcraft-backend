@@ -116,7 +116,7 @@ public class InvoiceService extends BaseService {
         Class<? super Invoice> invoiceClz = BaseInvoice.class;
 
         if (existing == null) {
-            existing = new Invoice(invoiceId); // Gotcha: The save function ignores this ID
+            existing = new Invoice(invoiceId); // TODO: The save function ignores this ID
 
         } else {
             existing.optimisticLockCheck(update);

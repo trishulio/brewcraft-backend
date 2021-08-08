@@ -15,26 +15,30 @@ public class EnhancedPurchaseOrderRepositoryImplTest {
     private EnhancedPurchaseOrderRepository repo;
 
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> mRefresher;
+    private SupplierRepository mSupplierRepo;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
+        mSupplierRepo = mock(SupplierRepository.class);
 
-        repo = new EnhancedPurchaseOrderRepositoryImpl(mRefresher);
+        repo = new EnhancedPurchaseOrderRepositoryImpl(mRefresher, mSupplierRepo);
     }
 
     @Test
     public void testRefreshAccessors_CallsRefreshAccessor() {
         List<PurchaseOrderAccessor> accessors = List.of(mock(PurchaseOrderAccessor.class), mock(PurchaseOrderAccessor.class));
-        
+
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(accessors);
     }
 
     @Test
-    public void testRefresh_DoesNothing() {
-        repo.refresh(null);
+    public void testRefresh_RefreshesSuppliers() {
+        repo.refresh(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L)));
+
+        verify(mSupplierRepo, times(1)).refreshAccessors(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L)));
     }
 }

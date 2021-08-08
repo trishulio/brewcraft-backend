@@ -4,10 +4,27 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
-import javax.persistence.*;
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import io.company.brewcraft.service.PathProvider;
 import io.company.brewcraft.service.mapper.QuantityMapper;
@@ -66,6 +83,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shipment_id", referencedColumnName = "id")
+    @JsonBackReference
     private Shipment shipment;
 
     @ManyToOne(fetch = FetchType.LAZY)

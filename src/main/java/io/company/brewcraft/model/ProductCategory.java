@@ -20,6 +20,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "PRODUCT_CATEGORY")
 public class ProductCategory extends BaseEntity {
     public static final String FIELD_ID = "id";
@@ -40,6 +42,7 @@ public class ProductCategory extends BaseEntity {
     private ProductCategory parentCategory;
 
     @OneToMany(mappedBy = "parentCategory")
+    @JsonIgnore
     private Set<ProductCategory> subcategories;
     
     @CreationTimestamp
@@ -163,6 +166,7 @@ public class ProductCategory extends BaseEntity {
         this.version = version;
     }
     
+    @JsonIgnore
     public ProductCategory getRootCategory() {
         ProductCategory root = this;
         
@@ -176,6 +180,7 @@ public class ProductCategory extends BaseEntity {
     /*
      * Returns all descendant category id's using iterative DFS
      */
+    @JsonIgnore
     public Set<Long> getDescendantCategoryIds() {
         Set<Long> ids = new HashSet<>();
         Stack<ProductCategory> stack = new Stack<ProductCategory>();

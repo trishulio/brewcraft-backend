@@ -14,9 +14,12 @@ public class EnhancedPurchaseOrderRepositoryImpl implements EnhancedPurchaseOrde
     
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher;
     
+    private SupplierRepository supplierRepo;
+    
     @Autowired
-    public EnhancedPurchaseOrderRepositoryImpl(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher) {
+    public EnhancedPurchaseOrderRepositoryImpl(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, SupplierRepository supplierRepo) {
         this.refresher = refresher;
+        this.supplierRepo = supplierRepo;
     }
 
     @Override
@@ -26,6 +29,6 @@ public class EnhancedPurchaseOrderRepositoryImpl implements EnhancedPurchaseOrde
 
     @Override
     public void refresh(Collection<PurchaseOrder> purchaseOrders) {
-        // No child entity to refresh.
+        this.supplierRepo.refreshAccessors(purchaseOrders);
     }
 }

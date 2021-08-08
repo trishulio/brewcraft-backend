@@ -6,8 +6,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
@@ -243,5 +246,13 @@ public class MaterialLotTest {
         assertNull(lot.getVersion());
         lot.setVersion(99);
         assertEquals(99, lot.getVersion());
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new Material(100L), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+
+        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"material\":{\"id\":100,\"name\":null,\"description\":null,\"category\":null,\"upc\":null,\"baseQuantityUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"invoiceItem\":{\"id\":200,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"amount\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":{\"nano\":0,\"year\":1999,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"FRIDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2000,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"SATURDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        JSONAssert.assertEquals(json, lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

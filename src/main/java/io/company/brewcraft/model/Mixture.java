@@ -27,6 +27,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MIXTURE")
@@ -48,6 +50,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 	private Mixture parentMixture;
 
 	@OneToMany(mappedBy = "parentMixture", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Mixture> childMixtures;
 
 	@Embedded
@@ -61,9 +64,11 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
 	private Equipment equipment;
 
 	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<MaterialPortion> materialPortions;
 
 	@OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<MixtureRecording> recordedMeasures;
 
 	@ManyToOne()
@@ -145,6 +150,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
     }
     
+    @Override
     public void addChildMixture(Mixture childMixture) {
         if (childMixture == null) {
             return;

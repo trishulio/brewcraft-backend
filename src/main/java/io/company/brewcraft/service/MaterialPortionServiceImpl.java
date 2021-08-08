@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMixtureRecording;
 import io.company.brewcraft.model.MaterialPortion;
+import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.UpdateMaterialPortion;
-import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;

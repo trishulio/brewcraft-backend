@@ -1,13 +1,13 @@
 package io.company.brewcraft.service.mapper;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.company.brewcraft.dto.AddMixtureDto;
 import io.company.brewcraft.dto.BrewStageDto;

@@ -27,8 +27,8 @@ public class Tenant extends BaseEntity {
     private String url;
     
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime created;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
     
     @UpdateTimestamp
     @Column(name = "last_updated")
@@ -38,11 +38,11 @@ public class Tenant extends BaseEntity {
 
     }
 
-    public Tenant(UUID id, String name, String url, LocalDateTime created, LocalDateTime lastUpdated) {
+    public Tenant(UUID id, String name, String url, LocalDateTime createdAt, LocalDateTime lastUpdated) {
         this.id = id;
         this.name = name;
         this.url = url;
-        this.created = created;
+        this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
     }
 
@@ -70,12 +70,12 @@ public class Tenant extends BaseEntity {
         this.url = url;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
     
     public LocalDateTime getLastUpdated() {

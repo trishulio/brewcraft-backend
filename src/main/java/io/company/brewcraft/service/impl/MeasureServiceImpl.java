@@ -1,8 +1,7 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
+import static io.company.brewcraft.repository.RepositoryUtil.*;
 
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;

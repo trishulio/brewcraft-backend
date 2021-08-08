@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity(name = "PRODUCT_MEASURE_VALUE")
 public class ProductMeasureValue extends BaseEntity {
     
@@ -22,6 +24,7 @@ public class ProductMeasureValue extends BaseEntity {
     
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JsonBackReference
     private Product product;    
     
     @ManyToOne(optional = false)

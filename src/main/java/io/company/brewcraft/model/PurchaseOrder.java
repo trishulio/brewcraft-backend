@@ -2,7 +2,17 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,10 +54,13 @@ public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, Upda
         setId(id);
     }
 
-    public PurchaseOrder(Long id, String orderNumber, Supplier supplier) {
+    public PurchaseOrder(Long id, String orderNumber, Supplier supplier, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setOrderNumber(orderNumber);
         setSupplier(supplier);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+        setVersion(version);
     }
 
     @Override

@@ -6,8 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ProductCategoryTest {
 
@@ -105,5 +108,21 @@ public class ProductCategoryTest {
 
         assertEquals(4, result.size());
         assertTrue(result.containsAll(List.of(1L, 2L, 3L, 4L)));
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        Long id = 1L;
+        String name = "testName";
+        ProductCategory parentCategory = new ProductCategory();
+        Set<ProductCategory> subcategories = Set.of();
+        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
+        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
+        int version = 1;
+
+        ProductCategory productCategoryEntity = new ProductCategory(id, name, parentCategory, subcategories, created, lastUpdated, version);
+
+        final String json = "{\"id\":1,\"name\":\"testName\",\"parentCategory\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        JSONAssert.assertEquals(json, productCategoryEntity.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

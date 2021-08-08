@@ -1,8 +1,9 @@
 .PHONY: install containerize pack upload unpack deploy run start stop remove restart
 
-HOST_APP_DIR := /var/server/brewcraft
-APP_NAME := brewcraft
-TARGET := ./dist
+HOST_APP_DIR:=/var/server/brewcraft
+APP_NAME:=brewcraft
+TARGET:=./dist
+VERSION:=1.0.0-SNAPSHOT
 
 install:
 	docker-compose -f docker-compose-install.yml run --rm install
@@ -15,6 +16,7 @@ pack:
 	rm -rf ${TARGET}/* ; true
 	docker save -o ${TARGET}/${APP_NAME}_${VERSION}.image ${APP_NAME}:${VERSION}
 	cp -r ./db-init-scripts ${TARGET}
+	cp -r ./wait-for-it.sh ${TARGET}
 	cp ./docker-compose.yml ${TARGET}
 	cp ./docker-compose-prod-test.yml ${TARGET}
 	cp ./Makefile ${TARGET}
@@ -47,3 +49,5 @@ remove:
 	docker-compose -f docker-compose.yml -f docker-compose-prod-test.yml rm
 
 restart: stop remove start
+
+setup: containerize pack upload deploy

@@ -1,6 +1,6 @@
 package io.company.brewcraft.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Mass;

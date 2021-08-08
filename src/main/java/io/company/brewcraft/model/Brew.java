@@ -22,6 +22,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "BREW")
 public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
@@ -56,10 +58,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     private Brew parentBrew;
 
     @OneToMany(mappedBy = "parentBrew")
+    @JsonIgnore
     private List<Brew> childBrews;
     
     @OneToMany(mappedBy="brew", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("startedAt ASC")
+    @JsonIgnore
     private List<BrewStage> brewStages;
     
     @Column(name = "started_at")

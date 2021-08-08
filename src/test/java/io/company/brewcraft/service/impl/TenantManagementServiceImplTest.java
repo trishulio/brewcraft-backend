@@ -1,15 +1,7 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -162,7 +154,7 @@ public class TenantManagementServiceImplTest {
         assertEquals(id, tenantArgument.getValue().getId());
         assertEquals("testNameNew", tenantArgument.getValue().getName());
         assertEquals("testUrlNew", tenantArgument.getValue().getUrl());
-        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), tenantArgument.getValue().getCreated());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), tenantArgument.getValue().getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 5, 6, 7, 8), tenantArgument.getValue().getLastUpdated());
     }
     

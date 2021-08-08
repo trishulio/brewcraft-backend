@@ -15,57 +15,60 @@ public class PurchaseOrderTest {
 
     @BeforeEach
     public void init() {
-        order = new PurchaseOrder();
+        this.order = new PurchaseOrder();
     }
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        order = new PurchaseOrder(1L, "ABCD-123", new Supplier());
+        this.order = new PurchaseOrder(1L, "ABCD-123", new Supplier(), LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0), 1);
 
-        assertEquals(1L, order.getId());
-        assertEquals("ABCD-123", order.getOrderNumber());
-        assertEquals(new Supplier(), order.getSupplier());
+        assertEquals(1L, this.order.getId());
+        assertEquals("ABCD-123", this.order.getOrderNumber());
+        assertEquals(new Supplier(), this.order.getSupplier());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), this.order.getCreatedAt());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), this.order.getLastUpdated());
+        assertEquals(1, this.order.getVersion());
     }
 
     @Test
     public void testAccessId() {
-        assertNull(order.getId());
-        order.setId(1L);
-        assertEquals(1L, order.getId());
+        assertNull(this.order.getId());
+        this.order.setId(1L);
+        assertEquals(1L, this.order.getId());
     }
 
     @Test
     public void testAccessOrderNumber() {
-        assertNull(order.getOrderNumber());
-        order.setOrderNumber("ABCD-123");
-        assertEquals("ABCD-123", order.getOrderNumber());
+        assertNull(this.order.getOrderNumber());
+        this.order.setOrderNumber("ABCD-123");
+        assertEquals("ABCD-123", this.order.getOrderNumber());
     }
 
     @Test
     public void testAccessSupplier() {
-        assertNull(order.getSupplier());
-        order.setSupplier(new Supplier());
-        assertEquals(new Supplier(), order.getSupplier());
+        assertNull(this.order.getSupplier());
+        this.order.setSupplier(new Supplier());
+        assertEquals(new Supplier(), this.order.getSupplier());
     }
 
     @Test
     public void testAccessCreatedAt() {
-        assertNull(order.getCreatedAt());
-        order.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), order.getCreatedAt());
+        assertNull(this.order.getCreatedAt());
+        this.order.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), this.order.getCreatedAt());
     }
 
     @Test
     public void testAccessLastUpdated() {
-        assertNull(order.getLastUpdated());
-        order.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), order.getLastUpdated());
+        assertNull(this.order.getLastUpdated());
+        this.order.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), this.order.getLastUpdated());
     }
 
     @Test
     public void testAccessVersion() {
-        assertNull(order.getVersion());
-        order.setVersion(1);
-        assertEquals(1, order.getVersion());
+        assertNull(this.order.getVersion());
+        this.order.setVersion(1);
+        assertEquals(1, this.order.getVersion());
     }
 }

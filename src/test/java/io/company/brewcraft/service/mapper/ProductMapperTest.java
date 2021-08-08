@@ -12,13 +12,13 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.AddProductDto;
 import io.company.brewcraft.dto.AddProductMeasureValueDto;
 import io.company.brewcraft.dto.CategoryDto;
-import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.MeasureDto;
+import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.ProductMeasureValueDto;
 import io.company.brewcraft.dto.UpdateProductDto;
+import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
-import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.ProductMeasureValue;
 
 public class ProductMapperTest {
