@@ -20,11 +20,10 @@ pack:
 	cp ./docker-compose.yml ${TARGET}
 	cp ./docker-compose-prod-test.yml ${TARGET}
 	cp ./Makefile ${TARGET}
-	docker rmi ${APP_NAME}:${VERSION}
 
 upload:
-	ssh -i ${ID_KEY} ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR} && rm -r ${HOST_APP_DIR}/* ; true"
-	rsync -e "ssh -i ${ID_KEY}" --progress -avz ${TARGET}/ ${USERNAME}@${HOST}:${HOST_APP_DIR}
+	ssh -i '${ID_KEY}' ${USERNAME}@${HOST} "mkdir -p ${HOST_APP_DIR} && rm -r ${HOST_APP_DIR}/* ; true"
+	rsync -e "ssh -i '${ID_KEY}'" --progress -avz ${TARGET}/ ${USERNAME}@${HOST}:${HOST_APP_DIR}
 
 unpack:
 	# Asserting that .env file is present.
@@ -32,7 +31,7 @@ unpack:
 	docker load -i ${APP_NAME}_${VERSION}.image
 
 deploy:
-	ssh -i ${ID_KEY} ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && export VERSION=${VERSION} && make unpack && make restart"
+	ssh -i '${ID_KEY}' ${USERNAME}@${HOST} "cd ${HOST_APP_DIR} && make unpack restart VERSION=${VERSION}"
 
 run:
 	docker-compose -f docker-compose.yml -f docker-compose-dev.yml down &&\

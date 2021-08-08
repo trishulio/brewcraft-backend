@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.measure.Unit;
 
@@ -45,7 +46,7 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
     public Page<Material> getMaterials(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, SortedSet<String> sort, boolean orderAscending) {       
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {           
-            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, page, size, sort, orderAscending);            
+            Page<MaterialCategory> categories = materialCategoryService.getCategories(categoryIds, categoryNames, null, null, 0, Integer.MAX_VALUE, new TreeSet<>(), true);            
             
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no materials with those categories assigned

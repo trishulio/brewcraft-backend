@@ -51,7 +51,7 @@ public class MeasureServiceImplTest {
     }
     
     @Test
-    public void testProductService_classIsTransactional() throws Exception {
+    public void testMeasureService_classIsTransactional() throws Exception {
         Transactional transactional = measureService.getClass().getAnnotation(Transactional.class);
         
         assertNotNull(transactional);
@@ -60,7 +60,7 @@ public class MeasureServiceImplTest {
     }
     
     @Test
-    public void testProductService_methodsAreNotTransactional() throws Exception {
+    public void testMeasureService_methodsAreNotTransactional() throws Exception {
         Method[] methods = measureService.getClass().getMethods();  
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
