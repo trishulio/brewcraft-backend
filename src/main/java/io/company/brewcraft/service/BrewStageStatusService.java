@@ -1,13 +1,16 @@
 package io.company.brewcraft.service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+
+import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.model.BrewStageStatus;
 
 public interface BrewStageStatusService {
-    
-	List<BrewStageStatus> getStatuses();
-    
-    BrewStageStatus getStatus(String name);
-    
+
+    Page<BrewStageStatus> getStatuses(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending);
+
+    BrewStageStatus getStatus(Long id);
+
 }
