@@ -1,0 +1,65 @@
+pipeline {
+    agent {
+        label 'docker'
+    }
+
+    environment {
+        SSH_CREDS = credentials('jaas_user')
+    }
+    
+    parameters {
+        string(name: 'HOST_URL', defaultValue: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
+    }
+
+    stages {
+       stage ('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage ('Build Params') {
+            steps {
+                script {
+                    def commitId = sh(script: "git rev-parse HEAD", returnStdout: true)
+                    def branchName = "${scm.branches[0].name}".replaceFirst('\\*/', "")
+
+                    IMAGE_TAG = "${branchName}_${commitId}"
+                }
+            }
+        }
+
+        stage ('Setup SSH') {
+            steps {
+                sh """
+                    mkdir -p ~/.ssh/
+                    ssh-keyscan -H ${params.HOST_URL} > ~/.ssh/known_hosts
+                """
+            }
+        }
+
+        stage ('Pack') {
+            steps {
+                sh """
+                    make pack VERSION=${IMAGE_TAG}
+                """
+            }
+        }
+
+        stage ('Upload') {
+            steps {
+                sh """
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL}
+                """
+            }
+        }
+
+        stage ('Start') {
+            steps {
+                sh """
+                    make deploy ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} VERSION=${IMAGE_TAG}
+                """
+            }
+        }
+    }
+}
