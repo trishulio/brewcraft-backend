@@ -40,7 +40,6 @@ import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.InvoiceItemRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 import io.company.brewcraft.repository.MaterialLotRepository;
 import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
@@ -82,11 +81,6 @@ public class RepositoryConfiguration {
     @PersistenceContext
     public AggregationRepository aggrRepo(EntityManager em) {
         return new AggregationRepository(em);
-    }
-
-    @Bean
-    public MaterialLotAggregationRepository lotAggrRepo(AggregationRepository aggrRepo) {
-        return new MaterialLotAggregationRepository(aggrRepo);
     }
 
     @Bean

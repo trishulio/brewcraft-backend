@@ -6,13 +6,13 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
@@ -34,7 +34,7 @@ import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
-import io.company.brewcraft.service.MaterialLotInventoryService;
+import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialPortionService;
 import io.company.brewcraft.service.MaterialPortionServiceImpl;
 import io.company.brewcraft.service.MeasureService;
@@ -75,62 +75,62 @@ public class ServiceAutoConfigurationTest {
 
     @BeforeEach
     public void init() {
-        serviceAutoConfiguration = new ServiceAutoConfiguration();
+        this.serviceAutoConfiguration = new ServiceAutoConfiguration();
     }
 
     @Test
     public void testTenantManagementService_returnsInstanceOfTenantManagementServiceImpl() {
-        TenantManagementService tenantManagementService = serviceAutoConfiguration.tenantManagementService(null, null, null);
+        final TenantManagementService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null);
         assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
     }
 
     @Test
     public void testSupplierService_returnsInstanceOfSupplierServiceImpl() {
-        SupplierService supplierService = serviceAutoConfiguration.supplierService(null);
+        final SupplierService supplierService = this.serviceAutoConfiguration.supplierService(null);
         assertTrue(supplierService instanceof SupplierServiceImpl);
     }
 
     @Test
     public void testSupplierContactService_returnsInstanceOfSupplierContactServiceImpl() {
-        SupplierContactService supplierContactService = serviceAutoConfiguration.supplierContactService(null, null);
+        final SupplierContactService supplierContactService = this.serviceAutoConfiguration.supplierContactService(null, null);
         assertTrue(supplierContactService instanceof SupplierContactServiceImpl);
     }
 
     @Test
     public void testFacilityService_returnsInstanceOfFacilityServiceImpl() {
-        FacilityService facilityService = serviceAutoConfiguration.facilityService(null);
+        final FacilityService facilityService = this.serviceAutoConfiguration.facilityService(null);
         assertTrue(facilityService instanceof FacilityServiceImpl);
     }
 
     @Test
     public void testInvoiceItemService_ReturnsInstanceOfInvoiceItemService() {
-        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        InvoiceItemService service = serviceAutoConfiguration.invoiceItemService(mUtilProvider);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        final InvoiceItemService service = this.serviceAutoConfiguration.invoiceItemService(mUtilProvider);
 
         assertTrue(service instanceof InvoiceItemService);
     }
 
     @Test
     public void testInvoiceService_ReturnsInstanceOfInvoiceService() {
-        InvoiceRepository mInvoiceRepo = mock(InvoiceRepository.class);
-        InvoiceItemService mInvoiceItemService = mock(InvoiceItemService.class);
+        final InvoiceRepository mInvoiceRepo = mock(InvoiceRepository.class);
+        final InvoiceItemService mInvoiceItemService = mock(InvoiceItemService.class);
 
-        InvoiceService service = serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService);
+        final InvoiceService service = this.serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService);
         assertTrue(service instanceof InvoiceService);
     }
 
     @Test
     public void testPurchaseOrderService_ReturnsInstanceOfPurchaseOrderService() {
-        PurchaseOrderRepository poRepo = mock(PurchaseOrderRepository.class);
-        PurchaseOrderService service = serviceAutoConfiguration.purchaseOrderService(poRepo);
+        final PurchaseOrderRepository poRepo = mock(PurchaseOrderRepository.class);
+        final PurchaseOrderService service = this.serviceAutoConfiguration.purchaseOrderService(poRepo);
 
         assertTrue(service instanceof PurchaseOrderService);
     }
 
     @Test
     public void testInvoiceStatusService_ReturnsInstanceOfInvoiceStatusService() {
-        InvoiceStatusRepository mRepo = mock(InvoiceStatusRepository.class);
-        InvoiceStatusService service = serviceAutoConfiguration.invoiceStatusService(mRepo);
+        final InvoiceStatusRepository mRepo = mock(InvoiceStatusRepository.class);
+        final InvoiceStatusService service = this.serviceAutoConfiguration.invoiceStatusService(mRepo);
 
         assertTrue(service instanceof InvoiceStatusService);
     }
@@ -139,154 +139,154 @@ public class ServiceAutoConfigurationTest {
     public void testAttributeFilter_ReturnsInstanceOfAttributeFilter() {
         new AttributeFilter();
     }
-    
+
     @Test
     public void testShipmentService_ReturnsInstanceOfShipmentService() {
-        ShipmentRepository mRepo = mock(ShipmentRepository.class);
-        MaterialLotService mItemService = mock(MaterialLotService.class);
+        final ShipmentRepository mRepo = mock(ShipmentRepository.class);
+        final MaterialLotService mItemService = mock(MaterialLotService.class);
 
-        ShipmentService service = serviceAutoConfiguration.shipmentService(mRepo, mItemService);
-        
+        final ShipmentService service = this.serviceAutoConfiguration.shipmentService(mRepo, mItemService);
+
         assertSame(ShipmentService.class, service.getClass());
     }
 
     @Test
     public void testMaterialLotService_ReturnsInstanceOfMaterialLotService() {
-        UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        MaterialLotService service = serviceAutoConfiguration.materialLotService(mUtilProvider);
-        
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        final MaterialLotService service = this.serviceAutoConfiguration.materialLotService(mUtilProvider);
+
         assertSame(MaterialLotService.class, service.getClass());
     }
-    
+
     @Test
     public void testUtilityProvider_ReturnsInstanceOfThreadLocalUtilityProvider() {
-        UtilityProvider provider = serviceAutoConfiguration.utilityProvider();
-        
+        final UtilityProvider provider = this.serviceAutoConfiguration.utilityProvider();
+
         assertSame(ThreadLocalUtilityProvider.class, provider.getClass());
     }
-    
+
     @Test
     public void testLotInventorySerivce_RetunrsInstanceOfMaterialLotInventoryServiceWithAggrRepo() {
-        MaterialLotAggregationRepository mRepo = mock(MaterialLotAggregationRepository.class);
-        MaterialLotInventoryService service = serviceAutoConfiguration.lotInventoryService(mRepo);
-        
-        assertSame(MaterialLotInventoryService.class, service.getClass());
+        final AggregationRepository mAggreRepo = mock(AggregationRepository.class);
+        final LotAggregationService service = this.serviceAutoConfiguration.lotInventoryService(mAggreRepo);
+
+        assertSame(LotAggregationService.class, service.getClass());
     }
-    
+
     @Test
     public void testProductService_ReturnsInstanceOfProductService() {
-    	ProductRepository productRepositoryMock = mock(ProductRepository.class);
-    	ProductCategoryService productCategoryServiceMock = mock(ProductCategoryService.class);
-    	ProductMeasureValueService productMeasureValueServiceMock = mock(ProductMeasureValueService.class);
-    	MeasureService productMeasureServiceMock = mock(MeasureService.class);
+    	final ProductRepository productRepositoryMock = mock(ProductRepository.class);
+    	final ProductCategoryService productCategoryServiceMock = mock(ProductCategoryService.class);
+    	final ProductMeasureValueService productMeasureValueServiceMock = mock(ProductMeasureValueService.class);
+    	final MeasureService productMeasureServiceMock = mock(MeasureService.class);
 
-        ProductService service = serviceAutoConfiguration.productService(productRepositoryMock, productCategoryServiceMock, productMeasureValueServiceMock, productMeasureServiceMock);
-        
+        final ProductService service = this.serviceAutoConfiguration.productService(productRepositoryMock, productCategoryServiceMock, productMeasureValueServiceMock, productMeasureServiceMock);
+
         assertTrue(service instanceof ProductServiceImpl);
     }
-    
+
     @Test
     public void testProductCategory_ReturnsInstanceOfProductCategoryService() {
-        ProductCategoryRepository productCategoryRepositoryMock = mock(ProductCategoryRepository.class);
-        ProductCategoryService service = serviceAutoConfiguration.productCategoryService(productCategoryRepositoryMock);
-        
+        final ProductCategoryRepository productCategoryRepositoryMock = mock(ProductCategoryRepository.class);
+        final ProductCategoryService service = this.serviceAutoConfiguration.productCategoryService(productCategoryRepositoryMock);
+
         assertTrue(service instanceof ProductCategoryServiceImpl);
     }
-    
+
     @Test
     public void testMeasureService_ReturnsInstanceOfMeasureService() {
-    	MeasureRepository measureRepositoryMock = mock(MeasureRepository.class);
-        MeasureService service = serviceAutoConfiguration.measureService(measureRepositoryMock);
-        
+    	final MeasureRepository measureRepositoryMock = mock(MeasureRepository.class);
+        final MeasureService service = this.serviceAutoConfiguration.measureService(measureRepositoryMock);
+
         assertTrue(service instanceof MeasureServiceImpl);
     }
-    
+
     @Test
     public void testProductMeasureValueService_ReturnsInstanceOfProductMeasureValueService() {
-        ProductMeasureValueRepository productMeasureValueRepositoryMock = mock(ProductMeasureValueRepository.class);
-        ProductMeasureValueService service = serviceAutoConfiguration.productMeasureValueService(productMeasureValueRepositoryMock);
-        
+        final ProductMeasureValueRepository productMeasureValueRepositoryMock = mock(ProductMeasureValueRepository.class);
+        final ProductMeasureValueService service = this.serviceAutoConfiguration.productMeasureValueService(productMeasureValueRepositoryMock);
+
         assertTrue(service instanceof ProductMeasureValueServiceImpl);
     }
-    
+
     @Test
     public void testUserService_ReturnsInstanceOfUserService() {
-    	UserRepository userRepositoryMock = mock(UserRepository.class);
-    	IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
+    	final UserRepository userRepositoryMock = mock(UserRepository.class);
+    	final IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
 
-    	UserService service = serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock);
-        
+    	final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock);
+
         assertTrue(service instanceof UserServiceImpl);
     }
-    
+
     @Test
     public void testProcurementService_ReturnsInstanceOfProcurementService() {
-    	InvoiceService invoiceServiceMock = mock(InvoiceService.class);
-    	PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
-    	ShipmentService shipmentServiceMock = mock(ShipmentService.class);
+    	final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
+    	final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
+    	final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
 
-    	ProcurementService service = serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock);
-        
+    	final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock);
+
         assertTrue(service instanceof ProcurementServiceImpl);
     }
-    
+
     @Test
     public void testBrewService_ReturnsInstanceOfBrewService() {
-    	BrewRepository brewRepositoryMock = mock(BrewRepository.class);
-    	BrewService service = serviceAutoConfiguration.brewService(brewRepositoryMock);
-        
+    	final BrewRepository brewRepositoryMock = mock(BrewRepository.class);
+    	final BrewService service = this.serviceAutoConfiguration.brewService(brewRepositoryMock);
+
         assertTrue(service instanceof BrewServiceImpl);
     }
-    
+
     @Test
     public void testBrewTaskService_ReturnsInstanceOfBrewTaskService() {
-    	BrewTaskRepository brewTaskRepositoryMock = mock(BrewTaskRepository.class);
-    	BrewTaskService service = serviceAutoConfiguration.brewTaskService(brewTaskRepositoryMock);
-        
+    	final BrewTaskRepository brewTaskRepositoryMock = mock(BrewTaskRepository.class);
+    	final BrewTaskService service = this.serviceAutoConfiguration.brewTaskService(brewTaskRepositoryMock);
+
         assertTrue(service instanceof BrewTaskServiceImpl);
     }
-    
+
     @Test
     public void testBrewStageService_ReturnsInstanceOfBrewStageService() {
-    	BrewStageRepository brewStageRepositoryMock = mock(BrewStageRepository.class);
+    	final BrewStageRepository brewStageRepositoryMock = mock(BrewStageRepository.class);
 
-    	BrewStageService service = serviceAutoConfiguration.brewStageService(brewStageRepositoryMock);
-        
+    	final BrewStageService service = this.serviceAutoConfiguration.brewStageService(brewStageRepositoryMock);
+
         assertTrue(service instanceof BrewStageServiceImpl);
     }
-    
+
     @Test
     public void testBrewStageStatusService_ReturnsInstanceOfBrewStageStatusService() {
-    	BrewStageStatusRepository brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
-    	
-    	BrewStageStatusService service = serviceAutoConfiguration.brewStageStatusService(brewStageStatusRepositoryMock);
-        
+    	final BrewStageStatusRepository brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
+
+    	final BrewStageStatusService service = this.serviceAutoConfiguration.brewStageStatusService(brewStageStatusRepositoryMock);
+
         assertTrue(service instanceof BrewStageStatusServiceImpl);
     }
-    
+
     @Test
     public void testMixtureService_ReturnsInstanceOfMixtureService() {
-    	MixtureRepository mixtureRepositoryMock = mock(MixtureRepository.class);
-    	MixtureService service = serviceAutoConfiguration.mixtureService(mixtureRepositoryMock);
-        
+    	final MixtureRepository mixtureRepositoryMock = mock(MixtureRepository.class);
+    	final MixtureService service = this.serviceAutoConfiguration.mixtureService(mixtureRepositoryMock);
+
         assertTrue(service instanceof MixtureServiceImpl);
     }
-    
+
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
-    	MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
-    	MaterialPortionService service = serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock);
-        
+    	final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
+    	final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock);
+
         assertTrue(service instanceof MaterialPortionServiceImpl);
     }
-    
+
     @Test
     public void testMixtureRecordingService_ReturnsInstanceOfMixtureRecordingService() {
-    	MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
+    	final MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
 
-    	MixtureRecordingService service = serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
-        
+    	final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
+
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }
-    
+
 }

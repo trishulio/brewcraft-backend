@@ -12,14 +12,12 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
     private static final Logger log = LoggerFactory.getLogger(EnhancedMaterialLotRepositoryImpl.class);
     
     private InvoiceItemRepository itemRepo;
-    private MaterialRepository materialRepo;
     private StorageRepository storageRepo;
     
     private final AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher;
 
-    public EnhancedMaterialLotRepositoryImpl(InvoiceItemRepository itemRepo, MaterialRepository materialRepo, StorageRepository storageRepo, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
+    public EnhancedMaterialLotRepositoryImpl(InvoiceItemRepository itemRepo, StorageRepository storageRepo, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
         this.itemRepo = itemRepo;
-        this.materialRepo = materialRepo;
         this.storageRepo = storageRepo;
         this.refresher = refresher;
     }
@@ -27,7 +25,6 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
     @Override
     public void refresh(Collection<MaterialLot> lots) {
         this.itemRepo.refreshAccessors(lots);
-        this.materialRepo.refreshAccessors(lots);
         this.storageRepo.refreshAccessors(lots);
     }
     

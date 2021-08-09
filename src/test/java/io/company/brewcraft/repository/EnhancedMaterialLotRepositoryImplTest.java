@@ -15,7 +15,6 @@ public class EnhancedMaterialLotRepositoryImplTest {
     private EnhancedMaterialLotRepository repo;
 
     private InvoiceItemRepository mItemRepo;
-    private MaterialRepository mMaterialRepo;
     private StorageRepository mStorageRepo;
 
     private AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> mRefresher;
@@ -24,11 +23,10 @@ public class EnhancedMaterialLotRepositoryImplTest {
     @BeforeEach
     public void init() {
         mItemRepo =  mock(InvoiceItemRepository.class);
-        mMaterialRepo = mock(MaterialRepository.class);
         mStorageRepo = mock(StorageRepository.class);
         mRefresher = mock(AccessorRefresher.class);
 
-        repo = new EnhancedMaterialLotRepositoryImpl(mItemRepo, mMaterialRepo, mStorageRepo, mRefresher);
+        repo = new EnhancedMaterialLotRepositoryImpl(mItemRepo, mStorageRepo, mRefresher);
     }
     
     @Test
@@ -38,7 +36,6 @@ public class EnhancedMaterialLotRepositoryImplTest {
         repo.refresh(lots);
 
         verify(mItemRepo, times(1)).refreshAccessors(lots);
-        verify(mMaterialRepo, times(1)).refreshAccessors(lots);
         verify(mStorageRepo, times(1)).refreshAccessors(lots);
     }
     
