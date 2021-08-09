@@ -1,4 +1,7 @@
 # brewery-backend
+
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
 Backend for the brewery business management app
 
 We are using Makefiles to abstract the tasks to build, start, and test, etc.
