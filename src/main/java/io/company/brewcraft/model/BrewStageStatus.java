@@ -11,12 +11,12 @@ import javax.persistence.SequenceGenerator;
 public class BrewStageStatus extends BaseEntity implements BaseBrewStageStatus, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
-    
+
     public static final String STATUS_IN_PROGRESS = "IN-PROGRESS";
     public static final String STATUS_COMPLETE = "COMPLETE";
     public static final String STATUS_FAILED = "FAILED";
     public static final String STATUS_SPLIT = "SPLIT";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brew_stage_status_generator")
     @SequenceGenerator(name = "brew_stage_status_generator", sequenceName = "brew_stage_status_sequence", allocationSize = 1)
@@ -42,7 +42,7 @@ public class BrewStageStatus extends BaseEntity implements BaseBrewStageStatus, 
     public Long getId() {
         return id;
     }
-    
+
     @Override
     public void setId(Long id) {
         this.id = id;
@@ -52,7 +52,7 @@ public class BrewStageStatus extends BaseEntity implements BaseBrewStageStatus, 
     public String getName() {
         return name;
     }
-    
+
     @Override
     public void setName(String name) {
         this.name = name;

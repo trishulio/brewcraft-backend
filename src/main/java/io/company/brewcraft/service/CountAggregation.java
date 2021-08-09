@@ -9,15 +9,15 @@ import io.company.brewcraft.model.BaseModel;
 
 public class CountAggregation extends BaseModel implements Aggregation {
     private Aggregation aggr;
-    
+
     public CountAggregation(String... path) {
         this(new PathAggregation(path));
     }
-    
+
     public CountAggregation(Aggregation aggr) {
         this.aggr = aggr;
     }
-    
+
     @Override
     public Expression<? extends Number> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         return cb.count(this.aggr.getExpression(root, cq, cb));

@@ -41,12 +41,12 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
 
     public InvoiceStatus() {
     }
-    
+
     public InvoiceStatus(Long id) {
         this();
         setId(id);
     }
-    
+
     public InvoiceStatus(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -64,7 +64,7 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return this.name;

@@ -30,7 +30,7 @@ public class Validator {
         if (!pass) {
             this.errors.add(String.format(err, args));
         }
-        
+
         return pass;
     }
 

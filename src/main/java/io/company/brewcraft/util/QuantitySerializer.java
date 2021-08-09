@@ -17,7 +17,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> {
     protected QuantitySerializer() {
         super();
     }
-    
+
     @Override
     public void serialize(Quantity value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         if (value == null) {
@@ -26,7 +26,7 @@ public class QuantitySerializer extends JsonSerializer<Quantity> {
             gen.writeStartObject();
             QuantityDto dto = QuantityMapper.INSTANCE.toDto(value);
             gen.writeStringField("symbol", dto.getSymbol());
-            gen.writeNumberField("value", (BigDecimal) dto.getValue());            
+            gen.writeNumberField("value", (BigDecimal) dto.getValue());
             gen.writeEndObject();
         }
     }

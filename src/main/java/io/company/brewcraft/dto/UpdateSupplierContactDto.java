@@ -3,24 +3,24 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotNull;
 
 public class UpdateSupplierContactDto {
-        
+
     private String firstName;
-    
+
     private String lastName;
-    
+
     private String position;
-    
+
     private String email;
-    
+
     private String phoneNumber;
 
     @NotNull
     private Integer version;
-    
+
     public UpdateSupplierContactDto() {
         super();
     }
-    
+
     public UpdateSupplierContactDto(String firstName, String lastName, String position, String email,
             String phoneNumber, Integer version) {
         super();
@@ -71,11 +71,11 @@ public class UpdateSupplierContactDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
-    
+
     public void setVersion(Integer version) {
         this.version = version;
     }

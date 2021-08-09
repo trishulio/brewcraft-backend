@@ -13,7 +13,7 @@ public class UpdateMaterialDtoTest {
     public void init() {
         material = new UpdateMaterialDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "testName";
@@ -24,13 +24,13 @@ public class UpdateMaterialDtoTest {
         int version = 1;
 
         UpdateMaterialDto material = new UpdateMaterialDto(name, description, categoryId, upc, baseQuantityUnit, version);
-        
+
         assertSame(name, material.getName());
         assertSame(description, material.getDescription());
         assertSame(categoryId, material.getCategoryId());
         assertSame(upc, material.getUPC());
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
-        assertSame(version, material.getVersion());        
+        assertSame(version, material.getVersion());
     }
 
     @Test
@@ -39,21 +39,21 @@ public class UpdateMaterialDtoTest {
         material.setName(name);
         assertSame(name, material.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         material.setDescription(description);
         assertSame(description, material.getDescription());
     }
-    
+
     @Test
     public void testGetSetCategoryId() {
         Long categoryId = 1L;
         material.setCategoryId(categoryId);
         assertSame(categoryId, material.getCategoryId());
     }
-    
+
     @Test
     public void testGetSetUPC() {
         String upc = "testUpc";
@@ -67,7 +67,7 @@ public class UpdateMaterialDtoTest {
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

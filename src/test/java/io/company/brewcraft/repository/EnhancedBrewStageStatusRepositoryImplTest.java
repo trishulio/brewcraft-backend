@@ -11,24 +11,24 @@ import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 
 public class EnhancedBrewStageStatusRepositoryImplTest {
-	private EnhancedBrewStageStatusRepository brewStageStatusRepository;
+    private EnhancedBrewStageStatusRepository brewStageStatusRepository;
 
-	private AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresherMock;
+    private AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresherMock;
 
-	@SuppressWarnings("unchecked")
-	@BeforeEach
-	public void init() {
-		refresherMock = mock(AccessorRefresher.class);
+    @SuppressWarnings("unchecked")
+    @BeforeEach
+    public void init() {
+        refresherMock = mock(AccessorRefresher.class);
 
-		brewStageStatusRepository = new EnhancedBrewStageStatusRepositoryImpl(refresherMock);
-	}
+        brewStageStatusRepository = new EnhancedBrewStageStatusRepositoryImpl(refresherMock);
+    }
 
-	@Test
-	public void testRefreshAccessors_CallsRefresherAccessor() {
-		List<BrewStageStatusAccessor> accessors = List.of(mock(BrewStageStatusAccessor.class), mock(BrewStageStatusAccessor.class));
+    @Test
+    public void testRefreshAccessors_CallsRefresherAccessor() {
+        List<BrewStageStatusAccessor> accessors = List.of(mock(BrewStageStatusAccessor.class), mock(BrewStageStatusAccessor.class));
 
-		brewStageStatusRepository.refreshAccessors(accessors);
+        brewStageStatusRepository.refreshAccessors(accessors);
 
-		verify(refresherMock, times(1)).refreshAccessors(accessors);
-	}
+        verify(refresherMock, times(1)).refreshAccessors(accessors);
+    }
 }

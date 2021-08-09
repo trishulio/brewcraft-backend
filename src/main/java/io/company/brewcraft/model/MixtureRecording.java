@@ -23,44 +23,44 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     public static final String FIELD_MIXTURE = "mixture";
     public static final String FIELD_MEASURE = "measure";
     public static final String FIELD_VALUE = "value";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mixture_recording_generator")
     @SequenceGenerator(name = "mixture_recording_generator", sequenceName = "mixture_recording_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mixture_id", referencedColumnName = "id")
-    private Mixture mixture;    
-    
+    private Mixture mixture;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private Measure measure;
-    
+
     @Column(name = "measure_value", precision = 20, scale = 4)
     private BigDecimal value;
-    
+
     @Column(name = "recorded_at")
     private LocalDateTime recordedAt;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
-      
+
     public MixtureRecording() {
         super();
     }
-    
+
     public MixtureRecording(Long id) {
         this();
-    	setId(id);
+        setId(id);
     }
 
     public MixtureRecording(Long id, Mixture mixture, Measure measure, BigDecimal value, LocalDateTime recordedAt,  LocalDateTime createdAt, LocalDateTime lastUpdated,
@@ -116,15 +116,15 @@ public class MixtureRecording extends BaseEntity implements BaseMixtureRecording
     }
 
     @Override
-	public LocalDateTime getRecordedAt() {
-		return recordedAt;
-	}
+    public LocalDateTime getRecordedAt() {
+        return recordedAt;
+    }
 
     @Override
-	public void setRecordedAt(LocalDateTime recordedAt) {
-		this.recordedAt = recordedAt;
-	}
-	
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt;
+    }
+
     @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;

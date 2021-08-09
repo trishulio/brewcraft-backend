@@ -18,11 +18,11 @@ public class SupplierAddressTest {
     public void init() {
         supplierAddress = new SupplierAddress();
     }
-    
+
     @Test
     public void testAllArgConstructor() {
         supplierAddress = new SupplierAddress(1L, "ADDRESS_1", "ADDRESS_2", "COUNTRY", "PROVINCE", "CITY", "POSTAL_CODE", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
-        
+
         assertEquals(1L, supplierAddress.getId());
         assertEquals("ADDRESS_1", supplierAddress.getAddressLine1());
         assertEquals("ADDRESS_2", supplierAddress.getAddressLine2());
@@ -52,7 +52,7 @@ public class SupplierAddressTest {
         supplierAddress.setAddressLine1("line1");
         assertSame("line1", supplierAddress.getAddressLine1());
     }
-    
+
     @Test
     public void testGetSetAddressLine2() {
         supplierAddress.setAddressLine2("line2");
@@ -64,19 +64,19 @@ public class SupplierAddressTest {
         supplierAddress.setCity("city");
         assertSame("city", supplierAddress.getCity());
     }
-    
+
     @Test
     public void testGetSetCountry() {
         supplierAddress.setCountry("country");
         assertSame("country", supplierAddress.getCountry());
     }
-    
+
     @Test
     public void testGetSetProvince() {
         supplierAddress.setProvince("province");
         assertSame("province", supplierAddress.getProvince());
     }
-    
+
     @Test
     public void testGetPostalCode() {
         supplierAddress.setPostalCode("postalCode");
@@ -89,7 +89,7 @@ public class SupplierAddressTest {
         supplierAddress.setCreatedAt(created);
         assertSame(created, supplierAddress.getCreatedAt());
     }
-    
+
     @Test
     public void testGetSetLastUpdated() {
         LocalDateTime lastUpdated = LocalDateTime.now();

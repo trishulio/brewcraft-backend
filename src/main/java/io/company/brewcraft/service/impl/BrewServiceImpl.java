@@ -29,19 +29,19 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class BrewServiceImpl extends BaseService implements BrewService {
     private static final Logger log = LoggerFactory.getLogger(BrewServiceImpl.class);
-        
+
     private BrewRepository brewRepository;
-        
+
     public BrewServiceImpl(BrewRepository brewRepository) {
-        this.brewRepository = brewRepository;  
+        this.brewRepository = brewRepository;
     }
-    
-	@Override
-	public Page<Brew> getBrews(Set<Long> ids, Set<Long> batchIds, Set<String> names, Set<Long> productIds,
-			Set<Long> stageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom, 
-			LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
-			
-			Specification<Brew> spec = SpecificationBuilder
+
+    @Override
+    public Page<Brew> getBrews(Set<Long> ids, Set<Long> batchIds, Set<String> names, Set<Long> productIds,
+            Set<Long> stageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
+            LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
+
+            Specification<Brew> spec = SpecificationBuilder
                 .builder()
                 .in(Brew.FIELD_ID, ids)
                 .in(Brew.FIELD_BATCH_ID, batchIds)
@@ -51,11 +51,11 @@ public class BrewServiceImpl extends BaseService implements BrewService {
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
                 .build();
-            
+
             Page<Brew> brewPage = brewRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
             return brewPage;
-	}
+    }
 
     @Override
     public Brew getBrew(Long brewId) {
@@ -63,22 +63,22 @@ public class BrewServiceImpl extends BaseService implements BrewService {
 
         return brew;
     }
-    
+
     @Override
-    public Brew addBrew(Brew brew) {  
+    public Brew addBrew(Brew brew) {
         brewRepository.refresh(List.of(brew));
 
         Brew addedBrew = brewRepository.saveAndFlush(brew);
-        
+
         return addedBrew;
     }
-    
+
     @Override
-    public Brew putBrew(Long brewId, Brew putBrew) { 
+    public Brew putBrew(Long brewId, Brew putBrew) {
         brewRepository.refresh(List.of(putBrew));
 
-        Brew existingBrew = getBrew(brewId);   
-        
+        Brew existingBrew = getBrew(brewId);
+
         if (existingBrew == null) {
             existingBrew = putBrew;
             existingBrew.setId(brewId);
@@ -86,28 +86,28 @@ public class BrewServiceImpl extends BaseService implements BrewService {
             existingBrew.optimisticLockCheck(putBrew);
             existingBrew.override(putBrew, getPropertyNames(BaseBrew.class));
         }
-        
-        return brewRepository.saveAndFlush(existingBrew); 
+
+        return brewRepository.saveAndFlush(existingBrew);
     }
-    
+
     @Override
-    public Brew patchBrew(Long brewId, Brew brewPatch) { 
-        Brew existingBrew = Optional.ofNullable(getBrew(brewId)).orElseThrow(() -> new EntityNotFoundException("Brew", brewId.toString()));            
-  
+    public Brew patchBrew(Long brewId, Brew brewPatch) {
+        Brew existingBrew = Optional.ofNullable(getBrew(brewId)).orElseThrow(() -> new EntityNotFoundException("Brew", brewId.toString()));
+
         brewRepository.refresh(List.of(brewPatch));
 
         existingBrew.optimisticLockCheck(brewPatch);
-        
+
         existingBrew.outerJoin(brewPatch, getPropertyNames(UpdateBrew.class));
-        
-        return brewRepository.saveAndFlush(existingBrew); 
+
+        return brewRepository.saveAndFlush(existingBrew);
     }
 
     @Override
     public void deleteBrew(Long brewId) {
-        brewRepository.deleteById(brewId);                        
+        brewRepository.deleteById(brewId);
     }
-    
+
     @Override
     public boolean brewExists(Long brewId) {
         return brewRepository.existsById(brewId);

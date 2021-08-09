@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class BrewStageStatusDto extends BaseDto {
     private Long id;
-    
+
     private String name;
 
     public BrewStageStatusDto() {

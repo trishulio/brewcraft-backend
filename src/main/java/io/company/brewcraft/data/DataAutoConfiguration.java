@@ -45,7 +45,7 @@ public class DataAutoConfiguration {
         TenantDataSourceManager mgr = new ContextHolderTenantDataSourceManager(ctxHolder, dataSourceManager, adminSchemaName, tenantSchemaPrefix);
         return mgr;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(JdbcTemplate.class)
     public JdbcTemplate jdbcTemplate(DataSourceManager dataSourceManager) {

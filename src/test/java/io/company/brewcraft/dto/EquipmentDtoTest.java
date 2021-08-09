@@ -18,7 +18,7 @@ public class EquipmentDtoTest {
     public void init() {
         equipmentDto = new EquipmentDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -30,23 +30,23 @@ public class EquipmentDtoTest {
         int version = 1;
 
         EquipmentDto equipmentDto = new EquipmentDto(id, facility, name, type, status, maxCapacity, version);
-        
+
         assertSame(id, equipmentDto.getId());
         assertSame(facility, equipmentDto.getFacility());
         assertSame(name, equipmentDto.getName());
         assertSame(type, equipmentDto.getType());
         assertSame(status, equipmentDto.getStatus());
         assertSame(maxCapacity, equipmentDto.getMaxCapacity());
-        assertSame(version, equipmentDto.getVersion());        
+        assertSame(version, equipmentDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
         equipmentDto.setId(id);
         assertSame(id, equipmentDto.getId());
     }
-    
+
     @Test
     public void testGetSetFacility() {
         FacilityBaseDto facility = new FacilityBaseDto();
@@ -60,28 +60,28 @@ public class EquipmentDtoTest {
         equipmentDto.setName(name);
         assertSame(name, equipmentDto.getName());
     }
-    
+
     @Test
     public void testGetSetType() {
         EquipmentType type = EquipmentType.FERMENTER;
         equipmentDto.setType(type);
         assertSame(type, equipmentDto.getType());
     }
-    
+
     @Test
     public void testGetSetStatus() {
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         equipmentDto.setStatus(status);
         assertSame(status, equipmentDto.getStatus());
     }
-    
+
     @Test
     public void testGetSetMaxCapacity() {
         QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
         equipmentDto.setMaxCapacity(maxCapacity);
         assertSame(maxCapacity, equipmentDto.getMaxCapacity());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

@@ -7,18 +7,18 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddProductDto extends BaseDto {
-    
+
     @NotEmpty
     private String name;
-    
+
     private String description;
-    
+
     @NotNull
     private Long categoryId;
-            
+
     @Valid
     private List<AddProductMeasureValueDto> targetMeasures;
-    
+
     public AddProductDto() {
         super();
     }
@@ -61,6 +61,6 @@ public class AddProductDto extends BaseDto {
 
     public void setTargetMeasures(List<AddProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
-    }        
-    
+    }
+
 }

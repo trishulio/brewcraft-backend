@@ -7,6 +7,6 @@ import io.company.brewcraft.service.BrewStageAccessor;
 
 public interface EnhancedBrewStageRepository {
     void refresh(Collection<BrewStage> brewStages);
-    
+
     void refreshAccessors(Collection<? extends BrewStageAccessor> accessors);
 }

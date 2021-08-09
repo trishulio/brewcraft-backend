@@ -17,7 +17,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class AccessorRefresherTest {
     class Entity implements Identified<Long> {
         private Long id;
-        
+
         public Entity(Long id) {
             setId(id);
         }
@@ -38,10 +38,10 @@ public class AccessorRefresherTest {
 
         void setEntity(Entity entity);
     }
-    
+
     class EntityConsumer implements EntityAccessor {
         private Entity e;
-        
+
         public EntityConsumer(Entity e) {
             setEntity(e);
         }
@@ -84,7 +84,7 @@ public class AccessorRefresherTest {
     public void testRefreshAccessors_DoesNothing_WhenAccessorsAreEmptyCollection() {
         refresher.refreshAccessors(new ArrayList<>());
     }
-    
+
     @Test
     public void testRefreshAccessors_ReplacesConsumerEntitiesWithMatchingRepoEntities_() {
         List<Entity> repoEntities = List.of( // Unordered on purpose to capture any edge case
@@ -99,9 +99,9 @@ public class AccessorRefresherTest {
             new EntityConsumer(new Entity(2L)),
             new EntityConsumer(new Entity(3L))
         );
-        
+
         refresher.refreshAccessors(consumers);
-        
+
         assertSame(repoEntities.get(1), consumers.get(0).getEntity());
         assertSame(repoEntities.get(2), consumers.get(1).getEntity());
         assertSame(repoEntities.get(0), consumers.get(2).getEntity());
@@ -121,7 +121,7 @@ public class AccessorRefresherTest {
             new EntityConsumer(new Entity(3L)),
             new EntityConsumer(null)
         );
-        
+
         refresher.refreshAccessors(consumers);
 
         assertSame(repoEntities.get(1), consumers.get(0).getEntity());
@@ -129,7 +129,7 @@ public class AccessorRefresherTest {
         assertSame(repoEntities.get(0), consumers.get(2).getEntity());
         assertSame(null, consumers.get(3).getEntity());
     }
-    
+
     @Test
     public void testRefreshAccessors_ThrowsException_WhenEntityRetrieverDoesNotReturnReferencedEntity() {
         List<Entity> repoEntities = List.of( // Unordered on purpose to capture any edge case
@@ -143,7 +143,7 @@ public class AccessorRefresherTest {
             new EntityConsumer(new Entity(2L)),
             new EntityConsumer(new Entity(3L))
         );
-        
+
         assertThrows(EntityNotFoundException.class, () -> refresher.refreshAccessors(consumers), "Cannot find all objects in Id-Set: [1, 2, 3]");
     }
 }

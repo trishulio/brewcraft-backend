@@ -7,7 +7,7 @@ import io.company.brewcraft.model.FacilityAddress;
 import io.company.brewcraft.model.Storage;
 
 public interface BaseFacility {
-    
+
     public String getName();
 
     public void setName(String name);

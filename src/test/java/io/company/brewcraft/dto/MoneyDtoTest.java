@@ -36,7 +36,7 @@ public class MoneyDtoTest {
         assertNull(dto.getAmount());
         dto.setAmount(new BigDecimal("999.00"));
         assertEquals(new BigDecimal("999"), dto.getAmount());
-        
+
         dto.setAmount(new BigDecimal("999"));
         assertEquals(new BigDecimal("999"), dto.getAmount());
     }
@@ -46,7 +46,7 @@ public class MoneyDtoTest {
     public void testEquality() {
         MoneyDto dto1 = new MoneyDto("CAD", new BigDecimal("10"));
         MoneyDto dto2 = new MoneyDto("CAD", new BigDecimal("10.00"));
-        
+
         assertEquals(dto1, dto2);
     }
 }

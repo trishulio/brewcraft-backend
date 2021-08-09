@@ -16,25 +16,24 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity(name = "PRODUCT_MEASURE_VALUE")
 public class ProductMeasureValue extends BaseEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_measure_value_generator")
     @SequenceGenerator(name = "product_measure_value_generator", sequenceName = "product_measure_value_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @JsonBackReference
-    private Product product;    
-    
+    private Product product;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "measure_id", referencedColumnName = "id")
     private Measure measure;
-    
+
     @Column(name = "product_measure_value", precision = 20, scale = 4)
     private BigDecimal value;
-    
-    
+
     public ProductMeasureValue() {
         super();
     }

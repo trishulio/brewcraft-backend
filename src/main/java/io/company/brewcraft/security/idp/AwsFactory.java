@@ -1,6 +1,5 @@
 package io.company.brewcraft.security.idp;
 
-
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 

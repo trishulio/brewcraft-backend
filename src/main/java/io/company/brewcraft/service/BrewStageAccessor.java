@@ -6,6 +6,6 @@ public interface BrewStageAccessor {
     final String ATTR_BREW_STAGE = "brewStage";
 
     BrewStage getBrewStage();
-    
+
     void setBrewStage(BrewStage brewStage);
 }

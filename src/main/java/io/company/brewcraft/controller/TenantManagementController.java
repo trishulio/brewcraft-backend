@@ -36,7 +36,7 @@ public class TenantManagementController extends BaseController {
     public List<TenantDto> getAll() {
         return tenantService.getTenants();
     }
-    
+
     @GetMapping("/tenants/{id}")
     public TenantDto getTenant(@PathVariable UUID id) {
         return tenantService.getTenant(id);
@@ -46,9 +46,9 @@ public class TenantManagementController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, String> addTenant(@Valid @RequestBody TenantDto newTenant) {
         UUID id = tenantService.addTenant(newTenant);
-        return Map.of(Identified.ATTR_ID, id.toString()); 
+        return Map.of(Identified.ATTR_ID, id.toString());
     }
-    
+
     @PutMapping("/tenants/{id}")
     public void updateTenant(@Valid @RequestBody TenantDto updatedTenant, @PathVariable UUID id) {
         tenantService.updateTenant(updatedTenant, id);

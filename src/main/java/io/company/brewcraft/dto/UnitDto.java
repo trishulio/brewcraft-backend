@@ -8,7 +8,7 @@ public class UnitDto extends BaseDto {
     private String symbol;
 
     public UnitDto() {
-        
+
     }
 
     public UnitDto(String symbol) {

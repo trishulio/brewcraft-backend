@@ -44,7 +44,7 @@ public class DataAutoConfigurationTest {
         TenantDataSourceManager mgr = config.tenantDsManager(null, null, "admin_schema", "schema_prefix");
         assertTrue(mgr instanceof ContextHolderTenantDataSourceManager);
     }
-    
+
     @Test
     public void testJdbcTemplate_ReturnsJdbcTemplate() {
         DataSourceManager dataSourceManagerMock = Mockito.mock(SchemaDataSourceManager.class);

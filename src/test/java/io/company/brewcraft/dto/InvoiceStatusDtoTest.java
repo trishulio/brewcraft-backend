@@ -22,11 +22,11 @@ public class InvoiceStatusDtoTest {
         status = new InvoiceStatusDto(99L);
         assertEquals(99L, status.getId());
     }
-    
+
     @Test
     public void testAllArgConstructor() {
         status = new InvoiceStatusDto(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
-        
+
         assertEquals(99L, status.getId());
         assertEquals("FINAL", status.getName());
         assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), status.getCreatedAt());
@@ -40,7 +40,7 @@ public class InvoiceStatusDtoTest {
         status.setId(1L);
         assertEquals(1L, status.getId());
     }
-    
+
     @Test
     public void testAccessName() {
         assertNull(status.getName());

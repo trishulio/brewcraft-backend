@@ -37,16 +37,16 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/brews/stages", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class BrewStageController extends BaseController {
-    
+
     private BrewStageService brewStageService;
-    
+
     private BrewStageMapper brewStageMapper = BrewStageMapper.INSTANCE;
-        
+
     public BrewStageController(BrewStageService brewStageService, AttributeFilter filter) {
         super(filter);
         this.brewStageService = brewStageService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<BrewStageDto> getBrewStages(
             @RequestParam(required = false) Set<Long> ids,
@@ -62,21 +62,21 @@ public class BrewStageController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-        
+
         Page<BrewStage> brewStagePage = brewStageService.getBrewStages(ids, brewLogIds, statusIds, taskIds, brewLogIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
-        
+
         List<BrewStageDto> brewStageList = brewStagePage.stream()
                 .map(brewStage -> brewStageMapper.toDto(brewStage)).collect(Collectors.toList());
 
         PageDto<BrewStageDto> dto = new PageDto<>(brewStageList, brewStagePage.getTotalPages(), brewStagePage.getTotalElements());
-        
+
         return dto;
     }
-        
+
     @GetMapping(value = "/{stageId}", consumes = MediaType.ALL_VALUE)
     public BrewStageDto getBrewStage(@PathVariable Long brewStageId) {
         BrewStage brewStage = brewStageService.getBrewStage(brewStageId);
-                
+
         Validator.assertion(brewStage != null, EntityNotFoundException.class, "BrewStage", brewStageId.toString());
 
         return brewStageMapper.toDto(brewStage);
@@ -86,27 +86,27 @@ public class BrewStageController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public BrewStageDto addBrewStage(@Valid @RequestBody AddBrewStageDto addBrewDto) {
         BrewStage brewStage = brewStageMapper.fromDto(addBrewDto);
-        
+
         BrewStage addedBrewStage = brewStageService.addBrewStage(brewStage);
-        
+
         return brewStageMapper.toDto(addedBrewStage);
     }
-    
+
     @PutMapping("/{stageId}")
     public BrewStageDto putBrewStage(@Valid @RequestBody UpdateBrewStageDto updateBrewStageDto, @PathVariable Long stageId) {
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
-        
+
         BrewStage putBrewStage = brewStageService.putBrewStage(stageId, brewStage);
 
         return brewStageMapper.toDto(putBrewStage);
     }
-    
+
     @PatchMapping("/{stageId}")
-    public BrewStageDto patchBrewStage(@PathVariable Long stageId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto) {        
+    public BrewStageDto patchBrewStage(@PathVariable Long stageId, @Valid @RequestBody UpdateBrewStageDto updateBrewStageDto) {
         BrewStage brewStage = brewStageMapper.fromDto(updateBrewStageDto);
-        
+
         BrewStage patchedBrewStage = brewStageService.patchBrewStage(stageId, brewStage);
-        
+
         return brewStageMapper.toDto(patchedBrewStage);
     }
 

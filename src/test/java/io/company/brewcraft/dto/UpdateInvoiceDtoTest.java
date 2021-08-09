@@ -107,7 +107,6 @@ public class UpdateInvoiceDtoTest {
         invoice.setVersion(3);
         assertEquals(3, invoice.getVersion());
     }
-    
 
     @Test
     public void testAccessItems() {

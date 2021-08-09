@@ -9,9 +9,9 @@ import io.company.brewcraft.model.Measure;
 @Mapper(uses = {  })
 public interface MeasureMapper {
 
-	MeasureMapper INSTANCE = Mappers.getMapper(MeasureMapper.class);
+    MeasureMapper INSTANCE = Mappers.getMapper(MeasureMapper.class);
 
     Measure fromDto(MeasureDto dto);
 
-    MeasureDto toDto(Measure measure); 
+    MeasureDto toDto(Measure measure);
 }

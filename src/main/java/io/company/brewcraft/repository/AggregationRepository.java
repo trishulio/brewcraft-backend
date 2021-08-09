@@ -23,11 +23,11 @@ public class AggregationRepository {
     private static Logger log = LoggerFactory.getLogger(AggregationRepository.class);
 
     private EntityManager em;
-    
+
     public AggregationRepository(EntityManager em) {
         this.em = em;
     }
-        
+
     public <R> Page<R> getAggregation(Class<R> clazz, Selector selection, Selector groupBy, Specification<R> spec, Pageable pageable) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<R> q = cb.createQuery(clazz);
@@ -38,19 +38,19 @@ public class AggregationRepository {
 
         List<Selection<?>> selectAttrs = selection.getSelection(root, q, cb);
         q.multiselect(selectAttrs);
-        
+
         if (groupBy != null) {
             @SuppressWarnings("unchecked")
             List<Expression<?>> groupByAttrs = (List<Expression<?>>) (List<? extends Selection<?>>) groupBy.getSelection(root, q, cb);
             q.groupBy(groupByAttrs);
         }
-        
+
         TypedQuery<R> tq = em.createQuery(q);
 
-        if (pageable != null) {            
+        if (pageable != null) {
             tq.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize());
         }
-        
+
         return new PageImpl<R>(tq.getResultList());
     }
 }

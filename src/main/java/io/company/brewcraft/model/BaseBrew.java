@@ -7,11 +7,11 @@ import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
 public interface BaseBrew extends ProductAccessor, ParentBrewAccessor {
-    
+
     String getName();
 
     void setName(String name);
-    
+
     String getDescription();
 
     void setDescription(String description);
@@ -26,14 +26,14 @@ public interface BaseBrew extends ProductAccessor, ParentBrewAccessor {
 
     List<BrewStage> getBrewStages();
 
-    void setBrewStages(List<BrewStage> brewStages);  
-    
+    void setBrewStages(List<BrewStage> brewStages);
+
     LocalDateTime getStartedAt();
 
     void setStartedAt(LocalDateTime startedAt);
 
     LocalDateTime getEndedAt();
-    
+
     void setEndedAt(LocalDateTime endedAt);
-    
+
 }

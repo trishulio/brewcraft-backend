@@ -6,7 +6,6 @@ Backend for the brewery business management app
 
 We are using Makefiles to abstract the tasks to build, start, and test, etc.
 
-
 Build the project using
 ```
 make install
@@ -18,7 +17,6 @@ This command expects that there is a `PWD` variable available in your ENV that c
 PWD=/c/Users/<username>/code/brewcraft/
 ```
 The first time this command is run, the maven container fetches all the JAR dependencies and stores them in the volume. Unless, the volumes is removed explicitly, the subsequent builds will be faster.
-
 
 
 Run app (development mode) in docker using:

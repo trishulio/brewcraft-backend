@@ -30,22 +30,22 @@ public class InvoiceItemServiceTest {
     private InvoiceItemService service;
 
     private UtilityProvider mUtilProvider;
-    
+
     @BeforeEach
     public void init() {
         mUtilProvider = mock(UtilityProvider.class);
         doReturn(new Validator()).when(mUtilProvider).getValidator();
-        
+
         service = new InvoiceItemService(mUtilProvider);
     }
-    
+
     @Test
     public void testGetPutItems_ReturnsNewItemsWithExistingItemsUpdated_WhenPayloadObjectsHaveIds() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
-        
+
         List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
@@ -53,7 +53,7 @@ public class InvoiceItemServiceTest {
 
         List<InvoiceItem> updatedItems = service.getPutItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
-        
+
         InvoiceItem item1 = it.next();
         assertEquals(1L, item1.getId());
         assertEquals("New_Description_1", item1.getDescription());
@@ -95,7 +95,7 @@ public class InvoiceItemServiceTest {
         assertEquals(new Tax(), item2.getTax());
         assertEquals(new Material(20L), item2.getMaterial());
         assertEquals(null, item2.getVersion());
-        
+
         InvoiceItem item1 = it.next();
         assertEquals(1L, item1.getId());
         assertEquals("New_Description_1", item1.getDescription());
@@ -117,17 +117,17 @@ public class InvoiceItemServiceTest {
 
         assertEquals(0, updatedItems.size());
     }
-    
+
     @Test
     public void testGetPutItems_AddsValidatorException_WhenPayloadObjectIdsDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of();
-        
+
         List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L),
             new InvoiceItem(2L),
             new InvoiceItem()
         );
-        
+
         assertThrows(ValidationException.class, () -> service.getPutItems(existingItems, itemUpdates), "1. No existing invoice item found with Id: 1. To add a new item to the invoice, don't include the version and id in the payload.\n2. No existing invoice item found with Id: 2. To add a new item to the invoice, don't include the version and id in the payload.\n 3. No existing invoice item found with Id: 3. To add a new item to the invoice, don't include the version and id in the payload.");
     }
 
@@ -147,7 +147,7 @@ public class InvoiceItemServiceTest {
 
         itemUpdates.get(0).setVersion(1);
         itemUpdates.get(1).setVersion(2);
-        
+
         assertThrows(OptimisticLockException.class, () -> service.getPutItems(existingItems, itemUpdates), "Cannot update entity with Id: 2 of version: 1 with payload of version: 2");
     }
 
@@ -156,14 +156,14 @@ public class InvoiceItemServiceTest {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
-        
+
         List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), null, new Tax(Money.parse("CAD 100")), null, LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
 
         List<InvoiceItem> updatedItems = service.getPatchItems(existingItems, itemUpdates);
         Iterator<InvoiceItem> it = updatedItems.iterator();
-        
+
         InvoiceItem item1 = it.next();
         assertEquals(1L, item1.getId());
         assertEquals("New_Description_1", item1.getDescription());
@@ -178,13 +178,13 @@ public class InvoiceItemServiceTest {
     public void testGetPutItems_ReturnsNull_WhenUpdateItemsAreNull() {
         assertNull(service.getPutItems(List.of(), null));
     }
-    
+
     @Test
     public void testGetPatchItems_AddsValidationException_WhenPayloadObjectsIdDoNotExistInExistingItems() {
         List<InvoiceItem> existingItems = List.of(
             new InvoiceItem(1L, "Description_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 100"), new Tax(), new Material(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
         );
-        
+
         List<UpdateInvoiceItem<?>> itemUpdates = List.of(
             new InvoiceItem(2L),
             new InvoiceItem(3L)
@@ -192,7 +192,7 @@ public class InvoiceItemServiceTest {
 
         assertThrows(ValidationException.class, () -> service.getPatchItems(existingItems, itemUpdates), "1. No existing invoice item found with Id: 2.\n2. No existing invoice item found with Id: 3.");
     }
-    
+
     @Test
     public void testGetPatchItems_ReturnsExistingItems_WhenPatchItemsAreNull() {
         List<InvoiceItem> existingItems = List.of(new InvoiceItem(1L));
@@ -215,7 +215,7 @@ public class InvoiceItemServiceTest {
 
         itemUpdates.get(0).setVersion(1);
         itemUpdates.get(1).setVersion(2);
-        
+
         assertThrows(OptimisticLockException.class, () -> service.getPatchItems(existingItems, itemUpdates), "Cannot update entity with Id: 2 of version: 1 with payload of version: 2");
     }
 
@@ -227,7 +227,7 @@ public class InvoiceItemServiceTest {
         );
 
         List<InvoiceItem> items = service.getAddItems(itemUpdates);
-        assertEquals(2, items.size());        
+        assertEquals(2, items.size());
         Iterator<InvoiceItem> it = items.iterator();
 
         InvoiceItem item1 = it.next();

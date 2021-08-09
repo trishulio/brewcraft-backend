@@ -9,14 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GetSupplierContactsDtoTest {
-    
+
     private GetSupplierContactsDto getSupplierContactsDto;
 
     @BeforeEach
     public void init() {
         getSupplierContactsDto = new GetSupplierContactsDto();
     }
-    
+
     @Test
     public void testConstructor() {
         List<SupplierContactWithSupplierDto> supplierContactDtos = new ArrayList<>();
@@ -26,7 +26,7 @@ public class GetSupplierContactsDtoTest {
         GetSupplierContactsDto getSupplierContactsDto = new GetSupplierContactsDto(supplierContactDtos, totalItems, totalPages);
         assertSame(supplierContactDtos, getSupplierContactsDto.getSupplierContacts());
         assertSame(totalItems, getSupplierContactsDto.getTotalItems());
-        assertSame(totalPages, getSupplierContactsDto.getTotalPages());   
+        assertSame(totalPages, getSupplierContactsDto.getTotalPages());
     }
 
     @Test

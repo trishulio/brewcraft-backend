@@ -9,7 +9,7 @@ public interface SpecificationBuilder {
     static SpecificationBuilder builder() {
         return new BasicSpecBuilder();
     }
-    
+
     SpecificationBuilder isNull(String path);
 
     SpecificationBuilder isNull(String[] paths);
@@ -17,7 +17,7 @@ public interface SpecificationBuilder {
     SpecificationBuilder in(String[] paths, Collection<?> collection);
 
     SpecificationBuilder in(String path, Collection<?> collection);
-    
+
     SpecificationBuilder not();
 
     SpecificationBuilder like(String[] paths, Set<String> queries);

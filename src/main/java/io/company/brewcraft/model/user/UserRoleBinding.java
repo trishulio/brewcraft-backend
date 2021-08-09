@@ -1,6 +1,5 @@
 package io.company.brewcraft.model.user;
 
-
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -66,15 +65,15 @@ public class UserRoleBinding extends BaseEntity implements Identified<Long>, Aud
 
     @Version
     private Integer version;
-    
+
     public UserRoleBinding() {
     }
-    
+
     public UserRoleBinding(Long id) {
         this();
         setId(id);
     }
-    
+
     public UserRoleBinding(Long id, UserRole role, User user) {
         this(id);
         setRole(role);

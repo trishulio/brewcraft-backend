@@ -27,9 +27,9 @@ public class EnhancedMaterialRepositoryImplTest {
     @Test
     public void testRefreshAccessors_CallsRefreshAccessor() {
         List<MaterialAccessor> accessors = List.of(mock(MaterialAccessor.class), mock(MaterialAccessor.class));
-        
+
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(accessors);
     }
 }

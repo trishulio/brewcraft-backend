@@ -8,16 +8,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 public class UpdateUserDtoTest {
-    
+
     private UpdateUserDto dto;
-    
+
     @BeforeEach
     public void init() {
         dto = new UpdateUserDto();
     }
-    
+
     @Test
     public void testAllArgConstructor_SetsAllFields() {
         dto = new UpdateUserDto(
@@ -32,7 +31,7 @@ public class UpdateUserDtoTest {
             List.of(10L),
             1
         );
-        
+
         assertEquals("displayName", dto.getDisplayName());
         assertEquals("firstName", dto.getFirstName());
         assertEquals("lastName", dto.getLastName());
@@ -106,11 +105,11 @@ public class UpdateUserDtoTest {
         assertNull(dto.getRoleIds());
         dto.setRoleIds(List.of(10L));
         assertEquals(List.of(10L), dto.getRoleIds());
-        
+
         dto.setRoleIds(List.of(20L));
         assertEquals(List.of(20L), dto.getRoleIds());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(dto.getVersion());

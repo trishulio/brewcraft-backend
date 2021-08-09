@@ -22,7 +22,7 @@ public class MaterialTest {
     public void init() {
         materialEntity = new Material();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -36,7 +36,7 @@ public class MaterialTest {
         int version = 1;
 
         Material materialEntity = new Material(id, name, description, category, upc, baseQuantityUnit, created, lastUpdated, version);
-        
+
         assertSame(id, materialEntity.getId());
         assertSame(name, materialEntity.getName());
         assertSame(description, materialEntity.getDescription());
@@ -45,9 +45,9 @@ public class MaterialTest {
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
         assertSame(created, materialEntity.getCreatedAt());
         assertSame(lastUpdated, materialEntity.getLastUpdated());
-        assertSame(version, materialEntity.getVersion());        
+        assertSame(version, materialEntity.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -61,21 +61,21 @@ public class MaterialTest {
         materialEntity.setName(name);
         assertSame(name, materialEntity.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         materialEntity.setDescription(description);
         assertSame(description, materialEntity.getDescription());
     }
-    
+
     @Test
     public void testGetSetCategory() {
         MaterialCategory category = new MaterialCategory();
         materialEntity.setCategory(category);
         assertSame(category, materialEntity.getCategory());
     }
-    
+
     @Test
     public void testGetSetUPC() {
         String upc = "testUpc";
@@ -89,28 +89,28 @@ public class MaterialTest {
         materialEntity.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
     }
-    
+
     @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.now();
         materialEntity.setCreatedAt(created);
         assertSame(created, materialEntity.getCreatedAt());
     }
-    
+
     @Test
     public void testGetSetLastUpdated() {
         LocalDateTime lastUpdated = LocalDateTime.now();
         materialEntity.setLastUpdated(lastUpdated);
         assertSame(lastUpdated, materialEntity.getLastUpdated());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;
         materialEntity.setVersion(version);
         assertSame(version, materialEntity.getVersion());
     }
-    
+
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
@@ -126,7 +126,7 @@ public class MaterialTest {
         Material material = new Material(id, name, description, category, upc, baseQuantityUnit, created, lastUpdated, version);
 
         final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"kg\"},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
-        
+
         JSONAssert.assertEquals(json, material.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

@@ -53,7 +53,7 @@ public class MoneyServiceTest {
             () -> Money.parse("CAD 10"),
             () -> null
         );
-        
+
         Money total = MoneyService.total(suppliers);
         assertEquals(Money.parse("CAD 10"), total);
     }
@@ -65,7 +65,7 @@ public class MoneyServiceTest {
             () -> Money.parse("CAD 20"),
             () -> Money.parse("CAD 30")
         );
-        
+
         Money total = MoneyService.total(suppliers);
         assertEquals(Money.parse("CAD 60"), total);
     }
@@ -77,7 +77,7 @@ public class MoneyServiceTest {
             () -> Money.parse("USD 20"),
             () -> Money.parse("INR 30")
         );
-        
+
         assertThrows(CurrencyMismatchException.class, () -> MoneyService.total(suppliers));
     }
 }

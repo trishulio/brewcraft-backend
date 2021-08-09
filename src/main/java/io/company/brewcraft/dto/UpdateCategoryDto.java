@@ -1,17 +1,17 @@
 package io.company.brewcraft.dto;
 
 public class UpdateCategoryDto extends BaseDto {
-        
+
     private Long parentCategoryId;
-    
+
     private String name;
-    
+
     private Integer version;
 
     public UpdateCategoryDto() {
         super();
     }
-    
+
     public UpdateCategoryDto(Long parentCategoryId, String name, Integer version) {
         super();
         this.parentCategoryId = parentCategoryId;
@@ -26,7 +26,7 @@ public class UpdateCategoryDto extends BaseDto {
     public void setParentCategoryId(Long parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -42,5 +42,5 @@ public class UpdateCategoryDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-   
+
 }

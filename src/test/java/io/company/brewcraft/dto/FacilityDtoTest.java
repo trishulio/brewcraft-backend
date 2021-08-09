@@ -16,7 +16,7 @@ public class FacilityDtoTest {
     public void init() {
         facilityDto = new FacilityDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -29,7 +29,7 @@ public class FacilityDtoTest {
         int version = 1;
 
         FacilityDto facilityDto = new FacilityDto(id, name, address, phoneNumber, faxNumber, equipment, storages, version);
-        
+
         assertSame(id, facilityDto.getId());
         assertSame(name, facilityDto.getName());
         assertSame(address, facilityDto.getAddress());
@@ -37,9 +37,9 @@ public class FacilityDtoTest {
         assertSame(faxNumber, facilityDto.getFaxNumber());
         assertSame(equipment, facilityDto.getEquipment());
         assertSame(storages, facilityDto.getStorages());
-        assertSame(version, facilityDto.getVersion());        
+        assertSame(version, facilityDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -53,21 +53,21 @@ public class FacilityDtoTest {
         facilityDto.setName(name);
         assertSame(name, facilityDto.getName());
     }
-    
+
     @Test
     public void testGetSetAddress() {
         AddressDto address = new AddressDto();
         facilityDto.setAddress(address);
         assertSame(address, facilityDto.getAddress());
     }
-    
+
     @Test
     public void testGetSetEquipment() {
         List<FacilityEquipmentDto> equipment = new ArrayList<FacilityEquipmentDto>();
         facilityDto.setEquipment(equipment);
         assertSame(equipment, facilityDto.getEquipment());
     }
-    
+
     @Test
     public void testGetSetStorages() {
         List<FacilityStorageDto> storages = new ArrayList<FacilityStorageDto>();

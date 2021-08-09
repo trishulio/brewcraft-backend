@@ -53,7 +53,7 @@ public abstract class QuantityUnitMapper {
     public abstract String toSymbol(Unit<?> unit);
 
     public abstract UnitEntity toEntity(Unit<?> unit);
-    
+
     Unit<?> fromDto(UnitDto dto) {
         Unit<?> unit = null;
         if (dto != null) {
@@ -62,11 +62,11 @@ public abstract class QuantityUnitMapper {
 
         return unit;
     }
-    
+
     public abstract UnitDto toDto(Unit<?> unit);
 
     private Map<String, Unit<?>> getAllUnits() {
-        try {           
+        try {
             Field[] fields = SupportedUnits.class.getFields();
 
             Predicate<Integer> isPublicStaticFinal = mod -> Modifier.isPublic(mod) && Modifier.isStatic(mod) && Modifier.isFinal(mod);
@@ -86,7 +86,7 @@ public abstract class QuantityUnitMapper {
                          .map(getValue)
                          .filter(o -> o instanceof Unit)
                          .collect(Collectors.toMap(o -> ((Unit<?>) o).toString(), o -> (Unit<?>) o));
-                  
+
             return unitMap;
         } catch (IllegalArgumentException e) {
             String msg = String.format("Failed to fetch property descriptors for class: %s because %s", QuantityUnitMapper.class.getName(), e.getMessage());

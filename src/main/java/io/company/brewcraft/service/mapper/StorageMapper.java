@@ -17,13 +17,13 @@ import io.company.brewcraft.model.Storage;
 
 @Mapper(uses = { QuantityMapper.class } )
 public interface StorageMapper {
-    
+
     StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);
-                            
+
     FacilityBaseDto facilityToFacilityBaseDto(Facility facility);
-    
+
     FacilityStorageDto toFacilityStorageDto(Storage storage);
-    
+
     StorageDto toDto(Storage storage);
 
     @Mappings({
@@ -40,7 +40,7 @@ public interface StorageMapper {
         @Mapping(target = Storage.ATTR_VERSION, ignore = true)
     })
     Storage fromDto(AddStorageDto storage);
-    
+
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mappings({
         @Mapping(target = Storage.ATTR_ID, ignore = true),

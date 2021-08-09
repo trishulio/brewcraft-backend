@@ -81,7 +81,7 @@ public class ShipmentController extends BaseController {
         Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statusIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
         List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
         shipments.stream().forEach(shipment -> filter(shipment, attributes));
-        
+
         return new PageDto<ShipmentDto>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
     }
 

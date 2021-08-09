@@ -11,7 +11,7 @@ public class AddProductMeasureValueDto extends BaseDto {
 
     @NotNull
     private Long measureId;
-    
+
     @NotNull
     private BigDecimal value;
 
@@ -23,7 +23,7 @@ public class AddProductMeasureValueDto extends BaseDto {
         setMeasureId(measureId);
         setValue(value);
     }
-    
+
     public Long getMeasureId() {
         return measureId;
     }

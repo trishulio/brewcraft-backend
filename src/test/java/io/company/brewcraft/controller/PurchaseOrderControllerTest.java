@@ -70,7 +70,7 @@ public class PurchaseOrderControllerTest {
             LocalDateTime.of(2001, 1, 1, 0, 0),
             1
         );
-        
+
         assertEquals(expected, dto);
     }
 
@@ -108,7 +108,7 @@ public class PurchaseOrderControllerTest {
             20,
             new HashSet<>()
         );
-        
+
         PageDto<PurchaseOrderDto> expected = new PageDto<PurchaseOrderDto>(
             List.of(
                 new PurchaseOrderDto(
@@ -126,7 +126,7 @@ public class PurchaseOrderControllerTest {
 
         assertEquals(expected, pageDto);
     }
-    
+
     @Test
     public void testGetPurchaseOrder_ReturnsPurchaseOrderDto_WhenServiceReturnPurchaseOrder() {
         PurchaseOrder po = new PurchaseOrder(
@@ -151,13 +151,13 @@ public class PurchaseOrderControllerTest {
         );
         assertEquals(expected, dto);
     }
-    
+
     @Test
     public void testGetPurchaseOrder_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
         doReturn(null).when(mService).getPurchaseOrder(1L);
         assertThrows(EntityNotFoundException.class, () -> controller.getPurchaseOrder(1L));
     }
-    
+
     @Test
     public void testAddPurchaseOrder_ReturnsPurchaseOrderDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(mService).add(any(PurchaseOrder.class));
@@ -167,7 +167,7 @@ public class PurchaseOrderControllerTest {
         );
 
         PurchaseOrderDto dto = controller.postPurchaseOrder(additionDto);
-        
+
         PurchaseOrderDto expected = new PurchaseOrderDto(
             null,
             "ORDER_1",
@@ -179,7 +179,7 @@ public class PurchaseOrderControllerTest {
 
         assertEquals(expected, dto);
     }
-    
+
     @Test
     public void testPutPurchaseOrder_ReturnsPurchaseOrderDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(1, PurchaseOrder.class)).when(mService).put(eq(1L), any(UpdatePurchaseOrder.class));
@@ -190,7 +190,7 @@ public class PurchaseOrderControllerTest {
         );
 
         PurchaseOrderDto dto = controller.putPurchaseOrder(1L, updateDto);
-        
+
         PurchaseOrderDto expected = new PurchaseOrderDto(
             null,
             "ORDER_1",

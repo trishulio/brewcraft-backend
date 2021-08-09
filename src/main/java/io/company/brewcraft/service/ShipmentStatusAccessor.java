@@ -4,6 +4,6 @@ import io.company.brewcraft.model.ShipmentStatus;
 
 public interface ShipmentStatusAccessor {
     ShipmentStatus getStatus();
-    
+
     void setStatus(ShipmentStatus status);
 }

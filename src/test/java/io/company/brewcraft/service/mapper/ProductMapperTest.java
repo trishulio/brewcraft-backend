@@ -34,32 +34,32 @@ public class ProductMapperTest {
     public void testFromDto_ReturnsEntity() {
         ProductDto dto = new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureValueDto(1L, new MeasureDto(1L, "abv", 1), new BigDecimal("100"))), 1);
         Product product = productMapper.fromDto(dto);
-        
+
         Product expectedProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L ,new Measure(1L, "abv", null, null, 1), new BigDecimal("100"), null)), null, null, null, 1);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
-        
+
         assertEquals(expectedProduct, product);
     }
-    
+
     @Test
     public void testFromAddDto_ReturnsEntity() {
         AddProductDto dto = new AddProductDto("testProduct", "testDescription", 1L, List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100"))));
         Product product = productMapper.fromDto(dto);
-        
+
         Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null ,new Measure(1L), new BigDecimal("100"), null)), null, null, null, null);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
-        
+
         assertEquals(expectedProduct, product);
     }
-    
+
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
         UpdateProductDto dto = new UpdateProductDto("testProduct", "testDescription", 1L, List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100"))), 1);
         Product product = productMapper.fromDto(dto);
-        
+
         Product expectedProduct = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(null, new Measure(1L), new BigDecimal("100"), null)), null, null, null, 1);
         expectedProduct.getTargetMeasures().get(0).setProduct(expectedProduct);
-        
+
         assertEquals(expectedProduct, product);
     }
 
@@ -70,22 +70,22 @@ public class ProductMapperTest {
 
         assertEquals(new ProductDto(1L, "testProduct", "testDescription", new CategoryDto(1L), null, null, List.of(new ProductMeasureValueDto(1L, new MeasureDto(1L, "abv", 1), new BigDecimal("100"))), 1), dto);
     }
-    
+
     @Test
     public void testBeforeDto_setsAllCategories() {
         ProductDto productDto = new ProductDto(1L, "product1", null, null, null, null, null, null);
-        
+
         ProductCategory rootCategory = new ProductCategory(1L, "root", null, null, null, null, null);
         ProductCategory subcategory1 = new ProductCategory(2L, "subcategory1", rootCategory, null, null, null, null);
         ProductCategory subcategory2 = new ProductCategory(3L, "subcategory2", subcategory1, null, null, null, null);
 
         Product product = new Product(1L, "testProduct", "testDescription", subcategory2, List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         productMapper.beforetoDto(productDto, product);
 
         assertEquals(rootCategory.getId(), productDto.getProductClass().getId());
         assertEquals(subcategory1.getId(), productDto.getType().getId());
         assertEquals(subcategory2.getId(), productDto.getStyle().getId());
     }
-    
+
  }

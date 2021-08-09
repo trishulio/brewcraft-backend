@@ -17,28 +17,28 @@ public class Selector extends BaseModel {
     public Selector() {
         this.aggregations = new ArrayList<>();
     }
-    
-    public Selector select(PathProvider provider) { 
+
+    public Selector select(PathProvider provider) {
         return select(provider.getPath());
     }
-    
+
     public Selector select(String... path) {
         return select(new PathAggregation(path));
     }
-    
+
     public Selector select(Aggregation aggr) {
         this.aggregations.add(aggr);
         return this;
     }
-    
+
     public Selector sum(String... path) {
         return select(new SumAggregation(path));
     }
-    
+
     public List<Selection<?>> getSelection(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         List<Selection<?>> selection = this.aggregations.stream()
                                                         .map(aggr -> aggr.getExpression(root, cq, cb))
                                                         .collect(Collectors.toList());
         return selection;
-    }    
+    }
 }

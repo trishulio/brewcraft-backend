@@ -20,10 +20,9 @@ public class EnhancedUserRepositoryImplTest {
     private UserStatusRepository mStatusRepo;
     private UserSalutationRepository mSalutationRepo;
     private UserRoleBindingRepository mRoleBindingRepo;
-    
+
     private EnhancedUserRepository repo;
-    
-    
+
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
@@ -32,19 +31,19 @@ public class EnhancedUserRepositoryImplTest {
         mRoleBindingRepo = mock(UserRoleBindingRepository.class);
         repo = new EnhancedUserRepositoryImpl(mRefresher, mStatusRepo, mSalutationRepo, mRoleBindingRepo);
     }
-    
+
     @Test
     public void testRefresh_RefreshedChildEntitiesAndBindings() {
         List<User> users = List.of(
             new User(1L),
             new User(2L)
         );
-        
+
         users.get(0).setRoles(List.of(new UserRole(10L)));
         users.get(1).setRoles(List.of(new UserRole(20L)));
-                
+
         repo.refresh(users);
-        
+
         List<UserRoleBinding> expected = List.of(
             new UserRoleBinding(null, new UserRole(10L), users.get(0)),
             new UserRoleBinding(null, new UserRole(20L), users.get(1))
@@ -54,12 +53,12 @@ public class EnhancedUserRepositoryImplTest {
         verify(mStatusRepo, times(1)).refreshAccessors(users);
         verify(mSalutationRepo, times(1)).refreshAccessors(users);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsAccessorRefresher() {
         UserAccessor accessor = mock(UserAccessor.class);
         repo.refreshAccessors(List.of(accessor));
-        
+
         verify(mRefresher, times(1)).refreshAccessors(List.of(accessor));
     }
 }

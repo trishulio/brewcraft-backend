@@ -6,6 +6,6 @@ public interface ProductAccessor {
     final String ATTR_PRODUCT = "product";
 
     Product getProduct();
-    
+
     void setProduct(Product product);
 }

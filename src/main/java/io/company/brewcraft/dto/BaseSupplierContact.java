@@ -27,5 +27,5 @@ public interface BaseSupplierContact {
     public String getPhoneNumber();
 
     public void setPhoneNumber(String phoneNumber);
-    
+
 }

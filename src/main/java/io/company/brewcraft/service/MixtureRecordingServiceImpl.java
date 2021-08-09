@@ -24,91 +24,90 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class MixtureRecordingServiceImpl extends BaseService implements MixtureRecordingService {
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingServiceImpl.class);
-    
+
     private MixtureRecordingRepository mixtureRecordingRepository;
-            
+
     public MixtureRecordingServiceImpl(MixtureRecordingRepository mixtureRecordingRepository) {
-        this.mixtureRecordingRepository = mixtureRecordingRepository;  
+        this.mixtureRecordingRepository = mixtureRecordingRepository;
     }
 
-	@Override
-	public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-		Specification<MixtureRecording> spec = SpecificationBuilder
+    @Override
+    public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+        Specification<MixtureRecording> spec = SpecificationBuilder
                 .builder()
                 .in(MixtureRecording.FIELD_ID, ids)
                 .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
                 .build();
-            
+
             Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
             return mixtureRecordingPage;
-	}
+    }
 
-	@Override
-	public MixtureRecording getMixtureRecording(Long mixtureRecordingId) {
-		MixtureRecording mixtureRecording = mixtureRecordingRepository.findById(mixtureRecordingId).orElse(null);
+    @Override
+    public MixtureRecording getMixtureRecording(Long mixtureRecordingId) {
+        MixtureRecording mixtureRecording = mixtureRecordingRepository.findById(mixtureRecordingId).orElse(null);
 
         return mixtureRecording;
-	}
-	
-	@Override
-	public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings) {		
-		mixtureRecordingRepository.refresh(mixtureRecordings);
+    }
 
-		List<MixtureRecording> addedMixtureRecordings = mixtureRecordingRepository.saveAll(mixtureRecordings);
-		mixtureRecordingRepository.flush();
-	        
-	    return addedMixtureRecordings;
-	}
+    @Override
+    public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings) {
+        mixtureRecordingRepository.refresh(mixtureRecordings);
 
-	@Override
-	public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording) {
-		mixtureRecordingRepository.refresh(List.of(mixtureRecording));
+        List<MixtureRecording> addedMixtureRecordings = mixtureRecordingRepository.saveAll(mixtureRecordings);
+        mixtureRecordingRepository.flush();
 
-		MixtureRecording addedMixture = mixtureRecordingRepository.saveAndFlush(mixtureRecording);
-	        
-	    return addedMixture;
-	}
+        return addedMixtureRecordings;
+    }
 
-	@Override
-	public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording putMixtureRecording) {		
-		mixtureRecordingRepository.refresh(List.of(putMixtureRecording));
+    @Override
+    public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording) {
+        mixtureRecordingRepository.refresh(List.of(mixtureRecording));
 
-		MixtureRecording existingMixtureRecording = getMixtureRecording(mixtureRecordingId);          
-        
+        MixtureRecording addedMixture = mixtureRecordingRepository.saveAndFlush(mixtureRecording);
+
+        return addedMixture;
+    }
+
+    @Override
+    public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording putMixtureRecording) {
+        mixtureRecordingRepository.refresh(List.of(putMixtureRecording));
+
+        MixtureRecording existingMixtureRecording = getMixtureRecording(mixtureRecordingId);
+
         if (existingMixtureRecording == null) {
             existingMixtureRecording = putMixtureRecording;
             existingMixtureRecording.setId(mixtureRecordingId);
         } else {
-        	existingMixtureRecording.optimisticLockCheck(putMixtureRecording);
-            existingMixtureRecording.override(putMixtureRecording, getPropertyNames(BaseMixtureRecording.class));       
+            existingMixtureRecording.optimisticLockCheck(putMixtureRecording);
+            existingMixtureRecording.override(putMixtureRecording, getPropertyNames(BaseMixtureRecording.class));
         }
-                
-        return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording); 
-	}
 
-
-	@Override
-	public MixtureRecording patchMixtureRecording(Long mixtureRecordingId, MixtureRecording patchMixtureRecording) {
-		MixtureRecording existingMixtureRecording = Optional.ofNullable(getMixtureRecording(mixtureRecordingId)).orElseThrow(() -> new EntityNotFoundException("MixtureRecording", mixtureRecordingId.toString()));            
-        
-		mixtureRecordingRepository.refresh(List.of(patchMixtureRecording));
-        
-        existingMixtureRecording.optimisticLockCheck(patchMixtureRecording);
-                     
-        existingMixtureRecording.outerJoin(patchMixtureRecording, getPropertyNames(UpdateMixtureRecording.class));
-        
         return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording);
-	}
+    }
 
-	@Override
-	public void deleteMixtureRecording(Long mixtureRecordingId) {
-		mixtureRecordingRepository.deleteById(mixtureRecordingId);		
-	}
+    @Override
+    public MixtureRecording patchMixtureRecording(Long mixtureRecordingId, MixtureRecording patchMixtureRecording) {
+        MixtureRecording existingMixtureRecording = Optional.ofNullable(getMixtureRecording(mixtureRecordingId)).orElseThrow(() -> new EntityNotFoundException("MixtureRecording", mixtureRecordingId.toString()));
 
-	@Override
-	public boolean mixtureRecordingExists(Long mixtureRecordingId) {
+        mixtureRecordingRepository.refresh(List.of(patchMixtureRecording));
+
+        existingMixtureRecording.optimisticLockCheck(patchMixtureRecording);
+
+        existingMixtureRecording.outerJoin(patchMixtureRecording, getPropertyNames(UpdateMixtureRecording.class));
+
+        return mixtureRecordingRepository.saveAndFlush(existingMixtureRecording);
+    }
+
+    @Override
+    public void deleteMixtureRecording(Long mixtureRecordingId) {
+        mixtureRecordingRepository.deleteById(mixtureRecordingId);
+    }
+
+    @Override
+    public boolean mixtureRecordingExists(Long mixtureRecordingId) {
         return mixtureRecordingRepository.existsById(mixtureRecordingId);
-	}
+    }
 
 }

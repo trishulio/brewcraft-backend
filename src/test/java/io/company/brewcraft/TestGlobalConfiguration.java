@@ -9,6 +9,5 @@ import io.company.brewcraft.security.session.ContextHolder;
 public class TestGlobalConfiguration {
     @MockBean
     private ContextHolder contextHolderMock;
-    
 
 }

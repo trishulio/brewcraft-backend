@@ -45,7 +45,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
     @Test
     public void testGetPredicates_AddsInIdsClauseToQuery_WhenIdsAreNotNull() {
         Set<Long> ids = Set.of(1L);
-        
+
         Path<Long> mPath = mock(Path.class);
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(ids);
@@ -57,7 +57,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        
+
         doReturn(mInPredicate).when(mBuilder).and(mInPredicate);
 
         specification = new EquipmentRepositoryGetAllEquipmentSpecification(ids, null, null, null);
@@ -68,13 +68,13 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
 
         verify(mRoot, times(1)).get("id");
         verify(mPath, times(1)).in(ids);
-        verify(mBuilder, times(1)).and(mInPredicate); 
+        verify(mBuilder, times(1)).and(mInPredicate);
     }
-    
+
     @Test
     public void testGetPredicates_AddsInTypesClauseToQuery_WhenTypesAreNotNull() {
         Set<String> types = Set.of(EquipmentType.BARREL.name());
-        
+
         Path<Long> mPath = mock(Path.class);
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(types);
@@ -86,7 +86,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        
+
         doReturn(mInPredicate).when(mBuilder).and(mInPredicate);
 
         specification = new EquipmentRepositoryGetAllEquipmentSpecification(null, types, null, null);
@@ -97,13 +97,13 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
 
         verify(mRoot, times(1)).get("type");
         verify(mPath, times(1)).in(types);
-        verify(mBuilder, times(1)).and(mInPredicate); 
+        verify(mBuilder, times(1)).and(mInPredicate);
     }
-    
+
     @Test
     public void testGetPredicates_AddsInStatusesClauseToQuery_WhenStatusesAreNotNull() {
         Set<String> statuses = Set.of(EquipmentStatus.ACTIVE.name());
-        
+
         Path<Long> mPath = mock(Path.class);
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(statuses);
@@ -115,7 +115,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        
+
         doReturn(mInPredicate).when(mBuilder).and(mInPredicate);
 
         specification = new EquipmentRepositoryGetAllEquipmentSpecification(null, null, statuses, null);
@@ -126,17 +126,17 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
 
         verify(mRoot, times(1)).get("status");
         verify(mPath, times(1)).in(statuses);
-        verify(mBuilder, times(1)).and(mInPredicate); 
+        verify(mBuilder, times(1)).and(mInPredicate);
     }
-    
+
     @Test
     public void testGetPredicates_AddsInFacilityIdsClauseToQuery_WhenFacilityIdsAreNotNull() {
         Set<Long> facilityIds = Set.of(1L);
-        
+
         Path<Long> mPath = mock(Path.class);
         Predicate mInPredicate = mock(Predicate.class);
         doReturn(mInPredicate).when(mPath).in(facilityIds);
- 
+
         Path<Facility> mPathFacility = mock(Path.class);
         doReturn(mPath).when(mPathFacility).get("id");
 
@@ -147,7 +147,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        
+
         doReturn(mInPredicate).when(mBuilder).and(mInPredicate);
 
         specification = new EquipmentRepositoryGetAllEquipmentSpecification(null, null, null, facilityIds);
@@ -159,7 +159,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         verify(mRoot, times(1)).get("facility");
         verify(mPathFacility, times(1)).get("id");
         verify(mPath, times(1)).in(facilityIds);
-        verify(mBuilder, times(1)).and(mInPredicate); 
+        verify(mBuilder, times(1)).and(mInPredicate);
     }
 
     @Test
@@ -201,7 +201,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
         doReturn(mQuery).when(mQuery).select(mRoot);
 
         CriteriaBuilder mBuilder = mock(CriteriaBuilder.class);
-        
+
         doReturn(mInIdsPredicate).when(mBuilder).and(mInIdsPredicate);
         doReturn(mInTypePredicate).when(mBuilder).and(mInTypePredicate);
         doReturn(mInStatusPredicate).when(mBuilder).and(mInStatusPredicate);

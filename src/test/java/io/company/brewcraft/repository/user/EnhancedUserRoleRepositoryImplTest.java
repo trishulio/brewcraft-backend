@@ -17,24 +17,24 @@ public class EnhancedUserRoleRepositoryImplTest {
     private AccessorRefresher<Long, UserRoleAccessor, UserRole> refresher;
 
     private EnhancedUserRoleRepository repo;
-    
+
     @BeforeEach
     public void init() {
         refresher = mock(AccessorRefresher.class);
         repo = new EnhancedUserRoleRepositoryImpl(refresher);
     }
-    
+
     @Test
     public void testRefresh_DoesNothing() {
         repo.refresh(null);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsRefreshAccessor() {
         UserRoleAccessor accessor = mock(UserRoleAccessor.class);
         List<UserRoleAccessor> accessors = List.of(accessor);
         repo.refreshAccessors(accessors);
-        
+
         verify(refresher, times(1)).refreshAccessors(List.of(accessor));
     }
 }

@@ -23,7 +23,7 @@ public class BasicSpecBuilder implements SpecificationBuilder {
     protected BasicSpecBuilder(SpecAccumulator accumulator) {
         this.accumulator = accumulator;
     }
-    
+
     @Override
     public BasicSpecBuilder isNull(String[] paths) {
         Aggregation aggr = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(new DeepRoot(root).get(paths));

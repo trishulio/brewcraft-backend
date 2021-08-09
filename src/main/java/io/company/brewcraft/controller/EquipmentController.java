@@ -36,16 +36,16 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EquipmentController extends BaseController {
-    
+
     private EquipmentService equipmentService;
-    
+
     private EquipmentMapper equipmentMapper = EquipmentMapper.INSTANCE;
-        
+
     public EquipmentController(EquipmentService equipmentService, AttributeFilter filter) {
         super(filter);
         this.equipmentService = equipmentService;
     }
-    
+
     @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
         @RequestParam(required = false) Set<Long> ids,
@@ -57,51 +57,51 @@ public class EquipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-        
+
         Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()
                 .map(equipment -> equipmentMapper.toDto(equipment)).collect(Collectors.toList());
 
         PageDto<EquipmentDto> dto = new PageDto<EquipmentDto>(equipmentList, equipmentPage.getTotalPages(), equipmentPage.getTotalElements());
-        
+
         return dto;
     }
-        
+
     @GetMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE)
     public EquipmentDto getEquipment(@PathVariable Long equipmentId) {
         Equipment equipment = equipmentService.getEquipment(equipmentId);
-        
+
         Validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
-        
+
         return equipmentMapper.toDto(equipment);
     }
 
     @PostMapping("/{facilityId}/equipment")
     @ResponseStatus(HttpStatus.CREATED)
-    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {        
+    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-        
+
         Equipment addedEquipment = equipmentService.addEquipment(facilityId, equipment);
-        
+
         return equipmentMapper.toDto(addedEquipment);
     }
-    
+
     @PutMapping("/{facilityId}/equipment/{equipmentId}")
     public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long facilityId,  @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-        
+
         Equipment putEquipment = equipmentService.putEquipment(facilityId, equipmentId, equipment);
 
         return equipmentMapper.toDto(putEquipment);
     }
-    
+
     @PatchMapping("/equipment/{equipmentId}")
     public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-        
+
         Equipment patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);
-        
+
         return equipmentMapper.toDto(patchedEquipment);
     }
 

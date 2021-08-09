@@ -41,18 +41,18 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brew_generator")
     @SequenceGenerator(name = "brew_generator", sequenceName = "brew_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     @Column(name = "batch_id", nullable = false)
     private Long batchId;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "parent_brew_id", referencedColumnName = "id")
     private Brew parentBrew;
@@ -60,40 +60,40 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @OneToMany(mappedBy = "parentBrew")
     @JsonIgnore
     private List<Brew> childBrews;
-    
+
     @OneToMany(mappedBy="brew", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("startedAt ASC")
     @JsonIgnore
     private List<BrewStage> brewStages;
-    
+
     @Column(name = "started_at")
     private LocalDateTime startedAt;
 
     @Column(name = "ended_at")
     private LocalDateTime endedAt;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
     public Brew() {
     }
-    
+
     public Brew(Long id) {
         this();
         setId(id);
     }
 
-    public Brew(Long id, String name, String description, Long batchId, Product product, Brew parentBrew, List<Brew> childBrews, List<BrewStage> brewStages, LocalDateTime startedAt, 
+    public Brew(Long id, String name, String description, Long batchId, Product product, Brew parentBrew, List<Brew> childBrews, List<BrewStage> brewStages, LocalDateTime startedAt,
             LocalDateTime endedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
-    	this(id);
+        this(id);
         setName(name);
         setDescription(description);
         setBatchId(batchId);
@@ -117,7 +117,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return name;
@@ -127,7 +127,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     public void setName(String name) {
         this.name = name;
     }
-    
+
     @Override
     public String getDescription() {
         return description;
@@ -166,7 +166,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @Override
     public void setParentBrew(Brew parentBrew) {
         this.parentBrew = parentBrew;
-        
+
         if (parentBrew != null) {
             parentBrew.addChildBrew(this);
         }
@@ -179,15 +179,15 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
     @Override
     public void setChildBrews(List<Brew> childBrews) {
-    	if (this.childBrews != null) {
+        if (this.childBrews != null) {
             this.childBrews.stream().collect(Collectors.toList()).forEach(this::removeChildBrew);
-    	}
+        }
 
         if (childBrews != null) {
-        	childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
+            childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
         }
     }
-    
+
     public void addChildBrew(Brew childBrew) {
         if (childBrew == null) {
             return;
@@ -197,12 +197,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
             this.childBrews = new ArrayList<>();
         }
 
-        if (childBrew.getParentBrew() != this) {            
+        if (childBrew.getParentBrew() != this) {
             childBrew.setParentBrew(this);
         }
-        
+
         if (!this.childBrews.contains(childBrew)) {
-            this.childBrews.add(childBrew);            
+            this.childBrews.add(childBrew);
         }
     }
 
@@ -212,11 +212,11 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
         }
 
         boolean removed = this.childBrews.remove(childBrew);
-        
-        if (removed) {            
+
+        if (removed) {
             childBrew.setParentBrew(null);
         }
-        
+
         return removed;
     }
 
@@ -227,15 +227,15 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
 
     @Override
     public void setBrewStages(List<BrewStage> brewStages) {
-    	if (this.brewStages != null) {
+        if (this.brewStages != null) {
             this.brewStages.stream().collect(Collectors.toList()).forEach(this::removeBrewStage);
-    	}
+        }
 
         if (brewStages != null) {
-        	brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
+            brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
         }
     }
-    
+
     public void addBrewStage(BrewStage brewStage) {
         if (brewStage == null) {
             return;
@@ -245,12 +245,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
             this.brewStages = new ArrayList<>();
         }
 
-        if (brewStage.getBrew() != this) {            
+        if (brewStage.getBrew() != this) {
             brewStage.setBrew(this);
         }
-        
+
         if (!this.brewStages.contains(brewStage)) {
-            this.brewStages.add(brewStage);            
+            this.brewStages.add(brewStage);
         }
     }
 
@@ -260,14 +260,14 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
         }
 
         boolean removed = this.brewStages.remove(brewStage);
-        
-        if (removed) {            
+
+        if (removed) {
             brewStage.setBrew(null);
         }
-        
+
         return removed;
     }
-    
+
     @Override
     public LocalDateTime getStartedAt() {
         return startedAt;

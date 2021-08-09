@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public Filter ctxHolderFilter(ContextHolder ctxHolder) {
         return new ContextHolderFilter(ctxHolder);
     }
-    
+
     @Bean
     public Filter utilityFilter(UtilityProvider utilityProvider) {
         return new UtilityProviderFilter(utilityProvider);

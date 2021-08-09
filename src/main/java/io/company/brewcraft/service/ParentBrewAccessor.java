@@ -6,6 +6,6 @@ public interface ParentBrewAccessor {
     final String ATTR_PARENT_BREW = "parentBrew";
 
     Brew getParentBrew();
-    
+
     void setParentBrew(Brew brew);
 }

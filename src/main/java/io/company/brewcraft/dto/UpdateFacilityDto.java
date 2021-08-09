@@ -5,23 +5,23 @@ import java.util.List;
 public class UpdateFacilityDto extends BaseDto {
 
     private String name;
-    
+
     private AddressDto address;
 
     private String phoneNumber;
-    
+
     private String faxNumber;
-    
+
     private List<FacilityEquipmentDto> equipment;
-    
+
     private List<FacilityStorageDto> storages;
-    
+
     private Integer version;
-    
+
     public UpdateFacilityDto() {
         super();
     }
-    
+
     public UpdateFacilityDto(String name, AddressDto address, String phoneNumber, String faxNumber, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages, Integer version) {
         super();
         this.name = name;
@@ -40,7 +40,7 @@ public class UpdateFacilityDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public AddressDto getAddress() {
         return address;
     }
@@ -48,7 +48,7 @@ public class UpdateFacilityDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-    
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -68,15 +68,15 @@ public class UpdateFacilityDto extends BaseDto {
     public List<FacilityEquipmentDto> getEquipment() {
         return equipment;
     }
-    
+
     public void setEquipment(List<FacilityEquipmentDto> equipment) {
         this.equipment = equipment;
     }
-    
+
     public List<FacilityStorageDto> getStorages() {
         return storages;
     }
-    
+
     public void setStorages(List<FacilityStorageDto> storages) {
         this.storages = storages;
     }

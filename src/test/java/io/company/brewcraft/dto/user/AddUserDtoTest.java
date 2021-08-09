@@ -9,14 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AddUserDtoTest {
-    
+
     private AddUserDto dto;
-    
+
     @BeforeEach
     public void init() {
         dto = new AddUserDto();
     }
-    
+
     @Test
     public void testAllArgConstructors_SetsAllValues() {
         dto = new AddUserDto(
@@ -31,7 +31,7 @@ public class AddUserDtoTest {
             "imageUrl",
             List.of(10L)
         );
-        
+
         assertEquals("userName", dto.getUserName());
         assertEquals("displayName", dto.getDisplayName());
         assertEquals("firstName", dto.getFirstName());
@@ -43,7 +43,7 @@ public class AddUserDtoTest {
         assertEquals("imageUrl", dto.getImageUrl());
         assertEquals(List.of(10L), dto.getRoleIds());
     }
-    
+
     @Test
     public void testAccessUserName() {
         assertNull(dto.getUserName());
@@ -112,7 +112,7 @@ public class AddUserDtoTest {
         assertNull(dto.getRoleIds());
         dto.setRoleIds(List.of(10L));
         assertEquals(List.of(10L), dto.getRoleIds());
-        
+
         dto.setRoleIds(List.of(20L));
         assertEquals(List.of(20L), dto.getRoleIds());
     }

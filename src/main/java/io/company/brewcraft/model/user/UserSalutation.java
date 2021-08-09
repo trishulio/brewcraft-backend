@@ -45,12 +45,12 @@ public class UserSalutation extends BaseEntity implements BaseUserSalutation, Up
 
     public UserSalutation() {
     }
-    
+
     public UserSalutation(Long id) {
         this();
         setId(id);
     }
-    
+
     public UserSalutation(Long id, String title, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setTitle(title);
@@ -68,7 +68,7 @@ public class UserSalutation extends BaseEntity implements BaseUserSalutation, Up
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getTitle() {
         return this.title;

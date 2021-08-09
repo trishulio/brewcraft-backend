@@ -19,7 +19,7 @@ public interface ProductCategoryMapper {
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
     CategoryDto toDto(ProductCategory productCategory);
-    
+
     CategoryWithParentDto toCategoryWithParentDto(ProductCategory productCategory);
 
     ProductCategory fromDto(CategoryDto productCategoryDto);
@@ -28,5 +28,5 @@ public interface ProductCategoryMapper {
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     ProductCategory fromDto(UpdateCategoryDto productCategoryDto);
-    
+
 }

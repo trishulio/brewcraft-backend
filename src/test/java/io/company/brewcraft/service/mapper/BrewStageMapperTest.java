@@ -21,53 +21,53 @@ import io.company.brewcraft.model.Mixture;
 
 public class BrewStageMapperTest {
 
-	private BrewStageMapper brewStageMapper;
+    private BrewStageMapper brewStageMapper;
 
-	@BeforeEach
-	public void init() {
-		brewStageMapper = BrewStageMapper.INSTANCE;
-	}
+    @BeforeEach
+    public void init() {
+        brewStageMapper = BrewStageMapper.INSTANCE;
+    }
 
-	@Test
-	public void testFromDto_ReturnsEntity() {
-		BrewStageDto dto = new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-		
-		BrewStage brewStage = brewStageMapper.fromDto(dto);
+    @Test
+    public void testFromDto_ReturnsEntity() {
+        BrewStageDto dto = new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-		BrewStage expectedBrewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
+        BrewStage brewStage = brewStageMapper.fromDto(dto);
 
-		assertEquals(expectedBrewStage, brewStage);
-	}
+        BrewStage expectedBrewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
 
-	@Test
-	public void testFromAddDto_ReturnsEntity() {
-		AddBrewStageDto dto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
-		
-		BrewStage brewStage = brewStageMapper.fromDto(dto);
+        assertEquals(expectedBrewStage, brewStage);
+    }
 
-		BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, null);
+    @Test
+    public void testFromAddDto_ReturnsEntity() {
+        AddBrewStageDto dto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
 
-		assertEquals(expectedBrewStage, brewStage);
-	}
+        BrewStage brewStage = brewStageMapper.fromDto(dto);
 
-	@Test
-	public void testFromUpdateDto_ReturnsEntity() {
-		UpdateBrewStageDto dto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-		
-		BrewStage brewStage = brewStageMapper.fromDto(dto);
+        BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, null);
 
-		BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
+        assertEquals(expectedBrewStage, brewStage);
+    }
 
-		assertEquals(expectedBrewStage, brewStage);
-	}
+    @Test
+    public void testFromUpdateDto_ReturnsEntity() {
+        UpdateBrewStageDto dto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-	@Test
-	public void testToDto_ReturnsDto() {
-		BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
-		
-		BrewStageDto dto = brewStageMapper.toDto(brewStage);
+        BrewStage brewStage = brewStageMapper.fromDto(dto);
 
-		assertEquals(new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), dto);
-	}
-	
+        BrewStage expectedBrewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, null, 1);
+
+        assertEquals(expectedBrewStage, brewStage);
+    }
+
+    @Test
+    public void testToDto_ReturnsDto() {
+        BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+
+        BrewStageDto dto = brewStageMapper.toDto(brewStage);
+
+        assertEquals(new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), dto);
+    }
+
 }

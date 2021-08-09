@@ -54,7 +54,7 @@ public interface MaterialMapper {
         @Mapping(target = "category", ignore = true)
     })
     MaterialDto toDto(Material material);
-    
+
     @Mappings({
         @Mapping(target = Material.ATTR_ID),
         @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
@@ -67,7 +67,7 @@ public interface MaterialMapper {
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         MaterialCategory category = material.getCategory();
-        
+
         if (category == null) {
             materialDto.setMaterialClass(null);
         } else if (category.getParentCategory() == null) {
@@ -90,11 +90,11 @@ public interface MaterialMapper {
             target.setCategory(null);
         }
     }
-    
+
     @AfterMapping
     default void afterFromDto(@MappingTarget Material material, MaterialDto materialDto) {
-        MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE; 
-        
+        MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
+
         CategoryDto categoryDto = null;
         if (materialDto.getSubcategory() != null) {
             categoryDto = materialDto.getSubcategory();
@@ -103,7 +103,7 @@ public interface MaterialMapper {
         } else {
             categoryDto = materialDto.getMaterialClass();
         }
-        
+
         material.setCategory(materialCategoryMapper.fromDto(categoryDto));
     }
 }

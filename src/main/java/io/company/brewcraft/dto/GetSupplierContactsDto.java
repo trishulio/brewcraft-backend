@@ -3,17 +3,17 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class GetSupplierContactsDto {
-    
+
     List<SupplierContactWithSupplierDto> supplierContacts;
-    
+
     Long totalItems;
-    
+
     int totalPages;
-    
+
     public GetSupplierContactsDto() {
-        
+
     }
-    
+
     public GetSupplierContactsDto(List<SupplierContactWithSupplierDto> supplierContacts, Long totalItems, int totalPages) {
         this.supplierContacts = supplierContacts;
         this.totalItems = totalItems;

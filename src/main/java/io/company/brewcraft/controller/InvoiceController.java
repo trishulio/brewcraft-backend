@@ -58,8 +58,8 @@ public class InvoiceController extends BaseController {
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "invoice_numbers") Set<String> invoiceNumbers,
-        @RequestParam(required = false, name = "invoice_desc") Set<String> invoiceDescriptions,        
-        @RequestParam(required = false, name = "invoice_item_desc") Set<String> invoiceItemDescriptions,        
+        @RequestParam(required = false, name = "invoice_desc") Set<String> invoiceDescriptions,
+        @RequestParam(required = false, name = "invoice_item_desc") Set<String> invoiceItemDescriptions,
         @RequestParam(required = false, name = "generated_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnFrom,
         @RequestParam(required = false, name = "generated_on_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnTo,
         @RequestParam(required = false, name = "received_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime receivedOnFrom,
@@ -140,7 +140,7 @@ public class InvoiceController extends BaseController {
 
         return dto;
     }
-    
+
     @PatchMapping("/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
@@ -149,7 +149,7 @@ public class InvoiceController extends BaseController {
         Invoice invoice = invoiceService.patch(invoiceId, patch);
         InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
-        return dto;        
+        return dto;
     }
 
     private PageDto<InvoiceDto> response(Page<Invoice> invoices, Set<String> attributes) {

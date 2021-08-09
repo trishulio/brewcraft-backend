@@ -242,7 +242,7 @@ public class InvoiceControllerTest {
        assertNull(invoice.getStatus());
        assertNull(invoice.getItems());
    }
-   
+
    @Test
    public void testGetInvoice_ReturnsInvoiceDtoMappedFromServiceInvoice() {
        Invoice mInvoice = new Invoice(
@@ -261,7 +261,7 @@ public class InvoiceControllerTest {
            1
        );
        doReturn(mInvoice).when(mService).getInvoice(1L);
-       
+
        InvoiceDto invoice = controller.getInvoice(1L, Set.of());
        assertEquals(12345L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
@@ -319,7 +319,7 @@ public class InvoiceControllerTest {
        assertNull(invoice.getStatus());
        assertNull(invoice.getItems());
    }
-   
+
    @Test
    public void testGetInvoice_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
        doReturn(null).when(mService).getInvoice(1L);
@@ -331,7 +331,7 @@ public class InvoiceControllerTest {
        doReturn(99).when(mService).delete(Set.of(1L, 11L, 111L));
        int count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
        assertEquals(99, count);
-       
+
        doReturn(9999).when(mService).delete(Set.of(1L, 11L, 111L));
        count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
        assertEquals(9999, count);

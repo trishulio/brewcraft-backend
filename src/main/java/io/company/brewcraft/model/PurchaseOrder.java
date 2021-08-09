@@ -21,7 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, UpdatePurchaseOrder, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";
-    public static final String FIELD_SUPPLIER = "supplier";    
+    public static final String FIELD_SUPPLIER = "supplier";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_order_generator")
@@ -38,11 +38,11 @@ public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, Upda
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 

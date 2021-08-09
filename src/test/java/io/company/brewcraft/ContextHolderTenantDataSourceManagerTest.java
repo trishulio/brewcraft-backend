@@ -105,7 +105,7 @@ public class ContextHolderTenantDataSourceManagerTest {
     public void testQuery_PerformsConnectionRollback_WhenErrorIsThrownInSupplier() throws SQLException {
         DataSource mDs = mock(DataSource.class);
         doReturn(mDs).when(mConnMgr).getAdminDataSource();
-        
+
         Connection mConn = mock(Connection.class);
         doReturn(mConn).when(mDs).getConnection();
 

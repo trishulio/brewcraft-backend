@@ -213,12 +213,12 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
             this.lots = new ArrayList<>();
         }
 
-        if (lot.getShipment() != this) {            
+        if (lot.getShipment() != this) {
             lot.setShipment(this);
         }
-        
+
         if (!this.lots.contains(lot)) {
-            this.lots.add(lot);            
+            this.lots.add(lot);
         }
     }
 
@@ -228,8 +228,8 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         }
 
         boolean removed = this.lots.remove(lot);
-        
-        if (removed) {            
+
+        if (removed) {
             lot.setShipment(null);
         }
 

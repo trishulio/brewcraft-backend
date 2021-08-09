@@ -49,7 +49,7 @@ public class InvoiceStatusMapperTest {
         InvoiceStatusDto expected = new InvoiceStatusDto(99l);
         assertEquals(expected, status);
     }
-    
+
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(mapper.toDto(null));

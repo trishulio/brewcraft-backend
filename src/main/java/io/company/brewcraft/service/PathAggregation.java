@@ -10,7 +10,7 @@ import io.company.brewcraft.repository.DeepRoot;
 
 public class PathAggregation extends BaseModel implements Aggregation {
     private String[] path;
-    
+
     public PathAggregation(String[] path) {
         this.path = path;
     }

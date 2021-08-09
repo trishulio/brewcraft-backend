@@ -48,7 +48,7 @@ services:
   pg-admin:
     image: dpage/pgadmin4
     restart: always
-    depends_on: 
+    depends_on:
       - postgresdb
     volumes:
       - db-admin-data:/var/lib/pgadmin
@@ -57,7 +57,7 @@ services:
         - "8443:443"
     logging:
         driver: none
-    environment: 
+    environment:
         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         PGADMIN_LISTEN_PORT: "443"

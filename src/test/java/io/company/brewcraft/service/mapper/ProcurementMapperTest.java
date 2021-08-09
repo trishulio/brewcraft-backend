@@ -38,23 +38,23 @@ public class ProcurementMapperTest {
     public void testFromDto_ReturnsProcurementFromAddDto_WhenDtoIsNotNull() {
         AddInvoiceDto invoiceDto = new AddInvoiceDto();
         invoiceDto.setDescription("desc_1");
-        
+
         AddPurchaseOrderDto poDto = new AddPurchaseOrderDto();
         poDto.setOrderNumber("ORDER_1");
 
         AddProcurementDto dto = new AddProcurementDto(poDto, invoiceDto);
-        
+
         Procurement procurement = mapper.fromDto(dto);
-        
+
         Invoice expectedInvoice = new Invoice();
         expectedInvoice.setDescription("desc_1");
         expectedInvoice.setItems(List.of());
-        
+
         PurchaseOrder expectedPo = new PurchaseOrder();
         expectedPo.setOrderNumber("ORDER_1");
 
         Procurement expected = new Procurement(expectedPo, expectedInvoice, null);
-        
+
         assertEquals(expected, procurement);
     }
 
@@ -69,7 +69,7 @@ public class ProcurementMapperTest {
         ProcurementDto dto = mapper.toDto(procurement);
 
         ProcurementDto expected = new ProcurementDto(new PurchaseOrderDto(1L), new InvoiceDto(2L), new ShipmentDto(3L));
-        
+
         assertEquals(expected, dto);
     }
 

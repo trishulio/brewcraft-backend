@@ -36,17 +36,17 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
             if (result != null && result.getSecretString() != null) {
                 secret = result.getSecretString();
             }
-            
+
             return secret;
-            
+
         } catch (ResourceNotFoundException e) {
-        	return null;        	
+            return null;
         } catch (InvalidRequestException | InvalidParameterException e) {
             logger.error("Error geting secret value for secretId: {}", secretId);
             throw new IOException(e);
         }
     }
-    
+
     @Override
     public Boolean exists(String secretId) throws IOException {
         GetSecretValueRequest getSecretRequest = new GetSecretValueRequest().withSecretId(secretId);
@@ -56,25 +56,25 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
         try {
             getSecretValueResult = client.getSecretValue(getSecretRequest);
             if (getSecretValueResult != null && getSecretValueResult.getSecretString() != null) {
-            	secretExists = true;
+                secretExists = true;
             }
         } catch (ResourceNotFoundException e) {
-        	secretExists = false;        	
+            secretExists = false;
         } catch (InvalidRequestException | InvalidParameterException e) {
             logger.error("Error checking if secret exists for secretId: {}", secretId);
             throw new IOException(e);
         }
-        
+
         return secretExists;
     }
 
     @Override
     public void put(String secretId, String secret) throws IOException {
-    	Boolean secretExists = this.exists(secretId);
-    	
-    	if (!secretExists) {
-    		this.create(secretId, secret);
-    	} else {
+        Boolean secretExists = this.exists(secretId);
+
+        if (!secretExists) {
+            this.create(secretId, secret);
+        } else {
             PutSecretValueRequest updateSecretRequest = new PutSecretValueRequest().withSecretId(secretId).withSecretString(secret);
 
             try {
@@ -82,12 +82,12 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
             } catch (InvalidRequestException | InvalidParameterException e) {
                 logger.error("Error updating secret with secretId: {}", secretId);
                 throw new IOException(e);
-            }	
-    	}
+            }
+        }
     }
-    
+
     @Override
-    public void create(String secretId, String secret) throws IOException {    
+    public void create(String secretId, String secret) throws IOException {
         CreateSecretRequest createSecretRequest = new CreateSecretRequest().withName(secretId).withSecretString(secret);
 
         try {
@@ -97,9 +97,9 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
             throw new IOException(e);
         }
     }
-    
+
     @Override
-    public void update(String secretId, String secret) throws IOException { 
+    public void update(String secretId, String secret) throws IOException {
         UpdateSecretRequest updateSecretRequest = new UpdateSecretRequest().withSecretId(secretId).withSecretString(secret);
 
         try {

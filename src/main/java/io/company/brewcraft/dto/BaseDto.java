@@ -12,7 +12,7 @@ public abstract class BaseDto extends BaseModel {
 //    public String toString() {
 //        return "JSON";
 //    }
-    
+
     public static <T> T fromString(String s, Class<T> clazz) {
         // TODO:
         return null;

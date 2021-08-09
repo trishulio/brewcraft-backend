@@ -19,11 +19,11 @@ public class TenantTest {
     public void init() {
         tenant = new Tenant();
     }
-    
+
     @Test
     public void testAllArgConstructor() {
         tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", "TENANT_URL", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
-        
+
         assertEquals(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), tenant.getId());
         assertEquals("TENANT_1", tenant.getName());
         assertEquals("TENANT_URL", tenant.getUrl());
@@ -58,7 +58,7 @@ public class TenantTest {
         tenant.setCreatedAt(created);
         assertSame(created, tenant.getCreatedAt());
     }
-    
+
     @Test
     public void testGetSetLastUpdated() {
         LocalDateTime lastUpdated = LocalDateTime.now();

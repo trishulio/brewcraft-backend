@@ -7,6 +7,6 @@ import io.company.brewcraft.model.user.UserStatusAccessor;
 
 public interface EnhancedUserStatusRepository {
     void refresh(Collection<UserStatus> statuses);
-    
+
     void refreshAccessors(Collection<? extends UserStatusAccessor> accessors);
 }

@@ -3,21 +3,21 @@ package io.company.brewcraft.dto;
 public class FacilityBaseDto extends BaseDto {
 
     private Long id;
-    
+
     private String name;
-    
+
     private AddressDto address;
-    
+
     private String phoneNumber;
-    
+
     private String faxNumber;
-        
+
     private Integer version;
-    
+
     public FacilityBaseDto() {
         super();
     }
-    
+
     public FacilityBaseDto(Long id, String name, AddressDto address, String phoneNumber, String faxNumber, Integer version) {
         super();
         this.id = id;
@@ -43,7 +43,7 @@ public class FacilityBaseDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public AddressDto getAddress() {
         return address;
     }
@@ -51,7 +51,7 @@ public class FacilityBaseDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-    
+
     public String getPhoneNumber() {
         return phoneNumber;
     }

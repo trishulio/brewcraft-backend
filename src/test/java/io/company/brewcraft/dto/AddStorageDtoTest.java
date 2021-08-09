@@ -15,14 +15,14 @@ public class AddStorageDtoTest {
     public void init() {
         addStorageDto = new AddStorageDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "storage1";
-        StorageType type = StorageType.GENERAL;        
+        StorageType type = StorageType.GENERAL;
 
         AddStorageDto addStorageDto = new AddStorageDto(name, type);
-        
+
         assertSame(name, addStorageDto.getName());
         assertSame(type, addStorageDto.getType());
     }
@@ -33,7 +33,7 @@ public class AddStorageDtoTest {
         addStorageDto.setName(name);
         assertSame(name, addStorageDto.getName());
     }
-    
+
     @Test
     public void testGetSetType() {
         StorageType type = StorageType.GENERAL;

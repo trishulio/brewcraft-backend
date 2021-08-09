@@ -14,7 +14,7 @@ import io.company.brewcraft.model.BrewStage;
 public interface BrewStageMapper {
 
     BrewStageMapper INSTANCE = Mappers.getMapper(BrewStageMapper.class);
-    
+
     BrewStage fromDto(Long id);
 
     @Mapping(target = "brew", source = "brewId")
@@ -28,7 +28,7 @@ public interface BrewStageMapper {
     @Mapping(target = "status", source = "statusId")
     @Mapping(target = "brew", source = "brewId")
     BrewStage fromDto(AddBrewStageDto dto);
-    
+
     @Mapping(target = Brew.ATTR_ID, ignore = true)
     @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)

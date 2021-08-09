@@ -5,18 +5,18 @@ import java.util.List;
 import javax.validation.Valid;
 
 public class UpdateProductDto extends BaseDto {
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private Long categoryId;
-        
+
     @Valid
     private List<AddProductMeasureValueDto> targetMeasures;
-        
+
     private Integer version;
-    
+
     public UpdateProductDto() {
         super();
     }
@@ -70,5 +70,5 @@ public class UpdateProductDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }

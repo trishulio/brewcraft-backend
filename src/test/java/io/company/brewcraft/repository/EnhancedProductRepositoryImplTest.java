@@ -11,24 +11,24 @@ import io.company.brewcraft.model.Product;
 import io.company.brewcraft.service.ProductAccessor;
 
 public class EnhancedProductRepositoryImplTest {
-	private EnhancedProductRepository productRepository;
+    private EnhancedProductRepository productRepository;
 
-	private AccessorRefresher<Long, ProductAccessor, Product> refresherMock;
+    private AccessorRefresher<Long, ProductAccessor, Product> refresherMock;
 
-	@SuppressWarnings("unchecked")
-	@BeforeEach
-	public void init() {
-		refresherMock = mock(AccessorRefresher.class);
+    @SuppressWarnings("unchecked")
+    @BeforeEach
+    public void init() {
+        refresherMock = mock(AccessorRefresher.class);
 
-		productRepository = new EnhancedProductRepositoryImpl(refresherMock);
-	}
+        productRepository = new EnhancedProductRepositoryImpl(refresherMock);
+    }
 
-	@Test
-	public void testRefreshAccessors_CallsRefresherAccessor() {
-		List<ProductAccessor> accessors = List.of(mock(ProductAccessor.class), mock(ProductAccessor.class));
+    @Test
+    public void testRefreshAccessors_CallsRefresherAccessor() {
+        List<ProductAccessor> accessors = List.of(mock(ProductAccessor.class), mock(ProductAccessor.class));
 
-		productRepository.refreshAccessors(accessors);
+        productRepository.refreshAccessors(accessors);
 
-		verify(refresherMock, times(1)).refreshAccessors(accessors);
-	}
+        verify(refresherMock, times(1)).refreshAccessors(accessors);
+    }
 }

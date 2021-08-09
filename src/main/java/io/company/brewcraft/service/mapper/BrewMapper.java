@@ -25,7 +25,7 @@ public interface BrewMapper {
     @Mapping(target = "parentBrew", source = "parentBrewId")
     @Mapping(target = "product", source = "productId")
     Brew fromDto(AddBrewDto dto);
-    
+
     Brew fromDto(Long id);
 
     @Mapping(target = Shipment.ATTR_ID, ignore = true)

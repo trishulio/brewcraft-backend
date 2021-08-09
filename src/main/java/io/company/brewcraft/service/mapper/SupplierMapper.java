@@ -14,11 +14,11 @@ import io.company.brewcraft.model.Supplier;
 
 @Mapper(uses = { SupplierContactMapper.class, AddressMapper.class})
 public interface SupplierMapper {
-    
+
     SupplierMapper INSTANCE = Mappers.getMapper(SupplierMapper.class);
-    
+
     SupplierDto toDto(Supplier supplier);
-    
+
     @Mappings({
         @Mapping(target = Supplier.ATTR_ID),
         @Mapping(target = Supplier.ATTR_CREATED_AT, ignore = true),
@@ -29,7 +29,7 @@ public interface SupplierMapper {
         @Mapping(target = Supplier.ATTR_NAME, ignore = true)
     })
     Supplier fromDto(Long id);
-    
+
     @Mappings({
         @Mapping(target = Supplier.ATTR_ID, ignore = true),
         @Mapping(target = Supplier.ATTR_CREATED_AT, ignore = true),
@@ -37,7 +37,7 @@ public interface SupplierMapper {
         @Mapping(target = Supplier.ATTR_VERSION, ignore = true),
     })
     Supplier fromDto(AddSupplierDto supplierDto);
-    
+
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mappings({
         @Mapping(target = Supplier.ATTR_ID, ignore = true),
@@ -45,5 +45,5 @@ public interface SupplierMapper {
         @Mapping(target = Supplier.ATTR_LAST_UPDATED, ignore = true)
     })
     Supplier fromDto(UpdateSupplierDto supplierDto);
-    
+
 }

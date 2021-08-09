@@ -42,7 +42,7 @@ public class MaterialLotDto extends BaseDto{
     public String getLotNumber() {
         return this.lotNumber;
     }
-    
+
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
     }
@@ -59,7 +59,7 @@ public class MaterialLotDto extends BaseDto{
         return this.invoiceItem;
     }
 
-    public void setInvoiceItem(InvoiceItemDto invoiceItem) { 
+    public void setInvoiceItem(InvoiceItemDto invoiceItem) {
         this.invoiceItem = invoiceItem;
     }
 

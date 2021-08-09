@@ -45,12 +45,12 @@ public class UserRole extends BaseEntity implements BaseUserRole, UpdateUserRole
 
     public UserRole() {
     }
-    
+
     public UserRole(Long id) {
         this();
         setId(id);
     }
-    
+
     public UserRole(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -68,7 +68,7 @@ public class UserRole extends BaseEntity implements BaseUserRole, UpdateUserRole
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return this.name;

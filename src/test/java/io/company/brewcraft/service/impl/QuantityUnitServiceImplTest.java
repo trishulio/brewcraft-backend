@@ -24,11 +24,11 @@ public class QuantityUnitServiceImplTest {
     private QuantityUnitService quantityUnitService;
 
     private QuantityUnitRepository quantityUnitRepositoryMock;
-    
+
     @BeforeEach
     public void init() {
         quantityUnitRepositoryMock = mock(QuantityUnitRepository.class);
-        
+
         quantityUnitService = new  QuantityUnitServiceImpl(quantityUnitRepositoryMock);
     }
 
@@ -44,19 +44,19 @@ public class QuantityUnitServiceImplTest {
 
         assertEquals(SupportedUnits.GRAM, returnedUnit);
     }
-    
+
     @Test
     public void testQuantityUnitService_classIsTransactional() throws Exception {
         Transactional transactional = quantityUnitService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testQuantityUnitService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = quantityUnitService.getClass().getMethods();  
+        Method[] methods = quantityUnitService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

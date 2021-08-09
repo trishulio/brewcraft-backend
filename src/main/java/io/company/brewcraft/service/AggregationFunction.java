@@ -19,13 +19,13 @@ public enum AggregationFunction {
     AVG(AverageAggregation.class),
     MAX(MaxAggregation.class),
     MIN(MinAggregation.class);
-    
+
     private Class<? extends Aggregation> clazz;
 
     private AggregationFunction(Class<? extends Aggregation> clazz) {
         this.clazz = clazz;
     }
-    
+
     public Aggregation getAggregation(PathProvider provider) {
         return getAggregation(provider.getPath());
     }
@@ -37,7 +37,7 @@ public enum AggregationFunction {
             return constructor.newInstance(new PathAggregation(path));
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             String msg = String.format("Failed to create an instance of type: '%s' with path: %s because: '%s'", this.clazz.getName(), Arrays.toString(path).replace(", ", "/"), e.getMessage());
-            
+
             throw new RuntimeException(msg, e);
         }
     }

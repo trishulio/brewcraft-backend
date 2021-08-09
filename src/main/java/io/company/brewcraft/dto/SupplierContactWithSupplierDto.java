@@ -8,38 +8,38 @@ import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SupplierContactWithSupplierDto {
-    
+
     private Long id;
-        
+
     @NotNull
     private String firstName;
-    
+
     @NotNull
     private String lastName;
-    
+
     @NotNull
     private String position;
-    
+
     @NotNull
     private String email;
-    
+
     @NotNull
     private String phoneNumber;
-    
+
     private SupplierWithoutContactsDto supplier;
 
     @Null
     @JsonIgnore
     private LocalDateTime created;
-    
+
     @Null
     @JsonIgnore
     private LocalDateTime lastUpdated;
-    
+
     private Integer version;
-    
+
     public SupplierContactWithSupplierDto() {
-        
+
     }
 
     public SupplierContactWithSupplierDto(Long id, String firstName, String lastName,
@@ -118,5 +118,5 @@ public class SupplierContactWithSupplierDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }

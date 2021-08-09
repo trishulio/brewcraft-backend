@@ -18,7 +18,7 @@ public class UpdateEquipmentDtoTest {
     public void init() {
         updateEquipmentDto = new UpdateEquipmentDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "equipment1";
@@ -28,12 +28,12 @@ public class UpdateEquipmentDtoTest {
         int version = 1;
 
         UpdateEquipmentDto equipment = new UpdateEquipmentDto(name, type, status, maxCapacity, version);
-        
+
         assertSame(name, equipment.getName());
         assertSame(type, equipment.getType());
         assertSame(status, equipment.getStatus());
         assertSame(maxCapacity, equipment.getMaxCapacity());
-        assertSame(version, equipment.getVersion());        
+        assertSame(version, equipment.getVersion());
     }
 
     @Test
@@ -42,28 +42,28 @@ public class UpdateEquipmentDtoTest {
         updateEquipmentDto.setName(name);
         assertSame(name, updateEquipmentDto.getName());
     }
-    
+
     @Test
     public void testGetSetType() {
         EquipmentType type = EquipmentType.FERMENTER;
         updateEquipmentDto.setType(type);
         assertSame(type, updateEquipmentDto.getType());
     }
-    
+
     @Test
     public void testGetSetStatus() {
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         updateEquipmentDto.setStatus(status);
         assertSame(status, updateEquipmentDto.getStatus());
     }
-    
+
     @Test
     public void testGetSetMaxCapacity() {
         QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
         updateEquipmentDto.setMaxCapacity(maxCapacity);
         assertSame(maxCapacity, updateEquipmentDto.getMaxCapacity());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

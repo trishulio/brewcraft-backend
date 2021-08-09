@@ -35,10 +35,10 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class SupplierControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockBean
     private ContextHolder contextHolderMock;
 
@@ -56,7 +56,7 @@ public class SupplierControllerTest {
        Supplier supplier1 = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
        supplier1.getContacts().add(new SupplierContact(1L, supplier1, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
        supplier1.getContacts().add(new SupplierContact(2L, supplier1, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
-       
+
        Supplier supplier2 = new Supplier(2L, "testName2", new ArrayList<>(), new SupplierAddress(2L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5), 2);
        supplier2.getContacts().add(new SupplierContact(3L, supplier2, "name3", "lastName3", "position3", "email3", "phoneNumber3", null, null, 1));
        supplier2.getContacts().add(new SupplierContact(4L, supplier2, "name4", "lastName4", "position4", "email4", "phoneNumber4", null, null, 1));
@@ -64,11 +64,11 @@ public class SupplierControllerTest {
        List<Supplier> suppliers = new ArrayList<>();
        suppliers.add(supplier1);
        suppliers.add(supplier2);
-       
+
        Page<Supplier> pagedResponse = new PageImpl<>(suppliers);
-        
+
        when(supplierServiceMock.getSuppliers(0, 100, new TreeSet<>(List.of("id")), true)).thenReturn(pagedResponse);
-        
+
        this.mockMvc.perform(get("/api/v1/suppliers").header("Authorization", "Bearer " + "test"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -147,18 +147,18 @@ public class SupplierControllerTest {
                 + "'totalItems': 2,"
                 + "'totalPages': 1"
                 + "}"));
-        
+
         verify(supplierServiceMock, times(1)).getSuppliers(0, 100, new TreeSet<>(List.of("id")), true);
     }
-    
+
     @Test
     public void testGetSupplier_ReturnsSupplier() throws Exception {
         Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
         supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
-        
+
         when(supplierServiceMock.getSupplier(1L)).thenReturn(supplier);
-         
+
         this.mockMvc.perform(get("/api/v1/suppliers/1"))
          .andExpect(status().isOk())
          .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -196,7 +196,7 @@ public class SupplierControllerTest {
                  + "        },"
                  + "        'version': 1"
                  + "    }"));
-         
+
          verify(supplierServiceMock, times(1)).getSupplier(1L);
     }
 
@@ -209,36 +209,36 @@ public class SupplierControllerTest {
         address.put("province", "province");
         address.put("city", "city");
         address.put("postalCode", "postalCode");
-        
+
         JSONObject contact1 = new JSONObject();
         contact1.put("firstName", "name1");
         contact1.put("lastName", "lastName1");
         contact1.put("position", "position1");
         contact1.put("email", "email1");
         contact1.put("phoneNumber", "phoneNumber1");
-        
+
         JSONObject contact2 = new JSONObject();
         contact2.put("firstName", "name2");
         contact2.put("lastName", "lastName2");
         contact2.put("position", "position2");
         contact2.put("email", "email2");
         contact2.put("phoneNumber", "phoneNumber2");
-        
+
         JSONArray contacts = new JSONArray();
         contacts.put(0, contact1);
         contacts.put(1, contact2);
-        
+
         JSONObject payload = new JSONObject();
-        payload.put("name", "testName");        
-        payload.put("address", address);        
+        payload.put("name", "testName");
+        payload.put("address", address);
         payload.put("contacts", contacts);
-                     
+
         Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
         supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
-        
+
         when(supplierServiceMock.addSupplier(any(Supplier.class))).thenReturn(supplier);
-        
+
         this.mockMvc.perform(post("/api/v1/suppliers")
          .contentType(MediaType.APPLICATION_JSON)
          .content(payload.toString()))
@@ -277,10 +277,10 @@ public class SupplierControllerTest {
                  + "        },"
                  + "        'version': 1"
                  + "    }"));
-        
+
         verify(supplierServiceMock, times(1)).addSupplier(any(Supplier.class));
     }
-    
+
     @Test
     public void testPutSupplier_PutsSupplier() throws Exception {
         JSONObject address = new JSONObject();
@@ -291,7 +291,7 @@ public class SupplierControllerTest {
         address.put("province", "province");
         address.put("city", "city");
         address.put("postalCode", "postalCode");
-        
+
         JSONObject contact1 = new JSONObject();
         contact1.put("id", "1");
         contact1.put("firstName", "name1");
@@ -299,7 +299,7 @@ public class SupplierControllerTest {
         contact1.put("position", "position1");
         contact1.put("email", "email1");
         contact1.put("phoneNumber", "phoneNumber1");
-        
+
         JSONObject contact2 = new JSONObject();
         contact2.put("id", "2");
         contact2.put("firstName", "name2");
@@ -307,23 +307,23 @@ public class SupplierControllerTest {
         contact2.put("position", "position2");
         contact2.put("email", "email2");
         contact2.put("phoneNumber", "phoneNumber2");
-        
+
         JSONArray contacts = new JSONArray();
         contacts.put(0, contact1);
         contacts.put(1, contact2);
-        
+
         JSONObject payload = new JSONObject();
-        payload.put("name", "testName");        
-        payload.put("address", address);        
+        payload.put("name", "testName");
+        payload.put("address", address);
         payload.put("contacts", contacts);
         payload.put("version", "1");
-             
+
         Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
         supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
-        
+
         when(supplierServiceMock.putSupplier(eq(1L), any(Supplier.class))).thenReturn(supplier);
-                                          
+
         this.mockMvc.perform(put("/api/v1/suppliers/1")
          .contentType(MediaType.APPLICATION_JSON)
          .content(payload.toString()))
@@ -363,7 +363,7 @@ public class SupplierControllerTest {
                  + "        'version': 1"
                  + "    }"));
     }
-    
+
     @Test
     public void testPatchSupplier_PatchesSupplier() throws Exception {
         JSONObject address = new JSONObject();
@@ -374,17 +374,17 @@ public class SupplierControllerTest {
         address.put("province", "province");
         address.put("city", "city");
         address.put("postalCode", "postalCode");
-        
+
         JSONObject payload = new JSONObject();
-        payload.put("address", address);        
+        payload.put("address", address);
         payload.put("version", "1");
-        
+
         Supplier supplier = new Supplier(1L, "testName", new ArrayList<>(), new SupplierAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         supplier.getContacts().add(new SupplierContact(1L, supplier, "name1", "lastName1", "position1", "email1", "phoneNumber1", null, null, 1));
         supplier.getContacts().add(new SupplierContact(2L, supplier, "name2", "lastName2", "position2", "email2", "phoneNumber2", null, null, 1));
-          
+
         when(supplierServiceMock.patchSupplier(eq(1L), any(Supplier.class))).thenReturn(supplier);
-                                          
+
         this.mockMvc.perform(patch("/api/v1/suppliers/1")
          .contentType(MediaType.APPLICATION_JSON)
          .content(payload.toString()))
@@ -425,12 +425,11 @@ public class SupplierControllerTest {
                  + "    }"));
     }
 
-
     @Test
-    public void testDeleteSupplier_DeletesSupplier() throws Exception {         
+    public void testDeleteSupplier_DeletesSupplier() throws Exception {
         this.mockMvc.perform(delete("/api/v1/suppliers/1"))
          .andExpect(status().isOk());
-         
+
          verify(supplierServiceMock, times(1)).deleteSupplier(1L);
     }
 }

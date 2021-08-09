@@ -13,15 +13,15 @@ public abstract class CurrencyMapper {
     private static final Logger log = LoggerFactory.getLogger(CurrencyMapper.class);
 
     public static final CurrencyMapper INSTANCE = Mappers.getMapper(CurrencyMapper.class);
-    
+
     public Currency toEntity(String code) {
         Currency entity = null;
         if (code != null) {
             CurrencyUnit unit = CurrencyUnit.of(code);
-            entity = fromUnit(unit);    
+            entity = fromUnit(unit);
         }
         return entity;
-    }    
+    }
 
-    public abstract Currency fromUnit(CurrencyUnit unit);   
+    public abstract Currency fromUnit(CurrencyUnit unit);
 }

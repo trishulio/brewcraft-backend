@@ -7,6 +7,6 @@ import io.company.brewcraft.model.user.UserSalutationAccessor;
 
 public interface EnhancedUserSalutationRepository {
     void refresh(Collection<UserSalutation> salutations);
-    
+
     void refreshAccessors(Collection<? extends UserSalutationAccessor> accessors);
 }

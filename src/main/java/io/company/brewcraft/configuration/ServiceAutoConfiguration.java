@@ -234,7 +234,6 @@ public class ServiceAutoConfiguration {
         return productMeasureValueService;
     }
 
-
     @Bean
     @ConditionalOnMissingBean(UserService.class)
     public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo) {
@@ -284,21 +283,21 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MixtureService.class)
     public MixtureService mixtureService(MixtureRepository mixtureRepository) {
-    	final MixtureService mixtureService = new MixtureServiceImpl(mixtureRepository);
+        final MixtureService mixtureService = new MixtureServiceImpl(mixtureRepository);
         return mixtureService;
     }
 
     @Bean
     @ConditionalOnMissingBean(MaterialPortionService.class)
     public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository) {
-    	final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
+        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
         return materialPortionService;
     }
 
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
     public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
-    	final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
+        final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
         return mixtureRecordingService;
     }
 }

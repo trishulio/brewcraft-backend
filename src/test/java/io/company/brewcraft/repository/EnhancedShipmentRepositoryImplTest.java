@@ -37,7 +37,7 @@ public class EnhancedShipmentRepositoryImplTest {
         shipments.get(0).setLots(List.of(lots.get(0)));
         shipments.get(1).setLots(List.of(lots.get(1)));
         shipments.get(2).setLots(List.of(lots.get(2)));
-        
+
         repo.refresh(shipments);
 
         verify(mStatusRepo, times(1)).refreshAccessors(shipments);

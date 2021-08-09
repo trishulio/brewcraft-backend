@@ -10,32 +10,32 @@ import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SupplierWithoutContactsDto {
-    
+
     @Null
     private Long id;
-    
+
     @NotEmpty
     private String name;
-    
+
     @NotNull
     @Valid
     private AddressDto address;
-    
+
     @Null
     @JsonIgnore
     private LocalDateTime created;
-    
+
     @Null
     @JsonIgnore
     private LocalDateTime lastUpdated;
-    
+
     @Null
     private Integer version;
-    
+
     public SupplierWithoutContactsDto() {
-        
+
     }
-    
+
     public SupplierWithoutContactsDto(Long id, String name, AddressDto address, Integer version) {
         this.id = id;
         this.name = name;
@@ -66,7 +66,7 @@ public class SupplierWithoutContactsDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-    
+
     public Integer getVersion() {
         return version;
     }

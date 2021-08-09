@@ -51,25 +51,25 @@ public class PurchaseOrderDtoTest {
         dto.setSupplier(new SupplierDto(99L));
         assertEquals(new SupplierDto(99L), dto.getSupplier());
     }
-    
+
     @Test
     public void testAccessCreatedAt() {
         assertNull(dto.getCreatedAt());
         dto.setCreatedAt(LocalDateTime.of(2011, 1, 1, 0, 0));
         assertEquals(LocalDateTime.of(2011, 1, 1, 0, 0), dto.getCreatedAt());
     }
-    
+
     @Test
     public void testAccessLastUpdated() {
         assertNull(dto.getLastUpdated());
         dto.setLastUpdated(LocalDateTime.of(2011, 1, 1, 0, 0));
         assertEquals(LocalDateTime.of(2011, 1, 1, 0, 0), dto.getLastUpdated());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(dto.getVersion());
-        
+
         dto.setVersion(99);
         assertEquals(99, dto.getVersion());
     }

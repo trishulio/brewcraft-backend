@@ -11,9 +11,9 @@ import io.company.brewcraft.service.ProductAccessor;
 
 public class EnhancedProductRepositoryImpl implements EnhancedProductRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedProductRepositoryImpl.class);
-    
+
     private AccessorRefresher<Long, ProductAccessor, Product> refresher;
-    
+
     @Autowired
     public EnhancedProductRepositoryImpl(AccessorRefresher<Long, ProductAccessor, Product> refresher) {
         this.refresher = refresher;

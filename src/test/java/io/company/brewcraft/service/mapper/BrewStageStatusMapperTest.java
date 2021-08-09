@@ -31,8 +31,8 @@ public class BrewStageStatusMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-    	BrewStageStatus status = brewStageStatusMapper.fromDto(new BrewStageStatusDto(1L));
-    	BrewStageStatus expected = new BrewStageStatus(1L);
+        BrewStageStatus status = brewStageStatusMapper.fromDto(new BrewStageStatusDto(1L));
+        BrewStageStatus expected = new BrewStageStatus(1L);
 
         assertEquals(expected, status);
     }
@@ -44,12 +44,12 @@ public class BrewStageStatusMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-    	BrewStageStatusDto status = brewStageStatusMapper.toDto(new BrewStageStatus(1L));
+        BrewStageStatusDto status = brewStageStatusMapper.toDto(new BrewStageStatus(1L));
 
-    	BrewStageStatusDto expected = new BrewStageStatusDto(1L);
+        BrewStageStatusDto expected = new BrewStageStatusDto(1L);
         assertEquals(expected, status);
     }
-    
+
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(brewStageStatusMapper.toDto(null));

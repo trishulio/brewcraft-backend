@@ -7,22 +7,22 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddSupplierDto extends BaseDto {
-    
+
     @NotEmpty
     private String name;
 
     @NotNull
     @Valid
     private List<SupplierContactDto> contacts;
-    
+
     @NotNull
     @Valid
     private AddressDto address;
-    
+
     public AddSupplierDto() {
         super();
     }
-    
+
     public AddSupplierDto(String name, List<SupplierContactDto> contacts, AddressDto address) {
         super();
         this.name = name;

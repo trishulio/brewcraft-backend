@@ -175,10 +175,10 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testProductService_ReturnsInstanceOfProductService() {
-    	final ProductRepository productRepositoryMock = mock(ProductRepository.class);
-    	final ProductCategoryService productCategoryServiceMock = mock(ProductCategoryService.class);
-    	final ProductMeasureValueService productMeasureValueServiceMock = mock(ProductMeasureValueService.class);
-    	final MeasureService productMeasureServiceMock = mock(MeasureService.class);
+        final ProductRepository productRepositoryMock = mock(ProductRepository.class);
+        final ProductCategoryService productCategoryServiceMock = mock(ProductCategoryService.class);
+        final ProductMeasureValueService productMeasureValueServiceMock = mock(ProductMeasureValueService.class);
+        final MeasureService productMeasureServiceMock = mock(MeasureService.class);
 
         final ProductService service = this.serviceAutoConfiguration.productService(productRepositoryMock, productCategoryServiceMock, productMeasureValueServiceMock, productMeasureServiceMock);
 
@@ -195,7 +195,7 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testMeasureService_ReturnsInstanceOfMeasureService() {
-    	final MeasureRepository measureRepositoryMock = mock(MeasureRepository.class);
+        final MeasureRepository measureRepositoryMock = mock(MeasureRepository.class);
         final MeasureService service = this.serviceAutoConfiguration.measureService(measureRepositoryMock);
 
         assertTrue(service instanceof MeasureServiceImpl);
@@ -211,80 +211,80 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testUserService_ReturnsInstanceOfUserService() {
-    	final UserRepository userRepositoryMock = mock(UserRepository.class);
-    	final IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
+        final UserRepository userRepositoryMock = mock(UserRepository.class);
+        final IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
 
-    	final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock);
+        final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock);
 
         assertTrue(service instanceof UserServiceImpl);
     }
 
     @Test
     public void testProcurementService_ReturnsInstanceOfProcurementService() {
-    	final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
-    	final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
-    	final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
+        final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
+        final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
+        final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
 
-    	final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock);
+        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock);
 
         assertTrue(service instanceof ProcurementServiceImpl);
     }
 
     @Test
     public void testBrewService_ReturnsInstanceOfBrewService() {
-    	final BrewRepository brewRepositoryMock = mock(BrewRepository.class);
-    	final BrewService service = this.serviceAutoConfiguration.brewService(brewRepositoryMock);
+        final BrewRepository brewRepositoryMock = mock(BrewRepository.class);
+        final BrewService service = this.serviceAutoConfiguration.brewService(brewRepositoryMock);
 
         assertTrue(service instanceof BrewServiceImpl);
     }
 
     @Test
     public void testBrewTaskService_ReturnsInstanceOfBrewTaskService() {
-    	final BrewTaskRepository brewTaskRepositoryMock = mock(BrewTaskRepository.class);
-    	final BrewTaskService service = this.serviceAutoConfiguration.brewTaskService(brewTaskRepositoryMock);
+        final BrewTaskRepository brewTaskRepositoryMock = mock(BrewTaskRepository.class);
+        final BrewTaskService service = this.serviceAutoConfiguration.brewTaskService(brewTaskRepositoryMock);
 
         assertTrue(service instanceof BrewTaskServiceImpl);
     }
 
     @Test
     public void testBrewStageService_ReturnsInstanceOfBrewStageService() {
-    	final BrewStageRepository brewStageRepositoryMock = mock(BrewStageRepository.class);
+        final BrewStageRepository brewStageRepositoryMock = mock(BrewStageRepository.class);
 
-    	final BrewStageService service = this.serviceAutoConfiguration.brewStageService(brewStageRepositoryMock);
+        final BrewStageService service = this.serviceAutoConfiguration.brewStageService(brewStageRepositoryMock);
 
         assertTrue(service instanceof BrewStageServiceImpl);
     }
 
     @Test
     public void testBrewStageStatusService_ReturnsInstanceOfBrewStageStatusService() {
-    	final BrewStageStatusRepository brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
+        final BrewStageStatusRepository brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
 
-    	final BrewStageStatusService service = this.serviceAutoConfiguration.brewStageStatusService(brewStageStatusRepositoryMock);
+        final BrewStageStatusService service = this.serviceAutoConfiguration.brewStageStatusService(brewStageStatusRepositoryMock);
 
         assertTrue(service instanceof BrewStageStatusServiceImpl);
     }
 
     @Test
     public void testMixtureService_ReturnsInstanceOfMixtureService() {
-    	final MixtureRepository mixtureRepositoryMock = mock(MixtureRepository.class);
-    	final MixtureService service = this.serviceAutoConfiguration.mixtureService(mixtureRepositoryMock);
+        final MixtureRepository mixtureRepositoryMock = mock(MixtureRepository.class);
+        final MixtureService service = this.serviceAutoConfiguration.mixtureService(mixtureRepositoryMock);
 
         assertTrue(service instanceof MixtureServiceImpl);
     }
 
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
-    	final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
-    	final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock);
+        final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
+        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock);
 
         assertTrue(service instanceof MaterialPortionServiceImpl);
     }
 
     @Test
     public void testMixtureRecordingService_ReturnsInstanceOfMixtureRecordingService() {
-    	final MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
+        final MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
 
-    	final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
+        final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
 
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }

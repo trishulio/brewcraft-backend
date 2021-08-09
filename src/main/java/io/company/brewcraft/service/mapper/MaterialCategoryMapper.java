@@ -19,7 +19,7 @@ public interface MaterialCategoryMapper {
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")
     CategoryDto toDto(MaterialCategory materialCategory);
-    
+
     CategoryWithParentDto toCategoryWithParentDto(MaterialCategory materialCategory);
 
     MaterialCategory fromDto(CategoryDto materialCategoryDto);

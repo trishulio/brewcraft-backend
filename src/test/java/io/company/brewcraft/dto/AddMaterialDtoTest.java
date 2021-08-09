@@ -13,7 +13,7 @@ public class AddMaterialDtoTest {
     public void init() {
         material = new AddMaterialDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "testName";
@@ -23,7 +23,7 @@ public class AddMaterialDtoTest {
         String baseQuantityUnit = "g";
 
         AddMaterialDto material = new AddMaterialDto(name, description, categoryId, upc, baseQuantityUnit);
-        
+
         assertSame(name, material.getName());
         assertSame(description, material.getDescription());
         assertSame(categoryId, material.getCategoryId());
@@ -37,21 +37,21 @@ public class AddMaterialDtoTest {
         material.setName(name);
         assertSame(name, material.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         material.setDescription(description);
         assertSame(description, material.getDescription());
     }
-    
+
     @Test
     public void testGetSetCategoryId() {
         Long categoryId = 1L;
         material.setCategoryId(categoryId);
         assertSame(categoryId, material.getCategoryId());
     }
-    
+
     @Test
     public void testGetSetUPC() {
         String upc = "testUpc";

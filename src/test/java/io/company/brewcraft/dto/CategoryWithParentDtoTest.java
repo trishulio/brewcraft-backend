@@ -13,7 +13,7 @@ public class CategoryWithParentDtoTest {
     public void init() {
         category = new CategoryWithParentDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -22,19 +22,19 @@ public class CategoryWithParentDtoTest {
         int version = 1;
 
         CategoryWithParentDto category = new CategoryWithParentDto(id, parentCategory, name, version);
-        
+
         assertEquals(1L, category.getId());
         assertEquals(new CategoryDto(2L, null, "parentName", null), category.getParentCategory());
         assertEquals("testName", category.getName());
-        assertEquals(1, category.getVersion());        
+        assertEquals(1, category.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         category.setId(1L);
         assertEquals(1L, category.getId());
     }
-    
+
     @Test
     public void testGetSetParentCategory() {
         CategoryDto parentCategory = new CategoryDto(2L, null, "parentName", null);
@@ -47,7 +47,7 @@ public class CategoryWithParentDtoTest {
         category.setName("testName");
         assertEquals("testName", category.getName());
     }
-  
+
     @Test
     public void testGetSetVersion() {
         category.setVersion(1);

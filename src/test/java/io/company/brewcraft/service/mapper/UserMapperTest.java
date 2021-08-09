@@ -23,12 +23,12 @@ import io.company.brewcraft.service.mapper.user.UserMapper;
 public class UserMapperTest {
 
     private UserMapper mapper;
-    
+
     @BeforeEach
     public void init() {
         mapper = UserMapper.INSTANCE;
     }
-    
+
     @Test
     public void testFromDto_ReturnsEntity_WhenAddDtoIsNotNull() {
         AddUserDto dto =  new AddUserDto(
@@ -45,7 +45,7 @@ public class UserMapperTest {
         );
 
         User user = mapper.fromDto(dto);
-        
+
         User expected = new User(
             null,
             "userName",
@@ -62,15 +62,15 @@ public class UserMapperTest {
             null,
             null
         );
-        
+
         assertEquals(expected, user);
     }
-    
+
     @Test
     public void testFromDto_ReturnsNull_WhenAddDtoIsNull() {
         assertNull(mapper.fromDto((AddUserDto) null));
     }
-    
+
     @Test
     public void testFromDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
         UpdateUserDto dto =  new UpdateUserDto(
@@ -87,7 +87,7 @@ public class UserMapperTest {
         );
 
         User user = mapper.fromDto(dto);
-        
+
         User expected = new User(
             null,
             null,
@@ -104,10 +104,10 @@ public class UserMapperTest {
             null,
             1
         );
-        
+
         assertEquals(expected, user);
     }
-    
+
     @Test
     public void testFromDto_ReturnsNull_WhenUpdateUserDtoIsNull() {
         assertNull(mapper.fromDto((UpdateUserDto) null));

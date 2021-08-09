@@ -7,19 +7,19 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class AddEquipmentDto extends BaseDto {
-    
+
     @NotEmpty
     private String name;
-    
+
     @NotNull
     private EquipmentType type;
-    
+
     @NotNull
     private EquipmentStatus status;
-    
+
     @NotNull
     private QuantityDto maxCapacity;
-        
+
     public AddEquipmentDto() {
         super();
     }

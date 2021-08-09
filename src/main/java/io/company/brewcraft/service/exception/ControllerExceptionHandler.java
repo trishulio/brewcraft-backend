@@ -63,13 +63,13 @@ public class ControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
         log.debug("Method argument not valid", e);
-        
+
         String fieldErrors = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
-                .collect(Collectors.joining(", "));        
-        
+                .collect(Collectors.joining(", "));
+
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), fieldErrors, request.getRequestURI());
-        
+
         return message;
     }
 
@@ -81,31 +81,31 @@ public class ControllerExceptionHandler {
         log.error("Runtime Exception", e);
         return message;
     }
-    
+
     @ExceptionHandler(value = { JpaObjectRetrievalFailureException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorResponse jpaObjectRetrievalFailureException(JpaObjectRetrievalFailureException e, HttpServletRequest request) {        
+    public ErrorResponse jpaObjectRetrievalFailureException(JpaObjectRetrievalFailureException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), e.getMostSpecificCause().getMessage(), request.getRequestURI());
 
         log.debug("Entity Not Found Exception", e);
         return message;
     }
-    
+
     @ExceptionHandler(value = { IllegalArgumentException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse illegalArgumentNotValidException(IllegalArgumentException e, HttpServletRequest request) {
         log.debug("argument not valid", e);
-        
+
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         return message;
     }
-    
+
     @ExceptionHandler(value = { ConversionFailedException.class })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse conversionFailedErrorResponse(ConversionFailedException e, HttpServletRequest request) {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
-        
+
         return message;
     }
 }

@@ -8,7 +8,7 @@
 ## What
 
 This changeset includes:
-- 
+-
 
 ## Why
 
@@ -20,7 +20,7 @@ This changeset includes:
 
 This PR also includes:
 
-- 
+-
 
 ## Checklist
 

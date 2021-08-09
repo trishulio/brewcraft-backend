@@ -12,16 +12,16 @@ import io.company.brewcraft.model.MixtureRecording;
 public class EnhancedMixtureRecordingRepositoryImplTest {
 
     private EnhancedMixtureRecordingRepository repo;
-    
+
     private MeasureRepository measureRepositoryMock;
-    
+
     private MixtureRepository mixtureRepositoryMock;
-    
+
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-    	measureRepositoryMock = mock(MeasureRepository.class);
-    	mixtureRepositoryMock = mock(MixtureRepository.class);
+        measureRepositoryMock = mock(MeasureRepository.class);
+        mixtureRepositoryMock = mock(MixtureRepository.class);
 
         repo = new EnhancedMixtureRecordingRepositoryImpl(measureRepositoryMock, mixtureRepositoryMock);
     }

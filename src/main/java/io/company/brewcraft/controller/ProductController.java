@@ -36,16 +36,16 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/products", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController extends BaseController {
-    
+
     private ProductService productService;
-    
+
     private ProductMapper productMapper = ProductMapper.INSTANCE;
-        
+
     public ProductController(ProductService productService, AttributeFilter filter) {
         super(filter);
         this.productService = productService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<ProductDto> getProducts(
         @RequestParam(required = false) Set<Long> ids,
@@ -56,21 +56,21 @@ public class ProductController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-        
+
         Page<Product> productsPage = productService.getProducts(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
-        
+
         List<ProductDto> productsList = productsPage.stream()
                 .map(product -> productMapper.toDto(product)).collect(Collectors.toList());
 
         PageDto<ProductDto> dto = new PageDto<ProductDto>(productsList, productsPage.getTotalPages(), productsPage.getTotalElements());
-        
+
         return dto;
     }
-        
+
     @GetMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
     public ProductDto getProduct(@PathVariable Long productId) {
         Product product = productService.getProduct(productId);
-                
+
         Validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
 
         return productMapper.toDto(product);
@@ -80,27 +80,27 @@ public class ProductController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto addProduct(@Valid @RequestBody AddProductDto addProductDto) {
         Product product = productMapper.fromDto(addProductDto);
-        
+
         Product addedProduct = productService.addProduct(product, addProductDto.getCategoryId());
-        
+
         return productMapper.toDto(addedProduct);
     }
-    
+
     @PutMapping("/{productId}")
     public ProductDto putProduct(@Valid @RequestBody UpdateProductDto updateProductDto, @PathVariable Long productId) {
         Product product = productMapper.fromDto(updateProductDto);
-        
+
         Product putProduct = productService.putProduct(productId, product, updateProductDto.getCategoryId());
 
         return productMapper.toDto(putProduct);
     }
-    
+
     @PatchMapping("/{productId}")
-    public ProductDto patchProduct(@Valid @RequestBody UpdateProductDto updateProductDto, @PathVariable Long productId) {        
+    public ProductDto patchProduct(@Valid @RequestBody UpdateProductDto updateProductDto, @PathVariable Long productId) {
         Product product = productMapper.fromDto(updateProductDto);
-        
+
         Product patchedProduct = productService.patchProduct(productId, product, updateProductDto.getCategoryId());
-        
+
         return productMapper.toDto(patchedProduct);
     }
 

@@ -14,9 +14,9 @@ import io.company.brewcraft.model.Invoice;
 public interface InvoiceMapper {
 
     InvoiceMapper INSTANCE = Mappers.getMapper(InvoiceMapper.class);
-    
+
     InvoiceDto toDto(Invoice invoice);
-    
+
     Invoice fromDto(InvoiceDto dto);
 
     @Mappings({

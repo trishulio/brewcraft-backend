@@ -33,17 +33,17 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class ProductServiceImpl extends BaseService implements ProductService {
-        
+
     private ProductRepository productRepository;
-    
+
     private ProductCategoryService productCategoryService;
-    
+
     private ProductMeasureValueService productMeasureValueService;
-    
+
     private MeasureService measureService;
 
     public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, MeasureService measureService) {
-        this.productRepository = productRepository;        
+        this.productRepository = productRepository;
         this.productCategoryService = productCategoryService;
         this.productMeasureValueService = productMeasureValueService;
         this.measureService = measureService;
@@ -53,26 +53,26 @@ public class ProductServiceImpl extends BaseService implements ProductService {
     public Page<Product> getProducts(Set<Long> ids, Set<Long> categoryIds, Set<String> categoryNames, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Set<Long> categoryIdsAndDescendantIds = new HashSet<Long>();
         if (categoryIds != null || categoryNames != null) {
-            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, page, size, sort, orderAscending);            
-            
+            Page<ProductCategory> categories = productCategoryService.getCategories(categoryIds, categoryNames, null, null, page, size, sort, orderAscending);
+
             if (categories.getTotalElements() == 0) {
                 //If no categories are found then there can be no products with those categories assigned
                 return Page.empty();
             }
-            
-            categories.forEach(category -> { 
+
+            categories.forEach(category -> {
                 categoryIdsAndDescendantIds.add(category.getId());
                 categoryIdsAndDescendantIds.addAll(category.getDescendantCategoryIds());
             });
         }
-                    
+
         Specification<Product> spec = SpecificationBuilder
             .builder()
             .in(Product.FIELD_ID, ids)
             .in(new String[] { Product.FIELD_CATEGORY, ProductCategory.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)
             .isNull(Product.FIELD_DELETED_AT)
             .build();
-        
+
         Page<Product> productPage = productRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
         return productPage;
@@ -84,67 +84,67 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
         return product;
     }
-    
+
     @Override
-    public Product addProduct(Product product, Long categoryId) {               
+    public Product addProduct(Product product, Long categoryId) {
         mapChildEntites(product, categoryId);
-       
+
         return addProduct(product);
     }
 
     @Override
-    public Product addProduct(Product product) {                 
+    public Product addProduct(Product product) {
         Product savedEntity = productRepository.saveAndFlush(product);
-        
+
         return savedEntity;
     }
-    
+
     @Override
-    public Product putProduct(Long productId, Product product, Long categoryId) {                
+    public Product putProduct(Long productId, Product product, Long categoryId) {
         mapChildEntites(product, categoryId);
-        
+
         return putProduct(productId, product);
     }
 
     @Override
-    public Product putProduct(Long productId, Product putProduct) {                        
-        Product existingProduct = getProduct(productId);          
+    public Product putProduct(Long productId, Product putProduct) {
+        Product existingProduct = getProduct(productId);
 
         if (existingProduct != null && existingProduct.getVersion() != putProduct.getVersion()) {
             throw new ObjectOptimisticLockingFailureException(Product.class, existingProduct.getId());
         }
-        
+
         if (existingProduct == null) {
             existingProduct = putProduct;
             existingProduct.setId(productId);
         } else {
             List<ProductMeasureValue> updatedProductMeasureValues = productMeasureValueService.merge(existingProduct.getTargetMeasures(), putProduct.getTargetMeasures());
 
-            existingProduct.override(putProduct, getPropertyNames(BaseProduct.class));       
+            existingProduct.override(putProduct, getPropertyNames(BaseProduct.class));
             existingProduct.setTargetMeasures(updatedProductMeasureValues);
         }
-        
-        return productRepository.saveAndFlush(existingProduct); 
-    }
-    
-    @Override
-    public Product patchProduct(Long productId, Product productPatch) {           
-        Product existingProduct = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));            
-  
-        if (existingProduct.getVersion() != productPatch.getVersion()) {
-            throw new ObjectOptimisticLockingFailureException(Product.class, existingProduct.getId());
-        }
-        
-        List<ProductMeasureValue> updatedProductMeasureValues = productMeasureValueService.merge(existingProduct.getTargetMeasures(), productPatch.getTargetMeasures());
-             
-        existingProduct.outerJoin(productPatch, getPropertyNames(UpdateProduct.class));
-        existingProduct.setTargetMeasures(updatedProductMeasureValues);
-                
-        return productRepository.saveAndFlush(existingProduct); 
+
+        return productRepository.saveAndFlush(existingProduct);
     }
 
     @Override
-    public Product patchProduct(Long productId, Product productPatch, Long categoryId) {        
+    public Product patchProduct(Long productId, Product productPatch) {
+        Product existingProduct = Optional.ofNullable(getProduct(productId)).orElseThrow(() -> new EntityNotFoundException("Product", productId.toString()));
+
+        if (existingProduct.getVersion() != productPatch.getVersion()) {
+            throw new ObjectOptimisticLockingFailureException(Product.class, existingProduct.getId());
+        }
+
+        List<ProductMeasureValue> updatedProductMeasureValues = productMeasureValueService.merge(existingProduct.getTargetMeasures(), productPatch.getTargetMeasures());
+
+        existingProduct.outerJoin(productPatch, getPropertyNames(UpdateProduct.class));
+        existingProduct.setTargetMeasures(updatedProductMeasureValues);
+
+        return productRepository.saveAndFlush(existingProduct);
+    }
+
+    @Override
+    public Product patchProduct(Long productId, Product productPatch, Long categoryId) {
         mapChildEntites(productPatch, categoryId);
 
         return patchProduct(productId, productPatch);
@@ -152,37 +152,37 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
     @Override
     public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);                        
+        productRepository.deleteById(productId);
     }
-    
+
     @Override
     public void softDeleteProduct(Long productId) {
-        productRepository.softDeleteByIds(Set.of(productId));                        
+        productRepository.softDeleteByIds(Set.of(productId));
     }
 
     @Override
     public boolean productExists(Long productId) {
         return productRepository.existsById(productId);
     }
-    
+
     private void mapChildEntites(Product product, Long categoryId) {
         if (categoryId != null) {
             ProductCategory category = Optional.ofNullable(productCategoryService.getCategory(categoryId)).orElseThrow(() -> new EntityNotFoundException("ProductCategory", categoryId.toString()));
             product.setCategory(category);
         }
-        
+
         if (product.getTargetMeasures() != null && !product.getTargetMeasures().isEmpty()) {
             Page<Measure> measuresPage = measureService.getMeasures(null, 0, Integer.MAX_VALUE, new TreeSet<>(List.of("id")), true);
             List<Measure> measures = measuresPage.getContent();
             Map<Long, Measure> measureMap = new HashMap<Long, Measure>();
             measures.forEach(measure -> measureMap.put(measure.getId(), measure));
-            
+
             for (int i = 0; i < product.getTargetMeasures().size(); i++) {
-            	ProductMeasureValue measure = product.getTargetMeasures().get(i);
+                ProductMeasureValue measure = product.getTargetMeasures().get(i);
                 if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getId())) {
                     throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getId());
                 } else {
-                	product.getTargetMeasures().get(i).setMeasure(measureMap.get(measure.getMeasure().getId()));
+                    product.getTargetMeasures().get(i).setMeasure(measureMap.get(measure.getMeasure().getId()));
                 }
             }
         }

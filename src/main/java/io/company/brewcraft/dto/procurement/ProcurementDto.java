@@ -9,10 +9,10 @@ public class ProcurementDto extends BaseDto {
     private PurchaseOrderDto purchaseOrder;
     private InvoiceDto invoice;
     private ShipmentDto shipment;
-    
+
     public ProcurementDto() {
     }
-    
+
     public ProcurementDto(PurchaseOrderDto purchaseOrder, InvoiceDto invoice, ShipmentDto shipment) {
         this();
         setPurchaseOrder(purchaseOrder);

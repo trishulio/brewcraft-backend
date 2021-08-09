@@ -16,24 +16,24 @@ import tec.uom.se.unit.Units;
 public class UnitSerializerTest {
     private JsonSerializer<Unit> serializer;
     private MockJsonGenerator mGen;
-    
+
     @BeforeEach
     public void init() {
         serializer = new UnitSerializer();
         mGen = new MockJsonGenerator();
     }
-    
+
     @Test
     public void testSerialize_ReturnNull_WhenValueIsNull() throws IOException {
         serializer.serialize(null, mGen, null);
-        
+
         assertEquals("null", mGen.json());
     }
-    
+
     @Test
     public void testSerialize_ReturnsJsonUnit_WhenValueIsNotNull() throws IOException {
         serializer.serialize(Units.KILOGRAM, mGen, null);
-        
+
         assertEquals("{\"symbol\":\"kg\"}", mGen.json());
     }
 }

@@ -7,18 +7,18 @@ import io.company.brewcraft.model.StorageType;
 public class FacilityStorageDto extends BaseDto {
 
     private Long id;
-   
+
     @NotEmpty
     private String name;
-    
+
     private StorageType type;
-    
+
     private Integer version;
-    
+
     public FacilityStorageDto() {
-        
+
     }
-    
+
     public FacilityStorageDto(Long id, String name, StorageType type, Integer version) {
         this.id = id;
         this.name = name;
