@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
+import org.json.JSONException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
@@ -12,6 +16,11 @@ import tec.uom.se.unit.Units;
 public class ProcurementLotTest {
 
     private Lot lot;
+
+    @BeforeEach
+    public void init() {
+        this.lot = new ProcurementLot();
+    }
 
     @Test
     public void testLotQuantityConstructor() {
@@ -94,5 +103,71 @@ public class ProcurementLotTest {
         assertEquals(shipment, this.lot.getShipment());
         assertEquals(new Storage(1L), this.lot.getStorage());
         assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
+    public void testAccessId() {
+        assertNull(this.lot.getId());
+        this.lot.setId(1L);
+        assertEquals(1L, this.lot.getId());
+    }
+
+    @Test
+    public void testAccessLotNumber() {
+        assertNull(this.lot.getLotNumber());
+        this.lot.setLotNumber("LOT");
+        assertEquals("LOT", this.lot.getLotNumber());
+    }
+
+    @Test
+    public void testAccessQuantity() {
+        assertNull(this.lot.getQuantity());
+        this.lot.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
+    public void testAccessQuantityOverloadedEntity() {
+        assertNull(this.lot.getQuantity());
+        this.lot.setQuantity(new QuantityEntity(new UnitEntity("kg"), new BigDecimal("10.00")));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
+    public void testAccessShipment() {
+        final Shipment shipment = new Shipment();
+
+        this.lot.setShipment(shipment);
+        assertEquals(shipment, this.lot.getShipment());
+    }
+
+    @Test
+    public void testAccessInvoiceItem() {
+        assertNull(this.lot.getInvoiceItem());
+        this.lot.setInvoiceItem(new InvoiceItem(1L));
+        assertEquals(new InvoiceItem(1L), this.lot.getInvoiceItem());
+    }
+
+    @Test
+    public void testAccessStorage() {
+        assertNull(this.lot.getStorage());
+        this.lot.setStorage(new Storage(1L));
+        assertEquals(new Storage(1L), this.lot.getStorage());
+    }
+
+    @Test
+    public void testToString_ReturnsJsonifiedString() throws JSONException {
+        this.lot = new ProcurementLot(
+            1L,
+            "LOT_1",
+            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+            new Material(3L),
+            new Shipment(1L),
+            new InvoiceItem(4L),
+            new Storage(2L)
+        );
+
+        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"material\":{\"id\":3,\"name\":null,\"description\":null,\"category\":null,\"upc\":null,\"baseQuantityUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"shipment\":{\"id\":1,\"shipmentNumber\":null,\"description\":null,\"status\":null,\"deliveryDueDate\":null,\"deliveredDate\":null,\"lots\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"invoiceItem\":{\"id\":4,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"amount\":null},\"storage\":{\"id\":2,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}}";
+        JSONAssert.assertEquals(json, this.lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

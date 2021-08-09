@@ -2,14 +2,29 @@ package io.company.brewcraft.model;
 
 import java.math.BigDecimal;
 
+import javax.measure.Quantity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity(name = "procurement_lot")
 @Table
 public class ProcurementLot extends Lot {
+    public ProcurementLot() {
+    }
+
     public ProcurementLot(Long id) {
+        this();
         this.setId(id);
+    }
+
+    public ProcurementLot(Long id, String lotNumber, Quantity<?> quantity, Material material, Shipment shipment, InvoiceItem invoiceItem, Storage storage) {
+        this(id);
+        this.setLotNumber(lotNumber);
+        this.setQuantity(quantity);
+        this.setMaterial(material);
+        this.setShipment(shipment);
+        this.setInvoiceItem(invoiceItem);
+        this.setStorage(storage);
     }
 
     public ProcurementLot(String lotNumber, UnitEntity unit, BigDecimal value) {
