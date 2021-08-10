@@ -6,8 +6,11 @@ import javax.measure.Quantity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Immutable;
+
 @Entity(name = "stock_lot")
 @Table
+@Immutable
 public class StockLot extends Lot {
     public StockLot() {
     }
