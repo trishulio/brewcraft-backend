@@ -3,17 +3,17 @@ package io.company.brewcraft.dto;
 import io.company.brewcraft.model.StorageType;
 
 public class UpdateStorageDto extends BaseDto {
-   
+
     private String name;
-    
+
     private StorageType type;
-    
+
     private Integer version;
-    
+
     public UpdateStorageDto() {
         super();
     }
-    
+
     public UpdateStorageDto(String name, StorageType type, Integer version) {
         super();
         this.name = name;

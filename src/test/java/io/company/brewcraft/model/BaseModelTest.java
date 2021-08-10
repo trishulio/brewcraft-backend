@@ -42,7 +42,7 @@ public class BaseModelTest {
     public void init() {
         util = mock(ReflectionManipulator.class);
         jsonMapper = mock(JsonMapper.class);
-        
+
         model = new TestBaseModel(0, util, jsonMapper);
         other = new TestBaseModel(12345, util, jsonMapper);
     }

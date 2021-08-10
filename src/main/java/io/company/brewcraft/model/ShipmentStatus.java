@@ -41,12 +41,12 @@ public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, Upd
 
     public ShipmentStatus() {
     }
-    
+
     public ShipmentStatus(Long id) {
         this();
         setId(id);
     }
-    
+
     public ShipmentStatus(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -64,7 +64,7 @@ public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, Upd
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return this.name;

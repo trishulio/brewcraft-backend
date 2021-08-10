@@ -8,7 +8,7 @@ import io.company.brewcraft.model.BrewStageStatus;
 
 @Mapper
 public interface BrewStageStatusMapper {
-	BrewStageStatusMapper INSTANCE = Mappers.getMapper(BrewStageStatusMapper.class);
+    BrewStageStatusMapper INSTANCE = Mappers.getMapper(BrewStageStatusMapper.class);
 
     BrewStageStatus fromDto(Long id);
 

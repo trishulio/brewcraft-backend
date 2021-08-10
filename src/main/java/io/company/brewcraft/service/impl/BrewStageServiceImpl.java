@@ -29,19 +29,19 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class BrewStageServiceImpl extends BaseService implements BrewStageService {
     private static final Logger log = LoggerFactory.getLogger(BrewStageServiceImpl.class);
-        
+
     private BrewStageRepository brewStageRepository;
-                
+
     public BrewStageServiceImpl(BrewStageRepository brewStageRepository) {
         this.brewStageRepository = brewStageRepository;
     }
 
-	@Override
-	public Page<BrewStage> getBrewStages(Set<Long> ids, Set<Long> brewIds, Set<Long> statusIds, Set<Long> taskIds,
-			Set<Long> brewLogIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
-			LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-			
-			Specification<BrewStage> spec = SpecificationBuilder
+    @Override
+    public Page<BrewStage> getBrewStages(Set<Long> ids, Set<Long> brewIds, Set<Long> statusIds, Set<Long> taskIds,
+            Set<Long> brewLogIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
+            LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+
+            Specification<BrewStage> spec = SpecificationBuilder
                 .builder()
                 .in(BrewStage.FIELD_ID, ids)
                 .in(new String[] {BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
@@ -51,11 +51,11 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
                 .build();
-            
+
             Page<BrewStage> brewPage = brewStageRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
             return brewPage;
-	}
+    }
 
     @Override
     public BrewStage getBrewStage(Long brewStageId) {
@@ -63,55 +63,55 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
 
         return brewStage;
     }
-    
+
     @Override
-    public BrewStage addBrewStage(BrewStage brewStage) {        
+    public BrewStage addBrewStage(BrewStage brewStage) {
         brewStageRepository.refresh(List.of(brewStage));
-        
+
         BrewStage addedBrewStage = brewStageRepository.saveAndFlush(brewStage);
-        
+
         return addedBrewStage;
     }
-    
+
     @Override
-    public BrewStage putBrewStage(Long brewStageId, BrewStage putBrewStage) {       
+    public BrewStage putBrewStage(Long brewStageId, BrewStage putBrewStage) {
         brewStageRepository.refresh(List.of(putBrewStage));
 
-        BrewStage existingBrewStage = getBrewStage(brewStageId);          
+        BrewStage existingBrewStage = getBrewStage(brewStageId);
 
         if (existingBrewStage == null) {
             existingBrewStage = putBrewStage;
             existingBrewStage.setId(brewStageId);
         } else {
-        	existingBrewStage.optimisticLockCheck(putBrewStage);
+            existingBrewStage.optimisticLockCheck(putBrewStage);
             existingBrewStage.override(putBrewStage, getPropertyNames(BaseBrewStage.class));
         }
-                
+
         BrewStage brewStage = brewStageRepository.saveAndFlush(existingBrewStage);
-        
+
         return brewStage;
     }
-    
+
     @Override
-    public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStagePatch) {           
-        BrewStage existingBrewStage = Optional.ofNullable(getBrewStage(brewStageId)).orElseThrow(() -> new EntityNotFoundException("BrewStage", brewStageId.toString()));            
-        
+    public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStagePatch) {
+        BrewStage existingBrewStage = Optional.ofNullable(getBrewStage(brewStageId)).orElseThrow(() -> new EntityNotFoundException("BrewStage", brewStageId.toString()));
+
         brewStageRepository.refresh(List.of(brewStagePatch));
-        
-    	existingBrewStage.optimisticLockCheck(brewStagePatch);
-        
+
+        existingBrewStage.optimisticLockCheck(brewStagePatch);
+
         existingBrewStage.outerJoin(brewStagePatch, getPropertyNames(UpdateBrewStage.class));
-        
+
         BrewStage brewStage = brewStageRepository.saveAndFlush(existingBrewStage);
-        
+
         return brewStage;
     }
-    
+
     @Override
     public void deleteBrewStage(Long brewStageId) {
-        brewStageRepository.deleteById(brewStageId);                        
+        brewStageRepository.deleteById(brewStageId);
     }
-    
+
     @Override
     public boolean brewStageExists(Long brewStageId) {
         return brewStageRepository.existsById(brewStageId);

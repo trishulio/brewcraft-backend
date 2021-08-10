@@ -18,11 +18,11 @@ import io.company.brewcraft.service.MaxAggregation;
 @SuppressWarnings("unchecked")
 public class MaxAggregationTest {
     private Aggregation aggr;
-    
+
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
-    
+
     @BeforeEach
     public void init() {
         mRoot = mock(Root.class);
@@ -34,15 +34,15 @@ public class MaxAggregationTest {
     public void testPathArrayConstructor_CreatesMaxExpressionOnRootPath() {
         Path<?> mPath1 = mock(Path.class);
         Path<? extends Number> mPath2 = mock(Path.class);
-        
+
         doReturn(mPath1).when(mRoot).get("PATH_1");
         doReturn(mPath2).when(mPath1).get("PATH_2");
 
         Expression<?> mMaxExpr = mock(Expression.class);
         doReturn(mMaxExpr).when(mCb).max(mPath2);
-        
+
         aggr = new MaxAggregation("PATH_1", "PATH_2");
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mMaxExpr, expr);
     }
@@ -55,9 +55,9 @@ public class MaxAggregationTest {
 
         Expression<?> mMaxExpr = mock(Expression.class);
         doReturn(mMaxExpr).when(mCb).max(mExpr);
-        
+
         aggr = new MaxAggregation(mArg);
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mMaxExpr, expr);
     }

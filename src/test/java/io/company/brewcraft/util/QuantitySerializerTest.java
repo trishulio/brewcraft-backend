@@ -18,24 +18,24 @@ import tec.uom.se.unit.Units;
 public class QuantitySerializerTest {
     private JsonSerializer<Quantity> serializer;
     private MockJsonGenerator mGen;
-    
+
     @BeforeEach
     public void init() {
         serializer = new QuantitySerializer();
         mGen = new MockJsonGenerator();
     }
-    
+
     @Test
     public void testSerialize_ReturnNull_WhenValueIsNull() throws IOException {
         serializer.serialize(null, mGen, null);
-        
+
         assertEquals("null", mGen.json());
     }
-    
+
     @Test
     public void testSerialize_ReturnsJsonQuantity_WhenValueIsNotNull() throws IOException {
         serializer.serialize(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), mGen, null);
-        
+
         assertEquals("{\"symbol\":\"kg\",\"value\":10}", mGen.json());
     }
 }

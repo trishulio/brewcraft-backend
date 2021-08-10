@@ -32,9 +32,9 @@ public class TenantManagementServiceImplTest {
     private TenantManagementService tenantManagementService;
 
     private TenantRepository tenantRepositoryMock;
-    
+
     private MigrationManager migrationManagerMock;
-    
+
     private TenantMapper tenantMapperMock;
 
     @BeforeEach
@@ -64,7 +64,7 @@ public class TenantManagementServiceImplTest {
 
         assertEquals(actualTenants, expectedTenants);
     }
-    
+
     @Test
     public void testGetTenant_returnsTenant() throws Exception {
         UUID id = UUID.randomUUID();
@@ -82,7 +82,7 @@ public class TenantManagementServiceImplTest {
     @Test
     public void testGetTenant_throwsEntityNotFoundException() throws Exception {
         UUID id = UUID.randomUUID();
-        
+
         when(tenantRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -95,7 +95,7 @@ public class TenantManagementServiceImplTest {
     public void testAddTenant_returnsId() throws Exception {
         TenantDto tenantDto = new TenantDto(null, "testName", "testUrl", null, null);
         Tenant tenant = new Tenant(null, "testName", "testUrl", null, null);
-        
+
         UUID expectedId = UUID.fromString("924343cb-6a3d-4513-8459-db1fc5a9c1e5");
         Tenant tenantWithId = new Tenant(expectedId, "testName", "testUrl", null, null);
 
@@ -107,23 +107,23 @@ public class TenantManagementServiceImplTest {
         verify(migrationManagerMock, times(1)).migrate("924343cb_6a3d_4513_8459_db1fc5a9c1e5");
         assertSame(expectedId, actualId);
     }
-    
+
     @Test
     public void testAddTenant_throwsDuplicateKeyException() throws Exception {
         Tenant tenant = new Tenant();
-        
+
         when(tenantRepositoryMock.save(tenant)).thenThrow(new DuplicateKeyException("Tenant"));
 
         assertThrows(DuplicateKeyException.class, () -> {
             tenantRepositoryMock.save(tenant);
         });
     }
-    
+
     @Test
     public void testAddTenant_deletesTenantAndThrowsWhenMigrationFails() throws Exception {
         TenantDto tenantDto = new TenantDto(null, "testName", "testUrl", null, null);
         Tenant tenant = new Tenant(null, "testName", "testUrl", null, null);
-        
+
         UUID expectedId = UUID.fromString("924343cb-6a3d-4513-8459-db1fc5a9c1e5");
         Tenant tenantWithId = new Tenant(expectedId, "testName", "testUrl", null, null);
 
@@ -137,7 +137,7 @@ public class TenantManagementServiceImplTest {
             verify(tenantRepositoryMock, times(1)).deleteById(expectedId);
         });
     }
-    
+
     @Test
     public void testUpdateTenant_success() throws Exception {
         TenantDto tenantDto = new TenantDto(null, "testNameNew", "testUrlNew", null, null);
@@ -145,26 +145,26 @@ public class TenantManagementServiceImplTest {
         Optional<Tenant> tenant = Optional.ofNullable(new Tenant(id, "testName", "testUrl", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 5, 6, 7, 8)));
 
         when(tenantRepositoryMock.findById(id)).thenReturn(tenant);
-        
+
         tenantManagementService.updateTenant(tenantDto, id);
-       
+
         ArgumentCaptor<Tenant> tenantArgument = ArgumentCaptor.forClass(Tenant.class);
         verify(tenantRepositoryMock, times(1)).save(tenantArgument.capture());
-        
+
         assertEquals(id, tenantArgument.getValue().getId());
         assertEquals("testNameNew", tenantArgument.getValue().getName());
         assertEquals("testUrlNew", tenantArgument.getValue().getUrl());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), tenantArgument.getValue().getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 5, 6, 7, 8), tenantArgument.getValue().getLastUpdated());
     }
-    
+
     @Test
     public void testUpdateTenant_throwsEntityNotFoundException() throws Exception {
         UUID id = UUID.fromString("924343cb-6a3d-4513-8459-db1fc5a9c1e5");
         TenantDto tenantDto = new TenantDto(id, "testName", "testUrl", null, null);
-        
+
         when(tenantRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             tenantManagementService.updateTenant(tenantDto, id);
             verify(tenantRepositoryMock, times(0)).save(Mockito.any(Tenant.class));
@@ -175,7 +175,7 @@ public class TenantManagementServiceImplTest {
     public void testDeleteTenant_success() throws Exception {
         UUID id = UUID.randomUUID();
         tenantManagementService.deleteTenant(id);
-        
+
         verify(tenantRepositoryMock, times(1)).deleteById(id);
     }
 
@@ -187,19 +187,19 @@ public class TenantManagementServiceImplTest {
             tenantManagementService.deleteTenant(UUID.randomUUID());
         });
     }
-    
+
     @Test
     public void testTenantManagementService_classIsTransactional() throws Exception {
         Transactional transactional = tenantManagementService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testTenantManagementService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = tenantManagementService.getClass().getMethods();  
+        Method[] methods = tenantManagementService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

@@ -16,7 +16,7 @@ public class AddSupplierDtoTest {
     public void init() {
         addSupplierDto = new AddSupplierDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "Supplier1";
@@ -41,7 +41,7 @@ public class AddSupplierDtoTest {
         addSupplierDto.setContacts(contacts);
         assertSame(contacts, addSupplierDto.getContacts());
     }
-    
+
     @Test
     public void testGetSetAddress() {
         AddressDto address = new AddressDto();

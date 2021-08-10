@@ -88,15 +88,15 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     public User() {
     }
-    
+
     public User(Long id) {
         this();
         setId(id);
     }
-    
+
     public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
@@ -244,7 +244,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
             existing.setRole(role);
             existing.setUser(this);
-            
+
             this.roleBindings.add(existing);
         });
     }
@@ -254,16 +254,16 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         if (this.roleBindings == null) {
             return null;
         }
-        
+
         return this.roleBindings.stream()
                                 .map(binding -> binding.getRole())
                                 .collect(Collectors.toList());
     }
-    
+
     /**
      * Used by the repository to directly access the bindings.
      * Refrain from using this is business logic. Prefer, getRoles()
-     * method. 
+     * method.
      * @return
      */
     public List<UserRoleBinding> getRoleBindings() {

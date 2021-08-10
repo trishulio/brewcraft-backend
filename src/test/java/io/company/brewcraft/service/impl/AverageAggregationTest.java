@@ -19,11 +19,11 @@ import io.company.brewcraft.service.AverageAggregation;
 public class AverageAggregationTest {
 
     private Aggregation aggr;
-    
+
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
-    
+
     @BeforeEach
     public void init() {
         mRoot = mock(Root.class);
@@ -35,15 +35,15 @@ public class AverageAggregationTest {
     public void testPathArrayConstructor_CreatesAvgExpressionOnRootPath() {
         Path<?> mPath1 = mock(Path.class);
         Path<?> mPath2 = mock(Path.class);
-        
+
         doReturn(mPath1).when(mRoot).get("PATH_1");
         doReturn(mPath2).when(mPath1).get("PATH_2");
 
         Expression<?> mAvgExpr = mock(Expression.class);
         doReturn(mAvgExpr).when(mCb).avg((Expression<? extends Number>) mPath2);
-        
+
         aggr = new AverageAggregation("PATH_1", "PATH_2");
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mAvgExpr, expr);
     }
@@ -56,9 +56,9 @@ public class AverageAggregationTest {
 
         Expression<?> mAvgExpr = mock(Expression.class);
         doReturn(mAvgExpr).when(mCb).avg((Expression<? extends Number>) mExpr);
-        
+
         aggr = new AverageAggregation(mArg);
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mAvgExpr, expr);
     }

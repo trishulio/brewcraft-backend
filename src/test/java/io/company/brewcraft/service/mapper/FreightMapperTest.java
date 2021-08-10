@@ -27,7 +27,7 @@ public class FreightMapperTest {
 
         assertEquals(new Freight(Money.parse("CAD 10")), freight);
     }
-    
+
     @Test
     public void testFromDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(mapper.fromDto(null));
@@ -40,7 +40,7 @@ public class FreightMapperTest {
 
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10.00"))), dto);
     }
-    
+
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(mapper.toDto(null));

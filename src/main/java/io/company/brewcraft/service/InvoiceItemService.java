@@ -31,9 +31,9 @@ public class InvoiceItemService extends BaseService {
             return null;
         }
 
-        List<InvoiceItem> targetItems = new ArrayList<>();        
+        List<InvoiceItem> targetItems = new ArrayList<>();
         List<UpdateInvoiceItem<?>> itemUpdates = new ArrayList<>(updates.size());
-        
+
         updates.forEach(update -> {
             if (update.getId() == null) {
                 InvoiceItem item = new InvoiceItem();
@@ -44,10 +44,10 @@ public class InvoiceItemService extends BaseService {
                 itemUpdates.add(update);
             }
         });
-        
+
         existingItems = existingItems == null ? new ArrayList<>(0) : existingItems;
         Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-        
+
         itemUpdates.forEach(update -> {
             InvoiceItem item = idToItemLookup.get(update.getId());
             if (validator.rule(item != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {

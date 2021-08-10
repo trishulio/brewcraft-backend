@@ -36,16 +36,16 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/mixtures/recordings", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MixtureRecordingController extends BaseController {
-    
+
     private MixtureRecordingService mixtureRecordingService;
-    
+
     private MixtureRecordingMapper mixtureRecordingMapper = MixtureRecordingMapper.INSTANCE;
-        
+
     public MixtureRecordingController(MixtureRecordingService mixtureRecordingService, AttributeFilter filter) {
         super(filter);
         this.mixtureRecordingService = mixtureRecordingService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<MixtureRecordingDto> getMixtureRecordings(
             @RequestParam(name = "ids", required = false) Set<Long> ids,
@@ -54,21 +54,21 @@ public class MixtureRecordingController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-        
+
         Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, page, size, sort, orderAscending);
-        
+
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()
                 .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording)).collect(Collectors.toList());
 
         PageDto<MixtureRecordingDto> dto = new PageDto<>(mixtureRecordingList, mixtureRecordingPage.getTotalPages(), mixtureRecordingPage.getTotalElements());
-        
+
         return dto;
     }
-        
+
     @GetMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
     public MixtureRecordingDto getMixtureRecording(@PathVariable Long mixtureRecordingId) {
         MixtureRecording mixtureRecording = mixtureRecordingService.getMixtureRecording(mixtureRecordingId);
-                
+
         Validator.assertion(mixtureRecording != null, EntityNotFoundException.class, "MixtureRecording", mixtureRecordingId.toString());
 
         return mixtureRecordingMapper.toDto(mixtureRecording);
@@ -77,28 +77,28 @@ public class MixtureRecordingController extends BaseController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public MixtureRecordingDto addMixtureRecording(@Valid @RequestBody AddMixtureRecordingDto addBrewDto) {
-    	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addBrewDto);
-        
-    	MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
-        
+        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addBrewDto);
+
+        MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
+
         return mixtureRecordingMapper.toDto(addedMixtureRecording);
     }
-    
+
     @PutMapping("/{mixtureRecordingId}")
     public MixtureRecordingDto putMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
-    	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
-        
-    	MixtureRecording putMixtureRecording = mixtureRecordingService.putMixtureRecording(mixtureRecordingId, mixtureRecording);
+        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
+
+        MixtureRecording putMixtureRecording = mixtureRecordingService.putMixtureRecording(mixtureRecordingId, mixtureRecording);
 
         return mixtureRecordingMapper.toDto(putMixtureRecording);
     }
-    
+
     @PatchMapping("/{mixtureRecordingId}")
-    public MixtureRecordingDto patchMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {        
-    	MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
-        
-    	MixtureRecording patchedMixtureRecording = mixtureRecordingService.patchMixtureRecording(mixtureRecordingId, mixtureRecording);
-        
+    public MixtureRecordingDto patchMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
+        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
+
+        MixtureRecording patchedMixtureRecording = mixtureRecordingService.patchMixtureRecording(mixtureRecordingId, mixtureRecording);
+
         return mixtureRecordingMapper.toDto(patchedMixtureRecording);
     }
 

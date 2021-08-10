@@ -38,44 +38,44 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brew_stage_generator")
     @SequenceGenerator(name = "brew_stage_generator", sequenceName = "brew_stage_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brew_id", referencedColumnName = "id", nullable = false)
     private Brew brew;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brew_stage_status_id", referencedColumnName = "id")
     private BrewStageStatus status;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brew_task_id", referencedColumnName = "id")
     private BrewTask task;
-    
+
     @OneToMany(mappedBy = "brewStage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("recordedAt ASC, id ASC")
     @JsonIgnore
     private List<Mixture> mixtures;
-    
+
     @Column(name = "started_at")
     private LocalDateTime startedAt;
 
     @Column(name = "ended_at")
     private LocalDateTime endedAt;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
     public BrewStage() {
     }
-    
+
     public BrewStage(Long id) {
         this();
         setId(id);
@@ -84,7 +84,7 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     public BrewStage(Long id, Brew brew, BrewStageStatus status, BrewTask task, List<Mixture> mixtures,
             LocalDateTime startedAt, LocalDateTime endedAt, LocalDateTime createdAt, LocalDateTime lastUpdated,
             Integer version) {
-    	this(id);
+        this(id);
         setBrew(brew);
         setStatus(status);
         setTask(task);
@@ -143,15 +143,15 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
 
     @Override
     public void setMixtures(List<Mixture> mixtures) {
-    	if (this.mixtures != null) {
+        if (this.mixtures != null) {
             this.mixtures.stream().collect(Collectors.toList()).forEach(this::removeMixture);
-    	}
+        }
 
         if (mixtures != null) {
-        	mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
+            mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
         }
     }
-    
+
     public void addMixture(Mixture mixture) {
         if (mixture == null) {
             return;
@@ -161,12 +161,12 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
             this.mixtures = new ArrayList<>();
         }
 
-        if (mixture.getBrewStage() != this) {            
+        if (mixture.getBrewStage() != this) {
             mixture.setBrewStage(this);
         }
-        
+
         if (!this.mixtures.contains(mixture)) {
-            this.mixtures.add(mixture);            
+            this.mixtures.add(mixture);
         }
     }
 
@@ -176,11 +176,11 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
         }
 
         boolean removed = this.mixtures.remove(mixture);
-        
-        if (removed) {            
+
+        if (removed) {
             mixture.setBrewStage(null);
         }
-        
+
         return removed;
     }
 

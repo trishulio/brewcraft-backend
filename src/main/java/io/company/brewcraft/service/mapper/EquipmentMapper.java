@@ -16,26 +16,26 @@ import io.company.brewcraft.model.Facility;
 
 @Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, AddressMapper.class})
 public interface EquipmentMapper {
-    
+
     EquipmentMapper INSTANCE = Mappers.getMapper(EquipmentMapper.class);
-    
+
     Equipment fromDto(Long id);
-    
+
     FacilityBaseDto facilityToFacilityBaseDto(Facility facility);
 
     @Mapping(target = "maxCapacity", source = "maxCapacityInDisplayUnit")
     EquipmentDto toDto(Equipment equipment);
-    
+
     @Mapping(target = "maxCapacity", source = "maxCapacityInDisplayUnit")
     FacilityEquipmentDto toFacilityEquipmentDto(Equipment equipment);
-    
+
     @Mapping(target = "maxCapacityDisplayUnit", source = "maxCapacity.symbol")
     Equipment fromDto(AddEquipmentDto equipment);
-    
+
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "maxCapacityDisplayUnit", source = "maxCapacity.symbol")
     Equipment fromDto(UpdateEquipmentDto equipment);
-    
+
     @Mapping(target = "maxCapacityDisplayUnit", source = "maxCapacity.symbol")
     Equipment fromDto(FacilityEquipmentDto equipment);
 }

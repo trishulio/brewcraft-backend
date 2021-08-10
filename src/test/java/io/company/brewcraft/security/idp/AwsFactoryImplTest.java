@@ -1,6 +1,5 @@
 package io.company.brewcraft.security.idp;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.commons.lang3.reflect.FieldUtils;

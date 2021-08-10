@@ -15,7 +15,7 @@ public class BrewDtoTest {
     public void init() {
         brewDto = new BrewDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -30,7 +30,7 @@ public class BrewDtoTest {
         Integer version = 1;
 
         BrewDto brewDto = new BrewDto(id, name, description, batchId, product, parentBrewId, startedAt, endedAt, created, version);
-        
+
         assertEquals(1L, brewDto.getId());
         assertEquals("testName", brewDto.getName());
         assertEquals("testDesc", brewDto.getDescription());
@@ -40,9 +40,9 @@ public class BrewDtoTest {
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getStartedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getEndedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getCreatedAt());
-        assertEquals(1, brewDto.getVersion());        
+        assertEquals(1, brewDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -56,42 +56,42 @@ public class BrewDtoTest {
         brewDto.setName(name);
         assertEquals(name, brewDto.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         brewDto.setDescription(description);
         assertEquals(description, brewDto.getDescription());
     }
-    
+
     @Test
     public void testGetSetBatchId() {
         Long batchId = 2L;
         brewDto.setBatchId(batchId);
         assertEquals(2L, brewDto.getBatchId());
     }
-    
+
     @Test
     public void testGetProduct() {
         ProductDto product = new ProductDto();
         brewDto.setProduct(product);
         assertEquals(new ProductDto(), brewDto.getProduct());
     }
-    
+
     @Test
     public void testGetSetParentBrew() {
         Long parentBrewId = 3L;
         brewDto.setParentBrewId(parentBrewId);
         assertEquals(parentBrewId, brewDto.getParentBrewId());
     }
-    
+
     @Test
     public void testGetSetStartedAt() {
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         brewDto.setStartedAt(startedAt);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getStartedAt());
     }
-    
+
     @Test
     public void testGetSetEndedAt() {
         LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -105,12 +105,12 @@ public class BrewDtoTest {
         brewDto.setCreatedAt(created);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getCreatedAt());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;
         brewDto.setVersion(version);
         assertEquals(version, brewDto.getVersion());
     }
-	
+
 }

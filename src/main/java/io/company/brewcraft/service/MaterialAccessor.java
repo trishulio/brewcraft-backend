@@ -6,6 +6,6 @@ public interface MaterialAccessor {
     final String ATTR_MATERIAL = "material";
 
     Material getMaterial();
-    
+
     void setMaterial(Material material);
 }

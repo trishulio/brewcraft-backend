@@ -1,25 +1,25 @@
 package io.company.brewcraft.dto;
 
 public class SupplierContactDto {
-    
+
     private Long id;
-    
+
     private String firstName;
-    
+
     private String lastName;
-    
+
     private String position;
-    
+
     private String email;
-    
+
     private String phoneNumber;
-    
+
     private Integer version;
-    
+
     public SupplierContactDto() {
         super();
     }
-    
+
     public SupplierContactDto(Long id, String firstName, String lastName, String position, String email,
             String phoneNumber, Integer version) {
         super();
@@ -79,11 +79,11 @@ public class SupplierContactDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
-    
+
     public void setVersion(Integer version) {
         this.version = version;
     }

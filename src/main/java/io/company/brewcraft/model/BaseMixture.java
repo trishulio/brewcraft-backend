@@ -10,22 +10,22 @@ import io.company.brewcraft.service.ParentMixtureAccessor;
 
 public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, BrewStageAccessor {
 
-	List<Mixture> getChildMixtures();
+    List<Mixture> getChildMixtures();
 
-	void setChildMixtures(List<Mixture> childMixtures);
+    void setChildMixtures(List<Mixture> childMixtures);
 
-	void addChildMixture(Mixture childMixture);
+    void addChildMixture(Mixture childMixture);
 
-	Quantity<?> getQuantity();
+    Quantity<?> getQuantity();
 
-	void setQuantity(Quantity<?> quantity);
+    void setQuantity(Quantity<?> quantity);
 
-	List<MaterialPortion> getMaterialPortions();
+    List<MaterialPortion> getMaterialPortions();
 
-	void setMaterialPortions(List<MaterialPortion> materialPortions);
+    void setMaterialPortions(List<MaterialPortion> materialPortions);
 
-	List<MixtureRecording> getRecordedMeasures();
+    List<MixtureRecording> getRecordedMeasures();
 
-	void setRecordedMeasures(List<MixtureRecording> recordedMeasures);
-	
+    void setRecordedMeasures(List<MixtureRecording> recordedMeasures);
+
 }

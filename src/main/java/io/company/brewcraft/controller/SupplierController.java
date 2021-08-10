@@ -33,9 +33,9 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1")
 public class SupplierController extends BaseController {
-    
+
     private SupplierService supplierService;
-    
+
     private SupplierMapper supplierMapper = SupplierMapper.INSTANCE;
 
     public SupplierController(SupplierService supplierService, AttributeFilter filter) {
@@ -49,53 +49,53 @@ public class SupplierController extends BaseController {
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
-    ) {        
+    ) {
         Page<Supplier> suppliers = supplierService.getSuppliers(page, size, sort, orderAscending);
-      
+
         List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.toDto(supplier)).collect(Collectors.toList());
-    
-        return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());   
+
+        return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());
     }
-    
+
     @GetMapping("/suppliers/{supplierId}")
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getSupplier(supplierId);
-        
+
         if (supplier == null) {
             throw new EntityNotFoundException("Supplier", supplierId.toString());
         } else {
-            return supplierMapper.toDto(supplier);   
+            return supplierMapper.toDto(supplier);
         }
     }
 
     @PostMapping("/suppliers")
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierDto addSupplier(@Valid @RequestBody AddSupplierDto supplierDto) {
-        Supplier supplier = supplierMapper.fromDto(supplierDto);    
-        
+        Supplier supplier = supplierMapper.fromDto(supplierDto);
+
         Supplier addedSupplier = supplierService.addSupplier(supplier);
-       
-        return supplierMapper.toDto(addedSupplier);   
+
+        return supplierMapper.toDto(addedSupplier);
     }
-    
+
     @PutMapping("/suppliers/{supplierId}")
     public SupplierDto putSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
-        
+
         Supplier putSupplier = supplierService.putSupplier(supplierId, supplier);
-        
-        return supplierMapper.toDto(putSupplier);   
+
+        return supplierMapper.toDto(putSupplier);
     }
 
     @PatchMapping("/suppliers/{supplierId}")
     public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
-        
+
         Supplier patchedSupplier = supplierService.patchSupplier(supplierId, supplier);
-        
-        return supplierMapper.toDto(patchedSupplier);   
+
+        return supplierMapper.toDto(patchedSupplier);
     }
-    
+
     @DeleteMapping("/suppliers/{supplierId}")
     public void deleteSupplier(@PathVariable Long supplierId) {
         supplierService.deleteSupplier(supplierId);

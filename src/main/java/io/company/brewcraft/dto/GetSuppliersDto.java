@@ -5,15 +5,15 @@ import java.util.List;
 public class GetSuppliersDto {
 
     List<SupplierDto> suppliers;
-        
+
     Long totalItems;
-    
+
     int totalPages;
-    
+
     public GetSuppliersDto() {
-        
+
     }
-    
+
     public GetSuppliersDto(List<SupplierDto> suppliers, Long totalItems, int totalPages) {
         this.suppliers = suppliers;
         this.totalItems = totalItems;
@@ -43,5 +43,5 @@ public class GetSuppliersDto {
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-    
+
 }

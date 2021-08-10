@@ -15,8 +15,8 @@ public interface ProductMeasureValueMapper {
 
     ProductMeasureValue fromDto(ProductMeasureValueDto dto);
 
-    ProductMeasureValueDto toDto(ProductMeasureValue productMeasureValue); 
-    
+    ProductMeasureValueDto toDto(ProductMeasureValue productMeasureValue);
+
     @Mapping(target = "measure.id", source = "measureId")
     ProductMeasureValue fromDto(AddProductMeasureValueDto dto);
 }

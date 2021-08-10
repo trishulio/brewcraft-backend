@@ -19,7 +19,7 @@ public class TenantDto {
 
     @Null
     private LocalDateTime created;
-    
+
     @Null
     private LocalDateTime lastUpdated;
 
@@ -66,7 +66,7 @@ public class TenantDto {
     public void setCreated(LocalDateTime created) {
         this.created = created;
     }
-    
+
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }

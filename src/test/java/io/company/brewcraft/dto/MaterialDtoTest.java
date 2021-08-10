@@ -13,7 +13,7 @@ public class MaterialDtoTest {
     public void init() {
         material = new MaterialDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -27,7 +27,7 @@ public class MaterialDtoTest {
         int version = 1;
 
         MaterialDto material = new MaterialDto(id, name, description, materialClass, category, subcategory, upc, baseQuantityUnit, version);
-        
+
         assertSame(id, material.getId());
         assertSame(name, material.getName());
         assertSame(description, material.getDescription());
@@ -36,9 +36,9 @@ public class MaterialDtoTest {
         assertSame(subcategory, material.getSubcategory());
         assertSame(upc, material.getUPC());
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
-        assertSame(version, material.getVersion());        
+        assertSame(version, material.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -52,35 +52,35 @@ public class MaterialDtoTest {
         material.setName(name);
         assertSame(name, material.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         material.setDescription(description);
         assertSame(description, material.getDescription());
     }
-    
+
     @Test
     public void testGetSetMaterialClass() {
         CategoryDto materialClass = new CategoryDto();
         material.setMaterialClass(materialClass);
         assertSame(materialClass, material.getMaterialClass());
     }
-    
+
     @Test
     public void testGetSetCategory() {
         CategoryDto category = new CategoryDto();
         material.setCategory(category);
         assertSame(category, material.getCategory());
     }
-    
+
     @Test
     public void testGetSetSubcategory() {
         CategoryDto subcategory = new CategoryDto();
         material.setSubcategory(subcategory);
         assertSame(subcategory, material.getSubcategory());
     }
-    
+
     @Test
     public void testGetSetUPC() {
         String upc = "testUpc";
@@ -94,7 +94,7 @@ public class MaterialDtoTest {
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

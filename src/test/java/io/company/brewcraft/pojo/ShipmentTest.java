@@ -150,7 +150,6 @@ public class ShipmentTest {
         shipment.setVersion(1);
         assertEquals(1, shipment.getVersion());
     }
-    
 
     @Test
     public void testAddLot_CreatesNewLotList_WhenLotIsNotNull() {

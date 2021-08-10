@@ -21,15 +21,15 @@ public class Tenant extends BaseEntity {
     @GeneratedValue()
     @Type(type = "pg-uuid")
     private UUID id;
-    
+
     private String name;
-    
+
     private String url;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
@@ -77,7 +77,7 @@ public class Tenant extends BaseEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }

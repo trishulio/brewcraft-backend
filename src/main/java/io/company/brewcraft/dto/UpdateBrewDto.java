@@ -3,25 +3,25 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class UpdateBrewDto extends BaseDto {
-	
-	private String name;
-	
-	private String description;
-    
+
+    private String name;
+
+    private String description;
+
     private Long batchId;
-    
+
     private Long productId;
-    
+
     private Long parentBrewId;
-            
+
     private LocalDateTime startedAt;
-    
+
     private LocalDateTime endedAt;
-    
+
     private Integer version;
-    
+
     public UpdateBrewDto() {
-    	super();
+        super();
     }
 
     public UpdateBrewDto(String name, String description, Long batchId, Long productId, Long parentBrewId, LocalDateTime startedAt,
@@ -36,22 +36,22 @@ public class UpdateBrewDto extends BaseDto {
         this.endedAt = endedAt;
         this.version = version;
     }
-    
+
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Long getBatchId() {
         return batchId;
@@ -100,5 +100,5 @@ public class UpdateBrewDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
 }

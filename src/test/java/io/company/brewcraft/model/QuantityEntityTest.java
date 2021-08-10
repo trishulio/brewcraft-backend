@@ -43,7 +43,7 @@ public class QuantityEntityTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         quantity = new QuantityEntity(new UnitEntity("KG"), new BigDecimal("100"));
-        
+
         final String json = "{\"unit\":{\"symbol\":\"KG\",\"name\":null},\"value\":100}";
         JSONAssert.assertEquals(json, quantity.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }

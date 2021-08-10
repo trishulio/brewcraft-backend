@@ -13,18 +13,18 @@ public class AddCategoryDtoTest {
     public void init() {
         addCategoryDto = new AddCategoryDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long parentCategoryId = 2L;
         String name = "testName";
 
         AddCategoryDto category = new AddCategoryDto(parentCategoryId, name);
-        
+
         assertSame(parentCategoryId, category.getParentCategoryId());
         assertSame(name, category.getName());
     }
-    
+
     @Test
     public void testGetSetParentCategoryId() {
         Long parentCategoryId = 1L;

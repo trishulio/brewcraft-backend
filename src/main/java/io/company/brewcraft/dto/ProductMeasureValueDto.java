@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductMeasureValueDto extends BaseDto {
-	
-	private Long id;
+
+    private Long id;
 
     private MeasureDto measure;
-    
+
     private BigDecimal value;
 
     public ProductMeasureValueDto() {
@@ -18,11 +18,11 @@ public class ProductMeasureValueDto extends BaseDto {
     }
 
     public ProductMeasureValueDto(Long id, MeasureDto measure, BigDecimal value) {
-    	setId(id);
+        setId(id);
         setMeasure(measure);
         setValue(value);
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -30,7 +30,7 @@ public class ProductMeasureValueDto extends BaseDto {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public MeasureDto getMeasure() {
         return measure;
     }

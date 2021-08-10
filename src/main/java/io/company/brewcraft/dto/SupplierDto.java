@@ -3,26 +3,26 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class SupplierDto extends BaseDto {
-    
+
     private Long id;
-    
+
     private String name;
 
     private List<SupplierContactDto> contacts;
-    
+
     private AddressDto address;
-    
+
     private Integer version;
-    
+
     public SupplierDto() {
         super();
     }
-    
+
     public SupplierDto(Long id) {
         this();
         this.id = id;
     }
-    
+
     public SupplierDto(Long id, String name, List<SupplierContactDto> contacts,
             AddressDto address, Integer version) {
         this(id);
@@ -63,7 +63,7 @@ public class SupplierDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-    
+
     public Integer getVersion() {
         return version;
     }

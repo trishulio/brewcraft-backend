@@ -17,11 +17,11 @@ import io.company.brewcraft.service.MinAggregation;
 
 public class MinAggregationTest {
     private Aggregation aggr;
-    
+
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
-    
+
     @BeforeEach
     public void init() {
         mRoot = mock(Root.class);
@@ -33,15 +33,15 @@ public class MinAggregationTest {
     public void testPathArrayConstructor_CreatesMinExpressionOnRootPath() {
         Path<?> mPath1 = mock(Path.class);
         Path<? extends Number> mPath2 = mock(Path.class);
-        
+
         doReturn(mPath1).when(mRoot).get("PATH_1");
         doReturn(mPath2).when(mPath1).get("PATH_2");
 
         Expression<?> mMinExpr = mock(Expression.class);
         doReturn(mMinExpr).when(mCb).min(mPath2);
-        
+
         aggr = new MinAggregation("PATH_1", "PATH_2");
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mMinExpr, expr);
     }
@@ -54,9 +54,9 @@ public class MinAggregationTest {
 
         Expression<?> mMinExpr = mock(Expression.class);
         doReturn(mMinExpr).when(mCb).min(mExpr);
-        
+
         aggr = new MinAggregation(mArg);
-        
+
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mMinExpr, expr);
     }

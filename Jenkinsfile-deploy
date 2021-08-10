@@ -6,7 +6,7 @@ pipeline {
     environment {
         SSH_CREDS = credentials('jaas_user')
     }
-    
+
     parameters {
         string(name: 'HOST_URL', defaultValue: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
     }

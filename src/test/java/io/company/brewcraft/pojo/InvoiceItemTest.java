@@ -127,7 +127,7 @@ public class InvoiceItemTest {
         item.setMaterial(new Material(1L));
         assertEquals(new Material(1L), item.getMaterial());
     }
-    
+
     @Test
     public void testAccessCreatedAt() {
         assertNull(item.getCreatedAt());

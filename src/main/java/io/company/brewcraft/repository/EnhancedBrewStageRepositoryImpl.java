@@ -10,15 +10,15 @@ import io.company.brewcraft.service.BrewStageAccessor;
 
 public class EnhancedBrewStageRepositoryImpl implements EnhancedBrewStageRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedBrewStageRepositoryImpl.class);
-    
+
     private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher;
 
     private BrewTaskRepository brewTaskRepository;
-    
+
     private BrewStageStatusRepository brewStageStatusRepository;
-    
+
     private BrewRepository brewRepository;
-        
+
     public EnhancedBrewStageRepositoryImpl(BrewTaskRepository brewTaskRepository, BrewStageStatusRepository brewStageStatusRepository, BrewRepository brewRepository, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
         this.brewStageStatusRepository = brewStageStatusRepository;
         this.brewTaskRepository = brewTaskRepository;
@@ -26,15 +26,15 @@ public class EnhancedBrewStageRepositoryImpl implements EnhancedBrewStageReposit
         this.refresher = refresher;
     }
 
-	@Override
-	public void refresh(Collection<BrewStage> brewStages) {
+    @Override
+    public void refresh(Collection<BrewStage> brewStages) {
         this.brewStageStatusRepository.refreshAccessors(brewStages);
         this.brewTaskRepository.refreshAccessors(brewStages);
         this.brewRepository.refreshAccessors(brewStages);
-	}
-	
-	@Override
-	public void refreshAccessors(Collection<? extends BrewStageAccessor> accessors) {
+    }
+
+    @Override
+    public void refreshAccessors(Collection<? extends BrewStageAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
-	}
+    }
 }

@@ -38,18 +38,18 @@ public class FacilityServiceImplTest {
     @BeforeEach
     public void init() {
         facilityRepositoryMock = mock(FacilityRepository.class);
-        
+
         facilityService = new FacilityServiceImpl(facilityRepositoryMock);
     }
 
     @Test
     public void testGetAllFacilities_returnsFacilities() throws Exception {
         Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         List<Facility> facilityList = Arrays.asList(facility);
-        
+
         Page<Facility> expectedFacilities = new PageImpl<>(facilityList);
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(facilityRepositoryMock.findAll(pageableArgument.capture())).thenReturn(expectedFacilities);
@@ -61,9 +61,9 @@ public class FacilityServiceImplTest {
         assertSame(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertSame("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertSame(1, actualFacilities.getNumberOfElements());
-        
+
         Facility actualFacility = actualFacilities.get().findFirst().get();
-        
+
         assertSame(facility.getId(), actualFacility.getId());
         assertSame(facility.getName(), actualFacility.getName());
         assertSame(facility.getAddress().getId(), actualFacility.getAddress().getId());
@@ -77,7 +77,7 @@ public class FacilityServiceImplTest {
         assertSame(facility.getCreatedAt(), actualFacility.getCreatedAt());
         assertSame(facility.getVersion(), actualFacility.getVersion());
     }
-    
+
     @Test
     public void testGetFacility_returnsFacility() throws Exception {
         Long id = 1L;
@@ -106,7 +106,7 @@ public class FacilityServiceImplTest {
     @Test
     public void testAddFacility_SavesFacility() throws Exception {
         Facility facility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
@@ -114,7 +114,7 @@ public class FacilityServiceImplTest {
         when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
 
         Facility returnedFacility = facilityService.addFacility(facility);
-        
+
         //Assert persisted entity
         assertEquals(facility.getId(), persistedFacilityCaptor.getValue().getId());
         assertEquals(facility.getName(), persistedFacilityCaptor.getValue().getName());
@@ -128,7 +128,7 @@ public class FacilityServiceImplTest {
         assertEquals(facility.getLastUpdated(), persistedFacilityCaptor.getValue().getLastUpdated());
         assertEquals(facility.getCreatedAt(), persistedFacilityCaptor.getValue().getCreatedAt());
         assertEquals(facility.getVersion(), persistedFacilityCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(facilityEntity.getId(), returnedFacility.getId());
         assertEquals(facilityEntity.getName(), returnedFacility.getName());
@@ -141,15 +141,15 @@ public class FacilityServiceImplTest {
         assertEquals(facilityEntity.getFaxNumber(), returnedFacility.getFaxNumber());
         assertEquals(facilityEntity.getLastUpdated(), returnedFacility.getLastUpdated());
         assertEquals(facilityEntity.getCreatedAt(), returnedFacility.getCreatedAt());
-        assertEquals(facilityEntity.getVersion(), returnedFacility.getVersion()); 
+        assertEquals(facilityEntity.getVersion(), returnedFacility.getVersion());
     }
-    
+
     @Test
     public void testPutFacility_Success() throws Exception {
         Long id = 1L;
-        
+
         Facility putFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         Facility facilityEntity = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
@@ -157,7 +157,7 @@ public class FacilityServiceImplTest {
         when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(facilityEntity);
 
         Facility returnedFacility = facilityService.putFacility(id, putFacility);
-       
+
         //Assert persisted entity
         assertEquals(putFacility.getId(), persistedFacilityCaptor.getValue().getId());
         assertEquals(putFacility.getName(), persistedFacilityCaptor.getValue().getName());
@@ -171,7 +171,7 @@ public class FacilityServiceImplTest {
         //assertEquals(null, persistedFacilityCaptor.getValue().getLastUpdated());
         //assertEquals(putFacility.getCreatedAt(), persistedFacilityCaptor.getValue().getCreatedAt());
         assertEquals(putFacility.getVersion(), persistedFacilityCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(facilityEntity.getId(), returnedFacility.getId());
         assertEquals(facilityEntity.getName(), returnedFacility.getName());
@@ -184,13 +184,13 @@ public class FacilityServiceImplTest {
         assertEquals(facilityEntity.getFaxNumber(), returnedFacility.getFaxNumber());
         assertEquals(facilityEntity.getLastUpdated(), returnedFacility.getLastUpdated());
         assertEquals(facilityEntity.getCreatedAt(), returnedFacility.getCreatedAt());
-        assertEquals(facilityEntity.getVersion(), returnedFacility.getVersion()); 
+        assertEquals(facilityEntity.getVersion(), returnedFacility.getVersion());
     }
-    
+
     @Test
     public void testPatchFacility_success() throws Exception {
         Long id = 1L;
-        
+
         Facility patchedFacility = new Facility(1L, "updatedName", null, null, null, null, null, null, null, null);
         Facility existingFacility = new Facility(1L, "facility1", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Facility persistedFacilityEntity = new Facility(1L, "updatedName", new FacilityAddress(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", List.of(new Equipment(2L)), List.of(new Storage(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
@@ -198,11 +198,11 @@ public class FacilityServiceImplTest {
         ArgumentCaptor<Facility> persistedFacilityCaptor = ArgumentCaptor.forClass(Facility.class);
 
         when(facilityRepositoryMock.findById(id)).thenReturn(Optional.of(existingFacility));
- 
+
         when(facilityRepositoryMock.saveAndFlush(persistedFacilityCaptor.capture())).thenReturn(persistedFacilityEntity);
 
         Facility returnedFacility = facilityService.patchFacility(id, patchedFacility);
-       
+
         //Assert persisted entity
         assertEquals(existingFacility.getId(), persistedFacilityCaptor.getValue().getId());
         assertEquals(patchedFacility.getName(), persistedFacilityCaptor.getValue().getName());
@@ -216,7 +216,7 @@ public class FacilityServiceImplTest {
         assertEquals(existingFacility.getLastUpdated(), persistedFacilityCaptor.getValue().getLastUpdated());
         assertEquals(existingFacility.getCreatedAt(), persistedFacilityCaptor.getValue().getCreatedAt());
         assertEquals(existingFacility.getVersion(), persistedFacilityCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(persistedFacilityEntity.getId(), returnedFacility.getId());
         assertEquals(persistedFacilityEntity.getName(), returnedFacility.getName());
@@ -229,16 +229,16 @@ public class FacilityServiceImplTest {
         assertEquals(persistedFacilityEntity.getFaxNumber(), returnedFacility.getFaxNumber());
         assertEquals(persistedFacilityEntity.getLastUpdated(), returnedFacility.getLastUpdated());
         assertEquals(persistedFacilityEntity.getCreatedAt(), returnedFacility.getCreatedAt());
-        assertEquals(persistedFacilityEntity.getVersion(), returnedFacility.getVersion()); 
+        assertEquals(persistedFacilityEntity.getVersion(), returnedFacility.getVersion());
     }
-    
+
     @Test
     public void testPatchFacility_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
         Facility facility = new Facility();
-        
+
         when(facilityRepositoryMock.existsById(id)).thenReturn(false);
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             facilityService.patchFacility(id, facility);
             verify(facilityRepositoryMock, times(0)).saveAndFlush(Mockito.any(Facility.class));
@@ -249,30 +249,30 @@ public class FacilityServiceImplTest {
     public void testDeleteFacility_success() throws Exception {
         Long id = 1L;
         facilityService.deleteFacility(id);
-        
+
         verify(facilityRepositoryMock, times(1)).deleteById(id);
     }
-    
+
     @Test
     public void testFacilityExists_success() throws Exception {
         Long id = 1L;
         facilityService.facilityExists(id);
-        
+
         verify(facilityRepositoryMock, times(1)).existsById(id);
     }
-    
+
     @Test
     public void testFacilityService_classIsTransactional() throws Exception {
         Transactional transactional = facilityService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testFacilityService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = facilityService.getClass().getMethods();  
+        Method[] methods = facilityService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

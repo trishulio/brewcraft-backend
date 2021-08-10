@@ -2,27 +2,27 @@ package io.company.brewcraft.dto;
 
 public class MaterialDto extends BaseDto {
     private Long id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private CategoryDto materialClass;
-    
+
     private CategoryDto category;
 
     private CategoryDto subcategory;
-    
+
     private String upc;
 
     private String baseQuantityUnit;
-    
+
     private Integer version;
-    
+
     public MaterialDto() {
         super();
     }
-    
+
     public MaterialDto(Long id) {
         this();
         this.id = id;

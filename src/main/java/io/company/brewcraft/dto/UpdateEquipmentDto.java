@@ -4,17 +4,17 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class UpdateEquipmentDto extends BaseDto {
-    
+
     private String name;
-    
+
     private EquipmentType type;
-    
+
     private EquipmentStatus status;
-    
+
     private QuantityDto maxCapacity;
-    
+
     private Integer version;
-    
+
     public UpdateEquipmentDto() {
         super();
     }
@@ -59,11 +59,11 @@ public class UpdateEquipmentDto extends BaseDto {
     public void setMaxCapacity(QuantityDto maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
-    
+
     public Integer getVersion() {
         return this.version;
     }
-    
+
     public void setVersion(Integer version) {
         this.version = version;
     }

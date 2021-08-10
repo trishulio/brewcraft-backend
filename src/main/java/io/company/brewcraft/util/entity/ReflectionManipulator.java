@@ -28,7 +28,7 @@ public class ReflectionManipulator {
 
     private LoadingCache<Class<?>, Set<String>> propNamesCache;
 
-    public boolean equals(Object o, Object that) {      
+    public boolean equals(Object o, Object that) {
         return EqualsBuilder.reflectionEquals(o, that);
     }
 
@@ -41,7 +41,7 @@ public class ReflectionManipulator {
                                     @Override
                                     public Set<String> load(Class<?> clazz) throws Exception {
                                         Set<String> propertyNames = null;
-                        
+
                                         Method[] methods = clazz.getMethods();
                                         propertyNames = Arrays.stream(methods)
                                                         .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
@@ -107,7 +107,7 @@ public class ReflectionManipulator {
         try {
             Constructor<T> constructor = clazz.getConstructor();
             obj = constructor.newInstance();
-            
+
             PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
             for (PropertyDescriptor pd : pds) {
                 if (props.containsKey(pd.getName())) {
@@ -128,16 +128,16 @@ public class ReflectionManipulator {
 
         return obj;
     }
-    
+
     public <T> T construct(Class<T> clazz, String[] fields, Object[] values) {
         T obj = null;
         try {
             Constructor<T> constructor = clazz.getConstructor();
             obj = constructor.newInstance();
-            
+
             PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
             Map<String, PropertyDescriptor> pdLookup = Arrays.stream(pds).collect(Collectors.toMap(pd -> pd.getName(), pd -> pd));
-            
+
             for (int i = 0; i < fields.length; i++) {
                 Method setter = pdLookup.get(fields[i]).getWriteMethod();
                 setter.invoke(obj, values[i]);

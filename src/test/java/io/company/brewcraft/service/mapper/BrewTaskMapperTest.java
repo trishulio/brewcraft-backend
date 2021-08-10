@@ -31,8 +31,8 @@ public class BrewTaskMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-    	BrewTask task = brewTaskMapper.fromDto(new BrewTaskDto(1L));
-    	BrewTask expected = new BrewTask(1L);
+        BrewTask task = brewTaskMapper.fromDto(new BrewTaskDto(1L));
+        BrewTask expected = new BrewTask(1L);
 
         assertEquals(expected, task);
     }
@@ -44,12 +44,12 @@ public class BrewTaskMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-    	BrewTaskDto task = brewTaskMapper.toDto(new BrewTask(1L));
+        BrewTaskDto task = brewTaskMapper.toDto(new BrewTask(1L));
 
-    	BrewTaskDto expected = new BrewTaskDto(1L);
+        BrewTaskDto expected = new BrewTaskDto(1L);
         assertEquals(expected, task);
     }
-    
+
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(brewTaskMapper.toDto(null));

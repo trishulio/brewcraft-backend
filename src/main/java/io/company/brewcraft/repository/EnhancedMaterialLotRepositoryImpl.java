@@ -10,10 +10,10 @@ import io.company.brewcraft.service.MaterialLotAccessor;
 
 public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedMaterialLotRepositoryImpl.class);
-    
+
     private InvoiceItemRepository itemRepo;
     private StorageRepository storageRepo;
-    
+
     private final AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher;
 
     public EnhancedMaterialLotRepositoryImpl(InvoiceItemRepository itemRepo, StorageRepository storageRepo, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
@@ -27,7 +27,7 @@ public class EnhancedMaterialLotRepositoryImpl implements EnhancedMaterialLotRep
         this.itemRepo.refreshAccessors(lots);
         this.storageRepo.refreshAccessors(lots);
     }
-    
+
     @Override
     public void refreshAccessors(Collection<? extends MaterialLotAccessor> accessors) {
         refresher.refreshAccessors(accessors);

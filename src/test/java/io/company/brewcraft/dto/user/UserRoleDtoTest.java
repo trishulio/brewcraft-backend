@@ -9,14 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserRoleDtoTest {
-    
+
     private UserRoleDto dto;
-    
+
     @BeforeEach
     public void init() {
         dto = new UserRoleDto();
     }
-    
+
     @Test
     public void testAllArgs_SetsAllFields() {
         dto = new UserRoleDto(
@@ -40,28 +40,28 @@ public class UserRoleDtoTest {
         dto.setId(1L);
         assertEquals(1L, dto.getId());
     }
-    
+
     @Test
     public void testAccessName() {
         assertNull(dto.getName());
         dto.setName("roleName");
         assertEquals("roleName", dto.getName());
     }
-    
+
     @Test
     public void testAccessCreatedAt() {
         assertNull(dto.getCreatedAt());
         dto.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getCreatedAt());
     }
-    
+
     @Test
     public void testAccessLastUpdated() {
         assertNull(dto.getLastUpdated());
         dto.setLastUpdated(LocalDateTime.of(1999, 1, 1, 0, 0));
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getLastUpdated());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(dto.getVersion());

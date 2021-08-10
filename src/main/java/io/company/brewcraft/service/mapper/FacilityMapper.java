@@ -12,14 +12,14 @@ import io.company.brewcraft.model.Facility;
 
 @Mapper(uses = { StorageMapper.class, EquipmentMapper.class, QuantityMapper.class, AddressMapper.class})
 public interface FacilityMapper {
-    
+
     FacilityMapper INSTANCE = Mappers.getMapper(FacilityMapper.class);
-                    
+
     FacilityDto toDto(Facility facility);
-    
+
     Facility fromDto(AddFacilityDto facilityDto);
-    
+
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Facility fromDto(UpdateFacilityDto facilityDto);
-    
+
 }

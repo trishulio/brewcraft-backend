@@ -44,7 +44,7 @@ public class BrewStageControllerTest {
 
    @Test
    public void testGetBrewStages() {
-	   BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        List<BrewStage> brewStageList = List.of(brewStage);
        Page<BrewStage> mPage = mock(Page.class);
@@ -80,15 +80,15 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brewStageDto.getEndedAt());
        assertEquals(1, brewStageDto.getVersion());
    }
-   
+
    @Test
    public void testGetBrewStage() {
-	   BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        doReturn(brewStage).when(brewStageService).getBrewStage(1L);
-       
+
        BrewStageDto brewStageDto = brewStageController.getBrewStage(1L);
-       
+
        assertEquals(1L, brewStageDto.getId());
        assertEquals(2L, brewStageDto.getBrewId());
        assertEquals(new BrewStageStatusDto(3L, "COMPLETE"), brewStageDto.getStatus());
@@ -97,7 +97,7 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brewStageDto.getEndedAt());
        assertEquals(1, brewStageDto.getVersion());
    }
-   
+
    @Test
    public void testGetBrewStage_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
        when(brewStageService.getBrewStage(1L)).thenReturn(null);
@@ -106,16 +106,16 @@ public class BrewStageControllerTest {
 
    @Test
    public void testAddBrewStage() {
-	   AddBrewStageDto addBrewStageDto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4));
+       AddBrewStageDto addBrewStageDto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4));
 
-	   BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<BrewStage> addBrewStageCaptor = ArgumentCaptor.forClass(BrewStage.class);
-       
+
        doReturn(brewStage).when(brewStageService).addBrewStage(addBrewStageCaptor.capture());
 
        BrewStageDto brewStageDto = brewStageController.addBrewStage(addBrewStageDto);
-       
+
        //Assert added brew stage
        assertEquals(null, addBrewStageCaptor.getValue().getId());
        assertEquals(new Brew(2L), addBrewStageCaptor.getValue().getBrew());
@@ -124,8 +124,8 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addBrewStageCaptor.getValue().getEndedAt());
        assertEquals(null, addBrewStageCaptor.getValue().getVersion());
-       
-       //Assert returned brew stage  
+
+       //Assert returned brew stage
        assertEquals(1L, brewStageDto.getId());
        assertEquals(2L, brewStageDto.getBrewId());
        assertEquals(new BrewStageStatusDto(3L, "COMPLETE"), brewStageDto.getStatus());
@@ -134,19 +134,19 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brewStageDto.getEndedAt());
        assertEquals(1, brewStageDto.getVersion());
    }
-   
+
    @Test
    public void testPutBrewStage() {
-	   UpdateBrewStageDto updateBrewStageDto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
-      
-	   BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       UpdateBrewStageDto updateBrewStageDto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+
+       BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<BrewStage> putBrewStageCaptor = ArgumentCaptor.forClass(BrewStage.class);
-       
+
        doReturn(brewStage).when(brewStageService).putBrewStage(eq(1L), putBrewStageCaptor.capture());
 
        BrewStageDto brewStageDto = brewStageController.putBrewStage(updateBrewStageDto, 1L);
-       
+
        //Assert put brew stage
        assertEquals(null, putBrewStageCaptor.getValue().getId());
        assertEquals(new Brew(2L), putBrewStageCaptor.getValue().getBrew());
@@ -155,8 +155,8 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), putBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), putBrewStageCaptor.getValue().getEndedAt());
        assertEquals(1, putBrewStageCaptor.getValue().getVersion());
-       
-       //Assert returned brew stage  
+
+       //Assert returned brew stage
        assertEquals(1L, brewStageDto.getId());
        assertEquals(2L, brewStageDto.getBrewId());
        assertEquals(new BrewStageStatusDto(3L, "COMPLETE"), brewStageDto.getStatus());
@@ -165,19 +165,19 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brewStageDto.getEndedAt());
        assertEquals(1, brewStageDto.getVersion());
    }
-   
+
    @Test
    public void testPatchBrewStage() {
-	   UpdateBrewStageDto updateBrewStageDto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
-	      
-	   BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       UpdateBrewStageDto updateBrewStageDto = new UpdateBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+
+       BrewStage brewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<BrewStage> patchBrewStageCaptor = ArgumentCaptor.forClass(BrewStage.class);
-       
+
        doReturn(brewStage).when(brewStageService).patchBrewStage(eq(1L), patchBrewStageCaptor.capture());
 
        BrewStageDto brewStageDto = brewStageController.patchBrewStage(1L, updateBrewStageDto);
-       
+
        //Assert patch brew stage
        assertEquals(null, patchBrewStageCaptor.getValue().getId());
        assertEquals(new Brew(2L), patchBrewStageCaptor.getValue().getBrew());
@@ -186,8 +186,8 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), patchBrewStageCaptor.getValue().getStartedAt());
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), patchBrewStageCaptor.getValue().getEndedAt());
        assertEquals(1, patchBrewStageCaptor.getValue().getVersion());
-       
-       //Assert returned brew stage  
+
+       //Assert returned brew stage
        assertEquals(1L, brewStageDto.getId());
        assertEquals(2L, brewStageDto.getBrewId());
        assertEquals(new BrewStageStatusDto(3L, "COMPLETE"), brewStageDto.getStatus());
@@ -196,7 +196,7 @@ public class BrewStageControllerTest {
        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brewStageDto.getEndedAt());
        assertEquals(1, brewStageDto.getVersion());
    }
-   
+
    @Test
    public void testDeleteBrewStage() {
        brewStageController.deleteBrewStage(1L);

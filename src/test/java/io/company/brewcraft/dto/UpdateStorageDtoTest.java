@@ -15,7 +15,7 @@ public class UpdateStorageDtoTest {
     public void init() {
         updateStorageDto = new UpdateStorageDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "storage1";
@@ -23,7 +23,7 @@ public class UpdateStorageDtoTest {
         Integer version = 1;
 
         UpdateStorageDto updateStorageDto = new UpdateStorageDto(name, type, version);
-        
+
         assertSame(name, updateStorageDto.getName());
         assertSame(type, updateStorageDto.getType());
         assertSame(version, updateStorageDto.getVersion());
@@ -35,14 +35,14 @@ public class UpdateStorageDtoTest {
         updateStorageDto.setName(name);
         assertSame(name, updateStorageDto.getName());
     }
-    
+
     @Test
     public void testGetSetType() {
         StorageType type = StorageType.GENERAL;
         updateStorageDto.setType(type);
         assertSame(type, updateStorageDto.getType());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

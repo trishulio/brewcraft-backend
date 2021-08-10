@@ -14,7 +14,7 @@ public class InvoiceStatusService {
     public InvoiceStatusService(InvoiceStatusRepository repo) {
         this.repo = repo;
     }
-    
+
     public InvoiceStatus getStatus(Long id) {
         InvoiceStatus status = null;
 

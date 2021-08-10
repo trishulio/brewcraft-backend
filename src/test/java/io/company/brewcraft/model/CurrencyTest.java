@@ -41,7 +41,7 @@ public class CurrencyTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         currency = new Currency(1234, "CAD");
-        
+
         final String json = "{\"numericCode\":1234,\"code\":\"CAD\"}";
         JSONAssert.assertEquals(json, currency.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }

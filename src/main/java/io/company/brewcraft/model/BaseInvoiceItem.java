@@ -17,9 +17,9 @@ public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem
     String getDescription();
 
     void setDescription(String description);
-    
+
     T getInvoice();
-    
+
     void setInvoice(T invoice);
 
     Quantity<?> getQuantity();

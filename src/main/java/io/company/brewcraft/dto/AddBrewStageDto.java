@@ -5,33 +5,33 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class AddBrewStageDto extends BaseDto {
-	
+
     @NotNull
     private Long brewId;
-    
+
     @NotNull
     private Long statusId;
-	
+
     @NotNull
     private Long taskId;
-                
+
     private LocalDateTime startedAt;
-    
+
     private LocalDateTime endedAt;
-    
+
     public AddBrewStageDto() {
-    	super();
+        super();
     }
 
     public AddBrewStageDto(Long brewId, Long statusId, Long taskId, LocalDateTime startedAt, LocalDateTime endedAt) {
-    	this();
+        this();
         this.brewId = brewId;
         this.statusId = statusId;
         this.taskId = taskId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
     }
-    
+
     public Long getBrewId() {
         return brewId;
     }
@@ -39,7 +39,7 @@ public class AddBrewStageDto extends BaseDto {
     public void setBrewId(Long brewId) {
         this.brewId = brewId;
     }
-    
+
     public Long getStatusId() {
         return statusId;
     }
@@ -71,5 +71,5 @@ public class AddBrewStageDto extends BaseDto {
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
     }
-    
+
 }

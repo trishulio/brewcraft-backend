@@ -19,7 +19,7 @@ public class AddMaterialLotDto extends BaseDto {
     public String getLotNumber() {
         return this.lotNumber;
     }
-    
+
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
     }
@@ -31,11 +31,11 @@ public class AddMaterialLotDto extends BaseDto {
     public void setQuantity(QuantityDto qty) {
         this.qty = qty;
     }
-    
+
     public Long getInvoiceItemId() {
         return this.invoiceItemId;
     }
-    
+
     public void setInvoiceItemId(Long invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }

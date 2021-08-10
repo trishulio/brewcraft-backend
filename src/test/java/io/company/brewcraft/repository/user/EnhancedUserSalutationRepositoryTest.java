@@ -16,26 +16,26 @@ public class EnhancedUserSalutationRepositoryTest {
     private AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> mRefresher;
 
     private EnhancedUserSalutationRepository repo;
-    
+
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
 
         repo = new EnhancedUserSalutationRepositoryImpl(mRefresher);
     }
-    
+
     @Test
     public void testRefresh_DoesNothing() {
         repo.refresh(null);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsAccessorRefresher() {
         UserSalutationAccessor accessor = mock(UserSalutationAccessor.class);
         List<UserSalutationAccessor> accessors = List.of(accessor);
 
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(List.of(accessor));
     }
 }

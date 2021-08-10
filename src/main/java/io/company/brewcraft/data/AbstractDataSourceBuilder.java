@@ -86,7 +86,7 @@ public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
         Object o = null;
         o = props.get(poolSize);
         if (o != null) {
-            size = (int) o; 
+            size = (int) o;
         }
 
         return size;

@@ -13,7 +13,7 @@ public class UpdateCategoryDtoTest {
     public void init() {
         updateCategoryDto = new UpdateCategoryDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long parentCategoryId = 2L;
@@ -21,12 +21,12 @@ public class UpdateCategoryDtoTest {
         int version = 1;
 
         UpdateCategoryDto updateCategoryDto = new UpdateCategoryDto(parentCategoryId, name, version);
-        
+
         assertSame(parentCategoryId, updateCategoryDto.getParentCategoryId());
         assertSame(name, updateCategoryDto.getName());
-        assertSame(version, updateCategoryDto.getVersion());        
+        assertSame(version, updateCategoryDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetParentCategoryId() {
         Long parentCategoryId = 1L;
@@ -40,7 +40,7 @@ public class UpdateCategoryDtoTest {
         updateCategoryDto.setName(name);
         assertSame(name, updateCategoryDto.getName());
     }
-  
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

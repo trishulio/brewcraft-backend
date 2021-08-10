@@ -36,11 +36,11 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_portion_generator")
     @SequenceGenerator(name = "material_portion_generator", sequenceName = "material_portion_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_lot_id", referencedColumnName = "id", nullable = false)
     private MaterialLot materialLot;
-    
+
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "value", column = @Column(name = "quantity_value"))
@@ -49,32 +49,32 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
         @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mixture_id", referencedColumnName = "id", nullable = false)
     private Mixture mixture;
-            
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
     public MaterialPortion() {
     }
-    
+
     public MaterialPortion(Long id) {
-    	this();
+        this();
         setId(id);
-    } 
+    }
 
     public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture, LocalDateTime createdAt, LocalDateTime lastUpdated) {
-    	this(id);
+        this(id);
         setMaterialLot(materialLot);
         setQuantity(quantity);
         setMixture(mixture);
@@ -92,7 +92,7 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public MaterialLot getMaterialLot() {
         return materialLot;
@@ -122,7 +122,7 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
     public void setMixture(Mixture mixture) {
         this.mixture = mixture;
     }
-    
+
     @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;

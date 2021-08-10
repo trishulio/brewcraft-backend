@@ -26,11 +26,11 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.service.MeasureService;
 
 public class MeasureServiceImplTest {
-    
+
     private MeasureService measureService;
-    
+
     private MeasureRepository measureRepositoryMock;
-    
+
     @BeforeEach
     public void init() {
         measureRepositoryMock = Mockito.mock(MeasureRepository.class);
@@ -38,30 +38,30 @@ public class MeasureServiceImplTest {
     }
 
     @Test
-    public void testGetAllMeasures_returnsMeasures() throws Exception {                        
+    public void testGetAllMeasures_returnsMeasures() throws Exception {
         Page<Measure> expectedMeasureEntities = new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)));
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
-        
+
         when(measureRepositoryMock.findAll(ArgumentMatchers.<Specification<Measure>>any(), pageableArgument.capture())).thenReturn(expectedMeasureEntities);
 
         Page<Measure> measuresPage = measureService.getMeasures(null, 0, 100, new TreeSet<>(List.of("id")), true);
 
         assertEquals(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), measuresPage.getContent());
     }
-    
+
     @Test
     public void testMeasureService_classIsTransactional() throws Exception {
         Transactional transactional = measureService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testMeasureService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = measureService.getClass().getMethods();  
+        Method[] methods = measureService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

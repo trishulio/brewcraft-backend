@@ -56,7 +56,7 @@ public class InvoiceServiceTest {
 
        this.service = spy(new InvoiceService(mRepo, mItemService));
    }
-   
+
    @Test
    @Disabled(value = "TODO: Need to figure out a way to assert the spec behaviour based on the inputs")
    public void testGetInvoices_CallsRepositoryWithACustomSpec_AndReturnsPageOfEntities() {
@@ -67,26 +67,26 @@ public class InvoiceServiceTest {
    public void testGetInvoice_ReturnsInvoicePojo_WhenRepositoryReturnsOptionalWithEntity() {
        Optional<Invoice> mOptional = Optional.of(new Invoice(1L));
        doReturn(mOptional).when(mRepo).findById(1L);
-       
+
        Invoice invoice = service.getInvoice(1L);
-       
+
        assertEquals(new Invoice(1L), invoice);
    }
-   
+
    @Test
    public void testGetInvoice_ReturnsNull_WhenRepositoryReturnsEmptyOptional() {
        Optional<Invoice> mOptional = Optional.empty();
        doReturn(mOptional).when(mRepo).findById(1L);
-       
+
        Invoice invoice = service.getInvoice(1L);
-       
+
        assertNull(invoice);
    }
 
    @Test
    public void testExists_ReturnsTrue_WhenRepoReturnsTrue() {
        doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
-       
+
        assertTrue(service.exists(Set.of(1L, 2L, 3L)));
    }
 
@@ -177,7 +177,7 @@ public class InvoiceServiceTest {
        );
 
        doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
-       
+
        doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
 
        Invoice invoice = service.put(1L, update);
@@ -235,7 +235,7 @@ public class InvoiceServiceTest {
            LocalDateTime.of(2003, 1, 1, 12, 0),
            new InvoiceStatus(99L),
            null,
-           1  
+           1
        );
 
        InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);

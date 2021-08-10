@@ -16,7 +16,7 @@ public interface MaterialLotMapper {
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
 
     MaterialLotDto toDto(MaterialLot lot);
-    
+
     @Mappings({
         @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),

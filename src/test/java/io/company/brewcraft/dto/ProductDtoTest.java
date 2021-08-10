@@ -15,7 +15,7 @@ public class ProductDtoTest {
     public void init() {
         productDto = new ProductDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -28,7 +28,7 @@ public class ProductDtoTest {
         Integer version = 1;
 
         ProductDto productDto = new ProductDto(id, name, description, productClass, type, style, targetMeasures, version);
-        
+
         assertEquals(id, productDto.getId());
         assertEquals("testName", productDto.getName());
         assertEquals("testDesc", productDto.getDescription());
@@ -36,9 +36,9 @@ public class ProductDtoTest {
         assertEquals(new CategoryDto(), productDto.getType());
         assertEquals(new CategoryDto(), productDto.getStyle());
         assertEquals(List.of(new ProductMeasureValueDto()), productDto.getTargetMeasures());
-        assertEquals(1, productDto.getVersion());        
+        assertEquals(1, productDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -52,42 +52,42 @@ public class ProductDtoTest {
         productDto.setName(name);
         assertEquals(name, productDto.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         productDto.setDescription(description);
         assertEquals(description, productDto.getDescription());
     }
-    
+
     @Test
     public void testGetSetProductClass() {
         CategoryDto productClass = new CategoryDto();
         productDto.setProductClass(productClass);
         assertEquals(productClass, productDto.getProductClass());
     }
-    
+
     @Test
     public void testGetSetType() {
         CategoryDto type = new CategoryDto();
         productDto.setType(type);
         assertEquals(type, productDto.getType());
     }
-    
+
     @Test
     public void testGetSetStyle() {
         CategoryDto style = new CategoryDto();
         productDto.setStyle(style);
         assertEquals(style, productDto.getStyle());
     }
-    
+
     @Test
     public void testGetSetTargetMeasures() {
         List<ProductMeasureValueDto> targetMeasures = List.of(new ProductMeasureValueDto());
         productDto.setTargetMeasures(targetMeasures);
         assertEquals(List.of(new ProductMeasureValueDto()), productDto.getTargetMeasures());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

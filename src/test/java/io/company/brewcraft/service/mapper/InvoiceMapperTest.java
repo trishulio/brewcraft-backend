@@ -36,7 +36,7 @@ import tec.uom.se.quantity.Quantities;
 
 public class InvoiceMapperTest {
     private InvoiceMapper mapper;
-    
+
     @BeforeEach
     public void init() {
         mapper = InvoiceMapper.INSTANCE;
@@ -102,9 +102,9 @@ public class InvoiceMapperTest {
             List.of(new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L, 1)),
             1
         );
-        
+
         Invoice invoice = mapper.fromDto(dto);
-        
+
         Invoice expected = new Invoice(
             null,
             "ABCDE-12345",
@@ -120,7 +120,7 @@ public class InvoiceMapperTest {
             List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)),
             1
         );
-        
+
         assertEquals(expected, invoice);
     }
 
@@ -142,9 +142,9 @@ public class InvoiceMapperTest {
             99L,
             List.of(new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L))
         );
-        
+
         Invoice invoice = mapper.fromDto(dto);
-        
+
         Invoice expected = new Invoice(
             null,
             "ABCDE-12345",
@@ -160,7 +160,7 @@ public class InvoiceMapperTest {
             List.of(new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)),
             null
         );
-        
+
         assertEquals(expected, invoice);
     }
 

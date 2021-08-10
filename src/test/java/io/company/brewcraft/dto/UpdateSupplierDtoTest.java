@@ -16,7 +16,7 @@ public class UpdateSupplierDtoTest {
     public void init() {
         updateSupplierDto = new UpdateSupplierDto();
     }
-    
+
     @Test
     public void testConstructor() {
         String name = "Supplier1";
@@ -28,7 +28,7 @@ public class UpdateSupplierDtoTest {
         assertSame(name, updateSupplierDto.getName());
         assertSame(address, updateSupplierDto.getAddress());
         assertSame(contacts, updateSupplierDto.getContacts());
-        assertSame(version, updateSupplierDto.getVersion());        
+        assertSame(version, updateSupplierDto.getVersion());
     }
 
     @Test
@@ -43,19 +43,19 @@ public class UpdateSupplierDtoTest {
         updateSupplierDto.setContacts(contacts);
         assertSame(contacts, updateSupplierDto.getContacts());
     }
-    
+
     @Test
     public void testGetSetAddress() {
         AddressDto address = new AddressDto();
         updateSupplierDto.setAddress(address);
         assertSame(address, updateSupplierDto.getAddress());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;
         updateSupplierDto.setVersion(version);
         assertSame(version, updateSupplierDto.getVersion());
     }
-    
+
 }

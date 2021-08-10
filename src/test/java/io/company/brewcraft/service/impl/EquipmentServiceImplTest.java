@@ -39,9 +39,9 @@ public class EquipmentServiceImplTest {
     private EquipmentService equipmentService;
 
     private EquipmentRepository equipmentRepositoryMock;
-    
+
     private FacilityService facilityServiceMock;
-            
+
     @BeforeEach
     public void init() {
         equipmentRepositoryMock = mock(EquipmentRepository.class);
@@ -54,9 +54,9 @@ public class EquipmentServiceImplTest {
     public void testGetAllEquipment_returnsEquipment() throws Exception {
         Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         List<Equipment> equipmentList = Arrays.asList(equipmentEntity);
-        
+
         Page<Equipment> expectedEquipmentEntity = new PageImpl<>(equipmentList);
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(equipmentRepositoryMock.findAll(ArgumentMatchers.<Specification<Equipment>>any(),pageableArgument.capture())).thenReturn(expectedEquipmentEntity);
@@ -68,7 +68,7 @@ public class EquipmentServiceImplTest {
         assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertEquals(1, actualEquipments.getNumberOfElements());
-        
+
         Equipment actualEquipment = actualEquipments.get().findFirst().get();
 
         assertEquals(equipmentEntity.getId(), actualEquipment.getId());
@@ -81,9 +81,9 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getFacility().getId(), actualEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), actualEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), actualEquipment.getCreatedAt());
-        assertEquals(equipmentEntity.getVersion(), actualEquipment.getVersion());      
+        assertEquals(equipmentEntity.getVersion(), actualEquipment.getVersion());
     }
-    
+
     @Test
     public void testGetEquipment_returnsEquipment() throws Exception {
         Long id = 1L;
@@ -104,25 +104,25 @@ public class EquipmentServiceImplTest {
         assertEquals(expectedEquipmentEntity.get().getFacility().getId(), returnedEntity.getFacility().getId());
         assertEquals(expectedEquipmentEntity.get().getLastUpdated(), returnedEntity.getLastUpdated());
         assertEquals(expectedEquipmentEntity.get().getCreatedAt(), returnedEntity.getCreatedAt());
-        assertEquals(expectedEquipmentEntity.get().getVersion(), returnedEntity.getVersion());  
+        assertEquals(expectedEquipmentEntity.get().getVersion(), returnedEntity.getVersion());
     }
 
     @Test
     public void testAddEquipment_Success() throws Exception {
         Long facilityId = 2L;
-                
+
         Equipment equipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         Equipment equipmentEntity = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Equipment> persistedEquipmentCaptor = ArgumentCaptor.forClass(Equipment.class);
-        
+
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
-        
+
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(equipmentEntity);
 
         Equipment returnedEquipment = equipmentService.addEquipment(facilityId, equipment);
-        
+
         //Assert persisted entity
         assertEquals(equipment.getId(), persistedEquipmentCaptor.getValue().getId());
         assertEquals(equipment.getName(), persistedEquipmentCaptor.getValue().getName());
@@ -135,7 +135,7 @@ public class EquipmentServiceImplTest {
         assertEquals(equipment.getLastUpdated(), persistedEquipmentCaptor.getValue().getLastUpdated());
         assertEquals(equipment.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
         assertEquals(equipment.getVersion(), persistedEquipmentCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(equipmentEntity.getId(), returnedEquipment.getId());
         assertEquals(equipmentEntity.getName(), returnedEquipment.getName());
@@ -147,15 +147,15 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
-        assertEquals(equipmentEntity.getVersion(), returnedEquipment.getVersion());  
+        assertEquals(equipmentEntity.getVersion(), returnedEquipment.getVersion());
     }
-    
+
     @Test
     public void testAddEquipment_throwsWhenFacilityDoesNotExist() throws Exception {
         Long facilityId = 2L;
-        
+
         Equipment equipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE,  BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(null);
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -163,7 +163,7 @@ public class EquipmentServiceImplTest {
             verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
         });
     }
-    
+
     @Test
     public void testPutEquipment_success() throws Exception {
         Long facilityId = 2L;
@@ -179,7 +179,7 @@ public class EquipmentServiceImplTest {
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(equipmentEntity);
 
         Equipment returnedEquipment = equipmentService.putEquipment(facilityId, id, putEquipment);
-       
+
         //Assert persisted entity
         assertEquals(putEquipment.getId(), persistedEquipmentCaptor.getValue().getId());
         assertEquals(putEquipment.getName(), persistedEquipmentCaptor.getValue().getName());
@@ -192,7 +192,7 @@ public class EquipmentServiceImplTest {
         //assertEquals(null, persistedEquipmentCaptor.getValue().getLastUpdated());
         //assertEquals(putEquipment.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
         assertEquals(putEquipment.getVersion(), persistedEquipmentCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(equipmentEntity.getId(), returnedEquipment.getId());
         assertEquals(equipmentEntity.getName(), returnedEquipment.getName());
@@ -204,16 +204,16 @@ public class EquipmentServiceImplTest {
         assertEquals(equipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(equipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(equipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
-        assertEquals(equipmentEntity.getVersion(), returnedEquipment.getVersion());  
+        assertEquals(equipmentEntity.getVersion(), returnedEquipment.getVersion());
     }
-     
+
     @Test
     public void testPutEquipment_throwsIfFacilityDoesNotExist() throws Exception {
         Long id = 1L;
         Long facilityId = 2L;
 
         Equipment putEquipment = new Equipment(1L, new Facility(2L), "testName", EquipmentType.BARREL, EquipmentStatus.ACTIVE, BigDecimal.valueOf(100.0), SupportedUnits.LITRE, SupportedUnits.LITRE, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(equipmentRepositoryMock.findById(facilityId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -221,7 +221,7 @@ public class EquipmentServiceImplTest {
             verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
         });
     }
-    
+
     @Test
     public void testPatchEquipment_success() throws Exception {
         Long facilityId = 2L;
@@ -235,11 +235,11 @@ public class EquipmentServiceImplTest {
         when(equipmentRepositoryMock.findById(id)).thenReturn(Optional.of(existingEquipmentEntity));
 
         when(facilityServiceMock.getFacility(facilityId)).thenReturn(new Facility(2L));
-        
+
         when(equipmentRepositoryMock.saveAndFlush(persistedEquipmentCaptor.capture())).thenReturn(persistedEquipmentEntity);
 
         Equipment returnedEquipment = equipmentService.patchEquipment(id, patchedEquipment);
-       
+
         //Assert persisted entity
         assertEquals(existingEquipmentEntity.getId(), persistedEquipmentCaptor.getValue().getId());
         assertEquals(patchedEquipment.getName(), persistedEquipmentCaptor.getValue().getName());
@@ -252,7 +252,7 @@ public class EquipmentServiceImplTest {
         assertEquals(existingEquipmentEntity.getLastUpdated(), persistedEquipmentCaptor.getValue().getLastUpdated());
         //assertEquals(existingEquipmentEntity.getCreatedAt(), persistedEquipmentCaptor.getValue().getCreatedAt());
         assertEquals(existingEquipmentEntity.getVersion(), persistedEquipmentCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(persistedEquipmentEntity.getId(), returnedEquipment.getId());
         assertEquals(persistedEquipmentEntity.getName(), returnedEquipment.getName());
@@ -264,16 +264,16 @@ public class EquipmentServiceImplTest {
         assertEquals(persistedEquipmentEntity.getFacility().getId(), returnedEquipment.getFacility().getId());
         assertEquals(persistedEquipmentEntity.getLastUpdated(), returnedEquipment.getLastUpdated());
         assertEquals(persistedEquipmentEntity.getCreatedAt(), returnedEquipment.getCreatedAt());
-        assertEquals(persistedEquipmentEntity.getVersion(), returnedEquipment.getVersion());  
+        assertEquals(persistedEquipmentEntity.getVersion(), returnedEquipment.getVersion());
     }
-    
+
     @Test
     public void testPatchEquipment_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
         Equipment equipment = new Equipment();
-        
+
         when(equipmentRepositoryMock.existsById(id)).thenReturn(false);
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             equipmentService.patchEquipment(id, equipment);
             verify(equipmentRepositoryMock, times(0)).saveAndFlush(Mockito.any(Equipment.class));
@@ -284,30 +284,30 @@ public class EquipmentServiceImplTest {
     public void testDeleteEquipment_success() throws Exception {
         Long id = 1L;
         equipmentService.deleteEquipment(id);
-        
+
         verify(equipmentRepositoryMock, times(1)).deleteById(id);
     }
-    
+
     @Test
     public void testEquipmentExists_success() throws Exception {
         Long id = 1L;
         equipmentService.equipmentExists(id);
-        
+
         verify(equipmentRepositoryMock, times(1)).existsById(id);
-    }    
-       
+    }
+
     @Test
     public void testEquipmentService_classIsTransactional() throws Exception {
         Transactional transactional = equipmentService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testEquipmentService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = equipmentService.getClass().getMethods();  
+        Method[] methods = equipmentService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

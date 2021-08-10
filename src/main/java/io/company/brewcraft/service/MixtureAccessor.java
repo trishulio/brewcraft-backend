@@ -6,6 +6,6 @@ public interface MixtureAccessor {
     final String ATTR_MIXTURE = "mixture";
 
     Mixture getMixture();
-    
+
     void setMixture(Mixture mixture);
 }

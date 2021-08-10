@@ -33,46 +33,46 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
     @SequenceGenerator(name = "product_generator", sequenceName = "product_sequence", allocationSize = 1)
     private Long id;
-    
+
     @Column(name = "name", nullable = false)
     private String name;
-    
+
     private String description;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_category_id", referencedColumnName = "id", nullable = false)
     private ProductCategory category;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ProductMeasureValue> targetMeasures;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-    
+
     @Version
     private Integer version;
 
     public Product() {
         super();
     }
-    
+
     public Product(Long id) {
-    	this();
-    	this.id = id;
+        this();
+        this.id = id;
     }
 
-    public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures, 
+    public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
             LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
-    	this(id);
+        this(id);
         this.name = name;
         this.description = description;
         this.category = category;
@@ -133,21 +133,21 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
         if (trgtMeasures != null) {
             trgtMeasures.stream().forEach(measure -> measure.setProduct(this));
         }
-        
+
         if (this.getTargetMeasures() != null) {
             this.getTargetMeasures().clear();
             this.getTargetMeasures().addAll(trgtMeasures);
         } else {
             this.targetMeasures = trgtMeasures;
-        }    
+        }
     }
-    
+
     @Override
     public void addTargetMeasure(ProductMeasureValue productMeasureValue) {
         if (targetMeasures == null) {
             targetMeasures = new ArrayList<>();
         }
-        
+
         if (productMeasureValue.getProduct() != this) {
             productMeasureValue.setProduct(this);
         }
@@ -156,7 +156,7 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
             this.targetMeasures.add(productMeasureValue);
         }
     }
-    
+
     @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -193,5 +193,5 @@ public class Product extends BaseEntity implements BaseProduct, UpdateProduct, I
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    } 
+    }
 }

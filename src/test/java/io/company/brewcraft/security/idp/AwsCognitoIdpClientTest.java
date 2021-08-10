@@ -1,6 +1,5 @@
 package io.company.brewcraft.security.idp;
 
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,9 +37,9 @@ public class AwsCognitoIdpClientTest {
 
         AdminCreateUserResult mRes = new AdminCreateUserResult().withUser(new UserType().withUserStatus("SUCCESS"));
         doReturn(mRes).when(mAwsIdp).adminCreateUser(captor.capture());
-        
+
         client.createUser("USERNAME", Map.of("key-1", "value-1", "key-2", "value-2"));
-        
+
         List<AttributeType> expected = List.of(
             new AttributeType().withName("key-2").withValue("value-2"),
             new AttributeType().withName("key-1").withValue("value-1")

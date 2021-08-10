@@ -15,7 +15,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class AccessorRefresher<I, A, V extends Identified<I>> {
     private static final Logger log = LoggerFactory.getLogger(AccessorRefresher.class);
-    
+
     private Class<V> clazz;
     private Function<A, V> getter;
     private BiConsumer<A, V> setter;
@@ -30,7 +30,7 @@ public class AccessorRefresher<I, A, V extends Identified<I>> {
 
     public void refreshAccessors(Collection<? extends A> accessors) {
         if (accessors != null && accessors.size() > 0) {
-        	Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
+            Map<I, List<A>> lookupAccessorsByValueId = accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null).collect(Collectors.groupingBy(accessor -> getter.apply(accessor).getId()));
             log.debug("accessMap: {}", lookupAccessorsByValueId);
 
             List<V> entities = entityRetriever.apply(lookupAccessorsByValueId.keySet());

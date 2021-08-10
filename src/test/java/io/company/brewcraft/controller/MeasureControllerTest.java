@@ -33,7 +33,7 @@ public class MeasureControllerTest {
    }
 
    @Test
-   public void testGetMeasures() { 
+   public void testGetMeasures() {
        Page<Measure> mPage = new PageImpl<>(List.of(new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)));
 
        doReturn(mPage).when(measureService).getMeasures(
@@ -45,7 +45,7 @@ public class MeasureControllerTest {
        );
 
        PageDto<MeasureDto> dto = measureController.getMeasures(
-    		   null,
+               null,
                new TreeSet<>(List.of("id")),
                true,
                1,
@@ -55,5 +55,5 @@ public class MeasureControllerTest {
        assertEquals(1, dto.getTotalPages());
        assertEquals(List.of(new MeasureDto(1L, "abv", 1), new MeasureDto(2L, "ibu", 1)), dto.getContent());
    }
-  
+
 }

@@ -9,7 +9,7 @@ public class AddInvoiceItemDto extends BaseDto {
 
     public AddInvoiceItemDto() {
     }
-    
+
     public AddInvoiceItemDto(String description, QuantityDto quantity, MoneyDto price, TaxDto tax, Long materialId) {
         this();
         setDescription(description);

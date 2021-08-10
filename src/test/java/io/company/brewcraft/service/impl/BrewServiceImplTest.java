@@ -22,222 +22,222 @@ import io.company.brewcraft.service.BrewService;
 
 public class BrewServiceImplTest {
 
-	private BrewService brewService;
+    private BrewService brewService;
 
-	private BrewRepository brewRepositoryMock;
+    private BrewRepository brewRepositoryMock;
 
-	@BeforeEach
-	public void init() {
-		brewRepositoryMock = mock(BrewRepository.class);
-		doAnswer(i -> i.getArgument(0, Brew.class)).when(brewRepositoryMock).saveAndFlush(any(Brew.class));
-		doAnswer(i -> {
-			Collection<Brew> coll = i.getArgument(0, Collection.class);
-			coll.forEach(s -> {
-				s.setProduct(new Product(1L));
-				s.setParentBrew(new Brew(2L));
-			});
-			return null;
-		}).when(brewRepositoryMock).refresh(anyCollection());
+    @BeforeEach
+    public void init() {
+        brewRepositoryMock = mock(BrewRepository.class);
+        doAnswer(i -> i.getArgument(0, Brew.class)).when(brewRepositoryMock).saveAndFlush(any(Brew.class));
+        doAnswer(i -> {
+            Collection<Brew> coll = i.getArgument(0, Collection.class);
+            coll.forEach(s -> {
+                s.setProduct(new Product(1L));
+                s.setParentBrew(new Brew(2L));
+            });
+            return null;
+        }).when(brewRepositoryMock).refresh(anyCollection());
 
-		brewService = new BrewServiceImpl(brewRepositoryMock);
-	}
+        brewService = new BrewServiceImpl(brewRepositoryMock);
+    }
 
-	@Test
-	public void testGetBrew_ReturnsBrew() {
-		doReturn(Optional.of(new Brew(1L))).when(brewRepositoryMock).findById(1L);
+    @Test
+    public void testGetBrew_ReturnsBrew() {
+        doReturn(Optional.of(new Brew(1L))).when(brewRepositoryMock).findById(1L);
 
-		Brew brew = brewService.getBrew(1L);
+        Brew brew = brewService.getBrew(1L);
 
-		assertEquals(new Brew(1L), brew);
-	}
+        assertEquals(new Brew(1L), brew);
+    }
 
-	@Test
-	public void testGetBrew_ReturnsNull_WhenBrewDoesNotExist() {
-		doReturn(Optional.empty()).when(brewRepositoryMock).findById(1L);
-		Brew brew = brewService.getBrew(1L);
+    @Test
+    public void testGetBrew_ReturnsNull_WhenBrewDoesNotExist() {
+        doReturn(Optional.empty()).when(brewRepositoryMock).findById(1L);
+        Brew brew = brewService.getBrew(1L);
 
-		assertNull(brew);
-	}
+        assertNull(brew);
+    }
 
-	@Test
-	@Disabled("TODO: Find a good strategy to test get method with long list of specifications")
-	public void testGetBrews() {
-		fail("Not tested");
-	}
+    @Test
+    @Disabled("TODO: Find a good strategy to test get method with long list of specifications")
+    public void testGetBrews() {
+        fail("Not tested");
+    }
 
-	@Test
-	public void testAddBrew_AddsBrew() {
-		Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(), new Brew(), null, null,
-				LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
-				LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+    @Test
+    public void testAddBrew_AddsBrew() {
+        Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(), new Brew(), null, null,
+                LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
+                LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
-		Brew addedBrew = brewService.addBrew(brew);
+        Brew addedBrew = brewService.addBrew(brew);
 
-		assertEquals(1L, addedBrew.getId());
-		assertEquals("testName", addedBrew.getName());
-		assertEquals("testDesc", addedBrew.getDescription());
-		assertEquals(2L, addedBrew.getBatchId());
-		assertEquals(new Product(1L), addedBrew.getProduct());
-		
-		Brew parentBrew = new Brew(2L);
-		parentBrew.addChildBrew(brew);
-		assertEquals(parentBrew, addedBrew.getParentBrew());
-		
-		assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrew.getStartedAt());
-		assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedBrew.getEndedAt());
-		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedBrew.getCreatedAt());
-		assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedBrew.getLastUpdated());
-		assertEquals(1, addedBrew.getVersion());
+        assertEquals(1L, addedBrew.getId());
+        assertEquals("testName", addedBrew.getName());
+        assertEquals("testDesc", addedBrew.getDescription());
+        assertEquals(2L, addedBrew.getBatchId());
+        assertEquals(new Product(1L), addedBrew.getProduct());
 
-		verify(brewRepositoryMock, times(1)).saveAndFlush(addedBrew);
-		verify(brewRepositoryMock, times(1)).refresh(List.of(addedBrew));
-	}
+        Brew parentBrew = new Brew(2L);
+        parentBrew.addChildBrew(brew);
+        assertEquals(parentBrew, addedBrew.getParentBrew());
 
-	@Test
-	public void testPutBrew_OverridesWhenBrewExists() {
-		Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
-				LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
-				LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-		
-		Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
-				LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
-				LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
+        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrew.getStartedAt());
+        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedBrew.getEndedAt());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedBrew.getCreatedAt());
+        assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedBrew.getLastUpdated());
+        assertEquals(1, addedBrew.getVersion());
+
+        verify(brewRepositoryMock, times(1)).saveAndFlush(addedBrew);
+        verify(brewRepositoryMock, times(1)).refresh(List.of(addedBrew));
+    }
+
+    @Test
+    public void testPutBrew_OverridesWhenBrewExists() {
+        Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
+                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
+                LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
-		
-		Brew brew = brewService.putBrew(1L, update);
 
-		assertEquals(1L, brew.getId());
-		assertEquals("testNameUpdate", brew.getName());
-		assertEquals("testDescUpdate", brew.getDescription());
-		assertEquals(3L, brew.getBatchId());
-		assertEquals(new Product(1L), brew.getProduct());
-		
-		Brew parentBrew = new Brew(2L);
-		parentBrew.addChildBrew(brew);
-		assertEquals(parentBrew, brew.getParentBrew());		
-		
-		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
-		assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
-		assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
-		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
-		assertEquals(1, brew.getVersion());
+        Brew brew = brewService.putBrew(1L, update);
 
-		verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-		verify(brewRepositoryMock, times(1)).refresh(anyList());
-	}
+        assertEquals(1L, brew.getId());
+        assertEquals("testNameUpdate", brew.getName());
+        assertEquals("testDescUpdate", brew.getDescription());
+        assertEquals(3L, brew.getBatchId());
+        assertEquals(new Product(1L), brew.getProduct());
 
-	@Test
-	public void testPutBrew_AddsNrewBrew_WhenNoBrewExists() {		
-		Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
-				LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
-				LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
+        Brew parentBrew = new Brew(2L);
+        parentBrew.addChildBrew(brew);
+        assertEquals(parentBrew, brew.getParentBrew());
+
+        assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
+        assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
+        assertEquals(1, brew.getVersion());
+
+        verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
+        verify(brewRepositoryMock, times(1)).refresh(anyList());
+    }
+
+    @Test
+    public void testPutBrew_AddsNrewBrew_WhenNoBrewExists() {
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(brewRepositoryMock).findById(1L);
-		
-		Brew brew = brewService.putBrew(1L, update);
 
-		assertEquals(1L, brew.getId());
-		assertEquals("testNameUpdate", brew.getName());
-		assertEquals("testDescUpdate", brew.getDescription());
-		assertEquals(3L, brew.getBatchId());
-		assertEquals(new Product(1L), brew.getProduct());
-		
-		Brew parentBrew = new Brew(2L);
-		parentBrew.addChildBrew(brew);
-		assertEquals(parentBrew, brew.getParentBrew());		
-		
-		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
-		assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
-		assertEquals(LocalDateTime.of(2012, 1, 2, 3, 4), brew.getCreatedAt());
-		assertEquals(LocalDateTime.of(2013, 1, 2, 3, 4), brew.getLastUpdated());
-		assertEquals(1, brew.getVersion());
+        Brew brew = brewService.putBrew(1L, update);
 
-		verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-		verify(brewRepositoryMock, times(1)).refresh(anyList());
-	}
+        assertEquals(1L, brew.getId());
+        assertEquals("testNameUpdate", brew.getName());
+        assertEquals("testDescUpdate", brew.getDescription());
+        assertEquals(3L, brew.getBatchId());
+        assertEquals(new Product(1L), brew.getProduct());
 
-	@Test
-	public void testPutBrew_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
-		Brew existing = new Brew(1L);
-		existing.setVersion(1);
-		doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
+        Brew parentBrew = new Brew(2L);
+        parentBrew.addChildBrew(brew);
+        assertEquals(parentBrew, brew.getParentBrew());
 
-		Brew update = new Brew(1L);
-		existing.setVersion(2);
+        assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
+        assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(LocalDateTime.of(2012, 1, 2, 3, 4), brew.getCreatedAt());
+        assertEquals(LocalDateTime.of(2013, 1, 2, 3, 4), brew.getLastUpdated());
+        assertEquals(1, brew.getVersion());
 
-		assertThrows(OptimisticLockException.class, () -> brewService.putBrew(1L, update));
-	}
+        verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
+        verify(brewRepositoryMock, times(1)).refresh(anyList());
+    }
 
-	@Test
-	public void testPatchBrew_PatchesExistingBrew() {
-		Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
-				LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
-				LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-		
-		Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
-				LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
-				LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
+    @Test
+    public void testPutBrew_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
+        Brew existing = new Brew(1L);
+        existing.setVersion(1);
+        doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
+
+        Brew update = new Brew(1L);
+        existing.setVersion(2);
+
+        assertThrows(OptimisticLockException.class, () -> brewService.putBrew(1L, update));
+    }
+
+    @Test
+    public void testPatchBrew_PatchesExistingBrew() {
+        Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
+                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
+                LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
-		
-		Brew brew = brewService.patchBrew(1L, update);
 
-		assertEquals(1L, brew.getId());
-		assertEquals("testNameUpdate", brew.getName());
-		assertEquals("testDescUpdate", brew.getDescription());
-		assertEquals(3L, brew.getBatchId());
-		assertEquals(new Product(1L), brew.getProduct());
-		
-		Brew parentBrew = new Brew(2L);
-		parentBrew.addChildBrew(brew);
-		assertEquals(parentBrew, brew.getParentBrew());		
-		
-		assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
-		assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
-		assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
-		assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
-		assertEquals(1, brew.getVersion());
+        Brew brew = brewService.patchBrew(1L, update);
 
-		verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-		verify(brewRepositoryMock, times(1)).refresh(anyList());
-	}
+        assertEquals(1L, brew.getId());
+        assertEquals("testNameUpdate", brew.getName());
+        assertEquals("testDescUpdate", brew.getDescription());
+        assertEquals(3L, brew.getBatchId());
+        assertEquals(new Product(1L), brew.getProduct());
 
-	@Test
-	public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
-		Brew existing = new Brew(1L);
-		existing.setVersion(1);
-		doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
+        Brew parentBrew = new Brew(2L);
+        parentBrew.addChildBrew(brew);
+        assertEquals(parentBrew, brew.getParentBrew());
 
-		Brew update = new Brew(1L);
-		existing.setVersion(2);
+        assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
+        assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
+        assertEquals(1, brew.getVersion());
 
-		assertThrows(OptimisticLockException.class, () -> brewService.patchBrew(1L, update));
-	}
-	
-	@Test
-	public void testExists_ReturnsTrue_WhenRepositoryReturnsTrue() {
-		doReturn(true).when(brewRepositoryMock).existsById(1L);
+        verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
+        verify(brewRepositoryMock, times(1)).refresh(anyList());
+    }
 
-		boolean exists = brewService.brewExists(1L);
+    @Test
+    public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
+        Brew existing = new Brew(1L);
+        existing.setVersion(1);
+        doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
 
-		assertTrue(exists);
-	}
+        Brew update = new Brew(1L);
+        existing.setVersion(2);
 
-	@Test
-	public void testExists_ReturnsFalse_WhenRepositoryReturnsFalse() {
-		doReturn(false).when(brewRepositoryMock).existsById(1L);
+        assertThrows(OptimisticLockException.class, () -> brewService.patchBrew(1L, update));
+    }
 
-		boolean exists = brewService.brewExists(1L);
+    @Test
+    public void testExists_ReturnsTrue_WhenRepositoryReturnsTrue() {
+        doReturn(true).when(brewRepositoryMock).existsById(1L);
 
-		assertFalse(exists);
-	}
+        boolean exists = brewService.brewExists(1L);
 
-	@Test
-	public void testDelete_CallsDeleteByIdOnRepository() {
-		brewService.deleteBrew(1L);
+        assertTrue(exists);
+    }
 
-		verify(brewRepositoryMock, times(1)).deleteById(1L);
-	}
+    @Test
+    public void testExists_ReturnsFalse_WhenRepositoryReturnsFalse() {
+        doReturn(false).when(brewRepositoryMock).existsById(1L);
+
+        boolean exists = brewService.brewExists(1L);
+
+        assertFalse(exists);
+    }
+
+    @Test
+    public void testDelete_CallsDeleteByIdOnRepository() {
+        brewService.deleteBrew(1L);
+
+        verify(brewRepositoryMock, times(1)).deleteById(1L);
+    }
 
 }

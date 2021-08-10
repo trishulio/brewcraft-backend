@@ -19,41 +19,41 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class FacilityServiceImpl extends BaseService implements FacilityService {
     private static final Logger log = LoggerFactory.getLogger(FacilityServiceImpl.class);
-    
+
     private FacilityRepository facilityRepository;
-                    
+
     public FacilityServiceImpl(FacilityRepository facilityRepository) {
         this.facilityRepository = facilityRepository;
     }
-    
+
     @Override
-    public Page<Facility> getAllFacilities(int page, int size, SortedSet<String> sort, boolean orderAscending) {        
+    public Page<Facility> getAllFacilities(int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Page<Facility> facilityPage = facilityRepository.findAll(pageRequest(sort, orderAscending, page, size));
-    
+
         return facilityPage;
     }
 
     @Override
     public Facility getFacility(Long facilityId) {
         Facility facility = facilityRepository.findById(facilityId).orElse(null);
-        
-        return facility;      
+
+        return facility;
     }
 
     @Override
-    public Facility addFacility(Facility facility) {         
+    public Facility addFacility(Facility facility) {
         Facility addedFacility = facilityRepository.saveAndFlush(facility);
-        
-        return addedFacility;    
+
+        return addedFacility;
     }
-    
+
     @Override
-    public Facility putFacility(Long facilityId, Facility updatedFacility) { 
+    public Facility putFacility(Long facilityId, Facility updatedFacility) {
         updatedFacility.setId(facilityId);
-        
-        return addFacility(updatedFacility); 
+
+        return addFacility(updatedFacility);
     }
-    
+
     @Override
     public Facility patchFacility(Long facilityId, Facility updatedFacility) {
         Facility existingFacility = Optional.ofNullable(getFacility(facilityId)).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
@@ -65,9 +65,9 @@ public class FacilityServiceImpl extends BaseService implements FacilityService 
 
     @Override
     public void deleteFacility(Long facilityId) {
-        facilityRepository.deleteById(facilityId);        
-    } 
-    
+        facilityRepository.deleteById(facilityId);
+    }
+
     @Override
     public boolean facilityExists(Long facilityId) {
         return facilityRepository.existsById(facilityId);

@@ -1,6 +1,5 @@
 package io.company.brewcraft.model.user;
 
-
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -46,12 +45,12 @@ public class UserStatus extends BaseEntity implements BaseUserStatus, UpdateUser
 
     public UserStatus() {
     }
-    
+
     public UserStatus(Long id) {
         this();
         setId(id);
     }
-    
+
     public UserStatus(Long id, String name, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -69,7 +68,7 @@ public class UserStatus extends BaseEntity implements BaseUserStatus, UpdateUser
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     @Override
     public String getName() {
         return this.name;

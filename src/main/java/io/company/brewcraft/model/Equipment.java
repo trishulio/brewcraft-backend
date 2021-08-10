@@ -36,46 +36,46 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_MAX_CAPACITY = "maxCapacity";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_generator")
     @SequenceGenerator(name="equipment_generator", sequenceName = "equipment_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name="facility_id", referencedColumnName = "id", nullable = false)
     private Facility facility;
-    
+
     private String name;
-    
+
     @Enumerated(EnumType.STRING)
     private EquipmentType type;
-    
+
     @Enumerated(EnumType.STRING)
     private EquipmentStatus status;
-    
+
     @Column(name = "max_capacity_value")
     private BigDecimal maxCapacityValue;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "max_capacity_unit", referencedColumnName = "symbol")
     private UnitEntity maxCapacityUnit;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "max_capacity_display_unit", referencedColumnName = "symbol")
     private UnitEntity maxCapacityDisplayUnit;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
-    
+
     public Equipment() {
     }
 
@@ -83,7 +83,7 @@ public class Equipment extends BaseEntity implements Identified<Long> {
         this();
         setId(id);
     }
-    
+
     public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, BigDecimal maxCapacityValue,
             Unit<?> maxCapacityUnit, Unit<?> maxCapacityDisplayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
@@ -106,7 +106,7 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public Facility getFacility() {
         return facility;
     }
@@ -138,32 +138,32 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
-    
+
     public BigDecimal getMaxCapacityValue() {
         return this.maxCapacityValue;
     }
-    
+
     public void setMaxCapacityValue(BigDecimal value) {
         this.maxCapacityValue = value;
     }
-    
+
     public Unit<?> getMaxCapacityUnit() {
         return QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit);
     }
 
     public void setMaxCapacityUnit(Unit<?> unit) throws IllegalArgumentException {
-        if (unit != null && !isValidUnit(unit)) {    
+        if (unit != null && !isValidUnit(unit)) {
             throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", unit.getSymbol()));
         }
         this.maxCapacityUnit = QuantityUnitMapper.INSTANCE.toEntity(unit);
     }
-    
+
     public Unit<?> getMaxCapacityDisplayUnit() {
         return QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityDisplayUnit);
     }
 
     public void setMaxCapacityDisplayUnit(Unit<?> displayUnit) throws IllegalArgumentException {
-        if (displayUnit != null && !isValidUnit(displayUnit)) {    
+        if (displayUnit != null && !isValidUnit(displayUnit)) {
             throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", displayUnit.getSymbol()));
         }
         this.maxCapacityDisplayUnit = QuantityUnitMapper.INSTANCE.toEntity(displayUnit);
@@ -192,7 +192,7 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
     public Quantity<?> getMaxCapacity() {
         Quantity<?> qty = null;
         if (this.maxCapacityValue != null && this.maxCapacityUnit != null) {
@@ -200,7 +200,7 @@ public class Equipment extends BaseEntity implements Identified<Long> {
         }
         return qty;
     }
-    
+
     public Quantity<?> getMaxCapacityInDisplayUnit() {
         Unit displayUnit = this.getMaxCapacityDisplayUnit();
 
@@ -228,13 +228,13 @@ public class Equipment extends BaseEntity implements Identified<Long> {
                 //Must be mass if its not Volume
                 Quantity<Mass> quantity = (Quantity<Mass>) maxCapacity;
                 maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_MASS);
-            } 
-        } 
+            }
+        }
 
         this.maxCapacityValue = maxCapacityInPersistedUnit != null ? (BigDecimal) maxCapacityInPersistedUnit.getValue() : null;
         this.maxCapacityUnit = maxCapacityInPersistedUnit != null ? QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit()) : null;
     }
-    
+
     private boolean isValidUnit(Unit<?> displayUnit) {
         boolean result = false;
         if (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit) || SupportedUnits.DEFAULT_MASS.isCompatible(displayUnit)) {

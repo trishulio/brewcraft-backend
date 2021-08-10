@@ -21,7 +21,6 @@ public class JacksonJsonMapper implements JsonMapper {
                       .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
-    
     @Override
     public <T> String writeString(T o) {
         try {

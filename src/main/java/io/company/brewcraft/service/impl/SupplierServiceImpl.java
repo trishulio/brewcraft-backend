@@ -19,9 +19,9 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class SupplierServiceImpl extends BaseService implements SupplierService {
     private static final Logger log = LoggerFactory.getLogger(SupplierServiceImpl.class);
-    
+
     private SupplierRepository supplierRepository;
-      
+
     public SupplierServiceImpl(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
     }
@@ -41,9 +41,9 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
 
     @Override
-    public Supplier addSupplier(Supplier supplier) {   
+    public Supplier addSupplier(Supplier supplier) {
         Supplier addedSupplier = supplierRepository.saveAndFlush(supplier);
-        
+
         return addedSupplier;
     }
 
@@ -53,24 +53,24 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
 
         return addSupplier(updatedSupplier);
     }
-    
+
     @Override
     public Supplier patchSupplier(Long id, Supplier updatedSupplier) {
         Supplier existing = Optional.ofNullable(getSupplier(id)).orElseThrow(() -> new EntityNotFoundException("Supplier", id.toString()));
-        
+
         updatedSupplier.copyToNullFields(existing);
-        
+
         return addSupplier(updatedSupplier);
     }
 
     @Override
     public void deleteSupplier(Long id) {
-        supplierRepository.deleteById(id);        
+        supplierRepository.deleteById(id);
     }
-    
+
     @Override
     public boolean supplierExists(Long supplierId) {
-        return supplierRepository.existsById(supplierId);     
+        return supplierRepository.existsById(supplierId);
     }
-          
+
 }

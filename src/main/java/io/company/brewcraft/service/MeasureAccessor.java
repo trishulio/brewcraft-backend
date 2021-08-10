@@ -6,6 +6,6 @@ public interface MeasureAccessor {
     final String ATTR_MEASURE = "measure";
 
     Measure getMeasure();
-    
+
     void setMeasure(Measure measure);
 }

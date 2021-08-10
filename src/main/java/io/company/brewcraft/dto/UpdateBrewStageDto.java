@@ -3,21 +3,21 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class UpdateBrewStageDto extends BaseDto {
-	
-	private Long brewId;
-	
+
+    private Long brewId;
+
     private Long statusId;
-    
+
     private Long taskId;
-                    
+
     private LocalDateTime startedAt;
-    
+
     private LocalDateTime endedAt;
 
     private Integer version;
-    
+
     public UpdateBrewStageDto() {
-    	super();
+        super();
     }
 
     public UpdateBrewStageDto(Long brewId, Long statusId, Long taskId, LocalDateTime startedAt, LocalDateTime endedAt, Integer version) {
@@ -28,8 +28,8 @@ public class UpdateBrewStageDto extends BaseDto {
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.version = version;
-    } 
-    
+    }
+
     public Long getBrewId() {
         return brewId;
     }

@@ -11,11 +11,11 @@ import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 
 @Transactional
 public class QuantityUnitServiceImpl implements QuantityUnitService {
-    
+
     private QuantityUnitMapper quantityUnitMapper = QuantityUnitMapper.INSTANCE;
-    
+
     private QuantityUnitRepository quantityUnitRepositry;
-    
+
     public QuantityUnitServiceImpl(QuantityUnitRepository quantityUnitRepositry) {
         this.quantityUnitRepositry = quantityUnitRepositry;
     }
@@ -23,7 +23,7 @@ public class QuantityUnitServiceImpl implements QuantityUnitService {
     @Override
     public Unit<?> get(String symbol) {
         UnitEntity unit = quantityUnitRepositry.findBySymbol(symbol).orElse(null);
-        
+
         return quantityUnitMapper.fromEntity(unit);
     }
 

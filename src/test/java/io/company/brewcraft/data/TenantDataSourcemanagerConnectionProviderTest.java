@@ -36,21 +36,21 @@ public class TenantDataSourcemanagerConnectionProviderTest {
     public void testUnwrap_ReturnsNull() throws Exception {
         assertNull(tenantDataSourcemanagerConnectionProvider.unwrap(dataSourceMock.getClass()));
     }
-    
+
     @Test
     public void testGetConnection_ReturnsDataSourceConnection() throws Exception {
         when(dataSourceMock.getConnection()).thenReturn(connectionMock);
-        
+
         assertSame(connectionMock, tenantDataSourcemanagerConnectionProvider.getConnection());
     }
-    
+
     @Test
     public void testCloseConnection_ClosesConnection() throws Exception {
         tenantDataSourcemanagerConnectionProvider.closeConnection(connectionMock);
-        
+
         verify(connectionMock, times(1)).close();
     }
-    
+
     @Test
     public void testSupportsAggressiveRelease_ReturnsFalse() throws Exception {
         assertFalse(tenantDataSourcemanagerConnectionProvider.supportsAggressiveRelease());

@@ -73,18 +73,18 @@ public class JacksonJsonMapperTest {
         assertEquals(10, data.getX());
         assertEquals(20, data.getY());
     }
-    
+
     @Test
     public void testQuantitySerialization_ReturnsJsonWithSymbolAndValue_WhenQuantityIsNotNull() {
         String json = mapper.writeString(Quantities.getQuantity(new BigDecimal("10.99"), Units.KILOGRAM));
-        
+
         assertEquals("{\"symbol\":\"kg\",\"value\":10.99}", json);
     }
-    
+
     @Test
     public void testUnitSerialization_ReturnsJsonWithSymbol_WhenUnitIsNotNull() {
         String json = mapper.writeString(Units.KILOGRAM);
-        
+
         assertEquals("{\"symbol\":\"kg\"}", json);
     }
 }

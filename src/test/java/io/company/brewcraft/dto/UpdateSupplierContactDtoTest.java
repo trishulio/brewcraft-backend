@@ -22,9 +22,9 @@ public class UpdateSupplierContactDtoTest {
         String email = "email";
         String phoneNumber = "phoneNumber";
         Integer version = 1;
-        
+
         UpdateSupplierContactDto updateSupplierContactDto = new UpdateSupplierContactDto(firstName, lastName, position, email, phoneNumber, version);
-        
+
         assertSame(firstName, updateSupplierContactDto.getFirstName());
         assertSame(lastName, updateSupplierContactDto.getLastName());
         assertSame(position, updateSupplierContactDto.getPosition());
@@ -38,7 +38,7 @@ public class UpdateSupplierContactDtoTest {
         updateSupplierContactDto.setFirstName("firstNameTest");
         assertSame("firstNameTest", updateSupplierContactDto.getFirstName());
     }
-    
+
     @Test
     public void testGetSetLastName() {
         updateSupplierContactDto.setLastName("testName");
@@ -50,13 +50,13 @@ public class UpdateSupplierContactDtoTest {
         updateSupplierContactDto.setEmail("testEmail");
         assertSame("testEmail", updateSupplierContactDto.getEmail());
     }
-    
+
     @Test
     public void testGetSetPhoneNumber() {
         updateSupplierContactDto.setPhoneNumber("testNumber");
         assertSame("testNumber", updateSupplierContactDto.getPhoneNumber());
     }
-    
+
     @Test
     public void testGetSetPosition() {
         updateSupplierContactDto.setPosition("position");

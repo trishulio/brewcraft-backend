@@ -25,7 +25,7 @@ public class InvoiceDto extends BaseDto {
 
     public InvoiceDto() {
     }
-    
+
     public InvoiceDto(Long id) {
         this();
         setId(id);

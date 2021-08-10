@@ -4,7 +4,7 @@ import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.model.StorageType;
 
 public interface BaseStorage {
-    
+
     public Facility getFacility();
 
     public void setFacility(Facility facility);

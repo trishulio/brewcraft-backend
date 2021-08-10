@@ -16,7 +16,7 @@ public class SupplierDtoTest {
     public void init() {
         supplierDto = new SupplierDto();
     }
-    
+
     @Test
     public void testIdArgConstructor() {
         SupplierDto dto = new SupplierDto(1L);
@@ -36,7 +36,7 @@ public class SupplierDtoTest {
         assertSame(name, supplierDto.getName());
         assertSame(address, supplierDto.getAddress());
         assertSame(contacts, supplierDto.getContacts());
-        assertSame(version, supplierDto.getVersion());        
+        assertSame(version, supplierDto.getVersion());
     }
 
     @Test
@@ -58,14 +58,14 @@ public class SupplierDtoTest {
         supplierDto.setContacts(contacts);
         assertSame(contacts, supplierDto.getContacts());
     }
-    
+
     @Test
     public void testGetSetAddress() {
         AddressDto address = new AddressDto();
         supplierDto.setAddress(address);
         assertSame(address, supplierDto.getAddress());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

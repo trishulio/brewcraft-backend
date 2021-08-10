@@ -14,26 +14,26 @@ import io.company.brewcraft.service.mapper.user.UserSalutationMapper;
 public class UserSalutationMapperTest {
 
     private UserSalutationMapper mapper;
-    
+
     @BeforeEach
     public void init() {
         mapper = UserSalutationMapper.INSTANCE;
     }
-    
+
     @Test
     public void testFromDto_ReturnEntity_WhenIdIsNotNull() {
         UserSalutation salutation = mapper.fromDto(1L);
-        
+
         UserSalutation expected = new UserSalutation(1L);
-        
+
         assertEquals(expected, salutation);
     }
-    
+
     @Test
     public void testFromDto_ReturnsEntity_WhenIdIsNull() {
         assertNull(mapper.fromDto((Long) null));
     }
-    
+
     @Test
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
         UserSalutation salutation = new UserSalutation(

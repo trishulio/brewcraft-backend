@@ -43,7 +43,7 @@ public class MoneyEntityTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         money = new MoneyEntity(new Currency(123, "CAD"), new BigDecimal("100"));
-        
+
         final String json = "{\"currency\":{\"numericCode\":123,\"code\":\"CAD\"},\"amount\":100}";
         JSONAssert.assertEquals(json, money.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }

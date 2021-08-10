@@ -19,7 +19,7 @@ public class ProductTest {
     public void init() {
         product = new Product();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -33,7 +33,7 @@ public class ProductTest {
         int version = 1;
 
         Product product = new Product(id, name, description, category, targetMeasures, created, lastUpdated, deletedAt, version);
-        
+
         assertEquals(1L, product.getId());
         assertEquals("testName", product.getName());
         assertEquals("testDesc", product.getDescription());
@@ -42,9 +42,9 @@ public class ProductTest {
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getLastUpdated());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getDeletedAt());
-        assertEquals(1, product.getVersion());        
+        assertEquals(1, product.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         Long id = 1L;
@@ -58,21 +58,21 @@ public class ProductTest {
         product.setName(name);
         assertEquals("testName", product.getName());
     }
-    
+
     @Test
     public void testGetSetDescription() {
         String description = "testDesc";
         product.setDescription(description);
         assertEquals("testDesc", product.getDescription());
     }
-    
+
     @Test
     public void testGetSetCategory() {
         ProductCategory category = new ProductCategory();
         product.setCategory(category);
         assertEquals(new ProductCategory(), product.getCategory());
     }
-    
+
     @Test
     public void testGetSetTargetMeasures() {
         List<ProductMeasureValue> targetMeasures = List.of();
@@ -86,21 +86,21 @@ public class ProductTest {
         product.setCreatedAt(created);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getCreatedAt());
     }
-    
+
     @Test
     public void testGetSetLastUpdated() {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         product.setLastUpdated(lastUpdated);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getLastUpdated());
     }
-    
+
     @Test
     public void testGetSetDeletedAt() {
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         product.setDeletedAt(deletedAt);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getDeletedAt());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;
@@ -121,7 +121,7 @@ public class ProductTest {
         int version = 1;
 
         Product product = new Product(id, name, description, category, targetMeasures, created, lastUpdated, deletedAt, version);
-        
+
         final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"targetMeasures\":[],\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"deletedAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
         JSONAssert.assertEquals(json, product.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }

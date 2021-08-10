@@ -3,13 +3,13 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class ProductDto extends BaseDto {
-    
+
     private Long id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private CategoryDto productClass;
 
     private CategoryDto type;
@@ -17,21 +17,21 @@ public class ProductDto extends BaseDto {
     private CategoryDto style;
 
     private List<ProductMeasureValueDto> targetMeasures;
-        
+
     private Integer version;
-    
+
     public ProductDto() {
         super();
     }
-    
+
     public ProductDto(Long id) {
-    	this();
-    	this.id = id;
+        this();
+        this.id = id;
     }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
             CategoryDto style, List<ProductMeasureValueDto> targetMeasures, Integer version) {
-    	this(id);
+        this(id);
         this.name = name;
         this.description = description;
         this.productClass = productClass;
@@ -96,12 +96,12 @@ public class ProductDto extends BaseDto {
     public void setTargetMeasures(List<ProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
-    } 
+    }
 }

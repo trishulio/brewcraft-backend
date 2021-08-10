@@ -26,7 +26,7 @@ public class MaterialMapperTest {
     public void testFromDto_ReturnsEntity_WhenDtoIsNotNull() {
         MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", 1);
         Material material = materialMapper.fromDto(dto);
-        
+
         assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, null, null, 1), material);
     }
 
@@ -50,22 +50,21 @@ public class MaterialMapperTest {
         assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", 1), dto);
     }
 
-    
     @Test
     public void testBeforeDto_setsAllCategories() {
         MaterialDto materialDto = new MaterialDto(1L, "material1", null, null, null, null, null, null, null);
-        
+
         MaterialCategory rootCategory = new MaterialCategory(1L, "root", null, null, null, null, null);
         MaterialCategory subcategory1 = new MaterialCategory(2L, "subcategory1", rootCategory, null, null, null, null);
         MaterialCategory subcategory2 = new MaterialCategory(3L, "subcategory2", subcategory1, null, null, null, null);
 
         Material material = new Material(1L, "material1", null, subcategory2, null, null, null, null, null);
-        
+
         materialMapper.beforetoDto(materialDto, material);
 
         assertEquals(rootCategory.getId(), materialDto.getMaterialClass().getId());
         assertEquals(subcategory1.getId(), materialDto.getCategory().getId());
         assertEquals(subcategory2.getId(), materialDto.getSubcategory().getId());
     }
-    
+
  }

@@ -18,9 +18,9 @@ public class UserDto extends BaseDto {
     private String lastName;
 
     private String email;
-    
+
     private String phoneNumber;
-    
+
     private String imageUrl;
 
     private UserStatusDto status;
@@ -28,21 +28,21 @@ public class UserDto extends BaseDto {
     private UserSalutationDto salutation;
 
     private List<UserRoleDto> roles;
-    
+
     private LocalDateTime createdAt;
-    
+
     private LocalDateTime lastUpdated;
 
     private Integer version;
-    
+
     public UserDto() {
     }
-    
+
     public UserDto(Long id) {
         this();
         setId(id);
     }
-    
+
     public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);

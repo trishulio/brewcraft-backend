@@ -14,10 +14,10 @@ import io.company.brewcraft.service.mapper.user.UserRoleMapper;
 public class UserRoleMapperTest {
 
     private UserRoleMapper mapper;
-    
+
     @BeforeEach
     public void init() {
-        mapper = UserRoleMapper.INSTANCE; 
+        mapper = UserRoleMapper.INSTANCE;
     }
 
     @Test
@@ -28,7 +28,7 @@ public class UserRoleMapperTest {
 
         assertEquals(expected, role);
     }
-    
+
     @Test
     public void testFromDto_ReturnsNull_WhenIdIsNull() {
         assertNull(mapper.fromDto((Long) null));

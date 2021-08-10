@@ -8,8 +8,8 @@ import io.company.brewcraft.service.ParentBrewAccessor;
 
 public interface EnhancedBrewRepository {
     void refresh(Collection<Brew> brews);
-    
+
     void refreshParentBrewAccessors(Collection<? extends ParentBrewAccessor> accessors);
-    
+
     void refreshAccessors(Collection<? extends BrewAccessor> accessors);
 }

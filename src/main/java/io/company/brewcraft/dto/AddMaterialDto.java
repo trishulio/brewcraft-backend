@@ -4,20 +4,20 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddMaterialDto extends BaseDto {
-    
+
     @NotEmpty
     private String name;
-    
+
     private String description;
-    
+
     @NotNull
     private Long categoryId;
-        
+
     private String upc;
 
     @NotEmpty
     private String baseQuantityUnit;
-        
+
     public AddMaterialDto() {
         super();
     }

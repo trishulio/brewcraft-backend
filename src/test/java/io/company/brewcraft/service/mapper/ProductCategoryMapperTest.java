@@ -34,29 +34,29 @@ public class ProductCategoryMapperTest {
     public void testFromDto_ReturnsEntity() {
         CategoryDto dto = new CategoryDto(1L, 2L, "testName", 1);
         ProductCategory category = productCategoryMapper.fromDto(dto);
-        
+
         ProductCategory expected = new ProductCategory(1L, "testName", null, null, null, null, 1);
-        
+
         assertEquals(expected, category);
     }
-    
+
     @Test
     public void testFromAddDto_ReturnsEntity() {
         AddCategoryDto dto = new AddCategoryDto(1L, "testName");
         ProductCategory category = productCategoryMapper.fromDto(dto);
-        
+
         ProductCategory expected = new ProductCategory(null, "testName", null, null, null, null, null);
-        
+
         assertEquals(expected, category);
     }
-    
+
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
         UpdateCategoryDto dto = new UpdateCategoryDto(1L, "testName", 1);
         ProductCategory category = productCategoryMapper.fromDto(dto);
-        
+
         ProductCategory expected = new ProductCategory(null, "testName", null, null, null, null, 1);
-        
+
         assertEquals(expected, category);
     }
 

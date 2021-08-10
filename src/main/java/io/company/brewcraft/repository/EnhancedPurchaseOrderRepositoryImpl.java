@@ -11,11 +11,11 @@ import io.company.brewcraft.service.PurchaseOrderAccessor;
 
 public class EnhancedPurchaseOrderRepositoryImpl implements EnhancedPurchaseOrderRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedPurchaseOrderRepositoryImpl.class);
-    
+
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher;
-    
+
     private SupplierRepository supplierRepo;
-    
+
     @Autowired
     public EnhancedPurchaseOrderRepositoryImpl(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, SupplierRepository supplierRepo) {
         this.refresher = refresher;

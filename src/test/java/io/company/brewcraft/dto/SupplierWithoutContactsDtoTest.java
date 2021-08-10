@@ -13,7 +13,7 @@ public class SupplierWithoutContactsDtoTest {
     public void init() {
         supplierWithoutContactsDto = new SupplierWithoutContactsDto();
     }
-    
+
     @Test
     public void testConstructor() {
         Long id = 1L;
@@ -25,7 +25,7 @@ public class SupplierWithoutContactsDtoTest {
         assertSame(id, supplierDto.getId());
         assertSame(name, supplierDto.getName());
         assertSame(address, supplierDto.getAddress());
-        assertSame(version, supplierDto.getVersion());        
+        assertSame(version, supplierDto.getVersion());
     }
 
     @Test
@@ -40,14 +40,14 @@ public class SupplierWithoutContactsDtoTest {
         supplierWithoutContactsDto.setName("testName");
         assertSame("testName", supplierWithoutContactsDto.getName());
     }
-    
+
     @Test
     public void testGetSetAddress() {
         AddressDto address = new AddressDto();
         supplierWithoutContactsDto.setAddress(address);
         assertSame(address, supplierWithoutContactsDto.getAddress());
     }
-    
+
     @Test
     public void testGetSetVersion() {
         Integer version = 1;

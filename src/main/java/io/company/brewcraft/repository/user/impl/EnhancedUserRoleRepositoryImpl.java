@@ -13,7 +13,7 @@ public class EnhancedUserRoleRepositoryImpl implements EnhancedUserRoleRepositor
     public EnhancedUserRoleRepositoryImpl(AccessorRefresher<Long, UserRoleAccessor, UserRole> refresher) {
         this.refresher = refresher;
     }
-    
+
     @Override
     public void refresh(Collection<UserRole> roles) {
         // Role has no child entity, hence, skipping.

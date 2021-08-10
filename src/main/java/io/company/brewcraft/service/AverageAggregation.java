@@ -9,13 +9,13 @@ import io.company.brewcraft.model.BaseModel;
 
 @SuppressWarnings("unchecked")
 public class AverageAggregation extends BaseModel implements Aggregation {
-    
+
     private Aggregation aggr;
-    
+
     public AverageAggregation(String... path) {
         this(new PathAggregation(path));
     }
-    
+
     public AverageAggregation(Aggregation aggr) {
         this.aggr = aggr;
     }

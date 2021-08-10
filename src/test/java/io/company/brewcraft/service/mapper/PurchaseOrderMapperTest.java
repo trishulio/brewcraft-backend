@@ -52,15 +52,15 @@ public class PurchaseOrderMapperTest {
     public void testFromDto_ReturnsNull_WhenAddDtoIsNull() {
         assertNull(mapper.fromDto((AddPurchaseOrderDto) null));
     }
-    
+
     @Test
     public void testFromDto_ReturnsPurchaseOrder_WhenUpdateDtoIsNotNull() {
         UpdatePurchaseOrderDto dto = new UpdatePurchaseOrderDto("ORDER_1", 2L, 3);
-        
+
         PurchaseOrder po = mapper.fromDto(dto);
-        
+
         PurchaseOrder expected = new PurchaseOrder(null, "ORDER_1", new Supplier(2L), null, null, 3);
-        
+
         assertEquals(expected, po);
     }
 

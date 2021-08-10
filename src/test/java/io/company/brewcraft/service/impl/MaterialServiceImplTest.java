@@ -37,9 +37,9 @@ public class MaterialServiceImplTest {
     private MaterialService materialService;
 
     private MaterialRepository materialRepositoryMock;
-    
+
     private MaterialCategoryService materialCategoryServiceMock;
-    
+
     private QuantityUnitService quantityUnitServiceMock;
 
     @BeforeEach
@@ -47,18 +47,18 @@ public class MaterialServiceImplTest {
         materialRepositoryMock = mock(MaterialRepository.class);
         materialCategoryServiceMock = mock(MaterialCategoryService.class);
         quantityUnitServiceMock = mock(QuantityUnitService.class);
-        
+
         materialService = new MaterialServiceImpl(materialRepositoryMock, materialCategoryServiceMock, quantityUnitServiceMock);
     }
 
     @Test
     public void testGetMaterials_returnsMaterials() throws Exception {
         Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-                
+
         List<Material> materialEntitys = Arrays.asList(materialEntity);
-        
+
         Page<Material> expectedMaterialEntities = new PageImpl<>(materialEntitys);
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(materialRepositoryMock.findAll(ArgumentMatchers.<Specification<Material>>any(), pageableArgument.capture())).thenReturn(expectedMaterialEntities);
@@ -70,9 +70,9 @@ public class MaterialServiceImplTest {
         assertSame(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertSame("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertSame(1, actualMaterials.getNumberOfElements());
-        
+
         Material actualMaterial = actualMaterials.get().findFirst().get();
-        
+
         assertSame(materialEntity.getId(), actualMaterial.getId());
         assertSame(materialEntity.getName(), actualMaterial.getName());
         assertSame(materialEntity.getDescription(), actualMaterial.getDescription());
@@ -83,7 +83,7 @@ public class MaterialServiceImplTest {
         assertSame(materialEntity.getCreatedAt(), actualMaterial.getCreatedAt());
         assertSame(materialEntity.getVersion(), actualMaterial.getVersion());
     }
-    
+
     @Test
     public void testGetMaterial_returnsMaterial() throws Exception {
         Long id = 1L;
@@ -108,7 +108,7 @@ public class MaterialServiceImplTest {
     @Test
     public void testAddMaterial_SavesMaterial() throws Exception {
         Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         Material newMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
@@ -116,7 +116,7 @@ public class MaterialServiceImplTest {
         when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(newMaterial);
 
         Material returnedMaterial = materialService.addMaterial(material);
-        
+
         //Assert persisted entity
         assertEquals(material.getId(), persistedMaterialCaptor.getValue().getId());
         assertEquals(material.getName(), persistedMaterialCaptor.getValue().getName());
@@ -127,7 +127,7 @@ public class MaterialServiceImplTest {
         assertEquals(material.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
         assertEquals(material.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(material.getVersion(), persistedMaterialCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(newMaterial.getId(), returnedMaterial.getId());
         assertEquals(newMaterial.getName(), returnedMaterial.getName());
@@ -137,9 +137,9 @@ public class MaterialServiceImplTest {
         assertEquals(newMaterial.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(newMaterial.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(newMaterial.getCreatedAt(), returnedMaterial.getCreatedAt());
-        assertEquals(newMaterial.getVersion(), returnedMaterial.getVersion()); 
+        assertEquals(newMaterial.getVersion(), returnedMaterial.getVersion());
     }
-    
+
     @Test
     public void testPutMaterial_success() throws Exception {
         Long id = 1L;
@@ -151,7 +151,7 @@ public class MaterialServiceImplTest {
         when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(materialEntity);
 
         Material returnedMaterial = materialService.putMaterial(id, putMaterial);
-       
+
         //Assert persisted entity
         assertEquals(putMaterial.getId(), persistedMaterialCaptor.getValue().getId());
         assertEquals(putMaterial.getName(), persistedMaterialCaptor.getValue().getName());
@@ -162,7 +162,7 @@ public class MaterialServiceImplTest {
         //assertEquals(null, persistedMaterialCaptor.getValue().getLastUpdated());
         //assertEquals(putMaterial.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(putMaterial.getVersion(), persistedMaterialCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(materialEntity.getId(), returnedMaterial.getId());
         assertEquals(materialEntity.getName(), returnedMaterial.getName());
@@ -172,9 +172,9 @@ public class MaterialServiceImplTest {
         assertEquals(materialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(materialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(materialEntity.getCreatedAt(), returnedMaterial.getCreatedAt());
-        assertEquals(materialEntity.getVersion(), returnedMaterial.getVersion()); 
+        assertEquals(materialEntity.getVersion(), returnedMaterial.getVersion());
     }
-    
+
     @Test
     public void testPatchMaterial_success() throws Exception {
         Long id = 1L;
@@ -185,11 +185,11 @@ public class MaterialServiceImplTest {
         ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
         when(materialRepositoryMock.findById(id)).thenReturn(Optional.of(existingMaterialEntity));
- 
+
         when(materialRepositoryMock.saveAndFlush(persistedMaterialCaptor.capture())).thenReturn(persistedMaterialEntity);
 
         Material returnedMaterial = materialService.patchMaterial(id, patchedMaterial);
-       
+
         //Assert persisted entity
         assertEquals(existingMaterialEntity.getId(), persistedMaterialCaptor.getValue().getId());
         assertEquals(patchedMaterial.getName(), persistedMaterialCaptor.getValue().getName());
@@ -200,7 +200,7 @@ public class MaterialServiceImplTest {
         assertEquals(existingMaterialEntity.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
         assertEquals(existingMaterialEntity.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(existingMaterialEntity.getVersion(), persistedMaterialCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(persistedMaterialEntity.getId(), returnedMaterial.getId());
         assertEquals(persistedMaterialEntity.getName(), returnedMaterial.getName());
@@ -210,16 +210,16 @@ public class MaterialServiceImplTest {
         assertEquals(persistedMaterialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(persistedMaterialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(persistedMaterialEntity.getCreatedAt(), returnedMaterial.getCreatedAt());
-        assertEquals(persistedMaterialEntity.getVersion(), returnedMaterial.getVersion()); 
+        assertEquals(persistedMaterialEntity.getVersion(), returnedMaterial.getVersion());
     }
-    
+
     @Test
     public void testPatchMaterial_throwsEntityNotFoundException() throws Exception {
         Long id = 1L;
         Material material = new Material();
-        
+
         when(materialRepositoryMock.existsById(id)).thenReturn(false);
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             materialService.patchMaterial(id, material);
             verify(materialRepositoryMock, times(0)).saveAndFlush(Mockito.any(Material.class));
@@ -230,30 +230,30 @@ public class MaterialServiceImplTest {
     public void testDeleteMaterial_success() throws Exception {
         Long id = 1L;
         materialService.deleteMaterial(id);
-        
+
         verify(materialRepositoryMock, times(1)).deleteById(id);
     }
-    
+
     @Test
     public void testMaterialExists_success() throws Exception {
         Long id = 1L;
         materialService.materialExists(id);
-        
+
         verify(materialRepositoryMock, times(1)).existsById(id);
     }
-    
+
     @Test
     public void testMaterialService_classIsTransactional() throws Exception {
         Transactional transactional = materialService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testMaterialService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = materialService.getClass().getMethods();  
+        Method[] methods = materialService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

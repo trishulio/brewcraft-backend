@@ -8,12 +8,12 @@ import io.company.brewcraft.service.MixtureAccessor;
 
 public interface BaseMixtureRecording extends MixtureAccessor, MeasureAccessor {
 
-	BigDecimal getValue();
-    
+    BigDecimal getValue();
+
     void setValue(BigDecimal value);
 
-	LocalDateTime getRecordedAt();
+    LocalDateTime getRecordedAt();
 
-	void setRecordedAt(LocalDateTime recordedAt);
+    void setRecordedAt(LocalDateTime recordedAt);
 
 }

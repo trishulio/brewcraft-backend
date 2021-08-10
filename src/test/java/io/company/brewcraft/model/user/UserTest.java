@@ -9,14 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
-    
+
     private User user;
-    
+
     @BeforeEach
     public void init() {
         user = new User();
     }
-    
+
     @Test
     public void testAllArgConstructor_SetsAllFields() {
         user = new User(
@@ -33,9 +33,9 @@ public class UserTest {
             List.of(new UserRole(3L)),
             LocalDateTime.of(1999, 1, 1, 0, 0),
             LocalDateTime.of(2000, 1, 1, 0, 0),
-            1            
+            1
         );
-        
+
         assertEquals(1L, user.getId());
         assertEquals("USER_NAME", user.getUserName());
         assertEquals("DISPLAY_NAME", user.getDisplayName());
@@ -148,12 +148,12 @@ public class UserTest {
         user.setRoles(List.of(new UserRole(10L), new UserRole(20L)));
         assertEquals(List.of(new UserRole(10L), new UserRole(20L)), user.getRoles());
     }
-    
+
     @Test
     public void testGetRoleBindings() {
         assertNull(user.getRoles());
         user.setRoles(List.of(new UserRole(1L), new UserRole(2L)));
-        
+
         List<UserRoleBinding> expected = List.of(
             new UserRoleBinding(null, new UserRole(1L), user),
             new UserRoleBinding(null, new UserRole(2L), user)
@@ -161,14 +161,14 @@ public class UserTest {
 
         assertEquals(expected, user.getRoleBindings());
     }
-    
+
     @Test
     public void testAccessLastUpdated() {
         assertNull(user.getLastUpdated());
         user.setLastUpdated(LocalDateTime.of(1999, 1, 1, 0, 0));
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), user.getLastUpdated());
     }
-    
+
     @Test
     public void testAccessCreatedAt() {
         assertNull(user.getCreatedAt());

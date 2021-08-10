@@ -35,7 +35,7 @@ public class InvoiceItemDtoTest {
             new MoneyDto("CAD", new BigDecimal("8")),
             new MaterialDto(7L),
             LocalDateTime.of(1999, 1, 1, 1, 1),
-            LocalDateTime.of(2000, 1, 1, 1, 1), 
+            LocalDateTime.of(2000, 1, 1, 1, 1),
             1
         );
 

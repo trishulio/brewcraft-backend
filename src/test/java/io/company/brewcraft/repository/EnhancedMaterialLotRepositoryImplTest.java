@@ -28,7 +28,7 @@ public class EnhancedMaterialLotRepositoryImplTest {
 
         repo = new EnhancedMaterialLotRepositoryImpl(mItemRepo, mStorageRepo, mRefresher);
     }
-    
+
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
         List<MaterialLot> lots = List.of(new MaterialLot(1L), new MaterialLot(2L));
@@ -38,13 +38,13 @@ public class EnhancedMaterialLotRepositoryImplTest {
         verify(mItemRepo, times(1)).refreshAccessors(lots);
         verify(mStorageRepo, times(1)).refreshAccessors(lots);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsRefreshAccessor() {
         List<MaterialLotAccessor> accessors = List.of(mock(MaterialLotAccessor.class), mock(MaterialLotAccessor.class));
-        
+
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(accessors);
     }
 }

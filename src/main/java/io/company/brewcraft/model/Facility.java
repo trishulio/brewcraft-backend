@@ -39,45 +39,45 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facility_generator")
     @SequenceGenerator(name="facility_generator", sequenceName = "facility_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
-    
+
     @JoinColumn(name = "address_id")
     @OneToOne(cascade = CascadeType.ALL)
     private FacilityAddress address;
-    
+
     @Column(name = "phone_number")
     private String phoneNumber;
-    
+
     @Column(name = "fax_number")
     private String faxNumber;
-    
+
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Equipment> equipment;
-    
+
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Storage> storages;
-        
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
-    
+
     public Facility() {
     }
 
     public Facility(Long id) {
         setId(id);
     }
-    
+
     public Facility(Long id, String name, FacilityAddress address, String phoneNumber, String faxNumber, List<Equipment> equipment, List<Storage> storages, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -110,7 +110,7 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     public void setName(String name) {
         this.name = name;
     }
-    
+
     @Override
     public FacilityAddress getAddress() {
         return address;
@@ -120,7 +120,7 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     public void setAddress(FacilityAddress address) {
         this.address = address;
     }
-    
+
     @Override
     public String getPhoneNumber() {
         return phoneNumber;
@@ -140,18 +140,18 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
     public void setFaxNumber(String faxNumber) {
         this.faxNumber = faxNumber;
     }
-    
+
     @Override
     public List<Equipment> getEquipment() {
         return equipment;
     }
-    
+
     @Override
     public void setEquipment(List<Equipment> equipment) {
         if (equipment != null) {
             equipment.stream().forEach(eqpt -> eqpt.setFacility(this));
         }
-        
+
         if (this.getEquipment() != null) {
             this.getEquipment().clear();
             this.getEquipment().addAll(equipment);
@@ -159,12 +159,12 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
             this.equipment = equipment;
         }
     }
-        
+
     public void addEquipment(Equipment eq) {
         if (equipment == null) {
             equipment = new ArrayList<>();
         }
-        
+
         if (eq.getFacility() != this) {
             eq.setFacility(this);
         }
@@ -173,38 +173,38 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
             this.equipment.add(eq);
         }
     }
-    
+
     public void removeEquipment(Equipment equipment) {
         if (this.equipment != null) {
             equipment.setFacility(null);
             this.equipment.remove(equipment);
         }
     }
-    
+
     @Override
     public List<Storage> getStorages() {
         return storages;
     }
-    
+
     @Override
     public void setStorages(List<Storage> storages) {
         if (storages != null) {
             storages.stream().forEach(storage -> storage.setFacility(this));
         }
-        
+
         if (this.getStorages() != null) {
             this.getStorages().clear();
             this.getStorages().addAll(storages);
         } else {
             this.storages = storages;
-        }    
+        }
     }
-    
+
     public void addStorage(Storage storage) {
         if (storages == null) {
             storages = new ArrayList<>();
         }
-        
+
         if (storage.getFacility() != this) {
             storage.setFacility(this);
         }
@@ -213,14 +213,14 @@ public class Facility extends BaseModel implements UpdateFacility, Identified<Lo
             this.storages.add(storage);
         }
     }
-    
+
     public void removeStorage(Storage storage) {
         if (storages != null) {
             storage.setFacility(null);
             storages.remove(storage);
         }
     }
-    
+
     @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;

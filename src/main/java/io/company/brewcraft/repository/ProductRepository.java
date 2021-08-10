@@ -14,8 +14,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
   @Query("update PRODUCT p set p.deletedAt=CURRENT_TIMESTAMP where p.id in (:ids)")
   @Modifying
-  public void softDeleteByIds(@Param("ids") Iterable<Long> ids); 
-  
+  public void softDeleteByIds(@Param("ids") Iterable<Long> ids);
+
   @Query("select p from PRODUCT p where p.id in (:ids) and p.deletedAt is NULL")
   // Shouldn't this return a LIST
   public Optional<Product> findByIdsExcludeDeleted(@Param("ids") Iterable<Long> ids);

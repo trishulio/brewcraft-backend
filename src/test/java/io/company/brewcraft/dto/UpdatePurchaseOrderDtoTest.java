@@ -38,11 +38,11 @@ public class UpdatePurchaseOrderDtoTest {
         dto.setSupplierId(99L);
         assertEquals(99L, dto.getSupplierId());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(dto.getVersion());
-        
+
         dto.setVersion(99);
         assertEquals(99, dto.getVersion());
     }

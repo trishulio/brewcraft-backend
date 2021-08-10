@@ -17,7 +17,7 @@ import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 public class EquipmentRepositoryGetAllEquipmentSpecification implements Specification<Equipment> {
     private static final long serialVersionUID = -6015366615586119965L;
-    
+
     private Set<Long> ids;
     private Set<String> types;
     private Set<String> statuses;
@@ -42,7 +42,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
 
     public Predicate[] getPredicates(Root<Equipment> root, CriteriaQuery<Equipment> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<Predicate>(10);
-        
+
         if (ids != null && ids.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_ID).in(ids)));
         }
@@ -50,7 +50,7 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
         if (types != null && types.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_TYPE).in(types)));
         }
-        
+
         if (statuses != null && statuses.size() > 0) {
             predicates.add(criteriaBuilder.and(root.get(Equipment.FIELD_STATUS).in(statuses)));
         }

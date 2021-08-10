@@ -17,26 +17,26 @@ public class EnhancedUserStatusRepositoryImplTest {
     private AccessorRefresher<Long, UserStatusAccessor, UserStatus> mRefresher;
 
     private EnhancedUserStatusRepository repo;
-    
+
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
 
         repo = new EnhancedUserStatusRepositoryImpl(mRefresher);
     }
-    
+
     @Test
     public void testRefresh_DoesNothing() {
         repo.refresh(null);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsAccessorRefresher() {
         UserStatusAccessor accessor = mock(UserStatusAccessor.class);
         List<UserStatusAccessor> accessors = List.of(accessor);
 
         repo.refreshAccessors(accessors);
-        
+
         verify(mRefresher, times(1)).refreshAccessors(List.of(accessor));
     }
 }

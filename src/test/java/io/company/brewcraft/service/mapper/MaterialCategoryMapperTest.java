@@ -24,9 +24,9 @@ public class MaterialCategoryMapperTest {
     public void testFromDto_ReturnEntity_WhenDtoIsNotNull() {
         CategoryDto dto = new CategoryDto(1L, 2L, "testName", 1);
         MaterialCategory category = materialCategoryMapper.fromDto(dto);
-        
+
         MaterialCategory expected = new MaterialCategory(1L, "testName", null, null, null, null, 1);
-        
+
         assertEquals(expected, category);
     }
 

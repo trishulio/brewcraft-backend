@@ -14,19 +14,19 @@ public class EnhancedBrewStageRepositoryImplTest {
     private EnhancedBrewStageRepository brewStageRepository;
 
     private BrewTaskRepository brewTaskRepositoryMock;
-    
+
     private BrewStageStatusRepository brewStageStatusRepositoryMock;
-    
+
     private BrewRepository brewRepositoryMock;
-    
+
     private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-    	brewTaskRepositoryMock = mock(BrewTaskRepository.class);
-    	brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
-    	brewRepositoryMock = mock(BrewRepository.class);
+        brewTaskRepositoryMock = mock(BrewTaskRepository.class);
+        brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
+        brewRepositoryMock = mock(BrewRepository.class);
         refresherMock = mock(AccessorRefresher.class);
 
         brewStageRepository = new EnhancedBrewStageRepositoryImpl(brewTaskRepositoryMock, brewStageStatusRepositoryMock, brewRepositoryMock, refresherMock);

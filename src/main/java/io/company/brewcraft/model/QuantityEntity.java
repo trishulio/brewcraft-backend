@@ -15,7 +15,7 @@ public class QuantityEntity extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity unit;
-    
+
     @Column(name = "value", precision = 20, scale = 4)
     private BigDecimal value;
 

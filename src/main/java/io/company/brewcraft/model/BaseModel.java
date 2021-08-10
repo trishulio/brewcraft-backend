@@ -25,7 +25,7 @@ public abstract class BaseModel {
     public void outerJoin(Object other, Set<String> include) {
         util.copy(this, other, pd -> include.contains(pd.getName()) && pd.getReadMethod().invoke(other) != null);
     }
-    
+
     public void copyToNullFields(Object existingEntity) {
         util.copy(this, existingEntity, pd -> pd.getReadMethod().invoke(this) == null);
     }

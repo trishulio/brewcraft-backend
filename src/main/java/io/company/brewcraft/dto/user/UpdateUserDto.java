@@ -29,10 +29,10 @@ public class UpdateUserDto extends BaseDto {
     @NotNull
     private Integer version;
 
-    public UpdateUserDto() { 
+    public UpdateUserDto() {
     }
 
-    public UpdateUserDto(String displayName, String firstName, String lastName, String email, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {       
+    public UpdateUserDto(String displayName, String firstName, String lastName, String email, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);

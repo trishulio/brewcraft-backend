@@ -14,7 +14,7 @@ public interface BrewStageStatusRepository extends JpaRepository<BrewStageStatus
 
     @Query("select s from BREW_STAGE_STATUS s where s.name = :name")
     Optional<BrewStageStatus> findByName(@Param("name") String name);
-    
+
     @Query("select s from BREW_STAGE_STATUS s where s.name in (:names)")
     Iterable<BrewStageStatus> findByNames(@Param("names") Set<String> names);
 }

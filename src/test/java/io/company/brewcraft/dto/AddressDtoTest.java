@@ -15,7 +15,7 @@ public class AddressDtoTest {
     }
 
     @Test
-    public void testConstructor() {      
+    public void testConstructor() {
         Long id = 1L;
         String addressLine1 = "addressLine1";
         String addressLine2 = "addressLine2";
@@ -25,7 +25,7 @@ public class AddressDtoTest {
         String postalCode = "postalCode";
 
         AddressDto addressDto = new AddressDto(id, addressLine1, addressLine2, country, province, city, postalCode);
-        
+
         assertSame(id, addressDto.getId());
         assertSame(addressLine1, addressDto.getAddressLine1());
         assertSame(addressLine2, addressDto.getAddressLine2());
@@ -34,7 +34,7 @@ public class AddressDtoTest {
         assertSame(city, addressDto.getCity());
         assertSame(postalCode, addressDto.getPostalCode());
     }
-    
+
     @Test
     public void testGetSetId() {
         addressDto.setId(1L);
@@ -46,7 +46,7 @@ public class AddressDtoTest {
         addressDto.setAddressLine1("line1");
         assertSame("line1", addressDto.getAddressLine1());
     }
-    
+
     @Test
     public void testGetSetAddressLine2() {
         addressDto.setAddressLine2("line2");
@@ -58,19 +58,19 @@ public class AddressDtoTest {
         addressDto.setCity("city");
         assertSame("city", addressDto.getCity());
     }
-    
+
     @Test
     public void testGetSetCountry() {
         addressDto.setCountry("country");
         assertSame("country", addressDto.getCountry());
     }
-    
+
     @Test
     public void testGetSetProvince() {
         addressDto.setProvince("province");
         assertSame("province", addressDto.getProvince());
     }
-    
+
     @Test
     public void testGetPostalCode() {
         addressDto.setPostalCode("postalCode");

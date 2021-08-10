@@ -12,9 +12,9 @@ public class AddShipmentDto extends BaseDto {
     private Collection<AddMaterialLotDto> lots;
 
     public AddShipmentDto() {
-        
-    } 
-    
+
+    }
+
     public AddShipmentDto(String shipmentNumber, String description, Long statusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<AddMaterialLotDto> lots) {
         setShipmentNumber(shipmentNumber);
         setDescription(description);
@@ -34,7 +34,7 @@ public class AddShipmentDto extends BaseDto {
     public String getDescription() {
         return this.description;
     }
-    
+
     public void setDescription(String description) {
         this.description = description;
     }

@@ -36,7 +36,7 @@ public class QuantityDto extends BaseDto {
     }
 
     public void setSymbol(String symbol) {
-        if (symbol != null) {            
+        if (symbol != null) {
             symbol = symbol.toLowerCase();
         }
         this.symbol = symbol;

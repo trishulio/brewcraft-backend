@@ -7,23 +7,23 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class UpdateSupplierDto {
-    
+
     @Pattern(regexp = "^(?!\\s*$).+", message = "must not be empty")
     private String name;
 
     @Valid
     private List<SupplierContactDto> contacts;
-    
+
     @Valid
     private AddressDto address;
-    
+
     @NotNull
     private Integer version;
-    
+
     public UpdateSupplierDto() {
         super();
     }
-    
+
     public UpdateSupplierDto(String name, List<SupplierContactDto> contacts, AddressDto address, Integer version) {
         super();
         this.name = name;

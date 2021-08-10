@@ -35,66 +35,66 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class FacilityController extends BaseController {
-    
+
     private FacilityService facilityService;
-    
+
     private FacilityMapper facilityMapper = FacilityMapper.INSTANCE;
 
     public FacilityController(FacilityService facilityService, AttributeFilter filter) {
         super(filter);
         this.facilityService = facilityService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<FacilityDto> getAllFacilities(
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
-    ) {        
+    ) {
         Page<Facility> facilitiesPage = facilityService.getAllFacilities(page, size, sort, orderAscending);
-        
+
         List<FacilityDto> facilitiesList = facilitiesPage.stream().map(facility -> facilityMapper.toDto(facility)).collect(Collectors.toList());
-    
+
         PageDto<FacilityDto> dto = new PageDto<FacilityDto>(facilitiesList, facilitiesPage.getTotalPages(), facilitiesPage.getTotalElements());
         return dto;
     }
-    
+
     @GetMapping(value = "/{facilityId}", consumes = MediaType.ALL_VALUE)
-    public FacilityDto getFacility(@PathVariable Long facilityId) {   
+    public FacilityDto getFacility(@PathVariable Long facilityId) {
         Facility facility =  facilityService.getFacility(facilityId);
-        
+
         Validator.assertion(facility != null, EntityNotFoundException.class, "Facility", facilityId.toString());
-        
+
         return facilityMapper.toDto(facility);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public FacilityDto addFacility(@Valid @RequestBody AddFacilityDto facilityDto) {
-        Facility facility = facilityMapper.fromDto(facilityDto);    
-        
+        Facility facility = facilityMapper.fromDto(facilityDto);
+
         Facility addedFacility = facilityService.addFacility(facility);
-        
-        return facilityMapper.toDto(addedFacility);   
+
+        return facilityMapper.toDto(addedFacility);
     }
-    
+
     @PutMapping("/{facilityId}")
     public FacilityDto putFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
         Facility facility = facilityMapper.fromDto(facilityDto);
 
         Facility putFacility = facilityService.putFacility(facilityId, facility);
-        
-        return facilityMapper.toDto(putFacility);   
+
+        return facilityMapper.toDto(putFacility);
     }
-    
+
     @PatchMapping("/{facilityId}")
     public FacilityDto patchFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
         Facility facility = facilityMapper.fromDto(facilityDto);
 
         Facility patchedFacility = facilityService.patchFacility(facilityId, facility);
-        
-        return facilityMapper.toDto(patchedFacility);   
+
+        return facilityMapper.toDto(patchedFacility);
     }
 
     @DeleteMapping(value = "/{facilityId}", consumes = MediaType.ALL_VALUE)

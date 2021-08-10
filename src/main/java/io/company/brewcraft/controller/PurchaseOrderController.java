@@ -58,7 +58,7 @@ public class PurchaseOrderController extends BaseController {
     ) {
 
         Page<PurchaseOrder> orders = service.getAllPurchaseOrders(ids, excludeIds, orderNumbers, supplierIds, sort, orderAscending, page, size);
-        
+
         return response(orders, attributes);
     }
 
@@ -67,9 +67,9 @@ public class PurchaseOrderController extends BaseController {
         PurchaseOrder po = service.getPurchaseOrder(id);
 
         PurchaseOrderDto dto = PurchaseOrderMapper.INSTANCE.toDto(po);
-        
+
         Validator.assertion(dto != null, EntityNotFoundException.class, "Purchase Order", id.toString());
-        
+
         return dto;
     }
 
@@ -77,30 +77,30 @@ public class PurchaseOrderController extends BaseController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public PurchaseOrderDto postPurchaseOrder(@Valid @NotNull @RequestBody AddPurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-        
+
         PurchaseOrder po = service.add(addition);
-        
+
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }
-    
+
     @PutMapping("/{purchaseOrderId}")
     public PurchaseOrderDto putPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-        
+
         PurchaseOrder po = service.put(purchaseOrderId, addition);
-        
+
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }
-    
+
     @PatchMapping("/{purchaseOrderId}")
     public PurchaseOrderDto patchPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-        
+
         PurchaseOrder po = service.patch(purchaseOrderId, addition);
-        
+
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }
-    
+
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public void deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {

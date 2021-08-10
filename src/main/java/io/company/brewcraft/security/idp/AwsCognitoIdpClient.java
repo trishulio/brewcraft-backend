@@ -52,7 +52,6 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         logger.debug("Successfully Updated user {} in cognito user pool {}", userName, userPoolId);
     }
 
-
     @Override
     public void deleteUser(final String userName) {
         final AdminDeleteUserRequest adminDeleteUserRequest = new AdminDeleteUserRequest().withUserPoolId(userPoolId).withUsername(userName);

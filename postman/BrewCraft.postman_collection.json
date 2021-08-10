@@ -1,1527 +1,1527 @@
 {
-	"info": {
-		"_postman_id": "3b1e7126-bc32-41d0-bab6-054385100d86",
-		"name": "BrewCraft",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "TenantManagementService",
-			"item": [
-				{
-					"name": "Add Tenant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/operations/tenants/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"operations",
-								"tenants",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Tenant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/operations/tenants/{{tenantId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"operations",
-								"tenants",
-								"{{tenantId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Tenant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/operations/tenants/{{tenantId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"operations",
-								"tenants",
-								"{{tenantId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Tenant",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/operations/tenants/{{tenantId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"operations",
-								"tenants",
-								"{{tenantId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Tenants",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/operations/tenants/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"operations",
-								"tenants",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Cognito",
-			"item": [
-				{
-					"name": "Authorization Code",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
-							"host": [
-								"{{cognito_url}}"
-							],
-							"path": [
-								"oauth2",
-								"authorize"
-							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code"
-								},
-								{
-									"key": "client_id",
-									"value": "{{cognito_client_id}}"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{cognito_redirect_url}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "JKW",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/jwks.json",
-							"protocol": "https",
-							"host": [
-								"cognito-idp",
-								"us-east-2",
-								"amazonaws",
-								"com"
-							],
-							"path": [
-								"{{cognito_user_pool_id}}",
-								".well-known",
-								"jwks.json"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "OpenId Configuration",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/openid-configuration",
-							"protocol": "https",
-							"host": [
-								"cognito-idp",
-								"us-east-2",
-								"amazonaws",
-								"com"
-							],
-							"path": [
-								"{{cognito_user_pool_id}}",
-								".well-known",
-								"openid-configuration"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{cognito_url}}/login?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
-							"host": [
-								"{{cognito_url}}"
-							],
-							"path": [
-								"login"
-							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code"
-								},
-								{
-									"key": "client_id",
-									"value": "{{cognito_client_id}}"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{cognito_redirect_url}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Token",
-					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "{{cognito_client_secret}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{cognito_client_id}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{cognito_url}}/oauth2/token?grant_type=authorization_code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}&code=f1c94e17-1c62-4304-962e-b1e8bb1aa88a",
-							"host": [
-								"{{cognito_url}}"
-							],
-							"path": [
-								"oauth2",
-								"token"
-							],
-							"query": [
-								{
-									"key": "grant_type",
-									"value": "authorization_code"
-								},
-								{
-									"key": "client_id",
-									"value": "{{cognito_client_id}}"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{cognito_redirect_url}}"
-								},
-								{
-									"key": "code",
-									"value": "f1c94e17-1c62-4304-962e-b1e8bb1aa88a"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "E2E",
-					"request": {
-						"auth": {
-							"type": "oauth2",
-							"oauth2": [
-								{
-									"key": "accessToken",
-									"value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2MmEyM2QwZi0zOTZkLTQ3ZTItYTFiNi00ODAxYzU2YmVlNDgiLCJjb2duaXRvOmdyb3VwcyI6WyJlYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6IjczNjEwYjQwLTI3ZGYtNDEzYS1hYTA3LTMwYjIyZWVhZjYxYyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDM2NTE0NTUsImV4cCI6MTYwMzY1NTA1NSwiaWF0IjoxNjAzNjUxNDU1LCJqdGkiOiI4NmMwM2Y2MS01YTk4LTQwZDctYmNiYS1kNDBmM2Q0N2ZmZTEiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9lYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgifQ.gTHK89siZku-CeQO0lZpn8EsUjB0f4PwHxe4dkBjZiiRXLhPB8n-mSIlaHMc5qnoEaenL8Z8TkCEEsvTvuiK3LgRsvzJHAM1ITLk1nlHXeH5aNbcjim4MNQ4DB8vlE9mL-dnkRERsWEiTwCUfjXsCTO-tFUXSNPx-aMiZSBM3mTqlUNFNuf09Oj3V5Iu3TZKRG7Pik5IdnsrxQAOvFOv4AeGCCi5JjJEZdYXlZl1xIX1_vQzBc7mdCk382jXzzfg0sA2xEkAJ8UFQNM0ZtTvheAQlcwPzIx1XgU0cVFm8N_lEkTDJuhmtxwgO9BKGbFY7Vv8YgmtKsgwTgbP9wZ05A",
-									"type": "string"
-								},
-								{
-									"key": "tokenType",
-									"value": "Bearer",
-									"type": "string"
-								},
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
-							"host": [
-								"{{cognito_url}}"
-							],
-							"path": [
-								"oauth2",
-								"authorize"
-							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code"
-								},
-								{
-									"key": "client_id",
-									"value": "{{cognito_client_id}}"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{cognito_redirect_url}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "SupplierService",
-			"item": [
-				{
-					"name": "Get All Suppliers",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/?page=0&size=100&sort=id,name&order_asc=true",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								""
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "100"
-								},
-								{
-									"key": "sort",
-									"value": "id,name"
-								},
-								{
-									"key": "order_asc",
-									"value": "true"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\":\"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"contacts\": [\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        },\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "   {\r\n        \"name\": \"\",\r\n        \"contacts\": [\r\n            {\r\n                \"id\": 1,\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\",\r\n                \"version\": 0\r\n            },\r\n            {\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            }\r\n        ],\r\n        \"address\": {\r\n            \"id\": 1,\r\n            \"addressLine1\": \"\",\r\n            \"addressLine2\": \"\",\r\n            \"country\": \"\",\r\n            \"province\": \"\",\r\n            \"city\": \"\",\r\n            \"postalCode\": \"\"\r\n        },\r\n        \"version\": 0\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"tests323ts\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{supplierId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Supplier",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "SupplierContactService",
-			"item": [
-				{
-					"name": "Get All Supplier Contacts",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"contacts"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "100"
-								},
-								{
-									"key": "sort",
-									"value": "id"
-								},
-								{
-									"key": "order_asc",
-									"value": "true"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Contact",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"contacts",
-								"{{contactId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add Contact",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{supplierId}}",
-								"contacts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Contact",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\",\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{supplierId}}",
-								"contacts",
-								"{{contactId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Contact",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "   {\r\n        \"firstName\": \"\",\r\n        \"version\": 0\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"contacts",
-								"{{contactId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Contact",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"suppliers",
-								"{{supplierId}}",
-								"contacts",
-								"{{contactId}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "FacilityService",
-			"item": [
-				{
-					"name": "Add Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Main facility 1\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Boil Kettle\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"Eqpt2\",\r\n            \"type\": \"Mix Tank\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 120.0\r\n            }\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"name\": \"storage 1\",\r\n            \"type\": \"General\"\r\n        },\r\n        {\r\n            \"name\": \"storage 2\",\r\n            \"type\": \"General\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"updatedFacilit2y\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"e4\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"s1\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"s2\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"testn\",\r\n            \"type\": \"Fermenter\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"testm\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"{{facility-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"{{facility-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Facility",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/{{facility-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"{{facility-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Facilities",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities?page=0&size=100&sort=id,name&order_asc=true",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "100"
-								},
-								{
-									"key": "sort",
-									"value": "id,name"
-								},
-								{
-									"key": "order_asc",
-									"value": "true"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "EquipmentService",
-			"item": [
-				{
-					"name": "Add Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/{{facility-id}}/equipment",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"{{facility-id}}",
-								"equipment"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/equipment",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"equipment"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"equipment",
-								"{{equipment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"e1\",\r\n    \"type\": \"Barrel\",\r\n    \"status\": \"Active\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0000\r\n    },\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"equipment",
-								"{{equipment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    },\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"equipment",
-								"{{equipment-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Equiptment",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"equipment",
-								"{{equipment-id}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "StorageService",
-			"item": [
-				{
-					"name": "Add Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Storage 1\",\r\n    \"type\": \"General\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/{{facility-id}}/storages",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"{{facility-id}}",
-								"storages"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"storages",
-								"{{storage-id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Storage",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/v1/facilities/storages/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"facilities",
-								"storages",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		}
-	],
-	"protocolProfileBehavior": {}
+    "info": {
+        "_postman_id": "3b1e7126-bc32-41d0-bab6-054385100d86",
+        "name": "BrewCraft",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "TenantManagementService",
+            "item": [
+                {
+                    "name": "Add Tenant",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/operations/tenants/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "operations",
+                                "tenants",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Tenant",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"\",\r\n    \"url\": \"\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/operations/tenants/{{tenantId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "operations",
+                                "tenants",
+                                "{{tenantId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Tenant",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/operations/tenants/{{tenantId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "operations",
+                                "tenants",
+                                "{{tenantId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Tenant",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/operations/tenants/{{tenantId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "operations",
+                                "tenants",
+                                "{{tenantId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Tenants",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/operations/tenants/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "operations",
+                                "tenants",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "Cognito",
+            "item": [
+                {
+                    "name": "Authorization Code",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+                            "host": [
+                                "{{cognito_url}}"
+                            ],
+                            "path": [
+                                "oauth2",
+                                "authorize"
+                            ],
+                            "query": [
+                                {
+                                    "key": "response_type",
+                                    "value": "code"
+                                },
+                                {
+                                    "key": "client_id",
+                                    "value": "{{cognito_client_id}}"
+                                },
+                                {
+                                    "key": "redirect_uri",
+                                    "value": "{{cognito_redirect_url}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "JKW",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/jwks.json",
+                            "protocol": "https",
+                            "host": [
+                                "cognito-idp",
+                                "us-east-2",
+                                "amazonaws",
+                                "com"
+                            ],
+                            "path": [
+                                "{{cognito_user_pool_id}}",
+                                ".well-known",
+                                "jwks.json"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "OpenId Configuration",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "https://cognito-idp.us-east-2.amazonaws.com/{{cognito_user_pool_id}}/.well-known/openid-configuration",
+                            "protocol": "https",
+                            "host": [
+                                "cognito-idp",
+                                "us-east-2",
+                                "amazonaws",
+                                "com"
+                            ],
+                            "path": [
+                                "{{cognito_user_pool_id}}",
+                                ".well-known",
+                                "openid-configuration"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{cognito_url}}/login?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+                            "host": [
+                                "{{cognito_url}}"
+                            ],
+                            "path": [
+                                "login"
+                            ],
+                            "query": [
+                                {
+                                    "key": "response_type",
+                                    "value": "code"
+                                },
+                                {
+                                    "key": "client_id",
+                                    "value": "{{cognito_client_id}}"
+                                },
+                                {
+                                    "key": "redirect_uri",
+                                    "value": "{{cognito_redirect_url}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "New Token",
+                    "request": {
+                        "auth": {
+                            "type": "basic",
+                            "basic": [
+                                {
+                                    "key": "password",
+                                    "value": "{{cognito_client_secret}}",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "username",
+                                    "value": "{{cognito_client_id}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/x-www-form-urlencoded",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{cognito_url}}/oauth2/token?grant_type=authorization_code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}&code=f1c94e17-1c62-4304-962e-b1e8bb1aa88a",
+                            "host": [
+                                "{{cognito_url}}"
+                            ],
+                            "path": [
+                                "oauth2",
+                                "token"
+                            ],
+                            "query": [
+                                {
+                                    "key": "grant_type",
+                                    "value": "authorization_code"
+                                },
+                                {
+                                    "key": "client_id",
+                                    "value": "{{cognito_client_id}}"
+                                },
+                                {
+                                    "key": "redirect_uri",
+                                    "value": "{{cognito_redirect_url}}"
+                                },
+                                {
+                                    "key": "code",
+                                    "value": "f1c94e17-1c62-4304-962e-b1e8bb1aa88a"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "E2E",
+                    "request": {
+                        "auth": {
+                            "type": "oauth2",
+                            "oauth2": [
+                                {
+                                    "key": "accessToken",
+                                    "value": "eyJraWQiOiJaVnpHOHcyK0h4bkhrYlVZVDB1VFVsaUxaYVhEM1VLRE9uUEtGNzNJQzBNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2MmEyM2QwZi0zOTZkLTQ3ZTItYTFiNi00ODAxYzU2YmVlNDgiLCJjb2duaXRvOmdyb3VwcyI6WyJlYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tXC91cy1lYXN0LTJfSFBsVHhURVNxIiwidmVyc2lvbiI6MiwiY2xpZW50X2lkIjoiM2E4OHEwZjdmbTV1ODNmODhvbmE4cTg1cmoiLCJldmVudF9pZCI6IjczNjEwYjQwLTI3ZGYtNDEzYS1hYTA3LTMwYjIyZWVhZjYxYyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4gcGhvbmUgb3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhdXRoX3RpbWUiOjE2MDM2NTE0NTUsImV4cCI6MTYwMzY1NTA1NSwiaWF0IjoxNjAzNjUxNDU1LCJqdGkiOiI4NmMwM2Y2MS01YTk4LTQwZDctYmNiYS1kNDBmM2Q0N2ZmZTEiLCJ1c2VybmFtZSI6ImJyZXdjcmFmdF9lYWUwN2YxMV80YzlhXzRhM2JfOGIyM185YzA1ZDY5NWFiNjgifQ.gTHK89siZku-CeQO0lZpn8EsUjB0f4PwHxe4dkBjZiiRXLhPB8n-mSIlaHMc5qnoEaenL8Z8TkCEEsvTvuiK3LgRsvzJHAM1ITLk1nlHXeH5aNbcjim4MNQ4DB8vlE9mL-dnkRERsWEiTwCUfjXsCTO-tFUXSNPx-aMiZSBM3mTqlUNFNuf09Oj3V5Iu3TZKRG7Pik5IdnsrxQAOvFOv4AeGCCi5JjJEZdYXlZl1xIX1_vQzBc7mdCk382jXzzfg0sA2xEkAJ8UFQNM0ZtTvheAQlcwPzIx1XgU0cVFm8N_lEkTDJuhmtxwgO9BKGbFY7Vv8YgmtKsgwTgbP9wZ05A",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "tokenType",
+                                    "value": "Bearer",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "addTokenTo",
+                                    "value": "header",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{cognito_url}}/oauth2/authorize?response_type=code&client_id={{cognito_client_id}}&redirect_uri={{cognito_redirect_url}}",
+                            "host": [
+                                "{{cognito_url}}"
+                            ],
+                            "path": [
+                                "oauth2",
+                                "authorize"
+                            ],
+                            "query": [
+                                {
+                                    "key": "response_type",
+                                    "value": "code"
+                                },
+                                {
+                                    "key": "client_id",
+                                    "value": "{{cognito_client_id}}"
+                                },
+                                {
+                                    "key": "redirect_uri",
+                                    "value": "{{cognito_redirect_url}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "SupplierService",
+            "item": [
+                {
+                    "name": "Get All Suppliers",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/?page=0&size=100&sort=id,name&order_asc=true",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "100"
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "id,name"
+                                },
+                                {
+                                    "key": "order_asc",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Supplier",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Supplier",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\":\"\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\":\"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"contacts\": [\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        },\r\n        {\r\n            \"firstName\" :\"\",\r\n            \"lastName\": \"\",\r\n            \"position\":\"\",\r\n            \"email\":\"\",\r\n            \"phoneNumber\":\"\"\r\n        }\r\n    ]\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Supplier",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "   {\r\n        \"name\": \"\",\r\n        \"contacts\": [\r\n            {\r\n                \"id\": 1,\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\",\r\n                \"version\": 0\r\n            },\r\n            {\r\n                \"firstName\": \"\",\r\n                \"lastName\": \"\",\r\n                \"position\": \"\",\r\n                \"email\": \"\",\r\n                \"phoneNumber\": \"\"\r\n            }\r\n        ],\r\n        \"address\": {\r\n            \"id\": 1,\r\n            \"addressLine1\": \"\",\r\n            \"addressLine2\": \"\",\r\n            \"country\": \"\",\r\n            \"province\": \"\",\r\n            \"city\": \"\",\r\n            \"postalCode\": \"\"\r\n        },\r\n        \"version\": 0\r\n    }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/1",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "1"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Supplier",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"tests323ts\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{supplierId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{supplierId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Supplier",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "SupplierContactService",
+            "item": [
+                {
+                    "name": "Get All Supplier Contacts",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/contacts?page=0&size=100&sort=id&order_asc=true",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "contacts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "100"
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "id"
+                                },
+                                {
+                                    "key": "order_asc",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Contact",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "contacts",
+                                "{{contactId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Contact",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{supplierId}}/contacts",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{supplierId}}",
+                                "contacts"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Contact",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"position\": \"\",\r\n    \"email\": \"\",\r\n    \"phoneNumber\": \"\",\r\n    \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{supplierId}}",
+                                "contacts",
+                                "{{contactId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Contact",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "   {\r\n        \"firstName\": \"\",\r\n        \"version\": 0\r\n    }",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/contacts/{{contactId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "contacts",
+                                "{{contactId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Contact",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/suppliers/{{supplierId}}/contacts/{{contactId}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "suppliers",
+                                "{{supplierId}}",
+                                "contacts",
+                                "{{contactId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "FacilityService",
+            "item": [
+                {
+                    "name": "Add Facility",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Main facility 1\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Boil Kettle\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            }\r\n        },\r\n        {\r\n            \"name\": \"Eqpt2\",\r\n            \"type\": \"Mix Tank\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 120.0\r\n            }\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"name\": \"storage 1\",\r\n            \"type\": \"General\"\r\n        },\r\n        {\r\n            \"name\": \"storage 2\",\r\n            \"type\": \"General\"\r\n        }\r\n    ]\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Facility",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"updatedFacilit2y\",\r\n    \"address\": {\r\n        \"addressLine1\": \"\",\r\n        \"addressLine2\": \"\",\r\n        \"country\": \"\",\r\n        \"province\": \"\",\r\n        \"city\": \"\",\r\n        \"postalCode\": \"\"\r\n    },\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Eqpt 1\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"e4\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n    \"storages\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"s1\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"s2\",\r\n            \"type\": \"General\",\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Facility",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"equipment\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"testn\",\r\n            \"type\": \"Fermenter\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 1000.0\r\n            },\r\n            \"version\": 0\r\n        },\r\n        {\r\n            \"name\": \"testm\",\r\n            \"type\": \"Barrel\",\r\n            \"status\": \"Active\",\r\n            \"maxCapacity\": {\r\n                \"symbol\": \"l\",\r\n                \"value\": 240.0\r\n            },\r\n            \"version\": 0\r\n        }\r\n    ],\r\n     \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/{{facility-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "{{facility-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Facility",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/{{facility-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "{{facility-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Facility",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/{{facility-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "{{facility-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Facilities",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities?page=0&size=100&sort=id,name&order_asc=true",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "100"
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "id,name"
+                                },
+                                {
+                                    "key": "order_asc",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "EquipmentService",
+            "item": [
+                {
+                    "name": "Add Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    }\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/{{facility-id}}/equipment",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "{{facility-id}}",
+                                "equipment"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/equipment",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "equipment"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "equipment",
+                                "{{equipment-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"e1\",\r\n    \"type\": \"Barrel\",\r\n    \"status\": \"Active\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0000\r\n    },\r\n    \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "equipment",
+                                "{{equipment-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\":\"\",\r\n    \"type\":\"\",\r\n    \"status\":\"\",\r\n    \"maxCapacity\": {\r\n        \"symbol\": \"l\",\r\n        \"value\": 240.0\r\n    },\r\n    \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "equipment",
+                                "{{equipment-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Equiptment",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/equipment/{{equipment-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "equipment",
+                                "{{equipment-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        },
+        {
+            "name": "StorageService",
+            "item": [
+                {
+                    "name": "Add Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Storage 1\",\r\n    \"type\": \"General\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/{{facility-id}}/storages",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "{{facility-id}}",
+                                "storages"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "storages",
+                                "{{storage-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Storage Updated\",\r\n    \"type\": \"General\",\r\n    \"version\": 0\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "storages",
+                                "{{storage-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "storages",
+                                "{{storage-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/storages/{{storage-id}}",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "storages",
+                                "{{storage-id}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Storage",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{url}}/api/v1/facilities/storages/",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "facilities",
+                                "storages",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "protocolProfileBehavior": {}
+        }
+    ],
+    "protocolProfileBehavior": {}
 }

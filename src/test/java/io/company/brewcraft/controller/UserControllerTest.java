@@ -87,9 +87,9 @@ public class UserControllerTest {
             List.of(new UserRoleDto(3L)),
             LocalDateTime.of(1999, 1, 1, 0, 0),
             LocalDateTime.of(2000, 1, 1, 0, 0),
-            1            
+            1
         );
-        
+
         assertEquals(expected, dto);
     }
 
@@ -144,7 +144,7 @@ public class UserControllerTest {
             1,
             100
         );
-        
+
         PageDto<UserDto> expected = new PageDto<UserDto>(
             List.of(new UserDto(
                 1L,
@@ -168,7 +168,7 @@ public class UserControllerTest {
 
         assertEquals(expected, pageDto);
     }
-    
+
     @Test
     public void testGetUser_ReturnsUserDto_WhenServiceReturnUser() {
         User user = new User(
@@ -209,13 +209,13 @@ public class UserControllerTest {
         );
         assertEquals(expected, dto);
     }
-    
+
     @Test
     public void testGetUser_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
         doReturn(null).when(mService).getUser(1L);
         assertThrows(EntityNotFoundException.class, () -> controller.getUser(1L));
     }
-    
+
     @Test
     public void testAddUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(0, User.class)).when(mService).addUser(any(User.class));
@@ -233,7 +233,7 @@ public class UserControllerTest {
         );
 
         UserDto dto = controller.addUser(additionDto);
-        
+
         UserDto expected = new UserDto(
             null,
             "userName",
@@ -253,7 +253,7 @@ public class UserControllerTest {
 
         assertEquals(expected, dto);
     }
-    
+
     @Test
     public void testPutUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(UpdateUser.class));
@@ -271,7 +271,7 @@ public class UserControllerTest {
         );
 
         UserDto dto = controller.putUser(1L, updateDto);
-        
+
         UserDto expected = new UserDto(
             null,
             null,

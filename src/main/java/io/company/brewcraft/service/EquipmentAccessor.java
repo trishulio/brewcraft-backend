@@ -6,6 +6,6 @@ public interface EquipmentAccessor {
     final String ATTR_EQUIPMENT = "equipment";
 
     Equipment getEquipment();
-    
+
     void setEquipment(Equipment equipment);
 }

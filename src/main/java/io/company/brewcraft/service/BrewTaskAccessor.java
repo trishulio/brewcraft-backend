@@ -6,6 +6,6 @@ public interface BrewTaskAccessor {
     final String ATTR_BREW_TASK = "task";
 
     BrewTask getTask();
-    
+
     void setTask(BrewTask brewTask);
 }

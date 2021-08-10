@@ -7,7 +7,7 @@ public interface BaseProduct {
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_CATEGORY = "category";
     final String ATTR_TARGET_MEASURES = "targetMeasures";
-    
+
     String getName();
 
     void setName(String name);

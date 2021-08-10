@@ -15,20 +15,20 @@ public class BrewTask extends BaseEntity implements BaseBrewTask, Identified<Lon
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brew_task_generator")
     @SequenceGenerator(name = "brew_task_generator", sequenceName = "brew_task_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
-    
+
     public BrewTask() {
         super();
     }
-    
+
     public BrewTask(Long id) {
-    	this();
-    	setId(id);
+        this();
+        setId(id);
     }
 
     public BrewTask(Long id, String name) {
-    	this(id);
+        this(id);
         setName(name);
     }
 

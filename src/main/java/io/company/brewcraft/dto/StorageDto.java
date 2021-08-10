@@ -5,22 +5,22 @@ import io.company.brewcraft.model.StorageType;
 public class StorageDto extends BaseDto {
 
     private Long id;
-   
+
     private FacilityBaseDto facility;
-    
+
     private String name;
-    
+
     private StorageType type;
-    
+
     private Integer version;
-    
+
     public StorageDto() {
     }
 
     public StorageDto(Long id) {
         setId(id);
     }
-    
+
     public StorageDto(Long id, FacilityBaseDto facility, String name, StorageType type, Integer version) {
         this(id);
         this.facility = facility;
@@ -36,7 +36,7 @@ public class StorageDto extends BaseDto {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public FacilityBaseDto getFacility() {
         return facility;
     }

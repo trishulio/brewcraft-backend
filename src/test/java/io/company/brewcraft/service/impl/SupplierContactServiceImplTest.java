@@ -32,25 +32,25 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class SupplierContactServiceImplTest {
 
     private SupplierContactService supplierContactService;
-    
+
     private SupplierContactRepository supplierContactRepositoryMock;
-    
+
     private SupplierService supplierServiceMock;
-            
+
     @BeforeEach
     public void init() {
         supplierContactRepositoryMock = mock(SupplierContactRepository.class);
         supplierServiceMock = mock(SupplierService.class);
-        
+
         supplierContactService = new SupplierContactServiceImpl(supplierContactRepositoryMock, supplierServiceMock);
     }
 
     @Test
     public void testGetContacts_returnsContacts() throws Exception {
         SupplierContact contactEntity = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         Page<SupplierContact> expectedContactEntity = new PageImpl<>(List.of(contactEntity));
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(supplierContactRepositoryMock.findAll(ArgumentMatchers.<Specification<SupplierContact>>any(), pageableArgument.capture())).thenReturn(expectedContactEntity);
@@ -62,7 +62,7 @@ public class SupplierContactServiceImplTest {
         assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertEquals(1, actualContacts.getNumberOfElements());
-        
+
         SupplierContact actualContact = actualContacts.get().findFirst().get();
 
         assertEquals(contactEntity.getId(), actualContact.getId());
@@ -74,9 +74,9 @@ public class SupplierContactServiceImplTest {
         assertEquals(contactEntity.getSupplier().getId(), actualContact.getSupplier().getId());
         assertEquals(contactEntity.getLastUpdated(), actualContact.getLastUpdated());
         assertEquals(contactEntity.getCreatedAt(), actualContact.getCreatedAt());
-        assertEquals(contactEntity.getVersion(), actualContact.getVersion());      
+        assertEquals(contactEntity.getVersion(), actualContact.getVersion());
     }
-    
+
     @Test
     public void testGetContact_returnsContact() throws Exception {
         Long id = 1L;
@@ -96,21 +96,21 @@ public class SupplierContactServiceImplTest {
         assertEquals(expectedContactEntity.get().getSupplier().getId(), returnedContact.getSupplier().getId());
         assertEquals(expectedContactEntity.get().getLastUpdated(), returnedContact.getLastUpdated());
         assertEquals(expectedContactEntity.get().getCreatedAt(), returnedContact.getCreatedAt());
-        assertEquals(expectedContactEntity.get().getVersion(), returnedContact.getVersion());  
+        assertEquals(expectedContactEntity.get().getVersion(), returnedContact.getVersion());
     }
 
     @Test
     public void testAddContact_Success() throws Exception {
         Long supplierId = 2L;
-        
+
         SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-                
+
         when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L));
-        
+
         when(supplierContactRepositoryMock.saveAndFlush(supplierContact)).thenReturn(supplierContact);
 
         SupplierContact returnedContact = supplierContactService.addContact(supplierId, supplierContact);
-            
+
         assertEquals(supplierContact.getId(), returnedContact.getId());
         assertEquals(supplierContact.getFirstName(), returnedContact.getFirstName());
         assertEquals(supplierContact.getLastName(), returnedContact.getLastName());
@@ -120,15 +120,15 @@ public class SupplierContactServiceImplTest {
         assertEquals(supplierContact.getSupplier().getId(), returnedContact.getSupplier().getId());
         assertEquals(supplierContact.getLastUpdated(), returnedContact.getLastUpdated());
         assertEquals(supplierContact.getCreatedAt(), returnedContact.getCreatedAt());
-        assertEquals(supplierContact.getVersion(), returnedContact.getVersion());  
+        assertEquals(supplierContact.getVersion(), returnedContact.getVersion());
     }
-    
+
     @Test
     public void testAddContact_throwsWhenSupplierDoesNotExist() throws Exception {
         Long supplierId = 2L;
-        
+
         SupplierContact supplierContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(supplierServiceMock.getSupplier(supplierId)).thenReturn(null);
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -136,7 +136,7 @@ public class SupplierContactServiceImplTest {
             verify(supplierContactRepositoryMock, times(0)).saveAndFlush(Mockito.any(SupplierContact.class));
         });
     }
-    
+
     @Test
     public void testPutContact_success() throws Exception {
         Long supplierId = 2L;
@@ -152,7 +152,7 @@ public class SupplierContactServiceImplTest {
         when(supplierContactRepositoryMock.saveAndFlush(persistedContactCaptor.capture())).thenReturn(supplierEntity);
 
         SupplierContact returnedContact = supplierContactService.putContact(supplierId, id, putContact);
-       
+
         //Assert persisted entity
         assertEquals(putContact.getId(), persistedContactCaptor.getValue().getId());
         assertEquals(putContact.getFirstName(), persistedContactCaptor.getValue().getFirstName());
@@ -164,7 +164,7 @@ public class SupplierContactServiceImplTest {
         //assertEquals(null, persistedContactCaptor.getValue().getLastUpdated());
         //assertEquals(putContact.getCreatedAt(), persistedContactCaptor.getValue().getCreatedAt());
         assertEquals(putContact.getVersion(), persistedContactCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(supplierEntity.getId(), returnedContact.getId());
         assertEquals(supplierEntity.getFirstName(), returnedContact.getFirstName());
@@ -175,16 +175,16 @@ public class SupplierContactServiceImplTest {
         assertEquals(supplierEntity.getSupplier().getId(), returnedContact.getSupplier().getId());
         assertEquals(supplierEntity.getLastUpdated(), returnedContact.getLastUpdated());
         assertEquals(supplierEntity.getCreatedAt(), returnedContact.getCreatedAt());
-        assertEquals(supplierEntity.getVersion(), returnedContact.getVersion());  
+        assertEquals(supplierEntity.getVersion(), returnedContact.getVersion());
     }
-     
+
     @Test
     public void testPutContact_throwsIfSupplierDoesNotExist() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
         SupplierContact putContact = new SupplierContact(1L, new Supplier(2L), "name1", "lastName1", "position1", "email1", "phoneNumber1", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(supplierContactRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -192,7 +192,7 @@ public class SupplierContactServiceImplTest {
             verify(supplierContactRepositoryMock, times(0)).saveAndFlush(Mockito.any(SupplierContact.class));
         });
     }
-    
+
     @Test
     public void testPatchContact_success() throws Exception {
         Long supplierId = 2L;
@@ -206,11 +206,11 @@ public class SupplierContactServiceImplTest {
         when(supplierContactRepositoryMock.findById(id)).thenReturn(Optional.of(existingContactEntity));
 
         when(supplierServiceMock.getSupplier(supplierId)).thenReturn(new Supplier(2L));
-        
+
         when(supplierContactRepositoryMock.saveAndFlush(persistedContactCaptor.capture())).thenReturn(persistedContactEntity);
 
         SupplierContact returnedContact = supplierContactService.patchContact(id, supplierId, patchedContact);
-       
+
         //Assert persisted entity
         assertEquals(existingContactEntity.getId(), persistedContactCaptor.getValue().getId());
         assertEquals(patchedContact.getFirstName(), persistedContactCaptor.getValue().getFirstName());
@@ -222,7 +222,7 @@ public class SupplierContactServiceImplTest {
         assertEquals(existingContactEntity.getLastUpdated(), persistedContactCaptor.getValue().getLastUpdated());
         //assertEquals(existingMaterialCategoryEntity.getCreatedAt(), persistedContactCaptor.getValue().getCreatedAt());
         assertEquals(existingContactEntity.getVersion(), persistedContactCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(persistedContactEntity.getId(), returnedContact.getId());
         assertEquals(persistedContactEntity.getFirstName(), returnedContact.getFirstName());
@@ -233,18 +233,17 @@ public class SupplierContactServiceImplTest {
         assertEquals(persistedContactEntity.getSupplier().getId(), returnedContact.getSupplier().getId());
         assertEquals(persistedContactEntity.getLastUpdated(), returnedContact.getLastUpdated());
         assertEquals(persistedContactEntity.getCreatedAt(), returnedContact.getCreatedAt());
-        assertEquals(persistedContactEntity.getVersion(), returnedContact.getVersion());  
+        assertEquals(persistedContactEntity.getVersion(), returnedContact.getVersion());
     }
-    
-   
+
     @Test
     public void testPatchContact_throwsIfSupplierDoesNotExist() throws Exception {
         Long id = 1L;
         Long supplierId = 2L;
         SupplierContact contact = new SupplierContact();
-        
+
         when(supplierContactRepositoryMock.findById(id)).thenReturn(Optional.ofNullable(null));
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             supplierContactService.patchContact(id, supplierId, contact);
             verify(supplierContactRepositoryMock, times(0)).saveAndFlush(Mockito.any(SupplierContact.class));
@@ -257,24 +256,24 @@ public class SupplierContactServiceImplTest {
         Long contactId = 1L;
 
         when(supplierServiceMock.supplierExists(supplierId)).thenReturn(true);
-        
+
         supplierContactService.deleteContact(contactId);
-        
+
         verify(supplierContactRepositoryMock, times(1)).deleteById(contactId);
     }
-      
+
     @Test
     public void testSupplierContactService_classIsTransactional() throws Exception {
         Transactional transactional = supplierContactService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testSupplierContactService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = supplierContactService.getClass().getMethods();  
+        Method[] methods = supplierContactService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

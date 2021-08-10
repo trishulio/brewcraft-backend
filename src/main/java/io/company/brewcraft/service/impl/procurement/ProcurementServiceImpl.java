@@ -33,7 +33,7 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
     public Procurement add(Procurement procurement) {
         PurchaseOrder order = procurement.getPurchaseOrder();
         Invoice invoice = procurement.getInvoice();
-        
+
         if (order != null && invoice != null && invoice.getPurchaseOrder() != null) {
             throw new IllegalArgumentException("PurchaseOrder specified in invoice object and also provided as a separate payload to add.");
         }

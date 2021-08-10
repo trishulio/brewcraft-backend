@@ -85,7 +85,7 @@ public class ShipmentService extends BaseService {
         log.debug("Checking invoice exists in Ids: {}", ids);
         boolean exists = repo.existsByIds(ids);
         log.debug("Shipments exists: {}", exists);
-        
+
         return exists;
     }
 
@@ -93,7 +93,7 @@ public class ShipmentService extends BaseService {
         log.debug("Attempting to delete shipments with Ids: {}", ids);
         int count = repo.deleteByIds(ids);
         log.debug("Number of shipments deleted: {}", count);
-        
+
         return count;
     }
 
@@ -152,7 +152,7 @@ public class ShipmentService extends BaseService {
         Shipment temp = new Shipment();
         temp.override(existing);
         temp.outerJoin(update, getPropertyNames(UpdateShipment.class));
-        temp.setLots(updatedLots);        
+        temp.setLots(updatedLots);
         repo.refresh(List.of(temp));
 
         existing.override(temp, getPropertyNames(UpdateShipment.class));

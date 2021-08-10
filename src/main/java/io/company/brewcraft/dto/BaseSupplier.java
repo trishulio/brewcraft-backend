@@ -9,7 +9,7 @@ public interface BaseSupplier {
     final String ATTR_NAME = "name";
     final String ATTR_CONTACTS = "contacts";
     final String ATTR_ADDRESS = "address";
-    
+
     public String getName();
 
     public void setName(String name);

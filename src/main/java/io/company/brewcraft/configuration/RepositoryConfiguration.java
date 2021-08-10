@@ -192,7 +192,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, SupplierAccessor, Supplier> supplierRefresher(SupplierRepository repo) {
         return new AccessorRefresher<>(
@@ -212,7 +212,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, BrewAccessor, Brew> brewRefresher(BrewRepository repo) {
         return new AccessorRefresher<>(
@@ -222,7 +222,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher(BrewRepository repo) {
         return new AccessorRefresher<>(
@@ -232,7 +232,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, BrewStageAccessor, BrewStage> brewStageRefresher(BrewStageRepository repo) {
         return new AccessorRefresher<>(
@@ -242,7 +242,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, BrewTaskAccessor, BrewTask> brewTaskRefresher(BrewTaskRepository repo) {
         return new AccessorRefresher<>(
@@ -252,7 +252,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> brewStageStatusRefresher(BrewStageStatusRepository repo) {
         return new AccessorRefresher<>(
@@ -262,7 +262,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, ParentMixtureAccessor, Mixture> parentMixtureRefresher(MixtureRepository repo) {
         return new AccessorRefresher<>(
@@ -272,7 +272,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher(MixtureRepository repo) {
         return new AccessorRefresher<>(
@@ -282,7 +282,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentRefresher(EquipmentRepository repo) {
         return new AccessorRefresher<>(
@@ -292,7 +292,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> materialPortionRefresher(MaterialPortionRepository repo) {
         return new AccessorRefresher<>(
@@ -302,7 +302,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, MeasureAccessor, Measure> measureRefresher(MeasureRepository repo) {
         return new AccessorRefresher<>(

@@ -8,7 +8,7 @@ import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.Facility;
 
 public interface BaseEquipment {
-    
+
     public Facility getFacility();
 
     public void setFacility(Facility facility);
@@ -28,7 +28,7 @@ public interface BaseEquipment {
     public Quantity<?> getMaxCapacity();
 
     public void setMaxCapacity(Quantity<?> maxCapacity);
-    
+
     public Unit<?> getDisplayUnit();
 
     public void setDisplayUnit(Unit<?> displayUnit);

@@ -19,7 +19,7 @@ public class UnitEntity extends BaseEntity {
     public UnitEntity() {
         this(null, null);
     }
-    
+
     public UnitEntity(String symbol) {
         this(symbol, null);
     }

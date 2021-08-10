@@ -22,11 +22,11 @@ import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.service.ProductMeasureValueService;
 
 public class ProductMeasureValueServiceImplTest {
-    
+
     private ProductMeasureValueService productMeasureValueService;
-    
+
     private ProductMeasureValueRepository productMeasureValueRepositoryMock;
-    
+
     @BeforeEach
     public void init() {
         productMeasureValueRepositoryMock = Mockito.mock(ProductMeasureValueRepository.class);
@@ -34,16 +34,16 @@ public class ProductMeasureValueServiceImplTest {
     }
 
     @Test
-    public void testMerge_returnsUpdatedValues() throws Exception {  
+    public void testMerge_returnsUpdatedValues() throws Exception {
         List<ProductMeasureValue> existingValues = new ArrayList<>();
         existingValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
-        
+
         List<ProductMeasureValue> updatedValues = new ArrayList<>();
         updatedValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("150"), new Product()));
         updatedValues.add(new ProductMeasureValue(2L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()));
-      
+
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(existingValues, updatedValues);
-        
+
         assertEquals(2, returnedValues.size());
         assertEquals(1L, returnedValues.get(0).getId());
         assertEquals(new Product(), returnedValues.get(0).getProduct());
@@ -54,15 +54,15 @@ public class ProductMeasureValueServiceImplTest {
         assertEquals(new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(1).getMeasure());
         assertEquals(new BigDecimal("200"), returnedValues.get(1).getValue());
     }
-    
+
     @Test
-    public void testMerge_successWhenExistingValuesIsNull() throws Exception {  
+    public void testMerge_successWhenExistingValuesIsNull() throws Exception {
         List<ProductMeasureValue> updatedValues = new ArrayList<>();
         updatedValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
         updatedValues.add(new ProductMeasureValue(2L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()));
-    
+
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(null, updatedValues);
-        
+
         assertEquals(2, returnedValues.size());
         assertEquals(1L, returnedValues.get(0).getId());
         assertEquals(new Product(), returnedValues.get(0).getProduct());
@@ -73,29 +73,29 @@ public class ProductMeasureValueServiceImplTest {
         assertEquals(new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), returnedValues.get(1).getMeasure());
         assertEquals(new BigDecimal("200"), returnedValues.get(1).getValue());
     }
-    
+
     @Test
-    public void testMerge_successWhenUpdatedValuesIsNull() throws Exception {  
+    public void testMerge_successWhenUpdatedValuesIsNull() throws Exception {
         List<ProductMeasureValue> existingValues = new ArrayList<>();
         existingValues.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
-   
+
         List<ProductMeasureValue> returnedValues = productMeasureValueService.merge(existingValues, null);
-        
+
         assertEquals(0, returnedValues.size());
     }
-    
+
     @Test
     public void testProductMeasureValueService_classIsTransactional() throws Exception {
         Transactional transactional = productMeasureValueService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testProductMeasureValueService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = productMeasureValueService.getClass().getMethods();  
+        Method[] methods = productMeasureValueService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

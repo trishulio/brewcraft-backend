@@ -15,18 +15,18 @@ public class EnhancedBrewRepositoryImplTest {
     private EnhancedBrewRepository repo;
 
     private ProductRepository productRepositoryMock;
-    
+
     private BrewRepository brewRepositoryMock;
-    
+
     private AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorMock;
-    
+
     private AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-    	productRepositoryMock = mock(ProductRepository.class);
-    	brewRepositoryMock = mock(BrewRepository.class);
+        productRepositoryMock = mock(ProductRepository.class);
+        brewRepositoryMock = mock(BrewRepository.class);
         parentBrewAccessorMock = mock(AccessorRefresher.class);
         brewAccessorMock = mock(AccessorRefresher.class);
 
@@ -51,7 +51,7 @@ public class EnhancedBrewRepositoryImplTest {
 
         verify(parentBrewAccessorMock, times(1)).refreshAccessors(accessors);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsRefresherAccessor() {
         List<BrewAccessor> accessors = List.of(mock(BrewAccessor.class), mock(BrewAccessor.class));

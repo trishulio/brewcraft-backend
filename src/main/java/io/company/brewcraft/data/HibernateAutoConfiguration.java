@@ -27,27 +27,27 @@ import io.company.brewcraft.security.session.ContextHolder;
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, AuthConfiguration.class})
 @EnableTransactionManagement
 public class HibernateAutoConfiguration {
-    
+
     @Bean
     @ConditionalOnMissingBean(MultiTenantConnectionProvider.class)
     public MultiTenantConnectionProvider multiTenantConnectionProvider(TenantDataSourceManager tenantDataSourceManager, @Value("${app.config.data.admin.name}") String adminIdentifier) {
         MultiTenantConnectionProvider multiTenantConnectionProvider = new TenantConnectionProviderPool(tenantDataSourceManager, adminIdentifier);
         return multiTenantConnectionProvider;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(CurrentTenantIdentifierResolver.class)
     public CurrentTenantIdentifierResolver currentTenantIdentifierResolver(ContextHolder contextHolder) {
         CurrentTenantIdentifierResolver currentTenantIdentifierResolver = new TenantIdentifierResolver(contextHolder);
         return currentTenantIdentifierResolver;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(JpaVendorAdapter.class)
     public JpaVendorAdapter jpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(LocalContainerEntityManagerFactoryBean.class)
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaVendorAdapter jpaVendorAdapter, TenantDataSourceManager tenantDataSourceManager, MultiTenantConnectionProvider multiTenantConnectionProvider, CurrentTenantIdentifierResolver currentTenantIdentifierResolver) {
@@ -55,7 +55,7 @@ public class HibernateAutoConfiguration {
         entityManagerFactory.setDataSource(tenantDataSourceManager.getAdminDataSource());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPackagesToScan("io.company.brewcraft.model");
-        
+
         Map<String, Object> jpaProperties = new HashMap<>();
         jpaProperties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA.toString());
         jpaProperties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
@@ -65,12 +65,12 @@ public class HibernateAutoConfiguration {
         entityManagerFactory.setJpaPropertyMap(jpaProperties);
         return entityManagerFactory;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(PlatformTransactionManager.class)
     public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         PlatformTransactionManager transactionManager = new JpaTransactionManager(entityManagerFactory.getObject());
-        
+
         return transactionManager;
     }
 }

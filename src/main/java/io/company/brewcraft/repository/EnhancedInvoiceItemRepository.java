@@ -7,6 +7,6 @@ import io.company.brewcraft.service.InvoiceItemAccessor;
 
 public interface EnhancedInvoiceItemRepository {
     void refresh(Collection<InvoiceItem> items);
-    
+
     void refreshAccessors(Collection<? extends InvoiceItemAccessor> accessors);
 }

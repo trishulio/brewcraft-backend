@@ -12,7 +12,7 @@ public class MoneyService {
         Money total = null;
         if (moneySuppliers != null) {
             List<Money> monies = moneySuppliers.stream().filter(i -> i != null && i.getAmount() != null).map(i -> i.getAmount()).collect(Collectors.toList());
-            if (monies.size() > 0) {                
+            if (monies.size() > 0) {
                 total = Money.total(monies);
             }
         }

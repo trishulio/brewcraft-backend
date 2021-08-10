@@ -31,14 +31,14 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";
     public static final String FIELD_SUBCATEGORIES = "subcategories";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_category_generator")
     @SequenceGenerator(name = "material_category_generator", sequenceName = "material_category_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
     private MaterialCategory parentCategory;
@@ -46,18 +46,18 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     @OneToMany(mappedBy = "parentCategory")
     @JsonIgnore
     private Set<MaterialCategory> subcategories;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
-    
+
     public MaterialCategory() {
         super();
     }
@@ -105,7 +105,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     @Override
     public void setParentCategory(MaterialCategory parentCategory) {
         this.parentCategory = parentCategory;
-        
+
         if (parentCategory != null) {
             parentCategory.addSubcategory(this);
         }
@@ -121,7 +121,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
         if (subcategories != null) {
             subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
         }
-        
+
         if (this.getSubcategories() != null) {
             this.getSubcategories().clear();
             this.getSubcategories().addAll(subcategories);
@@ -129,21 +129,21 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
             this.subcategories = subcategories;
         }
     }
-    
+
     public void addSubcategory(MaterialCategory subcategory) {
         if (this.subcategories == null) {
             this.subcategories = new HashSet<>();
         }
-        
+
         if (subcategory.getParentCategory() != this) {
             subcategory.setParentCategory(this);
         }
-        
+
         if (!subcategories.contains(subcategory)) {
             this.subcategories.add(subcategory);
         }
     }
-    
+
     public void removeSubcategory(MaterialCategory subcategory) {
         if (this.subcategories != null) {
             subcategory.setParentCategory(null);
@@ -180,18 +180,18 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
     @JsonIgnore
     public MaterialCategory getRootCategory() {
         MaterialCategory root = this;
-        
+
         while (root.getParentCategory() != null) {
             root = root.getParentCategory();
         }
-        
-        return root;        
+
+        return root;
     }
-    
+
     /*
      * Returns all descendant category id's using iterative DFS
      */
@@ -199,21 +199,21 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     public Set<Long> getDescendantCategoryIds() {
         Set<Long> ids = new HashSet<>();
         Stack<MaterialCategory> stack = new Stack<MaterialCategory>();
-        
+
         if (this.getSubcategories() != null) {
             stack.addAll(this.getSubcategories());
         }
-        
+
         while (!stack.isEmpty()) {
             MaterialCategory category = stack.pop();
             ids.add(category.getId());
-            
+
             if (category.getSubcategories() != null) {
                 stack.addAll(category.getSubcategories());
             }
         }
-              
-        return ids;        
+
+        return ids;
     }
- 
+
 }

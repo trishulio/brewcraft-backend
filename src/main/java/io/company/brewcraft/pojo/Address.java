@@ -3,21 +3,21 @@ package io.company.brewcraft.pojo;
 import io.company.brewcraft.model.BaseModel;
 
 public class Address extends BaseModel {
-    
+
     private Long id;
-    
+
     private String addressLine1;
-    
+
     private String addressLine2;
-    
+
     private String country;
-    
+
     private String province;
-    
+
     private String city;
-    
+
     private String postalCode;
-    
+
     public Address() {
         super();
     }

@@ -21,7 +21,7 @@ public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     Product fromDto(ProductDto dto);
-    
+
     Product fromDto(Long id);
 
     @Mappings({
@@ -29,7 +29,7 @@ public interface ProductMapper {
         @Mapping(target = Product.ATTR_ID, ignore = true),
         @Mapping(target = Product.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = Product.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Product.ATTR_VERSION, ignore = true)        
+        @Mapping(target = Product.ATTR_VERSION, ignore = true)
     })
     Product fromDto(AddProductDto dto);
 
@@ -42,12 +42,12 @@ public interface ProductMapper {
     Product fromDto(UpdateProductDto dto);
 
     ProductDto toDto(Product product);
-    
+
     @BeforeMapping
     default void beforetoDto(@MappingTarget ProductDto productDto, Product product) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         ProductCategory category = product.getCategory();
-        
+
         if (category == null) {
             productDto.setProductClass(null);
         } else if (category.getParentCategory() == null) {
@@ -70,11 +70,11 @@ public interface ProductMapper {
             target.setCategory(null);
         }
     }
-    
+
     @AfterMapping
     default void afterFromDto(@MappingTarget Product product, ProductDto productDto) {
-        ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE; 
-        
+        ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
+
         CategoryDto categoryDto = null;
         if (productDto.getStyle() != null) {
             categoryDto = productDto.getStyle();
@@ -83,7 +83,7 @@ public interface ProductMapper {
         } else {
             categoryDto = productDto.getProductClass();
         }
-        
+
         product.setCategory(productCategoryMapper.fromDto(categoryDto));
     }
 }

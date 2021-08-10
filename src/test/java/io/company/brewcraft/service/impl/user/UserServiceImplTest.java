@@ -32,23 +32,22 @@ public class UserServiceImplTest {
 
     private UserServiceImpl service;
 
-
     @BeforeEach
     public void init() {
         mUserRepo = mock(UserRepository.class);
         doAnswer(inv -> inv.getArgument(0, User.class)).when(mUserRepo).saveAndFlush(any(User.class));
-        
+
         idpRepo = mock(IdpUserRepository.class);
 
         service = new UserServiceImpl(mUserRepo, idpRepo);
     }
-    
+
     @Test
     @Disabled(value = "TODO: Need to figure out a way to assert the spec behaviour based on the inputs")
     public void testGetusersCallsRepositoryWithACustomSpec_AndReturnsPageOfEntities() {
         fail("TODO: Need to figure out a way to assert the spec behaviour based on the inputs");
     }
-    
+
     @Test
     public void testGetUser_ReturnsUser_WhenUserExistInRepo() {
         User user = new User(
@@ -68,7 +67,7 @@ public class UserServiceImplTest {
             1
         );
         doReturn(Optional.of(user)).when(mUserRepo).findById(1L);
-        
+
         User expected = new User(
                 1L,
                 "USER_NAME",
@@ -87,14 +86,14 @@ public class UserServiceImplTest {
             );
         assertEquals(expected, service.getUser(1L));
     }
-    
+
     @Test
     public void testGetUser_ReturnsNull_WhenUserDoesNotExistInRepo() {
         doReturn(Optional.empty()).when(mUserRepo).findById(1L);
-        
+
         assertNull(service.getUser(1L));
     }
-    
+
     @Test
     public void testAddUser_AddUserInRepoAndIdRepo() {
         BaseUser<? extends BaseUserRole> user = new User(
@@ -115,7 +114,7 @@ public class UserServiceImplTest {
         );
 
         User added = service.addUser(user);
-        
+
         User expected = new User(
             null,
             "USER_NAME",
@@ -132,12 +131,12 @@ public class UserServiceImplTest {
             null,
             null
         );
-        
+
         assertEquals(expected, added);
-        
+
 //        verify(idpRepo, times(1)).createUser(expected);
     }
-    
+
     @Test
     public void testPutUser_UpdatesExistingUserInRepo_WhenUserExistInRepo() {
         User existing = new User(1L);
@@ -162,7 +161,7 @@ public class UserServiceImplTest {
         );
 
         User updated = service.putUser(1L, user);
-        
+
         User expected = new User(
             1L,
             null, // user-name update will make it out of sync from cognito.
@@ -180,10 +179,10 @@ public class UserServiceImplTest {
             1
         );
         assertEquals(expected, updated);
-        
+
         verifyNoInteractions(idpRepo);
     }
-    
+
     @Test
     public void testPutUser_UpdatesExistingWithNullValues_WhenPayloadContainsNullFields() {
         User existing = new User(1L);
@@ -208,7 +207,7 @@ public class UserServiceImplTest {
         );
 
         User updated = service.putUser(1L, user);
-        
+
         User expected = new User(
             1L,
             null, // user-name update will make it out of sync from cognito.
@@ -226,7 +225,7 @@ public class UserServiceImplTest {
             1
         );
         assertEquals(expected, updated);
-        
+
         verifyNoInteractions(idpRepo);
     }
 
@@ -252,7 +251,7 @@ public class UserServiceImplTest {
             );
 
             User added = service.putUser(1L, user);
-            
+
             User expected = new User(
                 1L,
                 "USER_NAME",
@@ -269,9 +268,9 @@ public class UserServiceImplTest {
                 null,
                 null
             );
-            
+
             assertEquals(expected, added);
-            
+
             verify(idpRepo, times(1)).createUser(expected);
     }
 
@@ -286,7 +285,7 @@ public class UserServiceImplTest {
 
         assertThrows(OptimisticLockException.class, () -> service.putUser(1L, user));
     }
-    
+
     @Test
     public void testPatchUser_PatchesUser_WhenUserExistInRepo() {
         User existing = new User(
@@ -326,7 +325,7 @@ public class UserServiceImplTest {
         );
 
         User updated = service.patchUser(1L, user);
-        
+
         User expected = new User(
             1L,
             "USER_NAME",
@@ -344,7 +343,7 @@ public class UserServiceImplTest {
             1
         );
         assertEquals(expected, updated);
-        
+
         verifyNoInteractions(idpRepo);
     }
 }

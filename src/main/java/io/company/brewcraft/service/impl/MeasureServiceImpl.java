@@ -17,21 +17,21 @@ import io.company.brewcraft.service.MeasureService;
 
 @Transactional
 public class MeasureServiceImpl extends BaseService implements MeasureService {
-        
+
     private MeasureRepository measureRepository;
-    
+
     public MeasureServiceImpl(MeasureRepository measureRepository) {
-        this.measureRepository = measureRepository;        
+        this.measureRepository = measureRepository;
     }
 
     @Override
     public Page<Measure> getMeasures(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-		Specification<Measure> spec = SpecificationBuilder
+        Specification<Measure> spec = SpecificationBuilder
                 .builder()
                 .in(Measure.FIELD_ID, ids)
                 .build();
         Page<Measure> measures = measureRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
-    	
+
         return measures;
     }
 }

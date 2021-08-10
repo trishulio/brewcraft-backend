@@ -10,11 +10,11 @@ import io.company.brewcraft.repository.user.EnhancedUserStatusRepository;
 public class EnhancedUserStatusRepositoryImpl implements EnhancedUserStatusRepository {
 
     private AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher;
-    
+
     public EnhancedUserStatusRepositoryImpl(AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher) {
         this.refresher = refresher;
     }
-    
+
     @Override
     public void refresh(Collection<UserStatus> statuses) {
         // No child entities, hence skipping.

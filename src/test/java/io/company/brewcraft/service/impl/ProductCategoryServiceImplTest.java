@@ -34,22 +34,22 @@ public class ProductCategoryServiceImplTest {
     private ProductCategoryService productCategoryService;
 
     private ProductCategoryRepository productCategoryRepositoryMock;
-    
+
     @BeforeEach
     public void init() {
         productCategoryRepositoryMock = mock(ProductCategoryRepository.class);
-        
+
         productCategoryService = new ProductCategoryServiceImpl(productCategoryRepositoryMock);
     }
 
     @Test
     public void testGetProductCategories_returnsProductCategories() throws Exception {
         ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(2L), Set.of(new ProductCategory(3L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-                
+
         List<ProductCategory> productCategoryEntities = Arrays.asList(productCategoryEntity);
-        
+
         Page<ProductCategory> expectedProductCategoryEntities = new PageImpl<>(productCategoryEntities);
-        
+
         ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
 
         when(productCategoryRepositoryMock.findAll(ArgumentMatchers.<Specification<ProductCategory>>any(), pageableArgument.capture())).thenReturn(expectedProductCategoryEntities);
@@ -61,7 +61,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
         assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
         assertEquals(1, actualProductCategorys.getNumberOfElements());
-        
+
         ProductCategory actualCategory = actualProductCategorys.get().findFirst().get();
 
         assertEquals(productCategoryEntity.getId(), actualCategory.getId());
@@ -71,9 +71,9 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), actualCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), actualCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), actualCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), actualCategory.getVersion());      
+        assertEquals(productCategoryEntity.getVersion(), actualCategory.getVersion());
     }
-    
+
     @Test
     public void testGetProductCategory_returnsProductCategory() throws Exception {
         Long id = 1L;
@@ -97,15 +97,15 @@ public class ProductCategoryServiceImplTest {
     @Test
     public void testAddProductCategory_SavesProductCategoryWhenNoParentCategoryIsPassed() throws Exception {
         ProductCategory newCategory = new ProductCategory(null, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
-        
+
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(productCategoryEntity);
 
         ProductCategory returnedCategory = productCategoryService.addCategory(null, newCategory);
-        
+
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
         assertEquals(newCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -115,7 +115,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(newCategory.getLastUpdated(), persistedCategoryCaptor.getValue().getLastUpdated());
         assertEquals(newCategory.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(newCategory.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(productCategoryEntity.getId(), returnedCategory.getId());
         assertEquals(productCategoryEntity.getName(), returnedCategory.getName());
@@ -124,9 +124,9 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), returnedCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), returnedCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion()); 
+        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion());
     }
-    
+
     @Test
     public void testAddProductCategory_setsParentCategoryWhenParentCategoryIsPassed() throws Exception {
         Long parentCategoryId = 2L;
@@ -134,17 +134,17 @@ public class ProductCategoryServiceImplTest {
         ProductCategory productCategoryParent = new ProductCategory();
 
         ProductCategory newCategory = new ProductCategory(null, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
 
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.of(productCategoryParent));
-        
+
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(productCategoryEntity);
 
         ProductCategory actualProductCategory = productCategoryService.addCategory(parentCategoryId, newCategory);
-        
+
         //Assert persisted entity
         assertEquals(newCategory.getId(), persistedCategoryCaptor.getValue().getId());
         assertEquals(newCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -154,7 +154,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(newCategory.getLastUpdated(), persistedCategoryCaptor.getValue().getLastUpdated());
         assertEquals(newCategory.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(newCategory.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(productCategoryEntity.getId(), actualProductCategory.getId());
         assertEquals(productCategoryEntity.getName(), actualProductCategory.getName());
@@ -163,15 +163,15 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), actualProductCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), actualProductCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), actualProductCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), actualProductCategory.getVersion()); 
+        assertEquals(productCategoryEntity.getVersion(), actualProductCategory.getVersion());
     }
-    
+
     @Test
     public void testAddProductCategory_throwsWhenParentCategoryDoesNotExist() throws Exception {
         Long parentCategoryId = 2L;
-        
+
         ProductCategory newCategory = new ProductCategory(null, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -179,7 +179,7 @@ public class ProductCategoryServiceImplTest {
             verify(productCategoryRepositoryMock, times(0)).saveAndFlush(Mockito.any(ProductCategory.class));
         });
     }
-    
+
     @Test
     public void testPutProductCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
@@ -192,7 +192,7 @@ public class ProductCategoryServiceImplTest {
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(productCategoryEntity);
 
         ProductCategory returnedCategory = productCategoryService.putCategory(null, id, putCategory);
-       
+
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
         assertEquals(putCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -202,7 +202,7 @@ public class ProductCategoryServiceImplTest {
         //assertEquals(null, persistedCategoryCaptor.getValue().getLastUpdated());
         //assertEquals(putCategory.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(putCategory.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(productCategoryEntity.getId(), returnedCategory.getId());
         assertEquals(productCategoryEntity.getName(), returnedCategory.getName());
@@ -211,9 +211,9 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), returnedCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), returnedCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion()); 
+        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion());
     }
-    
+
     @Test
     public void testPutProductCategory_setsParentCategoryIfExists() throws Exception {
         Long id = 1L;
@@ -224,15 +224,15 @@ public class ProductCategoryServiceImplTest {
         ProductCategory productCategoryEntity = new ProductCategory(1L, "testName", new ProductCategory(1L), Set.of(new ProductCategory(2L)), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
-        
+
         when(productCategoryRepositoryMock.findById(id)).thenReturn(Optional.of(productCategoryEntity));
-        
+
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.of(productCategoryParent));
 
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(productCategoryEntity);
 
         ProductCategory returnedCategory = productCategoryService.putCategory(parentCategoryId, id, putCategory);
-       
+
         //Assert persisted entity
         assertEquals(id, persistedCategoryCaptor.getValue().getId());
         assertEquals(putCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -242,7 +242,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(putCategory.getLastUpdated(), persistedCategoryCaptor.getValue().getLastUpdated());
         assertEquals(putCategory.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(putCategory.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(productCategoryEntity.getId(), returnedCategory.getId());
         assertEquals(productCategoryEntity.getName(), returnedCategory.getName());
@@ -251,16 +251,16 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), returnedCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), returnedCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion()); 
+        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion());
     }
-     
+
     @Test
     public void testPutProductCategory_throwsIfParentCategoryDoesNotExist() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
 
         ProductCategory putCategory = new ProductCategory(null, "testName", new ProductCategory(), Set.of(new ProductCategory()), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        
+
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
 
         assertThrows(EntityNotFoundException.class, () -> {
@@ -268,7 +268,7 @@ public class ProductCategoryServiceImplTest {
             verify(productCategoryRepositoryMock, times(0)).saveAndFlush(Mockito.any(ProductCategory.class));
         });
     }
-    
+
     @Test
     public void testPatchProductCategory_successIfNoParentCategoryPassed() throws Exception {
         Long id = 1L;
@@ -279,11 +279,11 @@ public class ProductCategoryServiceImplTest {
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
 
         when(productCategoryRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductCategoryEntity));
- 
+
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(persistedProductCategoryEntity);
 
         ProductCategory returnedCategory = productCategoryService.patchCategory(null, id, patchedCategory);
-       
+
         //Assert persisted entity
         assertEquals(existingProductCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
         assertEquals(patchedCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -293,7 +293,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(existingProductCategoryEntity.getLastUpdated(), persistedCategoryCaptor.getValue().getLastUpdated());
         assertEquals(existingProductCategoryEntity.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(existingProductCategoryEntity.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(persistedProductCategoryEntity.getId(), returnedCategory.getId());
         assertEquals(persistedProductCategoryEntity.getName(), returnedCategory.getName());
@@ -302,9 +302,9 @@ public class ProductCategoryServiceImplTest {
         assertEquals(persistedProductCategoryEntity.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(persistedProductCategoryEntity.getLastUpdated(), returnedCategory.getLastUpdated());
         assertEquals(persistedProductCategoryEntity.getCreatedAt(), returnedCategory.getCreatedAt());
-        assertEquals(persistedProductCategoryEntity.getVersion(), returnedCategory.getVersion()); 
+        assertEquals(persistedProductCategoryEntity.getVersion(), returnedCategory.getVersion());
     }
-    
+
     @Test
     public void testPatchProductCategory_setsParentCategoryIfExists() throws Exception {
         Long id = 1L;
@@ -317,13 +317,13 @@ public class ProductCategoryServiceImplTest {
         ArgumentCaptor<ProductCategory> persistedCategoryCaptor = ArgumentCaptor.forClass(ProductCategory.class);
 
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.of(parentCategoryEntity));
-        
+
         when(productCategoryRepositoryMock.findById(id)).thenReturn(Optional.of(existingCategoryEntity));
- 
+
         when(productCategoryRepositoryMock.saveAndFlush(persistedCategoryCaptor.capture())).thenReturn(productCategoryEntity);
 
         ProductCategory returnedCategory = productCategoryService.patchCategory(parentCategoryId, id, patchedCategory);
-       
+
         //Assert persisted entity
         assertEquals(existingCategoryEntity.getId(), persistedCategoryCaptor.getValue().getId());
         assertEquals(patchedCategory.getName(), persistedCategoryCaptor.getValue().getName());
@@ -333,7 +333,7 @@ public class ProductCategoryServiceImplTest {
         assertEquals(existingCategoryEntity.getLastUpdated(), persistedCategoryCaptor.getValue().getLastUpdated());
         assertEquals(existingCategoryEntity.getCreatedAt(), persistedCategoryCaptor.getValue().getCreatedAt());
         assertEquals(existingCategoryEntity.getVersion(), persistedCategoryCaptor.getValue().getVersion());
-        
+
         //Assert returned POJO
         assertEquals(productCategoryEntity.getId(), returnedCategory.getId());
         assertEquals(productCategoryEntity.getName(), returnedCategory.getName());
@@ -342,30 +342,30 @@ public class ProductCategoryServiceImplTest {
         assertEquals(productCategoryEntity.getSubcategories().stream().findFirst().get().getId(), returnedCategory.getSubcategories().stream().findFirst().get().getId());
         assertEquals(productCategoryEntity.getLastUpdated(), returnedCategory.getLastUpdated());
         assertEquals(productCategoryEntity.getCreatedAt(), returnedCategory.getCreatedAt());
-        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion()); 
+        assertEquals(productCategoryEntity.getVersion(), returnedCategory.getVersion());
     }
-    
+
     @Test
     public void testPatchProductCategory_throwsIfParentCategoryDoesNotExist() throws Exception {
         Long id = 1L;
         Long parentCategoryId = 2L;
         ProductCategory category = new ProductCategory();
-        
+
         when(productCategoryRepositoryMock.findById(parentCategoryId)).thenReturn(Optional.ofNullable(null));
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             productCategoryService.patchCategory(parentCategoryId, id, category);
             verify(productCategoryRepositoryMock, times(0)).saveAndFlush(Mockito.any(ProductCategory.class));
         });
     }
-    
+
     @Test
     public void testPatchProductCategory_throwsIfCategoryDoesNotExist() throws Exception {
         Long id = 1L;
         ProductCategory category = new ProductCategory();
-        
+
         when(productCategoryRepositoryMock.existsById(id)).thenReturn(false);
-      
+
         assertThrows(EntityNotFoundException.class, () -> {
             productCategoryService.patchCategory(null,id, category);
             verify(productCategoryRepositoryMock, times(0)).saveAndFlush(Mockito.any(ProductCategory.class));
@@ -376,30 +376,30 @@ public class ProductCategoryServiceImplTest {
     public void testDeleteProductCategory_success() throws Exception {
         Long id = 1L;
         productCategoryService.deleteCategory(id);
-        
+
         verify(productCategoryRepositoryMock, times(1)).deleteById(id);
     }
-    
+
     @Test
     public void testMProductCategoryExists_success() throws Exception {
         Long id = 1L;
         productCategoryService.categoryExists(id);
-        
+
         verify(productCategoryRepositoryMock, times(1)).existsById(id);
     }
-    
+
     @Test
     public void testProductCategoryService_classIsTransactional() throws Exception {
         Transactional transactional = productCategoryService.getClass().getAnnotation(Transactional.class);
-        
+
         assertNotNull(transactional);
         assertEquals(transactional.isolation(), Isolation.DEFAULT);
         assertEquals(transactional.propagation(), Propagation.REQUIRED);
     }
-    
+
     @Test
     public void testProductCategoryService_methodsAreNotTransactional() throws Exception {
-        Method[] methods = productCategoryService.getClass().getMethods();  
+        Method[] methods = productCategoryService.getClass().getMethods();
         for(Method method : methods) {
             assertFalse(method.isAnnotationPresent(Transactional.class));
         }

@@ -8,11 +8,11 @@ import io.company.brewcraft.model.BrewTask;
 
 @Mapper
 public interface BrewTaskMapper {
-	BrewTaskMapper INSTANCE = Mappers.getMapper(BrewTaskMapper.class);
+    BrewTaskMapper INSTANCE = Mappers.getMapper(BrewTaskMapper.class);
 
-	BrewTask fromDto(Long id);
+    BrewTask fromDto(Long id);
 
-	BrewTask fromDto(BrewTaskDto taskDto);
+    BrewTask fromDto(BrewTaskDto taskDto);
 
-	BrewTaskDto toDto(BrewTask task);
+    BrewTaskDto toDto(BrewTask task);
 }

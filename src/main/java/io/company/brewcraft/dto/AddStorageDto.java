@@ -6,17 +6,17 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.model.StorageType;
 
 public class AddStorageDto extends BaseDto {
-   
+
     @NotEmpty
     private String name;
-    
+
     @NotNull
     private StorageType type;
-        
+
     public AddStorageDto() {
         super();
     }
-    
+
     public AddStorageDto(String name, StorageType type) {
         super();
         this.name = name;

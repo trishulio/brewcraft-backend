@@ -23,19 +23,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class HibernateAutoConfigurationTest {
 
     private LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBeanMock;
-    
+
     private EntityManagerFactory entityManagerFactoryMock;
-    
-    private JpaVendorAdapter jpaVendorAdapterMock; 
-    
+
+    private JpaVendorAdapter jpaVendorAdapterMock;
+
     private TenantDataSourceManager tenantDataSourceManageMock;
-    
+
     private MultiTenantConnectionProvider multiTenantConnectionProviderMock;
-    
+
     private CurrentTenantIdentifierResolver currentTenantIdentifierResolverMock;
-    
+
     private DataSource dataSourceMock;
- 
+
     private HibernateAutoConfiguration hibernateAutoConfiguration;
 
     @BeforeEach
@@ -47,49 +47,49 @@ public class HibernateAutoConfigurationTest {
         multiTenantConnectionProviderMock = mock(TenantConnectionProviderPool.class);
         currentTenantIdentifierResolverMock = mock(TenantIdentifierResolver.class);
         dataSourceMock = mock(DataSource.class);
-      
+
         hibernateAutoConfiguration = new HibernateAutoConfiguration();
     }
 
     @Test
     public void testMultiTenantConnectionProvider_ReturnsInstanceOfTenantConnectionProvider() {
         MultiTenantConnectionProvider multiTenantConnectionProvider = hibernateAutoConfiguration.multiTenantConnectionProvider(null, null);
-        
+
         assertTrue(multiTenantConnectionProvider instanceof TenantConnectionProviderPool);
     }
 
     @Test
     public void testCurrentTenantIdentifierResolver_ReturnsTenantIdentifierResolver() {
         CurrentTenantIdentifierResolver currentTenantIdentifierResolver = hibernateAutoConfiguration.currentTenantIdentifierResolver(null);
-        
+
         assertTrue(currentTenantIdentifierResolver instanceof TenantIdentifierResolver);
     }
 
     @Test
     public void testPlatformTransactionManager_ReturnsJpaTransactionManager() {
         when(localContainerEntityManagerFactoryBeanMock.getObject()).thenReturn(entityManagerFactoryMock);
-        
+
         PlatformTransactionManager platformTransactionManager = hibernateAutoConfiguration.transactionManager(localContainerEntityManagerFactoryBeanMock);
-        
+
         assertTrue(platformTransactionManager instanceof JpaTransactionManager);
     }
-    
+
     @Test
-    public void testJpaVendorAdapter_ReturnsHibernateJpaVendorAdapter() {        
+    public void testJpaVendorAdapter_ReturnsHibernateJpaVendorAdapter() {
         JpaVendorAdapter jpaVendorAdapter = hibernateAutoConfiguration.jpaVendorAdapter();
-        
+
         assertTrue(jpaVendorAdapter instanceof HibernateJpaVendorAdapter);
     }
-    
+
     @Test
-    public void testLocalContainerEntityManagerFactoryBean() {    
+    public void testLocalContainerEntityManagerFactoryBean() {
         when(tenantDataSourceManageMock.getAdminDataSource()).thenReturn(dataSourceMock);
-        
+
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = hibernateAutoConfiguration.entityManagerFactory(jpaVendorAdapterMock, tenantDataSourceManageMock, multiTenantConnectionProviderMock, currentTenantIdentifierResolverMock);
 
         assertSame(dataSourceMock, localContainerEntityManagerFactoryBean.getDataSource());
         assertSame(jpaVendorAdapterMock, localContainerEntityManagerFactoryBean.getJpaVendorAdapter());
-        
+
         Map<String, Object> jpaPropertyMap = localContainerEntityManagerFactoryBean.getJpaPropertyMap();
         assertEquals(4, jpaPropertyMap.size());
         assertEquals(MultiTenancyStrategy.SCHEMA.toString(), jpaPropertyMap.get(Environment.MULTI_TENANT));

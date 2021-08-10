@@ -250,12 +250,12 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
             this.items = new ArrayList<>();
         }
 
-        if (item.getInvoice() != this) {            
+        if (item.getInvoice() != this) {
             item.setInvoice(this);
         }
-        
+
         if (!this.items.contains(item)) {
-            this.items.add(item);            
+            this.items.add(item);
         }
     }
 
@@ -265,11 +265,11 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
         }
 
         boolean removed = this.items.remove(item);
-        
-        if (removed) {            
+
+        if (removed) {
             item.setInvoice(null);
         }
-        
+
         return removed;
     }
 

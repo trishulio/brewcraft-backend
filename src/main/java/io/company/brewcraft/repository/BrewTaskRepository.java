@@ -14,7 +14,7 @@ public interface BrewTaskRepository extends JpaRepository<BrewTask, Long>, JpaSp
 
     @Query("select s from BREW_TASK s where s.name = :name")
     Optional<BrewTask> findByName(@Param("name") String name);
-    
+
     @Query("select s from BREW_TASK s where s.name in (:names)")
     Iterable<BrewTask> findByNames(@Param("names") Set<String> names);
 }

@@ -40,16 +40,16 @@ import io.company.brewcraft.util.validator.Validator;
 @RequestMapping(path = "/api/v1/brews", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class BrewController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(BrewController.class);
-    
+
     private BrewService brewService;
-    
+
     private BrewMapper brewMapper = BrewMapper.INSTANCE;
-        
+
     public BrewController(BrewService brewService, AttributeFilter filter) {
         super(filter);
         this.brewService = brewService;
     }
-    
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<BrewDto> getBrews(
             @RequestParam(required = false) Set<Long> ids,
@@ -65,22 +65,22 @@ public class BrewController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-        
+
         Page<Brew> brewPage = brewService.getBrews(ids, batchIds, names, productIds, stageTaskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
-        
+
         List<BrewDto> brewList = brewPage.stream()
                                          .map(brew -> brewMapper.toDto(brew))
                                          .collect(Collectors.toList());
 
         PageDto<BrewDto> dto = new PageDto<>(brewList, brewPage.getTotalPages(), brewPage.getTotalElements());
-        
+
         return dto;
     }
-        
+
     @GetMapping(value = "/{brewId}", consumes = MediaType.ALL_VALUE)
     public BrewDto getBrew(@PathVariable Long brewId) {
         Brew brew = brewService.getBrew(brewId);
-                
+
         Validator.assertion(brew != null, EntityNotFoundException.class, "Brew", brewId.toString());
 
         return brewMapper.toDto(brew);
@@ -90,27 +90,27 @@ public class BrewController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public BrewDto addBrew(@Valid @RequestBody AddBrewDto addBrewDto) {
         Brew brew = brewMapper.fromDto(addBrewDto);
-        
+
         Brew addedBrew = brewService.addBrew(brew);
-        
+
         return brewMapper.toDto(addedBrew);
     }
-    
+
     @PutMapping("/{brewId}")
     public BrewDto putBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.fromDto(updateBrewDto);
-        
+
         Brew putBrew = brewService.putBrew(brewId, brew);
 
         return brewMapper.toDto(putBrew);
     }
-    
+
     @PatchMapping("/{brewId}")
-    public BrewDto patchBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {        
+    public BrewDto patchBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.fromDto(updateBrewDto);
-        
+
         Brew patchedBrew = brewService.patchBrew(brewId, brew);
-        
+
         return brewMapper.toDto(patchedBrew);
     }
 

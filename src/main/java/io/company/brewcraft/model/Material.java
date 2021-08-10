@@ -31,29 +31,29 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_generator")
     @SequenceGenerator(name = "material_generator", sequenceName = "material_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "material_category_id", referencedColumnName = "id")
     private MaterialCategory category;
-    
+
     private String upc;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity baseQuantityUnit;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
@@ -65,7 +65,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
         this.id = id;
     }
 
-    public Material(Long id, String name, String description, MaterialCategory category, String upc, 
+    public Material(Long id, String name, String description, MaterialCategory category, String upc,
             Unit<?> baseQuantityUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -107,7 +107,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public MaterialCategory getCategory() {
         return category;
@@ -127,7 +127,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     public void setUPC(String upc) {
         this.upc = upc;
     }
-    
+
     @Override
     public Unit<?> getBaseQuantityUnit() {
         return QuantityUnitMapper.INSTANCE.fromEntity(this.baseQuantityUnit);
@@ -135,7 +135,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
 
     @Override
     public void setBaseQuantityUnit(Unit<?> baseQuantityUnit) {
-        this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);    
+        this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);
     }
 
     @Override

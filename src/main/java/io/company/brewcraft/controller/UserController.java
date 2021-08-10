@@ -72,7 +72,6 @@ public class UserController extends BaseController {
         return new PageDto<>(userList, userPage.getTotalPages(), userPage.getTotalElements());
     }
 
-
     @GetMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
     public UserDto getUser(@PathVariable Long userId) {
         User user = userService.getUser(userId);
@@ -95,14 +94,12 @@ public class UserController extends BaseController {
         return UserMapper.INSTANCE.toDto(updatedUser);
     }
 
-
     @PatchMapping("/{userId}")
     public UserDto patchUser(@PathVariable Long userId, @Valid @RequestBody @NotNull UpdateUserDto userDto) {
         User user = UserMapper.INSTANCE.fromDto(userDto);
         User patchedUser = userService.patchUser(userId, user);
         return UserMapper.INSTANCE.toDto(patchedUser);
     }
-
 
     @DeleteMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
     public void deleteUser(@PathVariable Long userId) {

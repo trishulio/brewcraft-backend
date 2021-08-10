@@ -21,9 +21,9 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     private static final Logger log = LoggerFactory.getLogger(TenantManagementServiceImpl.class);
 
     private TenantRepository tenantRepository;
-    
+
     private MigrationManager migrationManager;
-    
+
     private TenantMapper tenantMapper;
 
     public TenantManagementServiceImpl(TenantRepository tenantRepository, MigrationManager migrationManager, TenantMapper tenantMapper) {
@@ -32,19 +32,19 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         this.tenantMapper = tenantMapper;
     }
 
-    public List<TenantDto> getTenants() {    
+    public List<TenantDto> getTenants() {
         return tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).collect(Collectors.toList());
     }
-    
+
     public TenantDto getTenant(UUID id) {
         Tenant tenant = tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tenant", id.toString()));
-        
+
         return tenantMapper.tenantToTenantDto(tenant);
     }
 
     public UUID addTenant(TenantDto tenantDto) {
         Tenant tenant = tenantMapper.tenantDtoToTenant(tenantDto);
-        
+
         tenant = tenantRepository.saveAndFlush(tenant);
 
         String tenantId = tenant.getId().toString().replace("-", "_");
@@ -54,10 +54,10 @@ public class TenantManagementServiceImpl implements TenantManagementService {
             tenantRepository.deleteById(tenant.getId());
             throw new EntityNotFoundException(null, null);
         }
-        
-        return tenant.getId(); 
+
+        return tenant.getId();
     }
-    
+
     public void updateTenant(TenantDto tenantDto, UUID id) {
         Tenant tenantToUpdate = tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tenant", id.toString()));
         tenantToUpdate.setName(tenantDto.getName());
@@ -68,7 +68,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
 
     public void deleteTenant(UUID id) {
         tenantRepository.deleteById(id);
-        
+
 //        TODO
 //        migrationManager.demigrate()
     }

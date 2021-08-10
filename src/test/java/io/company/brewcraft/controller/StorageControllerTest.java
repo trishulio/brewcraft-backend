@@ -34,10 +34,10 @@
 //@AutoConfigureMockMvc(addFilters = false)
 //@ActiveProfiles("test")
 //public class StorageControllerTest {
-//    
+//
 //    @Autowired
 //    private MockMvc mockMvc;
-//    
+//
 //    @MockBean
 //    private ContextHolder contextHolderMock;
 //
@@ -53,9 +53,9 @@
 //       List<StorageEntity> storageList = new ArrayList<>();
 //       storageList.add(storage1);
 //       storageList.add(storage2);
-//       
+//
 //       Page<StorageEntity> pagedResponse = new PageImpl<>(storageList);
-//        
+//
 //       when(storageServiceMock.getAllStorages(0, 100, new HashSet<>(Arrays.asList("id")), true)).thenReturn(pagedResponse);
 //
 //       this.mockMvc.perform(get("/api/v1/facilities/storages").header("Authorization", "Bearer " + "test"))
@@ -111,10 +111,10 @@
 //                + " 'totalElements': 2,"
 //                + " 'totalPages': 1"
 //                + "}"));
-//        
+//
 //        verify(storageServiceMock, times(1)).getAllStorages(0, 100, new HashSet<>(Arrays.asList("id")), true);
 //    }
-//    
+//
 //    @Test
 //    public void testGetStorage_ReturnsStorage() throws Exception {
 //        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
@@ -147,16 +147,16 @@
 //                 + "        'type': 'General',"
 //                 + "        'version': 1"
 //                 + "    }"));
-//         
+//
 //         verify(storageServiceMock, times(1)).getStorage(1L);
 //    }
 //
 //    @Test
-//    public void testAddStorage_AddsStorage() throws Exception {        
+//    public void testAddStorage_AddsStorage() throws Exception {
 //        JSONObject payload = new JSONObject();
-//        payload.put("name", "testName"); 
+//        payload.put("name", "testName");
 //        payload.put("type", StorageType.GENERAL);
-//        
+//
 //        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
 //        StorageEntity storage = new StorageEntity(1L,facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 //
@@ -189,22 +189,22 @@
 //                 + "        'type': 'General',"
 //                 + "        'version': 1"
 //                 + "    }"));
-//        
+//
 //        verify(storageServiceMock, times(1)).addStorage(eq(1L), any(StorageEntity.class));
 //    }
-//    
+//
 //    @Test
-//    public void testPutStorage_putsStorage() throws Exception {       
+//    public void testPutStorage_putsStorage() throws Exception {
 //        JSONObject payload = new JSONObject();
-//        payload.put("name", "testName"); 
-//        payload.put("type", StorageType.GENERAL);        
+//        payload.put("name", "testName");
+//        payload.put("type", StorageType.GENERAL);
 //        payload.put("version", "1");
-//        
+//
 //        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
 //        StorageEntity storage = new StorageEntity(1L, facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 //
 //        when(storageServiceMock.putStorage(eq(1L), eq(1L), any(StorageEntity.class))).thenReturn(storage);
-//             
+//
 //        this.mockMvc.perform(put("/api/v1/facilities/1/storages/1")
 //         .contentType(MediaType.APPLICATION_JSON_VALUE)
 //         .content(payload.toString()))
@@ -232,16 +232,16 @@
 //                 + "        'type': 'General',"
 //                 + "        'version': 1"
 //                 + "    }"));
-//        
+//
 //        verify(storageServiceMock, times(1)).putStorage(eq(1L), eq(1L), any(StorageEntity.class));
 //    }
-//    
+//
 //    @Test
-//    public void testPatchStorage_patchesStorage() throws Exception {       
+//    public void testPatchStorage_patchesStorage() throws Exception {
 //        JSONObject payload = new JSONObject();
-//        payload.put("name", "testName"); 
+//        payload.put("name", "testName");
 //        payload.put("version", "1");
-//        
+//
 //        FacilityEntity facility = new FacilityEntity(1L, "testName", new FacilityAddressEntity(1L, "addressLine1", "addressLine2", "country", "province", "city", "postalCode", null, null), "6045555555", "6045555555", null, null, null, null, 1);
 //        StorageEntity storage = new StorageEntity(1L, facility, "testName", StorageType.GENERAL, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 //
@@ -274,15 +274,15 @@
 //                 + "        'type': 'General',"
 //                 + "        'version': 1"
 //                 + "    }", true));
-//        
+//
 //        verify(storageServiceMock, times(1)).patchStorage(eq(1L), any(StorageEntity.class));
 //    }
 //
 //    @Test
-//    public void testDeleteStorage_DeletesStorage() throws Exception {         
+//    public void testDeleteStorage_DeletesStorage() throws Exception {
 //        this.mockMvc.perform(delete("/api/v1/facilities/storages/1"))
 //         .andExpect(status().isOk());
-//         
+//
 //         verify(storageServiceMock, times(1)).deleteStorage(1L);
 //    }
 //}

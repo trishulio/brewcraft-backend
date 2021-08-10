@@ -6,6 +6,6 @@ public interface InvoiceStatusAccessor {
     final String ATTR_STATUS = "status";
 
     InvoiceStatus getStatus();
-    
+
     void setStatus(InvoiceStatus status);
 }

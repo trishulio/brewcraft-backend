@@ -28,15 +28,15 @@ public class ProductCategory extends BaseEntity {
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";
     public static final String FIELD_SUBCATEGORIES = "subcategories";
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_category_generator")
     @SequenceGenerator(name = "product_category_generator", sequenceName = "product_category_sequence", allocationSize = 1)
     private Long id;
-    
+
     @Column(name = "name", nullable = false)
     private String name;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
     private ProductCategory parentCategory;
@@ -44,18 +44,18 @@ public class ProductCategory extends BaseEntity {
     @OneToMany(mappedBy = "parentCategory")
     @JsonIgnore
     private Set<ProductCategory> subcategories;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
-    
+
     public ProductCategory() {
         super();
     }
@@ -98,7 +98,7 @@ public class ProductCategory extends BaseEntity {
 
     public void setParentCategory(ProductCategory parentCategory) {
         this.parentCategory = parentCategory;
-        
+
         if (parentCategory != null) {
             parentCategory.addSubcategory(this);
         }
@@ -112,7 +112,7 @@ public class ProductCategory extends BaseEntity {
         if (subcategories != null) {
             subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
         }
-        
+
         if (this.getSubcategories() != null) {
             this.getSubcategories().clear();
             this.getSubcategories().addAll(subcategories);
@@ -120,21 +120,21 @@ public class ProductCategory extends BaseEntity {
             this.subcategories = subcategories;
         }
     }
-    
-    public void addSubcategory(ProductCategory subcategory) {        
+
+    public void addSubcategory(ProductCategory subcategory) {
         if (this.subcategories == null) {
             this.subcategories = new HashSet<>();
         }
-        
+
         if (subcategory.getParentCategory() != this) {
             subcategory.setParentCategory(this);
         }
-        
+
         if (!subcategories.contains(subcategory)) {
             this.subcategories.add(subcategory);
         }
     }
-    
+
     public void removeSubcategory(ProductCategory subcategory) {
         if (this.subcategories != null) {
             subcategory.setParentCategory(null);
@@ -165,18 +165,18 @@ public class ProductCategory extends BaseEntity {
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
     @JsonIgnore
     public ProductCategory getRootCategory() {
         ProductCategory root = this;
-        
+
         while (root.getParentCategory() != null) {
             root = root.getParentCategory();
         }
-        
-        return root;        
+
+        return root;
     }
-    
+
     /*
      * Returns all descendant category id's using iterative DFS
      */
@@ -184,21 +184,21 @@ public class ProductCategory extends BaseEntity {
     public Set<Long> getDescendantCategoryIds() {
         Set<Long> ids = new HashSet<>();
         Stack<ProductCategory> stack = new Stack<ProductCategory>();
-        
+
         if (this.getSubcategories() != null) {
             stack.addAll(this.getSubcategories());
         }
-        
+
         while (!stack.isEmpty()) {
             ProductCategory category = stack.pop();
             ids.add(category.getId());
-            
+
             if (category.getSubcategories() != null) {
                 stack.addAll(category.getSubcategories());
             }
         }
-              
-        return ids;        
+
+        return ids;
     }
- 
+
 }

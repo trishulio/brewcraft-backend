@@ -41,7 +41,7 @@ public class InvoiceItemMapperTest {
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
             new Material(7L),
             LocalDateTime.of(1999, 1, 1, 1, 1),
-            LocalDateTime.of(1999, 1, 1, 1, 1), 
+            LocalDateTime.of(1999, 1, 1, 1, 1),
             1
         );
         InvoiceItemDto dto = mapper.toDto(item);
@@ -54,7 +54,7 @@ public class InvoiceItemMapperTest {
         assertEquals(new MaterialDto(7L), dto.getMaterial());
         assertEquals(1, dto.getVersion());
     }
-    
+
     @Test
     public void testToDto_ReturnsNull_WhenInvoiceItemIsNull() {
         assertNull(mapper.toDto(null));
@@ -71,7 +71,7 @@ public class InvoiceItemMapperTest {
             new MoneyDto("CAD", new BigDecimal("20")),
             new MaterialDto(7L),
             LocalDateTime.of(1999, 1, 1, 1, 1),
-            LocalDateTime.of(2000, 1, 1, 1, 1), 
+            LocalDateTime.of(2000, 1, 1, 1, 1),
             1
         );
         InvoiceItem item = mapper.fromDto(dto);
@@ -91,7 +91,7 @@ public class InvoiceItemMapperTest {
     public void testFromDto_ReturnsNull_WhenInvoiceItemDtoIsNull() {
         assertNull(mapper.fromDto((InvoiceItemDto) null));
     }
-    
+
     @Test
     public void testFromDto_ReturnsInvoice_WhenUpdateInvoiceItemIsNotNull() {
         UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(

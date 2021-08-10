@@ -15,11 +15,11 @@ public class EnhancedMixtureRepositoryImplTest {
     private EnhancedMixtureRepository repo;
 
     private MixtureRepository mixtureRepositoryMock;
-    
+
     private EquipmentRepository equipmentRepositoryMock;
-    
+
     private BrewStageRepository brewStageRepositoryMock;
-    
+
     private AccessorRefresher<Long, ParentMixtureAccessor, Mixture> parentMixtureAccessorMock;
 
     private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorMock;
@@ -27,9 +27,9 @@ public class EnhancedMixtureRepositoryImplTest {
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-    	mixtureRepositoryMock = mock(MixtureRepository.class);
-    	equipmentRepositoryMock = mock(EquipmentRepository.class);
-    	brewStageRepositoryMock = mock(BrewStageRepository.class);
+        mixtureRepositoryMock = mock(MixtureRepository.class);
+        equipmentRepositoryMock = mock(EquipmentRepository.class);
+        brewStageRepositoryMock = mock(BrewStageRepository.class);
         parentMixtureAccessorMock = mock(AccessorRefresher.class);
         mixtureAccessorMock = mock(AccessorRefresher.class);
 
@@ -55,7 +55,7 @@ public class EnhancedMixtureRepositoryImplTest {
 
         verify(parentMixtureAccessorMock, times(1)).refreshAccessors(accessors);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsRefresherAccessor() {
         List<MixtureAccessor> accessors = List.of(mock(MixtureAccessor.class), mock(MixtureAccessor.class));

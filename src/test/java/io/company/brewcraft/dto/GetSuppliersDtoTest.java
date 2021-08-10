@@ -9,27 +9,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GetSuppliersDtoTest {
-    
+
     private GetSuppliersDto getSuppliersDto;
 
     @BeforeEach
     public void init() {
         getSuppliersDto = new GetSuppliersDto();
     }
-    
+
     @Test
     public void testConstructor() {
         List<SupplierDto> supplierDtos = new ArrayList<>();
         Long totalItems = 10L;
         int totalPages = 2;
 
-
         GetSuppliersDto getSuppliersDto = new GetSuppliersDto(supplierDtos, totalItems, totalPages);
         assertSame(supplierDtos, getSuppliersDto.getSuppliers());
         assertSame(totalItems, getSuppliersDto.getTotalItems());
-        assertSame(totalPages, getSuppliersDto.getTotalPages());   
+        assertSame(totalPages, getSuppliersDto.getTotalPages());
     }
-
 
     @Test
     public void testGetSetSupplierDtos() {

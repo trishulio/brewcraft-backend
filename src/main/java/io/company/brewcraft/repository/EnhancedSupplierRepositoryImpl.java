@@ -6,9 +6,9 @@ import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.service.SupplierAccessor;
 
 public class EnhancedSupplierRepositoryImpl implements EnhancedSupplierRepository {
-    
+
     private AccessorRefresher<Long, SupplierAccessor, Supplier> refresher;
-    
+
     public EnhancedSupplierRepositoryImpl(AccessorRefresher<Long, SupplierAccessor, Supplier> refresher) {
         this.refresher = refresher;
     }

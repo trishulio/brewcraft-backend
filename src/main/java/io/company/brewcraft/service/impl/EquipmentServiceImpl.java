@@ -23,11 +23,11 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class EquipmentServiceImpl extends BaseService implements EquipmentService {
     private static final Logger log = LoggerFactory.getLogger(EquipmentServiceImpl.class);
-    
+
     private EquipmentRepository equipmentRepository;
-    
+
     private FacilityService facilityService;
-            
+
     public EquipmentServiceImpl(EquipmentRepository equipmentRepository, FacilityService facilityService) {
         this.equipmentRepository = equipmentRepository;
         this.facilityService = facilityService;
@@ -40,33 +40,33 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
 
         return equipmentPage;
     }
-    
+
     @Override
-    public Equipment getEquipment(Long equipmentId) {       
+    public Equipment getEquipment(Long equipmentId) {
         Equipment equipment = equipmentRepository.findById(equipmentId).orElse(null);
-       
+
         return equipment;
     }
 
     @Override
-    public Equipment addEquipment(Long facilityId, Equipment equipment) { 
+    public Equipment addEquipment(Long facilityId, Equipment equipment) {
         Facility facility = Optional.ofNullable(facilityService.getFacility(facilityId)).orElseThrow(() -> new EntityNotFoundException("Facility", facilityId.toString()));
         equipment.setFacility(facility);
-    
-        Equipment savedEntity = equipmentRepository.saveAndFlush(equipment); 
-            
+
+        Equipment savedEntity = equipmentRepository.saveAndFlush(equipment);
+
         return savedEntity;
     }
 
     @Override
-    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment updatedEquipment) { 
+    public Equipment putEquipment(Long facilityId, Long equipmentId, Equipment updatedEquipment) {
         updatedEquipment.setId(equipmentId);
-        
+
         return addEquipment(facilityId, updatedEquipment);
     }
-    
+
     @Override
-    public Equipment patchEquipment(Long equipmentId, Equipment updatedEquipment) {         
+    public Equipment patchEquipment(Long equipmentId, Equipment updatedEquipment) {
         Equipment existing = Optional.ofNullable(getEquipment(equipmentId)).orElseThrow(() -> new EntityNotFoundException("Equipment", equipmentId.toString()));
 
         updatedEquipment.copyToNullFields(existing);
@@ -76,12 +76,12 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
 
     @Override
     public void deleteEquipment(Long equipmentId) {
-        equipmentRepository.deleteById(equipmentId);        
-    } 
-    
+        equipmentRepository.deleteById(equipmentId);
+    }
+
     @Override
     public boolean equipmentExists(Long equipmentId) {
         return equipmentRepository.existsById(equipmentId);
     }
-    
+
 }

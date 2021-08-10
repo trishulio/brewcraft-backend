@@ -1,19 +1,19 @@
 package io.company.brewcraft.dto;
 
 public class UpdateMaterialDto extends BaseDto {
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private Long categoryId;
-        
+
     private String upc;
 
     private String baseQuantityUnit;
-    
+
     private Integer version;
-    
+
     public UpdateMaterialDto() {
         super();
     }

@@ -188,7 +188,7 @@ Response Body for: `/api/v1/breweries/:brewery_id`
 
 ```
 {
-    "id": "abc1234", 
+    "id": "abc1234",
     "name": "Brewery ABC",
     "created": "2020-08-10T06:32:23.0000+00",
     "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -218,7 +218,7 @@ Response Body for: `/api/v1/users/:user_id`
     "email": "john.doe@example.com",
     "last_updated": "2020-08-10T06:32:23.0000+00",
     "brewery": {
-        "id": "abc1234", 
+        "id": "abc1234",
         "name": "Brewery ABC",
         "created": "2020-08-10T06:32:23.0000+00",
         "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -233,7 +233,7 @@ Response Body for: `/api/v1/users/:user_id`
             "postal_code": "V1A 7H4",
             "po_box": "?"
         }
-    } 
+    }
 }
 ```
 
@@ -256,7 +256,7 @@ Response Body for: `/api/v1/inventory/materials/raw/:material_id`
         "expected_end_time": "",
         "recorded_end_date": "",
         "brewery": {
-            "id": "abc1234", 
+            "id": "abc1234",
             "name": "Brewery ABC",
             "created": "2020-08-10T06:32:23.0000+00",
             "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -316,7 +316,7 @@ Response Body for: `/api/v1/brews/:brew_id/`
     "expected_end_time": "2020-08-10T06:32:23.0000+00",
     "recorded_end_date": "2020-08-10T06:32:23.0000+00",
     "brewery": {
-        "id": "abc1234", 
+        "id": "abc1234",
         "name": "Brewery ABC",
         "created": "2020-08-10T06:32:23.0000+00",
         "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -358,7 +358,7 @@ Response Body for: `/api/v1/brews/:brew_id/logs/:log_id`
             "expected_end_time": "2020-08-10T06:32:23.0000+00",
             "recorded_end_date": "2020-08-10T06:32:23.0000+00",
             "brewery": {
-                "id": "abc1234", 
+                "id": "abc1234",
                 "name": "Brewery ABC",
                 "created": "2020-08-10T06:32:23.0000+00",
                 "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -413,7 +413,7 @@ Response Body for: `/api/v1/brews/:brew_id/logs/:log_id`
         "email": "john.doe@example.com",
         "last_updated": "2020-08-10T06:32:23.0000+00",
         "brewery": {
-            "id": "abc1234", 
+            "id": "abc1234",
             "name": "Brewery ABC",
             "created": "2020-08-10T06:32:23.0000+00",
             "last_updated": "2020-08-10T06:32:23.0000+00",
@@ -428,7 +428,7 @@ Response Body for: `/api/v1/brews/:brew_id/logs/:log_id`
                 "postal_code": "V1A 7H4",
                 "po_box": "?"
             }
-        } 
+        }
     }
 }
 ```

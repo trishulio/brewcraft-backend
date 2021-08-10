@@ -33,42 +33,42 @@ public class SupplierContact extends BaseEntity implements UpdateSupplierContact
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_contact_generator")
     @SequenceGenerator(name="supplier_contact_generator", sequenceName = "supplier_contact_sequence", allocationSize = 1)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name="supplier_id", referencedColumnName = "id", nullable=false)
     private Supplier supplier;
-    
+
     @Column(name = "first_name")
     private String firstName;
-    
+
     @Column(name = "last_name")
     private String lastName;
-    
+
     private String position;
-    
+
     private String email;
-    
+
     @Column(name = "phone_number")
     private String phoneNumber;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
     @Version
     private Integer version;
 
     public SupplierContact() {
     }
-    
+
     public SupplierContact(Long id) {
         setId(id);
     }
-    
+
     public SupplierContact(Long id, Supplier supplier, String firstName, String lastName, String position, String email,
             String phoneNumber, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
@@ -172,12 +172,12 @@ public class SupplierContact extends BaseEntity implements UpdateSupplierContact
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
+
     @Override
     public Integer getVersion() {
         return version;
     }
-    
+
     @Override
     public void setVersion(Integer version) {
         this.version = version;
