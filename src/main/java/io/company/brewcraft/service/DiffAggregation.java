@@ -11,6 +11,14 @@ import io.company.brewcraft.model.BaseModel;
 public class DiffAggregation extends BaseModel implements Aggregation {
     private Aggregation pathX, pathY;
     
+    public DiffAggregation(PathProvider pathX, PathProvider pathY) {
+        this(pathX.getPath(), pathY.getPath());
+    }
+
+    public DiffAggregation(String[] pathX, String[] pathY) {
+        this(new PathAggregation(pathX), new PathAggregation(pathY));
+    }
+    
     public DiffAggregation(Aggregation pathX, Aggregation pathY) {
         this.pathX = pathX;
         this.pathY = pathY;

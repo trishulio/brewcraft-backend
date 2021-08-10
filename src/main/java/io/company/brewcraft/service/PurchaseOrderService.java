@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,11 +23,12 @@ import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
+@Transactional
 public class PurchaseOrderService extends BaseService {
 
     private static final Logger log = LoggerFactory.getLogger(PurchaseOrderService.class);
 
-    private PurchaseOrderRepository repo;
+    private final PurchaseOrderRepository repo;
 
     public PurchaseOrderService(PurchaseOrderRepository repo) {
         this.repo = repo;
@@ -38,7 +41,7 @@ public class PurchaseOrderService extends BaseService {
     public boolean exists(Long id) {
         return this.repo.existsById(id);
     }
-    
+
     public Page<PurchaseOrder> getAllPurchaseOrders(
         Set<Long> ids,
         Set<Long> excludeIds,
@@ -49,23 +52,23 @@ public class PurchaseOrderService extends BaseService {
         int page,
         int size
     ) {
-        Specification<PurchaseOrder> spec = SpecificationBuilder.builder()
-                                                                .in(PurchaseOrder.FIELD_ID, ids)
-                                                                .not().in(PurchaseOrder.FIELD_ID, excludeIds)
-                                                                .in(PurchaseOrder.FIELD_ORDER_NUMBER, orderNumbers)
-                                                                .in(new String[] { PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
-                                                                .build();
-        
-        PageRequest pageRequest = pageRequest(sort, orderAscending, page, size);
-        Page<PurchaseOrder> orders = this.repo.findAll(spec, pageRequest);
-        
+        final Specification<PurchaseOrder> spec = SpecificationBuilder.builder()
+                                                                      .in(PurchaseOrder.FIELD_ID, ids)
+                                                                      .not().in(PurchaseOrder.FIELD_ID, excludeIds)
+                                                                      .in(PurchaseOrder.FIELD_ORDER_NUMBER, orderNumbers)
+                                                                      .in(new String[] { PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
+                                                                      .build();
+
+        final PageRequest pageRequest = pageRequest(sort, orderAscending, page, size);
+        final Page<PurchaseOrder> orders = this.repo.findAll(spec, pageRequest);
+
         return orders;
     }
 
     public PurchaseOrder getPurchaseOrder(Long id) {
         PurchaseOrder po = null;
 
-        Optional<PurchaseOrder> opt = this.repo.findById(id);
+        final Optional<PurchaseOrder> opt = this.repo.findById(id);
         if (opt.isPresent()) {
             po = opt.get();
         }
@@ -74,19 +77,19 @@ public class PurchaseOrderService extends BaseService {
     }
 
     public PurchaseOrder add(BasePurchaseOrder addition) {
-        PurchaseOrder order = new PurchaseOrder();
+        final PurchaseOrder order = new PurchaseOrder();
 
-        order.override(addition, getPropertyNames(BasePurchaseOrder.class));
+        order.override(addition, this.getPropertyNames(BasePurchaseOrder.class));
 
-        repo.refresh(List.of(order));
+        this.repo.refresh(List.of(order));
 
-        return repo.saveAndFlush(order);
+        return this.repo.saveAndFlush(order);
     }
-    
+
     public PurchaseOrder put(Long purchaseOrderId, UpdatePurchaseOrder update) {
         log.debug("Updating the PurchaseOrder with Id: {}", purchaseOrderId);
 
-        PurchaseOrder existing = getPurchaseOrder(purchaseOrderId);
+        PurchaseOrder existing = this.getPurchaseOrder(purchaseOrderId);
         Class<? super PurchaseOrder> purchaseOrderClz = BasePurchaseOrder.class;
 
         if (existing == null) {
@@ -97,31 +100,31 @@ public class PurchaseOrderService extends BaseService {
             purchaseOrderClz = UpdatePurchaseOrder.class;
         }
 
-        PurchaseOrder temp = new PurchaseOrder();
-        temp.override(update, getPropertyNames(purchaseOrderClz));
-        repo.refresh(List.of(temp));
+        final PurchaseOrder temp = new PurchaseOrder();
+        temp.override(update, this.getPropertyNames(purchaseOrderClz));
+        this.repo.refresh(List.of(temp));
 
-        existing.override(temp, getPropertyNames(purchaseOrderClz));
+        existing.override(temp, this.getPropertyNames(purchaseOrderClz));
 
-        return repo.saveAndFlush(existing);
+        return this.repo.saveAndFlush(existing);
     }
-    
+
     public PurchaseOrder patch(Long purchaseOrderId, UpdatePurchaseOrder patch) {
         log.debug("Performing Patch on PurchaseOrder with Id: {}", purchaseOrderId);
 
-        PurchaseOrder existing = repo.findById(purchaseOrderId).orElseThrow(() -> new EntityNotFoundException("PurchaseOrder", purchaseOrderId.toString()));
+        final PurchaseOrder existing = this.repo.findById(purchaseOrderId).orElseThrow(() -> new EntityNotFoundException("PurchaseOrder", purchaseOrderId.toString()));
         existing.optimisticLockCheck(patch);
 
-        PurchaseOrder temp = new PurchaseOrder(purchaseOrderId);
+        final PurchaseOrder temp = new PurchaseOrder(purchaseOrderId);
         temp.override(existing);
-        temp.outerJoin(patch, getPropertyNames(UpdatePurchaseOrder.class));
-        repo.refresh(List.of(temp));
+        temp.outerJoin(patch, this.getPropertyNames(UpdatePurchaseOrder.class));
+        this.repo.refresh(List.of(temp));
 
         existing.override(temp);
 
-        return repo.saveAndFlush(existing);
+        return this.repo.saveAndFlush(existing);
     }
-    
+
     public void delete(Set<Long> ids) {
         this.repo.deleteByIds(ids);
     }

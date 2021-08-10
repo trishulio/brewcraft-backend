@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
@@ -15,7 +16,6 @@ import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
@@ -44,8 +44,8 @@ import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
+import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
-import io.company.brewcraft.service.MaterialLotInventoryService;
 import io.company.brewcraft.service.MaterialPortionService;
 import io.company.brewcraft.service.MaterialPortionServiceImpl;
 import io.company.brewcraft.service.MaterialService;
@@ -95,21 +95,21 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(TenantManagementService.class)
     public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister) {
-        TenantManagementService tenantService = new TenantManagementServiceImpl(tenantRepository, migrationManager, TenantMapper.INSTANCE);
+        final TenantManagementService tenantService = new TenantManagementServiceImpl(tenantRepository, migrationManager, TenantMapper.INSTANCE);
         return tenantService;
     }
 
     @Bean
     @ConditionalOnMissingBean(SupplierService.class)
     public SupplierService supplierService(SupplierRepository supplierRepository) {
-        SupplierService supplierService = new SupplierServiceImpl(supplierRepository);
+        final SupplierService supplierService = new SupplierServiceImpl(supplierRepository);
         return supplierService;
     }
 
     @Bean
     @ConditionalOnMissingBean(SupplierContactService.class)
     public SupplierContactService supplierContactService(SupplierContactRepository supplierContactRepository, SupplierService supplierService) {
-        SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository, supplierService);
+        final SupplierContactService supplierContactService = new SupplierContactServiceImpl(supplierContactRepository, supplierService);
         return supplierContactService;
     }
 
@@ -145,49 +145,49 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(FacilityService.class)
     public FacilityService facilityService(FacilityRepository facilityRepository) {
-        FacilityService facilityService = new FacilityServiceImpl(facilityRepository);
+        final FacilityService facilityService = new FacilityServiceImpl(facilityRepository);
         return facilityService;
     }
 
     @Bean
     @ConditionalOnMissingBean(EquipmentService.class)
     public EquipmentService equipmentService(EquipmentRepository equipmentRepository, FacilityService facilityService) {
-        EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityService);
+        final EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityService);
         return equipmentService;
     }
 
     @Bean
     @ConditionalOnMissingBean(StorageService.class)
     public StorageService storageService(StorageRepository storageRepository, FacilityService facilityService) {
-        StorageService storageService = new StorageServiceImpl(storageRepository, facilityService);
+        final StorageService storageService = new StorageServiceImpl(storageRepository, facilityService);
         return storageService;
     }
 
     @Bean
     @ConditionalOnMissingBean(MaterialService.class)
     public MaterialService materialService(MaterialRepository materialRepository, MaterialCategoryService materialCategoryService, QuantityUnitService quantityUnitService) {
-        MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
+        final MaterialService materialService = new MaterialServiceImpl(materialRepository, materialCategoryService, quantityUnitService);
         return materialService;
     }
 
     @Bean
     @ConditionalOnMissingBean(MaterialCategoryService.class)
     public MaterialCategoryService materialCategoryService(MaterialCategoryRepository materialCategoryRepository) {
-        MaterialCategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
+        final MaterialCategoryService materialCategoryService = new MaterialCategoryServiceImpl(materialCategoryRepository);
         return materialCategoryService;
     }
 
     @Bean
     @ConditionalOnMissingBean(QuantityUnitService.class)
     public QuantityUnitService quantityUnitService(QuantityUnitRepository quantityUnitRepository) {
-        QuantityUnitService quantityUnitService = new QuantityUnitServiceImpl(quantityUnitRepository);
+        final QuantityUnitService quantityUnitService = new QuantityUnitServiceImpl(quantityUnitRepository);
         return quantityUnitService;
     }
 
     @Bean
     @ConditionalOnMissingBean(ShipmentService.class)
     public ShipmentService shipmentService(ShipmentRepository repo, MaterialLotService itemService) {
-        ShipmentService shipmentService = new ShipmentService(repo, itemService);
+        final ShipmentService shipmentService = new ShipmentService(repo, itemService);
 
         return shipmentService;
     }
@@ -195,7 +195,7 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MaterialLotService.class)
     public MaterialLotService materialLotService(UtilityProvider utilProvider) {
-        MaterialLotService itemService = new MaterialLotService(utilProvider);
+        final MaterialLotService itemService = new MaterialLotService(utilProvider);
 
         return itemService;
     }
@@ -209,28 +209,28 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(ProductService.class)
     public ProductService productService(ProductRepository productRepository, ProductCategoryService productCategoryService, ProductMeasureValueService productMeasureValueService, MeasureService productMeasureService) {
-        ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
+        final ProductService productService = new ProductServiceImpl(productRepository, productCategoryService, productMeasureValueService, productMeasureService);
         return productService;
     }
 
     @Bean
     @ConditionalOnMissingBean(ProductCategoryService.class)
     public ProductCategoryService productCategoryService(ProductCategoryRepository productCategoryRepository) {
-        ProductCategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
+        final ProductCategoryService productCategoryService = new ProductCategoryServiceImpl(productCategoryRepository);
         return productCategoryService;
     }
 
     @Bean
     @ConditionalOnMissingBean(MeasureService.class)
     public MeasureService measureService(MeasureRepository measureRepository) {
-        MeasureService measureService = new MeasureServiceImpl(measureRepository);
+        final MeasureService measureService = new MeasureServiceImpl(measureRepository);
         return measureService;
     }
 
     @Bean
     @ConditionalOnMissingBean(ProductMeasureValueService.class)
     public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
-        ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
+        final ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
         return productMeasureValueService;
     }
 
@@ -246,59 +246,59 @@ public class ServiceAutoConfiguration {
     public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
         return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
     }
-    
+
     @Bean
-    @ConditionalOnMissingBean(MaterialLotInventoryService.class)
-    public MaterialLotInventoryService lotInventoryService(MaterialLotAggregationRepository lotAggrRepo) {
-        return new MaterialLotInventoryService(lotAggrRepo);
+    @ConditionalOnMissingBean(LotAggregationService.class)
+    public LotAggregationService lotInventoryService(AggregationRepository aggrRepo) {
+        return new LotAggregationService(aggrRepo);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(BrewService.class)
     public BrewService brewService(BrewRepository brewRepository) {
-        BrewService brewService = new BrewServiceImpl(brewRepository);
+        final BrewService brewService = new BrewServiceImpl(brewRepository);
         return brewService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(BrewTaskService.class)
     public BrewTaskService brewTaskService(BrewTaskRepository brewTaskRepository) {
-        BrewTaskService brewTaskService = new BrewTaskServiceImpl(brewTaskRepository);
+        final BrewTaskService brewTaskService = new BrewTaskServiceImpl(brewTaskRepository);
         return brewTaskService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(BrewStageService.class)
     public BrewStageService brewStageService(BrewStageRepository brewStageRepository) {
-        BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository);
+        final BrewStageService brewStageService = new BrewStageServiceImpl(brewStageRepository);
         return brewStageService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(BrewStageStatusService.class)
     public BrewStageStatusService brewStageStatusService(BrewStageStatusRepository brewStageStatusRepository) {
-        BrewStageStatusService brewStageStatusService = new BrewStageStatusServiceImpl(brewStageStatusRepository);
+        final BrewStageStatusService brewStageStatusService = new BrewStageStatusServiceImpl(brewStageStatusRepository);
         return brewStageStatusService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(MixtureService.class)
     public MixtureService mixtureService(MixtureRepository mixtureRepository) {
-    	MixtureService mixtureService = new MixtureServiceImpl(mixtureRepository);
+    	final MixtureService mixtureService = new MixtureServiceImpl(mixtureRepository);
         return mixtureService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(MaterialPortionService.class)
     public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository) {
-    	MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
+    	final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
         return materialPortionService;
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
     public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
-    	MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
+    	final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
         return mixtureRecordingService;
     }
 }

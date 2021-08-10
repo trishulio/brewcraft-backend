@@ -21,7 +21,6 @@ public interface MaterialLotMapper {
         @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_MATERIAL, source = "materialId"),
         @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, source = "invoiceItemId"),
         @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
     })
@@ -32,7 +31,6 @@ public interface MaterialLotMapper {
         @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_MATERIAL, source = "materialId"),
         @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, source = "invoiceItemId"),
         @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId"),
         @Mapping(target = MaterialLot.ATTR_VERSION, ignore = true)

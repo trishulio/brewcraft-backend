@@ -3,17 +3,15 @@ package io.company.brewcraft.dto;
 public class AddMaterialLotDto extends BaseDto {
     private String lotNumber;
     private QuantityDto qty;
-    private Long materialId;
     private Long invoiceItemId;
     private Long storageId;
 
     public AddMaterialLotDto() {
     }
 
-    public AddMaterialLotDto(String lotNumber, QuantityDto qty, Long materialId, Long invoiceItemId, Long storageId) {
+    public AddMaterialLotDto(String lotNumber, QuantityDto qty, Long invoiceItemId, Long storageId) {
         setLotNumber(lotNumber);
         setQuantity(qty);
-        setMaterialId(materialId);
         setInvoiceItemId(invoiceItemId);
         setStorageId(storageId);
     }
@@ -32,14 +30,6 @@ public class AddMaterialLotDto extends BaseDto {
 
     public void setQuantity(QuantityDto qty) {
         this.qty = qty;
-    }
-
-    public Long getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Long materialId) {
-        this.materialId = materialId;
     }
     
     public Long getInvoiceItemId() {

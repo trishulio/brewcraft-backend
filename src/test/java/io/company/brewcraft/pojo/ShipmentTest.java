@@ -31,7 +31,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new Material(1L), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         shipment = new Shipment(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
@@ -59,7 +59,6 @@ public class ShipmentTest {
         assertEquals(1L, lot.getId());
         assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
         assertEquals(shipment, lot.getShipment());
-        assertEquals(new Material(1L), lot.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());
         assertEquals(1, lot.getVersion());
@@ -79,7 +78,6 @@ public class ShipmentTest {
 
         MaterialLot expectedLot = new MaterialLot();
         expectedLot.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
-        expectedLot.setMaterial(new Material(1L));
         expectedLot.setInvoiceItem(item);
         expectedLot.setShipment(shipment);
 

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.repository.AggregationRepository;
-import io.company.brewcraft.repository.MaterialLotAggregationRepository;
 
 public class RepositoryConfigurationTest {
 
@@ -26,13 +25,5 @@ public class RepositoryConfigurationTest {
         AggregationRepository repo = repoConf.aggrRepo(mEm);
 
         assertSame(AggregationRepository.class, repo.getClass());
-    }
-
-    @Test
-    public void testLotAggrRepo_ReturnsInstanceOfMaterialLotAggregationRepository() {
-        AggregationRepository mAggrRepo = mock(AggregationRepository.class);
-        MaterialLotAggregationRepository repo = repoConf.lotAggrRepo(mAggrRepo);
-
-        assertSame(MaterialLotAggregationRepository.class, repo.getClass());
     }
 }

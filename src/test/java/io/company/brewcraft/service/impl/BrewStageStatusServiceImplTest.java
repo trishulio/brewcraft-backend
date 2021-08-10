@@ -14,15 +14,12 @@ import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BrewStageStatus;
-import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.service.BrewStageStatusService;
 import io.company.brewcraft.service.BrewStageStatusServiceImpl;

@@ -4,7 +4,6 @@ public class UpdateMaterialLotDto extends BaseDto {
     private Long id;
     private String lotNumber;
     private QuantityDto qty;
-    private Long materialId;
     private Long invoiceItemId;
     private Long storageId;
     private Integer version;
@@ -16,11 +15,10 @@ public class UpdateMaterialLotDto extends BaseDto {
         setId(id);
     }
 
-    public UpdateMaterialLotDto(Long id, String lotNumber, QuantityDto qty, Long materialId, Long invoiceItemId, Long storageId, Integer version) {
+    public UpdateMaterialLotDto(Long id, String lotNumber, QuantityDto qty, Long invoiceItemId, Long storageId, Integer version) {
         this(id);
         setLotNumber(lotNumber);
         setQuantity(qty);
-        setMaterialId(materialId);
         setInvoiceItemId(invoiceItemId);
         setStorageId(storageId);
         setVersion(version);
@@ -48,14 +46,6 @@ public class UpdateMaterialLotDto extends BaseDto {
 
     public void setQuantity(QuantityDto qty) {
         this.qty = qty;
-    }
-
-    public Long getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Long materialId) {
-        this.materialId = materialId;
     }
 
     public Long getInvoiceItemId() {
