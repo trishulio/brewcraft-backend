@@ -289,8 +289,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(MaterialPortionService.class)
-    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository) {
-        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
+    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository, LotAggregationService lotAggregationService) {
+        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository, lotAggregationService);
         return materialPortionService;
     }
 

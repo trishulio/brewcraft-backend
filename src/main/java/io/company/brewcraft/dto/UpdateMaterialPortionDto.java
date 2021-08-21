@@ -2,41 +2,25 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-public class MaterialPortionDto extends BaseDto {
+public class UpdateMaterialPortionDto extends BaseDto {
 
-    private Long id;
-    
     private Long mixtureId;
-
-    private MaterialLotDto materialLot;
+    
+    private Long materialLotId;
 
     private QuantityDto quantity;
     
     private LocalDateTime addedAt;
+    
+    private Integer version;
 
-    public MaterialPortionDto() {
+    public UpdateMaterialPortionDto(Long mixtureId, Long materialLotId, QuantityDto quantity, LocalDateTime addedAt, Integer version) {
         super();
-    }
-
-    public MaterialPortionDto(Long id) {
-        this();
-        this.id = id;
-    }
-
-    public MaterialPortionDto(Long id, Long mixtureId, MaterialLotDto materialLot, QuantityDto quantity, LocalDateTime addedAt) {
-        this(id);
         this.mixtureId = mixtureId;
-        this.materialLot = materialLot;
+        this.materialLotId = materialLotId;
         this.quantity = quantity;
         this.addedAt = addedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.version = version;
     }
     
     public Long getMixtureId() {
@@ -47,12 +31,12 @@ public class MaterialPortionDto extends BaseDto {
         this.mixtureId = mixtureId;
     }
 
-    public MaterialLotDto getMaterialLot() {
-        return materialLot;
+    public Long getMaterialLotId() {
+        return materialLotId;
     }
 
-    public void setMaterialLot(MaterialLotDto materialLot) {
-        this.materialLot = materialLot;
+    public void setMaterialLotId(Long materialLotId) {
+        this.materialLotId = materialLotId;
     }
 
     public QuantityDto getQuantity() {
@@ -70,4 +54,13 @@ public class MaterialPortionDto extends BaseDto {
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
+    
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
 }

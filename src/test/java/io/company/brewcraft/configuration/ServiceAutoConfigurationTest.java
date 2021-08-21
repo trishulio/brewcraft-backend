@@ -275,7 +275,8 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
         final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
-        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock);
+        final LotAggregationService lotAggregationServiceMock = mock(LotAggregationService.class);
+        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock, lotAggregationServiceMock);
 
         assertTrue(service instanceof MaterialPortionServiceImpl);
     }

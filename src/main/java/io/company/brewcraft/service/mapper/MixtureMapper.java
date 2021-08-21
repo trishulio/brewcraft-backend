@@ -10,7 +10,7 @@ import io.company.brewcraft.dto.UpdateMixtureDto;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.Mixture;
 
-@Mapper(uses = { EquipmentMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MaterialPortionMapper.class, MoneyMapper.class, BrewStageMapper.class, MaterialPortionMapper.class, MixtureRecordingMapper.class})
+@Mapper(uses = { EquipmentMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, BrewStageMapper.class})
 public interface MixtureMapper {
 
     MixtureMapper INSTANCE = Mappers.getMapper(MixtureMapper.class);

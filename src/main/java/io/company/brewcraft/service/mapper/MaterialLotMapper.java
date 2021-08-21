@@ -14,6 +14,8 @@ import io.company.brewcraft.model.MaterialLot;
 public interface MaterialLotMapper {
 
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
+    
+    MaterialLot fromDto(Long id);
 
     MaterialLotDto toDto(MaterialLot lot);
 

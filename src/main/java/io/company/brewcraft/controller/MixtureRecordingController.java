@@ -76,8 +76,8 @@ public class MixtureRecordingController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public MixtureRecordingDto addMixtureRecording(@Valid @RequestBody AddMixtureRecordingDto addBrewDto) {
-        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addBrewDto);
+    public MixtureRecordingDto addMixtureRecording(@Valid @RequestBody AddMixtureRecordingDto addMixtureRecordingDto) {
+        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addMixtureRecordingDto);
 
         MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
 
