@@ -77,7 +77,7 @@ public class MaterialPortionController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<MaterialPortionDto> addMMaterialPortion(@Valid @RequestBody List<AddMaterialPortionDto> addMaterialPortionDtos) {
+    public List<MaterialPortionDto> addMMaterialPortions(@Valid @RequestBody List<AddMaterialPortionDto> addMaterialPortionDtos) {
         List<MaterialPortion> materialPortions = addMaterialPortionDtos.stream()
                                                                        .map(dto -> materialPortionMapper.fromDto(dto))
                                                                        .collect(Collectors.toList());
