@@ -6,13 +6,15 @@ public class MaterialPortionDto extends BaseDto {
 
     private Long id;
     
-    private Long mixtureId;
-
     private MaterialLotDto materialLot;
 
     private QuantityDto quantity;
     
+    private Long mixtureId;
+    
     private LocalDateTime addedAt;
+    
+    private Integer version;
 
     public MaterialPortionDto() {
         super();
@@ -23,12 +25,13 @@ public class MaterialPortionDto extends BaseDto {
         this.id = id;
     }
 
-    public MaterialPortionDto(Long id, Long mixtureId, MaterialLotDto materialLot, QuantityDto quantity, LocalDateTime addedAt) {
+    public MaterialPortionDto(Long id, MaterialLotDto materialLot, QuantityDto quantity, Long mixtureId, LocalDateTime addedAt, Integer version) {
         this(id);
-        this.mixtureId = mixtureId;
         this.materialLot = materialLot;
         this.quantity = quantity;
+        this.mixtureId = mixtureId;
         this.addedAt = addedAt;
+        this.version = version;
     }
 
     public Long getId() {
@@ -37,14 +40,6 @@ public class MaterialPortionDto extends BaseDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-    
-    public Long getMixtureId() {
-        return mixtureId;
-    }
-
-    public void setMixtureId(Long mixtureId) {
-        this.mixtureId = mixtureId;
     }
 
     public MaterialLotDto getMaterialLot() {
@@ -58,6 +53,14 @@ public class MaterialPortionDto extends BaseDto {
     public QuantityDto getQuantity() {
         return quantity;
     }
+    
+    public Long getMixtureId() {
+        return mixtureId;
+    }
+
+    public void setMixtureId(Long mixtureId) {
+        this.mixtureId = mixtureId;
+    }
 
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
@@ -69,5 +72,13 @@ public class MaterialPortionDto extends BaseDto {
 
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
+    }
+    
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

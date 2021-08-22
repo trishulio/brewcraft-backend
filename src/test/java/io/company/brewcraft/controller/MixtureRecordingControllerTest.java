@@ -97,7 +97,7 @@ public class MixtureRecordingControllerTest {
 
         List<MixtureRecordingDto> mixtureRecordingDtos = mixtureRecordingController.addMixtureRecordings(List.of(addMixtureRecordingDto));
 
-        // Assert returned mixture recording
+        assertEquals(1, mixtureRecordingDtos.size());
         assertEquals(1L, mixtureRecordingDtos.get(0).getId());
         assertEquals(new MeasureDto(1L), mixtureRecordingDtos.get(0).getMeasure());
         assertEquals(new BigDecimal("100"), mixtureRecordingDtos.get(0).getValue());

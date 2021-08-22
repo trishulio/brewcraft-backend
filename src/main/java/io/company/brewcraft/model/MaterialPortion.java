@@ -76,7 +76,7 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
         setId(id);
     }
 
-    public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture, LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+    public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture, LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setMaterialLot(materialLot);
         setQuantity(quantity);
