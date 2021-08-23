@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import static io.company.brewcraft.repository.RepositoryUtil.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -213,7 +214,10 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
                 
                 Quantity<?> availableQuantity = stockLot.getQuantity();
                 
-                if (QuantityCalculator.subtract(availableQuantity, requestedQuantity).getValue().doubleValue() >= 0) {
+                BigDecimal remainingQuantityValue = new BigDecimal(QuantityCalculator.subtract(availableQuantity, requestedQuantity).getValue().toString());
+                
+                //Requested quantity is only available if remaining quantity is >= 0
+                if (remainingQuantityValue.compareTo(BigDecimal.ZERO) == 0 || remainingQuantityValue.compareTo(BigDecimal.ZERO) > 0) {
                     result.put(stockLot.getId(), true);
                 }
             });
