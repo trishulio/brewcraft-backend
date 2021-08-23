@@ -112,8 +112,7 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
             Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
             
             if (!lotIdsWithUnavailableQuantity.isEmpty()) {
-                Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                throw new MaterialLotQuantityNotAvailableException(lotIds);
+                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
             }    
         } else {
             existingMaterialPortion.optimisticLockCheck(putMaterialPortion);
