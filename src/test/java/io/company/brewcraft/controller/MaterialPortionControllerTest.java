@@ -120,7 +120,7 @@ public class MaterialPortionControllerTest {
 
         doReturn(materialPortion).when(materialPortionService).putMaterialPortion(eq(1L), putMaterialPortionCaptor.capture());
 
-        MaterialPortionDto materialPortionDto = materialPortionController.putMaterialPortion(updateMaterialPortionDto, 1L);
+        MaterialPortionDto materialPortionDto = materialPortionController.putMaterialPortion(1L, updateMaterialPortionDto);
 
         // Assert put material portion
         assertEquals(null, putMaterialPortionCaptor.getValue().getId());
@@ -151,7 +151,7 @@ public class MaterialPortionControllerTest {
 
         doReturn(materialPortion).when(materialPortionService).patchMaterialPortion(eq(1L), patchMaterialPortionCaptor.capture());
 
-        MaterialPortionDto materialPortionDto = materialPortionController.patchMaterialPortion(updateMaterialPortionDto, 1L);
+        MaterialPortionDto materialPortionDto = materialPortionController.patchMaterialPortion(1L, updateMaterialPortionDto);
 
         // Assert patch material portion
         assertEquals(null, patchMaterialPortionCaptor.getValue().getId());

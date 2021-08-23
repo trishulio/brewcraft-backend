@@ -77,9 +77,10 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
         Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(MaterialPortion::getId, MaterialPortion::getQuantity));
         Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(lotToQuantity);
         
-        if (quantityCheckresult.containsValue(false)) {
-            Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-            throw new MaterialLotQuantityNotAvailableException(lotIds);
+        Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+        
+        if (!lotIdsWithUnavailableQuantity.isEmpty()) {
+            throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
         }
 
         List<MaterialPortion> addedMaterialPortions = materialPortionRepository.saveAll(materialPortions);
@@ -107,7 +108,9 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
             
             Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), existingMaterialPortion.getQuantity()));
             
-            if (quantityCheckresult.containsValue(false)) {
+            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+            
+            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
                 Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
                 throw new MaterialLotQuantityNotAvailableException(lotIds);
             }    
@@ -121,16 +124,18 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
                 
                 Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), patchedQuantityDelta));
                 
-                if (patchedQuantityDelta.getValue().doubleValue() > 0 && quantityCheckresult.containsValue(false)) {
-                    Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                    throw new MaterialLotQuantityNotAvailableException(lotIds);
+                Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+                
+                if (patchedQuantityDelta.getValue().doubleValue() > 0 && !lotIdsWithUnavailableQuantity.isEmpty()) {
+                    throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
                 }
             } else {  
                 Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(putMaterialPortion.getMaterialLot().getId(), putMaterialPortion.getQuantity()));
                 
-                if (quantityCheckresult.containsValue(false)) {
-                    Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                    throw new MaterialLotQuantityNotAvailableException(lotIds);
+                Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+                
+                if (!lotIdsWithUnavailableQuantity.isEmpty()) {
+                    throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
                 }
             }
             
@@ -160,9 +165,10 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
             
             Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), patchedQuantityDelta));
             
-            if (patchedQuantityDelta.getValue().doubleValue() > 0 && quantityCheckresult.containsValue(false)) {
-                Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                throw new MaterialLotQuantityNotAvailableException(lotIds);
+            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+            
+            if (patchedQuantityDelta.getValue().doubleValue() > 0 && !lotIdsWithUnavailableQuantity.isEmpty()) {
+                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
             }
         }
         
@@ -171,9 +177,10 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
             
             Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), quantity));
             
-            if (quantityCheckresult.containsValue(false)) {
-                Set<Long> lotIds = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                throw new MaterialLotQuantityNotAvailableException(lotIds);
+            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+            
+            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
+                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
             }   
         }
          

@@ -90,7 +90,7 @@ public class MaterialPortionController extends BaseController {
     }
 
     @PutMapping("/{materialPortionId}")
-    public MaterialPortionDto putMaterialPortion(@Valid @RequestBody UpdateMaterialPortionDto updateMaterialPortionDto, @PathVariable Long materialPortionId) {
+    public MaterialPortionDto putMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMaterialPortionDto updateMaterialPortionDto) {
         MaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
 
         MaterialPortion putMaterialPortion = materialPortionService.putMaterialPortion(materialPortionId, materialPortion);
@@ -99,7 +99,7 @@ public class MaterialPortionController extends BaseController {
     }
 
     @PatchMapping("/{materialPortionId}")
-    public MaterialPortionDto patchMaterialPortion(@Valid @RequestBody UpdateMaterialPortionDto updateMaterialPortionDto, @PathVariable Long materialPortionId) {
+    public MaterialPortionDto patchMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMaterialPortionDto updateMaterialPortionDto) {
         MaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
 
         MaterialPortion patchedMaterialPortion = materialPortionService.patchMaterialPortion(materialPortionId, materialPortion);

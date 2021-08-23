@@ -18,17 +18,17 @@ public interface MaterialPortionMapper {
     @Mapping(target = "mixtureId", source = "mixture.id")
     MaterialPortionDto toDto(MaterialPortion materialPortion);
 
-    @Mapping(target = Brew.ATTR_ID, ignore = true)
-    @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
-    @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = Brew.ATTR_VERSION, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_VERSION, ignore = true)
     @Mapping(target = "materialLot", source = "materialLotId")
     @Mapping(target = "mixture", source = "mixtureId")
     MaterialPortion fromDto(AddMaterialPortionDto dto);
 
-    @Mapping(target = Brew.ATTR_ID, ignore = true)
-    @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
-    @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "materialLot", source = "materialLotId")
     @Mapping(target = "mixture", source = "mixtureId")
     MaterialPortion fromDto(UpdateMaterialPortionDto dto);
