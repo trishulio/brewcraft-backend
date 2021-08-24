@@ -30,12 +30,13 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, Identified<Long>, Audited, MoneySupplier {
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited, MoneySupplier {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -99,29 +100,29 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
     }
 
     public Invoice(Long id) {
-        setId(id);
+        this.setId(id);
     }
 
     public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
             LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
         this(id);
-        setInvoiceNumber(invoiceNumber);
-        setDescription(description);
-        setPurchaseOrder(purchaseOrder);
-        setGeneratedOn(generatedOn);
-        setReceivedOn(receivedOn);
-        setPaymentDueDate(paymentDueDate);
-        setFreight(freight);
-        setCreatedAt(createdAt);
-        setLastUpdated(lastUpdated);
-        setStatus(status);
-        setItems(items);
-        setVersion(version);
+        this.setInvoiceNumber(invoiceNumber);
+        this.setDescription(description);
+        this.setPurchaseOrder(purchaseOrder);
+        this.setGeneratedOn(generatedOn);
+        this.setReceivedOn(receivedOn);
+        this.setPaymentDueDate(paymentDueDate);
+        this.setFreight(freight);
+        this.setCreatedAt(createdAt);
+        this.setLastUpdated(lastUpdated);
+        this.setStatus(status);
+        this.setItems(items);
+        this.setVersion(version);
     }
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -131,7 +132,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public String getInvoiceNumber() {
-        return invoiceNumber;
+        return this.invoiceNumber;
     }
 
     @Override
@@ -141,7 +142,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override
@@ -151,7 +152,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
+        return this.purchaseOrder;
     }
 
     @Override
@@ -161,7 +162,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public LocalDateTime getGeneratedOn() {
-        return generatedOn;
+        return this.generatedOn;
     }
 
     @Override
@@ -171,7 +172,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public LocalDateTime getReceivedOn() {
-        return receivedOn;
+        return this.receivedOn;
     }
 
     @Override
@@ -181,7 +182,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public LocalDateTime getPaymentDueDate() {
-        return paymentDueDate;
+        return this.paymentDueDate;
     }
 
     @Override
@@ -191,7 +192,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+        return this.lastUpdated;
     }
 
     @Override
@@ -201,7 +202,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     @Override
@@ -211,7 +212,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public InvoiceStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     @Override
@@ -264,7 +265,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
             return false;
         }
 
-        boolean removed = this.items.remove(item);
+        final boolean removed = this.items.remove(item);
 
         if (removed) {
             item.setInvoice(null);
@@ -275,7 +276,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public Freight getFreight() {
-        return freight;
+        return this.freight;
     }
 
     @Override
@@ -285,7 +286,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     @Override
     public Integer getVersion() {
-        return version;
+        return this.version;
     }
 
     @Override
@@ -300,8 +301,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, I
 
     public Tax getTax() {
         Tax tax = null;
-        if (getItems() != null) {
-            Collection<Tax> taxes = getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
+        if (this.getItems() != null) {
+            final Collection<Tax> taxes = this.getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
 

@@ -26,7 +26,38 @@ import io.company.brewcraft.data.CheckedFunction;
 public class ReflectionManipulator {
     private static final Logger logger = LoggerFactory.getLogger(ReflectionManipulator.class);
 
+    static class PropNameKey {
+        private Class<?> clazz;
+        private Set<String> exclusions;
+
+        public PropNameKey(Class<?> clazz, Set<String> exclusions) {
+            this.clazz = clazz;
+            this.exclusions = exclusions;
+        }
+
+        public Class<?> getClazz() {
+            return this.clazz;
+        }
+
+        public void setClazz(Class<?> clazz) {
+            this.clazz = clazz;
+        }
+
+        public Set<String> getExclusions() {
+            return this.exclusions;
+        }
+
+        public void setExclusions(Set<String> exclusions) {
+            this.exclusions = exclusions;
+        }
+
+        public boolean equals(Object o) {
+            return EqualsBuilder.reflectionEquals(this, o);
+        }
+    }
+
     private LoadingCache<Class<?>, Set<String>> propNamesCache;
+    private LoadingCache<PropNameKey, Set<String>> propNamesCacheWithExclusions;
 
     public boolean equals(Object o, Object that) {
         return EqualsBuilder.reflectionEquals(o, that);
@@ -36,8 +67,8 @@ public class ReflectionManipulator {
 
     public ReflectionManipulator() {
         this.propNamesCache = CacheBuilder
-                              .newBuilder()
-                              .build(new CacheLoader<Class<?>, Set<String>>() {
+                                .newBuilder()
+                                .build(new CacheLoader<Class<?>, Set<String>>() {
                                     @Override
                                     public Set<String> load(Class<?> clazz) throws Exception {
                                         Set<String> propertyNames = null;
@@ -54,7 +85,19 @@ public class ReflectionManipulator {
                                                         .collect(ImmutableSet.toImmutableSet());
                                         return propertyNames;
                                     }
-        });
+                                });
+
+        this.propNamesCacheWithExclusions = CacheBuilder
+                                            .newBuilder()
+                                            .build(new CacheLoader<PropNameKey, Set<String>>() {
+                                                    @Override
+                                                    public Set<String> load(PropNameKey key) throws Exception {
+                                                        return propNamesCache.get(key.getClazz()).stream()
+                                                                                                 .filter(prop -> !key.getExclusions().contains(prop))
+                                                                                                 .collect(ImmutableSet.toImmutableSet());
+
+                                                    }
+                                            });
     }
 
     public void copy(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
@@ -93,9 +136,10 @@ public class ReflectionManipulator {
         }
     }
 
-    public Set<String> getPropertyNames(Class<?> clazz) {
+    public Set<String> getPropertyNames(Class<?> clazz, Set<String> exclusions) {
+        PropNameKey key = new PropNameKey(clazz, exclusions);
         try {
-            return this.propNamesCache.get(clazz);
+            return this.propNamesCacheWithExclusions.get(key);
 
         } catch (ExecutionException e) {
             throw new RuntimeException(String.format("Failed to fetch properties names because: %s", e.getMessage()), e);

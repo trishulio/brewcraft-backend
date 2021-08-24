@@ -1,10 +1,6 @@
 package io.company.brewcraft.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,88 +8,29 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.UpdateInvoiceItem;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.validator.Validator;
 
-public class InvoiceItemService extends BaseService {
+public class InvoiceItemService extends BaseService implements UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemService.class);
 
-    private UtilityProvider utilProvider;
 
-    public InvoiceItemService(UtilityProvider utilProvider) {
-        this.utilProvider = utilProvider;
+    private final UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService;
+
+    public InvoiceItemService(UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService) {
+        this.updateService = updateService;
     }
 
-    public List<InvoiceItem> getPutItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem<?>> updates) {
-        Validator validator = this.utilProvider.getValidator();
-
-        if (updates == null) {
-            return null;
-        }
-
-        List<InvoiceItem> targetItems = new ArrayList<>();
-        List<UpdateInvoiceItem<?>> itemUpdates = new ArrayList<>(updates.size());
-
-        updates.forEach(update -> {
-            if (update.getId() == null) {
-                InvoiceItem item = new InvoiceItem();
-                item.override(update, getPropertyNames(BaseInvoiceItem.class));
-                targetItems.add(item);
-
-            } else {
-                itemUpdates.add(update);
-            }
-        });
-
-        existingItems = existingItems == null ? new ArrayList<>(0) : existingItems;
-        Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-
-        itemUpdates.forEach(update -> {
-            InvoiceItem item = idToItemLookup.get(update.getId());
-            if (validator.rule(item != null, "No existing invoice item found with Id: %s. To add a new item to the invoice, don't include the version and id in the payload.", update.getId())) {
-                item.optimisticLockCheck(update);
-                item.override(update, getPropertyNames(UpdateInvoiceItem.class));
-                targetItems.add(item);
-            }
-        });
-
-        validator.raiseErrors();
-        return targetItems;
+    @Override
+    public List<InvoiceItem> getAddEntites(List<BaseInvoiceItem<?>> additions) {
+        return this.updateService.getAddEntites(additions);
     }
 
-    public List<InvoiceItem> getPatchItems(List<InvoiceItem> existingItems, List<? extends UpdateInvoiceItem<?>> patches) {
-        Validator validator = this.utilProvider.getValidator();
-
-        existingItems = existingItems == null ? new ArrayList<>() : existingItems;
-        final List<InvoiceItem> targetItems = existingItems.stream().collect(Collectors.toList());
-
-        if (patches != null) {
-            Map<Long, InvoiceItem> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-
-            patches.forEach(patch -> {
-                InvoiceItem item = idToItemLookup.get(patch.getId());
-                if (validator.rule(item != null, "No existing invoice item found with Id: %s.", patch.getId())) {
-                    item.optimisticLockCheck(patch);
-                    item.outerJoin(patch, getPropertyNames(UpdateInvoiceItem.class));
-                }
-            });
-        }
-
-        validator.raiseErrors();
-        return targetItems;
+    @Override
+    public List<InvoiceItem> getPutEntities(List<InvoiceItem> existingItems, List<UpdateInvoiceItem<?>> updates) {
+        return this.updateService.getPutEntities(existingItems, updates);
     }
 
-    public List<InvoiceItem> getAddItems(Collection<? extends BaseInvoiceItem<?>> additions) {
-        List<InvoiceItem> targetItems = null;
-        if (additions != null) {
-            targetItems = additions.stream().map(i -> {
-                InvoiceItem item = new InvoiceItem();
-                log.debug("Applying properties of InvoiceItem: {} to new item", i);
-                item.override(i, getPropertyNames(BaseInvoiceItem.class));
-                return item;
-            }).collect(Collectors.toList());
-        }
-
-        return targetItems;
+    @Override
+    public List<InvoiceItem> getPatchEntities(List<InvoiceItem> existingItems, List<UpdateInvoiceItem<?>> patches) {
+        return this.updateService.getPatchEntities(existingItems, patches);
     }
 }
