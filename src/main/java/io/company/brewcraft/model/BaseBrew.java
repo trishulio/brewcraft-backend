@@ -16,9 +16,9 @@ public interface BaseBrew extends ProductAccessor, ParentBrewAccessor {
 
     void setDescription(String description);
 
-    Long getBatchId();
+    String getBatchId();
 
-    void setBatchId(Long batchId);
+    void setBatchId(String batchId);
 
     List<Brew> getChildBrews();
 

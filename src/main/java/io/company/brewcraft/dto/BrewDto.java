@@ -10,7 +10,7 @@ public class BrewDto extends BaseDto {
 
     private String description;
 
-    private Long batchId;
+    private String batchId;
 
     private ProductDto product;
 
@@ -28,7 +28,7 @@ public class BrewDto extends BaseDto {
         super();
     }
 
-    public BrewDto(Long id, String name, String description, Long batchId, ProductDto productDto, Long parentBrewId,
+    public BrewDto(Long id, String name, String description, String batchId, ProductDto productDto, Long parentBrewId,
             LocalDateTime startedAt, LocalDateTime endedAt, LocalDateTime createdAt, Integer version) {
         super();
         this.id = id;
@@ -67,11 +67,11 @@ public class BrewDto extends BaseDto {
         this.description = description;
     }
 
-    public Long getBatchId() {
+    public String getBatchId() {
         return batchId;
     }
 
-    public void setBatchId(Long batchId) {
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
 

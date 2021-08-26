@@ -40,7 +40,7 @@ public class BrewControllerTest {
 
    @Test
    public void testGetBrews() {
-       Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(3L), new Brew(2L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(3L), new Brew(2L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        List<Brew> brewList = List.of(brew);
        Page<Brew> mPage = mock(Page.class);
@@ -71,7 +71,7 @@ public class BrewControllerTest {
        assertEquals(1L, brewDto.getId());
        assertEquals("testName", brewDto.getName());
        assertEquals("testDesc", brewDto.getDescription());
-       assertEquals(2L, brewDto.getBatchId());
+       assertEquals("2", brewDto.getBatchId());
        assertEquals(new ProductDto(3L), brewDto.getProduct());
        assertEquals(2L, brewDto.getParentBrewId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), brewDto.getStartedAt());
@@ -82,7 +82,7 @@ public class BrewControllerTest {
 
    @Test
    public void testGetBrew() {
-       Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(3L), new Brew(2L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(3L), new Brew(2L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        doReturn(brew).when(brewService).getBrew(1L);
 
@@ -91,7 +91,7 @@ public class BrewControllerTest {
        assertEquals(1L, brewDto.getId());
        assertEquals("testName", brewDto.getName());
        assertEquals("testDesc", brewDto.getDescription());
-       assertEquals(2L, brewDto.getBatchId());
+       assertEquals("2", brewDto.getBatchId());
        assertEquals(new ProductDto(3L), brewDto.getProduct());
        assertEquals(2L, brewDto.getParentBrewId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), brewDto.getStartedAt());
@@ -108,9 +108,9 @@ public class BrewControllerTest {
 
    @Test
    public void testAddBrew() {
-       AddBrewDto addBrewDto = new AddBrewDto("testName", "testDesc", 2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4));
+       AddBrewDto addBrewDto = new AddBrewDto("testName", "testDesc", "2", 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4));
 
-       Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Brew> addBrewCaptor = ArgumentCaptor.forClass(Brew.class);
 
@@ -122,7 +122,7 @@ public class BrewControllerTest {
        assertEquals(null, addBrewCaptor.getValue().getId());
        assertEquals("testName", addBrewCaptor.getValue().getName());
        assertEquals("testDesc", addBrewCaptor.getValue().getDescription());
-       assertEquals(2L, addBrewCaptor.getValue().getBatchId());
+       assertEquals("2", addBrewCaptor.getValue().getBatchId());
        assertEquals(new Product(3L), addBrewCaptor.getValue().getProduct());
        assertEquals(4L, addBrewCaptor.getValue().getParentBrew().getId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addBrewCaptor.getValue().getStartedAt());
@@ -134,7 +134,7 @@ public class BrewControllerTest {
        assertEquals(1L, brewDto.getId());
        assertEquals("testName", brewDto.getName());
        assertEquals("testDesc", brewDto.getDescription());
-       assertEquals(2L, brewDto.getBatchId());
+       assertEquals("2", brewDto.getBatchId());
        assertEquals(new ProductDto(3L), brewDto.getProduct());
        assertEquals(4L, brewDto.getParentBrewId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), brewDto.getStartedAt());
@@ -145,9 +145,9 @@ public class BrewControllerTest {
 
    @Test
    public void testPutBrew() {
-       UpdateBrewDto updateBrewDto = new UpdateBrewDto("testName", "testDesc", 2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       UpdateBrewDto updateBrewDto = new UpdateBrewDto("testName", "testDesc", "2", 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-       Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Brew> putBrewCaptor = ArgumentCaptor.forClass(Brew.class);
 
@@ -159,7 +159,7 @@ public class BrewControllerTest {
        assertEquals(null, putBrewCaptor.getValue().getId());
        assertEquals("testName", putBrewCaptor.getValue().getName());
        assertEquals("testDesc", putBrewCaptor.getValue().getDescription());
-       assertEquals(2L, putBrewCaptor.getValue().getBatchId());
+       assertEquals("2", putBrewCaptor.getValue().getBatchId());
        assertEquals(new Product(3L), putBrewCaptor.getValue().getProduct());
        assertEquals(4L, putBrewCaptor.getValue().getParentBrew().getId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), putBrewCaptor.getValue().getStartedAt());
@@ -171,7 +171,7 @@ public class BrewControllerTest {
        assertEquals(1L, brewDto.getId());
        assertEquals("testName", brewDto.getName());
        assertEquals("testDesc", brewDto.getDescription());
-       assertEquals(2L, brewDto.getBatchId());
+       assertEquals("2", brewDto.getBatchId());
        assertEquals(new ProductDto(3L), brewDto.getProduct());
        assertEquals(4L, brewDto.getParentBrewId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), brewDto.getStartedAt());
@@ -182,9 +182,9 @@ public class BrewControllerTest {
 
    @Test
    public void testPatchBrew() {
-       UpdateBrewDto updateBrewDto = new UpdateBrewDto("testName", "testDesc", 2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       UpdateBrewDto updateBrewDto = new UpdateBrewDto("testName", "testDesc", "2", 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-       Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
+       Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(3L), new Brew(4L), null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Brew> patchBrewCaptor = ArgumentCaptor.forClass(Brew.class);
 
@@ -196,7 +196,7 @@ public class BrewControllerTest {
        assertEquals(null, patchBrewCaptor.getValue().getId());
        assertEquals("testName", patchBrewCaptor.getValue().getName());
        assertEquals("testDesc", patchBrewCaptor.getValue().getDescription());
-       assertEquals(2L, patchBrewCaptor.getValue().getBatchId());
+       assertEquals("2", patchBrewCaptor.getValue().getBatchId());
        assertEquals(new Product(3L), patchBrewCaptor.getValue().getProduct());
        assertEquals(4L, patchBrewCaptor.getValue().getParentBrew().getId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), patchBrewCaptor.getValue().getStartedAt());
@@ -208,7 +208,7 @@ public class BrewControllerTest {
        assertEquals(1L, brewDto.getId());
        assertEquals("testName", brewDto.getName());
        assertEquals("testDesc", brewDto.getDescription());
-       assertEquals(2L, brewDto.getBatchId());
+       assertEquals("2", brewDto.getBatchId());
        assertEquals(new ProductDto(3L), brewDto.getProduct());
        assertEquals(4L, brewDto.getParentBrewId());
        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), brewDto.getStartedAt());

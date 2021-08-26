@@ -21,7 +21,7 @@ public class BrewDtoTest {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
-        Long batchId = 2L;
+        String batchId = "2";
         ProductDto product = new ProductDto();
         Long parentBrewId = 3L;
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -34,7 +34,7 @@ public class BrewDtoTest {
         assertEquals(1L, brewDto.getId());
         assertEquals("testName", brewDto.getName());
         assertEquals("testDesc", brewDto.getDescription());
-        assertEquals(2L, brewDto.getBatchId());
+        assertEquals("2", brewDto.getBatchId());
         assertEquals(new ProductDto(), brewDto.getProduct());
         assertEquals(3L, brewDto.getParentBrewId());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewDto.getStartedAt());
@@ -66,9 +66,8 @@ public class BrewDtoTest {
 
     @Test
     public void testGetSetBatchId() {
-        Long batchId = 2L;
-        brewDto.setBatchId(batchId);
-        assertEquals(2L, brewDto.getBatchId());
+        brewDto.setBatchId("2");
+        assertEquals("2", brewDto.getBatchId());
     }
 
     @Test

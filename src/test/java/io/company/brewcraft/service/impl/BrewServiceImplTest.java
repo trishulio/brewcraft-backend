@@ -67,7 +67,7 @@ public class BrewServiceImplTest {
 
     @Test
     public void testAddBrew_AddsBrew() {
-        Brew brew = new Brew(1L, "testName", "testDesc", 2L, new Product(), new Brew(), null, null,
+        Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(), new Brew(), null, null,
                 LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
                 LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
@@ -76,7 +76,7 @@ public class BrewServiceImplTest {
         assertEquals(1L, addedBrew.getId());
         assertEquals("testName", addedBrew.getName());
         assertEquals("testDesc", addedBrew.getDescription());
-        assertEquals(2L, addedBrew.getBatchId());
+        assertEquals("2", addedBrew.getBatchId());
         assertEquals(new Product(1L), addedBrew.getProduct());
 
         Brew parentBrew = new Brew(2L);
@@ -95,11 +95,11 @@ public class BrewServiceImplTest {
 
     @Test
     public void testPutBrew_OverridesWhenBrewExists() {
-        Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
+        Brew existing = new Brew(1L, "testName", "testDesc", "2", new Product(2L), new Brew(3L), null, null,
                 LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
                 LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
                 LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
@@ -110,7 +110,7 @@ public class BrewServiceImplTest {
         assertEquals(1L, brew.getId());
         assertEquals("testNameUpdate", brew.getName());
         assertEquals("testDescUpdate", brew.getDescription());
-        assertEquals(3L, brew.getBatchId());
+        assertEquals("3", brew.getBatchId());
         assertEquals(new Product(1L), brew.getProduct());
 
         Brew parentBrew = new Brew(2L);
@@ -129,7 +129,7 @@ public class BrewServiceImplTest {
 
     @Test
     public void testPutBrew_AddsNrewBrew_WhenNoBrewExists() {
-        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
                 LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
@@ -140,7 +140,7 @@ public class BrewServiceImplTest {
         assertEquals(1L, brew.getId());
         assertEquals("testNameUpdate", brew.getName());
         assertEquals("testDescUpdate", brew.getDescription());
-        assertEquals(3L, brew.getBatchId());
+        assertEquals("3", brew.getBatchId());
         assertEquals(new Product(1L), brew.getProduct());
 
         Brew parentBrew = new Brew(2L);
@@ -171,11 +171,11 @@ public class BrewServiceImplTest {
 
     @Test
     public void testPatchBrew_PatchesExistingBrew() {
-        Brew existing = new Brew(1L, "testName", "testDesc", 2L, new Product(2L), new Brew(3L), null, null,
+        Brew existing = new Brew(1L, "testName", "testDesc", "2", new Product(2L), new Brew(3L), null, null,
                 LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
                 LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", 3L, new Product(), new Brew(), null, null,
+        Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
                 LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
@@ -186,7 +186,7 @@ public class BrewServiceImplTest {
         assertEquals(1L, brew.getId());
         assertEquals("testNameUpdate", brew.getName());
         assertEquals("testDescUpdate", brew.getDescription());
-        assertEquals(3L, brew.getBatchId());
+        assertEquals("3", brew.getBatchId());
         assertEquals(new Product(1L), brew.getProduct());
 
         Brew parentBrew = new Brew(2L);
