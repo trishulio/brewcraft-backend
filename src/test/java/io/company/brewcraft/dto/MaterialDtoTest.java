@@ -24,9 +24,10 @@ public class MaterialDtoTest {
         CategoryDto subcategory = new CategoryDto();
         String upc = "testUPC";
         String baseQuantityUnit = "g";
+        String imageSrc = "http://www.test.com";
         int version = 1;
 
-        MaterialDto material = new MaterialDto(id, name, description, materialClass, category, subcategory, upc, baseQuantityUnit, version);
+        MaterialDto material = new MaterialDto(id, name, description, materialClass, category, subcategory, upc, baseQuantityUnit, imageSrc, version);
 
         assertSame(id, material.getId());
         assertSame(name, material.getName());
@@ -36,6 +37,7 @@ public class MaterialDtoTest {
         assertSame(subcategory, material.getSubcategory());
         assertSame(upc, material.getUPC());
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
+        assertSame(imageSrc, material.getImageSrc());
         assertSame(version, material.getVersion());
     }
 
@@ -93,6 +95,12 @@ public class MaterialDtoTest {
         String baseQuantityUnit = "g";
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
+    }
+    
+    @Test
+    public void testGetSetImageSrc() {
+        material.setImageSrc("http://www.test.com");
+        assertSame("http://www.test.com", material.getImageSrc());
     }
 
     @Test

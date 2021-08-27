@@ -31,11 +31,12 @@ public class MaterialTest {
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
         Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        String imageSrc = "http://www.test.com";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Material materialEntity = new Material(id, name, description, category, upc, baseQuantityUnit, created, lastUpdated, version);
+        Material materialEntity = new Material(id, name, description, category, upc, baseQuantityUnit, imageSrc, created, lastUpdated, version);
 
         assertSame(id, materialEntity.getId());
         assertSame(name, materialEntity.getName());
@@ -43,6 +44,7 @@ public class MaterialTest {
         assertSame(category, materialEntity.getCategory());
         assertSame(upc, materialEntity.getUPC());
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
+        assertSame(imageSrc, materialEntity.getImageSrc());
         assertSame(created, materialEntity.getCreatedAt());
         assertSame(lastUpdated, materialEntity.getLastUpdated());
         assertSame(version, materialEntity.getVersion());
@@ -89,6 +91,12 @@ public class MaterialTest {
         materialEntity.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
     }
+    
+    @Test
+    public void testGetSetImageSrc() {
+        materialEntity.setImageSrc("http://www.test.com");
+        assertSame("http://www.test.com", materialEntity.getImageSrc());
+    }
 
     @Test
     public void testGetSetCreated() {
@@ -119,13 +127,14 @@ public class MaterialTest {
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
         Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        String imageSrc = "http://www.test.com";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Material material = new Material(id, name, description, category, upc, baseQuantityUnit, created, lastUpdated, version);
+        Material material = new Material(id, name, description, category, upc, baseQuantityUnit, imageSrc, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"kg\"},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"kg\"},\"imageSrc\":\"http://www.test.com\",\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
 
         JSONAssert.assertEquals(json, material.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
