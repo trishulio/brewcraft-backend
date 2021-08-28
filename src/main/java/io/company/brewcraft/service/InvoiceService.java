@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -25,6 +26,7 @@ import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class InvoiceService extends BaseService implements CrudService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> {
@@ -109,16 +111,19 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
 
     @Override
     public List<Invoice> add(final List<BaseInvoice<? extends BaseInvoiceItem<?>>> additions) {
-        final List<Invoice> entities = this.updateService.getAddEntites(additions);
+        if (additions == null) {
+            return null;
+        }
+
+        final List<Invoice> entities = this.updateService.getAddEntities(additions);
 
         for (int i = 0; i < additions.size(); i++) {
-            final List<InvoiceItem> items =this.itemService.getAddEntites((List<BaseInvoiceItem<?>>) additions.get(0).getItems());
+            final List<InvoiceItem> items =this.itemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getItems());
             entities.get(i).setItems(items);
         }
 
         return this.repoService.saveAll(entities);
     }
-
 
     @Override
     public List<Invoice> put(List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates) {
@@ -131,8 +136,8 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
 
         final int length = Math.max(existing.size(), updates.size());
         for (int i = 0; i < length; i++) {
-            final List<InvoiceItem> existingItems = existing.size() <= length ? existing.get(i).getItems() : null;
-            final List<? extends UpdateInvoiceItem<?>> updateItems = updates.size() <= length ? updates.get(i).getItems() : null;
+            final List<InvoiceItem> existingItems = i < existing.size() ? existing.get(i).getItems() : null;
+            final List<? extends UpdateInvoiceItem<?>> updateItems = i < updates.size() ? updates.get(i).getItems() : null;
 
             final List<InvoiceItem> updatedItems =this.itemService.getPutEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
 
@@ -151,12 +156,18 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
         final List<Invoice> existing = this.repoService.getByIds(patches);
         final List<Invoice> updated = this.updateService.getPatchEntities(existing, patches);
 
-        final int length = Math.max(existing.size(), patches.size());
-        for (int i = 0; i < length; i++) {
-            final List<InvoiceItem> existingItems = existing.size() <= length ? existing.get(i).getItems() : null;
-            final List<? extends UpdateInvoiceItem<?>> updateItems = patches.size() <= length ? patches.get(i).getItems() : null;
+        if (existing.size() != patches.size()) {
+            final Set<Long> existingIds = existing.stream().map(invoice -> invoice.getId()).collect(Collectors.toSet());
+            final Set<Long> nonExistingIds = patches.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
 
-            final List<InvoiceItem> updatedItems =this.itemService.getPutEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
+            throw new EntityNotFoundException(String.format("Cannot find invoices with Ids: %s", nonExistingIds));
+        }
+
+        for (int i = 0; i < existing.size(); i++) {
+            final List<InvoiceItem> existingItems = existing.get(i).getItems();
+            final List<? extends UpdateInvoiceItem<?>> updateItems = patches.get(i).getItems();
+
+            final List<InvoiceItem> updatedItems =this.itemService.getPatchEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
 
             updated.get(i).setItems(updatedItems);
         }

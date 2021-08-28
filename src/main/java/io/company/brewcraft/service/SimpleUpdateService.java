@@ -1,6 +1,5 @@
 package io.company.brewcraft.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +31,13 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
     }
 
     @Override
-    public List<E> getAddEntites(List<BE> additions) {
+    public List<E> getAddEntities(List<BE> additions) {
         if (additions == null) {
             return null;
         }
 
         return additions.stream().map(addition -> {
-            final E item = this.instance();
+            final E item = this.newEntity();
             item.override(addition, this.getPropertyNames(this.baseEntityCls, this.excludeProps));
             return item;
          }).collect(Collectors.toList());
@@ -56,7 +55,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         final List<E> targetItems = updates.stream().map(update -> {
-            final E item = this.instance();
+            final E item = this.newEntity();
             Class<?> itemCls = this.baseEntityCls;
             if (update.getId() != null) {
                 final E existing = idToItemLookup.get(update.getId());
@@ -86,7 +85,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         final List<E> targetItems = patches.stream().map(patch -> {
-            final E item = this.instance();
+            final E item = this.newEntity();
             final E existing = idToItemLookup.get(patch.getId());
             if (validator.rule(existing != null, "No existing invoice item found with Id: %s.", patch.getId())) {
                 existing.optimisticLockCheck(patch);
@@ -101,13 +100,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         return targetItems;
     }
 
-    private E instance() {
-        try {
-            return this.entityCls.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            final String msg = String.format("Failed to create an instance of class '%s' because %s", this.entityCls.getName(), e.getMessage());
-            log.error(msg);
-            throw new RuntimeException(msg, e);
-        }
+    private E newEntity() {
+        return this.util.construct(this.entityCls);
     }
 }

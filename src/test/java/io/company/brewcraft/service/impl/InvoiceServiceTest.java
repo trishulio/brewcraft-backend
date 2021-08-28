@@ -6,336 +6,234 @@ import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
-import javax.persistence.OptimisticLockException;
-
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
-import io.company.brewcraft.model.InvoiceStatus;
-import io.company.brewcraft.model.Material;
-import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Tax;
-import io.company.brewcraft.repository.InvoiceRepository;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.util.SupportedUnits;
-import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.UpdateService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class InvoiceServiceTest {
    private InvoiceService service;
 
-   private InvoiceRepository mRepo;
    private InvoiceItemService mItemService;
+   private UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> mUpdateService;
+   private RepoService<Long, Invoice> mRepoService;
 
    @BeforeEach
    public void init() {
-       mRepo = mock(InvoiceRepository.class);
-       doAnswer(inv -> inv.getArgument(0, Invoice.class)).when(mRepo).saveAndFlush(any(Invoice.class));
-       doAnswer(inv -> {
-           @SuppressWarnings("unchecked")
-           List<Invoice> invoices = inv.getArgument(0, List.class);
-           invoices.forEach(i -> {
-               i.setStatus(new InvoiceStatus(99L));
-               i.setPurchaseOrder(new PurchaseOrder(99L));
-           });
-           return null;
-       }).when(mRepo).refresh(anyList());
+       this.mItemService = mock(InvoiceItemService.class);
+       this.mUpdateService = mock(UpdateService.class);
+       this.mRepoService = mock(RepoService.class);
 
-       mItemService = mock(InvoiceItemService.class);
+       doAnswer(inv -> inv.getArgument(0)).when(this.mRepoService).saveAll(anyList());
 
-       this.service = spy(new InvoiceService(mRepo, mItemService));
+       this.service = new InvoiceService(this.mUpdateService, this.mItemService, this.mRepoService);
    }
 
    @Test
-   @Disabled(value = "TODO: Need to figure out a way to assert the spec behaviour based on the inputs")
-   public void testGetInvoices_CallsRepositoryWithACustomSpec_AndReturnsPageOfEntities() {
-       fail("TODO: Need to figure out a way to assert the spec behaviour based on the inputs");
+   public void testGetInvoices_ReturnsEntitiesFromRepoService_WithCustomSpec() {
+       final ArgumentCaptor<Specification<Invoice>> captor = ArgumentCaptor.forClass(Specification.class);
+       final Page<Invoice> mPage = new PageImpl<>(List.of(new Invoice(1L)));
+       doReturn(mPage).when(this.mRepoService).getAll(captor.capture(), eq(new TreeSet<>(List.of("id"))), eq(true), eq(10), eq(20));
+
+       final Page<Invoice> page = this.service.getInvoices(
+           Set.of(1L), //ids
+           Set.of(2L), //excludeIds
+           Set.of("INVOICE_1"), //invoiceNumbers
+           Set.of("DESC"), //invoiceDescriptions,
+           Set.of("ITEM_DESC"), //invoiceItemDescriptions
+           LocalDateTime.of(2000, 1, 1, 0, 0), //generatedOnFrom,
+           LocalDateTime.of(2001, 1, 1, 0, 0), //generatedOnTo,
+           LocalDateTime.of(2002, 1, 1, 0, 0), //receivedOnFrom,
+           LocalDateTime.of(2003, 1, 1, 0, 0), //receivedOnTo,
+           LocalDateTime.of(2004, 1, 1, 0, 0), //paymentDueDateFrom,
+           LocalDateTime.of(2005, 1, 1, 0, 0), //paymentDueDateTo,
+           Set.of(3L), //purchaseOrderIds,
+           new BigDecimal("10"), //freightAmtFrom,
+           new BigDecimal("20"), //freightAmtTo,
+           Set.of(4L), //statusIds,
+           Set.of(5L), //supplierIds,
+           new TreeSet<>(List.of("id")), //sortBy,
+           true, //ascending,
+           10, //page,
+           20 //size
+       );
+
+       final Page<Invoice> expected = new PageImpl<>(List.of(new Invoice(1L)));
+       assertEquals(expected, page);
+
+       captor.getValue();
    }
 
    @Test
-   public void testGetInvoice_ReturnsInvoicePojo_WhenRepositoryReturnsOptionalWithEntity() {
-       Optional<Invoice> mOptional = Optional.of(new Invoice(1L));
-       doReturn(mOptional).when(mRepo).findById(1L);
+   public void testGetInvoice_ReturnsInvoicePojo_WhenRepoServiceReturnsOptionalWithEntity() {
+       doReturn(new Invoice(1L)).when(this.mRepoService).get(1L);
 
-       Invoice invoice = service.getInvoice(1L);
+       final Invoice invoice = this.service.get(1L);
 
        assertEquals(new Invoice(1L), invoice);
    }
 
    @Test
-   public void testGetInvoice_ReturnsNull_WhenRepositoryReturnsEmptyOptional() {
-       Optional<Invoice> mOptional = Optional.empty();
-       doReturn(mOptional).when(mRepo).findById(1L);
+   public void testExists_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+       doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-       Invoice invoice = service.getInvoice(1L);
-
-       assertNull(invoice);
+       assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
    }
 
    @Test
-   public void testExists_ReturnsTrue_WhenRepoReturnsTrue() {
-       doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
+   public void testExists_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+       doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-       assertTrue(service.exists(Set.of(1L, 2L, 3L)));
+       assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
    }
 
    @Test
-   public void testExists_ReturnsFalse_WhenRepoReturnsFalse() {
-       doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L, 3L));
+   public void testExist_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+       doReturn(true).when(this.mRepoService).exist(1L);
 
-       assertTrue(service.exists(Set.of(1L, 2L, 3L)));
+       assertTrue(this.service.exist(1L));
    }
 
    @Test
-   public void testDelete_CallsRepoDeleteById_WhenInvoiceExists() {
-       doReturn(123).when(mRepo).deleteByIds(Set.of(1L, 2L, 3L));
+   public void testExist_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+       doReturn(true).when(this.mRepoService).exist(1L);
 
-       int count = service.delete(Set.of(1L, 2L, 3L));
+       assertTrue(this.service.exist(1L));
+   }
+
+   @Test
+   public void testDelete_CallsRepoServiceDeleteBulk_WhenInvoiceExists() {
+       doReturn(123).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
+
+       final int count = this.service.delete(Set.of(1L, 2L, 3L));
        assertEquals(123, count);
    }
 
    @Test
-   public void testPut_CreatesAndSaveNewEntityWithUpdates_WhenInvoiceWithGivenIdDoesNotExist() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
-       Invoice update = new Invoice(
-           1L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(2L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           List.of(itemUpdate),
-           1
+   public void testDelete_CallsRepoServiceDelete_WhenInvoiceExists() {
+       this.service.delete(1L);
+       verify(this.mRepoService).delete(1L);
+   }
+
+   @Test
+   public void testAdd_AddsInvoiceAndItemsAndSavesToRepo_WhenAdditionsAreNotNull() {
+       doAnswer(inv -> inv.getArgument(0)).when(this.mItemService).getAddEntities(any());
+       doAnswer(inv -> inv.getArgument(0)).when(this.mUpdateService).getAddEntities(any());
+
+       final List<BaseInvoice<? extends BaseInvoiceItem<?>>> additions = List.of(
+           new Invoice(1L), new Invoice()
        );
+       additions.get(0).setItems(List.of((BaseInvoiceItem<?>) new InvoiceItem(10L)));
+       additions.get(1).setItems(List.of((BaseInvoiceItem<?>) new InvoiceItem(20L)));
 
-       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
+       final List<Invoice> added = this.service.add(additions);
 
-       Invoice invoice = service.put(1L, update);
-
-       verify(mRepo, times(1)).saveAndFlush(any(Invoice.class));
-       assertEquals(1L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(), invoice.getFreight());
-       assertEquals(null, invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
-       assertEquals(null, invoice.getVersion());
-       assertEquals(1, invoice.getItems().size());
-
-       Iterator<InvoiceItem> it = invoice.getItems().iterator();
-       InvoiceItem item = it.next();
-       assertEquals(2L, item.getId());
-       assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
-       assertEquals(Money.parse("CAD 10"), item.getPrice());
-       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
-   }
-
-   @Test
-   public void testPut_UpdatesTheExistingEntityAndSavesIt_WhenEntityExist() {
-       Invoice mExisting = new Invoice(1L);
-       mExisting.setCreatedAt(LocalDateTime.of(2100, 1, 1, 12, 0));
-       mExisting.setVersion(1);
-       InvoiceItem itemUpdate = new InvoiceItem(1L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
-       Invoice update = new Invoice(
-           1L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(2L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           List.of(itemUpdate),
-           1
+       final List<Invoice> expected = List.of(
+           new Invoice(1L), new Invoice()
        );
+       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
 
-       doReturn(List.of(itemUpdate)).when(mItemService).getPutItems(null, List.of(itemUpdate));
-
-       doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
-
-       Invoice invoice = service.put(1L, update);
-
-       verify(mRepo, times(1)).saveAndFlush(invoice);
-       assertEquals(1L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(), invoice.getFreight());
-       assertEquals(LocalDateTime.of(2100, 1, 1, 12, 0), invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
-       assertEquals(1, invoice.getVersion());
-       assertEquals(1, invoice.getItems().size());
-
-       Iterator<InvoiceItem> it = invoice.getItems().iterator();
-       InvoiceItem item = it.next();
-       assertEquals(1L, item.getId());
-       assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
-       assertEquals(Money.parse("CAD 10"), item.getPrice());
-       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
+       assertEquals(expected, added);
+       verify(this.mRepoService, times(1)).saveAll(added);
    }
 
    @Test
-   public void testPut_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
-       Invoice existing = new Invoice(1L);
-       existing.setVersion(1);
-       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
-
-       Invoice update = new Invoice(1L);
-       existing.setVersion(2);
-
-       assertThrows(OptimisticLockException.class, () -> service.put(1L, update));
+   public void testAddd_DoesNotCallRepoServiceAndReturnsNull_WhenAdditionsAreNull() {
+       assertNull(this.service.add(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
    }
 
    @Test
-   public void testPatch_ApplyUpdatesOnExistingEntityAndSavesIt_WhenInvoiceExists() {
-       Invoice mExisting = new Invoice(
-           1L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(2L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           null,
-           1
+   public void testPut_UpdatesInvoiceAndItemsAndSavesToRepo_WhenUpdatesAreNotNull() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mItemService).getPutEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPutEntities(any(), any());
+
+       final List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates = List.of(
+           new Invoice(1L), new Invoice(2L), new Invoice()
        );
+       updates.get(0).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(10L)));
+       updates.get(1).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(20L)));
 
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
-       Invoice update = new Invoice(1L);
-       update.setDescription("New description value");
-       update.setCreatedAt(LocalDateTime.of(9999, 12, 31, 12, 0));
-       update.setLastUpdated(LocalDateTime.of(9999, 12, 31, 12, 0));
-       update.setItems(List.of(itemUpdate));
-       update.setVersion(1);
+       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(updates);
 
-       doReturn(List.of(itemUpdate)).when(mItemService).getPatchItems(Collections.emptyList(), List.of(itemUpdate));
+       final List<Invoice> updated = this.service.put(updates);
 
-       doReturn(Optional.of(mExisting)).when(mRepo).findById(1L);
-
-       Invoice invoice = service.patch(1L, update);
-
-       verify(mRepo, times(1)).saveAndFlush(invoice);
-       assertEquals(1L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("New description value", invoice.getDescription());
-       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(), invoice.getFreight());
-       assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
-       assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
-       assertEquals(1, invoice.getVersion());
-       assertEquals(1, invoice.getItems().size());
-
-       Iterator<InvoiceItem> it = invoice.getItems().iterator();
-       InvoiceItem item = it.next();
-       assertEquals(2L, item.getId());
-       assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
-       assertEquals(Money.parse("CAD 10"), item.getPrice());
-       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
-   }
-
-   @Test
-   public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
-       Invoice existing = new Invoice(1L);
-       existing.setVersion(1);
-       doReturn(Optional.of(existing)).when(mRepo).findById(1L);
-
-       Invoice update = new Invoice(1L);
-       existing.setVersion(2);
-
-       assertThrows(OptimisticLockException.class, () -> service.patch(1L, update));
-   }
-
-   @Test
-   public void testAdd_SavesTheNewEntity() {
-       InvoiceItem itemUpdate = new InvoiceItem(2L, "Item description", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), Money.parse("CAD 10"), new Tax(Money.parse("CAD 20")), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1);
-       Invoice addition = new Invoice(
-           1L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(2L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           List.of(itemUpdate),
-           1
+       final List<Invoice> expected = List.of(
+           new Invoice(1L), new Invoice(2L), new Invoice()
        );
+       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
 
-       doReturn(List.of(itemUpdate)).when(mItemService).getAddItems(eq(List.of(itemUpdate)));
+       assertEquals(expected, updated);
+       verify(this.mRepoService, times(1)).saveAll(updated);
+   }
 
-       Invoice invoice = service.add(addition);
+   @Test
+   public void testPut_DoesNotCallRepoServiceAndReturnsNull_WhenUpdatesAreNull() {
+       assertNull(this.service.put(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
+   }
 
-       verify(mRepo, times(1)).saveAndFlush(invoice);
-       assertEquals(null, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrder(99L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new Freight(), invoice.getFreight());
-       assertEquals(null, invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatus(99L), invoice.getStatus());
-       assertEquals(null, invoice.getVersion());
-       assertEquals(1, invoice.getItems().size());
+   @Test
+   public void testPatch_PatchesInvoiceAndItemsAndSavesToRepo_WhenPatchesAreNotNull() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mItemService).getPatchEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
 
-       Iterator<InvoiceItem> it = invoice.getItems().iterator();
-       InvoiceItem item = it.next();
-       assertEquals(2L, item.getId());
-       assertEquals("Item description", item.getDescription());
-       assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
-       assertEquals(Money.parse("CAD 10"), item.getPrice());
-       assertEquals(new Tax(Money.parse("CAD 20")), item.getTax());
-       assertEquals(new Material(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
+       final List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates = List.of(
+           new Invoice(1L), new Invoice(2L)
+       );
+       updates.get(0).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(10L)));
+       updates.get(1).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(20L)));
+
+       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(updates);
+
+       final List<Invoice> updated = this.service.patch(updates);
+
+       final List<Invoice> expected = List.of(
+           new Invoice(1L), new Invoice(2L)
+       );
+       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
+
+       assertEquals(expected, updated);
+       verify(this.mRepoService, times(1)).saveAll(updated);
+   }
+
+   @Test
+   public void testPatch_DoesNotCallRepoServiceAndReturnsNull_WhenPatchesAreNull() {
+       assertNull(this.service.patch(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
+   }
+
+   @Test
+   public void testPatch_ThrowsNotFoundException_WhenAllInvoicesDontExist() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mItemService).getPatchEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
+
+       final List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates = List.of(
+           new Invoice(1L), new Invoice(2L), new Invoice(3L), new Invoice(4L)
+       );
+       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(updates);
+
+       assertThrows(EntityNotFoundException.class, () -> this.service.patch(updates), "Cannot find invoices with Ids: [3, 4]");
    }
 }

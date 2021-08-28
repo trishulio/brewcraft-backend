@@ -20,8 +20,8 @@ public class InvoiceItemService extends BaseService implements UpdateService<Lon
     }
 
     @Override
-    public List<InvoiceItem> getAddEntites(List<BaseInvoiceItem<?>> additions) {
-        return this.updateService.getAddEntites(additions);
+    public List<InvoiceItem> getAddEntities(List<BaseInvoiceItem<?>> additions) {
+        return this.updateService.getAddEntities(additions);
     }
 
     @Override

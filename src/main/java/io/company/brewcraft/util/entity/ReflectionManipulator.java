@@ -51,6 +51,7 @@ public class ReflectionManipulator {
             this.exclusions = exclusions;
         }
 
+        @Override
         public boolean equals(Object o) {
             return EqualsBuilder.reflectionEquals(this, o);
         }
@@ -73,13 +74,13 @@ public class ReflectionManipulator {
                                     public Set<String> load(Class<?> clazz) throws Exception {
                                         Set<String> propertyNames = null;
 
-                                        Method[] methods = clazz.getMethods();
+                                        final Method[] methods = clazz.getMethods();
                                         propertyNames = Arrays.stream(methods)
                                                         .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
                                                         .map(method -> method.getName().replaceFirst("get|set", ""))
                                                         .map(prop -> {
-                                                            char c = Character.toLowerCase(prop.charAt(0));
-                                                            String l = Character.toString(c);
+                                                            final char c = Character.toLowerCase(prop.charAt(0));
+                                                            final String l = Character.toString(c);
                                                             return prop.replaceFirst("\\w", l);
                                                         })
                                                         .collect(ImmutableSet.toImmutableSet());
@@ -92,7 +93,7 @@ public class ReflectionManipulator {
                                             .build(new CacheLoader<PropNameKey, Set<String>>() {
                                                     @Override
                                                     public Set<String> load(PropNameKey key) throws Exception {
-                                                        return propNamesCache.get(key.getClazz()).stream()
+                                                        return ReflectionManipulator.this.propNamesCache.get(key.getClazz()).stream()
                                                                                                  .filter(prop -> !key.getExclusions().contains(prop))
                                                                                                  .collect(ImmutableSet.toImmutableSet());
 
@@ -106,42 +107,42 @@ public class ReflectionManipulator {
         }
 
         try {
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(o2.getClass(), Object.class).getPropertyDescriptors();
+            final PropertyDescriptor[] pds = Introspector.getBeanInfo(o2.getClass(), Object.class).getPropertyDescriptors();
 
-            for (PropertyDescriptor pd : pds) {
-                Method getter = pd.getReadMethod();
-                Method setter = pd.getWriteMethod();
+            for (final PropertyDescriptor pd : pds) {
+                final Method getter = pd.getReadMethod();
+                final Method setter = pd.getWriteMethod();
 
                 if (getter == null || setter == null) {
                     continue;
                 }
 
-                boolean pass = predicate.apply(pd);
+                final boolean pass = predicate.apply(pd);
 
                 if (pass) {
-                    Object value = getter.invoke(o2);
+                    final Object value = getter.invoke(o2);
                     setter.invoke(o1, value);
                 }
             }
 
-        } catch (IntrospectionException e) {
-            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
-            handleException(msg, e);
+        } catch (final IntrospectionException e) {
+            final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            this.handleException(msg, e);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
-            handleException(msg, e);
-        } catch (ReflectiveOperationException e) {
-            String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
-            handleException(msg, e);
+            final String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
+            this.handleException(msg, e);
+        } catch (final ReflectiveOperationException e) {
+            final String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
+            this.handleException(msg, e);
         }
     }
 
     public Set<String> getPropertyNames(Class<?> clazz, Set<String> exclusions) {
-        PropNameKey key = new PropNameKey(clazz, exclusions);
+        final PropNameKey key = new PropNameKey(clazz, exclusions);
         try {
             return this.propNamesCacheWithExclusions.get(key);
 
-        } catch (ExecutionException e) {
+        } catch (final ExecutionException e) {
             throw new RuntimeException(String.format("Failed to fetch properties names because: %s", e.getMessage()), e);
         }
     }
@@ -149,52 +150,56 @@ public class ReflectionManipulator {
     public <T> T construct(Class<T> clazz, Map<String, Object> props) {
         T obj = null;
         try {
-            Constructor<T> constructor = clazz.getConstructor();
+            final Constructor<T> constructor = clazz.getConstructor();
             obj = constructor.newInstance();
 
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
-            for (PropertyDescriptor pd : pds) {
+            final PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+            for (final PropertyDescriptor pd : pds) {
                 if (props.containsKey(pd.getName())) {
-                    Method setter = pd.getWriteMethod();
+                    final Method setter = pd.getWriteMethod();
                     setter.invoke(obj, props.get(pd.getName()));
                 }
             }
-        } catch (IntrospectionException e) {
-            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
-            handleException(msg, e);
+        } catch (final IntrospectionException e) {
+            final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            this.handleException(msg, e);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
-            handleException(msg, e);
-        } catch (ReflectiveOperationException e) {
-            String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
-            handleException(msg, e);
+            final String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
+            this.handleException(msg, e);
+        } catch (final ReflectiveOperationException e) {
+            final String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
+            this.handleException(msg, e);
         }
 
         return obj;
     }
 
+    public <T> T construct(Class<T> clazz) {
+        return this.construct(clazz, new String[] {}, new Object[] {});
+    }
+
     public <T> T construct(Class<T> clazz, String[] fields, Object[] values) {
         T obj = null;
         try {
-            Constructor<T> constructor = clazz.getConstructor();
+            final Constructor<T> constructor = clazz.getConstructor();
             obj = constructor.newInstance();
 
-            PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
-            Map<String, PropertyDescriptor> pdLookup = Arrays.stream(pds).collect(Collectors.toMap(pd -> pd.getName(), pd -> pd));
+            final PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
+            final Map<String, PropertyDescriptor> pdLookup = Arrays.stream(pds).collect(Collectors.toMap(pd -> pd.getName(), pd -> pd));
 
             for (int i = 0; i < fields.length; i++) {
-                Method setter = pdLookup.get(fields[i]).getWriteMethod();
+                final Method setter = pdLookup.get(fields[i]).getWriteMethod();
                 setter.invoke(obj, values[i]);
             }
-        } catch (IntrospectionException e) {
-            String msg = String.format("Failed to introspect object because: %s", e.getMessage());
-            handleException(msg, e);
+        } catch (final IntrospectionException e) {
+            final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
+            this.handleException(msg, e);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
-            handleException(msg, e);
-        } catch (ReflectiveOperationException e) {
-            String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
-            handleException(msg, e);
+            final String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
+            this.handleException(msg, e);
+        } catch (final ReflectiveOperationException e) {
+            final String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
+            this.handleException(msg, e);
         }
 
         return obj;

@@ -237,7 +237,9 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
             this.items.stream().collect(Collectors.toList()).forEach(this::removeItem);
         }
 
-        if (items != null) {
+        if (items == null) {
+            this.items = null;
+        } else {
             items.stream().collect(Collectors.toList()).forEach(this::addItem);
         }
     }

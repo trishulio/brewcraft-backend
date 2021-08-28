@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,26 +25,25 @@ public class ProcurementControllerTest {
 
     @BeforeEach
     public void init() {
-        mService = mock(ProcurementService.class);
-        controller = new ProcurementController(new AttributeFilter(), mService);
+        this.mService = mock(ProcurementService.class);
+        this.controller = new ProcurementController(new AttributeFilter(), this.mService);
     }
 
     @Test
     public void testAdd_ReturnsDtoFromServicePojo_WhenAddDtoIsNotNull() {
-        doAnswer(inv -> inv.getArgument(0, Procurement.class)).when(mService).add(any(Procurement.class));
+        doAnswer(inv -> inv.getArgument(0, Procurement.class)).when(this.mService).add(any(Procurement.class));
 
-        AddInvoiceDto invoiceAdditionDto = new AddInvoiceDto();
+        final AddInvoiceDto invoiceAdditionDto = new AddInvoiceDto();
         invoiceAdditionDto.setPurchaseOrderId(2L);
-        AddPurchaseOrderDto poAdditionDto = new AddPurchaseOrderDto("ORDER_1", 1L);
-        AddProcurementDto addition = new AddProcurementDto(poAdditionDto, invoiceAdditionDto);
+        final AddPurchaseOrderDto poAdditionDto = new AddPurchaseOrderDto("ORDER_1", 1L);
+        final AddProcurementDto addition = new AddProcurementDto(poAdditionDto, invoiceAdditionDto);
 
-        ProcurementDto dto = controller.add(addition);
+        final ProcurementDto dto = this.controller.add(addition);
 
-        InvoiceDto expectedInvoice = new InvoiceDto();
+        final InvoiceDto expectedInvoice = new InvoiceDto();
         expectedInvoice.setPurchaseOrder(new PurchaseOrderDto(2L));
-        expectedInvoice.setItems(List.of());
-        PurchaseOrderDto expectedPo = new PurchaseOrderDto(null, "ORDER_1", new SupplierDto(1L), null, null, null);
-        ProcurementDto expected = new ProcurementDto(expectedPo, expectedInvoice, null);
+        final PurchaseOrderDto expectedPo = new PurchaseOrderDto(null, "ORDER_1", new SupplierDto(1L), null, null, null);
+        final ProcurementDto expected = new ProcurementDto(expectedPo, expectedInvoice, null);
 
         assertEquals(expected, dto);
     }

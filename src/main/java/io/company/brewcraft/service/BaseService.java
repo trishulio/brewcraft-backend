@@ -16,10 +16,10 @@ public class BaseService {
     }
 
     public Set<String> getPropertyNames(Class<?> clazz) {
-        return getPropertyNames(clazz, Set.of());
+        return this.getPropertyNames(clazz, Set.of());
     }
 
     public Set<String> getPropertyNames(Class<?> clazz, Set<String> exclusions) {
-        return util.getPropertyNames(clazz, exclusions);
+        return this.util.getPropertyNames(clazz, exclusions);
     }
 }
