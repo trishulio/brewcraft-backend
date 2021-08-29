@@ -139,13 +139,12 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(0)).when(this.mItemService).getAddEntities(any());
        doAnswer(inv -> inv.getArgument(0)).when(this.mUpdateService).getAddEntities(any());
 
-       final List<BaseInvoice<? extends BaseInvoiceItem<?>>> additions = List.of(
-           new Invoice(1L), new Invoice()
-       );
-       additions.get(0).setItems(List.of((BaseInvoiceItem<?>) new InvoiceItem(10L)));
-       additions.get(1).setItems(List.of((BaseInvoiceItem<?>) new InvoiceItem(20L)));
+       final BaseInvoice<InvoiceItem> invoice1 = new Invoice(1L);
+       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       final BaseInvoice<InvoiceItem> invoice2 = new Invoice();
+       invoice2.setItems(List.of(new InvoiceItem(20L)));
 
-       final List<Invoice> added = this.service.add(additions);
+       final List<Invoice> added = this.service.add(List.of(invoice1, invoice2));
 
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice()
@@ -158,7 +157,7 @@ public class InvoiceServiceTest {
    }
 
    @Test
-   public void testAddd_DoesNotCallRepoServiceAndReturnsNull_WhenAdditionsAreNull() {
+   public void testAdd_DoesNotCallRepoServiceAndReturnsNull_WhenAdditionsAreNull() {
        assertNull(this.service.add(null));
        verify(this.mRepoService, times(0)).saveAll(any());
    }
@@ -168,15 +167,14 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(1)).when(this.mItemService).getPutEntities(any(), any());
        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPutEntities(any(), any());
 
-       final List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates = List.of(
-           new Invoice(1L), new Invoice(2L), new Invoice()
-       );
-       updates.get(0).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(10L)));
-       updates.get(1).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(20L)));
+       final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
+       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice();
+       invoice2.setItems(List.of(new InvoiceItem(20L)));
 
-       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(updates);
+       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
-       final List<Invoice> updated = this.service.put(updates);
+       final List<Invoice> updated = this.service.put(List.of(invoice1, invoice2));
 
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice(2L), new Invoice()
@@ -199,15 +197,14 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(1)).when(this.mItemService).getPatchEntities(any(), any());
        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
 
-       final List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates = List.of(
-           new Invoice(1L), new Invoice(2L)
-       );
-       updates.get(0).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(10L)));
-       updates.get(1).setItems(List.of((UpdateInvoiceItem<?>) new InvoiceItem(20L)));
+       final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
+       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice();
+       invoice2.setItems(List.of(new InvoiceItem(20L)));
 
-       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(updates);
+       doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
-       final List<Invoice> updated = this.service.patch(updates);
+       final List<Invoice> updated = this.service.patch(List.of(invoice1, invoice2));
 
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice(2L)
