@@ -15,12 +15,14 @@ import io.company.brewcraft.model.InvoiceItem;
 public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedInvoiceRepositoryImpl.class);
 
+    private AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher;
+
     private final InvoiceItemRepository itemRepo;
     private final InvoiceStatusRepository statusRepo;
     private final PurchaseOrderRepository poRepo;
 
     @Autowired
-    public EnhancedInvoiceRepositoryImpl(InvoiceItemRepository itemRepo, InvoiceStatusRepository statusRepo, PurchaseOrderRepository poRepo) {
+    public EnhancedInvoiceRepositoryImpl(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, InvoiceItemRepository itemRepo, InvoiceStatusRepository statusRepo, PurchaseOrderRepository poRepo) {
         this.itemRepo = itemRepo;
         this.statusRepo = statusRepo;
         this.poRepo = poRepo;
@@ -37,6 +39,6 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
 
     @Override
     public void refreshAccessors(Collection<? extends InvoiceAccessor> accessors) {
-        throw new NoSuchMethodError("Not yet implemented");
+        this.refresher.refreshAccessors(accessors);
     }
 }

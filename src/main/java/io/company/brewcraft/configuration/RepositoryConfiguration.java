@@ -11,6 +11,8 @@ import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Material;
@@ -39,6 +41,7 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.InvoiceItemRepository;
+import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialLotRepository;
 import io.company.brewcraft.repository.MaterialPortionRepository;
@@ -81,6 +84,16 @@ public class RepositoryConfiguration {
     @PersistenceContext
     public AggregationRepository aggrRepo(EntityManager em) {
         return new AggregationRepository(em);
+    }
+
+    @Bean
+    public AccessorRefresher<Long, InvoiceAccessor, Invoice> invoiceRefresher(InvoiceRepository repo) {
+        return new AccessorRefresher<>(
+                Invoice.class,
+            accessor -> accessor.getInvoice(),
+            (accessor, invoice) -> accessor.setInvoice(invoice),
+            ids -> repo.findAllById(ids)
+        );
     }
 
     @Bean
