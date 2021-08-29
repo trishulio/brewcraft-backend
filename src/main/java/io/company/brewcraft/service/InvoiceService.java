@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -18,7 +19,9 @@ import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MoneyEntity;
@@ -29,14 +32,14 @@ import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
-public class InvoiceService extends BaseService implements CrudService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> {
+public class InvoiceService extends BaseService implements CrudService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>, InvoiceAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
     private final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService;
     private final InvoiceItemService itemService;
-    private final RepoService<Long, Invoice> repoService;
+    private final RepoService<Long, Invoice, InvoiceAccessor> repoService;
 
-    public InvoiceService(UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService, InvoiceItemService itemService, RepoService<Long, Invoice> repoService) {
+    public InvoiceService(UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService, InvoiceItemService itemService, RepoService<Long, Invoice, InvoiceAccessor> repoService) {
         this.updateService = updateService;
         this.itemService = itemService;
         this.repoService = repoService;
@@ -87,6 +90,16 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
     @Override
     public Invoice get(Long id) {
         return this.repoService.get(id);
+    }
+
+    @Override
+    public List<Invoice> getByIds(Collection<? extends Identified<Long>> idProviders) {
+        return this.repoService.getByIds(idProviders);
+    }
+
+    @Override
+    public List<Invoice> getByAccessorIds(Collection<? extends InvoiceAccessor> accessors) {
+        return this.repoService.getByAccessorIds(accessors, accessor -> accessor.getInvoice().getId());
     }
 
     @Override

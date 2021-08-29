@@ -12,6 +12,7 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.AggregationRepository;
@@ -135,7 +136,7 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(InvoiceService.class)
     public InvoiceService invoiceService(UtilityProvider utilProvider, InvoiceItemService invoiceItemService, final InvoiceRepository invoiceRepo) {
         final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoice.class, UpdateInvoice.class, Invoice.class, Set.of(BaseInvoice.ATTR_ITEMS));
-        final RepoService<Long, Invoice> repoService = new CrudRepoService<>(invoiceRepo);
+        final RepoService<Long, Invoice, InvoiceAccessor> repoService = new CrudRepoService<>(invoiceRepo);
         return new InvoiceService(updateService, invoiceItemService, repoService);
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.repository.EnhancedRepository;
 
-public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & EnhancedRepository<E, A>, ID, A, E extends CrudEntity<ID>> implements RepoService<ID, E> {
+public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & EnhancedRepository<E, A>, ID, A, E extends CrudEntity<ID>> implements RepoService<ID, E, A> {
     private final T repo;
 
     public CrudRepoService(T repo) {
@@ -48,6 +49,12 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     @Override
     public List<E> getByIds(Collection<? extends Identified<ID>> idProviders) {
         final Set<ID> ids = idProviders.stream().map(provider -> provider.getId()).collect(Collectors.toSet());
+        return this.repo.findAllById(ids);
+    }
+
+    @Override
+    public List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ID> idSupplier) {
+        final Set<ID> ids = accessors.stream().filter(accessor -> accessor != null).map(accessor -> idSupplier.apply(accessor)).filter(id -> id != null).collect(Collectors.toSet());
         return this.repo.findAllById(ids);
     }
 
@@ -82,5 +89,4 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     public void delete(ID id) {
         this.repo.deleteById(id);
     }
-
 }

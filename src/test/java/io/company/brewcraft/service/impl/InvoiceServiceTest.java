@@ -21,6 +21,7 @@ import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceItemService;
@@ -34,7 +35,7 @@ public class InvoiceServiceTest {
 
    private InvoiceItemService mItemService;
    private UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> mUpdateService;
-   private RepoService<Long, Invoice> mRepoService;
+   private RepoService<Long, Invoice, InvoiceAccessor> mRepoService;
 
    @BeforeEach
    public void init() {
