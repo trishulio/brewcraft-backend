@@ -116,7 +116,9 @@ public class ServiceAutoConfigurationTest {
         final InvoiceRepository mInvoiceRepo = mock(InvoiceRepository.class);
         final InvoiceItemService mInvoiceItemService = mock(InvoiceItemService.class);
 
-        final InvoiceService service = this.serviceAutoConfiguration.invoiceService(mInvoiceRepo, mInvoiceItemService);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+
+        final InvoiceService service = this.serviceAutoConfiguration.invoiceService(mUtilProvider, mInvoiceItemService, mInvoiceRepo);
         assertTrue(service instanceof InvoiceService);
     }
 

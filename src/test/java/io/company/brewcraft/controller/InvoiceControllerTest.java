@@ -53,15 +53,15 @@ public class InvoiceControllerTest {
 
    @BeforeEach
    public void init() {
-       mService = mock(InvoiceService.class);
-       filter = new AttributeFilter();
+       this.mService = mock(InvoiceService.class);
+       this.filter = new AttributeFilter();
 
-       controller = new InvoiceController(mService, filter);
+       this.controller = new InvoiceController(this.mService, this.filter);
    }
 
    @Test
    public void testGetInvoices_CallsServicesWithArguments_AndReturnsPageDtoOfInvoiceDtosMappedFromInvoicesPage() {
-       List<Invoice> mInvoices = List.of(
+       final List<Invoice> mInvoices = List.of(
            new Invoice(
                12345L,
                "ABCDE-12345",
@@ -78,11 +78,11 @@ public class InvoiceControllerTest {
                1
            )
        );
-       Page<Invoice> mPage = mock(Page.class);
+       final Page<Invoice> mPage = mock(Page.class);
        doReturn(mInvoices.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
-       doReturn(mPage).when(mService).getInvoices(
+       doReturn(mPage).when(this.mService).getInvoices(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),
@@ -105,7 +105,7 @@ public class InvoiceControllerTest {
            10
        );
 
-       PageDto<InvoiceDto> dto = controller.getInvoices(
+       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),
@@ -132,7 +132,7 @@ public class InvoiceControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       InvoiceDto invoice = dto.getContent().get(0);
+       final InvoiceDto invoice = dto.getContent().get(0);
        assertEquals(12345L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -145,7 +145,7 @@ public class InvoiceControllerTest {
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
        assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
-       InvoiceItemDto item = invoice.getItems().get(0);
+       final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
@@ -157,7 +157,7 @@ public class InvoiceControllerTest {
 
    @Test
    public void testGetInvoices_CallsServicesWithArguments_AndReturnsPageDtoWithAllFieldsFilteredOut() {
-       List<Invoice> mInvoices = List.of(
+       final List<Invoice> mInvoices = List.of(
            new Invoice(
                12345L,
                "ABCDE-12345",
@@ -174,11 +174,11 @@ public class InvoiceControllerTest {
                1
            )
        );
-       Page<Invoice> mPage = mock(Page.class);
+       final Page<Invoice> mPage = mock(Page.class);
        doReturn(mInvoices.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
-       doReturn(mPage).when(mService).getInvoices(
+       doReturn(mPage).when(this.mService).getInvoices(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),
@@ -201,7 +201,7 @@ public class InvoiceControllerTest {
            10
        );
 
-       PageDto<InvoiceDto> dto = controller.getInvoices(
+       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),
@@ -228,7 +228,7 @@ public class InvoiceControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       InvoiceDto invoice = dto.getContent().get(0);
+       final InvoiceDto invoice = dto.getContent().get(0);
        assertEquals(12345L, invoice.getId());
        assertNull(invoice.getInvoiceNumber());
        assertNull(invoice.getDescription());
@@ -245,7 +245,7 @@ public class InvoiceControllerTest {
 
    @Test
    public void testGetInvoice_ReturnsInvoiceDtoMappedFromServiceInvoice() {
-       Invoice mInvoice = new Invoice(
+       final Invoice mInvoice = new Invoice(
            12345L,
            "ABCDE-12345",
            "desc1",
@@ -260,9 +260,9 @@ public class InvoiceControllerTest {
            List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
            1
        );
-       doReturn(mInvoice).when(mService).getInvoice(1L);
+       doReturn(mInvoice).when(this.mService).get(1L);
 
-       InvoiceDto invoice = controller.getInvoice(1L, Set.of());
+       final InvoiceDto invoice = this.controller.getInvoice(1L, Set.of());
        assertEquals(12345L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
@@ -275,7 +275,7 @@ public class InvoiceControllerTest {
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
        assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
-       InvoiceItemDto item = invoice.getItems().get(0);
+       final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
@@ -287,7 +287,7 @@ public class InvoiceControllerTest {
 
    @Test
    public void testGetInvoice_FiltersOutAllAttributesExceptId_WhenAttributeSetOnlyContainsId() {
-       Invoice mInvoice = new Invoice(
+       final Invoice mInvoice = new Invoice(
            12345L,
            "ABCDE-12345",
            "desc1",
@@ -302,9 +302,9 @@ public class InvoiceControllerTest {
            List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
            1
        );
-       doReturn(mInvoice).when(mService).getInvoice(1L);
+       doReturn(mInvoice).when(this.mService).get(1L);
 
-       InvoiceDto invoice = controller.getInvoice(1L, Set.of("id"));
+       final InvoiceDto invoice = this.controller.getInvoice(1L, Set.of("id"));
 
        assertEquals(12345L, invoice.getId());
        assertNull(invoice.getInvoiceNumber());
@@ -322,30 +322,26 @@ public class InvoiceControllerTest {
 
    @Test
    public void testGetInvoice_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
-       doReturn(null).when(mService).getInvoice(1L);
-       assertThrows(EntityNotFoundException.class, () -> controller.getInvoice(1L, Set.of()), "Invoice not found with id: 1");
+       doReturn(null).when(this.mService).get(1L);
+       assertThrows(EntityNotFoundException.class, () -> this.controller.getInvoice(1L, Set.of()), "Invoice not found with id: 1");
    }
 
    @Test
    public void testDeleteInvoices_ReturnsDeleteCountFromService() {
-       doReturn(99).when(mService).delete(Set.of(1L, 11L, 111L));
-       int count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
+       doReturn(99).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       int count = this.controller.deleteInvoices(Set.of(1L, 11L, 111L));
        assertEquals(99, count);
 
-       doReturn(9999).when(mService).delete(Set.of(1L, 11L, 111L));
-       count = controller.deleteInvoices(Set.of(1L, 11L, 111L));
+       doReturn(9999).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       count = this.controller.deleteInvoices(Set.of(1L, 11L, 111L));
        assertEquals(9999, count);
    }
 
    @Test
    public void testAddInvoice_ReturnsInvoiceDtoAfterAddingToService() {
-       doAnswer(i -> {
-           Invoice invoice = i.getArgument(0, Invoice.class);
-           invoice.setId(1L);
-           return invoice;
-       }).when(mService).add(any(Invoice.class));
+       doAnswer(i -> i.getArgument(0)).when(this.mService).add(anyList());
 
-       AddInvoiceDto payload = new AddInvoiceDto(
+       final AddInvoiceDto payload = new AddInvoiceDto(
            "ABCDE-12345",
            2L,
            "desc1",
@@ -357,8 +353,8 @@ public class InvoiceControllerTest {
            List.of(new AddInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L))
        );
 
-       InvoiceDto invoice = controller.addInvoice(payload);
-       assertEquals(1L, invoice.getId());
+       final InvoiceDto invoice = this.controller.addInvoice(payload);
+       assertEquals(null, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
        assertEquals("desc1", invoice.getDescription());
        assertEquals(new PurchaseOrderDto(2L), invoice.getPurchaseOrder());
@@ -370,7 +366,7 @@ public class InvoiceControllerTest {
        assertEquals(null, invoice.getLastUpdated());
        assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
-       InvoiceItemDto item = invoice.getItems().get(0);
+       final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(null, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
@@ -382,13 +378,9 @@ public class InvoiceControllerTest {
 
    @Test
    public void testUpdateInvoice_ReturnsInvoiceDtoAfterUpdatingItToService() {
-       doAnswer(i -> {
-           Invoice invoice = i.getArgument(1, Invoice.class);
-           invoice.setId(i.getArgument(0, Long.class));
-           return invoice;
-       }).when(mService).put(anyLong(), any(Invoice.class));
+       doAnswer(i -> i.getArgument(0)).when(this.mService).put(anyList());
 
-       UpdateInvoiceDto payload = new UpdateInvoiceDto(
+       final UpdateInvoiceDto payload = new UpdateInvoiceDto(
            "ABCDE-12345",
            2L,
            "desc1",
@@ -401,7 +393,7 @@ public class InvoiceControllerTest {
            1
        );
 
-       InvoiceDto invoice = controller.updateInvoice(1L, payload);
+       final InvoiceDto invoice = this.controller.updateInvoice(1L, payload);
 
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
@@ -415,7 +407,7 @@ public class InvoiceControllerTest {
        assertEquals(null, invoice.getLastUpdated());
        assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
-       InvoiceItemDto item = invoice.getItems().get(0);
+       final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
@@ -427,13 +419,9 @@ public class InvoiceControllerTest {
 
    @Test
    public void testPatchInvoice_ReturnsInvoiceDtoAfterPatchingItToService() {
-       doAnswer(i -> {
-           Invoice invoice = i.getArgument(1, Invoice.class);
-           invoice.setId(i.getArgument(0, Long.class));
-           return invoice;
-       }).when(mService).patch(anyLong(), any(Invoice.class));
+       doAnswer(i -> i.getArgument(0)).when(this.mService).patch(anyList());
 
-       UpdateInvoiceDto payload = new UpdateInvoiceDto(
+       final UpdateInvoiceDto payload = new UpdateInvoiceDto(
            "ABCDE-12345",
            2L,
            "desc1",
@@ -446,7 +434,7 @@ public class InvoiceControllerTest {
            1
        );
 
-       InvoiceDto invoice = controller.patchInvoice(1L, payload);
+       final InvoiceDto invoice = this.controller.patchInvoice(1L, payload);
 
        assertEquals(1L, invoice.getId());
        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
@@ -460,7 +448,7 @@ public class InvoiceControllerTest {
        assertEquals(null, invoice.getLastUpdated());
        assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
        assertEquals(1, invoice.getItems().size());
-       InvoiceItemDto item = invoice.getItems().get(0);
+       final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());
        assertEquals("desc2", item.getDescription());
        assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());

@@ -45,7 +45,7 @@ import io.company.brewcraft.util.validator.Validator;
 public class InvoiceController extends BaseController {
     private static InvoiceMapper mapper = InvoiceMapper.INSTANCE;
 
-    private InvoiceService invoiceService;
+    private final InvoiceService invoiceService;
 
     @Autowired
     public InvoiceController(InvoiceService invoiceService, AttributeFilter filter) {
@@ -77,7 +77,7 @@ public class InvoiceController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
-        Page<Invoice> invoices = invoiceService.getInvoices(
+        final Page<Invoice> invoices = this.invoiceService.getInvoices(
             ids,
             excludeIds,
             invoiceNumbers,
@@ -99,16 +99,17 @@ public class InvoiceController extends BaseController {
             page,
             size
         );
-        return response(invoices, attributes);
+
+        return this.response(invoices, attributes);
     }
 
     @GetMapping("/invoices/{invoiceId}")
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
-        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        final Invoice invoice = this.invoiceService.get(invoiceId);
         Validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
 
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
-        filter(dto, attributes);
+        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+        this.filter(dto, attributes);
 
         return dto;
     }
@@ -116,16 +117,16 @@ public class InvoiceController extends BaseController {
     @DeleteMapping("/invoices")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
-        return invoiceService.delete(invoiceIds);
+        return this.invoiceService.delete(invoiceIds);
     }
 
     @PostMapping("/invoices")
     @ResponseStatus(value = HttpStatus.CREATED)
     public InvoiceDto addInvoice(@Valid @NotNull @RequestBody AddInvoiceDto payload) {
-        BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
-        Invoice added = invoiceService.add(addition);
+        final BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
+        final Invoice added = this.invoiceService.add(List.of(addition)).get(0);
 
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
+        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
 
         return dto;
     }
@@ -133,10 +134,11 @@ public class InvoiceController extends BaseController {
     @PutMapping("/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
+        final UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
+        update.setId(invoiceId);
 
-        Invoice invoice = invoiceService.put(invoiceId, update);
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+        final Invoice invoice = this.invoiceService.put(List.of(update)).get(0);
+        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;
     }
@@ -144,19 +146,20 @@ public class InvoiceController extends BaseController {
     @PatchMapping("/invoices/{invoiceId}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
+        final UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
+        patch.setId(invoiceId);
 
-        Invoice invoice = invoiceService.patch(invoiceId, patch);
-        InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
+        final Invoice invoice = this.invoiceService.patch(List.of(patch)).get(0);
+        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
 
         return dto;
     }
 
     private PageDto<InvoiceDto> response(Page<Invoice> invoices, Set<String> attributes) {
-        List<InvoiceDto> content = invoices.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
-        content.forEach(invoice -> filter(invoice, attributes));
+        final List<InvoiceDto> content = invoices.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
+        content.forEach(invoice -> this.filter(invoice, attributes));
 
-        PageDto<InvoiceDto> dto = new PageDto<InvoiceDto>();
+        final PageDto<InvoiceDto> dto = new PageDto<>();
         dto.setContent(content);
         dto.setTotalElements(invoices.getTotalElements());
         dto.setTotalPages(invoices.getTotalPages());

@@ -26,12 +26,12 @@ public class InvoiceTest {
 
     @BeforeEach
     public void init() {
-        invoice = new Invoice();
+        this.invoice = new Invoice();
     }
 
     @Test
     public void testAllArgsConstructor() {
-        invoice = new Invoice(12345L,
+        this.invoice = new Invoice(12345L,
             "ABCDE-12345",
             "desc1",
             new PurchaseOrder(1L),
@@ -46,216 +46,222 @@ public class InvoiceTest {
             1
         );
 
-        assertEquals(12345L, invoice.getId());
-        assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-        assertEquals("desc1", invoice.getDescription());
-        assertEquals(new PurchaseOrder(1L), invoice.getPurchaseOrder());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), invoice.getFreight());
-        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
-        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
-        assertNull(invoice.getAmount());
-        assertNull(invoice.getTax());
-        assertEquals(1, invoice.getItems().size());
-        InvoiceItem item = new InvoiceItem();
-        item.setInvoice(invoice);
-        assertEquals(item, invoice.getItems().iterator().next());
+        assertEquals(12345L, this.invoice.getId());
+        assertEquals("ABCDE-12345", this.invoice.getInvoiceNumber());
+        assertEquals("desc1", this.invoice.getDescription());
+        assertEquals(new PurchaseOrder(1L), this.invoice.getPurchaseOrder());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), this.invoice.getGeneratedOn());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), this.invoice.getReceivedOn());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), this.invoice.getPaymentDueDate());
+        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), this.invoice.getFreight());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), this.invoice.getCreatedAt());
+        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), this.invoice.getLastUpdated());
+        assertEquals(new InvoiceStatus(99L), this.invoice.getStatus());
+        assertNull(this.invoice.getAmount());
+        assertNull(this.invoice.getTax());
+        assertEquals(1, this.invoice.getItems().size());
+        final InvoiceItem item = new InvoiceItem();
+        item.setInvoice(this.invoice);
+        assertEquals(item, this.invoice.getItems().iterator().next());
     }
 
     @Test
     public void testAccessId() {
-        assertNull(invoice.getId());
-        invoice.setId(2L);
-        assertEquals(2L, invoice.getId());
+        assertNull(this.invoice.getId());
+        this.invoice.setId(2L);
+        assertEquals(2L, this.invoice.getId());
     }
 
     @Test
     public void testAccessInvoiceNumber() {
-        assertNull(invoice.getInvoiceNumber());
-        invoice.setInvoiceNumber("ABC-123");
-        assertEquals("ABC-123", invoice.getInvoiceNumber());
+        assertNull(this.invoice.getInvoiceNumber());
+        this.invoice.setInvoiceNumber("ABC-123");
+        assertEquals("ABC-123", this.invoice.getInvoiceNumber());
     }
 
     @Test
     public void testAccessPurchaseOrder() {
-        assertNull(invoice.getPurchaseOrder());
-        invoice.setPurchaseOrder(new PurchaseOrder(1L));
-        assertEquals(new PurchaseOrder(1L), invoice.getPurchaseOrder());
+        assertNull(this.invoice.getPurchaseOrder());
+        this.invoice.setPurchaseOrder(new PurchaseOrder(1L));
+        assertEquals(new PurchaseOrder(1L), this.invoice.getPurchaseOrder());
     }
 
     @Test
     public void testAccessDescription() {
-        assertNull(invoice.getDescription());
-        invoice.setDescription("Description 1");
-        assertEquals("Description 1", invoice.getDescription());
+        assertNull(this.invoice.getDescription());
+        this.invoice.setDescription("Description 1");
+        assertEquals("Description 1", this.invoice.getDescription());
     }
 
     @Test
     public void testAccessGeneratedOn() {
-        assertNull(invoice.getGeneratedOn());
-        invoice.setGeneratedOn(LocalDateTime.of(1999, 1, 1, 10, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), invoice.getGeneratedOn());
+        assertNull(this.invoice.getGeneratedOn());
+        this.invoice.setGeneratedOn(LocalDateTime.of(1999, 1, 1, 10, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), this.invoice.getGeneratedOn());
     }
 
     @Test
     public void testAccessReceivedOn() {
-        assertNull(invoice.getReceivedOn());
-        invoice.setReceivedOn(LocalDateTime.of(1999, 1, 1, 10, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), invoice.getReceivedOn());
+        assertNull(this.invoice.getReceivedOn());
+        this.invoice.setReceivedOn(LocalDateTime.of(1999, 1, 1, 10, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), this.invoice.getReceivedOn());
     }
 
     @Test
     public void testAccessPaymentDueDate() {
-        assertNull(invoice.getPaymentDueDate());
-        invoice.setPaymentDueDate(LocalDateTime.of(1999, 1, 1, 10, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), invoice.getPaymentDueDate());
+        assertNull(this.invoice.getPaymentDueDate());
+        this.invoice.setPaymentDueDate(LocalDateTime.of(1999, 1, 1, 10, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), this.invoice.getPaymentDueDate());
     }
 
     @Test
     public void testAccessLastUpdated() {
-        assertNull(invoice.getLastUpdated());
-        invoice.setLastUpdated(LocalDateTime.of(1999, 1, 1, 10, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), invoice.getLastUpdated());
+        assertNull(this.invoice.getLastUpdated());
+        this.invoice.setLastUpdated(LocalDateTime.of(1999, 1, 1, 10, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), this.invoice.getLastUpdated());
     }
 
     @Test
     public void testAccessCreatedAt() {
-        assertNull(invoice.getCreatedAt());
-        invoice.setCreatedAt(LocalDateTime.of(1999, 1, 1, 10, 0));
-        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), invoice.getCreatedAt());
+        assertNull(this.invoice.getCreatedAt());
+        this.invoice.setCreatedAt(LocalDateTime.of(1999, 1, 1, 10, 0));
+        assertEquals(LocalDateTime.of(1999, 1, 1, 10, 0), this.invoice.getCreatedAt());
     }
 
     @Test
     public void testAccessStatus() {
-        assertNull(invoice.getStatus());
-        invoice.setStatus(new InvoiceStatus(99L));
-        assertEquals(new InvoiceStatus(99L), invoice.getStatus());
+        assertNull(this.invoice.getStatus());
+        this.invoice.setStatus(new InvoiceStatus(99L));
+        assertEquals(new InvoiceStatus(99L), this.invoice.getStatus());
     }
 
     @Test
     public void testAccessFreight() {
-        assertNull(invoice.getFreight());
-        invoice.setFreight(new Freight(Money.parse("CAD 10")));
-        assertEquals(new Freight(Money.parse("CAD 10")), invoice.getFreight());
+        assertNull(this.invoice.getFreight());
+        this.invoice.setFreight(new Freight(Money.parse("CAD 10")));
+        assertEquals(new Freight(Money.parse("CAD 10")), this.invoice.getFreight());
     }
 
     @Test
     public void testAccessVersion() {
-        assertNull(invoice.getVersion());
-        invoice.setVersion(1);
-        assertEquals(1, invoice.getVersion());
+        assertNull(this.invoice.getVersion());
+        this.invoice.setVersion(1);
+        assertEquals(1, this.invoice.getVersion());
     }
 
     @Test
     public void testAccessItems() {
-        assertNull(invoice.getItems());
-        InvoiceItem item = new InvoiceItem(2L);
-        invoice.setItems(List.of(item));
+        assertNull(this.invoice.getItems());
+        final InvoiceItem item = new InvoiceItem(2L);
+        this.invoice.setItems(List.of(item));
 
-        InvoiceItem expected = new InvoiceItem(2L);
+        final InvoiceItem expected = new InvoiceItem(2L);
         expected.setInvoice(new Invoice());
 
-        assertEquals(List.of(expected), invoice.getItems());
-        assertEquals(invoice, item.getInvoice());
+        assertEquals(List.of(expected), this.invoice.getItems());
+        assertEquals(this.invoice, item.getInvoice());
+    }
+
+    @Test
+    public void testAccessItems_SetsNull_WhenInputIsNull() {
+        this.invoice.setItems(null);
+        assertNull(this.invoice.getItems());
     }
 
     @Test
     public void testGetAmount_ReturnsTotalOfAllItemsAmount() {
-        InvoiceItem item1 = spy(new InvoiceItem());
+        final InvoiceItem item1 = spy(new InvoiceItem());
         doReturn(Money.parse("CAD 100")).when(item1).getAmount();
 
-        InvoiceItem item2 = spy(new InvoiceItem());
+        final InvoiceItem item2 = spy(new InvoiceItem());
         doReturn(Money.parse("CAD 200")).when(item2).getAmount();
 
-        invoice.setItems(List.of(item1, item2));
-        assertEquals(Money.parse("CAD 300"), invoice.getAmount());
+        this.invoice.setItems(List.of(item1, item2));
+        assertEquals(Money.parse("CAD 300"), this.invoice.getAmount());
     }
 
     @Test
     public void testGetTax_ReturnsTotalOfAllItemsTax() {
-        InvoiceItem item1 = spy(new InvoiceItem());
+        final InvoiceItem item1 = spy(new InvoiceItem());
         doReturn(new Tax(Money.parse("CAD 100"))).when(item1).getTax();
 
-        InvoiceItem item2 = spy(new InvoiceItem());
+        final InvoiceItem item2 = spy(new InvoiceItem());
         doReturn(new Tax(Money.parse("CAD 200"))).when(item2).getTax();
 
-        invoice.setItems(List.of(item1, item2));
-        assertEquals(new Tax(Money.parse("CAD 300")), invoice.getTax());
+        this.invoice.setItems(List.of(item1, item2));
+        assertEquals(new Tax(Money.parse("CAD 300")), this.invoice.getTax());
     }
 
     @Test
     public void testAddItem_CreatesNewItemList_WhenItemIsNotNull() {
-        assertNull(invoice.getItems());
+        assertNull(this.invoice.getItems());
 
-        InvoiceItem item = new InvoiceItem(1L);
+        final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
-        invoice.addItem(item);
+        this.invoice.addItem(item);
 
-        assertEquals(List.of(item), invoice.getItems());
-        assertEquals(invoice, item.getInvoice());
+        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testAddItem_AddsItemsToList_WhenItemIsNotNull() {
-        InvoiceItem existing = new InvoiceItem(0L);
-        invoice.setItems(List.of(existing));
-        assertEquals(List.of(existing), invoice.getItems());
+        final InvoiceItem existing = new InvoiceItem(0L);
+        this.invoice.setItems(List.of(existing));
+        assertEquals(List.of(existing), this.invoice.getItems());
 
-        InvoiceItem item = new InvoiceItem(1L);
+        final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
-        invoice.addItem(item);
+        this.invoice.addItem(item);
 
-        assertEquals(List.of(existing, item), invoice.getItems());
-        assertEquals(invoice, existing.getInvoice());
-        assertEquals(invoice, item.getInvoice());
+        assertEquals(List.of(existing, item), this.invoice.getItems());
+        assertEquals(this.invoice, existing.getInvoice());
+        assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testAddItem_AddsItemOnlyOnce_WhenMultipleAdditionsArePerformed() {
-        InvoiceItem item = new InvoiceItem(1L);
+        final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
-        invoice.addItem(item);
-        invoice.addItem(item);
-        invoice.addItem(item);
+        this.invoice.addItem(item);
+        this.invoice.addItem(item);
+        this.invoice.addItem(item);
 
-        assertEquals(List.of(item), invoice.getItems());
-        assertEquals(invoice, item.getInvoice());
+        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsNull() {
-        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+        assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
 
     @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsEmpty() {
-        invoice.setItems(new ArrayList<>());
-        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+        this.invoice.setItems(new ArrayList<>());
+        assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
 
     @Test
     public void testRemoveItem_ReturnsFalse_WhenItemExistInList() {
-        invoice.setItems(List.of(new InvoiceItem(2L)));
+        this.invoice.setItems(List.of(new InvoiceItem(2L)));
 
-        assertFalse(invoice.removeItem(new InvoiceItem(1L)));
+        assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
 
     @Test
     public void testRemoveItem_ReturnsTrueAndUpdatesItemInvoice_WhenItemExist() {
-        InvoiceItem item = new InvoiceItem(1L);
+        final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
-        invoice.addItem(item);
-        assertEquals(List.of(item), invoice.getItems());
-        assertEquals(invoice, item.getInvoice());
+        this.invoice.addItem(item);
+        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(this.invoice, item.getInvoice());
 
-        assertTrue(invoice.removeItem(item));
+        assertTrue(this.invoice.removeItem(item));
         assertNull(item.getInvoice());
     }
 }

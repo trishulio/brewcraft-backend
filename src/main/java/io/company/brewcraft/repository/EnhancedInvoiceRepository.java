@@ -1,9 +1,7 @@
 package io.company.brewcraft.repository;
 
-import java.util.Collection;
-
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 
-public interface EnhancedInvoiceRepository {
-    void refresh(Collection<Invoice> invoices);
+public interface EnhancedInvoiceRepository extends EnhancedRepository<Invoice, InvoiceAccessor>{
 }
