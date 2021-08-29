@@ -169,12 +169,12 @@ public class InvoiceServiceTest {
 
        final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
        invoice1.setItems(List.of(new InvoiceItem(10L)));
-       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice();
+       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice(2L);
        invoice2.setItems(List.of(new InvoiceItem(20L)));
 
        doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
-       final List<Invoice> updated = this.service.put(List.of(invoice1, invoice2));
+       final List<Invoice> updated = this.service.put(List.of(invoice1, invoice2, new Invoice()));
 
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice(2L), new Invoice()
@@ -199,7 +199,7 @@ public class InvoiceServiceTest {
 
        final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
        invoice1.setItems(List.of(new InvoiceItem(10L)));
-       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice();
+       final UpdateInvoice<InvoiceItem> invoice2 = new Invoice(2L);
        invoice2.setItems(List.of(new InvoiceItem(20L)));
 
        doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
