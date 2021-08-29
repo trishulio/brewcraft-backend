@@ -1,7 +1,10 @@
 package io.company.brewcraft.model;
 
+import org.springframework.context.annotation.Profile;
+
 import io.company.brewcraft.service.CrudEntity;
 
+@Profile("IgnoredFromSpringContextTests")
 public class DummyCrudEntity extends BaseEntity implements CrudEntity<Long>, BaseDummyCrudEntity, UpdateDummyCrudEntity {
 
     private Long id;

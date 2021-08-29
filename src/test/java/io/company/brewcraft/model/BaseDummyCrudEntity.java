@@ -1,8 +1,8 @@
 package io.company.brewcraft.model;
 
 public interface BaseDummyCrudEntity {
-    String ATTR_EXCLUDED_VALUE = "excludedValue";
-    String ATTR_VALUE = "value";
+    final String ATTR_EXCLUDED_VALUE = "excludedValue";
+    final String ATTR_VALUE = "value";
 
     String getExcludedValue();
 
