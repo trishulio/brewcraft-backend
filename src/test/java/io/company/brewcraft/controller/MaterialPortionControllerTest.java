@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.dto.AddMaterialPortionDto;
 import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.MaterialPortionDto;
+import io.company.brewcraft.dto.MixtureDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMaterialPortionDto;
@@ -63,7 +64,7 @@ public class MaterialPortionControllerTest {
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
-        assertEquals(3L, materialPortionDto.getMixtureId());
+        assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
     }
@@ -79,7 +80,7 @@ public class MaterialPortionControllerTest {
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
-        assertEquals(3L, materialPortionDto.getMixtureId());
+        assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
     }
@@ -105,7 +106,7 @@ public class MaterialPortionControllerTest {
         assertEquals(1L, materialPortionDtos.get(0).getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDtos.get(0).getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("100")), materialPortionDtos.get(0).getQuantity());
-        assertEquals(3L, materialPortionDtos.get(0).getMixtureId());
+        assertEquals(new MixtureDto(3L), materialPortionDtos.get(0).getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDtos.get(0).getAddedAt());
         assertEquals(1, materialPortionDtos.get(0).getVersion());
     }
@@ -136,7 +137,7 @@ public class MaterialPortionControllerTest {
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
-        assertEquals(3L, materialPortionDto.getMixtureId());
+        assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
     }
@@ -167,7 +168,7 @@ public class MaterialPortionControllerTest {
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
-        assertEquals(3L, materialPortionDto.getMixtureId());
+        assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
     }

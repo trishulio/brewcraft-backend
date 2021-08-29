@@ -82,8 +82,6 @@ public class MixtureControllerTest {
        assertEquals(2L, mixtureDto.getParentMixtureId());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-       assertEquals(List.of(new MaterialPortionDto(4L)), mixtureDto.getMaterialPortions());
-       assertEquals(List.of(new MixtureRecordingDto(5L)), mixtureDto.getRecordedMeasures());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
        assertEquals(1, mixtureDto.getVersion());
    }
@@ -100,8 +98,6 @@ public class MixtureControllerTest {
        assertEquals(2L, mixtureDto.getParentMixtureId());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-       assertEquals(List.of(new MaterialPortionDto(4L)), mixtureDto.getMaterialPortions());
-       assertEquals(List.of(new MixtureRecordingDto(5L)), mixtureDto.getRecordedMeasures());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
        assertEquals(1, mixtureDto.getVersion());
    }
@@ -141,8 +137,6 @@ public class MixtureControllerTest {
        assertEquals(2L, mixtureDto.getParentMixtureId());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-       assertEquals(null, mixtureDto.getMaterialPortions());
-       assertEquals(null, mixtureDto.getRecordedMeasures());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
        assertEquals(1, mixtureDto.getVersion());
    }
@@ -176,8 +170,6 @@ public class MixtureControllerTest {
        assertEquals(2L, mixtureDto.getParentMixtureId());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-       assertEquals(null, mixtureDto.getMaterialPortions());
-       assertEquals(null, mixtureDto.getRecordedMeasures());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
        assertEquals(1, mixtureDto.getVersion());
    }
@@ -211,8 +203,6 @@ public class MixtureControllerTest {
        assertEquals(2L, mixtureDto.getParentMixtureId());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-       assertEquals(null, mixtureDto.getMaterialPortions());
-       assertEquals(null, mixtureDto.getRecordedMeasures());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
        assertEquals(1, mixtureDto.getVersion());
    }

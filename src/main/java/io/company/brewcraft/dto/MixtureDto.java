@@ -1,7 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.util.List;
-
 public class MixtureDto extends BaseDto {
 
     private Long id;
@@ -14,27 +12,24 @@ public class MixtureDto extends BaseDto {
 
     private BrewStageDto brewStage;
 
-    private List<MaterialPortionDto> materialPortions;
-
-    private List<MixtureRecordingDto> recordedMeasures;
-
     private Integer version;
 
     public MixtureDto() {
-
+        super();
+    }
+    
+    public MixtureDto(Long id) {
+        this();
+        this.id = id;
     }
 
     public MixtureDto(Long id, Long parentMixtureId, QuantityDto quantity, FacilityEquipmentDto equipment,
-            BrewStageDto brewStage, List<MaterialPortionDto> materialPortions,
-            List<MixtureRecordingDto> recordedMeasures, Integer version) {
-        super();
-        this.id = id;
+            BrewStageDto brewStage, Integer version) {
+        this(id);
         this.parentMixtureId = parentMixtureId;
         this.quantity = quantity;
         this.equipment = equipment;
         this.brewStage = brewStage;
-        this.materialPortions = materialPortions;
-        this.recordedMeasures = recordedMeasures;
         this.version = version;
     }
 
@@ -76,22 +71,6 @@ public class MixtureDto extends BaseDto {
 
     public void setBrewStage(BrewStageDto brewStage) {
         this.brewStage = brewStage;
-    }
-
-    public List<MaterialPortionDto> getMaterialPortions() {
-        return materialPortions;
-    }
-
-    public void setMaterialPortions(List<MaterialPortionDto> materialPortions) {
-        this.materialPortions = materialPortions;
-    }
-
-    public List<MixtureRecordingDto> getRecordedMeasures() {
-        return recordedMeasures;
-    }
-
-    public void setRecordedMeasures(List<MixtureRecordingDto> recordedMeasures) {
-        this.recordedMeasures = recordedMeasures;
     }
 
     public Integer getVersion() {

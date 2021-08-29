@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,20 +23,15 @@ public class MixtureDtoTest {
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
         FacilityEquipmentDto equipmentDto = new FacilityEquipmentDto(3L);
         BrewStageDto brewStageDto = new BrewStageDto(4L);
-        List<MaterialPortionDto> materialPortions = List.of(new MaterialPortionDto(5L));
-        List<MixtureRecordingDto> recordedMeasures = List.of(new MixtureRecordingDto(6L));
         Integer version = 1;
 
-        MixtureDto mixtureDto = new MixtureDto(id, parentMixtureId, quantity, equipmentDto, brewStageDto,
-                materialPortions, recordedMeasures, version);
+        MixtureDto mixtureDto = new MixtureDto(id, parentMixtureId, quantity, equipmentDto, brewStageDto, version);
 
         assertEquals(1L, mixtureDto.getId());
         assertEquals(2L, mixtureDto.getParentMixtureId());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
         assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
         assertEquals(new BrewStageDto(4L), mixtureDto.getBrewStage());
-        assertEquals(List.of(new MaterialPortionDto(5L)), mixtureDto.getMaterialPortions());
-        assertEquals(List.of(new MixtureRecordingDto(6L)), mixtureDto.getRecordedMeasures());
         assertEquals(1, mixtureDto.getVersion());
     }
 
@@ -69,18 +63,6 @@ public class MixtureDtoTest {
     public void testGetBrewStage() {
         mixtureDto.setBrewStage(new BrewStageDto(4L));
         assertEquals(new BrewStageDto(4L), mixtureDto.getBrewStage());
-    }
-
-    @Test
-    public void testGetSetMaterialPortions() {
-        mixtureDto.setMaterialPortions(List.of(new MaterialPortionDto(5L)));
-        assertEquals(List.of(new MaterialPortionDto(5L)), mixtureDto.getMaterialPortions());
-    }
-
-    @Test
-    public void testGetSetRecordedMeasures() {
-        mixtureDto.setRecordedMeasures(List.of(new MixtureRecordingDto(6L)));
-        assertEquals(List.of(new MixtureRecordingDto(6L)), mixtureDto.getRecordedMeasures());
     }
 
     @Test

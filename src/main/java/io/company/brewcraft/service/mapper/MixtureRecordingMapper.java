@@ -15,7 +15,6 @@ public interface MixtureRecordingMapper {
 
     MixtureRecordingMapper INSTANCE = Mappers.getMapper(MixtureRecordingMapper.class);
 
-    @Mapping(target = "mixtureId", source = "mixture.id")
     MixtureRecordingDto toDto(MixtureRecording mixtureRecording);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)

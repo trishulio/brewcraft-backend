@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.AddMixtureRecordingDto;
 import io.company.brewcraft.dto.MeasureDto;
+import io.company.brewcraft.dto.MixtureDto;
 import io.company.brewcraft.dto.MixtureRecordingDto;
 import io.company.brewcraft.dto.UpdateMixtureRecordingDto;
 import io.company.brewcraft.model.Measure;
@@ -53,7 +54,7 @@ public class MixtureRecordingMapperTest {
 
         MixtureRecordingDto dto = mixtureRecordingMapper.toDto(mixtureRecording);
 
-        MixtureRecordingDto expectedMixtureRecordingDto = new MixtureRecordingDto(1L, 2L, new MeasureDto(3L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        MixtureRecordingDto expectedMixtureRecordingDto = new MixtureRecordingDto(1L, new MixtureDto(2L), new MeasureDto(3L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
         assertEquals(expectedMixtureRecordingDto, dto);
     }

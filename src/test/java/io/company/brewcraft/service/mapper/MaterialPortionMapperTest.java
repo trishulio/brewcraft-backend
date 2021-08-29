@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.AddMaterialPortionDto;
 import io.company.brewcraft.dto.MaterialLotDto;
 import io.company.brewcraft.dto.MaterialPortionDto;
+import io.company.brewcraft.dto.MixtureDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMaterialPortionDto;
 import io.company.brewcraft.model.MaterialLot;
@@ -56,7 +57,7 @@ public class MaterialPortionMapperTest {
 
         MaterialPortionDto dto = materialPortionMapper.toDto(materialPortion);
         
-        MaterialPortionDto expectedMaterialPortionDto = new MaterialPortionDto(1L, new MaterialLotDto(2L), new QuantityDto("kg", new BigDecimal("100")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        MaterialPortionDto expectedMaterialPortionDto = new MaterialPortionDto(1L, new MaterialLotDto(2L), new QuantityDto("kg", new BigDecimal("100")), new MixtureDto(3L), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
         assertEquals(expectedMaterialPortionDto, dto);
     }

@@ -7,7 +7,6 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddMaterialPortionDto;
 import io.company.brewcraft.dto.MaterialPortionDto;
 import io.company.brewcraft.dto.UpdateMaterialPortionDto;
-import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.MaterialPortion;
 
 @Mapper(uses = { MaterialLotMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MixtureMapper.class, MoneyMapper.class})
@@ -15,7 +14,6 @@ public interface MaterialPortionMapper {
 
     MaterialPortionMapper INSTANCE = Mappers.getMapper(MaterialPortionMapper.class);
     
-    @Mapping(target = "mixtureId", source = "mixture.id")
     MaterialPortionDto toDto(MaterialPortion materialPortion);
 
     @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)

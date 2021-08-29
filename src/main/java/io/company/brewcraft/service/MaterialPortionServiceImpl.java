@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.measure.Quantity;
@@ -21,7 +20,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMaterialPortion;
-import io.company.brewcraft.model.Lot;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
@@ -40,11 +38,11 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
     
     private MaterialPortionRepository materialPortionRepository;
     
-    private LotAggregationService lotAggredationService;
+    private StockLotService stockLotService;
 
-    public MaterialPortionServiceImpl(MaterialPortionRepository materialPortionRepository, LotAggregationService lotAggredationService) {
+    public MaterialPortionServiceImpl(MaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
         this.materialPortionRepository = materialPortionRepository;
-        this.lotAggredationService = lotAggredationService;
+        this.stockLotService = stockLotService;
     }
 
     @Override
@@ -72,11 +70,11 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
         materialPortionRepository.refresh(materialPortions);
         
         materialPortions.forEach(materialPortion -> {
-            Validator.assertion(materialPortion.getQuantity().getValue().doubleValue() > 0, RuntimeException.class, "Quantities must be greater than 0");   
+            Validator.assertion(new BigDecimal(materialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");   
         });
         
-        Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(MaterialPortion::getId, MaterialPortion::getQuantity));
-        Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(lotToQuantity);
+        Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getMaterialLot().getId(), MaterialPortion::getQuantity));
+        Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotToQuantity);
         
         Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
         
@@ -99,7 +97,7 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
     public MaterialPortion putMaterialPortion(Long materialPortionId, MaterialPortion putMaterialPortion) {
         materialPortionRepository.refresh(List.of(putMaterialPortion));
         
-        Validator.assertion(putMaterialPortion.getQuantity().getValue().doubleValue() > 0, RuntimeException.class, "Quantity must be greater than 0");
+        Validator.assertion(new BigDecimal(putMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
 
         MaterialPortion existingMaterialPortion = getMaterialPortion(materialPortionId);
 
@@ -107,40 +105,31 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
             existingMaterialPortion = putMaterialPortion;
             existingMaterialPortion.setId(materialPortionId);
             
-            Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), existingMaterialPortion.getQuantity()));
-            
-            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-            
-            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
-                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
+            Boolean quantityAvailable = this.isQuantityAvailable(existingMaterialPortion.getMaterialLot().getId(), existingMaterialPortion.getQuantity());
+                        
+            if (!quantityAvailable) {
+                throw new MaterialLotQuantityNotAvailableException(Set.of(existingMaterialPortion.getMaterialLot().getId()));
             }    
         } else {
             existingMaterialPortion.optimisticLockCheck(putMaterialPortion);
             
             boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existingMaterialPortion.getMaterialLot().getId();
 
-            if (isPutOnSameLot) {
-                Quantity<?> patchedQuantityDelta = QuantityCalculator.subtract(putMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity());
-                
-                Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), patchedQuantityDelta));
-                
-                Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                
-                if (patchedQuantityDelta.getValue().doubleValue() > 0 && !lotIdsWithUnavailableQuantity.isEmpty()) {
-                    throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
-                }
-            } else {  
-                Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(putMaterialPortion.getMaterialLot().getId(), putMaterialPortion.getQuantity()));
-                
-                Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-                
-                if (!lotIdsWithUnavailableQuantity.isEmpty()) {
-                    throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
+            //If put is on the same lot, we only need to check if the difference in quantity is available
+            Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.subtract(putMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity()) : putMaterialPortion.getQuantity();
+            
+            if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), quantityToCheck);
+            
+                if (!quantityAvailable) {
+                    throw new MaterialLotQuantityNotAvailableException(Set.of(putMaterialPortion.getMaterialLot().getId()));
                 }
             }
             
             existingMaterialPortion.override(putMaterialPortion, getPropertyNames(BaseMaterialPortion.class));
         }
+        
+        
 
         return materialPortionRepository.saveAndFlush(existingMaterialPortion);
     }
@@ -152,36 +141,30 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
         materialPortionRepository.refresh(List.of(existingMaterialPortion));
         
         if (patchMaterialPortion.getQuantity() != null) {
-            Validator.assertion(patchMaterialPortion.getQuantity().getValue().doubleValue() > 0, RuntimeException.class, "Quantity must be greater than 0");
+            Validator.assertion(new BigDecimal(patchMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
         }
 
         existingMaterialPortion.optimisticLockCheck(patchMaterialPortion);
                 
         boolean isPatchOnSameLot = patchMaterialPortion.getMaterialLot() == null || patchMaterialPortion.getMaterialLot().getId() == null 
-                || (patchMaterialPortion.getMaterialLot() != null && patchMaterialPortion.getMaterialLot().getId() == existingMaterialPortion.getMaterialLot().getId());
+                || patchMaterialPortion.getMaterialLot().getId() == existingMaterialPortion.getMaterialLot().getId();       
+           
+        boolean isQuantityCheckRequired = (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) || !isPatchOnSameLot;
         
-        if (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) {
-            Quantity<?> patchedQuantityDelta = QuantityCalculator.subtract(patchMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity());
+        if (isQuantityCheckRequired) {
+            Long lotIdToCheck = isPatchOnSameLot ? existingMaterialPortion.getMaterialLot().getId() : patchMaterialPortion.getMaterialLot().getId();
             
-            Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), patchedQuantityDelta));
-            
-            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-            
-            if (patchedQuantityDelta.getValue().doubleValue() > 0 && !lotIdsWithUnavailableQuantity.isEmpty()) {
-                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
+            //If patch is on the same lot, we only need to check if the difference in quantity is available
+            Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.subtract(patchMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity()) : 
+                patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existingMaterialPortion.getQuantity();
+
+            if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                Boolean quantityAvailable = this.isQuantityAvailable(lotIdToCheck, quantityToCheck);
+
+                if (!quantityAvailable) {
+                    throw new MaterialLotQuantityNotAvailableException(Set.of(lotIdToCheck));
+                } 
             }
-        }
-        
-        if (!isPatchOnSameLot) {
-            Quantity<?> quantity = patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existingMaterialPortion.getQuantity();
-            
-            Map<Long, Boolean> quantityCheckresult = areQuantitiesAvailable(Map.of(existingMaterialPortion.getMaterialLot().getId(), quantity));
-            
-            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
-            
-            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
-                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
-            }   
         }
          
         existingMaterialPortion.outerJoin(patchMaterialPortion, getPropertyNames(UpdateMaterialPortion.class)); 
@@ -199,12 +182,24 @@ public class MaterialPortionServiceImpl extends BaseService implements MaterialP
         return materialPortionRepository.existsById(materialPortionId);
     }  
     
+    private Boolean isQuantityAvailable(Long stockLotId, Quantity<?> quantity) {
+        Boolean result = false;
+        
+        Map<Long, Boolean> quantityCheckResult = this.areQuantitiesAvailable(Map.of(stockLotId, quantity));
+        
+        if(quantityCheckResult.get(stockLotId) == true) {
+            result = true;
+        }
+        
+        return result;        
+    }
+
     private Map<Long, Boolean> areQuantitiesAvailable(Map<Long, Quantity<?>> lotIdToQuantity) {
         Map<Long, Boolean> result = new HashMap<>();
         lotIdToQuantity.forEach((lotId, quantity) -> result.put(lotId, false)); //init result map to false for all lot ids
         
-        List<StockLot> stockLots = lotAggredationService.getAggregatedStockQuantity(lotIdToQuantity.keySet(), null, null, null, null, null, null, null, null, AggregationFunction.SUM, new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, new TreeSet<>(List.of("id")), true, 0, Integer.MAX_VALUE).getContent();
-        
+        List<StockLot> stockLots = stockLotService.getAllByIds(lotIdToQuantity.keySet());
+                        
         if (stockLots != null && !stockLots.isEmpty()) {
             stockLots.forEach(stockLot -> {
                 Quantity<?> requestedQuantity = lotIdToQuantity.get(stockLot.getId());

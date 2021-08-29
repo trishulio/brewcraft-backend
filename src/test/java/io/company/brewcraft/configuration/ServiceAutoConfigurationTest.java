@@ -46,6 +46,7 @@ import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.PurchaseOrderService;
+import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
@@ -275,8 +276,8 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
         final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
-        final LotAggregationService lotAggregationServiceMock = mock(LotAggregationService.class);
-        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock, lotAggregationServiceMock);
+        final StockLotService stockLotServiceMock = mock(StockLotService.class);
+        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock, stockLotServiceMock);
 
         assertTrue(service instanceof MaterialPortionServiceImpl);
     }

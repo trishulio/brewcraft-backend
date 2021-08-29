@@ -10,7 +10,7 @@ public class MaterialPortionDto extends BaseDto {
 
     private QuantityDto quantity;
     
-    private Long mixtureId;
+    private MixtureDto mixtureDto;
     
     private LocalDateTime addedAt;
     
@@ -25,11 +25,11 @@ public class MaterialPortionDto extends BaseDto {
         this.id = id;
     }
 
-    public MaterialPortionDto(Long id, MaterialLotDto materialLot, QuantityDto quantity, Long mixtureId, LocalDateTime addedAt, Integer version) {
+    public MaterialPortionDto(Long id, MaterialLotDto materialLot, QuantityDto quantity, MixtureDto mixtureDto, LocalDateTime addedAt, Integer version) {
         this(id);
         this.materialLot = materialLot;
         this.quantity = quantity;
-        this.mixtureId = mixtureId;
+        this.mixtureDto = mixtureDto;
         this.addedAt = addedAt;
         this.version = version;
     }
@@ -54,12 +54,12 @@ public class MaterialPortionDto extends BaseDto {
         return quantity;
     }
     
-    public Long getMixtureId() {
-        return mixtureId;
+    public MixtureDto getMixture() {
+        return this.mixtureDto;
     }
 
-    public void setMixtureId(Long mixtureId) {
-        this.mixtureId = mixtureId;
+    public void setMixture(MixtureDto mixtureDto) {
+        this.mixtureDto = mixtureDto;
     }
 
     public void setQuantity(QuantityDto quantity) {

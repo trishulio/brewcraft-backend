@@ -22,16 +22,16 @@ public class MaterialPortionDtoTest {
         Long id = 1L;
         MaterialLotDto materialLotDto = new MaterialLotDto(3L);
         QuantityDto quantityDto = new QuantityDto("kg", new BigDecimal("100"));
-        Long mixtureId = 2L;
+        MixtureDto mixtureDto = new MixtureDto(2L);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
 
-        MaterialPortionDto materialPortionDto = new MaterialPortionDto(id, materialLotDto, quantityDto, mixtureId, addedAt, version);
+        MaterialPortionDto materialPortionDto = new MaterialPortionDto(id, materialLotDto, quantityDto, mixtureDto, addedAt, version);
 
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(3L), materialPortionDto.getMaterialLot());
         assertEquals(new QuantityDto("kg", new BigDecimal("100")), materialPortionDto.getQuantity());
-        assertEquals(2L, materialPortionDto.getMixtureId());
+        assertEquals(new MixtureDto(2L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
     }
@@ -56,9 +56,9 @@ public class MaterialPortionDtoTest {
     }
     
     @Test
-    public void testGetSetMixtureId() {
-        materialPortionDto.setMixtureId(2L);
-        assertEquals(2L, materialPortionDto.getMixtureId());
+    public void testGetSetMixture() {
+        materialPortionDto.setMixture(new MixtureDto(2L));
+        assertEquals(new MixtureDto(2L), materialPortionDto.getMixture());
     }
 
     @Test
