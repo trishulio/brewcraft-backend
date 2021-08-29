@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   install:
-    image: maven:3.8.2-openjdk-17-slim
+    image: maven:3.6.3-jdk-13
     container_name: brewcraft_maven
     working_dir: /usr/code/app
     command: ['mvn', 'clean', 'install']
