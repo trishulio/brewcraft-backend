@@ -89,7 +89,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, InvoiceAccessor, Invoice> invoiceRefresher(InvoiceRepository repo) {
         return new AccessorRefresher<>(
-                Invoice.class,
+            Invoice.class,
             accessor -> accessor.getInvoice(),
             (accessor, invoice) -> accessor.setInvoice(invoice),
             ids -> repo.findAllById(ids)

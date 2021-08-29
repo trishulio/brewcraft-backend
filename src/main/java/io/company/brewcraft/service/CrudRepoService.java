@@ -33,7 +33,7 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     }
 
     @Override
-    public boolean exist(ID id) {
+    public boolean exists(ID id) {
         return this.repo.existsById(id);
     }
 
@@ -48,13 +48,28 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
 
     @Override
     public List<E> getByIds(Collection<? extends Identified<ID>> idProviders) {
-        final Set<ID> ids = idProviders.stream().map(provider -> provider.getId()).collect(Collectors.toSet());
+        if (idProviders == null) {
+            return null;
+        }
+
+        final Set<ID> ids = idProviders.stream().filter(provider -> provider != null).map(provider -> provider.getId()).filter(id -> id != null).collect(Collectors.toSet());
+
         return this.repo.findAllById(ids);
     }
 
     @Override
-    public List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ID> idSupplier) {
-        final Set<ID> ids = accessors.stream().filter(accessor -> accessor != null).map(accessor -> idSupplier.apply(accessor)).filter(id -> id != null).collect(Collectors.toSet());
+    public List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ? extends Identified<ID>> entityGetter) {
+        if (accessors == null) {
+            return null;
+        }
+
+        final Set<ID> ids = accessors.stream()
+                                     .filter(accessor -> accessor != null)
+                                     .map(accessor -> entityGetter.apply(accessor))
+                                     .filter(identified -> identified != null)
+                                     .map(identified -> identified.getId())
+                                     .filter(id -> id != null)
+                                     .collect(Collectors.toSet());
         return this.repo.findAllById(ids);
     }
 

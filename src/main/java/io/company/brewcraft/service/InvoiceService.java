@@ -86,7 +86,6 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
         return this.repoService.getAll(spec, sortBy, ascending, page, size);
     }
 
-
     @Override
     public Invoice get(Long id) {
         return this.repoService.get(id);
@@ -99,7 +98,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
 
     @Override
     public List<Invoice> getByAccessorIds(Collection<? extends InvoiceAccessor> accessors) {
-        return this.repoService.getByAccessorIds(accessors, accessor -> accessor.getInvoice().getId());
+        return this.repoService.getByAccessorIds(accessors, accessor -> accessor.getInvoice());
     }
 
     @Override
@@ -109,7 +108,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
 
     @Override
     public boolean exist(Long id) {
-        return this.repoService.exist(id);
+        return this.repoService.exists(id);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
         final List<Invoice> entities = this.updateService.getAddEntities(additions);
 
         for (int i = 0; i < additions.size(); i++) {
-            final List<InvoiceItem> items =this.itemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getItems());
+            final List<InvoiceItem> items = this.itemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getItems());
             entities.get(i).setItems(items);
         }
 
@@ -152,7 +151,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             final List<InvoiceItem> existingItems = i < existing.size() ? existing.get(i).getItems() : null;
             final List<? extends UpdateInvoiceItem<?>> updateItems = i < updates.size() ? updates.get(i).getItems() : null;
 
-            final List<InvoiceItem> updatedItems =this.itemService.getPutEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
+            final List<InvoiceItem> updatedItems = this.itemService.getPutEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
 
             updated.get(i).setItems(updatedItems);
         }
@@ -180,7 +179,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             final List<InvoiceItem> existingItems = existing.get(i).getItems();
             final List<? extends UpdateInvoiceItem<?>> updateItems = patches.get(i).getItems();
 
-            final List<InvoiceItem> updatedItems =this.itemService.getPatchEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
+            final List<InvoiceItem> updatedItems = this.itemService.getPatchEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
 
             updated.get(i).setItems(updatedItems);
         }

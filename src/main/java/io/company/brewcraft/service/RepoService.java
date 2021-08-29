@@ -14,7 +14,7 @@ import io.company.brewcraft.model.Identified;
 public interface RepoService<ID, E extends CrudEntity<ID>, A> {
     boolean exists(Set<ID> ids);
 
-    boolean exist(ID id);
+    boolean exists(ID id);
 
     E get(ID id);
 
@@ -22,7 +22,7 @@ public interface RepoService<ID, E extends CrudEntity<ID>, A> {
 
     List<E> getByIds(Collection<? extends Identified<ID>> idProviders);
 
-    List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ID> idSupplier);
+    List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ? extends Identified<ID>> entityGetter);
 
     List<E> saveAll(List<E> entities);
 

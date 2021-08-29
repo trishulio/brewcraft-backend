@@ -7,10 +7,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
@@ -67,38 +67,37 @@ public class ReflectionManipulator {
     public static final ReflectionManipulator INSTANCE = new ReflectionManipulator();
 
     public ReflectionManipulator() {
-        this.propNamesCache = CacheBuilder
-                                .newBuilder()
-                                .build(new CacheLoader<Class<?>, Set<String>>() {
-                                    @Override
-                                    public Set<String> load(Class<?> clazz) throws Exception {
-                                        Set<String> propertyNames = null;
+        this.propNamesCache = CacheBuilder.newBuilder().build(new CacheLoader<Class<?>, Set<String>>() {
+            @Override
+            public Set<String> load(Class<?> clazz) throws Exception {
+                final Method[] methods = clazz.getMethods();
+                final Set<String> propertyNames = Arrays.stream(methods)
+                                        .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
+                                        .map(method -> method.getName().replaceFirst("get|set", ""))
+                                        .map(prop -> {
+                                            final char c = Character.toLowerCase(prop.charAt(0));
+                                                final String l = Character.toString(c);
+                                                return prop.replaceFirst("\\w", l);
+                                            })
+                                        .collect(ImmutableSet.toImmutableSet());
+                return propertyNames;
+            }
+        });
 
-                                        final Method[] methods = clazz.getMethods();
-                                        propertyNames = Arrays.stream(methods)
-                                                        .filter(m -> m.getName().startsWith("get") || m.getName().startsWith("set"))
-                                                        .map(method -> method.getName().replaceFirst("get|set", ""))
-                                                        .map(prop -> {
-                                                            final char c = Character.toLowerCase(prop.charAt(0));
-                                                            final String l = Character.toString(c);
-                                                            return prop.replaceFirst("\\w", l);
-                                                        })
-                                                        .collect(ImmutableSet.toImmutableSet());
-                                        return propertyNames;
-                                    }
-                                });
+        this.propNamesCacheWithExclusions = CacheBuilder.newBuilder().build(new CacheLoader<PropNameKey, Set<String>>() {
+            @Override
+            public Set<String> load(PropNameKey key) throws Exception {
+                Set<String> propNames = ReflectionManipulator.this.propNamesCache.get(key.getClazz());
 
-        this.propNamesCacheWithExclusions = CacheBuilder
-                                            .newBuilder()
-                                            .build(new CacheLoader<PropNameKey, Set<String>>() {
-                                                    @Override
-                                                    public Set<String> load(PropNameKey key) throws Exception {
-                                                        return ReflectionManipulator.this.propNamesCache.get(key.getClazz()).stream()
-                                                                                                 .filter(prop -> !key.getExclusions().contains(prop))
-                                                                                                 .collect(ImmutableSet.toImmutableSet());
+                if (key.getExclusions() != null) {
+                    propNames = propNames.stream()
+                                         .filter(prop -> !key.getExclusions().contains(prop))
+                                         .collect(ImmutableSet.toImmutableSet());
+                }
 
-                                                    }
-                                            });
+                return propNames;
+            }
+        });
     }
 
     public void copy(Object o1, Object o2, CheckedFunction<Boolean, PropertyDescriptor, ReflectiveOperationException> predicate) {
@@ -138,6 +137,10 @@ public class ReflectionManipulator {
     }
 
     public Set<String> getPropertyNames(Class<?> clazz, Set<String> exclusions) {
+        if (clazz == null) {
+            return null;
+        }
+
         final PropNameKey key = new PropNameKey(clazz, exclusions);
         try {
             return this.propNamesCacheWithExclusions.get(key);
@@ -148,6 +151,10 @@ public class ReflectionManipulator {
     }
 
     public <T> T construct(Class<T> clazz, Map<String, Object> props) {
+        if (clazz == null) {
+            return null;
+        }
+
         T obj = null;
         try {
             final Constructor<T> constructor = clazz.getConstructor();
@@ -175,38 +182,11 @@ public class ReflectionManipulator {
     }
 
     public <T> T construct(Class<T> clazz) {
-        return this.construct(clazz, new String[] {}, new Object[] {});
-    }
-
-    public <T> T construct(Class<T> clazz, String[] fields, Object[] values) {
-        T obj = null;
-        try {
-            final Constructor<T> constructor = clazz.getConstructor();
-            obj = constructor.newInstance();
-
-            final PropertyDescriptor[] pds = Introspector.getBeanInfo(clazz, Object.class).getPropertyDescriptors();
-            final Map<String, PropertyDescriptor> pdLookup = Arrays.stream(pds).collect(Collectors.toMap(pd -> pd.getName(), pd -> pd));
-
-            for (int i = 0; i < fields.length; i++) {
-                final Method setter = pdLookup.get(fields[i]).getWriteMethod();
-                setter.invoke(obj, values[i]);
-            }
-        } catch (final IntrospectionException e) {
-            final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
-            this.handleException(msg, e);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            final String msg = String.format("Failed to access the value using dynamic method because: %s", e.getMessage());
-            this.handleException(msg, e);
-        } catch (final ReflectiveOperationException e) {
-            final String msg = String.format("Failed to execute the predicate because: %s", e.getMessage());
-            this.handleException(msg, e);
-        }
-
-        return obj;
+        return this.construct(clazz, new HashMap<>());
     }
 
     private void handleException(String msg, Exception e) {
         logger.error(msg);
-        throw new RuntimeException(msg, e.getCause());
+        throw new RuntimeException(msg, e);
     }
 }

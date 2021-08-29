@@ -108,14 +108,14 @@ public class InvoiceServiceTest {
 
    @Test
    public void testExist_ReturnsTrue_WhenRepoServiceReturnsTrue() {
-       doReturn(true).when(this.mRepoService).exist(1L);
+       doReturn(true).when(this.mRepoService).exists(1L);
 
        assertTrue(this.service.exist(1L));
    }
 
    @Test
    public void testExist_ReturnsFalse_WhenRepoServiceReturnsFalse() {
-       doReturn(true).when(this.mRepoService).exist(1L);
+       doReturn(true).when(this.mRepoService).exists(1L);
 
        assertTrue(this.service.exist(1L));
    }

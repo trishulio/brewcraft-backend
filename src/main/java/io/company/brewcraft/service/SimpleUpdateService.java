@@ -59,7 +59,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
             Class<?> itemCls = this.baseEntityCls;
             if (update.getId() != null) {
                 final E existing = idToItemLookup.get(update.getId());
-                if (validator.rule(existing != null, "No existing invoice item found with Id: %s.", update.getId())) {
+                if (validator.rule(existing != null, "No existing %s found with Id: %s.", this.entityCls.getSimpleName(), update.getId())) {
                     existing.optimisticLockCheck(update);
                     itemCls = this.updateEntityCls;
                 }
@@ -85,9 +85,12 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         final List<E> targetItems = patches.stream().map(patch -> {
+            if (patch.getId() == null) {
+                throw new IllegalArgumentException("Patch entity doesn't contain an ID. Patch can only update existing entities. ID is mandatory.");
+            }
             final E item = this.newEntity();
             final E existing = idToItemLookup.get(patch.getId());
-            if (validator.rule(existing != null, "No existing invoice item found with Id: %s.", patch.getId())) {
+            if (validator.rule(existing != null, "No existing  %s found with Id: %s.", this.entityCls.getSimpleName(), patch.getId())) {
                 existing.optimisticLockCheck(patch);
                 item.override(existing, this.getPropertyNames(this.entityCls, this.excludeProps));
             }
