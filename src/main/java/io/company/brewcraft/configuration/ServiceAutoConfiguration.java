@@ -1,11 +1,20 @@
 package io.company.brewcraft.configuration;
 
+import java.util.Set;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.model.BaseInvoiceItem;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
@@ -38,6 +47,7 @@ import io.company.brewcraft.service.BrewStageStatusService;
 import io.company.brewcraft.service.BrewStageStatusServiceImpl;
 import io.company.brewcraft.service.BrewTaskService;
 import io.company.brewcraft.service.BrewTaskServiceImpl;
+import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.IdpUserRepository;
@@ -59,10 +69,13 @@ import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.QuantityUnitService;
+import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.SimpleUpdateService;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
@@ -115,13 +128,16 @@ public class ServiceAutoConfiguration {
 
     @Bean
     public InvoiceItemService invoiceItemService(UtilityProvider utilProvider) {
-        return new InvoiceItemService(utilProvider);
+        final UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoiceItem.class, UpdateInvoiceItem.class, InvoiceItem.class, Set.of(BaseInvoiceItem.ATTR_INVOICE));
+        return new InvoiceItemService(updateService);
     }
 
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
-    public InvoiceService invoiceService(InvoiceRepository invoiceRepo, InvoiceItemService invoiceItemService) {
-        return new InvoiceService(invoiceRepo, invoiceItemService);
+    public InvoiceService invoiceService(UtilityProvider utilProvider, InvoiceItemService invoiceItemService, final InvoiceRepository invoiceRepo) {
+        final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoice.class, UpdateInvoice.class, Invoice.class, Set.of(BaseInvoice.ATTR_ITEMS));
+        final RepoService<Long, Invoice, InvoiceAccessor> repoService = new CrudRepoService<>(invoiceRepo);
+        return new InvoiceService(updateService, invoiceItemService, repoService);
     }
 
     @Bean

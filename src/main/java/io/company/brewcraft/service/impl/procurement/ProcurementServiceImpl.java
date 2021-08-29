@@ -1,5 +1,7 @@
 package io.company.brewcraft.service.impl.procurement;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -43,13 +45,13 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
         }
 
         if (order != null && order.getId() == null) {
-            order = purchaseOrderService.add(order);
+            order = this.purchaseOrderService.add(order);
             invoice.setPurchaseOrder(order);
         }
 
-        invoice = invoiceService.add(invoice);
+        invoice = this.invoiceService.add(List.of(invoice)).get(0);
         Shipment shipment = new Shipment(invoice);
-        shipment = shipmentService.add(shipment);
+        shipment = this.shipmentService.add(shipment);
         return new Procurement(order, invoice, shipment);
     }
 

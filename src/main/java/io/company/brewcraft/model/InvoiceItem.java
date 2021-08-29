@@ -26,13 +26,14 @@ import org.joda.money.Money;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "invoice_item")
 @Table
-public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem<Invoice>, Identified<Long>, Audited {
+public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_QUANTITY = "quantity";
@@ -94,24 +95,24 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     public InvoiceItem(Long id) {
         this();
-        setId(id);
+        this.setId(id);
     }
 
     public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
-        setDescription(description);
-        setQuantity(quantity);
-        setPrice(price);
-        setTax(tax);
-        setMaterial(material);
-        setCreatedAt(createdAt);
-        setLastUpdated(lastUpdated);
-        setVersion(version);
+        this.setDescription(description);
+        this.setQuantity(quantity);
+        this.setPrice(price);
+        this.setTax(tax);
+        this.setMaterial(material);
+        this.setCreatedAt(createdAt);
+        this.setLastUpdated(lastUpdated);
+        this.setVersion(version);
     }
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -121,7 +122,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override
@@ -149,7 +150,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(quantity);
+        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
     }
 
     @Override
@@ -169,7 +170,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public Tax getTax() {
-        return tax;
+        return this.tax;
     }
 
     @Override
@@ -179,7 +180,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public Material getMaterial() {
-        return material;
+        return this.material;
     }
 
     @Override
@@ -189,7 +190,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
 
     @Override
     public Integer getVersion() {
-        return version;
+        return this.version;
     }
 
     @Override
@@ -201,8 +202,8 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     public Money getAmount() {
         Money amount = null;
 
-        Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
-        Money price = this.getPrice() != null ? this.getPrice() : null;
+        final Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
+        final Money price = this.getPrice() != null ? this.getPrice() : null;
 
         if (qty != null && price != null) {
             amount = price.multipliedBy(qty.longValue());

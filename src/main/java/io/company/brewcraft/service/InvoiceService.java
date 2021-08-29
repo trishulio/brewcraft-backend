@@ -1,13 +1,12 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -20,32 +19,30 @@ import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateInvoiceItem;
-import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
-public class InvoiceService extends BaseService {
+public class InvoiceService extends BaseService implements CrudService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>, InvoiceAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
-    private InvoiceRepository repo;
-    private InvoiceItemService itemService;
+    private final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService;
+    private final InvoiceItemService itemService;
+    private final RepoService<Long, Invoice, InvoiceAccessor> repoService;
 
-    public InvoiceService() {
-        super();
-    }
-
-    public InvoiceService(InvoiceRepository repo, InvoiceItemService itemService) {
-        this();
-        this.repo = repo;
+    public InvoiceService(UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService, InvoiceItemService itemService, RepoService<Long, Invoice, InvoiceAccessor> repoService) {
+        this.updateService = updateService;
         this.itemService = itemService;
+        this.repoService = repoService;
     }
 
     public Page<Invoice> getInvoices(
@@ -65,12 +62,12 @@ public class InvoiceService extends BaseService {
             BigDecimal freightAmtTo,
             Set<Long> statusIds,
             Set<Long> supplierIds,
-            SortedSet<String> sort,
-            boolean orderAscending,
+            SortedSet<String> sortBy,
+            boolean ascending,
             int page,
             int size
          ) {
-        Specification<Invoice> spec = SpecificationBuilder
+        final Specification<Invoice> spec = SpecificationBuilder
                                             .builder()
                                             .in(Invoice.FIELD_ID, ids)
                                             .not().in(Invoice.FIELD_ID, excludeIds)
@@ -85,93 +82,108 @@ public class InvoiceService extends BaseService {
                                             .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
-        return repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
+
+        return this.repoService.getAll(spec, sortBy, ascending, page, size);
     }
 
-    public Invoice getInvoice(Long id) {
-        log.debug("Retrieving invoice with Id: {}", id);
-        Invoice invoice = null;
-        Optional<Invoice> optional = repo.findById(id);
-        if (optional.isPresent()) {
-            log.debug("Found invoice with id: {}", id);
-            invoice = optional.get();
-        }
-
-        return invoice;
+    @Override
+    public Invoice get(Long id) {
+        return this.repoService.get(id);
     }
 
+    @Override
+    public List<Invoice> getByIds(Collection<? extends Identified<Long>> idProviders) {
+        return this.repoService.getByIds(idProviders);
+    }
+
+    @Override
+    public List<Invoice> getByAccessorIds(Collection<? extends InvoiceAccessor> accessors) {
+        return this.repoService.getByAccessorIds(accessors, accessor -> accessor.getInvoice());
+    }
+
+    @Override
     public boolean exists(Set<Long> ids) {
-        return repo.existsByIds(ids);
+        return this.repoService.exists(ids);
     }
 
+    @Override
+    public boolean exist(Long id) {
+        return this.repoService.exists(id);
+    }
+
+    @Override
     public int delete(Set<Long> ids) {
-        log.debug("Attempting to delete Invoice with Ids: {}", ids);
-        return repo.deleteByIds(ids);
+        return this.repoService.delete(ids);
     }
 
-    public Invoice put(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem<?>> update) {
-        log.debug("Updating the Invoice with Id: {}", invoiceId);
+    @Override
+    public void delete(Long id) {
+        this.repoService.delete(id);
+    }
 
-        Invoice existing = getInvoice(invoiceId);
-        Class<? super Invoice> invoiceClz = BaseInvoice.class;
-
-        if (existing == null) {
-            existing = new Invoice(invoiceId); // TODO: The save function ignores this ID
-
-        } else {
-            existing.optimisticLockCheck(update);
-            invoiceClz = UpdateInvoice.class;
+    @Override
+    public List<Invoice> add(final List<BaseInvoice<? extends BaseInvoiceItem<?>>> additions) {
+        if (additions == null) {
+            return null;
         }
 
-        log.debug("Invoice with Id: {} has {} existing items", existing == null ? null : invoiceId, existing.getItems() == null ? null : existing.getItems().size());
-        log.debug("Update payload has {} item updates", update.getItems() == null ? null : update.getItems().size());
+        final List<Invoice> entities = this.updateService.getAddEntities(additions);
 
-        List<InvoiceItem> updatedItems = itemService.getPutItems(existing.getItems(), update.getItems());
-        log.debug("Total UpdateItems: {}", updatedItems == null ? null : updatedItems.size());
+        for (int i = 0; i < additions.size(); i++) {
+            final List<InvoiceItem> items = this.itemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getItems());
+            entities.get(i).setItems(items);
+        }
 
-        Invoice temp = new Invoice();
-        temp.override(update, getPropertyNames(invoiceClz));
-        temp.setItems(updatedItems);
-        repo.refresh(List.of(temp));
-
-        existing.override(temp, getPropertyNames(invoiceClz));
-
-        return repo.saveAndFlush(existing);
+        return this.repoService.saveAll(entities);
     }
 
-    public Invoice patch(Long invoiceId, UpdateInvoice<? extends UpdateInvoiceItem<?>> patch) {
-        log.debug("Performing Patch on Invoice with Id: {}", invoiceId);
+    @Override
+    public List<Invoice> put(List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> updates) {
+        if (updates == null) {
+            return null;
+        }
 
-        Invoice existing = repo.findById(invoiceId).orElseThrow(() -> new EntityNotFoundException("Invoice", invoiceId.toString()));
-        existing.optimisticLockCheck(patch);
+        final List<Invoice> existing = this.repoService.getByIds(updates);
+        final List<Invoice> updated = this.updateService.getPutEntities(existing, updates);
 
-        log.debug("Invoice with Id: {} has {} existing items", existing.getId(), existing.getItems() == null ? null : existing.getItems().size());
-        log.debug("Update payload has {} item updates", patch.getItems() == null ? null : patch.getItems().size());
+        final int length = Math.max(existing.size(), updates.size());
+        for (int i = 0; i < length; i++) {
+            final List<InvoiceItem> existingItems = i < existing.size() ? existing.get(i).getItems() : null;
+            final List<? extends UpdateInvoiceItem<?>> updateItems = i < updates.size() ? updates.get(i).getItems() : null;
 
-        List<InvoiceItem> updatedItems = itemService.getPatchItems(existing.getItems(), patch.getItems());
-        log.debug("Total UpdateItems: {}", updatedItems.size());
+            final List<InvoiceItem> updatedItems = this.itemService.getPutEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
 
-        Invoice temp = new Invoice(invoiceId);
-        temp.override(existing);
-        temp.outerJoin(patch, getPropertyNames(UpdateInvoice.class));
-       temp.setItems(updatedItems);
-        repo.refresh(List.of(temp));
+            updated.get(i).setItems(updatedItems);
+        }
 
-        existing.override(temp);
-
-        return repo.saveAndFlush(existing);
+        return this.repoService.saveAll(updated);
     }
 
-    public Invoice add(BaseInvoice<? extends BaseInvoiceItem<?>> addition) {
-        Invoice invoice = new Invoice();
-        List<InvoiceItem> itemAdditions = itemService.getAddItems(addition.getItems());
-        log.debug("Invoice has {} items", invoice.getItems() == null ? null : invoice.getItems().size());
+    @Override
+    public List<Invoice> patch(List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> patches) {
+        if (patches == null) {
+            return null;
+        }
 
-        invoice.override(addition, getPropertyNames(BaseInvoice.class));
-        invoice.setItems(itemAdditions);
+        final List<Invoice> existing = this.repoService.getByIds(patches);
+        final List<Invoice> updated = this.updateService.getPatchEntities(existing, patches);
 
-        repo.refresh(List.of(invoice));
+        if (existing.size() != patches.size()) {
+            final Set<Long> existingIds = existing.stream().map(invoice -> invoice.getId()).collect(Collectors.toSet());
+            final Set<Long> nonExistingIds = patches.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
 
-        return repo.saveAndFlush(invoice);
+            throw new EntityNotFoundException(String.format("Cannot find invoices with Ids: %s", nonExistingIds));
+        }
+
+        for (int i = 0; i < existing.size(); i++) {
+            final List<InvoiceItem> existingItems = existing.get(i).getItems();
+            final List<? extends UpdateInvoiceItem<?>> updateItems = patches.get(i).getItems();
+
+            final List<InvoiceItem> updatedItems = this.itemService.getPatchEntities(existingItems, (List<UpdateInvoiceItem<?>>) updateItems);
+
+            updated.get(i).setItems(updatedItems);
+        }
+
+        return this.repoService.saveAll(updated);
     }
 }
