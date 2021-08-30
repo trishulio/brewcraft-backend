@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,10 +58,10 @@ public class BrewController extends BaseController {
             @RequestParam(required = false, name = "names") Set<String> names,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
             @RequestParam(required = false, name = "stage_task_ids") Set<Long> stageTaskIds,
-            @RequestParam(required = false, name = "started_at_from") LocalDateTime startedAtFrom,
-            @RequestParam(required = false, name = "started_at_to") LocalDateTime startedAtTo,
-            @RequestParam(required = false, name = "ended_at_from") LocalDateTime endedAtFrom,
-            @RequestParam(required = false, name = "ended_at_to") LocalDateTime endedAtTo,
+            @RequestParam(required = false, name = "started_at_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startedAtFrom,
+            @RequestParam(required = false, name = "started_at_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startedAtTo,
+            @RequestParam(required = false, name = "ended_at_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAtFrom,
+            @RequestParam(required = false, name = "ended_at_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAtTo,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,

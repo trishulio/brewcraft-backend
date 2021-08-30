@@ -47,7 +47,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     private String description;
 
     @Column(name = "batch_id", nullable = false)
-    private Long batchId;
+    private String batchId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -91,7 +91,7 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
         setId(id);
     }
 
-    public Brew(Long id, String name, String description, Long batchId, Product product, Brew parentBrew, List<Brew> childBrews, List<BrewStage> brewStages, LocalDateTime startedAt,
+    public Brew(Long id, String name, String description, String batchId, Product product, Brew parentBrew, List<Brew> childBrews, List<BrewStage> brewStages, LocalDateTime startedAt,
             LocalDateTime endedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
@@ -139,12 +139,12 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     }
 
     @Override
-    public Long getBatchId() {
+    public String getBatchId() {
         return batchId;
     }
 
     @Override
-    public void setBatchId(Long batchId) {
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
 

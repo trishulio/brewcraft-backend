@@ -36,6 +36,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.repository.ShipmentRepository;
+import io.company.brewcraft.repository.StockLotRepository;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
@@ -69,6 +70,8 @@ import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.QuantityUnitService;
+import io.company.brewcraft.service.StockLotService;
+import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.SimpleUpdateService;
 import io.company.brewcraft.service.StorageService;
@@ -267,6 +270,13 @@ public class ServiceAutoConfiguration {
     public LotAggregationService lotInventoryService(AggregationRepository aggrRepo) {
         return new LotAggregationService(aggrRepo);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(StockLotService.class)
+    public StockLotService stockLotService(StockLotRepository stockLotRepository) {
+        final StockLotService stockLotService = new StockLotServiceImpl(stockLotRepository);
+        return stockLotService;
+    }
 
     @Bean
     @ConditionalOnMissingBean(BrewService.class)
@@ -305,8 +315,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(MaterialPortionService.class)
-    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository) {
-        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository);
+    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
+        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository, stockLotService);
         return materialPortionService;
     }
 

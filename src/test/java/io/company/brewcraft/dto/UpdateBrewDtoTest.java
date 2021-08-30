@@ -20,7 +20,7 @@ public class UpdateBrewDtoTest {
     public void testConstructor() {
         String name = "testName";
         String description = "testDesc";
-        Long batchId = 2L;
+        String batchId = "2";
         Long productId = 4L;
         Long parentBrewId = 3L;
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -31,7 +31,7 @@ public class UpdateBrewDtoTest {
 
         assertEquals("testName", updateBrewDto.getName());
         assertEquals("testDesc", updateBrewDto.getDescription());
-        assertEquals(2L, updateBrewDto.getBatchId());
+        assertEquals("2", updateBrewDto.getBatchId());
         assertEquals(4L, updateBrewDto.getProductId());
         assertEquals(3L, updateBrewDto.getParentBrewId());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), updateBrewDto.getStartedAt());
@@ -55,9 +55,8 @@ public class UpdateBrewDtoTest {
 
     @Test
     public void testGetSetBatchId() {
-        Long batchId = 2L;
-        updateBrewDto.setBatchId(batchId);
-        assertEquals(2L, updateBrewDto.getBatchId());
+        updateBrewDto.setBatchId("2");
+        assertEquals("2", updateBrewDto.getBatchId());
     }
 
     @Test

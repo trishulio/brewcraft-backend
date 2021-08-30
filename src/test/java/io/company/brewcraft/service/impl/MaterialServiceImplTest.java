@@ -53,7 +53,7 @@ public class MaterialServiceImplTest {
 
     @Test
     public void testGetMaterials_returnsMaterials() throws Exception {
-        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         List<Material> materialEntitys = Arrays.asList(materialEntity);
 
@@ -79,6 +79,7 @@ public class MaterialServiceImplTest {
         assertSame(materialEntity.getCategory().getId(), actualMaterial.getCategory().getId());
         assertSame(materialEntity.getUPC(), actualMaterial.getUPC());
         assertSame(materialEntity.getBaseQuantityUnit().getSymbol(), actualMaterial.getBaseQuantityUnit().getSymbol());
+        assertSame(materialEntity.getImageSrc(), actualMaterial.getImageSrc());
         assertSame(materialEntity.getLastUpdated(), actualMaterial.getLastUpdated());
         assertSame(materialEntity.getCreatedAt(), actualMaterial.getCreatedAt());
         assertSame(materialEntity.getVersion(), actualMaterial.getVersion());
@@ -87,7 +88,7 @@ public class MaterialServiceImplTest {
     @Test
     public void testGetMaterial_returnsMaterial() throws Exception {
         Long id = 1L;
-        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Material> expectedMaterialEntity = Optional.ofNullable(materialEntity);
 
         when(materialRepositoryMock.findById(id)).thenReturn(expectedMaterialEntity);
@@ -100,6 +101,7 @@ public class MaterialServiceImplTest {
         assertEquals(expectedMaterialEntity.get().getCategory().getId(), returnedMaterial.getCategory().getId());
         assertEquals(expectedMaterialEntity.get().getUPC(), returnedMaterial.getUPC());
         assertEquals(expectedMaterialEntity.get().getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
+        assertEquals(expectedMaterialEntity.get().getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(expectedMaterialEntity.get().getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(expectedMaterialEntity.get().getCreatedAt(), returnedMaterial.getCreatedAt());
         assertEquals(expectedMaterialEntity.get().getVersion(), returnedMaterial.getVersion());
@@ -107,9 +109,9 @@ public class MaterialServiceImplTest {
 
     @Test
     public void testAddMaterial_SavesMaterial() throws Exception {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), null, SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        Material newMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material newMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
@@ -124,6 +126,7 @@ public class MaterialServiceImplTest {
         assertEquals(material.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
         assertEquals(material.getUPC(), persistedMaterialCaptor.getValue().getUPC());
         assertEquals(material.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
+        assertEquals(material.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         assertEquals(material.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
         assertEquals(material.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(material.getVersion(), persistedMaterialCaptor.getValue().getVersion());
@@ -135,6 +138,7 @@ public class MaterialServiceImplTest {
         assertEquals(newMaterial.getCategory().getId(), returnedMaterial.getCategory().getId());
         assertEquals(newMaterial.getUPC(), returnedMaterial.getUPC());
         assertEquals(newMaterial.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
+        assertEquals(newMaterial.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(newMaterial.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(newMaterial.getCreatedAt(), returnedMaterial.getCreatedAt());
         assertEquals(newMaterial.getVersion(), returnedMaterial.getVersion());
@@ -143,8 +147,8 @@ public class MaterialServiceImplTest {
     @Test
     public void testPutMaterial_success() throws Exception {
         Long id = 1L;
-        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), null, SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material putMaterial = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), null, SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material materialEntity = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
@@ -159,6 +163,7 @@ public class MaterialServiceImplTest {
         assertEquals(putMaterial.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
         assertEquals(putMaterial.getUPC(), persistedMaterialCaptor.getValue().getUPC());
         assertEquals(putMaterial.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
+        assertEquals(putMaterial.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         //assertEquals(null, persistedMaterialCaptor.getValue().getLastUpdated());
         //assertEquals(putMaterial.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(putMaterial.getVersion(), persistedMaterialCaptor.getValue().getVersion());
@@ -170,6 +175,7 @@ public class MaterialServiceImplTest {
         assertEquals(materialEntity.getCategory().getId(), returnedMaterial.getCategory().getId());
         assertEquals(materialEntity.getUPC(), returnedMaterial.getUPC());
         assertEquals(materialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
+        assertEquals(materialEntity.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(materialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(materialEntity.getCreatedAt(), returnedMaterial.getCreatedAt());
         assertEquals(materialEntity.getVersion(), returnedMaterial.getVersion());
@@ -178,9 +184,9 @@ public class MaterialServiceImplTest {
     @Test
     public void testPatchMaterial_success() throws Exception {
         Long id = 1L;
-        Material patchedMaterial = new Material(1L, "updatedName", null, null, null, null, null, null, 1);
-        Material existingMaterialEntity = new Material(1L, "materialName", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Material persistedMaterialEntity = new Material(1L, "updatedName", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material patchedMaterial = new Material(1L, "updatedName", null, null, null, null, null, null, null, 1);
+        Material existingMaterialEntity = new Material(1L, "materialName", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material persistedMaterialEntity = new Material(1L, "updatedName", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Material> persistedMaterialCaptor = ArgumentCaptor.forClass(Material.class);
 
@@ -197,6 +203,7 @@ public class MaterialServiceImplTest {
         assertEquals(existingMaterialEntity.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
         assertEquals(existingMaterialEntity.getUPC(), persistedMaterialCaptor.getValue().getUPC());
         assertEquals(existingMaterialEntity.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
+        assertEquals(existingMaterialEntity.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         assertEquals(existingMaterialEntity.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
         assertEquals(existingMaterialEntity.getCreatedAt(), persistedMaterialCaptor.getValue().getCreatedAt());
         assertEquals(existingMaterialEntity.getVersion(), persistedMaterialCaptor.getValue().getVersion());
@@ -208,6 +215,7 @@ public class MaterialServiceImplTest {
         assertEquals(persistedMaterialEntity.getCategory().getId(), returnedMaterial.getCategory().getId());
         assertEquals(persistedMaterialEntity.getUPC(), returnedMaterial.getUPC());
         assertEquals(persistedMaterialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
+        assertEquals(persistedMaterialEntity.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(persistedMaterialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());
         assertEquals(persistedMaterialEntity.getCreatedAt(), returnedMaterial.getCreatedAt());
         assertEquals(persistedMaterialEntity.getVersion(), returnedMaterial.getVersion());

@@ -2,33 +2,31 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotNull;
-
-public class AddMaterialPortionDto extends BaseDto {
+public class UpdateMaterialPortionDto extends BaseDto {
     
-    @NotNull
     private Long materialLotId;
 
-    @NotNull
     private QuantityDto quantity;
     
-    @NotNull
     private Long mixtureId;
     
     private LocalDateTime addedAt;
     
-    public AddMaterialPortionDto() {
+    private Integer version;
+    
+    public UpdateMaterialPortionDto() {
         super();
     }
 
-    public AddMaterialPortionDto(Long materialLotId, QuantityDto quantity, Long mixtureId, LocalDateTime addedAt) {
+    public UpdateMaterialPortionDto(Long materialLotId, QuantityDto quantity, Long mixtureId, LocalDateTime addedAt, Integer version) {
         this();
         this.materialLotId = materialLotId;
         this.quantity = quantity;
         this.mixtureId = mixtureId;
         this.addedAt = addedAt;
+        this.version = version;
     }
-    
+
     public Long getMaterialLotId() {
         return materialLotId;
     }
@@ -59,6 +57,14 @@ public class AddMaterialPortionDto extends BaseDto {
 
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
+    }
+    
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
 }

@@ -53,6 +53,9 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mixture_id", referencedColumnName = "id", nullable = false)
     private Mixture mixture;
+    
+    @Column(name = "added_at")
+    private LocalDateTime addedAt;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -73,11 +76,12 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
         setId(id);
     }
 
-    public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+    public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture, LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setMaterialLot(materialLot);
         setQuantity(quantity);
         setMixture(mixture);
+        setAddedAt(addedAt);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -121,6 +125,16 @@ public class MaterialPortion extends BaseEntity implements BaseMaterialPortion, 
     @Override
     public void setMixture(Mixture mixture) {
         this.mixture = mixture;
+    }
+    
+    @Override
+    public LocalDateTime getAddedAt() {
+        return addedAt;
+    }
+
+    @Override
+    public void setAddedAt(LocalDateTime addedAt) {
+        this.addedAt = addedAt;
     }
 
     @Override

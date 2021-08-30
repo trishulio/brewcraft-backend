@@ -17,18 +17,21 @@ public class AddMaterialDto extends BaseDto {
 
     @NotEmpty
     private String baseQuantityUnit;
+    
+    private String imageSrc;
 
     public AddMaterialDto() {
         super();
     }
 
-    public AddMaterialDto(String name, String description, Long categoryId, String upc, String baseQuantityUnit) {
+    public AddMaterialDto(String name, String description, Long categoryId, String upc, String baseQuantityUnit, String imageSrc) {
         super();
         this.name = name;
         this.description = description;
         this.categoryId = categoryId;
         this.upc = upc;
         this.baseQuantityUnit = baseQuantityUnit;
+        this.imageSrc = imageSrc;
     }
 
     public String getName() {
@@ -69,6 +72,14 @@ public class AddMaterialDto extends BaseDto {
 
     public void setBaseQuantityUnit(String baseQuantityUnit) {
         this.baseQuantityUnit = baseQuantityUnit;
+    }
+    
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
 }

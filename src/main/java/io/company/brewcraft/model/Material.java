@@ -15,6 +15,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 
@@ -26,6 +27,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_UPC = "upc";
     public static final String FIELD_BASE_QUANTITY_UNIT = "baseQuantityUnit";
+    public static final String FIELD_IMAGE_SRC = "imageSrc";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_generator")
@@ -45,6 +47,10 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity baseQuantityUnit;
+    
+    @URL
+    @Column(name = "image_source")
+    private String imageSrc;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -66,13 +72,14 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     }
 
     public Material(Long id, String name, String description, MaterialCategory category, String upc,
-            Unit<?> baseQuantityUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+            Unit<?> baseQuantityUnit, String imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
         setDescription(description);
         setCategory(category);
         setUPC(upc);
         setBaseQuantityUnit(baseQuantityUnit);
+        setImageSrc(imageSrc);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -136,6 +143,16 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     @Override
     public void setBaseQuantityUnit(Unit<?> baseQuantityUnit) {
         this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);
+    }
+    
+    @Override
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    @Override
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     @Override

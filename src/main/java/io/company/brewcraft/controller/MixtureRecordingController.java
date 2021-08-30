@@ -76,12 +76,16 @@ public class MixtureRecordingController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public MixtureRecordingDto addMixtureRecording(@Valid @RequestBody AddMixtureRecordingDto addBrewDto) {
-        MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(addBrewDto);
+    public List<MixtureRecordingDto> addMixtureRecordings(@Valid @RequestBody List<AddMixtureRecordingDto> addMixtureRecordingDtos) {
+        List<MixtureRecording> mixtureRecordings = addMixtureRecordingDtos.stream()
+                                                                          .map(addMixtureRecordingDto -> mixtureRecordingMapper.fromDto(addMixtureRecordingDto))
+                                                                          .collect(Collectors.toList());
 
-        MixtureRecording addedMixtureRecording = mixtureRecordingService.addMixtureRecording(mixtureRecording);
+        List<MixtureRecording> addedMixtureRecordings = mixtureRecordingService.addMixtureRecordings(mixtureRecordings);
 
-        return mixtureRecordingMapper.toDto(addedMixtureRecording);
+        return addedMixtureRecordings.stream()
+                                     .map(addedMixtureRecording -> mixtureRecordingMapper.toDto(addedMixtureRecording))
+                                     .collect(Collectors.toList());          
     }
 
     @PutMapping("/{mixtureRecordingId}")

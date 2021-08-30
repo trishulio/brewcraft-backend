@@ -20,16 +20,16 @@ public class MixtureRecordingDtoTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
-        Long mixtureId = 2L;
+        MixtureDto mixtureDto = new MixtureDto(2L);
         MeasureDto measure = new MeasureDto(1L, "abv", 1);
         BigDecimal value = new BigDecimal("100");
         LocalDateTime recordedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
 
-        MixtureRecordingDto mixtureRecordingDto = new MixtureRecordingDto(id, mixtureId, measure, value, recordedAt, version);
+        MixtureRecordingDto mixtureRecordingDto = new MixtureRecordingDto(id, mixtureDto, measure, value, recordedAt, version);
 
         assertEquals(1L, mixtureRecordingDto.getId());
-        assertEquals(2L, mixtureRecordingDto.getMixtureId());
+        assertEquals(new MixtureDto(2L), mixtureRecordingDto.getMixture());
         assertEquals(new MeasureDto(1L, "abv", 1), mixtureRecordingDto.getMeasure());
         assertEquals(new BigDecimal("100"), mixtureRecordingDto.getValue());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureRecordingDto.getRecordedAt());
@@ -44,8 +44,8 @@ public class MixtureRecordingDtoTest {
 
     @Test
     public void testGetSetMixtureId() {
-        mixtureRecordingDto.setMixtureId(2L);
-        assertEquals(2L, mixtureRecordingDto.getMixtureId());
+        mixtureRecordingDto.setMixture(new MixtureDto(2L));
+        assertEquals(new MixtureDto(2L), mixtureRecordingDto.getMixture());
     }
 
     @Test

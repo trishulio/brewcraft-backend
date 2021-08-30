@@ -11,16 +11,22 @@ import io.company.brewcraft.service.MaterialPortionAccessor;
 public class EnhancedMaterialPortionRepositoryImpl implements EnhancedMaterialPortionRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedMaterialPortionRepositoryImpl.class);
 
+    private MixtureRepository mixtureRepository;
+
+    private MaterialLotRepository materialLotRepository;
+    
     private final AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> refresher;
 
-    public EnhancedMaterialPortionRepositoryImpl(AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> refresher) {
+    public EnhancedMaterialPortionRepositoryImpl(MixtureRepository mixtureRepository, MaterialLotRepository materialLotRepository, AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> refresher) {
+        this.mixtureRepository = mixtureRepository;
+        this.materialLotRepository = materialLotRepository;
         this.refresher = refresher;
     }
 
     @Override
     public void refresh(Collection<MaterialPortion> materialPortions) {
-        //materialLotRepo.refreshAccessors(materialPortions);
-        //mixtureRepo.refreshAccessors(materialPortions);
+        mixtureRepository.refreshAccessors(materialPortions);
+        materialLotRepository.refreshAccessors(materialPortions);
     }
 
     @Override
