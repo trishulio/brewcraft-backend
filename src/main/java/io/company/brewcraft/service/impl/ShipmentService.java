@@ -45,29 +45,29 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
     }
 
     public Page<Shipment> getShipments(
-            Set<Long> ids,
-            Set<Long> excludeIds,
-            Set<String> shipmentNumbers,
-            Set<String> descriptions,
-            Set<Long> statusIds,
-            LocalDateTime deliveryDueDateFrom,
-            LocalDateTime deliveryDueDateTo,
-            LocalDateTime deliveredDateFrom,
-            LocalDateTime deliveredDateTo,
-            SortedSet<String> sortBy,
-            boolean orderAscending,
-            int page,
-            int size
-        ) {
-            final Specification<Shipment> spec= SpecificationBuilder.builder()
-                                                              .in(Shipment.FIELD_ID, ids)
-                                                              .not().in(Shipment.FIELD_ID, excludeIds)
-                                                              .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
-                                                              .in(Shipment.FIELD_DESCRIPTION, descriptions)
-                                                              .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
-                                                              .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
-                                                              .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
-                                                              .build();
+        Set<Long> ids,
+        Set<Long> excludeIds,
+        Set<String> shipmentNumbers,
+        Set<String> descriptions,
+        Set<Long> statusIds,
+        LocalDateTime deliveryDueDateFrom,
+        LocalDateTime deliveryDueDateTo,
+        LocalDateTime deliveredDateFrom,
+        LocalDateTime deliveredDateTo,
+        SortedSet<String> sortBy,
+        boolean orderAscending,
+        int page,
+        int size
+    ) {
+        final Specification<Shipment> spec= SpecificationBuilder.builder()
+                                                          .in(Shipment.FIELD_ID, ids)
+                                                          .not().in(Shipment.FIELD_ID, excludeIds)
+                                                          .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
+                                                          .in(Shipment.FIELD_DESCRIPTION, descriptions)
+                                                          .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
+                                                          .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
+                                                          .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
+                                                          .build();
 
         return this.repoService.getAll(spec, sortBy, orderAscending, page, size);
     }
