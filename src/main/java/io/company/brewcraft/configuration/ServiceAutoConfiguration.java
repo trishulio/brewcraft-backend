@@ -11,10 +11,17 @@ import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.model.BaseInvoiceItem;
+import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.UpdateInvoiceItem;
+import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
@@ -70,10 +77,10 @@ import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.QuantityUnitService;
-import io.company.brewcraft.service.StockLotService;
-import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.SimpleUpdateService;
+import io.company.brewcraft.service.StockLotService;
+import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
@@ -205,8 +212,10 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ShipmentService.class)
-    public ShipmentService shipmentService(ShipmentRepository repo, MaterialLotService itemService) {
-        final ShipmentService shipmentService = new ShipmentService(repo, itemService);
+    public ShipmentService shipmentService(UtilityProvider utilProvider, ShipmentRepository repo, MaterialLotService lotService) {
+        final UpdateService<Long, Shipment, BaseShipment<? extends BaseMaterialLot<?>>, UpdateShipment<? extends UpdateMaterialLot<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseShipment.class, UpdateShipment.class, Shipment.class, Set.of(BaseShipment.ATTR_LOTS));
+        final RepoService<Long, Shipment, ShipmentAccessor> repoService = new CrudRepoService<>(repo);
+        final ShipmentService shipmentService = new ShipmentService(updateService, lotService, repoService);
 
         return shipmentService;
     }
@@ -214,7 +223,8 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MaterialLotService.class)
     public MaterialLotService materialLotService(UtilityProvider utilProvider) {
-        final MaterialLotService itemService = new MaterialLotService(utilProvider);
+        final UpdateService<Long, MaterialLot, BaseMaterialLot<?>, UpdateMaterialLot<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseMaterialLot.class, UpdateMaterialLot.class, MaterialLot.class, Set.of(BaseMaterialLot.ATTR_SHIPMENT));
+        final MaterialLotService itemService = new MaterialLotService(updateService);
 
         return itemService;
     }
@@ -270,7 +280,7 @@ public class ServiceAutoConfiguration {
     public LotAggregationService lotInventoryService(AggregationRepository aggrRepo) {
         return new LotAggregationService(aggrRepo);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(StockLotService.class)
     public StockLotService stockLotService(StockLotRepository stockLotRepository) {

@@ -77,27 +77,29 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
     public List<E> getPatchEntities(List<E> existingItems, List<UE> patches) {
         final Validator validator = this.utilProvider.getValidator();
 
-        if (patches == null) {
-            return existingItems;
+        List<E> targetItems = null;
+        patches = patches == null ? new ArrayList<>() : patches;
+
+        final Map<ID, UE> idToItemLookup = patches.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+
+        if (existingItems != null) {
+            targetItems = existingItems.stream().map(existing -> {
+                final UE patch = idToItemLookup.remove(existing.getId());
+                final E item = this.newEntity();
+                item.override(existing, this.getPropertyNames(this.entityCls, this.excludeProps));
+                if (patch != null) {
+                    if (patch.getId() == null) {
+                        throw new IllegalArgumentException("Patch entity doesn't contain an ID. Patch can only update existing entities. ID is mandatory.");
+                    }
+                    existing.optimisticLockCheck(patch);
+                    item.outerJoin(patch, this.getPropertyNames(this.updateEntityCls, this.excludeProps));
+                }
+                item.setId(existing.getId());
+                return item;
+            }).collect(Collectors.toList());
         }
 
-        existingItems = existingItems == null ? new ArrayList<>() : existingItems;
-        final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
-
-        final List<E> targetItems = patches.stream().map(patch -> {
-            if (patch.getId() == null) {
-                throw new IllegalArgumentException("Patch entity doesn't contain an ID. Patch can only update existing entities. ID is mandatory.");
-            }
-            final E item = this.newEntity();
-            final E existing = idToItemLookup.get(patch.getId());
-            if (validator.rule(existing != null, "No existing  %s found with Id: %s.", this.entityCls.getSimpleName(), patch.getId())) {
-                existing.optimisticLockCheck(patch);
-                item.override(existing, this.getPropertyNames(this.entityCls, this.excludeProps));
-            }
-            item.outerJoin(patch, this.getPropertyNames(this.updateEntityCls, this.excludeProps));
-            item.setId(patch.getId());
-            return item;
-        }).collect(Collectors.toList());
+        idToItemLookup.forEach((id, patch) -> validator.rule(false, "Cannot apply the patch with Id: %s to an existing entity as it does not exist", id));
 
         validator.raiseErrors();
         return targetItems;

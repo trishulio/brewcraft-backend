@@ -1,162 +1,175 @@
 package io.company.brewcraft.service.impl;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
 
+import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdateShipment;
-import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
+import io.company.brewcraft.service.CrudService;
+import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
-public class ShipmentService extends BaseService {
+public class ShipmentService extends BaseService implements CrudService<Long, Shipment, BaseShipment<? extends BaseMaterialLot<?>>, UpdateShipment<? extends UpdateMaterialLot<?>>, ShipmentAccessor> {
     private static final Logger log = LoggerFactory.getLogger(ShipmentService.class);
 
-    private ShipmentRepository repo;
-    private MaterialLotService lotService;
+    private final UpdateService<Long, Shipment, BaseShipment<? extends BaseMaterialLot<?>>, UpdateShipment<? extends UpdateMaterialLot<?>>> updateService;
+    private final MaterialLotService lotService;
+    private final RepoService<Long, Shipment, ShipmentAccessor> repoService;
 
-    public ShipmentService(ShipmentRepository repo, MaterialLotService lotService) {
-        this.repo = repo;
+    public ShipmentService(UpdateService<Long, Shipment, BaseShipment<? extends BaseMaterialLot<?>>, UpdateShipment<? extends UpdateMaterialLot<?>>> updateService, MaterialLotService lotService, RepoService<Long, Shipment, ShipmentAccessor> repoService) {
+        this.updateService = updateService;
         this.lotService = lotService;
+        this.repoService = repoService;
     }
 
     public Page<Shipment> getShipments(
-        Set<Long> ids,
-        Set<Long> excludeIds,
-        Set<String> shipmentNumbers,
-        Set<String> descriptions,
-        Set<Long> statusIds,
-        LocalDateTime deliveryDueDateFrom,
-        LocalDateTime deliveryDueDateTo,
-        LocalDateTime deliveredDateFrom,
-        LocalDateTime deliveredDateTo,
-        SortedSet<String> sort,
-        boolean orderAscending,
-        int page,
-        int size
-    ) {
-        Specification<Shipment> spec= SpecificationBuilder
-                                                        .builder()
-                                                        .in(Shipment.FIELD_ID, ids)
-                                                        .not().in(Shipment.FIELD_ID, excludeIds)
-                                                        .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
-                                                        .in(Shipment.FIELD_DESCRIPTION, descriptions)
-                                                        .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
-                                                        .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
-                                                        .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
-                                                        .build();
-        return repo.findAll(spec, pageRequest(sort, orderAscending, page, size));
+            Set<Long> ids,
+            Set<Long> excludeIds,
+            Set<String> shipmentNumbers,
+            Set<String> descriptions,
+            Set<Long> statusIds,
+            LocalDateTime deliveryDueDateFrom,
+            LocalDateTime deliveryDueDateTo,
+            LocalDateTime deliveredDateFrom,
+            LocalDateTime deliveredDateTo,
+            SortedSet<String> sortBy,
+            boolean orderAscending,
+            int page,
+            int size
+        ) {
+            final Specification<Shipment> spec= SpecificationBuilder.builder()
+                                                              .in(Shipment.FIELD_ID, ids)
+                                                              .not().in(Shipment.FIELD_ID, excludeIds)
+                                                              .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
+                                                              .in(Shipment.FIELD_DESCRIPTION, descriptions)
+                                                              .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
+                                                              .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
+                                                              .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
+                                                              .build();
+
+        return this.repoService.getAll(spec, sortBy, orderAscending, page, size);
     }
 
-    public Shipment getShipment(Long id) {
-        log.debug("Fetching shipment with Id: {}", id);
+    @Override
+    public Shipment get(Long id) {
+        return this.repoService.get(id);
+    }
 
-        Shipment shipment = null;
+    @Override
+    public List<Shipment> getByIds(Collection<? extends Identified<Long>> idProviders) {
+        return this.repoService.getByIds(idProviders);
+    }
 
-        log.debug("Finding shipment by Id: {}", id);
-        Optional<Shipment> retrieved = repo.findById(id);
+    @Override
+    public List<Shipment> getByAccessorIds(Collection<? extends ShipmentAccessor> accessors) {
+        return this.repoService.getByAccessorIds(accessors, accessor -> accessor.getShipment());
+    }
 
-        if (retrieved.isPresent()) {
-            log.debug("Shipment found with id: {}", id);
-            shipment = retrieved.get();
+    @Override
+    public boolean exists(Set<Long> ids) {
+        return this.repoService.exists(ids);
+    }
+
+    @Override
+    public boolean exist(Long id) {
+        return this.repoService.exists(id);
+    }
+
+    @Override
+    public int delete(Set<Long> ids) {
+        return this.repoService.delete(ids);
+    }
+
+    @Override
+    public void delete(Long id) {
+        this.repoService.delete(id);
+    }
+
+    @Override
+    public List<Shipment> add(final List<BaseShipment<? extends BaseMaterialLot<?>>> additions) {
+        if (additions == null) {
+            return null;
         }
 
-        return shipment;
-    }
+        final List<Shipment> entities = this.updateService.getAddEntities(additions);
 
-    public boolean existsByIds(Collection<Long> ids) {
-        log.debug("Checking invoice exists in Ids: {}", ids);
-        boolean exists = repo.existsByIds(ids);
-        log.debug("Shipments exists: {}", exists);
-
-        return exists;
-    }
-
-    public int delete(Collection<Long> ids) {
-        log.debug("Attempting to delete shipments with Ids: {}", ids);
-        int count = repo.deleteByIds(ids);
-        log.debug("Number of shipments deleted: {}", count);
-
-        return count;
-    }
-
-    public Shipment add(Shipment shipment) {
-        log.debug("Adding a new shipment with {} lots", shipment.getLots() == null ? null : shipment.getLots().size());
-        Shipment addition = new Shipment();
-        List<MaterialLot> lotAdditions = lotService.getAddLots(shipment.getLots());
-        log.debug("Number of lot additions: {}", lotAdditions == null ? null : lotAdditions.size());
-
-        addition.override(shipment, getPropertyNames(BaseShipment.class));
-        addition.setLots(lotAdditions);
-
-        repo.refresh(List.of(addition));
-
-        return repo.saveAndFlush(addition);
-    }
-
-    public Shipment put(Long shipmentId, Shipment update) {
-        log.debug("Putting a shipment with Id: {}", shipmentId);
-
-        Shipment existing = getShipment(shipmentId);
-        Class<? super Shipment> shipmentClz = BaseShipment.class;
-
-        if (existing == null) {
-            existing = new Shipment(shipmentId); //TODO: Hibernate ignores the id.
-        } else {
-            existing.optimisticLockCheck(update);
-            shipmentClz = UpdateShipment.class;
+        for (int i = 0; i < additions.size(); i++) {
+            final List<MaterialLot> lots = this.lotService.getAddEntities((List<BaseMaterialLot<?>>) additions.get(i).getLots());
+            entities.get(i).setLots(lots);
         }
 
-        log.debug("Shipment with Id: {} has {} existing lots", existing == null ? null : shipmentId, existing.getLots() == null ? null : existing.getLots().size());
-        log.debug("Update payload has {} lot updates", update.getLots() == null ? null : update.getLots().size());
-
-        List<MaterialLot> updatedLots = lotService.getPutLots(existing.getLots(), update.getLots());
-        log.debug("Total UpdateLots: {}", updatedLots == null ? null : updatedLots.size());
-
-        Shipment temp = new Shipment();
-        temp.override(update, getPropertyNames(shipmentClz));
-        temp.setLots(updatedLots);
-        repo.refresh(List.of(temp));
-
-        existing.override(temp, getPropertyNames(shipmentClz));
-
-        return repo.saveAndFlush(existing);
+        return this.repoService.saveAll(entities);
     }
 
-    public Shipment patch(Long shipmentId, Shipment update) {
-        log.debug("Performing patch on Shipment with Id: {}", shipmentId);
+    @Override
+    public List<Shipment> put(List<UpdateShipment<? extends UpdateMaterialLot<?>>> updates) {
+        if (updates == null) {
+            return null;
+        }
 
-        Shipment existing = repo.findById(shipmentId).orElseThrow(() -> new EntityNotFoundException("Shipment", shipmentId));
-        existing.optimisticLockCheck(update);
+        final List<Shipment> existing = this.repoService.getByIds(updates);
+        final List<Shipment> updated = this.updateService.getPutEntities(existing, updates);
 
-        List<MaterialLot> existingLots = existing.getLots();
-        List<MaterialLot> updatedLots = lotService.getPatchLots(existingLots, update.getLots());
+        final int length = Math.max(existing.size(), updates.size());
+        for (int i = 0; i < length; i++) {
+            final List<MaterialLot> existingLots = i < existing.size() ? existing.get(i).getLots() : null;
+            final List<? extends UpdateMaterialLot<?>> updateLots = i < updates.size() ? updates.get(i).getLots() : null;
 
-        Shipment temp = new Shipment();
-        temp.override(existing);
-        temp.outerJoin(update, getPropertyNames(UpdateShipment.class));
-        temp.setLots(updatedLots);
-        repo.refresh(List.of(temp));
+            final List<MaterialLot> updatedLots = this.lotService.getPutEntities(existingLots, (List<UpdateMaterialLot<?>>) updateLots);
 
-        existing.override(temp, getPropertyNames(UpdateShipment.class));
+            updated.get(i).setLots(updatedLots);
+        }
 
-        return repo.saveAndFlush(existing);
+        return this.repoService.saveAll(updated);
+    }
+
+    @Override
+    public List<Shipment> patch(List<UpdateShipment<? extends UpdateMaterialLot<?>>> patches) {
+        if (patches == null) {
+            return null;
+        }
+
+        final List<Shipment> existing = this.repoService.getByIds(patches);
+        final List<Shipment> updated = this.updateService.getPatchEntities(existing, patches);
+
+        if (existing.size() != patches.size()) {
+            final Set<Long> existingIds = existing.stream().map(shipment -> shipment.getId()).collect(Collectors.toSet());
+            final Set<Long> nonExistingIds = patches.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
+
+            throw new EntityNotFoundException(String.format("Cannot find shipments with Ids: %s", nonExistingIds));
+        }
+
+        for (int i = 0; i < existing.size(); i++) {
+            final List<MaterialLot> existingLots = existing.get(i).getLots();
+            final List<? extends UpdateMaterialLot<?>> updateLots = patches.get(i).getLots();
+
+            final List<MaterialLot> updatedLots = this.lotService.getPatchEntities(existingLots, (List<UpdateMaterialLot<?>>) updateLots);
+
+            updated.get(i).setLots(updatedLots);
+        }
+
+        return this.repoService.saveAll(updated);
     }
 }

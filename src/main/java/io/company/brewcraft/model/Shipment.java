@@ -24,9 +24,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import io.company.brewcraft.service.CrudEntity;
+
 @Entity(name = "shipment")
 @Table
-public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, BaseShipment<MaterialLot>, Identified<Long>, Audited {
+public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, BaseShipment<MaterialLot>, CrudEntity<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_DESCRIPTION = "description";
@@ -76,21 +78,21 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     public Shipment(Long id) {
         this();
-        setId(id);
+        this.setId(id);
     }
 
     public Shipment(Long id, String shipmentNumber, String description, ShipmentStatus shipmentStatus, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, LocalDateTime createdAt, LocalDateTime lastUpdated,
             List<MaterialLot> lots, Integer version) {
         this(id);
-        setShipmentNumber(shipmentNumber);
-        setDescription(description);
-        setStatus(shipmentStatus);
-        setDeliveryDueDate(deliveryDueDate);
-        setDeliveredDate(deliveredDate);
-        setCreatedAt(createdAt);
-        setLastUpdated(lastUpdated);
-        setLots(lots);
-        setVersion(version);
+        this.setShipmentNumber(shipmentNumber);
+        this.setDescription(description);
+        this.setStatus(shipmentStatus);
+        this.setDeliveryDueDate(deliveryDueDate);
+        this.setDeliveredDate(deliveredDate);
+        this.setCreatedAt(createdAt);
+        this.setLastUpdated(lastUpdated);
+        this.setLots(lots);
+        this.setVersion(version);
     }
 
     public Shipment(Invoice invoice) {
@@ -98,13 +100,13 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         if (invoice.getItems() != null && invoice.getItems().size() != 0) {
             lots = invoice.getItems().stream().map(item -> new MaterialLot(item)).collect(Collectors.toList());
         }
-        setShipmentNumber(invoice.getInvoiceNumber());
-        setLots(lots);
+        this.setShipmentNumber(invoice.getInvoiceNumber());
+        this.setLots(lots);
     }
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -114,7 +116,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public String getShipmentNumber() {
-        return shipmentNumber;
+        return this.shipmentNumber;
     }
 
     @Override
@@ -124,7 +126,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     @Override
@@ -134,7 +136,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public ShipmentStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     @Override
@@ -144,7 +146,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public LocalDateTime getDeliveryDueDate() {
-        return deliveryDueDate;
+        return this.deliveryDueDate;
     }
 
     @Override
@@ -154,7 +156,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public LocalDateTime getDeliveredDate() {
-        return deliveredDate;
+        return this.deliveredDate;
     }
 
     @Override
@@ -164,7 +166,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     @Override
@@ -174,7 +176,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @Override
     public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+        return this.lastUpdated;
     }
 
     @Override
@@ -199,7 +201,9 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
             this.lots.stream().collect(Collectors.toList()).forEach(this::removeLot);
         }
 
-        if (lots != null) {
+        if (lots == null) {
+            this.lots = null;
+        } else {
             lots.stream().collect(Collectors.toList()).forEach(this::addLot);
         }
     }
@@ -227,7 +231,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
             return false;
         }
 
-        boolean removed = this.lots.remove(lot);
+        final boolean removed = this.lots.remove(lot);
 
         if (removed) {
             lot.setShipment(null);
@@ -237,7 +241,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     }
     @Override
     public Integer getVersion() {
-        return version;
+        return this.version;
     }
 
     @Override

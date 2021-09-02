@@ -145,12 +145,12 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testShipmentService_ReturnsInstanceOfShipmentService() {
-        final ShipmentRepository mRepo = mock(ShipmentRepository.class);
-        final MaterialLotService mItemService = mock(MaterialLotService.class);
+        final ShipmentRepository mShipmentRepo = mock(ShipmentRepository.class);
+        final MaterialLotService mMaterialLotService = mock(MaterialLotService.class);
 
-        final ShipmentService service = this.serviceAutoConfiguration.shipmentService(mRepo, mItemService);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        assertSame(ShipmentService.class, service.getClass());
+        this.serviceAutoConfiguration.shipmentService(mUtilProvider, mShipmentRepo, mMaterialLotService);
     }
 
     @Test

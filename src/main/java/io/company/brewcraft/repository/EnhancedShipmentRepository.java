@@ -1,9 +1,7 @@
 package io.company.brewcraft.repository;
 
-import java.util.Collection;
-
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentAccessor;
 
-public interface EnhancedShipmentRepository {
-    void refresh(Collection<Shipment> shipments);
+public interface EnhancedShipmentRepository extends EnhancedRepository<Shipment, ShipmentAccessor>{
 }
