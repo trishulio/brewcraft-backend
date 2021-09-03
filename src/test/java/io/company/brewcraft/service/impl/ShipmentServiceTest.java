@@ -70,6 +70,7 @@ public class ShipmentServiceTest {
        final Page<Shipment> expected = new PageImpl<>(List.of(new Shipment(1L)));
        assertEquals(expected, page);
 
+       // TODO: Pending testing for the specification
        captor.getValue();
    }
 

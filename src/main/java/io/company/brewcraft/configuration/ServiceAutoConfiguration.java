@@ -12,15 +12,18 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
@@ -75,6 +78,7 @@ import io.company.brewcraft.service.MixtureServiceImpl;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
+import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.RepoService;
@@ -152,8 +156,10 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(PurchaseOrderService.class)
-    public PurchaseOrderService purchaseOrderService(PurchaseOrderRepository purchaseOrderRepository) {
-        return new PurchaseOrderService(purchaseOrderRepository);
+    public PurchaseOrderService purchaseOrderService(UtilityProvider utilProvider, PurchaseOrderRepository poRepo) {
+        final UpdateService<Long, PurchaseOrder, BasePurchaseOrder, UpdatePurchaseOrder> updateService = new SimpleUpdateService<>(utilProvider, BasePurchaseOrder.class, UpdatePurchaseOrder.class, PurchaseOrder.class, Set.of());
+        final RepoService<Long, PurchaseOrder, PurchaseOrderAccessor> repoService = new CrudRepoService<>(poRepo);
+        return new PurchaseOrderService(updateService, repoService);
     }
 
     @Bean

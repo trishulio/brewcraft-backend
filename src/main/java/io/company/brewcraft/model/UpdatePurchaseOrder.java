@@ -1,4 +1,6 @@
 package io.company.brewcraft.model;
 
-public interface UpdatePurchaseOrder extends BasePurchaseOrder, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdatePurchaseOrder extends BasePurchaseOrder, UpdatableEntity<Long> {
 }

@@ -45,7 +45,7 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
         }
 
         if (order != null && order.getId() == null) {
-            order = this.purchaseOrderService.add(order);
+            order = this.purchaseOrderService.add(List.of(order)).get(0);
             invoice.setPurchaseOrder(order);
         }
 

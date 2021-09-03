@@ -29,6 +29,7 @@ import io.company.brewcraft.service.BrewStageStatusService;
 import io.company.brewcraft.service.BrewStageStatusServiceImpl;
 import io.company.brewcraft.service.BrewTaskService;
 import io.company.brewcraft.service.BrewTaskServiceImpl;
+import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
@@ -106,9 +107,7 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testInvoiceItemService_ReturnsInstanceOfInvoiceItemService() {
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        final InvoiceItemService service = this.serviceAutoConfiguration.invoiceItemService(mUtilProvider);
-
-        assertTrue(service instanceof InvoiceItemService);
+        this.serviceAutoConfiguration.invoiceItemService(mUtilProvider);
     }
 
     @Test
@@ -118,16 +117,16 @@ public class ServiceAutoConfigurationTest {
 
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        final InvoiceService service = this.serviceAutoConfiguration.invoiceService(mUtilProvider, mInvoiceItemService, mInvoiceRepo);
-        assertTrue(service instanceof InvoiceService);
+        this.serviceAutoConfiguration.invoiceService(mUtilProvider, mInvoiceItemService, mInvoiceRepo);
     }
 
     @Test
     public void testPurchaseOrderService_ReturnsInstanceOfPurchaseOrderService() {
-        final PurchaseOrderRepository poRepo = mock(PurchaseOrderRepository.class);
-        final PurchaseOrderService service = this.serviceAutoConfiguration.purchaseOrderService(poRepo);
+        final PurchaseOrderRepository mInvoiceRepo = mock(PurchaseOrderRepository.class);
 
-        assertTrue(service instanceof PurchaseOrderService);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        
+        this.serviceAutoConfiguration.purchaseOrderService(mUtilProvider, mInvoiceRepo);
     }
 
     @Test

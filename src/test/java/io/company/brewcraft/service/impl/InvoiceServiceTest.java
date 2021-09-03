@@ -80,6 +80,7 @@ public class InvoiceServiceTest {
        final Page<Invoice> expected = new PageImpl<>(List.of(new Invoice(1L)));
        assertEquals(expected, page);
 
+       // TODO: Pending testing for the specification
        captor.getValue();
    }
 

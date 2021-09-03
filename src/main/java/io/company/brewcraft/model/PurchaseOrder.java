@@ -16,9 +16,11 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import io.company.brewcraft.service.CrudEntity;
 @Entity(name = "purchase_order")
 @Table
-public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, UpdatePurchaseOrder, Audited, Identified<Long> {
+public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, UpdatePurchaseOrder, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";
     public static final String FIELD_SUPPLIER = "supplier";
