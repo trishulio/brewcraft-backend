@@ -15,10 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.company.brewcraft.dto.BaseMaterial;
-import io.company.brewcraft.dto.UpdateMaterial;
+import io.company.brewcraft.model.BaseMaterial;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialCategory;
+import io.company.brewcraft.model.UpdateMaterial;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 import io.company.brewcraft.service.BaseService;
