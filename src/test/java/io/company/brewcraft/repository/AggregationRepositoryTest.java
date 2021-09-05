@@ -1,25 +1,15 @@
 package io.company.brewcraft.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -29,154 +19,82 @@ import io.company.brewcraft.service.Selector;
 @SuppressWarnings("unchecked")
 public class AggregationRepositoryTest {
     class TestEntity extends BaseModel {
-        private int data;
+        private Long id;
 
-        public TestEntity(int data) {
-            this.data = data;
-        }
-
-        public int getData() {
-            return this.data;
-        }
-
-        public void setData(int data) {
-            this.data = data;
+        public TestEntity(Long id) {
+            this.id = id;
         }
     }
 
+    private QueryResolver mResolver;
     private AggregationRepository repo;
-
-    private EntityManager mEm;
-
-    private CriteriaBuilder mCb;
-    private CriteriaQuery<TestEntity> mCq;
-    private Root<TestEntity> mRoot;
-    private TypedQuery<TestEntity> mTq;
 
     @BeforeEach
     public void init() {
-        mEm = mock(EntityManager.class);
+        mResolver = mock(QueryResolver.class);
 
-        mCb = mock(CriteriaBuilder.class);
-        doReturn(mCb).when(mEm).getCriteriaBuilder();
-
-        mCq = mock(CriteriaQuery.class);
-        doReturn(mCq).when(mCb).createQuery(TestEntity.class);
-
-        mRoot = mock(Root.class);
-        doReturn(mRoot).when(mCq).from(TestEntity.class);
-
-        mTq = mock(TypedQuery.class);
-        doReturn(mTq).when(mEm).createQuery(mCq);
-
-        doReturn(mTq).when(mTq).setFirstResult(any(Integer.class));
-        doReturn(mTq).when(mTq).setMaxResults(any(Integer.class));
-
-        repo = new AggregationRepository(mEm);
+        repo = new AggregationRepository(mResolver);
     }
 
     @Test
-    public void testGetAggregation_PerformsSelection_WhenNothingIsNull() {
-        Specification<TestEntity> mSpec = mock(Specification.class);
-        Predicate mPred = mock(Predicate.class);
-        doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
-
+    public void testGetAggregation_ReturnsListOfResultsFromTypedQuery() {
         Selector mSelector = mock(Selector.class);
-        List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        Selector mGroupBy = mock(Selector.class);
+        Specification<TestEntity> mSpec = mock(Specification.class);
 
-        Selector mGroupBySelector = mock(Selector.class);
-        List<Expression<?>> mGroupSelection = List.of(mock(Expression.class));
-        doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCq, mCb);
+        TypedQuery<Object> mTq = mock(TypedQuery.class);
+        doReturn(mTq).when(mResolver).buildQuery(TestEntity.class, Object.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
+        doReturn(List.of(new TestEntity(1L))).when(mTq).getResultList();
 
-        doAnswer(inv -> {
-            InOrder order = inOrder(mCq, mTq);
-            order.verify(mCq, times(1)).where(mPred);
-            order.verify(mCq, times(1)).multiselect(mSelection);
-            order.verify(mCq, times(1)).groupBy(mGroupSelection);
-            order.verify(mTq).setFirstResult(990);
-            order.verify(mTq).setMaxResults(99);
-            order.verify(mTq).getResultList();
-            order.verifyNoMoreInteractions();
+        List<Object> content = repo.getAggregation(TestEntity.class, Object.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
 
-            return List.of(new TestEntity(100));
-        }).when(mTq).getResultList();
-
-        Page<TestEntity> page = repo.getAggregation(
-            TestEntity.class,
-            mSelector,
-            mGroupBySelector,
-            mSpec,
-            PageRequest.of(10, 99)
-        );
-
-        Page<TestEntity> expected = new PageImpl<>(List.of(new TestEntity(100)));
-        assertEquals(expected, page);
+        assertEquals(List.of(new TestEntity(1L)), content);
     }
 
     @Test
-    public void testGetAggregation_DoesNotGroupBy_WhenGroupByIsNull() {
-        Specification<TestEntity> mSpec = mock(Specification.class);
-        Predicate mPred = mock(Predicate.class);
-        doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
-
+    public void testGetAggregation_UsesSameClassForReturnClassAndReturnsListOFResultsFromTypedQuery_WhenOverloadedMethodIsUsed() {
         Selector mSelector = mock(Selector.class);
-        List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        Selector mGroupBy = mock(Selector.class);
+        Specification<TestEntity> mSpec = mock(Specification.class);
 
-        doAnswer(inv -> {
-            InOrder order = inOrder(mCq, mTq);
-            order.verify(mCq, times(1)).where(mPred);
-            order.verify(mCq, times(1)).multiselect(mSelection);
-            order.verify(mTq).setFirstResult(990);
-            order.verify(mTq).setMaxResults(99);
-            order.verify(mTq).getResultList();
-            order.verifyNoMoreInteractions();
+        TypedQuery<TestEntity> mTq = mock(TypedQuery.class);
+        doReturn(mTq).when(mResolver).buildQuery(TestEntity.class, TestEntity.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
+        doReturn(List.of(new TestEntity(1L))).when(mTq).getResultList();
 
-            return List.of(new TestEntity(100));
-        }).when(mTq).getResultList();
+        List<TestEntity> content = repo.getAggregation(TestEntity.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
 
-        Page<TestEntity> page = repo.getAggregation(
-            TestEntity.class,
-            mSelector,
-            null,
-            mSpec,
-            PageRequest.of(10, 99)
-        );
-
-        Page<TestEntity> expected = new PageImpl<>(List.of(new TestEntity(100)));
-        assertEquals(expected, page);
+        assertEquals(List.of(new TestEntity(1L)), content);
     }
 
     @Test
-    public void testGetAggregation_DoesSetLimitOffset_WhenPageableIsNull() {
-        Specification<TestEntity> mSpec = mock(Specification.class);
-        Predicate mPred = mock(Predicate.class);
-        doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
-
+    public void testGetSingleAggregation_ReturnsSingleResultFromTypedQuery() {
         Selector mSelector = mock(Selector.class);
-        List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        Selector mGroupBy = mock(Selector.class);
+        Specification<TestEntity> mSpec = mock(Specification.class);
 
-        doAnswer(inv -> {
-            InOrder order = inOrder(mCq, mTq);
-            order.verify(mCq, times(1)).where(mPred);
-            order.verify(mCq, times(1)).multiselect(mSelection);
-            order.verify(mTq).getResultList();
-            order.verifyNoMoreInteractions();
+        TypedQuery<TestEntity> mTq = mock(TypedQuery.class);
+        doReturn(mTq).when(mResolver).buildQuery(TestEntity.class, TestEntity.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
+        doReturn(new TestEntity(1L)).when(mTq).getSingleResult();
 
-            return List.of(new TestEntity(100));
-        }).when(mTq).getResultList();
+        TestEntity content = repo.getSingleAggregation(TestEntity.class, TestEntity.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
 
-        Page<TestEntity> page = repo.getAggregation(
-            TestEntity.class,
-            mSelector,
-            null,
-            mSpec,
-            null
-        );
+        assertEquals(new TestEntity(1L), content);
+    }
 
-        Page<TestEntity> expected = new PageImpl<>(List.of(new TestEntity(100)));
-        assertEquals(expected, page);
+    @Test
+    public void testResultCount_ReturnsCountOfStream() {
+        Selector mSelector = mock(Selector.class);
+        Selector mGroupBy = mock(Selector.class);
+        Specification<TestEntity> mSpec = mock(Specification.class);
+
+        TypedQuery<TestEntity> mTq = mock(TypedQuery.class);
+        doReturn(mTq).when(mResolver).buildQuery(TestEntity.class, Object.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
+
+        Stream<TestEntity> mStream = mock(Stream.class);
+        doReturn(99L).when(mStream).count();
+        doReturn(mStream).when(mTq).getResultStream();
+
+        Long count = repo.getResultCount(TestEntity.class, mSelector, mGroupBy, mSpec, PageRequest.of(1, 10));
+        assertEquals(99L, count);
     }
 }

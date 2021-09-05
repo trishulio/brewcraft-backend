@@ -14,26 +14,26 @@ import io.company.brewcraft.service.Selector;
 public class AggregationRepository {
     private static Logger log = LoggerFactory.getLogger(AggregationRepository.class);
 
-    private QueryResolver qBuilder;
+    private QueryResolver qResolver;
 
-    public AggregationRepository(QueryResolver qBuilder) {
-        this.qBuilder = qBuilder;
+    public AggregationRepository(QueryResolver qResolver) {
+        this.qResolver = qResolver;
     }
 
     public <T> List<T> getAggregation(Class<T> entityClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
-        TypedQuery<T> tq = qBuilder.buildQuery(entityClz, entityClz, selection, groupBy, spec, pageable);
+        TypedQuery<T> tq = qResolver.buildQuery(entityClz, entityClz, selection, groupBy, spec, pageable);
 
         return tq.getResultList();
     }
 
     public <R, T> List<R> getAggregation(Class<T> entityClz, Class<R> returnClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
-        TypedQuery<R> tq = qBuilder.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
+        TypedQuery<R> tq = qResolver.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
 
         return tq.getResultList();
     }
 
     public <R, T> R getSingleAggregation(Class<T> entityClz, Class<R> returnClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
-        TypedQuery<R> tq = qBuilder.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
+        TypedQuery<R> tq = qResolver.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
 
         return tq.getSingleResult();
     }
@@ -54,7 +54,7 @@ public class AggregationRepository {
          * SELECT COUNT (*) FROM ( SELECT NULL FROM TABLE WHERE <SPEC> GROUP BY
          * <GROUP_BY_CLAUSE> ) AS SUB_QUERY
          */
-        TypedQuery<Object> tq = qBuilder.buildQuery(entityClz, Object.class, selection, groupBy, spec, pageable);
+        TypedQuery<Object> tq = qResolver.buildQuery(entityClz, Object.class, selection, groupBy, spec, pageable);
 
         return tq.getResultStream().count();
     }

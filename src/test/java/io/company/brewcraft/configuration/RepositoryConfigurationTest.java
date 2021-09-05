@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.repository.AggregationRepository;
+import io.company.brewcraft.repository.QueryResolver;
 
 public class RepositoryConfigurationTest {
 
@@ -20,10 +21,19 @@ public class RepositoryConfigurationTest {
     }
 
     @Test
-    public void testAggrRepo_ReturnsInstanceOfAggregationRepository() {
+    public void testQueryResolver_ReturnsInstanceOfQueryResolver() {
         EntityManager mEm = mock(EntityManager.class);
-        AggregationRepository repo = repoConf.aggrRepo(mEm);
+        QueryResolver queryResolver = repoConf.queryResolver(mEm);
 
-        assertSame(AggregationRepository.class, repo.getClass());
+        assertSame(QueryResolver.class, queryResolver.getClass());
+    }
+
+    @Test
+    public void testAggrRepo_ReturnsInstanceOfAggregationRepository() {
+        QueryResolver mResolver = mock(QueryResolver.class);
+
+        AggregationRepository aggrRepo = repoConf.aggrRepo(mResolver);
+
+        assertSame(AggregationRepository.class, aggrRepo.getClass());
     }
 }
