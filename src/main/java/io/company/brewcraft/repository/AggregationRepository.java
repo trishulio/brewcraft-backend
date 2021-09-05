@@ -2,18 +2,10 @@ package io.company.brewcraft.repository;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -22,35 +14,48 @@ import io.company.brewcraft.service.Selector;
 public class AggregationRepository {
     private static Logger log = LoggerFactory.getLogger(AggregationRepository.class);
 
-    private EntityManager em;
+    private QueryResolver qBuilder;
 
-    public AggregationRepository(EntityManager em) {
-        this.em = em;
+    public AggregationRepository(QueryResolver qBuilder) {
+        this.qBuilder = qBuilder;
     }
 
-    public <R> Page<R> getAggregation(Class<R> clazz, Selector selection, Selector groupBy, Specification<R> spec, Pageable pageable) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<R> q = cb.createQuery(clazz);
+    public <T> List<T> getAggregation(Class<T> entityClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
+        TypedQuery<T> tq = qBuilder.buildQuery(entityClz, entityClz, selection, groupBy, spec, pageable);
 
-        Root<R> root = q.from(clazz);
+        return tq.getResultList();
+    }
 
-        q.where(spec.toPredicate(root, q, cb));
+    public <R, T> List<R> getAggregation(Class<T> entityClz, Class<R> returnClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
+        TypedQuery<R> tq = qBuilder.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
 
-        List<Selection<?>> selectAttrs = selection.getSelection(root, q, cb);
-        q.multiselect(selectAttrs);
+        return tq.getResultList();
+    }
 
-        if (groupBy != null) {
-            @SuppressWarnings("unchecked")
-            List<Expression<?>> groupByAttrs = (List<Expression<?>>) (List<? extends Selection<?>>) groupBy.getSelection(root, q, cb);
-            q.groupBy(groupByAttrs);
-        }
+    public <R, T> R getSingleAggregation(Class<T> entityClz, Class<R> returnClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
+        TypedQuery<R> tq = qBuilder.buildQuery(entityClz, returnClz, selection, groupBy, spec, pageable);
 
-        TypedQuery<R> tq = em.createQuery(q);
+        return tq.getSingleResult();
+    }
 
-        if (pageable != null) {
-            tq.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize());
-        }
+    public <T> Long getResultCount(Class<T> entityClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
+        /***
+         * JPA has a limitation where it doesn't allow the use of a sub-query in a FROM
+         * clause: https://stackoverflow.com/a/12076584. Hence a COUNT cannot be
+         * performed to count the number of rows resulting from a aggregation query.
+         * This implementation, therefore, counts the number of rows from the
+         * result-set. This approach is inefficient as the result data needs to be
+         * pulled from the DB over the network.
+         * 
+         * If and when the Criteria API starts to support using a sub-query in the FROM
+         * clause, then a query equivalent to following can be used to count the rows
+         * more efficiently
+         * 
+         * SELECT COUNT (*) FROM ( SELECT NULL FROM TABLE WHERE <SPEC> GROUP BY
+         * <GROUP_BY_CLAUSE> ) AS SUB_QUERY
+         */
+        TypedQuery<Object> tq = qBuilder.buildQuery(entityClz, Object.class, selection, groupBy, spec, pageable);
 
-        return new PageImpl<R>(tq.getResultList());
+        return tq.getResultStream().count();
     }
 }

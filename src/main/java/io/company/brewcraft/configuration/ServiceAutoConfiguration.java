@@ -52,6 +52,7 @@ import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
 import io.company.brewcraft.service.BrewStageStatusService;
@@ -282,9 +283,15 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
+    public AggregationService aggrService(AggregationRepository aggrRepo) {
+        return new AggregationService(aggrRepo);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(LotAggregationService.class)
-    public LotAggregationService lotInventoryService(AggregationRepository aggrRepo) {
-        return new LotAggregationService(aggrRepo);
+    public LotAggregationService lotInventoryService(AggregationService aggrService) {
+        return new LotAggregationService(aggrService);
     }
 
     @Bean

@@ -52,6 +52,7 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.repository.QueryResolver;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
 import io.company.brewcraft.repository.StorageRepository;
@@ -85,8 +86,13 @@ public class RepositoryConfiguration {
 
     @Bean
     @PersistenceContext
-    public AggregationRepository aggrRepo(EntityManager em) {
-        return new AggregationRepository(em);
+    public QueryResolver queryResolver(EntityManager em) {
+        return new QueryResolver(em);
+    }
+
+    @Bean
+    public AggregationRepository aggrRepo(QueryResolver queryResolver) {
+        return new AggregationRepository(queryResolver);
     }
 
     @Bean
