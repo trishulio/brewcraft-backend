@@ -88,9 +88,6 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
                 final E item = this.newEntity();
                 item.override(existing, this.getPropertyNames(this.entityCls, this.excludeProps));
                 if (patch != null) {
-                    if (patch.getId() == null) {
-                        throw new IllegalArgumentException("Patch entity doesn't contain an ID. Patch can only update existing entities. ID is mandatory.");
-                    }
                     existing.optimisticLockCheck(patch);
                     item.outerJoin(patch, this.getPropertyNames(this.updateEntityCls, this.excludeProps));
                 }

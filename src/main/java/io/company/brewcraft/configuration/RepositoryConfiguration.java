@@ -122,7 +122,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, ShipmentAccessor, Shipment> shipmentRefresher(ShipmentRepository repo) {
         return new AccessorRefresher<>(
-                Shipment.class,
+            Shipment.class,
             accessor -> accessor.getShipment(),
             (accessor, shipment) -> accessor.setShipment(shipment),
             ids -> repo.findAllById(ids)

@@ -119,4 +119,25 @@ public class SimpleUpdateServiceTest {
 
         assertThrows(OptimisticLockException.class, () -> this.service.getPatchEntities(existing, patches), "Cannot update entity of version with: null with update payload of version: 1");
     }
+
+    @Test
+    public void testGetPatchEntities_ThrowsDuplicateKeyException_WhenMultiplePatchesHaveSameId() {
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
+        final List<UpdateDummyCrudEntity> patchesWithSameId = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(2L));
+        final List<UpdateDummyCrudEntity> patchesWithSameNullIds = List.of(new DummyCrudEntity(), new DummyCrudEntity());
+
+        assertThrows(IllegalStateException.class, () -> this.service.getPatchEntities(existing, patchesWithSameId));
+        assertThrows(IllegalStateException.class, () -> this.service.getPatchEntities(existing, patchesWithSameNullIds));
+    }
+
+    @Test
+    public void testGetPatchEntities_AppliesUpdateToEntityWithNullId_WhenPatchIdIsNull() {
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(null, "OLD_VALUE", "OLD_EXCLUDED_VALUE", 1));
+        final List<UpdateDummyCrudEntity> patches = List.of(new DummyCrudEntity(null, "VALUE", "EXCLUDED_VALUE", 1));
+
+        List<DummyCrudEntity> entities = this.service.getPatchEntities(existing, patches);
+
+        final List<DummyCrudEntity> expected = List.of(new DummyCrudEntity(null, "VALUE", null, 1));
+        assertEquals(expected, entities);
+    }
 }
