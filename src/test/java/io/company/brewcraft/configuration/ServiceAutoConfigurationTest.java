@@ -23,6 +23,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
 import io.company.brewcraft.service.BrewStageStatusService;
@@ -168,9 +169,17 @@ public class ServiceAutoConfigurationTest {
     }
 
     @Test
-    public void testLotInventorySerivce_RetunrsInstanceOfMaterialLotInventoryServiceWithAggrRepo() {
-        final AggregationRepository mAggreRepo = mock(AggregationRepository.class);
-        final LotAggregationService service = this.serviceAutoConfiguration.lotInventoryService(mAggreRepo);
+    public void testAggregationService_ReturnsInstanceOfAggregationService() {
+        final AggregationRepository mAggrRepo = mock(AggregationRepository.class);
+        final AggregationService service = this.serviceAutoConfiguration.aggrService(mAggrRepo);
+
+        assertSame(AggregationService.class, service.getClass());
+    }
+
+    @Test
+    public void testLotInventorySerivce_ReturnsInstanceOfMaterialLotInventoryService() {
+        final AggregationService mAggrService = mock(AggregationService.class);
+        final LotAggregationService service = this.serviceAutoConfiguration.lotInventoryService(mAggrService);
 
         assertSame(LotAggregationService.class, service.getClass());
     }

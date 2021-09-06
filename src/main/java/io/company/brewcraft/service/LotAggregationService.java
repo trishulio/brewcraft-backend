@@ -1,14 +1,13 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.Lot;
@@ -17,15 +16,14 @@ import io.company.brewcraft.model.ProcurementLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.StockLot;
 import io.company.brewcraft.model.Storage;
-import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
 
 public class LotAggregationService {
 
-    private final AggregationRepository aggrRepo;
+    private AggregationService aggrService;
 
-    public LotAggregationService(AggregationRepository aggrRepo) {
-        this.aggrRepo = aggrRepo;
+    public LotAggregationService(AggregationService aggrService) {
+        this.aggrService = aggrService;
     }
 
     public Page<ProcurementLot> getAggregatedProcurementQuantity(
@@ -56,22 +54,9 @@ public class LotAggregationService {
                                                                            .between(new String[] { Lot.FIELD_SHIPMENT, Shipment.FIELD_DELIVERED_DATE }, deliveredDateFrom, deliveredDateTo)
                                                                            .build();
 
-        final PageRequest pageable = pageRequest(sort, orderAscending, page, size);
+            groupBy = addToArray(groupBy, ProcurementLot.AggregationField.QUANTITY_UNIT);
 
-        final Selector selectAttr = new Selector();
-        final Selector groupByAttr = new Selector();
-
-        Arrays.stream(groupBy).forEach(col -> {
-            selectAttr.select(col);
-            groupByAttr.select(col);
-        });
-
-        selectAttr.select(ProcurementLot.AggregationField.QUANTITY_UNIT);
-        groupByAttr.select(ProcurementLot.AggregationField.QUANTITY_UNIT);
-
-        selectAttr.select(aggrFn.getAggregation(ProcurementLot.AggregationField.QUANTITY_VALUE));
-
-        return this.aggrRepo.getAggregation(ProcurementLot.class, selectAttr, groupByAttr, spec, pageable);
+            return this.aggrService.getAggregation(ProcurementLot.class, spec, aggrFn, ProcurementLot.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
     }
 
     public Page<StockLot> getAggregatedStockQuantity(
@@ -102,21 +87,19 @@ public class LotAggregationService {
                                                                      .between(new String[] { Lot.FIELD_SHIPMENT, Shipment.FIELD_DELIVERED_DATE }, deliveredDateFrom, deliveredDateTo)
                                                                      .build();
 
-        final PageRequest pageable = pageRequest(sort, orderAscending, page, size);
+        groupBy = addToArray(groupBy, StockLot.AggregationField.QUANTITY_UNIT);
 
-        final Selector selectAttr = new Selector();
-        final Selector groupByAttr = new Selector();
+        return this.aggrService.getAggregation(StockLot.class, spec, aggrFn, StockLot.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
+    }
 
-        Arrays.stream(groupBy).forEach(col -> {
-            selectAttr.select(col);
-            groupByAttr.select(col);
-        });
+    private <T> T[] addToArray(T[] source, T... extra) {
+        int lenOriginal = source.length;
+        source = Arrays.copyOf(source, source.length + extra.length);
 
-        selectAttr.select(StockLot.AggregationField.QUANTITY_UNIT);
-        groupByAttr.select(StockLot.AggregationField.QUANTITY_UNIT);
+        for (int i = 0; i < extra.length; i++) {
+            source[lenOriginal + i] = extra[i];
+        }
 
-        selectAttr.select(aggrFn.getAggregation(StockLot.AggregationField.QUANTITY_VALUE));
-
-        return this.aggrRepo.getAggregation(StockLot.class, selectAttr, groupByAttr, spec, pageable);
+        return source;
     }
 }
