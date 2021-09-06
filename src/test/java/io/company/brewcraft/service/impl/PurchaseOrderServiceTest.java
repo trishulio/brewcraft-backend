@@ -4,223 +4,190 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.persistence.OptimisticLockException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 
+import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
-import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.PurchaseOrderService;
+import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class PurchaseOrderServiceTest {
-
     private PurchaseOrderService service;
-    private PurchaseOrderRepository mRepo;
+
+    private UpdateService<Long, PurchaseOrder, BasePurchaseOrder, UpdatePurchaseOrder> mUpdateService;
+    private RepoService<Long, PurchaseOrder, PurchaseOrderAccessor> mRepoService;
 
     @BeforeEach
     public void init() {
-        mRepo = mock(PurchaseOrderRepository.class);
-        doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(mRepo).saveAndFlush(any(PurchaseOrder.class));
+        this.mUpdateService = mock(UpdateService.class);
+        this.mRepoService = mock(RepoService.class);
 
-        service = new PurchaseOrderService(mRepo);
+        doAnswer(inv -> inv.getArgument(0)).when(this.mRepoService).saveAll(anyList());
+
+        this.service = new PurchaseOrderService(this.mUpdateService, this.mRepoService);
     }
 
     @Test
-    public void testGetPurchaseOrder_ReturnsPojo_WhenEntityExists() {
-        PurchaseOrder mEntity = new PurchaseOrder(1L);
-        doReturn(Optional.of(mEntity)).when(mRepo).findById(1L);
+    public void testGetPurchaseOrders_ReturnsEntitiesFromRepoService_WithCustomSpec() {
+        final ArgumentCaptor<Specification<PurchaseOrder>> captor = ArgumentCaptor.forClass(Specification.class);
+        final Page<PurchaseOrder> mPage = new PageImpl<>(List.of(new PurchaseOrder(1L)));
+        doReturn(mPage).when(this.mRepoService).getAll(captor.capture(), eq(new TreeSet<>(List.of("id"))), eq(true), eq(10), eq(20));
 
-        PurchaseOrder po = service.getPurchaseOrder(1L);
-        assertEquals(new PurchaseOrder(1L), po);
-    }
-
-    @Test
-    public void testGetPurchaseOrder_ReturnsNull_WhenEntityDoesNotExists() {
-        doReturn(java.util.Optional.empty()).when(mRepo).findById(1L);
-
-        PurchaseOrder po = service.getPurchaseOrder(1L);
-        assertNull(po);
-    }
-
-    @Test
-    public void testExistsById_ReturnsTrue_WhenRepositoryReturnsTrue() {
-        doReturn(true).when(mRepo).existsById(1L);
-
-        assertTrue(service.exists(1L));
-    }
-
-    @Test
-    public void testExistsById_ReturnsFalse_WhenRepositoryReturnsFalse() {
-        doReturn(false).when(mRepo).existsById(1L);
-
-        assertFalse(service.exists(1L));
-    }
-
-    @Test
-    public void testExistsByIds_ReturnsTrue_WhenRepositoryReturnsTrue() {
-        doReturn(true).when(mRepo).existsByIds(Set.of(1L, 2L));
-
-        assertTrue(service.exists(Set.of(1L, 2L)));
-    }
-
-    @Test
-    public void testExistsByIds_ReturnsFalse_WhenRepositoryReturnsFalse() {
-        doReturn(false).when(mRepo).existsByIds(Set.of(1L, 2L));
-
-        assertFalse(service.exists(Set.of(1L, 2L)));
-    }
-
-    @Test
-    public void testGetAllPurchaseOrders_GetsPageFromRepoWithSpecsAndPageRequestBuiltFromParams() {
-        ArgumentCaptor<Specification<PurchaseOrder>> specCaptor = ArgumentCaptor.forClass(Specification.class);
-
-        List<PurchaseOrder> mContent = List.of(new PurchaseOrder(1L));
-        doReturn(new PageImpl<>(mContent)).when(mRepo).findAll(specCaptor.capture(), eq(PageRequest.of(10, 20, Direction.DESC, "col_1", "col_2")));
-
-        Page<PurchaseOrder> page = service.getAllPurchaseOrders(
-            Set.of(1L, 2L),
-            Set.of(3L, 4L),
-            Set.of("ORDER_1", "ORDER_2"),
-            Set.of(5L, 6L),
-            new TreeSet<>(List.of("col_1", "col_2")),
-            false,
-            10,
-            20
+        final Page<PurchaseOrder> page = this.service.getPurchaseOrders(Set.of(1L), // ids
+            Set.of(2L), // excludeIds
+            Set.of("ORDER_1"), // orderNumbers
+            Set.of(3L), // supplierIds
+            new TreeSet<>(List.of("id")), // sortBy
+            true, // orderAscending
+            10, // page
+            20 // size
         );
 
-        Page<PurchaseOrder> expected = new PageImpl<PurchaseOrder>(List.of(new PurchaseOrder(1L)));
-
+        final Page<PurchaseOrder> expected = new PageImpl<>(List.of(new PurchaseOrder(1L)));
         assertEquals(expected, page);
 
-        Specification<PurchaseOrder> spec = specCaptor.getValue();
-        // TODO: Specifications are currently not being tested.
+        // TODO: Pending testing for the specification
+        captor.getValue();
     }
 
     @Test
-    public void testPut_SavesNewEntity_WhenNoExistingEntityExistsForTheGivenId() {
-        doReturn(Optional.empty()).when(mRepo).findById(1L);
+    public void testGetPurchaseOrder_ReturnsPurchaseOrderPojo_WhenRepoServiceReturnsOptionalWithEntity() {
+        doReturn(new PurchaseOrder(1L)).when(this.mRepoService).get(1L);
 
-        UpdatePurchaseOrder update = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            new Supplier(1L),
-            LocalDateTime.of(2000, 1, 1, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 0, 0),
-            1
-        );
+        final PurchaseOrder purchaseOrder = this.service.get(1L);
 
-        PurchaseOrder po = service.put(1L, update);
-
-        PurchaseOrder expected = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            new Supplier(1L),
-            null,
-            null,
-            null
-        );
-        assertEquals(expected, po);
-
-        verify(mRepo, times(1)).saveAndFlush(po);
+        assertEquals(new PurchaseOrder(1L), purchaseOrder);
     }
 
     @Test
-    public void testPut_OverridesExistingPurchaseOrder_WhenEntityExistsForGivenId() {
-        doReturn(Optional.of(new PurchaseOrder(1L, null, null, null, null, 1))).when(mRepo).findById(1L);
+    public void testExists_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+        doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-        UpdatePurchaseOrder update = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            new Supplier(1L),
-            LocalDateTime.of(2000, 1, 1, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 0, 0),
-            1
-        );
-
-        PurchaseOrder po = service.put(1L, update);
-
-        PurchaseOrder expected = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            new Supplier(1L),
-            null,
-            null,
-            1
-        );
-        assertEquals(expected, po);
-
-        verify(mRepo, times(1)).saveAndFlush(po);
+        assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
     }
 
     @Test
-    public void testPut_ThrowsOptimisticLockException_WhenInputVersionDoesntMatchExistingVersion() {
-        doReturn(Optional.of(new PurchaseOrder(1L, null, null, null, null, 1))).when(mRepo).findById(1L);
+    public void testExists_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+        doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-        assertThrows(OptimisticLockException.class, () -> service.put(1L, new PurchaseOrder(1L, null, null, null, null, 2)));
+        assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
     }
 
     @Test
-    public void testPatch_OverridesPropertiesOfExistingPurchaseOrder_WhenInputPropertiesAreNotNull() {
-        doReturn(Optional.of(new PurchaseOrder(1L, null, new Supplier(1L), LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0), 1))).when(mRepo).findById(1L);
+    public void testExist_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+        doReturn(true).when(this.mRepoService).exists(1L);
 
-        UpdatePurchaseOrder update = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            null,
-            LocalDateTime.of(2011, 1, 1, 0, 0),
-            LocalDateTime.of(2012, 1, 1, 0, 0),
-            1
-        );
-
-        PurchaseOrder po = service.patch(1L, update);
-
-        PurchaseOrder expected = new PurchaseOrder(
-            1L,
-            "ORDER_1",
-            new Supplier(1L),
-            LocalDateTime.of(2000, 1, 1, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 0, 0),
-            1
-        );
-        assertEquals(expected, po);
-
-        verify(mRepo, times(1)).saveAndFlush(po);
+        assertTrue(this.service.exist(1L));
     }
 
     @Test
-    public void testPatch_ThrowsEntityNotFoundException_WhenEntityDoesNotExist() {
-        doReturn(Optional.empty()).when(mRepo).findById(1L);
+    public void testExist_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+        doReturn(true).when(this.mRepoService).exists(1L);
 
-        assertThrows(EntityNotFoundException.class, () -> service.patch(1L, new PurchaseOrder(1L)));
+        assertTrue(this.service.exist(1L));
     }
 
     @Test
-    public void testPatch_ThrowsOptimisticLockException_WhenInputVersionDoesntMatchExistingVersion() {
-        doReturn(Optional.of(new PurchaseOrder(1L, null, null, null, null, 1))).when(mRepo).findById(1L);
+    public void testDelete_CallsRepoServiceDeleteBulk_WhenPurchaseOrderExists() {
+        doReturn(123).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
 
-        assertThrows(OptimisticLockException.class, () -> service.patch(1L, new PurchaseOrder(1L, null, null, null, null, 2)));
+        final int count = this.service.delete(Set.of(1L, 2L, 3L));
+        assertEquals(123, count);
     }
 
     @Test
-    public void testDelete_CallsDeleteByIdsOnAllIds() {
-        service.delete(Set.of(1L, 2L, 3L));
+    public void testDelete_CallsRepoServiceDelete_WhenPurchaseOrderExists() {
+        this.service.delete(1L);
+        verify(this.mRepoService).delete(1L);
+    }
 
-        verify(mRepo, times(1)).deleteByIds(Set.of(1L, 2L, 3L));
+    @Test
+    public void testAdd_AddsPurchaseOrderAndItemsAndSavesToRepo_WhenAdditionsAreNotNull() {
+        doAnswer(inv -> inv.getArgument(0)).when(this.mUpdateService).getAddEntities(any());
+
+        final BasePurchaseOrder purchaseOrder1 = new PurchaseOrder(1L);
+        final BasePurchaseOrder purchaseOrder2 = new PurchaseOrder();
+
+        final List<PurchaseOrder> added = this.service.add(List.of(purchaseOrder1, purchaseOrder2));
+
+        final List<PurchaseOrder> expected = List.of(new PurchaseOrder(1L), new PurchaseOrder());
+
+        assertEquals(expected, added);
+        verify(this.mRepoService, times(1)).saveAll(added);
+    }
+
+    @Test
+    public void testAdd_DoesNotCallRepoServiceAndReturnsNull_WhenAdditionsAreNull() {
+        assertNull(this.service.add(null));
+        verify(this.mRepoService, times(0)).saveAll(any());
+    }
+
+    @Test
+    public void testPut_UpdatesPurchaseOrderAndItemsAndSavesToRepo_WhenUpdatesAreNotNull() {
+        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPutEntities(any(), any());
+
+        final UpdatePurchaseOrder purchaseOrder1 = new PurchaseOrder(1L);
+        final UpdatePurchaseOrder purchaseOrder2 = new PurchaseOrder(2L);
+
+        doReturn(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L))).when(this.mRepoService).getByIds(List.of(purchaseOrder1, purchaseOrder2));
+
+        final List<PurchaseOrder> updated = this.service.put(List.of(purchaseOrder1, purchaseOrder2, new PurchaseOrder()));
+
+        final List<PurchaseOrder> expected = List.of(new PurchaseOrder(1L), new PurchaseOrder(2L), new PurchaseOrder());
+
+        assertEquals(expected, updated);
+        verify(this.mRepoService, times(1)).saveAll(updated);
+    }
+
+    @Test
+    public void testPut_DoesNotCallRepoServiceAndReturnsNull_WhenUpdatesAreNull() {
+        assertNull(this.service.put(null));
+        verify(this.mRepoService, times(0)).saveAll(any());
+    }
+
+    @Test
+    public void testPatch_PatchesPurchaseOrderAndItemsAndSavesToRepo_WhenPatchesAreNotNull() {
+        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
+
+        final UpdatePurchaseOrder purchaseOrder1 = new PurchaseOrder(1L);
+        final UpdatePurchaseOrder purchaseOrder2 = new PurchaseOrder(2L);
+
+        doReturn(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L))).when(this.mRepoService).getByIds(List.of(purchaseOrder1, purchaseOrder2));
+
+        final List<PurchaseOrder> updated = this.service.patch(List.of(purchaseOrder1, purchaseOrder2));
+
+        final List<PurchaseOrder> expected = List.of(new PurchaseOrder(1L), new PurchaseOrder(2L));
+
+        assertEquals(expected, updated);
+        verify(this.mRepoService, times(1)).saveAll(updated);
+    }
+
+    @Test
+    public void testPatch_DoesNotCallRepoServiceAndReturnsNull_WhenPatchesAreNull() {
+        assertNull(this.service.patch(null));
+        verify(this.mRepoService, times(0)).saveAll(any());
+    }
+
+    @Test
+    public void testPatch_ThrowsNotFoundException_WhenAllPurchaseOrdersDontExist() {
+        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
+
+        final List<UpdatePurchaseOrder> updates = List.of(new PurchaseOrder(1L), new PurchaseOrder(2L), new PurchaseOrder(3L), new PurchaseOrder(4L));
+        doReturn(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L))).when(this.mRepoService).getByIds(updates);
+
+        assertThrows(EntityNotFoundException.class, () -> this.service.patch(updates), "Cannot find purchaseOrders with Ids: [3, 4]");
     }
 }

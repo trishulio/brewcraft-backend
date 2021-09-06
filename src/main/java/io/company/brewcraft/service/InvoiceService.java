@@ -166,7 +166,6 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
         }
 
         final List<Invoice> existing = this.repoService.getByIds(patches);
-        final List<Invoice> updated = this.updateService.getPatchEntities(existing, patches);
 
         if (existing.size() != patches.size()) {
             final Set<Long> existingIds = existing.stream().map(invoice -> invoice.getId()).collect(Collectors.toSet());
@@ -174,6 +173,8 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
 
             throw new EntityNotFoundException(String.format("Cannot find invoices with Ids: %s", nonExistingIds));
         }
+
+        final List<Invoice> updated = this.updateService.getPatchEntities(existing, patches);
 
         for (int i = 0; i < existing.size(); i++) {
             final List<InvoiceItem> existingItems = existing.get(i).getItems();

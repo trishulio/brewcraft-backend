@@ -57,14 +57,14 @@ public class PurchaseOrderController extends BaseController {
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
 
-        Page<PurchaseOrder> orders = service.getAllPurchaseOrders(ids, excludeIds, orderNumbers, supplierIds, sort, orderAscending, page, size);
+        Page<PurchaseOrder> orders = service.getPurchaseOrders(ids, excludeIds, orderNumbers, supplierIds, sort, orderAscending, page, size);
 
         return response(orders, attributes);
     }
 
     @GetMapping("/{id}")
     public PurchaseOrderDto getPurchaseOrder(@PathVariable("id") Long id) {
-        PurchaseOrder po = service.getPurchaseOrder(id);
+        PurchaseOrder po = service.get(id);
 
         PurchaseOrderDto dto = PurchaseOrderMapper.INSTANCE.toDto(po);
 
@@ -78,7 +78,7 @@ public class PurchaseOrderController extends BaseController {
     public PurchaseOrderDto postPurchaseOrder(@Valid @NotNull @RequestBody AddPurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
 
-        PurchaseOrder po = service.add(addition);
+        PurchaseOrder po = service.add(List.of(addition)).get(0);
 
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }
@@ -87,7 +87,7 @@ public class PurchaseOrderController extends BaseController {
     public PurchaseOrderDto putPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
 
-        PurchaseOrder po = service.put(purchaseOrderId, addition);
+        PurchaseOrder po = service.put(List.of(addition)).get(0);
 
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }
@@ -96,7 +96,7 @@ public class PurchaseOrderController extends BaseController {
     public PurchaseOrderDto patchPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
         PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
 
-        PurchaseOrder po = service.patch(purchaseOrderId, addition);
+        PurchaseOrder po = service.patch(List.of(addition)).get(0);
 
         return PurchaseOrderMapper.INSTANCE.toDto(po);
     }

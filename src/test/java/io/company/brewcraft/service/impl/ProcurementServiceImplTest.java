@@ -52,7 +52,7 @@ public class ProcurementServiceImplTest {
     @Test
     public void testAdd_ReturnsNewlyCreatedPoInvoiceShipment_WhenInputIsNotNull() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
-        doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(any(PurchaseOrder.class));
+        doAnswer(inv -> inv.getArgument(0)).when(this.mPoService).add(anyList());
         doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final PurchaseOrder additionPo = new PurchaseOrder();
@@ -94,7 +94,7 @@ public class ProcurementServiceImplTest {
     @Test
     public void testAdd_SkipsAddingPurchaseOrder_WhenNullPurchaseOrderIsPassed() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
-        doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(any(PurchaseOrder.class));
+        doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(anyList());
         doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final InvoiceItem additionItem = new InvoiceItem();

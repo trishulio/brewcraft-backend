@@ -23,7 +23,6 @@ import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
-import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -42,7 +41,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testGetPurchaseOrder_ThrowsEntityNotFoundException_WhenPurchaseOrderDoesNotExist() {
-        when(mService.getPurchaseOrder(1L)).thenReturn(null);
+        doReturn(null).when(mService).get(1L);
 
         assertThrows(EntityNotFoundException.class, () -> controller.getPurchaseOrder(1L));
     }
@@ -58,7 +57,7 @@ public class PurchaseOrderControllerTest {
             1
         );
 
-        doReturn(po).when(mService).getPurchaseOrder(1L);
+        doReturn(po).when(mService).get(1L);
 
         PurchaseOrderDto dto = controller.getPurchaseOrder(1L);
 
@@ -86,15 +85,15 @@ public class PurchaseOrderControllerTest {
                 1
             )
         ));
-        doReturn(poPage).when(mService).getAllPurchaseOrders(
-            Set.of(1L),
-            Set.of(2L),
-            Set.of("ORDER_1"),
-            Set.of(3L),
-            new TreeSet<>(List.of("id")),
-            true,
-            10,
-            20
+        doReturn(poPage).when(mService).getPurchaseOrders(
+            Set.of(1L), //ids
+            Set.of(2L), //excludeIds
+            Set.of("ORDER_1"), //orderNumbers
+            Set.of(3L), //supplierIds
+            new TreeSet<>(List.of("id")), //sortBy
+            true, //orderAscending
+            10, //page
+            20 //size
         );
 
         final PageDto<PurchaseOrderDto> pageDto = controller.getAllPurchaseOrders(
@@ -137,7 +136,7 @@ public class PurchaseOrderControllerTest {
             LocalDateTime.of(2001, 1, 1, 0, 0),
             1
         );
-        doReturn(po).when(mService).getPurchaseOrder(1L);
+        doReturn(po).when(mService).get(1L);
 
         PurchaseOrderDto dto = controller.getPurchaseOrder(1L);
 
@@ -154,13 +153,13 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testGetPurchaseOrder_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
-        doReturn(null).when(mService).getPurchaseOrder(1L);
+        doReturn(null).when(mService).get(1L);
         assertThrows(EntityNotFoundException.class, () -> controller.getPurchaseOrder(1L));
     }
 
     @Test
     public void testAddPurchaseOrder_ReturnsPurchaseOrderDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(mService).add(any(PurchaseOrder.class));
+        doAnswer(inv -> inv.getArgument(0)).when(mService).add(anyList());
         AddPurchaseOrderDto additionDto = new AddPurchaseOrderDto(
             "ORDER_1",
             2L
@@ -182,7 +181,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testPutPurchaseOrder_ReturnsPurchaseOrderDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, PurchaseOrder.class)).when(mService).put(eq(1L), any(UpdatePurchaseOrder.class));
+        doAnswer(inv -> inv.getArgument(0)).when(mService).put(anyList());
         UpdatePurchaseOrderDto updateDto = new UpdatePurchaseOrderDto(
             "ORDER_1",
             2L,
@@ -205,7 +204,7 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testPatchPurchaseOrder_ReturnsPurchaseOrderDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, PurchaseOrder.class)).when(mService).patch(eq(1L), any(UpdatePurchaseOrder.class));
+        doAnswer(inv -> inv.getArgument(0)).when(mService).patch(anyList());
         UpdatePurchaseOrderDto updateDto = new UpdatePurchaseOrderDto(
             "ORDER_1",
             2L,
@@ -228,11 +227,8 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testDeletePurchaseOrders_DeletesPurchaseOrders_WhenPurchaseOrderIdsAreProvided() {
-        ArgumentCaptor<Set<Long>> poIdCaptor = ArgumentCaptor.forClass(Set.class);
-        doNothing().when(mService).delete(poIdCaptor.capture());
-
         controller.deletePurchaseOrder(Set.of(1L, 2L, 3L));
-
-        assertEquals(Set.of(1L, 2L, 3L), poIdCaptor.getValue());
+        
+        verify(mService, times(1)).delete(Set.of(1L, 2L, 3L));
     }
 }
