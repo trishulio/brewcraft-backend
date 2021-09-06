@@ -52,6 +52,7 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.repository.QueryResolver;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
 import io.company.brewcraft.repository.StorageRepository;
