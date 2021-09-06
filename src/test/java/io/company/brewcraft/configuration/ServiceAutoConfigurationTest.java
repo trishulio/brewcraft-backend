@@ -126,7 +126,7 @@ public class ServiceAutoConfigurationTest {
         final PurchaseOrderRepository mInvoiceRepo = mock(PurchaseOrderRepository.class);
 
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-
+        
         this.serviceAutoConfiguration.purchaseOrderService(mUtilProvider, mInvoiceRepo);
     }
 

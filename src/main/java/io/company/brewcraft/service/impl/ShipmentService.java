@@ -152,7 +152,6 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
         }
 
         final List<Shipment> existing = this.repoService.getByIds(patches);
-        final List<Shipment> updated = this.updateService.getPatchEntities(existing, patches);
 
         if (existing.size() != patches.size()) {
             final Set<Long> existingIds = existing.stream().map(shipment -> shipment.getId()).collect(Collectors.toSet());
@@ -160,6 +159,8 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
 
             throw new EntityNotFoundException(String.format("Cannot find shipments with Ids: %s", nonExistingIds));
         }
+
+        final List<Shipment> updated = this.updateService.getPatchEntities(existing, patches);
 
         for (int i = 0; i < existing.size(); i++) {
             final List<MaterialLot> existingLots = existing.get(i).getLots();

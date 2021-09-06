@@ -118,14 +118,14 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         }
 
         final List<PurchaseOrder> existing = this.repoService.getByIds(patches);
-        final List<PurchaseOrder> updated = this.updateService.getPatchEntities(existing, patches);
-
         if (existing.size() != patches.size()) {
             final Set<Long> existingIds = existing.stream().map(shipment -> shipment.getId()).collect(Collectors.toSet());
             final Set<Long> nonExistingIds = patches.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
 
             throw new EntityNotFoundException(String.format("Cannot find shipments with Ids: %s", nonExistingIds));
         }
+
+        final List<PurchaseOrder> updated = this.updateService.getPatchEntities(existing, patches);
 
         return this.repoService.saveAll(updated);
     }
