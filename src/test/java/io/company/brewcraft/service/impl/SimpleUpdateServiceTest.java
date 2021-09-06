@@ -73,8 +73,8 @@ public class SimpleUpdateServiceTest {
         final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(3L));
 
-        assertThrows(ValidationException.class, () -> this.service.getPutEntities(existing, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing invoice item found with Id: 3.");
-        assertThrows(ValidationException.class, () -> this.service.getPutEntities(null, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing invoice item found with Id: 3.");
+        assertThrows(ValidationException.class, () -> this.service.getPutEntities(existing, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
+        assertThrows(ValidationException.class, () -> this.service.getPutEntities(null, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
     }
 
     @Test
@@ -108,8 +108,8 @@ public class SimpleUpdateServiceTest {
         final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
         final List<UpdateDummyCrudEntity> patches = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(3L));
 
-        assertThrows(ValidationException.class, () -> this.service.getPatchEntities(existing, patches), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing invoice item found with Id: 3.");
-        assertThrows(ValidationException.class, () -> this.service.getPatchEntities(null, patches), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing invoice item found with Id: 3.");
+        assertThrows(ValidationException.class, () -> this.service.getPatchEntities(existing, patches), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
+        assertThrows(ValidationException.class, () -> this.service.getPatchEntities(null, patches), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
     }
 
     @Test
@@ -121,9 +121,23 @@ public class SimpleUpdateServiceTest {
     }
 
     @Test
-    public void testGetPatchEntities_ThrowsIllegalArgumentException_WhenPatchEntityDoNotHaveAnId() {
-        final List<UpdateDummyCrudEntity> patches = List.of(new DummyCrudEntity());
+    public void testGetPatchEntities_ThrowsDuplicateKeyException_WhenMultiplePatchesHaveSameId() {
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
+        final List<UpdateDummyCrudEntity> patchesWithSameId = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(2L));
+        final List<UpdateDummyCrudEntity> patchesWithSameNullIds = List.of(new DummyCrudEntity(), new DummyCrudEntity());
 
-        assertThrows(IllegalArgumentException.class, () -> this.service.getPatchEntities(null, patches), "Patch entity doesn't contain an ID. Patch can only update existing entities. ID is mandatory.");
+        assertThrows(IllegalStateException.class, () -> this.service.getPatchEntities(existing, patchesWithSameId));
+        assertThrows(IllegalStateException.class, () -> this.service.getPatchEntities(existing, patchesWithSameNullIds));
+    }
+
+    @Test
+    public void testGetPatchEntities_AppliesUpdateToEntityWithNullId_WhenPatchIdIsNull() {
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(null, "OLD_VALUE", "OLD_EXCLUDED_VALUE", 1));
+        final List<UpdateDummyCrudEntity> patches = List.of(new DummyCrudEntity(null, "VALUE", "EXCLUDED_VALUE", 1));
+
+        List<DummyCrudEntity> entities = this.service.getPatchEntities(existing, patches);
+
+        final List<DummyCrudEntity> expected = List.of(new DummyCrudEntity(null, "VALUE", null, 1));
+        assertEquals(expected, entities);
     }
 }

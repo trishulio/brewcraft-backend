@@ -25,11 +25,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "material_lot")
 @Table
-public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, Identified<Long> {
+public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_QTY = "quantity";
@@ -86,28 +87,28 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     public MaterialLot(Long id) {
         this();
-        setId(id);
+        this.setId(id);
     }
 
     public MaterialLot(Long id, String lotNumber, Quantity<?> qty, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
-        setLotNumber(lotNumber);
-        setQuantity(qty);
-        setInvoiceItem(item);
-        setStorage(storage);
-        setCreatedAt(createdAt);
-        setLastUpdated(lastUpdated);
-        setVersion(version);
+        this.setLotNumber(lotNumber);
+        this.setQuantity(qty);
+        this.setInvoiceItem(item);
+        this.setStorage(storage);
+        this.setCreatedAt(createdAt);
+        this.setLastUpdated(lastUpdated);
+        this.setVersion(version);
     }
 
     public MaterialLot(InvoiceItem item) {
-        setInvoiceItem(item);
-        setQuantity(item.getQuantity());
+        this.setInvoiceItem(item);
+        this.setQuantity(item.getQuantity());
     }
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -117,7 +118,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public String getLotNumber() {
-        return lotNumber;
+        return this.lotNumber;
     }
 
     @Override
@@ -159,7 +160,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public InvoiceItem getInvoiceItem() {
-        return invoiceItem;
+        return this.invoiceItem;
     }
 
     @Override
@@ -179,7 +180,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     @Override
@@ -189,7 +190,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+        return this.lastUpdated;
     }
 
     @Override
@@ -199,7 +200,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public Integer getVersion() {
-        return version;
+        return this.version;
     }
 
     @Override

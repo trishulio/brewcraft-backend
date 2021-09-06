@@ -53,7 +53,7 @@ public class ProcurementServiceImplTest {
     public void testAdd_ReturnsNewlyCreatedPoInvoiceShipment_WhenInputIsNotNull() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
         doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(any(PurchaseOrder.class));
-        doAnswer(inv -> inv.getArgument(0, Shipment.class)).when(this.mShipmentService).add(any(Shipment.class));
+        doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final PurchaseOrder additionPo = new PurchaseOrder();
         additionPo.setOrderNumber("ORDER_1");
@@ -95,7 +95,7 @@ public class ProcurementServiceImplTest {
     public void testAdd_SkipsAddingPurchaseOrder_WhenNullPurchaseOrderIsPassed() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
         doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(any(PurchaseOrder.class));
-        doAnswer(inv -> inv.getArgument(0, Shipment.class)).when(this.mShipmentService).add(any(Shipment.class));
+        doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final InvoiceItem additionItem = new InvoiceItem();
         additionItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));

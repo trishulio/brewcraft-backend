@@ -22,6 +22,8 @@ import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
@@ -50,6 +52,7 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
+import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierRepository;
@@ -112,6 +115,16 @@ public class RepositoryConfiguration {
             InvoiceStatus.class,
             accessor -> accessor.getStatus(),
             (accessor, status) -> accessor.setStatus(status),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<Long, ShipmentAccessor, Shipment> shipmentRefresher(ShipmentRepository repo) {
+        return new AccessorRefresher<>(
+            Shipment.class,
+            accessor -> accessor.getShipment(),
+            (accessor, shipment) -> accessor.setShipment(shipment),
             ids -> repo.findAllById(ids)
         );
     }

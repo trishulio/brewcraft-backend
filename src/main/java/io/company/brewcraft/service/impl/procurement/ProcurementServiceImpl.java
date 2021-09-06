@@ -51,7 +51,7 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
 
         invoice = this.invoiceService.add(List.of(invoice)).get(0);
         Shipment shipment = new Shipment(invoice);
-        shipment = this.shipmentService.add(shipment);
+        shipment = this.shipmentService.add(List.of(shipment)).get(0);
         return new Procurement(order, invoice, shipment);
     }
 

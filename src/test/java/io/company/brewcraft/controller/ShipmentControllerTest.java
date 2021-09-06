@@ -52,7 +52,7 @@ public class ShipmentControllerTest {
 
     @Test
     public void testGetShipment_ReturnsShipmentDto_WhenServiceReturnsShipment() {
-        doReturn(new Shipment(1L)).when(this.mService).getShipment(anyLong());
+        doReturn(new Shipment(1L)).when(this.mService).get(anyLong());
 
         final ShipmentDto dto = this.controller.getShipment(1L);
 
@@ -61,7 +61,7 @@ public class ShipmentControllerTest {
 
     @Test
     public void testGetShipment_ThrowsEntityNotFoundException_WhenShipmentDoesNotExist() {
-        doReturn(null).when(this.mService).getShipment(anyLong());
+        doReturn(null).when(this.mService).get(anyLong());
         assertThrows(EntityNotFoundException.class, () -> this.controller.getShipment(1L), "Shipment not found with Id: 1");
     }
 
@@ -207,7 +207,7 @@ public class ShipmentControllerTest {
 
     @Test
     public void testAddShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(this.mService).add(any(Shipment.class));
+        doAnswer(i -> i.getArgument(0)).when(this.mService).add(anyList());
 
         final AddShipmentDto addDto = new AddShipmentDto(
             "SHIPMENT_1",
@@ -242,11 +242,7 @@ public class ShipmentControllerTest {
 
     @Test
     public void testPutShipment_ReturnsPutShipmentDto_WhenServiceReturnsPutShipment() {
-        doAnswer(i -> {
-            final Shipment shipment = i.getArgument(1, Shipment.class);
-            shipment.setId(i.getArgument(0, Long.class));
-            return shipment;
-        }).when(this.mService).put(anyLong(), any(Shipment.class));
+        doAnswer(i -> i.getArgument(0)).when(this.mService).put(anyList());
 
         final UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",
@@ -282,11 +278,7 @@ public class ShipmentControllerTest {
 
     @Test
     public void testPatch_ReturnsPatchShipmentDto_WhenServiceReturnsPatchShipment() {
-        doAnswer(i -> {
-            final Shipment shipment = i.getArgument(1, Shipment.class);
-            shipment.setId(i.getArgument(0, Long.class));
-            return shipment;
-        }).when(this.mService).patch(anyLong(), any(Shipment.class));
+        doAnswer(i -> i.getArgument(0)).when(this.mService).patch(anyList());
 
         final UpdateShipmentDto updateDto = new UpdateShipmentDto(
             "SHIPMENT_1",

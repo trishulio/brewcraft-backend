@@ -4,350 +4,224 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import javax.persistence.OptimisticLockException;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentStatus;
-import io.company.brewcraft.model.Storage;
-import io.company.brewcraft.repository.ShipmentRepository;
-import io.company.brewcraft.util.SupportedUnits;
-import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.model.ShipmentAccessor;
+import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdateShipment;
+import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.UpdateService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class ShipmentServiceTest {
+   private ShipmentService service;
 
-    private ShipmentService service;
+   private MaterialLotService mLotService;
+   private UpdateService<Long, Shipment, BaseShipment<? extends BaseMaterialLot<?>>, UpdateShipment<? extends UpdateMaterialLot<?>>> mUpdateService;
+   private RepoService<Long, Shipment, ShipmentAccessor> mRepoService;
 
-    private ShipmentRepository mRepo;
-    private MaterialLotService mLotService;
+   @BeforeEach
+   public void init() {
+       this.mLotService = mock(MaterialLotService.class);
+       this.mUpdateService = mock(UpdateService.class);
+       this.mRepoService = mock(RepoService.class);
 
-    @BeforeEach
-    public void init() {
-        this.mRepo = mock(ShipmentRepository.class);
-        doAnswer(i -> i.getArgument(0, Shipment.class)).when(this.mRepo).saveAndFlush(any(Shipment.class));
-        doAnswer(i -> {
-            final Collection<Shipment> coll = i.getArgument(0, Collection.class);
-            coll.forEach(s -> s.setStatus(new ShipmentStatus(99L)));
-            return null;
-        }).when(this.mRepo).refresh(anyCollection());
+       doAnswer(inv -> inv.getArgument(0)).when(this.mRepoService).saveAll(anyList());
 
-        this.mLotService = mock(MaterialLotService.class);
+       this.service = new ShipmentService(this.mUpdateService, this.mLotService, this.mRepoService);
+   }
 
-        this.service = new ShipmentService(this.mRepo, this.mLotService);
-    }
+   @Test
+   public void testGetShipments_ReturnsEntitiesFromRepoService_WithCustomSpec() {
+       final ArgumentCaptor<Specification<Shipment>> captor = ArgumentCaptor.forClass(Specification.class);
+       final Page<Shipment> mPage = new PageImpl<>(List.of(new Shipment(1L)));
+       doReturn(mPage).when(this.mRepoService).getAll(captor.capture(), eq(new TreeSet<>(List.of("id"))), eq(true), eq(10), eq(20));
 
-    @Test
-    public void testGetShipment_ReturnsShipmentInstance_WhenItExistsInRepository() {
-        doReturn(Optional.of(new Shipment(1L))).when(this.mRepo).findById(1L);
+       final Page<Shipment> page = this.service.getShipments(
+           Set.of(1L), //ids
+           Set.of(2L), //excludeIds
+           Set.of("SHIPMENT_1"), //shipmentNumbers
+           Set.of("DESC"), //descriptions,
+           Set.of(4L), //statusIds,
+           LocalDateTime.of(2000, 1, 1, 0, 0), //deliveryDueDateFrom,
+           LocalDateTime.of(2001, 1, 1, 0, 0), //deliveryDueDateTo,
+           LocalDateTime.of(2002, 1, 1, 0, 0), //deliveredDateFrom,
+           LocalDateTime.of(2003, 1, 1, 0, 0), //deliveredDateTo,
+           new TreeSet<>(List.of("id")), //sortBy,
+           true, //ascending,
+           10, //page,
+           20 //size
+       );
 
-        final Shipment shipment = this.service.getShipment(1L);
+       final Page<Shipment> expected = new PageImpl<>(List.of(new Shipment(1L)));
+       assertEquals(expected, page);
 
-        assertEquals(new Shipment(1L), shipment);
-    }
+       captor.getValue();
+   }
 
-    @Test
-    public void testGetShipment_ReturnsNull_WhenRepositoryDoesNotHaveIt() {
-        doReturn(Optional.empty()).when(this.mRepo).findById(1L);
-        final Shipment shipment = this.service.getShipment(1L);
+   @Test
+   public void testGetShipment_ReturnsShipmentPojo_WhenRepoServiceReturnsOptionalWithEntity() {
+       doReturn(new Shipment(1L)).when(this.mRepoService).get(1L);
 
-        assertNull(shipment);
-    }
+       final Shipment invoice = this.service.get(1L);
 
-    @Test
-    @Disabled("TODO: Find a good strategy to test get method with long list of specifications")
-    public void testGetShipments() {
-        fail("Not tested");
-    }
+       assertEquals(new Shipment(1L), invoice);
+   }
 
-    @Test
-    public void testExists_ReturnsTrue_WhenRepositoryReturnsTrue() {
-        doReturn(true).when(this.mRepo).existsByIds(Set.of(1L, 2L, 3L));
+   @Test
+   public void testExists_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+       doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-        final boolean exists = this.service.existsByIds(Set.of(1L, 2L, 3L));
+       assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
+   }
 
-        assertTrue(exists);
-    }
+   @Test
+   public void testExists_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+       doReturn(true).when(this.mRepoService).exists(Set.of(1L, 2L, 3L));
 
-    @Test
-    public void testExists_ReturnsFalse_WhenRepositoryReturnsFalse() {
-        doReturn(false).when(this.mRepo).existsByIds(Set.of(1L, 2L, 3L));
+       assertTrue(this.service.exists(Set.of(1L, 2L, 3L)));
+   }
 
-        final boolean exists = this.service.existsByIds(Set.of(1L, 2L, 3L));
+   @Test
+   public void testExist_ReturnsTrue_WhenRepoServiceReturnsTrue() {
+       doReturn(true).when(this.mRepoService).exists(1L);
 
-        assertFalse(exists);
-    }
+       assertTrue(this.service.exist(1L));
+   }
 
-    @Test
-    public void testDelete_CallsDeleteByIdOnRepository() {
-        this.service.delete(Set.of(1L, 2L, 3L));
+   @Test
+   public void testExist_ReturnsFalse_WhenRepoServiceReturnsFalse() {
+       doReturn(true).when(this.mRepoService).exists(1L);
 
-        verify(this.mRepo, times(1)).deleteByIds(Set.of(1L, 2L, 3L));
-    }
+       assertTrue(this.service.exist(1L));
+   }
 
-    @Test
-    public void testAdd_RetainsBaseValuesAndAddsShipmentToRepository_WhenObjectIsNotNull() {
-        final List<MaterialLot> additionLots = new ArrayList<>();
-        additionLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
-        final Shipment addition = new Shipment(
-            1L,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(100L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0),
-            additionLots,
-            1
-        );
+   @Test
+   public void testDelete_CallsRepoServiceDeleteBulk_WhenShipmentExists() {
+       doReturn(123).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
 
-        doReturn(List.of(
-            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, null)
-        )).when(this.mLotService).getAddLots(additionLots);
+       final int count = this.service.delete(Set.of(1L, 2L, 3L));
+       assertEquals(123, count);
+   }
 
-        final Shipment shipment = this.service.add(addition);
+   @Test
+   public void testDelete_CallsRepoServiceDelete_WhenShipmentExists() {
+       this.service.delete(1L);
+       verify(this.mRepoService).delete(1L);
+   }
 
-        final Shipment expected = new Shipment(
-            null,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(99L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            null,
-            null,
-            List.of(new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, null)),
-            null
-        );
+   @Test
+   public void testAdd_AddsShipmentAndLotsAndSavesToRepo_WhenAdditionsAreNotNull() {
+       doAnswer(inv -> inv.getArgument(0)).when(this.mLotService).getAddEntities(any());
+       doAnswer(inv -> inv.getArgument(0)).when(this.mUpdateService).getAddEntities(any());
 
-        assertEquals(expected, shipment);
+       final BaseShipment<MaterialLot> invoice1 = new Shipment(1L);
+       invoice1.setLots(List.of(new MaterialLot(10L)));
+       final BaseShipment<MaterialLot> invoice2 = new Shipment();
+       invoice2.setLots(List.of(new MaterialLot(20L)));
 
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(List.of(shipment));
-        verify(this.mLotService, times(1)).getAddLots(anyList());
-    }
+       final List<Shipment> added = this.service.add(List.of(invoice1, invoice2));
 
-    @Test
-    public void testPut_OverridesAnExistingShipmentEntity_WhenInputIsNotNull() {
-        final List<MaterialLot> existingLots = new ArrayList<>();
-        existingLots.add(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
-        final Shipment existing = new Shipment(
-            1L,
-            "SHIPMENT_0",
-            "DESCRIPTION_0",
-            new ShipmentStatus(101L),
-            LocalDateTime.of(1999, 12, 31, 12, 0),
-            LocalDateTime.of(2000, 12, 31, 12, 0),
-            LocalDateTime.of(2001, 12, 31, 12, 0),
-            LocalDateTime.of(2002, 12, 31, 12, 0),
-            existingLots,
-            1
-        );
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
+       final List<Shipment> expected = List.of(
+           new Shipment(1L), new Shipment()
+       );
+       expected.get(0).setLots(List.of(new MaterialLot(10L)));
+       expected.get(1).setLots(List.of(new MaterialLot(20L)));
 
-        final List<MaterialLot> updateLots = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
-        );
-        final Shipment update = new Shipment(
-            null,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(100L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0),
-            updateLots,
-            1
-        );
+       assertEquals(expected, added);
+       verify(this.mRepoService, times(1)).saveAll(added);
+   }
 
-        doReturn(List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)
-        )).when(this.mLotService).getPutLots(existingLots, updateLots);
+   @Test
+   public void testAdd_DoesNotCallRepoServiceAndReturnsNull_WhenAdditionsAreNull() {
+       assertNull(this.service.add(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
+   }
 
-        final Shipment shipment = this.service.put(1L, update);
+   @Test
+   public void testPut_UpdatesShipmentAndLotsAndSavesToRepo_WhenUpdatesAreNotNull() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mLotService).getPutEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPutEntities(any(), any());
 
-        final Shipment expected = new Shipment(
-            1L,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(99L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 12, 31, 12, 0),
-            LocalDateTime.of(2002, 12, 31, 12, 0),
-            List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 2)),
-            1
-        );
+       final UpdateShipment<MaterialLot> invoice1 = new Shipment(1L);
+       invoice1.setLots(List.of(new MaterialLot(10L)));
+       final UpdateShipment<MaterialLot> invoice2 = new Shipment(2L);
+       invoice2.setLots(List.of(new MaterialLot(20L)));
 
-        assertEquals(expected, shipment);
+       doReturn(List.of(new Shipment(1L), new Shipment(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(anyList());
-        verify(this.mLotService, times(1)).getPutLots(anyList(), anyList());
-    }
+       final List<Shipment> updated = this.service.put(List.of(invoice1, invoice2, new Shipment()));
 
-    @Test
-    public void testPut_AddsANewEntity_WhenExistingEntityDoesNotExists() {
-        doReturn(Optional.empty()).when(this.mRepo).findById(1L);
+       final List<Shipment> expected = List.of(
+           new Shipment(1L), new Shipment(2L), new Shipment()
+       );
+       expected.get(0).setLots(List.of(new MaterialLot(10L)));
+       expected.get(1).setLots(List.of(new MaterialLot(20L)));
 
-        final List<MaterialLot> updateLots = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 2)
-        );
-        final Shipment update = new Shipment(
-            1L,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(100L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0),
-            updateLots,
-            1
-        );
+       assertEquals(expected, updated);
+       verify(this.mRepoService, times(1)).saveAll(updated);
+   }
 
-        doReturn(List.of(
-            new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, null)
-        )).when(this.mLotService).getPutLots(null, updateLots);
+   @Test
+   public void testPut_DoesNotCallRepoServiceAndReturnsNull_WhenUpdatesAreNull() {
+       assertNull(this.service.put(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
+   }
 
-        final Shipment shipment = this.service.put(1L, update);
+   @Test
+   public void testPatch_PatchesShipmentAndLotsAndSavesToRepo_WhenPatchesAreNotNull() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mLotService).getPatchEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
 
-        final Shipment expected = new Shipment(
-            1L,
-            "SHIPMENT_1",
-            "DESCRIPTION_1",
-            new ShipmentStatus(99L),
-            LocalDateTime.of(1999, 1, 1, 12, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0),
-            null,
-            null,
-            List.of(new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, null)),
-            null
-        );
+       final UpdateShipment<MaterialLot> invoice1 = new Shipment(1L);
+       invoice1.setLots(List.of(new MaterialLot(10L)));
+       final UpdateShipment<MaterialLot> invoice2 = new Shipment(2L);
+       invoice2.setLots(List.of(new MaterialLot(20L)));
 
-        assertEquals(expected, shipment);
+       doReturn(List.of(new Shipment(1L), new Shipment(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(anyList());
-        verify(this.mLotService, times(1)).getPutLots(isNull(), anyList());
-    }
+       final List<Shipment> updated = this.service.patch(List.of(invoice1, invoice2));
 
-    @Test
-    public void testPut_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
-        final Shipment existing = new Shipment(1L);
-        existing.setVersion(1);
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
+       final List<Shipment> expected = List.of(
+           new Shipment(1L), new Shipment(2L)
+       );
+       expected.get(0).setLots(List.of(new MaterialLot(10L)));
+       expected.get(1).setLots(List.of(new MaterialLot(20L)));
 
-        final Shipment update = new Shipment(1L);
-        existing.setVersion(2);
+       assertEquals(expected, updated);
+       verify(this.mRepoService, times(1)).saveAll(updated);
+   }
 
-        assertThrows(OptimisticLockException.class, () -> this.service.put(1L, update));
-    }
+   @Test
+   public void testPatch_DoesNotCallRepoServiceAndReturnsNull_WhenPatchesAreNull() {
+       assertNull(this.service.patch(null));
+       verify(this.mRepoService, times(0)).saveAll(any());
+   }
 
-    @Test
-    public void testPatch_PatchesExistingEntity_WhenExistingIsNotNull() {
-        final List<MaterialLot> existingLots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
-        final Shipment existing = new Shipment(
-            1L,
-            "SHIPMENT_0",
-            "DESCRIPTION_0",
-            new ShipmentStatus(101L),
-            LocalDateTime.of(1999, 12, 31, 12, 0),
-            LocalDateTime.of(2000, 12, 31, 12, 0),
-            LocalDateTime.of(2001, 12, 31, 12, 0),
-            LocalDateTime.of(2002, 12, 31, 12, 0),
-            existingLots,
-            1
-        );
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
+   @Test
+   public void testPatch_ThrowsNotFoundException_WhenAllShipmentsDontExist() {
+       doAnswer(inv -> inv.getArgument(1)).when(this.mLotService).getPatchEntities(any(), any());
+       doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
 
-        final List<MaterialLot> updateLots = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 12, 31, 12, 0, 0), LocalDateTime.of(2000, 12, 31, 12, 0, 0), 1)
-        );
-        final Shipment update = new Shipment(
-            null,
-            null,
-            null,
-            new ShipmentStatus(100L),
-            null,
-            null,
-            null,
-            null,
-            updateLots,
-            1
-        );
+       final List<UpdateShipment<? extends UpdateMaterialLot<?>>> updates = List.of(
+           new Shipment(1L), new Shipment(2L), new Shipment(3L), new Shipment(4L)
+       );
+       doReturn(List.of(new Shipment(1L), new Shipment(2L))).when(this.mRepoService).getByIds(updates);
 
-        doReturn(List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)
-        )).when(this.mLotService).getPatchLots(existingLots, updateLots);
-
-        final Shipment shipment = this.service.patch(1L, update);
-
-        final Shipment expected = new Shipment(
-            1L,
-            "SHIPMENT_0",
-            "DESCRIPTION_0",
-            new ShipmentStatus(99L),
-            LocalDateTime.of(1999, 12, 31, 12, 0),
-            LocalDateTime.of(2000, 12, 31, 12, 0),
-            LocalDateTime.of(2001, 12, 31, 12, 0),
-            LocalDateTime.of(2002, 12, 31, 12, 0),
-            List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
-            1
-        );
-
-        assertEquals(expected, shipment);
-
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(anyList());
-        verify(this.mLotService, times(1)).getPatchLots(anyList(), anyList());
-    }
-
-    @Test
-    public void testPatch_SavesWithExistingInvoiceId_WhenInvoiceIdArgIsNull() {
-        final Shipment existing = new Shipment(1L);
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
-
-        final Shipment update = new Shipment(1L);
-        final Shipment shipment = this.service.patch(1L, update);
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(List.of(shipment));
-    }
-
-    @Test
-    public void testPatch_SavesWithNullInvoiceId_WhenInvoiceIdArgIsNullAndExistingInvoiceIsNull() {
-        final Shipment existing = new Shipment(1L);
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
-
-        final Shipment update = new Shipment(1L);
-        final Shipment shipment = this.service.patch(1L, update);
-        verify(this.mRepo, times(1)).saveAndFlush(shipment);
-        verify(this.mRepo, times(1)).refresh(List.of(shipment));
-    }
-
-    @Test
-    public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
-        final Shipment existing = new Shipment(1L);
-        existing.setVersion(1);
-        doReturn(Optional.of(existing)).when(this.mRepo).findById(1L);
-
-        final Shipment update = new Shipment(1L);
-        existing.setVersion(2);
-
-        assertThrows(OptimisticLockException.class, () -> this.service.patch(1L, update));
-    }
+       assertThrows(EntityNotFoundException.class, () -> this.service.patch(updates), "Cannot find invoices with Ids: [3, 4]");
+   }
 }

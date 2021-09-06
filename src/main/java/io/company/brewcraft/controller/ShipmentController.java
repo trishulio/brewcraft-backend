@@ -40,7 +40,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
-    private ShipmentService service;
+    private final ShipmentService service;
 
     @Autowired
     public ShipmentController(ShipmentService service, AttributeFilter filter) {
@@ -51,7 +51,7 @@ public class ShipmentController extends BaseController {
     @GetMapping(value = "/shipments/{shipmentId}")
     public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId) {
         log.debug("Fetching shipment with Id: {}", shipmentId);
-        Shipment shipment = service.getShipment(shipmentId);
+        final Shipment shipment = this.service.get(shipmentId);
 
         if (shipment == null) {
             log.debug("No shipment found with Id: {}", shipmentId);
@@ -78,17 +78,17 @@ public class ShipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
-        Page<Shipment> shipmentsPage = service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statusIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
-        List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
-        shipments.stream().forEach(shipment -> filter(shipment, attributes));
+        final Page<Shipment> shipmentsPage = this.service.getShipments(ids, excludeIds, shipmentNumbers, descriptions, statusIds, deliveryDueDateFrom, deliveryDueDateTo, deliveredDateFrom, deliveredDateTo, sort, orderAscending, page, size);
+        final List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
+        shipments.stream().forEach(shipment -> this.filter(shipment, attributes));
 
-        return new PageDto<ShipmentDto>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
+        return new PageDto<>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
     }
 
     @DeleteMapping("/shipments")
     public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
         log.debug("Attempting to delete shipments with Ids: {}", shipmentIds);
-        int count = service.delete(shipmentIds);
+        final int count = this.service.delete(shipmentIds);
         log.debug("Number of shipments deleted: {}", count);
 
         return count;
@@ -97,9 +97,10 @@ public class ShipmentController extends BaseController {
     @PutMapping("/shipments/{shipmentId}")
     public ShipmentDto putShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
         log.debug("Updating shipment with Id: {}", shipmentId);
-        Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
+        final Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
+        update.setId(shipmentId);
 
-        Shipment updated = service.put(shipmentId, update);
+        final Shipment updated = this.service.put(List.of(update)).get(0);
 
         log.debug("Put successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
@@ -108,9 +109,10 @@ public class ShipmentController extends BaseController {
     @PatchMapping("/shipments/{shipmentId}")
     public ShipmentDto patchShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
         log.debug("Patching shipment with Id: {}", shipmentId);
-        Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
+        final Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
+        update.setId(shipmentId);
 
-        Shipment updated = service.patch(shipmentId, update);
+        final Shipment updated = this.service.patch(List.of(update)).get(0);
 
         log.debug("Patch successful");
         return ShipmentMapper.INSTANCE.toDto(updated);
@@ -119,9 +121,9 @@ public class ShipmentController extends BaseController {
     @PostMapping("/shipments")
     public ShipmentDto addShipment(@RequestBody @Valid @NotNull AddShipmentDto addDto) {
         log.debug("Adding a new shipment item");
-        Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
+        final Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
 
-        Shipment added = service.add(shipment);
+        final Shipment added = this.service.add(List.of(shipment)).get(0);
 
         log.debug("Added a new shipment item with Id: {}", shipment.getId());
         return ShipmentMapper.INSTANCE.toDto(added);
