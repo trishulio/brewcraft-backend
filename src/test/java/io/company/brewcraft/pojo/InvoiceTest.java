@@ -19,6 +19,8 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Tax;
+import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
 public class InvoiceTest {
 
@@ -171,13 +173,42 @@ public class InvoiceTest {
     @Test
     public void testGetAmount_ReturnsTotalOfAllItemsAmount() {
         final InvoiceItem item1 = spy(new InvoiceItem());
-        doReturn(Money.parse("CAD 100")).when(item1).getAmount();
+        item1.setPrice(Money.parse("CAD 10"));
+        item1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
 
         final InvoiceItem item2 = spy(new InvoiceItem());
-        doReturn(Money.parse("CAD 200")).when(item2).getAmount();
+        item2.setPrice(Money.parse("CAD 20"));
+        item2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
 
         this.invoice.setItems(List.of(item1, item2));
         assertEquals(Money.parse("CAD 300"), this.invoice.getAmount());
+    }
+
+    @Test
+    public void testGetAmount_ReturnsAmountOfAddedItem() {
+        final InvoiceItem item1 = spy(new InvoiceItem());
+        item1.setPrice(Money.parse("CAD 20"));
+        item1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+
+        this.invoice.addItem(item1);
+        assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
+    }
+
+    @Test
+    public void testGetAmount_ReturnsAmountReducedByRemovedItem() {
+        final InvoiceItem item1 = spy(new InvoiceItem());
+        item1.setPrice(Money.parse("CAD 10"));
+        item1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+
+        final InvoiceItem item2 = spy(new InvoiceItem());
+        item2.setPrice(Money.parse("CAD 20"));
+        item2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+
+        this.invoice.setItems(List.of(item1, item2));
+        
+        this.invoice.removeItem(item1);
+        
+        assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
     }
 
     @Test

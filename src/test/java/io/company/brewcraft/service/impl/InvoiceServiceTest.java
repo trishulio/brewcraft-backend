@@ -67,8 +67,11 @@ public class InvoiceServiceTest {
            LocalDateTime.of(2004, 1, 1, 0, 0), //paymentDueDateFrom,
            LocalDateTime.of(2005, 1, 1, 0, 0), //paymentDueDateTo,
            Set.of(3L), //purchaseOrderIds,
-           new BigDecimal("10"), //freightAmtFrom,
-           new BigDecimal("20"), //freightAmtTo,
+           Set.of(4L), // materialIds
+           new BigDecimal("1"), //amtFrom,
+           new BigDecimal("2"), //amtTo,
+           new BigDecimal("3"), //freightAmtFrom,
+           new BigDecimal("4"), //freightAmtTo,
            Set.of(4L), //statusIds,
            Set.of(5L), //supplierIds,
            new TreeSet<>(List.of("id")), //sortBy,

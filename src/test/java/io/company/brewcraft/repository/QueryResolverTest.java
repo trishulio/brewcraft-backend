@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
@@ -22,7 +23,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 
 import io.company.brewcraft.repository.AggregationRepositoryTest.TestEntity;
 import io.company.brewcraft.service.Selector;
@@ -53,6 +57,11 @@ public class QueryResolverTest {
         mTq = mock(TypedQuery.class);
         doReturn(mTq).when(mEm).createQuery(mCq);
 
+        // For Sorting assertions
+        doReturn(TestEntity.class).when(mRoot).getJavaType();
+        doReturn(mock(Path.class)).when(mRoot).get("id");
+
+        // For pagination
         doReturn(mTq).when(mTq).setFirstResult(any(Integer.class));
         doReturn(mTq).when(mTq).setMaxResults(any(Integer.class));
 
@@ -73,13 +82,14 @@ public class QueryResolverTest {
         List<Expression<?>> mGroupSelection = List.of(mock(Expression.class));
         doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCq, mCb);
 
-        TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, mGroupBySelector, mSpec, PageRequest.of(10, 99));
+        TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, mGroupBySelector, mSpec, PageRequest.of(10, 99, Direction.DESC, "id"));
         assertSame(mTq, q);
 
         InOrder order = inOrder(mCq, mTq);
         order.verify(mCq, times(1)).where(mPred);
         order.verify(mCq, times(1)).multiselect(mSelection);
         order.verify(mCq, times(1)).groupBy(mGroupSelection);
+        order.verify(mCq, times(1)).orderBy(QueryUtils.toOrders(Sort.by(Direction.DESC, "id"), mRoot, mCb));
         order.verify(mTq).setFirstResult(990);
         order.verify(mTq).setMaxResults(99);
         order.verifyNoMoreInteractions();
@@ -95,12 +105,13 @@ public class QueryResolverTest {
         List<Selection<?>> mSelection = List.of(mock(Selection.class));
         doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
 
-        TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, null, mSpec, PageRequest.of(10, 99));
+        TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, null, mSpec, PageRequest.of(10, 99, Direction.DESC, "id"));
         assertSame(mTq, q);
 
         InOrder order = inOrder(mCq, mTq);
         order.verify(mCq, times(1)).where(mPred);
         order.verify(mCq, times(1)).multiselect(mSelection);
+        order.verify(mCq, times(1)).orderBy(QueryUtils.toOrders(Sort.by(Direction.DESC, "id"), mRoot, mCb));
         order.verify(mTq).setFirstResult(990);
         order.verify(mTq).setMaxResults(99);
         order.verifyNoMoreInteractions();
