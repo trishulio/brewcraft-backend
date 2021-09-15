@@ -24,6 +24,7 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
@@ -58,6 +59,9 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             LocalDateTime paymentDueDateFrom,
             LocalDateTime paymentDueDateTo,
             Set<Long> purchaseOrderIds,
+            Set<Long> materialIds,
+            BigDecimal amtFrom,
+            BigDecimal amtTo,
             BigDecimal freightAmtFrom,
             BigDecimal freightAmtTo,
             Set<Long> statusIds,
@@ -73,11 +77,13 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .not().in(Invoice.FIELD_ID, excludeIds)
                                             .in(Invoice.FIELD_INVOICE_NUMBER, invoiceNumbers)
                                             .like(Invoice.FIELD_DESCRITION, invoiceDescriptions)
-//                                            .like(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_DESCRIPTION }, invoiceItemDescriptions)
+                                            .like(Invoice.FIELD_ITEMS, InvoiceItem.FIELD_DESCRIPTION, invoiceItemDescriptions)
                                             .between(Invoice.FIELD_GENERATED_ON, generatedOnFrom, generatedOnTo)
                                             .between(Invoice.FIELD_RECEIVED_ON, receivedOnFrom, receivedOnTo)
                                             .between(Invoice.FIELD_PAYMENT_DUE_DATE, paymentDueDateFrom, paymentDueDateTo)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID }, purchaseOrderIds)
+                                            .in(Invoice.FIELD_ITEMS, new String[] { InvoiceItem.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)

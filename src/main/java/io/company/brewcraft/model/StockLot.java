@@ -13,73 +13,98 @@ import org.hibernate.annotations.Immutable;
 @Immutable
 public class StockLot extends Lot {
     public StockLot() {
+        super();
     }
 
     public StockLot(Long id) {
-        this();
-        this.setId(id);
+        super(id);
     }
 
     public StockLot(Long id, String lotNumber, Quantity<?> quantity, Material material, Shipment shipment, InvoiceItem invoiceItem, Storage storage) {
-        this(id);
-        this.setLotNumber(lotNumber);
-        this.setQuantity(quantity);
-        this.setMaterial(material);
-        this.setShipment(shipment);
-        this.setInvoiceItem(invoiceItem);
-        this.setStorage(storage);
+        super(id, lotNumber, quantity, material, shipment, invoiceItem, storage);
     }
 
     public StockLot(String lotNumber, UnitEntity unit, BigDecimal value) {
-        this.setLotNumber(lotNumber);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(lotNumber, unit, value);
+    }
+
+    public StockLot(String lotNumber, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, invoiceItem, unit, value);
     }
 
     public StockLot(Shipment shipment, UnitEntity unit, BigDecimal value) {
-        this.setShipment(shipment);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(shipment, unit, value);
+    }
+
+    public StockLot(Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(shipment, invoiceItem, unit, value);
     }
 
     public StockLot(Material material, UnitEntity unit, BigDecimal value) {
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(material, unit, value);
+    }
+
+    public StockLot(Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(material, invoiceItem, unit, value);
     }
 
     public StockLot(Storage storage, UnitEntity unit, BigDecimal value) {
-        this.setStorage(storage);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(storage, unit, value);
+    }
+
+    public StockLot(Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(storage, invoiceItem, unit, value);
+    }
+
+    public StockLot(InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(invoiceItem, unit, value);
     }
 
     public StockLot(String lotNumber, Material material, UnitEntity unit, BigDecimal value) {
-        this.setLotNumber(lotNumber);
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(lotNumber, material, unit, value);
+    }
+
+    public StockLot(String lotNumber, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, material, invoiceItem, unit, value);
     }
 
     public StockLot(Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
-        this.setShipment(shipment);
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(shipment, material, unit, value);
+    }
+
+    public StockLot(Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(shipment, material, invoiceItem, unit, value);
     }
 
     public StockLot(Storage storage, Material material, UnitEntity unit, BigDecimal value) {
-        this.setStorage(storage);
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(storage, material, unit, value);
+    }
+
+    public StockLot(Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(storage, material, invoiceItem, unit, value);
     }
 
     public StockLot(String lotNumber, Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
-        this.setLotNumber(lotNumber);
-        this.setShipment(shipment);
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(lotNumber, shipment, material, unit, value);
+    }
+
+    public StockLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, invoiceItem, unit, value);
+    }
+
+    public StockLot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, material, invoiceItem, unit, value);
     }
 
     public StockLot(String lotNumber, Shipment shipment, Storage storage, Material material, UnitEntity unit, BigDecimal value) {
-        this.setLotNumber(lotNumber);
-        this.setShipment(shipment);
-        this.setStorage(storage);
-        this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        super(lotNumber, shipment, storage, material, unit, value);
+    }
+
+    public StockLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, storage, invoiceItem, unit, value);
+    }
+
+    public StockLot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, storage, material, invoiceItem, unit, value);
     }
 }

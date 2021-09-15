@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -33,6 +37,7 @@ import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
+import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Entity(name = "invoice")
 @Table
@@ -46,6 +51,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public static final String FIELD_GENERATED_ON = "generatedOn";
     public static final String FIELD_RECEIVED_ON = "receivedOn";
     public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
+    public static final String FIELD_AMOUNT = "amount";
     public static final String FIELD_FREIGHT = "freight";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_ITEMS = "items";
@@ -73,6 +79,15 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @Column(name = "payment_due_date")
     private LocalDateTime paymentDueDate;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "amount", column = @Column(name = "amount"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "currency_code", referencedColumnName = "numeric_code"))
+    })
+    private MoneyEntity amount;
 
     @Embedded
     private Freight freight;
@@ -260,6 +275,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         if (!this.items.contains(item)) {
             this.items.add(item);
         }
+
+        setAmount();
     }
 
     public boolean removeItem(InvoiceItem item) {
@@ -272,6 +289,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         if (removed) {
             item.setInvoice(null);
         }
+
+        setAmount();
 
         return removed;
     }
@@ -298,7 +317,12 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @Override
     public Money getAmount() {
-        return MoneyService.total(this.getItems());
+        return MoneyMapper.INSTANCE.fromEntity(this.amount);
+    }
+
+    private void setAmount() {
+        Money amount = MoneyService.total(this.getItems());
+        this.amount = MoneyMapper.INSTANCE.toEntity(amount);
     }
 
     public Tax getTax() {

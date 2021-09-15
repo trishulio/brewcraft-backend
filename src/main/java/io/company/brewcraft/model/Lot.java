@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
+import java.math.BigDecimal;
+
 import javax.measure.Quantity;
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
@@ -19,12 +21,13 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 @MappedSuperclass
 public abstract class Lot extends BaseEntity {
     public enum AggregationField implements PathProvider {
-        LOT_NUMBER("lotNumber"),
-        MATERIAL("material"),
-        SHIPMENT("shipment"),
-        STORAGE("storage"),
-        QUANTITY_UNIT("quantity", "unit"),
-        QUANTITY_VALUE("quantity", "value");
+        LOT_NUMBER (FIELD_LOT_NUMBER),
+        MATERIAL (FIELD_MATERIAL),
+        INVOICE_ITEM (FIELD_INVOICE_ITEM),
+        SHIPMENT (FIELD_SHIPMENT),
+        STORAGE (FIELD_STORAGE),
+        QUANTITY_UNIT (FIELD_QTY, QuantityEntity.FIELD_UNIT),
+        QUANTITY_VALUE (FIELD_QTY, QuantityEntity.FIELD_VALUE);
 
         private final String[] path;
 
@@ -45,6 +48,159 @@ public abstract class Lot extends BaseEntity {
     public static final String FIELD_SHIPMENT = "shipment";
     public static final String FIELD_INVOICE_ITEM = "invoiceItem";
     public static final String FIELD_STORAGE = "storage";
+
+    public Lot() {
+    }
+
+    public Lot(Long id) {
+        this();
+        this.setId(id);
+    }
+
+    public Lot(Long id, String lotNumber, Quantity<?> quantity, Material material, Shipment shipment, InvoiceItem invoiceItem, Storage storage) {
+        this(id);
+        this.setLotNumber(lotNumber);
+        this.setQuantity(quantity);
+        this.setMaterial(material);
+        this.setShipment(shipment);
+        this.setInvoiceItem(invoiceItem);
+        this.setStorage(storage);
+    }
+
+    public Lot(String lotNumber, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Shipment shipment, UnitEntity unit, BigDecimal value) {
+        this.setShipment(shipment);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setShipment(shipment);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Material material, UnitEntity unit, BigDecimal value) {
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Storage storage, UnitEntity unit, BigDecimal value) {
+        this.setStorage(storage);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setStorage(storage);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Material material, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Material material, InvoiceItem invoiceitem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceitem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+        this.setShipment(shipment);
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setShipment(shipment);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+        this.setStorage(storage);
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setStorage(storage);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setStorage(storage);
+        this.setMaterial(material);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setStorage(storage);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
+
+    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+        this.setLotNumber(lotNumber);
+        this.setShipment(shipment);
+        this.setStorage(storage);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setQuantity(new QuantityEntity(unit, value));
+    }
 
     @Id
     private Long id;
