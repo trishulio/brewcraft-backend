@@ -77,7 +77,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .not().in(Invoice.FIELD_ID, excludeIds)
                                             .in(Invoice.FIELD_INVOICE_NUMBER, invoiceNumbers)
                                             .like(Invoice.FIELD_DESCRITION, invoiceDescriptions)
-                                            .like(Invoice.FIELD_ITEMS, new String[] {InvoiceItem.FIELD_DESCRIPTION}, invoiceItemDescriptions)
+                                            .like(Invoice.FIELD_ITEMS, InvoiceItem.FIELD_DESCRIPTION, invoiceItemDescriptions)
                                             .between(Invoice.FIELD_GENERATED_ON, generatedOnFrom, generatedOnTo)
                                             .between(Invoice.FIELD_RECEIVED_ON, receivedOnFrom, receivedOnTo)
                                             .between(Invoice.FIELD_PAYMENT_DUE_DATE, paymentDueDateFrom, paymentDueDateTo)
