@@ -54,11 +54,23 @@ pipeline {
             }
         }
 
-        stage ('Start') {
-            steps {
-                sh """
-                    make deploy ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} VERSION=${IMAGE_TAG}
-                """
+        stage ("Deploy") {
+            parallel {
+                stage ('Start Backend') {
+                    steps {
+                        sh """
+                            make deploy ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} VERSION=${IMAGE_TAG}
+                        """
+                    }
+                }
+
+                stage ('Start Frontend') {
+                    steps {
+                        sh """
+                            ssh -i '${SSH_CREDS}' ${SSH_CREDS_USR}@${params.HOST_URL} "cd /var/server/brewcraft-ui && make restart"
+                        """
+                    }
+                }
             }
         }
     }
