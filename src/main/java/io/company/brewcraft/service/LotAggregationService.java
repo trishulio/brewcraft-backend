@@ -15,6 +15,7 @@ import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.StockLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.SpecificationBuilder;
+import static io.company.brewcraft.util.CollectionUtils.addToArray;
 
 /**
  * Gotcha: The service doesn't support sorting the results by Material Name. By the nature of the API call,
@@ -102,16 +103,5 @@ public class LotAggregationService {
         groupBy = addToArray(groupBy, StockLot.AggregationField.QUANTITY_UNIT);
 
         return this.aggrService.getAggregation(StockLot.class, spec, aggrFn, StockLot.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
-    }
-
-    private <T> T[] addToArray(T[] source, T... extra) {
-        int lenOriginal = source.length;
-        source = Arrays.copyOf(source, source.length + extra.length);
-
-        for (int i = 0; i < extra.length; i++) {
-            source[lenOriginal + i] = extra[i];
-        }
-
-        return source;
     }
 }
