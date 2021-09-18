@@ -16,20 +16,6 @@ import io.company.brewcraft.model.StockLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.SpecificationBuilder;
 
-/**
- * Gotcha: The service doesn't support sorting the results by Material Name. By the nature of the API call,
- * the group_by parameters translates to the SQL's SELECT and GROUP BY clauses. Since material's name is not
- * part of the SELECT clause, a sort cannot be performed on it. However, hibernate takes care of fetching the
- * Material object so it's included in the return object. To solve this issue, I have set a default sort by
- * Material name on the VIEW itself. However, a sort in the QUERY will override it. So, currently, the sort on
- * Material name cannot be combined with sort on other columns.
- * 
- * An alternative to support multi-column sort that can be performed on the property attribute values is doing
- * it outside the SQL query, programmatically. Collections API provides library methods to accomplish this easily.
- * However, a major challenge associated with that would be parsing the sort-set parameter String values and
- * converting them to the Comparators for the Collections API:
- * https://stackoverflow.com/questions/4258700/collections-sort-with-multiple-fields
- */
 public class LotAggregationService {
 
     private AggregationService aggrService;
