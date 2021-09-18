@@ -19,6 +19,7 @@ public class EnhancedUserStatusRepositoryImplTest {
     private EnhancedUserStatusRepository repo;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
 

@@ -50,6 +50,7 @@ public class InvoiceServiceTest {
 
    @Test
    public void testGetInvoices_ReturnsEntitiesFromRepoService_WithCustomSpec() {
+       @SuppressWarnings("unchecked")
        final ArgumentCaptor<Specification<Invoice>> captor = ArgumentCaptor.forClass(Specification.class);
        final Page<Invoice> mPage = new PageImpl<>(List.of(new Invoice(1L)));
        doReturn(mPage).when(this.mRepoService).getAll(captor.capture(), eq(new TreeSet<>(List.of("id"))), eq(true), eq(10), eq(20));

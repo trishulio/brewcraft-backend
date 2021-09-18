@@ -7,9 +7,9 @@ import javax.persistence.criteria.Root;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class NullAggregation extends BaseModel implements Aggregation {
+public class NullSpec extends BaseModel implements CriteriaSpec<Integer> {
     @Override
-    public Expression<?> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+    public Expression<Integer> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         return cb.nullLiteral(Integer.class);
     }
 }

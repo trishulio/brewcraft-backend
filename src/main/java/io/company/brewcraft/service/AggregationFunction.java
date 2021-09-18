@@ -14,27 +14,28 @@ import java.util.Arrays;
  */
 
 public enum AggregationFunction {
-    SUM(SumAggregation.class),
-    COUNT(CountAggregation.class),
-    AVG(AverageAggregation.class),
-    MAX(MaxAggregation.class),
-    MIN(MinAggregation.class);
+    SUM(SumSpec.class),
+    COUNT(CountSpec.class),
+    AVG(AverageSpec.class),
+    MAX(MaxSpec.class),
+    MIN(MinSpec.class);
 
-    private Class<? extends Aggregation> clazz;
+    private Class<? extends CriteriaSpec<? extends Number>> clazz;
 
-    private AggregationFunction(Class<? extends Aggregation> clazz) {
-        this.clazz = clazz;
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private AggregationFunction(Class<? extends CriteriaSpec> clazz) {
+        this.clazz = (Class<? extends CriteriaSpec<? extends Number>>) clazz;
     }
 
-    public Aggregation getAggregation(PathProvider provider) {
+    public CriteriaSpec<? extends Number> getAggregation(PathProvider provider) {
         return getAggregation(provider.getPath());
     }
 
-    public Aggregation getAggregation(String... path) {
+    public  CriteriaSpec<? extends Number> getAggregation(String... path) {
         try {
-            Constructor<? extends Aggregation> constructor = this.clazz.getConstructor(Aggregation.class);
+            Constructor<? extends CriteriaSpec<? extends Number>> constructor = this.clazz.getConstructor(CriteriaSpec.class);
 
-            return constructor.newInstance(new PathAggregation(path));
+            return constructor.newInstance(new PathSpec<>(path));
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             String msg = String.format("Failed to create an instance of type: '%s' with path: %s because: '%s'", this.clazz.getName(), Arrays.toString(path).replace(", ", "/"), e.getMessage());
 

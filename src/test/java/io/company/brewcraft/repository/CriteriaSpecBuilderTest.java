@@ -2,15 +2,12 @@ package io.company.brewcraft.repository;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -31,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.service.Aggregation;
+import io.company.brewcraft.service.CriteriaSpec;
 
 public class CriteriaSpecBuilderTest {
 
@@ -46,7 +43,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testIn_AddsInClauseToAccumulator_WhenInputsAreValid() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.in(new String[] { "join1" }, new String[] { "layer-1" }, List.of("V1", "V2"));
@@ -72,11 +69,8 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testIn_DoesNotAddsCriteria_WhenCollectionIsNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
-
-        Join<String, Object> mJoin = mock(Join.class);
-        Path<String> mLayer1 = mock(Path.class);
 
         builder.in(new String[] { "join1" }, new String[] { "layer-1" }, null);
         builder.build();
@@ -87,7 +81,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testIn_ThrowsIllegalArgumentException_WhenFieldsArrayIsEmptyOrNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.in(new String[] { "join1" }, new String[] {}, List.of("V1"));
@@ -108,7 +102,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testBetween_DoesNotAddCriteria_WhenStartAndEndIsNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "join1" }, new String[] { "layer-1" }, null, null);
@@ -119,7 +113,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testBetween_AddBetweenCriteria_WhenStartAndEndAreBothNotNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "join1" }, new String[] { "layer-1" }, 10, 50);
@@ -143,7 +137,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testBetween_AddsGreaterThanEqualToCriteria_WhenEndIsNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "join1" }, new String[] { "layer-1" }, 10, null);
@@ -167,7 +161,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testBetween_AddsLessThanEqualToCriteria_WhenStartIsNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "join1" }, new String[] { "layer-1" }, null, 50);
@@ -191,7 +185,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testBetween_ThrowsException_WhenFieldsAreEmptyOrNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.between(new String[] { "join1" }, new String[] {}, 10, 20);
@@ -205,7 +199,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testLike_AddLikeCriteriaQuery_WhenQueriesAreNotNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.like(new String[] { "join1" }, new String[] { "layer-1" }, Set.of("HELLO"));
@@ -228,7 +222,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testLike_AddLikeCriteriaForMultipleQuery_WhenQueriesAreNotNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         builder.like(new String[] { "join1" }, new String[] { "layer-1" }, Set.of("HELLO", "BYE", "FOO"));
@@ -259,7 +253,7 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testLike_AddLikeCriteriaIgnoresNullQueries_WhenQueriesAreNotNull() {
-        ArgumentCaptor<Aggregation> captor = ArgumentCaptor.forClass(Aggregation.class);
+        ArgumentCaptor<CriteriaSpec> captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         Set<String> queries = new HashSet<String>();

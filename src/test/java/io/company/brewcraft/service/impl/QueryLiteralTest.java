@@ -12,11 +12,11 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
+import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.QueryLiteral;
 
 public class QueryLiteralTest {
-    private Aggregation aggr;
+    private CriteriaSpec<String> aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -34,7 +34,7 @@ public class QueryLiteralTest {
         Expression<String> mExpr = mock(Expression.class);
         doReturn(mExpr).when(mCb).literal("VALUE");
 
-        aggr = new QueryLiteral("VALUE");
+        aggr = new QueryLiteral<>("VALUE");
 
         assertSame(mExpr, aggr.getExpression(mRoot, mCq, mCb));
     }

@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
+import io.company.brewcraft.service.CriteriaSpec;
 
 public class SpecAccumulatorTest {
 
@@ -23,7 +23,7 @@ public class SpecAccumulatorTest {
     @Test
     public void testAdd_ConvertsSpecIntoAPredicateAndAddsToTheList_WhenIsNotIsFalse() {
         Predicate mPred = mock(Predicate.class);
-        Aggregation spec = (root, query, cb) -> mPred;
+        CriteriaSpec spec = (root, query, cb) -> mPred;
 
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
         Predicate mCombined = mock(Predicate.class);
@@ -39,7 +39,7 @@ public class SpecAccumulatorTest {
     @Test
     public void testNotAdd_ConvertsSpecIntoNegativePredicateAndAddsToTheList_WhenIsNotIsTrue() {
         Predicate mPred = mock(Predicate.class);
-        Aggregation spec = (root, query, cb) -> mPred;
+        CriteriaSpec spec = (root, query, cb) -> mPred;
 
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
         Predicate mNegation = mock(Predicate.class);
@@ -61,12 +61,12 @@ public class SpecAccumulatorTest {
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
 
         Predicate mPred1 = mock(Predicate.class);
-        Aggregation spec1 = (root, query, cb) -> mPred1;
+        CriteriaSpec spec1 = (root, query, cb) -> mPred1;
         Predicate mCombined1 = mock(Predicate.class);
         doReturn(mCombined1).when(mCb).and(mPred1);
 
         Predicate mPred2 = mock(Predicate.class);
-        Aggregation spec2 = (root, query, cb) -> mPred2;
+        CriteriaSpec spec2 = (root, query, cb) -> mPred2;
         Predicate mCombined2 = mock(Predicate.class);
         doReturn(mCombined2).when(mCb).and(mPred2);
 

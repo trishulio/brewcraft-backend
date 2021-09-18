@@ -56,7 +56,7 @@ public class AggregationService {
          * fetched from DB in the Repo layer, the selection uses a null-literal as a
          * value
          */
-        Selector selection = new Selector().select(new NullAggregation());
+        Selector selection = new Selector().select(new NullSpec());
         return this.aggrRepo.getResultCount(clazz, selection, groupBy, spec, null);
     }
 }

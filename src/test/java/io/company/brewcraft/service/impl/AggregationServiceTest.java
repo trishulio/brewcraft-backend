@@ -18,7 +18,7 @@ import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.service.AggregationFunction;
 import io.company.brewcraft.service.AggregationService;
-import io.company.brewcraft.service.NullAggregation;
+import io.company.brewcraft.service.NullSpec;
 import io.company.brewcraft.service.PathProvider;
 import io.company.brewcraft.service.Selector;
 
@@ -63,7 +63,7 @@ public class AggregationServiceTest {
         Selector groupBy = new Selector().select("col_1").select("col_2");
 
         doReturn(List.of(new TestEntity(1L))).when(mRepo).getAggregation(TestEntity.class, selector, groupBy, mSpec, PageRequest.of(1, 10, Direction.ASC, "col_1"));
-        doReturn(99L).when(mRepo).getResultCount(TestEntity.class, new Selector().select(new NullAggregation()), groupBy, mSpec, null);
+        doReturn(99L).when(mRepo).getResultCount(TestEntity.class, new Selector().select(new NullSpec()), groupBy, mSpec, null);
 
         Page<TestEntity> page = this.service.getAggregation(TestEntity.class, mSpec, AggregationFunction.SUM, new TestPathProvider("col_3"), new PathProvider[] { new TestPathProvider("col_1"), new TestPathProvider("col_2") },new TreeSet<>(List.of("col_1")), true, 1, 10);
 
@@ -77,7 +77,7 @@ public class AggregationServiceTest {
         Specification<TestEntity> mSpec = mock(Specification.class);
         Selector groupBy = new Selector().select("col_1").select("col_2");
 
-        doReturn(100L).when(mRepo).getResultCount(TestEntity.class, new Selector().select(new NullAggregation()), groupBy, mSpec, null);
+        doReturn(100L).when(mRepo).getResultCount(TestEntity.class, new Selector().select(new NullSpec()), groupBy, mSpec, null);
 
         Long total = this.service.getResultCount(TestEntity.class, groupBy, mSpec);
 

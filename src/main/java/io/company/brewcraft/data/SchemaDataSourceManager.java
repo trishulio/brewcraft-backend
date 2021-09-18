@@ -73,6 +73,7 @@ public class SchemaDataSourceManager implements DataSourceManager {
         return this.adminDs;
     }
 
+    @SuppressWarnings("unused")
     private void verifySchemaExists(JdbcDialect dialect, DataSource ds, String schema) throws SQLException {
         log.debug("Verifying the schema already exists: {}", schema);
 

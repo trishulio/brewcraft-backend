@@ -18,6 +18,7 @@ public class EnhancedUserSalutationRepositoryTest {
     private EnhancedUserSalutationRepository repo;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
 

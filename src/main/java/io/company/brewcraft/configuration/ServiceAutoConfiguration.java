@@ -265,8 +265,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ProductMeasureValueService.class)
-    public ProductMeasureValueService productMeasureValueService(ProductMeasureValueRepository productMeasureValueRepository) {
-        final ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl(productMeasureValueRepository);
+    public ProductMeasureValueService productMeasureValueService() {
+        final ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl();
         return productMeasureValueService;
     }
 

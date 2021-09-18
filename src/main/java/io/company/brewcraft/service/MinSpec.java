@@ -7,15 +7,15 @@ import javax.persistence.criteria.Root;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class QueryLiteral<T> extends BaseModel implements CriteriaSpec<T> {
-    private T value;
+public class MinSpec<T extends Number> extends BaseModel implements CriteriaSpec<T> {
+    private CriteriaSpec<T> aggr;
 
-    public QueryLiteral(T value) {
-        this.value = value;
+    public MinSpec(CriteriaSpec<T> aggr) {
+        this.aggr = aggr;
     }
 
     @Override
     public Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return cb.literal(value);
+        return cb.min(this.aggr.getExpression(root, cq, cb));
     }
 }

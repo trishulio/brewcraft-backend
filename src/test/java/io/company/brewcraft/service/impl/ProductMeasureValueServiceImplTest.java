@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductMeasureValue;
-import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.service.ProductMeasureValueService;
 
 public class ProductMeasureValueServiceImplTest {
 
     private ProductMeasureValueService productMeasureValueService;
 
-    private ProductMeasureValueRepository productMeasureValueRepositoryMock;
-
     @BeforeEach
     public void init() {
-        productMeasureValueRepositoryMock = Mockito.mock(ProductMeasureValueRepository.class);
-        productMeasureValueService = new ProductMeasureValueServiceImpl(productMeasureValueRepositoryMock);
+        productMeasureValueService = new ProductMeasureValueServiceImpl();
     }
 
     @Test
