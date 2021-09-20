@@ -8,12 +8,14 @@ import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -73,21 +75,21 @@ public class CriteriaSpecBuilderTest {
 
     @Test
     public void testLike_AddsLikeSpecAndResetFlag_WhenCollectionIsNotNull() {
-        builder.in(new String[] { "join1" }, new String[] { "layer-1" }, List.of("V1", "V2"));
+        builder.like(new String[] { "join1" }, new String[] { "layer-1" }, Set.of("V1", "V2"));
 
         List<CriteriaSpec<Boolean>> expected = List.of(
             new LikeSpec(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V1"),
             new LikeSpec(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V2")
         );
 
-        assertEquals(expected, captor.getValue());
+        Assertions.assertThat(expected).hasSameElementsAs(captor.getAllValues());
 
         verify(mAccumulator).setIsNot(false);
     }
 
     @Test
     public void testLike_AddsNothingAndResetFlag_WhenCollectionIsNull() {
-        builder.in(new String[] { "join1" }, new String[] { "layer-1" }, null);
+        builder.like(new String[] { "join1" }, new String[] { "layer-1" }, null);
 
         assertEquals(List.of(), captor.getAllValues());
 
