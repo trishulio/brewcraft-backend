@@ -278,8 +278,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ProcurementService.class)
-    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService) {
-        return new ProcurementServiceImpl(invoiceService, purchaseOrderService, shipmentService);
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService) {
+        return new ProcurementServiceImpl(invoiceService, purchaseOrderService);
     }
 
     @Bean

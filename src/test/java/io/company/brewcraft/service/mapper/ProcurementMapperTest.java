@@ -9,12 +9,10 @@ import io.company.brewcraft.dto.AddInvoiceDto;
 import io.company.brewcraft.dto.AddPurchaseOrderDto;
 import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.PurchaseOrderDto;
-import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
 
@@ -50,7 +48,7 @@ public class ProcurementMapperTest {
         final PurchaseOrder expectedPo = new PurchaseOrder();
         expectedPo.setOrderNumber("ORDER_1");
 
-        final Procurement expected = new Procurement(expectedPo, expectedInvoice, null);
+        final Procurement expected = new Procurement(expectedPo, expectedInvoice);
 
         assertEquals(expected, procurement);
     }
@@ -59,13 +57,12 @@ public class ProcurementMapperTest {
     public void testToDto_ReturnsNull_WhenProcurementIsNotNull() {
         final Procurement procurement = new Procurement(
             new PurchaseOrder(1L),
-            new Invoice(2L),
-            new Shipment(3L)
+            new Invoice(2L)
         );
 
         final ProcurementDto dto = this.mapper.toDto(procurement);
 
-        final ProcurementDto expected = new ProcurementDto(new PurchaseOrderDto(1L), new InvoiceDto(2L), new ShipmentDto(3L));
+        final ProcurementDto expected = new ProcurementDto(new PurchaseOrderDto(1L), new InvoiceDto(2L));
 
         assertEquals(expected, dto);
     }

@@ -27,14 +27,12 @@ public class ProcurementServiceImplTest {
 
     private InvoiceService mInvoiceService;
     private PurchaseOrderService mPoService;
-    private ShipmentService mShipmentService;
 
     @BeforeEach
     public void init() {
         this.mInvoiceService = mock(InvoiceService.class);
         this.mPoService = mock(PurchaseOrderService.class);
-        this.mShipmentService = mock(ShipmentService.class);
-        this.service = new ProcurementServiceImpl(this.mInvoiceService, this.mPoService, this.mShipmentService);
+        this.service = new ProcurementServiceImpl(this.mInvoiceService, this.mPoService);
     }
 
     @Test
@@ -44,7 +42,7 @@ public class ProcurementServiceImplTest {
 
         final PurchaseOrder additionPo = new PurchaseOrder(2L);
 
-        final Procurement addition = new Procurement(additionPo, additionInvoice, null);
+        final Procurement addition = new Procurement(additionPo, additionInvoice);
 
         assertThrows(IllegalArgumentException.class, () -> this.service.add(addition), "PurchaseOrder specified in invoice object and also provided as a separate payload to add.");
     }
@@ -53,7 +51,6 @@ public class ProcurementServiceImplTest {
     public void testAdd_ReturnsNewlyCreatedPoInvoiceShipment_WhenInputIsNotNull() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
         doAnswer(inv -> inv.getArgument(0)).when(this.mPoService).add(anyList());
-        doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final PurchaseOrder additionPo = new PurchaseOrder();
         additionPo.setOrderNumber("ORDER_1");
@@ -64,7 +61,7 @@ public class ProcurementServiceImplTest {
         additionInvoice.setInvoiceNumber("INVOICE_1");
         additionInvoice.addItem(additionItem);
 
-        final Procurement addition = new Procurement(additionPo, additionInvoice, null);
+        final Procurement addition = new Procurement(additionPo, additionInvoice);
 
         final Procurement procurement = this.service.add(addition);
 
@@ -86,7 +83,7 @@ public class ProcurementServiceImplTest {
         expectedLot.setInvoiceItem(expectedItem);
         expectedShipment.addLot(expectedLot);
 
-        final Procurement expected = new Procurement(expectedPo, expectedInvoice, expectedShipment);
+        final Procurement expected = new Procurement(expectedPo, expectedInvoice);
 
         assertEquals(expected, procurement);
     }
@@ -95,7 +92,6 @@ public class ProcurementServiceImplTest {
     public void testAdd_SkipsAddingPurchaseOrder_WhenNullPurchaseOrderIsPassed() {
         doAnswer(inv -> inv.getArgument(0)).when(this.mInvoiceService).add(anyList());
         doAnswer(inv -> inv.getArgument(0, PurchaseOrder.class)).when(this.mPoService).add(anyList());
-        doAnswer(inv -> inv.getArgument(0)).when(this.mShipmentService).add(anyList());
 
         final InvoiceItem additionItem = new InvoiceItem();
         additionItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
@@ -104,7 +100,7 @@ public class ProcurementServiceImplTest {
         additionInvoice.addItem(additionItem);
         additionInvoice.setPurchaseOrder(new PurchaseOrder(1L));
 
-        final Procurement addition = new Procurement(null, additionInvoice, null);
+        final Procurement addition = new Procurement(null, additionInvoice);
 
         final Procurement procurement = this.service.add(addition);
 
@@ -125,7 +121,7 @@ public class ProcurementServiceImplTest {
         expectedLot.setInvoiceItem(expectedItem);
         expectedShipment.addLot(expectedLot);
 
-        final Procurement expected = new Procurement(expectedPo, expectedInvoice, expectedShipment);
+        final Procurement expected = new Procurement(expectedPo, expectedInvoice);
 
         assertEquals(expected, procurement);
     }

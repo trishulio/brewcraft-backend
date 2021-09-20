@@ -9,12 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.PurchaseOrderService;
-import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.procurement.ProcurementService;
 
 @Transactional
@@ -23,12 +21,10 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
 
     private final InvoiceService invoiceService;
     private final PurchaseOrderService purchaseOrderService;
-    private final ShipmentService shipmentService;
 
-    public ProcurementServiceImpl(final InvoiceService invoiceService, final PurchaseOrderService poService, final ShipmentService shipmentService) {
+    public ProcurementServiceImpl(final InvoiceService invoiceService, final PurchaseOrderService poService) {
         this.invoiceService = invoiceService;
         this.purchaseOrderService = poService;
-        this.shipmentService = shipmentService;
     }
 
     @Override
@@ -50,9 +46,7 @@ public class ProcurementServiceImpl extends BaseService implements ProcurementSe
         }
 
         invoice = this.invoiceService.add(List.of(invoice)).get(0);
-        Shipment shipment = new Shipment(invoice);
-        shipment = this.shipmentService.add(List.of(shipment)).get(0);
-        return new Procurement(order, invoice, shipment);
+        return new Procurement(order, invoice);
     }
 
 }
