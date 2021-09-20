@@ -42,6 +42,7 @@ public class PurchaseOrderServiceTest {
 
     @Test
     public void testGetPurchaseOrders_ReturnsEntitiesFromRepoService_WithCustomSpec() {
+        @SuppressWarnings("unchecked")
         final ArgumentCaptor<Specification<PurchaseOrder>> captor = ArgumentCaptor.forClass(Specification.class);
         final Page<PurchaseOrder> mPage = new PageImpl<>(List.of(new PurchaseOrder(1L)));
         doReturn(mPage).when(this.mRepoService).getAll(captor.capture(), eq(new TreeSet<>(List.of("id"))), eq(true), eq(10), eq(20));

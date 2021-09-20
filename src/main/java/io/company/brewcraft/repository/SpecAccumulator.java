@@ -12,12 +12,14 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.company.brewcraft.service.Aggregation;
+import io.company.brewcraft.service.AndSpec;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.NotSpec;
 
 public class SpecAccumulator {
     private static final Logger log = LoggerFactory.getLogger(SpecAccumulator.class);
 
-    private List<Aggregation> aggregations;
+    private List<CriteriaSpec<Boolean>> aggregations;
     private boolean isNot;
 
     public SpecAccumulator() {
@@ -25,16 +27,15 @@ public class SpecAccumulator {
         this.isNot = false;
     }
 
-    public void add(Aggregation aggr) {
+    public void add(CriteriaSpec<Boolean> aggr) {
         log.debug("Not = {}", isNot);
         if (this.isNot) {
-            Aggregation orig = aggr;
-            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.not((Predicate) orig.getExpression(root, query, criteriaBuilder));
+            aggr = new NotSpec(aggr);
         }
 
-        final Aggregation ref = aggr;
-        Aggregation combined = (root, query, criteriaBuilder) -> criteriaBuilder.and((Predicate) ref.getExpression(root, query, criteriaBuilder));
-        this.aggregations.add(combined);
+        aggr = new AndSpec(aggr);
+
+        this.aggregations.add(aggr);
     }
 
     public void setIsNot(boolean isNot) {

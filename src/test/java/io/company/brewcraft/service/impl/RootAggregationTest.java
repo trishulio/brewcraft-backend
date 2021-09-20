@@ -10,11 +10,11 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
-import io.company.brewcraft.service.RootAggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.RootSpec;
 
 public class RootAggregationTest {
-    private Aggregation aggr;
+    private CriteriaSpec<?> aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -29,7 +29,7 @@ public class RootAggregationTest {
 
     @Test
     public void testGetAggregation_ReturnsRoot() {
-        aggr = new RootAggregation();
+        aggr = new RootSpec<>();
 
         assertSame(mRoot, aggr.getExpression(mRoot, mCq, mCb));
     }

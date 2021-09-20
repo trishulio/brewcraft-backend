@@ -1,7 +1,6 @@
 package io.company.brewcraft.repository;
 
 import javax.persistence.criteria.From;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 
 import org.slf4j.Logger;

@@ -30,7 +30,6 @@ import io.company.brewcraft.service.BrewStageStatusService;
 import io.company.brewcraft.service.BrewStageStatusServiceImpl;
 import io.company.brewcraft.service.BrewTaskService;
 import io.company.brewcraft.service.BrewTaskServiceImpl;
-import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
@@ -214,8 +213,7 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testProductMeasureValueService_ReturnsInstanceOfProductMeasureValueService() {
-        final ProductMeasureValueRepository productMeasureValueRepositoryMock = mock(ProductMeasureValueRepository.class);
-        final ProductMeasureValueService service = this.serviceAutoConfiguration.productMeasureValueService(productMeasureValueRepositoryMock);
+        final ProductMeasureValueService service = this.serviceAutoConfiguration.productMeasureValueService();
 
         assertTrue(service instanceof ProductMeasureValueServiceImpl);
     }

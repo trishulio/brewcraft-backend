@@ -12,11 +12,11 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
-import io.company.brewcraft.service.NullAggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.NullSpec;
 
 public class NullAggregationTest {
-    private Aggregation aggr;
+    private CriteriaSpec aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -34,7 +34,7 @@ public class NullAggregationTest {
         Expression<Integer> mExpr = mock(Expression.class);
         doReturn(mExpr).when(mCb).nullLiteral(Integer.class);
 
-        aggr = new NullAggregation();
+        aggr = new NullSpec();
 
         assertSame(mExpr, aggr.getExpression(mRoot, mCq, mCb));
     }

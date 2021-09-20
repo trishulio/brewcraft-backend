@@ -6,18 +6,17 @@ import static org.mockito.Mockito.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
-import io.company.brewcraft.service.MaxAggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.MaxSpec;
 
 @SuppressWarnings("unchecked")
 public class MaxAggregationTest {
-    private Aggregation aggr;
+    private CriteriaSpec<Number> aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -31,32 +30,15 @@ public class MaxAggregationTest {
     }
 
     @Test
-    public void testPathArrayConstructor_CreatesMaxExpressionOnRootPath() {
-        Path<?> mPath1 = mock(Path.class);
-        Path<? extends Number> mPath2 = mock(Path.class);
-
-        doReturn(mPath1).when(mRoot).get("PATH_1");
-        doReturn(mPath2).when(mPath1).get("PATH_2");
-
-        Expression<?> mMaxExpr = mock(Expression.class);
-        doReturn(mMaxExpr).when(mCb).max(mPath2);
-
-        aggr = new MaxAggregation("PATH_1", "PATH_2");
-
-        Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
-        assertSame(mMaxExpr, expr);
-    }
-
-    @Test
     public void testAggrConstructor_CreatesMaxExpressionWrapperOnGivenAggregation() {
-        Aggregation mArg = mock(Aggregation.class);
+        CriteriaSpec<Number> mArg = mock(CriteriaSpec.class);
         Expression<? extends Number> mExpr = mock(Expression.class);
         doReturn(mExpr).when(mArg).getExpression(mRoot, mCq, mCb);
 
         Expression<?> mMaxExpr = mock(Expression.class);
         doReturn(mMaxExpr).when(mCb).max(mExpr);
 
-        aggr = new MaxAggregation(mArg);
+        aggr = new MaxSpec<Number>(mArg);
 
         Expression<?> expr = aggr.getExpression(mRoot, mCq, mCb);
         assertSame(mMaxExpr, expr);

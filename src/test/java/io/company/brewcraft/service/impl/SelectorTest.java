@@ -14,8 +14,8 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
-import io.company.brewcraft.service.CountAggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.CountSpec;
 import io.company.brewcraft.service.PathProvider;
 import io.company.brewcraft.service.Selector;
 
@@ -65,28 +65,12 @@ public class SelectorTest {
 
     @Test
     public void testSelectAggregation_AddsAggregationToSelection() {
-        Aggregation mCountAggr = mock(CountAggregation.class);
+        CriteriaSpec mCountAggr = mock(CountSpec.class);
         Expression<?> mCountExpr = mock(Expression.class);
         doReturn(mCountExpr).when(mCountAggr).getExpression(mRoot, mCq, mCb);
 
         selector.select(mCountAggr);
 
         assertEquals(List.of(mCountExpr), selector.getSelection(mRoot, mCq, mCb));
-    }
-
-    @Test
-    public void testSum_AddsSumAggregationToSelection() {
-        Path<?> mPath1 = mock(Path.class);
-        Path<?> mPath2 = mock(Path.class);
-
-        doReturn(mPath1).when(mRoot).get("PATH_1");
-        doReturn(mPath2).when(mPath1).get("PATH_2");
-
-        Expression<?> mSumExpr = mock(Expression.class);
-        doReturn(mSumExpr).when(mCb).sum((Expression<? extends Number>) mPath2);
-
-        selector.sum(new String[] { "PATH_1", "PATH_2" });
-
-        assertEquals(List.of(mSumExpr), selector.getSelection(mRoot, mCq, mCb));
     }
 }

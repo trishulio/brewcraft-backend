@@ -12,7 +12,7 @@ import javax.persistence.criteria.Selection;
 import io.company.brewcraft.model.BaseModel;
 
 public class Selector extends BaseModel {
-    private List<Aggregation> aggregations;
+    private List<CriteriaSpec<?>> aggregations;
 
     public Selector() {
         this.aggregations = new ArrayList<>();
@@ -23,16 +23,12 @@ public class Selector extends BaseModel {
     }
 
     public Selector select(String... path) {
-        return select(new PathAggregation(path));
+        return select(new PathSpec<>(path));
     }
 
-    public Selector select(Aggregation aggr) {
+    public Selector select(CriteriaSpec<?> aggr) {
         this.aggregations.add(aggr);
         return this;
-    }
-
-    public Selector sum(String... path) {
-        return select(new SumAggregation(path));
     }
 
     public List<Selection<?>> getSelection(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {

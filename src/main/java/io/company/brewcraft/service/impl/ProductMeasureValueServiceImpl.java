@@ -9,18 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.dto.UpdateProductMeasureValue;
 import io.company.brewcraft.model.ProductMeasureValue;
-import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 
 @Transactional
 public class ProductMeasureValueServiceImpl extends BaseService implements ProductMeasureValueService {
-
-    private ProductMeasureValueRepository productMeasureValueRepository;
-
-    public ProductMeasureValueServiceImpl(ProductMeasureValueRepository productMeasureValueRepository) {
-        this.productMeasureValueRepository = productMeasureValueRepository;
-    }
 
     @Override
     public List<ProductMeasureValue> merge(List<ProductMeasureValue> existingValues, List<ProductMeasureValue> newValues) {

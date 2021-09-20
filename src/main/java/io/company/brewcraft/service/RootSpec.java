@@ -7,9 +7,10 @@ import javax.persistence.criteria.Root;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class RootAggregation extends BaseModel implements Aggregation {
+@SuppressWarnings("unchecked")
+public class RootSpec<T> extends BaseModel implements CriteriaSpec<T> {
     @Override
-    public Expression<?> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return root;
+    public Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+        return (Expression<T>) root;
     }
 }

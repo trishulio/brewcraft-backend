@@ -9,13 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.service.Aggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.BetweenSpec;
+import io.company.brewcraft.service.InSpec;
+import io.company.brewcraft.service.IsNullSpec;
+import io.company.brewcraft.service.LikeSpec;
+import io.company.brewcraft.service.PathSpec;
 
 public class CriteriaSpecBuilder {
     private static final Logger log = LoggerFactory.getLogger(CriteriaSpecBuilder.class);
 
     private SpecAccumulator accumulator;
-    
+
     public CriteriaSpecBuilder(SpecAccumulator accumulator) {
         this.accumulator = accumulator;
     }
@@ -25,7 +30,7 @@ public class CriteriaSpecBuilder {
     }
 
     public void isNull(String[] joins, String[] paths) {
-        Aggregation aggr = (root, query, criteriaBuilder) -> criteriaBuilder.isNull(new DeepRoot(root).get(joins, paths));
+        CriteriaSpec<Boolean> aggr = new IsNullSpec(new PathSpec<>(joins, paths));
         accumulator.add(aggr);
 
         accumulator.setIsNot(false);
@@ -33,7 +38,7 @@ public class CriteriaSpecBuilder {
 
     public void in(String[] joins, String[] paths, Collection<?> collection) {
         if (collection != null) {
-            Aggregation aggr = (root, query, criteriaBuilder) -> new DeepRoot(root).get(joins, paths).in(collection);
+            CriteriaSpec<Boolean> aggr = new InSpec<>(new PathSpec<>(joins, paths), collection);
             accumulator.add(aggr);
         }
 
@@ -44,24 +49,20 @@ public class CriteriaSpecBuilder {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    Aggregation aggr = (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(new DeepRoot(root).get(joins, paths)), String.format("%%%s%%", text.toLowerCase()));
+                    CriteriaSpec<Boolean> aggr = new LikeSpec(new PathSpec<>(joins, paths), text);
                     accumulator.add(aggr);
                 }
             }
         }
+
+        accumulator.setIsNot(false);
     }
 
     public <C extends Comparable<C>> void between(String[] joins, String[] paths, C start, C end) {
-        Aggregation aggr = null;
-        if (start != null && end != null) {
-            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.between(new DeepRoot(root).get(joins, paths), start, end);
-        } else if (start != null) {
-            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(new DeepRoot(root).get(joins, paths), start);
-        } else if (end != null) {
-            aggr = (root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(new DeepRoot(root).get(joins, paths), end);
-        }
-
-        if (aggr != null) {
+        // Note: Null checks for start and end reduces the redundant clause for a true
+        // literal. It only sort-of improves the Query performance but its not required.
+        if (start != null || end != null) {
+            CriteriaSpec<Boolean> aggr = new BetweenSpec<>(new PathSpec<>(joins, paths), start, end);
             accumulator.add(aggr);
         }
 

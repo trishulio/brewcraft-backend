@@ -5,6 +5,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
-public interface Aggregation {
-    Expression<?> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb);
+public interface CriteriaSpec<T> {
+    Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb);
 }

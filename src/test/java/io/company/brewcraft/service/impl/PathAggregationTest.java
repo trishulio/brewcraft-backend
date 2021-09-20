@@ -11,12 +11,12 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.Aggregation;
-import io.company.brewcraft.service.PathAggregation;
+import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.PathSpec;
 
 public class PathAggregationTest {
 
-    private Aggregation aggr;
+    private CriteriaSpec<String> aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -37,7 +37,7 @@ public class PathAggregationTest {
         doReturn(mPath1).when(mRoot).get("PATH_1");
         doReturn(mPath2).when(mPath1).get("PATH_2");
 
-        aggr = new PathAggregation(new String[] { "PATH_1", "PATH_2" });
+        aggr = new PathSpec<>(new String[] { "PATH_1", "PATH_2" });
 
         assertSame(mPath2, aggr.getExpression(mRoot, mCq, mCb));
     }

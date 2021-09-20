@@ -16,6 +16,7 @@ public class TenantDataSourceManagerConnectionProvider implements ConnectionProv
         this.dataSource = dataSource;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public boolean isUnwrappableAs(Class unwrapType) {
         return false;

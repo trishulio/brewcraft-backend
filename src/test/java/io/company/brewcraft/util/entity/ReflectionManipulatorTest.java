@@ -76,7 +76,7 @@ public class ReflectionManipulatorTest {
             }
 
             int x;
-            public void setX() {this.x = this.x;}
+            public void setX(int x) {this.x = x;}
         }
         final TestDataWithoutGetter o1 = new TestDataWithoutGetter(10);
         final TestDataWithoutGetter o2 = new TestDataWithoutGetter(20);
