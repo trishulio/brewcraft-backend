@@ -65,7 +65,7 @@ public class SelectorTest {
 
     @Test
     public void testSelectAggregation_AddsAggregationToSelection() {
-        CriteriaSpec mCountAggr = mock(CountSpec.class);
+        CriteriaSpec<Number> mCountAggr = mock(CountSpec.class);
         Expression<?> mCountExpr = mock(Expression.class);
         doReturn(mCountExpr).when(mCountAggr).getExpression(mRoot, mCq, mCb);
 

@@ -57,14 +57,14 @@ public class AggregationFunctionTest {
 
         CriteriaSpec<? extends Number> aggr = AggregationFunction.AVG.getAggregation(mProvider);
 
-        assertEquals(new AverageSpec(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new AverageSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
     }
 
     @Test
     public void testGetAggregation_AvgFunctionReturnsAvgAggregation_WhenPathsArrayIsNotNull() {
         CriteriaSpec<? extends Number> aggr = AggregationFunction.AVG.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new AverageSpec(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new AverageSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
     }
 
     @Test

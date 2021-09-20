@@ -16,7 +16,7 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.NullSpec;
 
 public class NullAggregationTest {
-    private CriteriaSpec aggr;
+    private CriteriaSpec<Integer> aggr;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
