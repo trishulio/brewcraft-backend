@@ -10,10 +10,10 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class InSpec<T> extends BaseModel implements CriteriaSpec<Boolean> {
-    private CriteriaSpec<Boolean> aggr;
+    private CriteriaSpec<T> aggr;
     private Collection<T> collection;
 
-    public InSpec(CriteriaSpec<Boolean> aggr, Collection<T> collection) {
+    public InSpec(CriteriaSpec<T> aggr, Collection<T> collection) {
         this.aggr = aggr;
         this.collection = collection;
     }

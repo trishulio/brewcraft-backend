@@ -21,14 +21,22 @@ public class BetweenSpec<C extends Comparable<C>> extends BaseModel implements C
     @Override
     public Expression<Boolean> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         Expression<Boolean> expr = null;
+        Expression<? extends C> innerExpr = this.aggr.getExpression(root, cq, cb);
+
         if (start != null && end != null) {
-            expr = cb.between(this.aggr.getExpression(root, cq, cb), start, end);
+            expr = cb.between(innerExpr, start, end);
+
         } else if (start != null) {
-            expr = cb.greaterThanOrEqualTo(this.aggr.getExpression(root, cq, cb), start);
+            expr = cb.greaterThanOrEqualTo(innerExpr, start);
+
         } else if (end != null) {
-            expr = cb.lessThanOrEqualTo(this.aggr.getExpression(root, cq, cb), end);
+            expr = cb.lessThanOrEqualTo(innerExpr, end);
+
+        } else {
+            // Note: When start and end are both null, a "true" literal is returned,
+            // which makes sense but is that a better than throwing an error?
+            expr = cb.literal(true);
         }
-        // TODO: Never return a null expression
 
         return expr;
     }

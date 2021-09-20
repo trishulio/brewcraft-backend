@@ -1,5 +1,8 @@
 package io.company.brewcraft.service.impl;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
@@ -9,14 +12,12 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.CountSpec;
+import io.company.brewcraft.service.IsNullSpec;
 
-public class CountSpecTest {
-    private CriteriaSpec<?> spec;
+public class IsNullSpecTest {
+
+    private CriteriaSpec<Boolean> spec;
 
     private CriteriaSpec<?> mDelegate;
     private Expression<?> mExpr;
@@ -33,15 +34,16 @@ public class CountSpecTest {
 
         mDelegate = mock(CriteriaSpec.class);
         mExpr = mock(Expression.class);
+
         doReturn(mExpr).when(mDelegate).getExpression(mRoot, mCq, mCb);
     }
 
     @Test
-    public void testGetExpression_ReturnsCountExpressionOnDelegatePath() {
-        Expression<Double> mCountExpr = mock(Expression.class);
-        doReturn(mCountExpr).when(mCb).count(mExpr);
+    public void testGetExpression_ReturnsIsNullExpressionOnDelegatePath() {
+        Predicate mNullExpr = mock(Predicate.class);
+        doReturn(mNullExpr).when(mCb).isNull(mExpr);
 
-        spec = new CountSpec<>(mDelegate);
-        assertSame(mCountExpr, spec.getExpression(mRoot, mCq, mCb));
+        spec = new IsNullSpec(mDelegate);
+        assertSame(mNullExpr, spec.getExpression(mRoot, mCq, mCb));
     }
 }

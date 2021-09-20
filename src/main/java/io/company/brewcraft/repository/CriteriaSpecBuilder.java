@@ -59,6 +59,8 @@ public class CriteriaSpecBuilder {
     }
 
     public <C extends Comparable<C>> void between(String[] joins, String[] paths, C start, C end) {
+        // Note: Null checks for start and end reduces the redundant clause for a true
+        // literal. It only sort-of improves the Query performance but its not required.
         if (start != null || end != null) {
             CriteriaSpec<Boolean> aggr = new BetweenSpec<>(new PathSpec<>(joins, paths), start, end);
             accumulator.add(aggr);

@@ -1,7 +1,8 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,13 +14,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.CountSpec;
+import io.company.brewcraft.service.LikeSpec;
 
-public class CountSpecTest {
-    private CriteriaSpec<?> spec;
+public class LikeSpecTest {
 
-    private CriteriaSpec<?> mDelegate;
-    private Expression<?> mExpr;
+    private CriteriaSpec<Boolean> spec;
+
+    private CriteriaSpec<String> mDelegate;
+    private Expression<String> mExpr;
 
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
@@ -37,11 +39,14 @@ public class CountSpecTest {
     }
 
     @Test
-    public void testGetExpression_ReturnsCountExpressionOnDelegatePath() {
-        Expression<Double> mCountExpr = mock(Expression.class);
-        doReturn(mCountExpr).when(mCb).count(mExpr);
+    public void testGetExpression_ReturnsLikeOnLowerCaseExpressionOnDelegatePath() {
+        Expression<String> mLowerExpr = mock(Expression.class);
+        doReturn(mLowerExpr).when(mCb).lower(mExpr);
+        
+        Predicate mLikeExpr = mock(Predicate.class);
+        doReturn(mLikeExpr).when(mCb).like(mLowerExpr, "%val1%");
 
-        spec = new CountSpec<>(mDelegate);
-        assertSame(mCountExpr, spec.getExpression(mRoot, mCq, mCb));
+        spec = new LikeSpec(mDelegate, "VAL1");
+        assertSame(mLikeExpr, spec.getExpression(mRoot, mCq, mCb));
     }
 }

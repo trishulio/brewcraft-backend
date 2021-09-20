@@ -7,10 +7,10 @@ import javax.persistence.criteria.Root;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class AverageSpec extends BaseModel implements CriteriaSpec<Double> {
-    private CriteriaSpec<Double> aggr;
+public class AverageSpec<T extends Number> extends BaseModel implements CriteriaSpec<Double> {
+    private CriteriaSpec<T> aggr;
 
-    public AverageSpec(CriteriaSpec<Double> aggr) {
+    public AverageSpec(CriteriaSpec<T> aggr) {
         this.aggr = aggr;
     }
 

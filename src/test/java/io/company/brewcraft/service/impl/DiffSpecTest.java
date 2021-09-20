@@ -1,6 +1,6 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,35 +16,39 @@ import io.company.brewcraft.service.DiffSpec;
 
 @SuppressWarnings("unchecked")
 public class DiffSpecTest {
-    private CriteriaSpec<Number> aggr;
+    private CriteriaSpec<?> spec;
 
-    private Root<?> mRoot;
+    private CriteriaSpec<Double> mDelegateX;
+    private Expression<Double> mExprX;
+
+    private CriteriaSpec<Double> mDelegateY;
+    private Expression<Double> mExprY;
+
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
+    private Root<?> mRoot;
 
     @BeforeEach
     public void init() {
-        this.mRoot = mock(Root.class);
-        this.mCb = mock(CriteriaBuilder.class);
-        this.mCq = mock(CriteriaQuery.class);
+        mCb = mock(CriteriaBuilder.class);
+        mCq = mock(CriteriaQuery.class);
+        mRoot = mock(Root.class);
+
+        mDelegateX = mock(CriteriaSpec.class);
+        mExprX = mock(Expression.class);
+        doReturn(mExprX).when(mDelegateX).getExpression(mRoot, mCq, mCb);
+
+        mDelegateY = mock(CriteriaSpec.class);
+        mExprY = mock(Expression.class);
+        doReturn(mExprY).when(mDelegateY).getExpression(mRoot, mCq, mCb);
     }
 
     @Test
-    public void testAggrConstructor_CreatesDiffExpressionWrapperOnGivenAggregation() {
-        final CriteriaSpec<Number> mArg1 = mock(CriteriaSpec.class);
-        final Expression<? extends Number> mExpr1 = mock(Expression.class);
-        doReturn(mExpr1).when(mArg1).getExpression(this.mRoot, this.mCq, this.mCb);
+    public void testGetExpression_ReturnsDiffExpressionOnDelegatePath() {
+        Expression<Double> mDiffExpr = mock(Expression.class);
+        doReturn(mDiffExpr).when(mCb).diff(mExprX, mExprY);
 
-        final CriteriaSpec<Number> mArg2 = mock(CriteriaSpec.class);
-        final Expression<? extends Number> mExpr2 = mock(Expression.class);
-        doReturn(mExpr2).when(mArg2).getExpression(this.mRoot, this.mCq, this.mCb);
-
-        final Expression<?> mDiffExpr = mock(Expression.class);
-        doReturn(mDiffExpr).when(this.mCb).diff(mExpr1, mExpr2);
-
-        this.aggr = new DiffSpec(mArg1, mArg2);
-
-        final Expression<?> expr = this.aggr.getExpression(this.mRoot, this.mCq, this.mCb);
-        assertSame(mDiffExpr, expr);
+        spec = new DiffSpec<>(mDelegateX, mDelegateY);
+        assertSame(mDiffExpr, spec.getExpression(mRoot, mCq, mCb));
     }
 }

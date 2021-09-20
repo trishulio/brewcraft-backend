@@ -1,7 +1,8 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,13 +14,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.CountSpec;
+import io.company.brewcraft.service.SumSpec;
 
-public class CountSpecTest {
+public class SumSpecTest {
     private CriteriaSpec<?> spec;
 
-    private CriteriaSpec<?> mDelegate;
-    private Expression<?> mExpr;
+    private CriteriaSpec<Number> mDelegate;
+    private Expression<Number> mExpr;
 
     private CriteriaBuilder mCb;
     private CriteriaQuery<?> mCq;
@@ -37,11 +38,11 @@ public class CountSpecTest {
     }
 
     @Test
-    public void testGetExpression_ReturnsCountExpressionOnDelegatePath() {
-        Expression<Double> mCountExpr = mock(Expression.class);
-        doReturn(mCountExpr).when(mCb).count(mExpr);
+    public void testGetExpression_ReturnsSumExpressionOnDelegatePath() {
+        Expression<Number> mSumExpr = mock(Expression.class);
+        doReturn(mSumExpr).when(mCb).sum(mExpr);
 
-        spec = new CountSpec<>(mDelegate);
-        assertSame(mCountExpr, spec.getExpression(mRoot, mCq, mCb));
+        spec = new SumSpec<>(mDelegate);
+        assertSame(mSumExpr, spec.getExpression(mRoot, mCq, mCb));
     }
 }
