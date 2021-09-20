@@ -23,6 +23,7 @@ public abstract class Lot extends BaseEntity {
     public enum AggregationField implements PathProvider {
         LOT_NUMBER (FIELD_LOT_NUMBER),
         MATERIAL (FIELD_MATERIAL),
+        MATERIAL_NAME (FIELD_MATERIAL, Material.FIELD_NAME),
         INVOICE_ITEM (FIELD_INVOICE_ITEM),
         SHIPMENT (FIELD_SHIPMENT),
         STORAGE (FIELD_STORAGE),
@@ -69,120 +70,160 @@ public abstract class Lot extends BaseEntity {
 
     public Lot(String lotNumber, UnitEntity unit, BigDecimal value) {
         this.setLotNumber(lotNumber);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(String lotNumber, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
         this.setLotNumber(lotNumber);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(Shipment shipment, UnitEntity unit, BigDecimal value) {
         this.setShipment(shipment);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
         this.setShipment(shipment);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(Material material, String materialName, UnitEntity unit, BigDecimal value) {
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+    public Lot(Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setMaterial(material);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(Storage storage, UnitEntity unit, BigDecimal value) {
         this.setStorage(storage);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
         this.setStorage(storage);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Material material, InvoiceItem invoiceitem, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Material material, InvoiceItem invoiceitem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setMaterial(material);
         this.setInvoiceItem(invoiceitem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setShipment(shipment);
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+    public Lot(Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setShipment(shipment);
         this.setMaterial(material);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setStorage(storage);
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+    public Lot(Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setStorage(storage);
         this.setMaterial(material);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setShipment(shipment);
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
         this.setLotNumber(lotNumber);
         this.setShipment(shipment);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setShipment(shipment);
         this.setMaterial(material);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setShipment(shipment);
         this.setStorage(storage);
         this.setMaterial(material);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     public Lot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
@@ -190,16 +231,20 @@ public abstract class Lot extends BaseEntity {
         this.setShipment(shipment);
         this.setStorage(storage);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+        /**
+         * MaterialName is an unused field. It's included in the constructor since it's
+         * required by JPA for doing sort by Material Name field. Do not remove it.
+         */
         this.setLotNumber(lotNumber);
         this.setShipment(shipment);
         this.setStorage(storage);
         this.setMaterial(material);
         this.setInvoiceItem(invoiceItem);
-        this.setQuantity(new QuantityEntity(unit, value));
+        this.setQuantity(unit, value);
     }
 
     @Id
@@ -255,6 +300,10 @@ public abstract class Lot extends BaseEntity {
 
     public void setQuantity(QuantityEntity quantityEntity) {
         this.quantity = quantityEntity;
+    }
+
+    private void setQuantity(UnitEntity unit, BigDecimal value) {
+        setQuantity(new QuantityEntity(unit, value));
     }
 
     public Material getMaterial() {
