@@ -58,7 +58,6 @@ import io.company.brewcraft.service.impl.MeasureServiceImpl;
 import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
 import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
 import io.company.brewcraft.service.impl.ProductServiceImpl;
-import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
@@ -231,9 +230,8 @@ public class ServiceAutoConfigurationTest {
     public void testProcurementService_ReturnsInstanceOfProcurementService() {
         final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
         final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
-        final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
 
-        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock);
+        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock);
 
         assertTrue(service instanceof ProcurementServiceImpl);
     }

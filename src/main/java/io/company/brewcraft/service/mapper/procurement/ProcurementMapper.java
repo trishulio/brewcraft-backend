@@ -1,8 +1,6 @@
 package io.company.brewcraft.service.mapper.procurement;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
@@ -16,9 +14,6 @@ import io.company.brewcraft.service.mapper.ShipmentMapper;
 public interface ProcurementMapper {
     ProcurementMapper INSTANCE = Mappers.getMapper(ProcurementMapper.class);
 
-    @Mappings({
-        @Mapping(target = "shipment", ignore = true)
-    })
     Procurement fromDto(AddProcurementDto addProcurement);
 
     ProcurementDto toDto(Procurement procurement);

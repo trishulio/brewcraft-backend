@@ -18,11 +18,10 @@ public class ProcurementDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        dto = new ProcurementDto(new PurchaseOrderDto(1L), new InvoiceDto(2L), new ShipmentDto(3L));
+        dto = new ProcurementDto(new PurchaseOrderDto(1L), new InvoiceDto(2L));
 
         assertEquals(new PurchaseOrderDto(1L), dto.getPurchaseOrder());
         assertEquals(new InvoiceDto(2L), dto.getInvoice());
-        assertEquals(new ShipmentDto(3L), dto.getShipment());
     }
 
     @Test
@@ -39,13 +38,5 @@ public class ProcurementDtoTest {
 
         dto.setInvoice(new InvoiceDto(1L));
         assertEquals(new InvoiceDto(1L), dto.getInvoice());
-    }
-
-    @Test
-    public void testAccessShipment() {
-        assertNull(dto.getShipment());
-
-        dto.setShipment(new ShipmentDto(1L));
-        assertEquals(new ShipmentDto(1L), dto.getShipment());
     }
 }

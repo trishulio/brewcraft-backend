@@ -43,7 +43,7 @@ public class ProcurementControllerTest {
         final InvoiceDto expectedInvoice = new InvoiceDto();
         expectedInvoice.setPurchaseOrder(new PurchaseOrderDto(2L));
         final PurchaseOrderDto expectedPo = new PurchaseOrderDto(null, "ORDER_1", new SupplierDto(1L), null, null, null);
-        final ProcurementDto expected = new ProcurementDto(expectedPo, expectedInvoice, null);
+        final ProcurementDto expected = new ProcurementDto(expectedPo, expectedInvoice);
 
         assertEquals(expected, dto);
     }
