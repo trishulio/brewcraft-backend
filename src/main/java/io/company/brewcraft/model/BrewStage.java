@@ -144,11 +144,11 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     @Override
     public void setMixtures(List<Mixture> mixtures) {
         if (this.mixtures != null) {
-            this.mixtures.stream().collect(Collectors.toList()).forEach(this::removeMixture);
+            this.mixtures.stream().filter(mixture -> !mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::removeMixture);
         }
 
         if (mixtures != null) {
-            mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
+            mixtures.stream().filter(mixture -> this.mixtures == null || !this.mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::addMixture);
         }
     }
 

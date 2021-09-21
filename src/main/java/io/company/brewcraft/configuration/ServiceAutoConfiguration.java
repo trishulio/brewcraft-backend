@@ -14,6 +14,8 @@ import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.BaseSku;
+import io.company.brewcraft.model.BaseSkuMaterial;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -21,10 +23,15 @@ import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
+import io.company.brewcraft.model.Sku;
+import io.company.brewcraft.model.SkuAccessor;
+import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
+import io.company.brewcraft.model.UpdateSku;
+import io.company.brewcraft.model.UpdateSkuMaterial;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
@@ -46,6 +53,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.repository.ShipmentRepository;
+import io.company.brewcraft.repository.SkuRepository;
 import io.company.brewcraft.repository.StockLotRepository;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierContactRepository;
@@ -84,6 +92,8 @@ import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.SimpleUpdateService;
+import io.company.brewcraft.service.SkuMaterialService;
+import io.company.brewcraft.service.SkuService;
 import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.StorageService;
@@ -104,6 +114,7 @@ import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
 import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.QuantityUnitServiceImpl;
 import io.company.brewcraft.service.impl.ShipmentService;
+import io.company.brewcraft.service.impl.SkuServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
@@ -348,5 +359,19 @@ public class ServiceAutoConfiguration {
     public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
         final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
         return mixtureRecordingService;
+    }
+    
+    @Bean
+    public SkuMaterialService skuMaterialService(UtilityProvider utilProvider) {
+        final UpdateService<Long, SkuMaterial, BaseSkuMaterial<?>, UpdateSkuMaterial<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseSkuMaterial.class, UpdateSkuMaterial.class, SkuMaterial.class, Set.of(BaseSkuMaterial.ATTR_SKU));
+        return new SkuMaterialService(updateService);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(SkuService.class)
+    public SkuService skuService(UtilityProvider utilProvider, SkuRepository skuRepository, SkuMaterialService skuMaterialService) {
+        final UpdateService<Long, Sku, BaseSku<? extends BaseSkuMaterial<?>>, UpdateSku<? extends UpdateSkuMaterial<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseSku.class, UpdateSku.class, Sku.class, Set.of(BaseSku.ATTR_MATERIALS));
+        final RepoService<Long, Sku, SkuAccessor> repoService = new CrudRepoService<>(skuRepository);
+        return new SkuServiceImpl(repoService, updateService, skuMaterialService);
     }
 }

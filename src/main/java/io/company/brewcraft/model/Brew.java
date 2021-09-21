@@ -180,11 +180,11 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @Override
     public void setChildBrews(List<Brew> childBrews) {
         if (this.childBrews != null) {
-            this.childBrews.stream().collect(Collectors.toList()).forEach(this::removeChildBrew);
+            this.childBrews.stream().filter(childBrew -> !childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::removeChildBrew);
         }
 
         if (childBrews != null) {
-            childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
+            childBrews.stream().filter(childBrew -> this.childBrews == null || !this.childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::addChildBrew);
         }
     }
 
@@ -228,11 +228,11 @@ public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, I
     @Override
     public void setBrewStages(List<BrewStage> brewStages) {
         if (this.brewStages != null) {
-            this.brewStages.stream().collect(Collectors.toList()).forEach(this::removeBrewStage);
+            this.brewStages.stream().filter(brewStage -> !brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::removeBrewStage);
         }
 
         if (brewStages != null) {
-            brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
+            brewStages.stream().filter(brewStage -> this.brewStages == null || !this.brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::addBrewStage);
         }
     }
 

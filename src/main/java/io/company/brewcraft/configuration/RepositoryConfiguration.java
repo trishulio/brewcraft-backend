@@ -25,6 +25,8 @@ import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Sku;
+import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.user.User;
@@ -55,6 +57,7 @@ import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.QueryResolver;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.ShipmentStatusRepository;
+import io.company.brewcraft.repository.SkuRepository;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.user.UserRepository;
@@ -341,6 +344,16 @@ public class RepositoryConfiguration {
             Measure.class,
             accessor -> accessor.getMeasure(),
             (accessor, measure) -> accessor.setMeasure(measure),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, SkuAccessor, Sku> skuRefresher(SkuRepository repo) {
+        return new AccessorRefresher<>(
+            Sku.class,
+            accessor -> accessor.getSku(),
+            (accessor, sku) -> accessor.setSku(sku),
             ids -> repo.findAllById(ids)
         );
     }
