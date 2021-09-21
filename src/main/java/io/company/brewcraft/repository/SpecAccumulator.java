@@ -23,7 +23,11 @@ public class SpecAccumulator {
     private boolean isNot;
 
     public SpecAccumulator() {
-        this.aggregations = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    protected SpecAccumulator(List<CriteriaSpec<Boolean>> aggregations) {
+        this.aggregations = aggregations;
         this.isNot = false;
     }
 

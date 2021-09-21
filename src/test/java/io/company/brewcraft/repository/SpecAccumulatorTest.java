@@ -3,79 +3,74 @@ package io.company.brewcraft.repository;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.service.AndSpec;
 import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.NotSpec;
 
 public class SpecAccumulatorTest {
 
     private SpecAccumulator accumulator;
 
+    private List<CriteriaSpec<Boolean>> mAggregations;
+
     @BeforeEach
     public void init() {
-        accumulator = new SpecAccumulator();
+        mAggregations = new ArrayList<>();
+        accumulator = new SpecAccumulator(mAggregations);
     }
 
     @Test
-    public void testAdd_ConvertsSpecIntoAPredicateAndAddsToTheList_WhenIsNotIsFalse() {
-        Predicate mPred = mock(Predicate.class);
-        CriteriaSpec spec = (root, query, cb) -> mPred;
+    public void testAdd_WrapsAggregationInAndSpecAndAddsItToTheList_WhenNotFlagIsNotSet() {
+        CriteriaSpec<Boolean> spec = mock(CriteriaSpec.class);
 
-        CriteriaBuilder mCb = mock(CriteriaBuilder.class);
-        Predicate mCombined = mock(Predicate.class);
-        doReturn(mCombined).when(mCb).and(mPred);
-
+        accumulator.setIsNot(false);
         accumulator.add(spec);
 
-        Predicate[] preds = accumulator.getPredicates(null, null, mCb);
-        assertEquals(1, preds.length);
-        assertEquals(mCombined, preds[0]);
+        CriteriaSpec<Boolean> expected = new AndSpec(spec);
+        assertEquals(List.of(expected), mAggregations);
     }
 
     @Test
-    public void testNotAdd_ConvertsSpecIntoNegativePredicateAndAddsToTheList_WhenIsNotIsTrue() {
-        Predicate mPred = mock(Predicate.class);
-        CriteriaSpec spec = (root, query, cb) -> mPred;
-
-        CriteriaBuilder mCb = mock(CriteriaBuilder.class);
-        Predicate mNegation = mock(Predicate.class);
-        doReturn(mNegation).when(mCb).not(mPred);
-
-        Predicate mCombined = mock(Predicate.class);
-        doReturn(mCombined).when(mCb).and(mNegation);
+    public void testAdd_WrapsAggregationInNotAndSpecAndAddsItToTheList_WhenNotFlagIsSet() {
+        CriteriaSpec<Boolean> spec = mock(CriteriaSpec.class);
 
         accumulator.setIsNot(true);
         accumulator.add(spec);
 
-        Predicate[] preds = accumulator.getPredicates(null, null, mCb);
-        assertEquals(1, preds.length);
-        assertEquals(mCombined, preds[0]);
+        CriteriaSpec<Boolean> expected = new AndSpec(new NotSpec(spec));
+        assertEquals(List.of(expected), mAggregations);
     }
 
     @Test
-    public void testGetPredicates_ReturnsArrayOfAllConvertedPredicatesAdded() {
+    public void testGetPredicates_CollectsAllSpecExpressionsAndReturnsArray() {
         CriteriaBuilder mCb = mock(CriteriaBuilder.class);
+        CriteriaQuery<?> mCq = mock(CriteriaQuery.class);
+        Root<?> mRoot = mock(Root.class);
 
-        Predicate mPred1 = mock(Predicate.class);
-        CriteriaSpec spec1 = (root, query, cb) -> mPred1;
-        Predicate mCombined1 = mock(Predicate.class);
-        doReturn(mCombined1).when(mCb).and(mPred1);
+        doAnswer(i -> i.getArgument(0, Predicate.class)).when(mCb).and(any(Predicate.class));
 
-        Predicate mPred2 = mock(Predicate.class);
-        CriteriaSpec spec2 = (root, query, cb) -> mPred2;
-        Predicate mCombined2 = mock(Predicate.class);
-        doReturn(mCombined2).when(mCb).and(mPred2);
+        CriteriaSpec<Boolean> spec1 = mock(CriteriaSpec.class);
+        Predicate mExpr1 = mock(Predicate.class);
+        doReturn(mExpr1).when(spec1).getExpression(mRoot, mCq, mCb);
+
+        CriteriaSpec<Boolean> spec2 = mock(CriteriaSpec.class);
+        Predicate mExpr2 = mock(Predicate.class);
+        doReturn(mExpr2).when(spec2).getExpression(mRoot, mCq, mCb);
 
         accumulator.add(spec1);
         accumulator.add(spec2);
 
-        Predicate[] preds = accumulator.getPredicates(null, null, mCb);
-        assertEquals(2, preds.length);
-        assertEquals(mCombined1, preds[0]);
-        assertEquals(mCombined2, preds[1]);
+        assertArrayEquals(new Predicate[] { mExpr1, mExpr2 }, accumulator.getPredicates(mRoot, mCq, mCb));
     }
 }
