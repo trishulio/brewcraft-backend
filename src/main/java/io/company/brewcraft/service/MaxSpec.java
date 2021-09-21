@@ -8,14 +8,14 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class MaxSpec<T extends Number> extends BaseModel implements CriteriaSpec<T> {
-    private CriteriaSpec<T> aggr;
+    private CriteriaSpec<T> spec;
 
-    public MaxSpec(CriteriaSpec<T> aggr) {
-        this.aggr = aggr;
+    public MaxSpec(CriteriaSpec<T> spec) {
+        this.spec = spec;
     }
 
     @Override
     public Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return cb.max(this.aggr.getExpression(root, cq, cb));
+        return cb.max(this.spec.getExpression(root, cq, cb));
     }
 }

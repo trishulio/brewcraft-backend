@@ -41,7 +41,6 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
-import io.company.brewcraft.repository.ProductMeasureValueRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.QuantityUnitRepository;

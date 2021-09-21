@@ -21,16 +21,16 @@ public class AggregationFunctionTest {
         PathProvider mProvider = mock(PathProvider.class);
         doReturn(new String[] { "FIELD_1", "FIELD_2" }).when(mProvider).getPath();
 
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.SUM.getAggregation(mProvider);
+        CriteriaSpec<? extends Number> spec = AggregationFunction.SUM.getAggregation(mProvider);
 
-        assertEquals(new SumSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new SumSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
     public void testGetAggregation_SumFunctionReturnsSumAggregation_WhenPathsArrayIsNotNull() {
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.SUM.getAggregation("FIELD_1", "FIELD_2");
+        CriteriaSpec<? extends Number> spec = AggregationFunction.SUM.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new SumSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new SumSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
@@ -38,16 +38,16 @@ public class AggregationFunctionTest {
         PathProvider mProvider = mock(PathProvider.class);
         doReturn(new String[] { "FIELD_1", "FIELD_2" }).when(mProvider).getPath();
 
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.COUNT.getAggregation(mProvider);
+        CriteriaSpec<? extends Number> spec = AggregationFunction.COUNT.getAggregation(mProvider);
 
-        assertEquals(new CountSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new CountSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
     public void testGetAggregation_CountFunctionReturnsCountAggregation_WhenPathsArrayIsNotNull() {
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.COUNT.getAggregation("FIELD_1", "FIELD_2");
+        CriteriaSpec<? extends Number> spec = AggregationFunction.COUNT.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new CountSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new CountSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
@@ -55,16 +55,16 @@ public class AggregationFunctionTest {
         PathProvider mProvider = mock(PathProvider.class);
         doReturn(new String[] { "FIELD_1", "FIELD_2" }).when(mProvider).getPath();
 
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.AVG.getAggregation(mProvider);
+        CriteriaSpec<? extends Number> spec = AggregationFunction.AVG.getAggregation(mProvider);
 
-        assertEquals(new AverageSpec(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new AverageSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
     public void testGetAggregation_AvgFunctionReturnsAvgAggregation_WhenPathsArrayIsNotNull() {
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.AVG.getAggregation("FIELD_1", "FIELD_2");
+        CriteriaSpec<? extends Number> spec = AggregationFunction.AVG.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new AverageSpec(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new AverageSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
@@ -72,16 +72,16 @@ public class AggregationFunctionTest {
         PathProvider mProvider = mock(PathProvider.class);
         doReturn(new String[] { "FIELD_1", "FIELD_2" }).when(mProvider).getPath();
 
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.MAX.getAggregation(mProvider);
+        CriteriaSpec<? extends Number> spec = AggregationFunction.MAX.getAggregation(mProvider);
 
-        assertEquals(new MaxSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new MaxSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
     public void testGetAggregation_MaxFunctionReturnsMaxAggregation_WhenPathsArrayIsNotNull() {
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.MAX.getAggregation("FIELD_1", "FIELD_2");
+        CriteriaSpec<? extends Number> spec = AggregationFunction.MAX.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new MaxSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new MaxSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
@@ -89,15 +89,15 @@ public class AggregationFunctionTest {
         PathProvider mProvider = mock(PathProvider.class);
         doReturn(new String[] { "FIELD_1", "FIELD_2" }).when(mProvider).getPath();
 
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.MIN.getAggregation(mProvider);
+        CriteriaSpec<? extends Number> spec = AggregationFunction.MIN.getAggregation(mProvider);
 
-        assertEquals(new MinSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new MinSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 
     @Test
     public void testGetAggregation_MinFunctionReturnsMinAggregation_WhenPathsArrayIsNotNull() {
-        CriteriaSpec<? extends Number> aggr = AggregationFunction.MIN.getAggregation("FIELD_1", "FIELD_2");
+        CriteriaSpec<? extends Number> spec = AggregationFunction.MIN.getAggregation("FIELD_1", "FIELD_2");
 
-        assertEquals(new MinSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), aggr);
+        assertEquals(new MinSpec<>(new PathSpec<>(new String[] { "FIELD_1", "FIELD_2" })), spec);
     }
 }

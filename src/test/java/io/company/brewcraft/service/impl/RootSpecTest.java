@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.RootSpec;
 
-public class RootAggregationTest {
-    private CriteriaSpec<?> aggr;
+public class RootSpecTest {
+    private CriteriaSpec<?> spec;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -29,8 +29,8 @@ public class RootAggregationTest {
 
     @Test
     public void testGetAggregation_ReturnsRoot() {
-        aggr = new RootSpec<>();
+        spec = new RootSpec<>();
 
-        assertSame(mRoot, aggr.getExpression(mRoot, mCq, mCb));
+        assertSame(mRoot, spec.getExpression(mRoot, mCq, mCb));
     }
 }

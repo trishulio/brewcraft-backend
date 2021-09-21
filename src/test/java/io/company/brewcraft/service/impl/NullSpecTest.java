@@ -13,10 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.QueryLiteral;
+import io.company.brewcraft.service.NullSpec;
 
-public class QueryLiteralTest {
-    private CriteriaSpec<String> spec;
+public class NullSpecTest {
+    private CriteriaSpec<?> spec;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -30,11 +30,11 @@ public class QueryLiteralTest {
     }
 
     @Test
-    public void testGetAggregation_ReturnsStringLiteralFromCb() {
-        Expression<String> mExpr = mock(Expression.class);
-        doReturn(mExpr).when(mCb).literal("VALUE");
+    public void testGetAggregation_ReturnsNullLiteralWithIntegerClass() {
+        Expression<Integer> mExpr = mock(Expression.class);
+        doReturn(mExpr).when(mCb).nullLiteral(Integer.class);
 
-        spec = new QueryLiteral<>("VALUE");
+        spec = new NullSpec();
 
         assertSame(mExpr, spec.getExpression(mRoot, mCq, mCb));
     }

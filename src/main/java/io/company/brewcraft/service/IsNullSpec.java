@@ -8,14 +8,14 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class IsNullSpec extends BaseModel implements CriteriaSpec<Boolean> {
-    private CriteriaSpec<?> aggr;
+    private CriteriaSpec<?> spec;
 
-    public IsNullSpec(CriteriaSpec<?> aggr) {
-        this.aggr = aggr;
+    public IsNullSpec(CriteriaSpec<?> spec) {
+        this.spec = spec;
     }
 
     @Override
     public Expression<Boolean> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return cb.isNull(this.aggr.getExpression(root, cq, cb));
+        return cb.isNull(this.spec.getExpression(root, cq, cb));
     }
 }
