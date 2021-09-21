@@ -8,15 +8,15 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class AverageSpec<T extends Number> extends BaseModel implements CriteriaSpec<Double> {
-    private CriteriaSpec<T> aggr;
+    private CriteriaSpec<T> spec;
 
-    public AverageSpec(CriteriaSpec<T> aggr) {
-        this.aggr = aggr;
+    public AverageSpec(CriteriaSpec<T> spec) {
+        this.spec = spec;
     }
 
     @Override
     public Expression<Double> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return cb.avg(this.aggr.getExpression(root, cq, cb));
+        return cb.avg(this.spec.getExpression(root, cq, cb));
     }
 
 }

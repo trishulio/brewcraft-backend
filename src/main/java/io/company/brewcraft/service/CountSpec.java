@@ -8,14 +8,14 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class CountSpec<T> extends BaseModel implements CriteriaSpec<Long> {
-    private CriteriaSpec<T> aggr;
+    private CriteriaSpec<T> spec;
 
-    public CountSpec(CriteriaSpec<T> aggr) {
-        this.aggr = aggr;
+    public CountSpec(CriteriaSpec<T> spec) {
+        this.spec = spec;
     }
 
     @Override
     public Expression<Long> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return cb.count(this.aggr.getExpression(root, cq, cb));
+        return cb.count(this.spec.getExpression(root, cq, cb));
     }
 }

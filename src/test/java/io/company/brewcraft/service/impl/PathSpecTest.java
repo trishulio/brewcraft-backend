@@ -1,20 +1,22 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.RootSpec;
+import io.company.brewcraft.service.PathSpec;
 
-public class RootAggregationTest {
-    private CriteriaSpec<?> aggr;
+public class PathSpecTest {
+
+    private CriteriaSpec<String> spec;
 
     private Root<?> mRoot;
     private CriteriaBuilder mCb;
@@ -28,9 +30,15 @@ public class RootAggregationTest {
     }
 
     @Test
-    public void testGetAggregation_ReturnsRoot() {
-        aggr = new RootSpec<>();
+    public void testPathArrConstructor() {
+        Path<?> mPath1 = mock(Path.class);
+        Path<?> mPath2 = mock(Path.class);
 
-        assertSame(mRoot, aggr.getExpression(mRoot, mCq, mCb));
+        doReturn(mPath1).when(mRoot).get("PATH_1");
+        doReturn(mPath2).when(mPath1).get("PATH_2");
+
+        spec = new PathSpec<>(new String[] { "PATH_1", "PATH_2" });
+
+        assertSame(mPath2, spec.getExpression(mRoot, mCq, mCb));
     }
 }

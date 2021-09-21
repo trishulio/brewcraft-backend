@@ -30,16 +30,16 @@ public class CriteriaSpecBuilder {
     }
 
     public void isNull(String[] joins, String[] paths) {
-        CriteriaSpec<Boolean> aggr = new IsNullSpec(new PathSpec<>(joins, paths));
-        accumulator.add(aggr);
+        CriteriaSpec<Boolean> spec = new IsNullSpec(new PathSpec<>(joins, paths));
+        accumulator.add(spec);
 
         accumulator.setIsNot(false);
     }
 
     public void in(String[] joins, String[] paths, Collection<?> collection) {
         if (collection != null) {
-            CriteriaSpec<Boolean> aggr = new InSpec<>(new PathSpec<>(joins, paths), collection);
-            accumulator.add(aggr);
+            CriteriaSpec<Boolean> spec = new InSpec<>(new PathSpec<>(joins, paths), collection);
+            accumulator.add(spec);
         }
 
         accumulator.setIsNot(false);
@@ -49,8 +49,8 @@ public class CriteriaSpecBuilder {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    CriteriaSpec<Boolean> aggr = new LikeSpec(new PathSpec<>(joins, paths), text);
-                    accumulator.add(aggr);
+                    CriteriaSpec<Boolean> spec = new LikeSpec(new PathSpec<>(joins, paths), text);
+                    accumulator.add(spec);
                 }
             }
         }
@@ -62,8 +62,8 @@ public class CriteriaSpecBuilder {
         // Note: Null checks for start and end reduces the redundant clause for a true
         // literal. It only sort-of improves the Query performance but its not required.
         if (start != null || end != null) {
-            CriteriaSpec<Boolean> aggr = new BetweenSpec<>(new PathSpec<>(joins, paths), start, end);
-            accumulator.add(aggr);
+            CriteriaSpec<Boolean> spec = new BetweenSpec<>(new PathSpec<>(joins, paths), start, end);
+            accumulator.add(spec);
         }
 
         accumulator.setIsNot(false);

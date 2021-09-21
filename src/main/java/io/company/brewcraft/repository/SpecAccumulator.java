@@ -23,19 +23,23 @@ public class SpecAccumulator {
     private boolean isNot;
 
     public SpecAccumulator() {
-        this.aggregations = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    protected SpecAccumulator(List<CriteriaSpec<Boolean>> aggregations) {
+        this.aggregations = aggregations;
         this.isNot = false;
     }
 
-    public void add(CriteriaSpec<Boolean> aggr) {
+    public void add(CriteriaSpec<Boolean> spec) {
         log.debug("Not = {}", isNot);
         if (this.isNot) {
-            aggr = new NotSpec(aggr);
+            spec = new NotSpec(spec);
         }
 
-        aggr = new AndSpec(aggr);
+        spec = new AndSpec(spec);
 
-        this.aggregations.add(aggr);
+        this.aggregations.add(spec);
     }
 
     public void setIsNot(boolean isNot) {
@@ -45,7 +49,7 @@ public class SpecAccumulator {
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate[] predicates = new Predicate[this.aggregations.size()];
         log.debug("Total Predicates = {}", predicates.length);
-        predicates = this.aggregations.stream().map(aggr -> aggr.getExpression(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
+        predicates = this.aggregations.stream().map(spec -> spec.getExpression(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
 
         return predicates;
     }

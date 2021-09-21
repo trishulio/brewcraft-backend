@@ -26,14 +26,14 @@ public class Selector extends BaseModel {
         return select(new PathSpec<>(path));
     }
 
-    public Selector select(CriteriaSpec<?> aggr) {
-        this.aggregations.add(aggr);
+    public Selector select(CriteriaSpec<?> spec) {
+        this.aggregations.add(spec);
         return this;
     }
 
     public List<Selection<?>> getSelection(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         List<Selection<?>> selection = this.aggregations.stream()
-                                                        .map(aggr -> aggr.getExpression(root, cq, cb))
+                                                        .map(spec -> spec.getExpression(root, cq, cb))
                                                         .collect(Collectors.toList());
         return selection;
     }
