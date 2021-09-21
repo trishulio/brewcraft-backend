@@ -62,8 +62,8 @@ public class SkuController extends BaseController {
         Page<Sku> skuPage = skuService.getSkus(ids, productIds, page, size, sort, orderAscending);
 
         List<SkuDto> skuList = skuPage.stream()
-                                         .map(sku -> skuMapper.toDto(sku))
-                                         .collect(Collectors.toList());
+                                       .map(sku -> skuMapper.toDto(sku))
+                                       .collect(Collectors.toList());
 
         PageDto<SkuDto> dto = new PageDto<>(skuList, skuPage.getTotalPages(), skuPage.getTotalElements());
 
