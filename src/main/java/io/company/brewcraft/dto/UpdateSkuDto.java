@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
-public class UpdateSkuDto extends BaseDto{
+public class UpdateSkuDto extends BaseDto {
     
     private Long productId;
     
