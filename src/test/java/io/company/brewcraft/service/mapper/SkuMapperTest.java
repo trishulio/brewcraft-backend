@@ -38,11 +38,8 @@ public class SkuMapperTest {
         AddSkuDto dto = new AddSkuDto(2L, List.of(new AddSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)));
 
         Sku sku = skuMapper.fromDto(dto);
-
-        SkuMaterial skuMaterial = new SkuMaterial(null, null, new Material(3L), null, null, null, null);
-        skuMaterial.setSku(sku);
         
-        Sku expectedSku = new Sku(null, new Product(2L), List.of(skuMaterial), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, null);
+        Sku expectedSku = new Sku(null, new Product(2L), List.of(new SkuMaterial(null, null, new Material(3L), null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, null);
 
         assertEquals(expectedSku, sku);
     }
@@ -52,11 +49,8 @@ public class SkuMapperTest {
         UpdateSkuDto dto = new UpdateSkuDto(2L, List.of(new UpdateSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
 
         Sku sku = skuMapper.fromDto(dto);
-
-        SkuMaterial skuMaterial = new SkuMaterial(3L, null, null, null, null, null, null);
-        skuMaterial.setSku(sku);
         
-        Sku expectedSku = new Sku(null, new Product(2L), List.of(skuMaterial), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, 1);
+        Sku expectedSku = new Sku(null, new Product(2L), List.of(new SkuMaterial(3L, null, null, null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, 1);
 
         assertEquals(expectedSku, sku);
     }

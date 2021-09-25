@@ -148,7 +148,11 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
         }
 
         if (mixtures != null) {
-            mixtures.stream().filter(mixture -> this.mixtures == null || !this.mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::addMixture);
+            if (this.mixtures == null) {
+                mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
+            } else {
+                mixtures.stream().filter(mixture -> !this.mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::addMixture);
+            }
         }
     }
 

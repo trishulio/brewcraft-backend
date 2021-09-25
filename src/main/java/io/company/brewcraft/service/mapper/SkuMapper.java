@@ -20,7 +20,7 @@ public interface SkuMapper {
     @Mapping(target = Sku.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Sku.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = Sku.ATTR_VERSION, ignore = true)
-    @Mapping(target = "product", source = "productId")
+    @Mapping(target = Sku.ATTR_PRODUCT, source = "productId")
     Sku fromDto(AddSkuDto dto);
 
     Sku fromDto(Long id);
@@ -28,7 +28,7 @@ public interface SkuMapper {
     @Mapping(target = Sku.ATTR_ID, ignore = true)
     @Mapping(target = Sku.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Sku.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = "product", source = "productId")
+    @Mapping(target = Sku.ATTR_PRODUCT, source = "productId")
     Sku fromDto(UpdateSkuDto dto);
 
     SkuDto toDto(Sku brew);

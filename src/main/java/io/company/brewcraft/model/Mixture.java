@@ -146,7 +146,11 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
 
         if (childMixtures != null) {
-            childMixtures.stream().filter(childMixture -> this.childMixtures == null || !this.childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::addChildMixture);
+            if (this.childMixtures == null) {
+                childMixtures.stream().collect(Collectors.toList()).forEach(this::addChildMixture);
+            } else {
+                childMixtures.stream().filter(childMixture -> !this.childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::addChildMixture);
+            }
         }
     }
 
@@ -215,7 +219,11 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
 
         if (materialPortions != null) {
-            materialPortions.stream().filter(materialPortion -> this.materialPortions == null || !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);
+            if (this.materialPortions == null) {
+                materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
+            } else {
+                materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);
+            }
         }
     }
 
@@ -263,7 +271,11 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
 
         if (recordedMeasures != null) {
-            recordedMeasures.stream().filter(recordedMeasure -> this.recordedMeasures == null || !this.recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+            if (this.recordedMeasures == null) {
+                recordedMeasures.stream().collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+            } else {
+                recordedMeasures.stream().filter(recordedMeasure -> !this.recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+            }
         }
     }
 
