@@ -52,7 +52,7 @@ public class SkuController extends BaseController {
 
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<SkuDto> getSkus(
-            @RequestParam(required = false) Set<Long> ids,
+            @RequestParam(required = false, name = "ids") Set<Long> ids,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
