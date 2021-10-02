@@ -26,9 +26,31 @@ pipeline {
             }
         }
 
-        stage('Containerize') {
+        stage ('Containerize') {
             steps {
                 sh "make containerize VERSION=${IMAGE_TAG}"
+            }
+        }
+
+        stage ('Deliver') {
+            when { branch 'master' }
+
+            stages {
+                stage ('Prune') {
+                    steps {
+                        build job: 'Brewcraft Cleanup Deploy (Nucleus)', parameters: [
+                            string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
+                        ]
+                    }
+                }
+
+                stage ('Deploy') {
+                    steps {
+                        build job: 'Brewcraft Deploy', parameters: [
+                            string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
+                        ]
+                    }
+                }
             }
         }
     }
