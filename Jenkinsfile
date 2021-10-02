@@ -38,7 +38,7 @@ pipeline {
             stages {
                 stage ('Prune') {
                     steps {
-                        build job: '../Brewcraft Cleanup Deploy (Nucleus)', parameters: [
+                        build job: '../Nucleus Prune', parameters: [
                             string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
                         ]
                     }
