@@ -54,10 +54,10 @@ public class MixtureDtoTest {
     }
 
     @Test
-        public void testGetSetEquipment() {
-            mixtureDto.setEquipment(new FacilityEquipmentDto(3L));
-            assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
-        }
+    public void testGetSetEquipment() {
+        mixtureDto.setEquipment(new FacilityEquipmentDto(3L));
+        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
+    }
 
     @Test
     public void testGetBrewStage() {

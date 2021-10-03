@@ -8,7 +8,6 @@ import io.company.brewcraft.dto.AddBrewDto;
 import io.company.brewcraft.dto.BrewDto;
 import io.company.brewcraft.dto.UpdateBrewDto;
 import io.company.brewcraft.model.Brew;
-import io.company.brewcraft.model.Shipment;
 
 @Mapper(uses = { ProductMapper.class })
 public interface BrewMapper {
@@ -28,9 +27,9 @@ public interface BrewMapper {
 
     Brew fromDto(Long id);
 
-    @Mapping(target = Shipment.ATTR_ID, ignore = true)
-    @Mapping(target = Shipment.ATTR_CREATED_AT, ignore = true)
-    @Mapping(target = Shipment.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Brew.ATTR_ID, ignore = true)
+    @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "parentBrew", source = "parentBrewId")
     @Mapping(target = "product", source = "productId")
     Brew fromDto(UpdateBrewDto dto);
