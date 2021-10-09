@@ -11,7 +11,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity(name = "MIXTURE_MATERIAL_PORTION")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
-public class MixtureMaterialPortion extends MaterialPortion implements BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion {
+public class MixtureMaterialPortion extends MaterialPortion implements UpdateMixtureMaterialPortion {
     
     public static final String FIELD_MIXTURE = "mixture";
     
