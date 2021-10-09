@@ -17,9 +17,9 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
@@ -48,9 +48,9 @@ import io.company.brewcraft.repository.InvoiceItemRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialLotRepository;
-import io.company.brewcraft.repository.MaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
@@ -73,9 +73,9 @@ import io.company.brewcraft.service.InvoiceItemAccessor;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
 import io.company.brewcraft.service.MaterialAccessor;
 import io.company.brewcraft.service.MaterialLotAccessor;
-import io.company.brewcraft.service.MaterialPortionAccessor;
 import io.company.brewcraft.service.MeasureAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
+import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ParentMixtureAccessor;
 import io.company.brewcraft.service.ProductAccessor;
@@ -329,9 +329,9 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> materialPortionRefresher(MaterialPortionRepository repo) {
+    public AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> materialPortionRefresher(MixtureMaterialPortionRepository repo) {
         return new AccessorRefresher<>(
-            MaterialPortion.class,
+            MixtureMaterialPortion.class,
             accessor -> accessor.getMaterialPortion(),
             (accessor, materialPortion) -> accessor.setMaterialPortion(materialPortion),
             ids -> repo.findAllById(ids)

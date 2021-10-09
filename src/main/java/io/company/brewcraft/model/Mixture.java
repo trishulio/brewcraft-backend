@@ -60,12 +60,12 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
     private QuantityEntity quantity;
 
     @ManyToOne()
-    @JoinColumn(name = "equipment_id", referencedColumnName = "id")
+    @JoinColumn(name = "equipment_id", referencedColumnName = "id", nullable = true)
     private Equipment equipment;
 
     @OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<MaterialPortion> materialPortions;
+    private List<MixtureMaterialPortion> materialPortions;
 
     @OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -95,7 +95,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
     }
 
     public Mixture(Long id, Mixture parentMixture, List<Mixture> childMixtures, Quantity<?> quantity,
-            Equipment equipment, List<MaterialPortion> materialPortions, List<MixtureRecording> recordedMeasures,
+            Equipment equipment, List<MixtureMaterialPortion> materialPortions, List<MixtureRecording> recordedMeasures,
             BrewStage brewStage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setParentMixture(parentMixture);
@@ -208,12 +208,12 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
     }
 
     @Override
-    public List<MaterialPortion> getMaterialPortions() {
+    public List<MixtureMaterialPortion> getMaterialPortions() {
         return materialPortions;
     }
 
     @Override
-    public void setMaterialPortions(List<MaterialPortion> materialPortions) {
+    public void setMaterialPortions(List<MixtureMaterialPortion> materialPortions) {
         if (this.materialPortions != null) {
             this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
         }
@@ -227,7 +227,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
     }
 
-    public void addMaterialPortion(MaterialPortion materialPortion) {
+    public void addMaterialPortion(MixtureMaterialPortion materialPortion) {
         if (materialPortion == null) {
             return;
         }
@@ -245,7 +245,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
         }
     }
 
-    public boolean removeMaterialPortion(MaterialPortion materialPortion) {
+    public boolean removeMaterialPortion(MixtureMaterialPortion materialPortion) {
         if (materialPortion == null || this.materialPortions == null) {
             return false;
         }

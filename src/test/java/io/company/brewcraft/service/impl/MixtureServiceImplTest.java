@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.service.MixtureService;
@@ -75,7 +75,7 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testAddMixture_AddsMixture() {
-        Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         Mixture addedMixture = mixtureService.addMixture(mixture);
 
@@ -102,9 +102,9 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPutMixture_OverridesWhenMixtureExists() {
-        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(mixtureRepositoryMock).findById(1L);
 
@@ -133,7 +133,7 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPutMixture_AddsNewMixture_WhenNoMixtureExists() {
-        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(mixtureRepositoryMock).findById(1L);
 
@@ -174,9 +174,9 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPatchMixture_PatchesExistingMixture() {
-        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-        Mixture update = new Mixture(null, new Mixture(12L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, new Mixture(12L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(mixtureRepositoryMock).findById(1L);
 

@@ -7,18 +7,18 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.MaterialPortion;
-import io.company.brewcraft.service.MaterialPortionAccessor;
+import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 
-public class EnhancedMaterialPortionRepositoryImplTest {
+public class EnhancedMixtureMaterialPortionRepositoryTest {
 
-    private EnhancedMaterialPortionRepository repo;
+    private EnhancedMixtureMaterialPortionRepository repo;
 
     private MixtureRepository mixtureRepositoryMock;
 
     private MaterialLotRepository materialLotRepositoryMock;
     
-    private AccessorRefresher<Long, MaterialPortionAccessor, MaterialPortion> refresherMock;
+    private AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
@@ -27,12 +27,12 @@ public class EnhancedMaterialPortionRepositoryImplTest {
         materialLotRepositoryMock = mock(MaterialLotRepository.class);
         refresherMock = mock(AccessorRefresher.class);
 
-        repo = new EnhancedMaterialPortionRepositoryImpl(mixtureRepositoryMock, materialLotRepositoryMock, refresherMock);
+        repo = new EnhancedMixtureMaterialPortionRepositoryImpl(mixtureRepositoryMock, materialLotRepositoryMock, refresherMock);
     }
 
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
-        List<MaterialPortion> materialPortions = List.of(new MaterialPortion(1L));
+        List<MixtureMaterialPortion> materialPortions = List.of(new MixtureMaterialPortion(1L));
 
         repo.refresh(materialPortions);
 
@@ -42,7 +42,7 @@ public class EnhancedMaterialPortionRepositoryImplTest {
     
     @Test
     public void testRefreshAccessors_CallsRefresherAccessor() {
-        List<MaterialPortionAccessor> accessors = List.of(mock(MaterialPortionAccessor.class), mock(MaterialPortionAccessor.class));
+        List<MixtureMaterialPortionAccessor> accessors = List.of(mock(MixtureMaterialPortionAccessor.class), mock(MixtureMaterialPortionAccessor.class));
 
         repo.refreshAccessors(accessors);
 

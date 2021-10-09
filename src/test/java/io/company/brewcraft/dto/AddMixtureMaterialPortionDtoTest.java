@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AddMaterialPortionDtoTest {
+public class AddMixtureMaterialPortionDtoTest {
 
-    private AddMaterialPortionDto addMaterialPortionDto;
+    private AddMixtureMaterialPortionDto addMaterialPortionDto;
 
     @BeforeEach
     public void init() {
-        addMaterialPortionDto = new AddMaterialPortionDto();
+        addMaterialPortionDto = new AddMixtureMaterialPortionDto();
     }
 
     @Test
@@ -24,7 +24,7 @@ public class AddMaterialPortionDtoTest {
         Long mixtureId = 1L;
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
 
-        AddMaterialPortionDto addMaterialPortionDto = new AddMaterialPortionDto(materialLotId, quantityDto, mixtureId, addedAt);
+        AddMixtureMaterialPortionDto addMaterialPortionDto = new AddMixtureMaterialPortionDto(materialLotId, quantityDto, mixtureId, addedAt);
 
         assertEquals(2L, addMaterialPortionDto.getMaterialLotId());
         assertEquals(new QuantityDto("kg", new BigDecimal("100")), addMaterialPortionDto.getQuantity());

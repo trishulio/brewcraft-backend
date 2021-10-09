@@ -17,8 +17,8 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMixtureDto;
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
@@ -60,7 +60,7 @@ public class MixtureMapperTest {
 
     @Test
     public void testToDto_ReturnsDto() {
-        Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         MixtureDto dto = mixtureMapper.toDto(mixture);
 
