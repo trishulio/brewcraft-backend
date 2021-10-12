@@ -31,17 +31,19 @@ import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneyService;
-import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited, MoneySupplier {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -102,7 +104,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
-    private InvoiceStatus status;
+    private InvoiceStatus invoiceStatus;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -130,7 +132,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         this.setFreight(freight);
         this.setCreatedAt(createdAt);
         this.setLastUpdated(lastUpdated);
-        this.setStatus(status);
+        this.setInvoiceStatus(status);
         this.setItems(items);
         this.setVersion(version);
     }
@@ -226,13 +228,13 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     @Override
-    public InvoiceStatus getStatus() {
-        return this.status;
+    public InvoiceStatus getInvoiceStatus() {
+        return this.invoiceStatus;
     }
 
     @Override
-    public void setStatus(InvoiceStatus status) {
-        this.status = status;
+    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
     @Override
@@ -316,6 +318,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     @Override
+    @JsonIgnore
     public Money getAmount() {
         return MoneyMapper.INSTANCE.fromEntity(this.amount);
     }
@@ -325,6 +328,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         this.amount = MoneyMapper.INSTANCE.toEntity(amount);
     }
 
+    @JsonIgnore
     public Tax getTax() {
         Tax tax = null;
         if (this.getItems() != null) {
@@ -333,5 +337,15 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         }
 
         return tax;
+    }
+
+    @JsonIgnore
+    public int getItemCount() {
+        int count = 0;
+        if (this.items != null) {
+            count = this.items.size();
+        }
+
+        return count;
     }
 }

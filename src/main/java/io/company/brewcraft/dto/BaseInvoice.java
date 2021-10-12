@@ -6,9 +6,11 @@ import java.util.List;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
+import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
+import io.company.brewcraft.service.TaxSupplier;
 
-public interface BaseInvoice<T extends BaseInvoiceItem<? extends BaseInvoice<T>>> extends InvoiceStatusAccessor, PurchaseOrderAccessor {
+public interface BaseInvoice<T extends BaseInvoiceItem<? extends BaseInvoice<T>>> extends InvoiceStatusAccessor, PurchaseOrderAccessor, MoneySupplier, TaxSupplier {
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_GENERATED_ON = "generatedOn";
     final String ATTR_RECEIVED_ON = "receivedOn";

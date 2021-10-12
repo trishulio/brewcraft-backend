@@ -13,8 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity(name = "PRODUCT_MEASURE_VALUE")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class ProductMeasureValue extends BaseEntity {
 
     @Id

@@ -92,8 +92,8 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
     }
 
     @Override
-    public void delete(Long id) {
-        this.repoService.delete(id);
+    public int delete(Long id) {
+        return this.repoService.delete(id);
     }
 
     @Override

@@ -23,9 +23,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity(name = "BREW")
-public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited, Identified<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Brew extends BaseEntity implements BaseBrew, UpdateBrew, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";

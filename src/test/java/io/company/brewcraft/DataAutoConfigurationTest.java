@@ -7,8 +7,6 @@ import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
 import io.company.brewcraft.data.DataAutoConfiguration;
@@ -52,7 +50,7 @@ public class DataAutoConfigurationTest {
 
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
 
-        JdbcTemplate jdbcTemplate = config.jdbcTemplate(dataSourceManagerMock);
+        config.jdbcTemplate(dataSourceManagerMock);
     }
 
     @Test
@@ -62,7 +60,7 @@ public class DataAutoConfigurationTest {
 
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
 
-        TransactionTemplate transactionTemplate = config.transactionTemplate(dataSourceManagerMock);
+        config.transactionTemplate(dataSourceManagerMock);
     }
 
 }

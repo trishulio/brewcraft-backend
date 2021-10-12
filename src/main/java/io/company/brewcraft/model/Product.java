@@ -19,10 +19,12 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "PRODUCT")
-public class Product extends BaseEntity implements BaseProduct, UpdateProduct, Identified<Long>, Audited {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Product extends BaseEntity implements BaseProduct, UpdateProduct, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";

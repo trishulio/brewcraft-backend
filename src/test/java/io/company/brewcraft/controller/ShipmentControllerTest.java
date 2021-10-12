@@ -124,7 +124,7 @@ public class ShipmentControllerTest {
         assertEquals(1L, shipmentDto.getId());
         assertEquals("SHIPMENT_1", shipmentDto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipmentDto.getDescription());
-        assertEquals(new ShipmentStatusDto(99L), shipmentDto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), shipmentDto.getShipmentStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipmentDto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipmentDto.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipmentDto.getCreatedAt());

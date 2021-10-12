@@ -46,7 +46,7 @@ public class MeasureTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         measure = new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-        final String json = "{\"id\":1,\"name\":\"abv\",\"createdAt\":{\"nano\":0,\"year\":2018,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"TUESDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2019,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"WEDNESDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"abv\",\"createdAt\":\"2018-01-02T03:04:00\",\"lastUpdated\":\"2019-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, measure.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 

@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.company.brewcraft.model.Identified;
+import io.company.brewcraft.model.IdentityAccessor;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class AccessorRefresherTest {
-    class Entity implements Identified<Long> {
+    class Entity implements IdentityAccessor<Long> {
         private Long id;
 
         public Entity(Long id) {

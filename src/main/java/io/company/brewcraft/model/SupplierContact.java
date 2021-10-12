@@ -13,6 +13,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,7 +22,8 @@ import io.company.brewcraft.dto.UpdateSupplierContact;
 
 @Entity
 @Table(name="SUPPLIER_CONTACT")
-public class SupplierContact extends BaseEntity implements UpdateSupplierContact, Identified<Long>, Audited {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class SupplierContact extends BaseEntity implements UpdateSupplierContact, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SUPPLIER = "supplier";
     public static final String FIELD_FIRST_NAME = "firstName";

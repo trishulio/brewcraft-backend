@@ -21,8 +21,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity(name = "PRODUCT_CATEGORY")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class ProductCategory extends BaseEntity {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";

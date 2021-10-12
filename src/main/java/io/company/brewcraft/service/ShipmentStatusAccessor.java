@@ -3,7 +3,9 @@ package io.company.brewcraft.service;
 import io.company.brewcraft.model.ShipmentStatus;
 
 public interface ShipmentStatusAccessor {
-    ShipmentStatus getStatus();
+    final String ATTR_SHIPMENT_STATUS = "shipmentStatus";
 
-    void setStatus(ShipmentStatus status);
+    ShipmentStatus getShipmentStatus();
+
+    void setShipmentStatus(ShipmentStatus status);
 }

@@ -1,4 +1,6 @@
 package io.company.brewcraft.model;
 
-public interface UpdateProduct extends BaseProduct, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateProduct extends BaseProduct, UpdatableEntity<Long> {
 }

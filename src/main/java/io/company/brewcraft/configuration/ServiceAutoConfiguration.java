@@ -52,9 +52,9 @@ import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
@@ -89,10 +89,10 @@ import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
 import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
-import io.company.brewcraft.service.MixtureMaterialPortionService;
-import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.MeasureService;
+import io.company.brewcraft.service.MixtureMaterialPortionService;
+import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
 import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
@@ -113,6 +113,7 @@ import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
@@ -132,10 +133,9 @@ import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
+import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
-import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -301,9 +301,15 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(TransactionService.class)
+    public TransactionService transactionService() {
+        return new TransactionService();
+    }
+
+    @Bean
     @ConditionalOnMissingBean(ProcurementService.class)
-    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService) {
-        return new ProcurementServiceImpl(invoiceService, purchaseOrderService);
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService, TransactionService transactionService) {
+        return new ProcurementService(invoiceService, purchaseOrderService, shipmentService, transactionService);
     }
 
     @Bean

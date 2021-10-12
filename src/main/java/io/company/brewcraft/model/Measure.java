@@ -10,10 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "MEASURE")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Measure extends BaseEntity implements Identified<Long> {
     public static final String ABV = "abv";
     public static final String IBU = "ibu";

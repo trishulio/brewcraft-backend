@@ -13,7 +13,7 @@ public class UpdateInvoiceDto extends BaseDto {
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
-    private Long statusId;
+    private Long invoiceStatusId;
     private List<UpdateInvoiceItemDto> items;
 
     @NotNull
@@ -22,7 +22,7 @@ public class UpdateInvoiceDto extends BaseDto {
     public UpdateInvoiceDto() {
     }
 
-    public UpdateInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long statusId, List<UpdateInvoiceItemDto> items, Integer version) {
+    public UpdateInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, List<UpdateInvoiceItemDto> items, Integer version) {
         setInvoiceNumber(invoiceNumber);
         setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
@@ -30,7 +30,7 @@ public class UpdateInvoiceDto extends BaseDto {
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
-        setStatusId(statusId);
+        setInvoiceStatusId(invoiceStatusId);
         setItems(items);
         setVersion(version);
     }
@@ -91,12 +91,12 @@ public class UpdateInvoiceDto extends BaseDto {
         this.paymentDueDate = paymentDueDate;
     }
 
-    public Long getStatusId() {
-        return statusId;
+    public Long getInvoiceStatusId() {
+        return invoiceStatusId;
     }
 
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public void setInvoiceStatusId(Long invoiceStatusId) {
+        this.invoiceStatusId = invoiceStatusId;
     }
 
     public List<UpdateInvoiceItemDto> getItems() {

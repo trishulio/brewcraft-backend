@@ -45,7 +45,7 @@ public class ShipmentTest {
         assertEquals(1L, this.shipment.getId());
         assertEquals("SHIPMENT_1", this.shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", this.shipment.getDescription());
-        assertEquals(new ShipmentStatus(99L), this.shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), this.shipment.getShipmentStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), this.shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), this.shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), this.shipment.getCreatedAt());
@@ -78,9 +78,9 @@ public class ShipmentTest {
 
     @Test
     public void testAccessStatus() {
-        assertNull(this.shipment.getStatus());
-        this.shipment.setStatus(new ShipmentStatus(99L));
-        assertEquals(new ShipmentStatus(99L), this.shipment.getStatus());
+        assertNull(this.shipment.getShipmentStatus());
+        this.shipment.setShipmentStatus(new ShipmentStatus(99L));
+        assertEquals(new ShipmentStatus(99L), this.shipment.getShipmentStatus());
     }
 
     @Test

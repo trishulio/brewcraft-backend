@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+@SuppressWarnings("rawtypes")
 public class UnitSerializer extends JsonSerializer<Unit>{
 
     @Override
@@ -20,5 +21,4 @@ public class UnitSerializer extends JsonSerializer<Unit>{
             gen.writeEndObject();
         }
     }
-
 }

@@ -149,7 +149,7 @@ public class InvoiceControllerTest {
        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
+       assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
        assertEquals(1, invoice.getItems().size());
        final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());
@@ -251,7 +251,7 @@ public class InvoiceControllerTest {
        assertNull(invoice.getFreight());
        assertNull(invoice.getCreatedAt());
        assertNull(invoice.getLastUpdated());
-       assertNull(invoice.getStatus());
+       assertNull(invoice.getInvoiceStatus());
        assertNull(invoice.getItems());
    }
 
@@ -285,7 +285,7 @@ public class InvoiceControllerTest {
        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))), invoice.getFreight());
        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
        assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
+       assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
        assertEquals(1, invoice.getItems().size());
        final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(2L, item.getId());
@@ -328,7 +328,7 @@ public class InvoiceControllerTest {
        assertNull(invoice.getFreight());
        assertNull(invoice.getCreatedAt());
        assertNull(invoice.getLastUpdated());
-       assertNull(invoice.getStatus());
+       assertNull(invoice.getInvoiceStatus());
        assertNull(invoice.getItems());
    }
 
@@ -376,7 +376,7 @@ public class InvoiceControllerTest {
        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
+       assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
        assertEquals(1, invoice.getItems().size());
        final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(null, item.getId());
@@ -417,7 +417,7 @@ public class InvoiceControllerTest {
        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
+       assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
        assertEquals(1, invoice.getItems().size());
        final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());
@@ -458,7 +458,7 @@ public class InvoiceControllerTest {
        assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
        assertEquals(null, invoice.getCreatedAt());
        assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
+       assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
        assertEquals(1, invoice.getItems().size());
        final InvoiceItemDto item = invoice.getItems().get(0);
        assertEquals(1L, item.getId());

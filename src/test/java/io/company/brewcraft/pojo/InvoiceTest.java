@@ -58,7 +58,7 @@ public class InvoiceTest {
         assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), this.invoice.getFreight());
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), this.invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), this.invoice.getLastUpdated());
-        assertEquals(new InvoiceStatus(99L), this.invoice.getStatus());
+        assertEquals(new InvoiceStatus(99L), this.invoice.getInvoiceStatus());
         assertNull(this.invoice.getAmount());
         assertNull(this.invoice.getTax());
         assertEquals(1, this.invoice.getItems().size());
@@ -132,9 +132,9 @@ public class InvoiceTest {
 
     @Test
     public void testAccessStatus() {
-        assertNull(this.invoice.getStatus());
-        this.invoice.setStatus(new InvoiceStatus(99L));
-        assertEquals(new InvoiceStatus(99L), this.invoice.getStatus());
+        assertNull(this.invoice.getInvoiceStatus());
+        this.invoice.setInvoiceStatus(new InvoiceStatus(99L));
+        assertEquals(new InvoiceStatus(99L), this.invoice.getInvoiceStatus());
     }
 
     @Test

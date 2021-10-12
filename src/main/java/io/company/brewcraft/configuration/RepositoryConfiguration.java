@@ -131,8 +131,8 @@ public class RepositoryConfiguration {
     public AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusRefresher(InvoiceStatusRepository repo) {
         return new AccessorRefresher<>(
             InvoiceStatus.class,
-            accessor -> accessor.getStatus(),
-            (accessor, status) -> accessor.setStatus(status),
+            accessor -> accessor.getInvoiceStatus(),
+            (accessor, status) -> accessor.setInvoiceStatus(status),
             ids -> repo.findAllById(ids)
         );
     }
@@ -181,8 +181,8 @@ public class RepositoryConfiguration {
     public AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> shipmentStatusRefresher(ShipmentStatusRepository repo) {
         return new AccessorRefresher<>(
             ShipmentStatus.class,
-            accessor -> accessor.getStatus(),
-            (accessor, status) -> accessor.setStatus(status),
+            accessor -> accessor.getShipmentStatus(),
+            (accessor, status) -> accessor.setShipmentStatus(status),
             ids -> repo.findAllById(ids)
         );
     }

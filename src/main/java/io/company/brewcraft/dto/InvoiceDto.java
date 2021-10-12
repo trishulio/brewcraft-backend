@@ -19,7 +19,7 @@ public class InvoiceDto extends BaseDto {
     private LocalDateTime paymentDueDate;
     private LocalDateTime lastUpdated;
     private LocalDateTime createdAt;
-    private InvoiceStatusDto status;
+    private InvoiceStatusDto invoiceStatus;
     private List<InvoiceItemDto> items;
     private Integer version;
 
@@ -31,7 +31,7 @@ public class InvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto status, List<InvoiceItemDto> items, Integer version) {
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> items, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -44,7 +44,7 @@ public class InvoiceDto extends BaseDto {
         setReceivedOn(receivedOn);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
-        setStatus(status);
+        setInvoiceStatus(invoiceStatus);
         setItems(items);
         setVersion(version);
     }
@@ -145,12 +145,12 @@ public class InvoiceDto extends BaseDto {
         this.createdAt = createdAt;
     }
 
-    public InvoiceStatusDto getStatus() {
-        return status;
+    public InvoiceStatusDto getInvoiceStatus() {
+        return invoiceStatus;
     }
 
-    public void setStatus(InvoiceStatusDto status) {
-        this.status = status;
+    public void setInvoiceStatus(InvoiceStatusDto invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
     public List<InvoiceItemDto> getItems() {

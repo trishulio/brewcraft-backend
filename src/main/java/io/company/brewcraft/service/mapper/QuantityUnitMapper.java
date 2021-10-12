@@ -37,8 +37,6 @@ public abstract class QuantityUnitMapper {
             unit = this.map.get(symbol);
         }
 
-        logger.info("Mapping for symbol: {} is: {}", symbol, unit);
-
         return unit;
     }
 

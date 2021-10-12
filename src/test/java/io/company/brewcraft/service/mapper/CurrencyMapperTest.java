@@ -24,7 +24,7 @@ public class CurrencyMapperTest {
 
     @Test
     public void testUnitToEntity_ReturnsNull_WhenUnitIsNull() {
-        assertNull(mapper.fromUnit((CurrencyUnit) null));
+        assertNull(mapper.toEntity((CurrencyUnit) null));
     }
 
     @Test
@@ -41,13 +41,13 @@ public class CurrencyMapperTest {
 
     @Test
     public void testUnitToEntity_ReturnsPojoFromUnit_WhenCodeAndNameAreValid() {
-        Currency cad = mapper.fromUnit(CurrencyUnit.of("CAD"));
+        Currency cad = mapper.toEntity(CurrencyUnit.of("CAD"));
         assertEquals(new Currency(124, "CAD"), cad);
 
-        Currency usd = mapper.fromUnit(CurrencyUnit.of("USD"));
+        Currency usd = mapper.toEntity(CurrencyUnit.of("USD"));
         assertEquals(new Currency(840, "USD"), usd);
 
-        Currency inr = mapper.fromUnit(CurrencyUnit.of("INR"));
+        Currency inr = mapper.toEntity(CurrencyUnit.of("INR"));
         assertEquals(new Currency(356, "INR"), inr);
     }
 }

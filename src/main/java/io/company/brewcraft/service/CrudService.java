@@ -6,7 +6,7 @@ import java.util.Set;
 
 import io.company.brewcraft.model.Identified;
 
-public interface CrudService<ID, E extends CrudEntity<ID>, BE, UE extends UpdatableEntity<ID>, A> {
+public interface CrudService<ID, E extends Identified<ID>, BE, UE extends UpdatableEntity<ID>, A> {
 
     boolean exists(Set<ID> ids);
 
@@ -14,7 +14,7 @@ public interface CrudService<ID, E extends CrudEntity<ID>, BE, UE extends Updata
 
     int delete(Set<ID> ids);
 
-    void delete(ID id);
+    int delete(ID id);
 
     E get(ID id);
 

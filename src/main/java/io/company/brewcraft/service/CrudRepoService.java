@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.repository.EnhancedRepository;
 import io.company.brewcraft.repository.ExtendedRepository;
 
-public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID> & EnhancedRepository<E, A>, ID, A, E extends CrudEntity<ID>> implements RepoService<ID, E, A> {
+public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID> & EnhancedRepository<E, A>, ID, A, E extends Identified<ID>> implements RepoService<ID, E, A> {
     private final T repo;
 
     public CrudRepoService(T repo) {
@@ -100,7 +100,7 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     }
 
     @Override
-    public void delete(ID id) {
-        this.repo.deleteById(id);
+    public int delete(ID id) {
+        return this.repo.deleteOneById(id);
     }
 }

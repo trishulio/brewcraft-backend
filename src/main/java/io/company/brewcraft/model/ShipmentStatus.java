@@ -14,9 +14,12 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity(name = "shipment_status")
 @Table
-public class ShipmentStatus extends BaseModel implements BaseShipmentStatus, UpdateShipmentStatus, Audited, Identified<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class ShipmentStatus extends BaseEntity implements BaseShipmentStatus, UpdateShipmentStatus, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
 

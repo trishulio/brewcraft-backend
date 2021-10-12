@@ -103,8 +103,8 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
     }
 
     @Override
-    public void delete(Long id) {
-        this.repoService.delete(id);
+    public int delete(Long id) {
+        return this.repoService.delete(id);
     }
 
     @Override

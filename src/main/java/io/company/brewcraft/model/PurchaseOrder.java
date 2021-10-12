@@ -14,12 +14,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import io.company.brewcraft.service.CrudEntity;
 @Entity(name = "purchase_order")
 @Table
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, UpdatePurchaseOrder, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_ORDER_NUMBER = "orderNumber";

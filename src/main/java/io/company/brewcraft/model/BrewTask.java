@@ -6,8 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity(name = "BREW_TASK")
-public class BrewTask extends BaseEntity implements BaseBrewTask, Identified<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class BrewTask extends BaseEntity implements BaseBrewTask, IdentityAccessor<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
 

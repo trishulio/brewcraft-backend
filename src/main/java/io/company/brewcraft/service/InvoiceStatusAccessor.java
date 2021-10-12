@@ -3,9 +3,9 @@ package io.company.brewcraft.service;
 import io.company.brewcraft.model.InvoiceStatus;
 
 public interface InvoiceStatusAccessor {
-    final String ATTR_STATUS = "status";
+    final String ATTR_INVOICE_STATUS = "invoiceStatus";
 
-    InvoiceStatus getStatus();
+    InvoiceStatus getInvoiceStatus();
 
-    void setStatus(InvoiceStatus status);
+    void setInvoiceStatus(InvoiceStatus status);
 }

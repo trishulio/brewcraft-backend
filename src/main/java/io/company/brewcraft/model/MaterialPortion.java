@@ -21,6 +21,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,6 +31,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MATERIAL_PORTION")
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String MATERIAL_LOT = "materialLot";

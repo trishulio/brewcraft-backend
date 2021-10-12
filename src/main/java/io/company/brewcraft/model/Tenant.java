@@ -9,12 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="TENANT")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Tenant extends BaseEntity {
 
     @Id

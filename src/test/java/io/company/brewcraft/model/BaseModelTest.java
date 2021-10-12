@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -45,6 +46,12 @@ public class BaseModelTest {
 
         model = new TestBaseModel(0, util, jsonMapper);
         other = new TestBaseModel(12345, util, jsonMapper);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        BaseModel.util = ReflectionManipulator.INSTANCE;
+        BaseModel.jsonMapper = JsonMapper.INSTANCE;
     }
 
     @Test

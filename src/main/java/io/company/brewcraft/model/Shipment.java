@@ -22,12 +22,15 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.service.CrudEntity;
 
 @Entity(name = "shipment")
 @Table
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>, BaseShipment<MaterialLot>, CrudEntity<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
@@ -50,7 +53,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipment_status_id", referencedColumnName = "id")
-    private ShipmentStatus status;
+    private ShipmentStatus shipmentStatus;
 
     @Column(name = "delivery_due_date")
     private LocalDateTime deliveryDueDate;
@@ -86,7 +89,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         this(id);
         this.setShipmentNumber(shipmentNumber);
         this.setDescription(description);
-        this.setStatus(shipmentStatus);
+        this.setShipmentStatus(shipmentStatus);
         this.setDeliveryDueDate(deliveryDueDate);
         this.setDeliveredDate(deliveredDate);
         this.setCreatedAt(createdAt);
@@ -126,13 +129,13 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     }
 
     @Override
-    public ShipmentStatus getStatus() {
-        return this.status;
+    public ShipmentStatus getShipmentStatus() {
+        return this.shipmentStatus;
     }
 
     @Override
-    public void setStatus(ShipmentStatus status) {
-        this.status = status;
+    public void setShipmentStatus(ShipmentStatus shipmentStatus) {
+        this.shipmentStatus = shipmentStatus;
     }
 
     @Override
@@ -238,5 +241,15 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     @Override
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @JsonIgnore
+    public int getLotCount() {
+        int count = 0;
+        if (this.lots != null) {
+            count = this.lots.size();
+        }
+
+        return count;
     }
 }

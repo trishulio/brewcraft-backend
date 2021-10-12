@@ -1,50 +1,112 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
-import io.company.brewcraft.dto.AddInvoiceDto;
-import io.company.brewcraft.dto.AddPurchaseOrderDto;
-import io.company.brewcraft.dto.InvoiceDto;
-import io.company.brewcraft.dto.PurchaseOrderDto;
-import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
+import io.company.brewcraft.dto.procurement.ProcurementIdDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementDto;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.procurement.BaseProcurement;
 import io.company.brewcraft.model.procurement.Procurement;
-import io.company.brewcraft.service.procurement.ProcurementService;
-import io.company.brewcraft.util.controller.AttributeFilter;
+import io.company.brewcraft.model.procurement.ProcurementId;
+import io.company.brewcraft.model.procurement.ProcurementItem;
+import io.company.brewcraft.model.procurement.UpdateProcurement;
 
 public class ProcurementControllerTest {
 
     private ProcurementController controller;
-    private ProcurementService mService;
+
+    private CrudControllerService<
+        ProcurementId,
+        Procurement,
+        BaseProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
+        UpdateProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
+        ProcurementDto,
+        AddProcurementDto,
+        UpdateProcurementDto
+    > mCrudController;
 
     @BeforeEach
     public void init() {
-        this.mService = mock(ProcurementService.class);
-        this.controller = new ProcurementController(new AttributeFilter(), this.mService);
+        mCrudController = mock(CrudControllerService.class);
+        controller = new ProcurementController(mCrudController);
     }
 
     @Test
-    public void testAdd_ReturnsDtoFromServicePojo_WhenAddDtoIsNotNull() {
-        doAnswer(inv -> inv.getArgument(0, Procurement.class)).when(this.mService).add(any(Procurement.class));
+    public void testGet_ReturnsSingleProcurementFromCrudController() {
+        doReturn(new ProcurementDto(new ProcurementIdDto(1L, 10L))).when(mCrudController).get(new ProcurementId(1L, 10L), Set.of(""));
 
-        final AddInvoiceDto invoiceAdditionDto = new AddInvoiceDto();
-        invoiceAdditionDto.setPurchaseOrderId(2L);
-        final AddPurchaseOrderDto poAdditionDto = new AddPurchaseOrderDto("ORDER_1", 1L);
-        final AddProcurementDto addition = new AddProcurementDto(poAdditionDto, invoiceAdditionDto);
+        ProcurementDto dto = controller.get(1L, 10L, Set.of(""));
 
-        final ProcurementDto dto = this.controller.add(addition);
-
-        final InvoiceDto expectedInvoice = new InvoiceDto();
-        expectedInvoice.setPurchaseOrder(new PurchaseOrderDto(2L));
-        final PurchaseOrderDto expectedPo = new PurchaseOrderDto(null, "ORDER_1", new SupplierDto(1L), null, null, null);
-        final ProcurementDto expected = new ProcurementDto(expectedPo, expectedInvoice);
-
+        ProcurementDto expected = new ProcurementDto(new ProcurementIdDto(1L, 10L));
         assertEquals(expected, dto);
+    }
+
+    @Test
+    public void testAdd_ReturnsDtoFromCrudAdd() {
+        doAnswer(inv -> {
+            List<AddProcurementDto> addDtos = inv.getArgument(0, List.class);
+            assertEquals(List.of(new AddProcurementDto()), addDtos);
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        }).when(mCrudController).add(anyList());
+
+
+        List<ProcurementDto> dtos = controller.add(List.of(new AddProcurementDto()));
+
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        assertEquals(expected, dtos);
+    }
+
+    @Test
+    public void testPut_ReturnsDtoFromCrudPut() {
+        doAnswer(inv -> {
+            List<UpdateProcurementDto> updateDtos = inv.getArgument(0, List.class);
+            assertEquals(List.of(new UpdateProcurementDto()), updateDtos);
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        }).when(mCrudController).put(anyList());
+
+
+        List<ProcurementDto> dtos = controller.put(List.of(new UpdateProcurementDto()));
+
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        assertEquals(expected, dtos);
+    }
+
+    @Test
+    public void testPatch_ReturnsDtoFromCrudPatch() {
+        doAnswer(inv -> {
+            List<UpdateProcurementDto> updateDtos = inv.getArgument(0, List.class);
+            assertEquals(List.of(new UpdateProcurementDto()), updateDtos);
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        }).when(mCrudController).patch(anyList());
+
+
+        List<ProcurementDto> dtos = controller.patch(List.of(new UpdateProcurementDto()));
+
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
+        assertEquals(expected, dtos);
+    }
+
+    @Test
+    public void testDelete_ReturnsCountFromCrudDelete() {
+        ArgumentCaptor<Set<ProcurementId>> captor = ArgumentCaptor.forClass(Set.class);
+        doReturn(3).when(mCrudController).delete(captor.capture());
+
+        int count = controller.delete(Set.of(new ProcurementIdDto(1L, 1L), new ProcurementIdDto(2L, 2L), new ProcurementIdDto(3L, 3L)));
+
+        assertEquals(3, count);
+        assertThat(captor.getValue()).hasSameElementsAs(Set.of(new ProcurementId(1L, 1L), new ProcurementId(2L, 2L), new ProcurementId(3L, 3L)));
     }
 }

@@ -24,12 +24,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "material_lot")
 @Table
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
@@ -132,11 +135,12 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     }
 
     @Override
+    @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
-    public void setQuantity(QuantityEntity quantityEntity) {
+    protected void setQuantity(QuantityEntity quantityEntity) {
         this.quantity = quantityEntity;
     }
 
