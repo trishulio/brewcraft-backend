@@ -42,7 +42,7 @@ import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.repository.MaterialPortionRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
@@ -75,8 +75,8 @@ import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
 import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
-import io.company.brewcraft.service.MaterialPortionService;
-import io.company.brewcraft.service.MaterialPortionServiceImpl;
+import io.company.brewcraft.service.MixtureMaterialPortionService;
+import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.MixtureRecordingService;
@@ -347,10 +347,10 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(MaterialPortionService.class)
-    public MaterialPortionService materialPortionService(MaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
-        final MaterialPortionService materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository, stockLotService);
-        return materialPortionService;
+    @ConditionalOnMissingBean(MixtureMaterialPortionService.class)
+    public MixtureMaterialPortionService mixtureMaterialPortionService(MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
+        final MixtureMaterialPortionService mixtureMaterialPortionService = new MixtureMaterialPortionServiceImpl(materialPortionRepository, stockLotService);
+        return mixtureMaterialPortionService;
     }
 
     @Bean

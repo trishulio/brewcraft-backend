@@ -23,8 +23,8 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMixtureDto;
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.service.MixtureService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -48,7 +48,7 @@ public class MixtureControllerTest {
 
    @Test
    public void testGetMixtures() {
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        List<Mixture> mixtureList = List.of(mixture);
        Page<Mixture> mPage = mock(Page.class);
@@ -86,7 +86,7 @@ public class MixtureControllerTest {
 
    @Test
    public void testGetMixture() {
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        doReturn(mixture).when(mixtureService).getMixture(1L);
 

@@ -9,7 +9,6 @@ public class AddMixtureDto extends BaseDto {
     @NotNull
     private QuantityDto quantity;
 
-    @NotNull
     private Long equipmentId;
 
     @NotNull

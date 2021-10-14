@@ -20,9 +20,9 @@ public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, B
 
     void setQuantity(Quantity<?> quantity);
 
-    List<MaterialPortion> getMaterialPortions();
+    List<MixtureMaterialPortion> getMaterialPortions();
 
-    void setMaterialPortions(List<MaterialPortion> materialPortions);
+    void setMaterialPortions(List<MixtureMaterialPortion> materialPortions);
 
     List<MixtureRecording> getRecordedMeasures();
 

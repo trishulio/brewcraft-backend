@@ -33,7 +33,7 @@ public class MixtureTest {
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
         Equipment equipment = new Equipment(3L);
         BrewStage brewStage = new BrewStage(4L);
-        List<MaterialPortion> materialPortions = List.of(new MaterialPortion(5L));
+        List<MixtureMaterialPortion> materialPortions = List.of(new MixtureMaterialPortion(5L));
         List<MixtureRecording> recordedMeasures = List.of(new MixtureRecording(6L));
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -55,7 +55,7 @@ public class MixtureTest {
         assertEquals(new Equipment(3L), mixture.getEquipment());
         assertEquals(new BrewStage(4L), mixture.getBrewStage());
 
-        MaterialPortion expectedMaterialPortion = new MaterialPortion(5L);
+        MixtureMaterialPortion expectedMaterialPortion = new MixtureMaterialPortion(5L);
         expectedMaterialPortion.setMixture(mixture);
         assertEquals(List.of(expectedMaterialPortion), mixture.getMaterialPortions());
 
@@ -108,9 +108,9 @@ public class MixtureTest {
 
     @Test
     public void testGetSetMaterialPortions() {
-        mixture.setMaterialPortions(List.of(new MaterialPortion(5L)));
+        mixture.setMaterialPortions(List.of(new MixtureMaterialPortion(5L)));
 
-        MaterialPortion expectedMaterialPortion = new MaterialPortion(5L);
+        MixtureMaterialPortion expectedMaterialPortion = new MixtureMaterialPortion(5L);
         expectedMaterialPortion.setMixture(mixture);
 
         assertEquals(List.of(expectedMaterialPortion), mixture.getMaterialPortions());
@@ -155,7 +155,7 @@ public class MixtureTest {
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
         Equipment equipment = new Equipment(3L);
         BrewStage brewStage = new BrewStage(4L);
-        List<MaterialPortion> materialPortions = List.of(new MaterialPortion(5L));
+        List<MixtureMaterialPortion> materialPortions = List.of(new MixtureMaterialPortion(5L));
         List<MixtureRecording> recordedMeasures = List.of(new MixtureRecording(6L));
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);

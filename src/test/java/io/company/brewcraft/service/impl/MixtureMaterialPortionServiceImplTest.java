@@ -18,33 +18,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.MaterialLot;
-import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.StockLot;
-import io.company.brewcraft.repository.MaterialPortionRepository;
-import io.company.brewcraft.service.MaterialPortionService;
-import io.company.brewcraft.service.MaterialPortionServiceImpl;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
+import io.company.brewcraft.service.MixtureMaterialPortionService;
+import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
 import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.exception.MaterialLotQuantityNotAvailableException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
-public class MaterialPortionServiceImplTest {
+public class MixtureMaterialPortionServiceImplTest {
 
-    private MaterialPortionService materialPortionService;
+    private MixtureMaterialPortionService materialPortionService;
     
     private StockLotService stockLotService;
 
-    private MaterialPortionRepository materialPortionRepository;
+    private MixtureMaterialPortionRepository materialPortionRepository;
 
     @BeforeEach
     public void init() {
-        materialPortionRepository = mock(MaterialPortionRepository.class);
+        materialPortionRepository = mock(MixtureMaterialPortionRepository.class);
         stockLotService = mock(StockLotService.class);
 
-        doAnswer(i -> i.getArgument(0, MaterialPortion.class)).when(materialPortionRepository).saveAndFlush(any(MaterialPortion.class));
+        doAnswer(i -> i.getArgument(0, MixtureMaterialPortion.class)).when(materialPortionRepository).saveAndFlush(any(MixtureMaterialPortion.class));
         doAnswer(i -> {
-            Collection<MaterialPortion> coll = i.getArgument(0, Collection.class);
+            Collection<MixtureMaterialPortion> coll = i.getArgument(0, Collection.class);
             coll.forEach(s -> {
                 s.setMaterialLot(new MaterialLot(4L));
                 s.setMixture(new Mixture(5L));
@@ -52,22 +52,22 @@ public class MaterialPortionServiceImplTest {
             return null;
         }).when(materialPortionRepository).refresh(anyCollection());
 
-        materialPortionService = new MaterialPortionServiceImpl(materialPortionRepository, stockLotService);
+        materialPortionService = new MixtureMaterialPortionServiceImpl(materialPortionRepository, stockLotService);
     }
 
     @Test
     public void testGetMaterialPortion_ReturnsMaterialPortion() {
-        doReturn(Optional.of(new MaterialPortion(1L))).when(materialPortionRepository).findById(1L);
+        doReturn(Optional.of(new MixtureMaterialPortion(1L))).when(materialPortionRepository).findById(1L);
 
-        MaterialPortion materialPortion = materialPortionService.getMaterialPortion(1L);
+        MixtureMaterialPortion materialPortion = materialPortionService.getMaterialPortion(1L);
 
-        assertEquals(new MaterialPortion(1L), materialPortion);
+        assertEquals(new MixtureMaterialPortion(1L), materialPortion);
     }
 
     @Test
     public void testGetMaterialPortion_ReturnsNull_WhenMaterialPortionDoesNotExist() {
         doReturn(Optional.empty()).when(materialPortionRepository).findById(1L);
-        MaterialPortion materialPortion = materialPortionService.getMaterialPortion(1L);
+        MixtureMaterialPortion materialPortion = materialPortionService.getMaterialPortion(1L);
 
         assertNull(materialPortion);
     }
@@ -80,7 +80,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testAddMaterialPortion_ThrowsWhenRequestedQuantityUnitIsNotCompatibleWithStockLotUnit() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -89,7 +89,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testAddMaterialPortion_ThrowsWhenQuantityIsUnavailable() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -98,12 +98,12 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testAddMaterialPortion_AddsMaterialPortion() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
         doReturn(List.of(materialPortion)).when(materialPortionRepository).saveAll(List.of(materialPortion));
 
-        MaterialPortion addedMaterialPortion = materialPortionService.addMaterialPortion(materialPortion);
+        MixtureMaterialPortion addedMaterialPortion = materialPortionService.addMaterialPortion(materialPortion);
 
         assertEquals(1L, addedMaterialPortion.getId());
         assertEquals(new MaterialLot(4L), addedMaterialPortion.getMaterialLot());
@@ -121,7 +121,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testAddMaterialPortions_ThrowsWhenRequestedQuantityUnitIsNotCompatibleWithStockLotUnit() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -130,7 +130,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testAddMaterialPortions_ThrowsWhenQuantityIsUnavailable() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -139,12 +139,12 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testAddMaterialPortions_AddsMaterialPortions() {
-        MaterialPortion materialPortion = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
         doReturn(List.of(materialPortion)).when(materialPortionRepository).saveAll(List.of(materialPortion));
 
-        List<MaterialPortion> addedMaterialPortions = materialPortionService.addMaterialPortions(List.of(materialPortion));
+        List<MixtureMaterialPortion> addedMaterialPortions = materialPortionService.addMaterialPortions(List.of(materialPortion));
 
         assertEquals(1, addedMaterialPortions.size());
         assertEquals(1L, addedMaterialPortions.get(0).getId());
@@ -163,7 +163,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPutMaterialPortion_ThrowsWhenRequestedQuantityUnitIsNotCompatibleWithStockLotUnit() {
-        MaterialPortion materialPortion = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -172,9 +172,9 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPutMaterialPortion_ThrowsWhenMaterialPortionExistsAndQuantityIsUnavailable() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
         
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
@@ -184,7 +184,7 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPutMaterialPortion_ThrowsWhenMaterialPortionDoesNotExistAndQuantityIsUnavailable() {        
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
@@ -194,14 +194,14 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testPutMaterialPortion_OverridesWhenMaterialPortionExists_SameLot() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
         
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
-        MaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
+        MixtureMaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(4L), materialPortion.getMaterialLot());
@@ -218,12 +218,12 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPutMaterialPortion_OverridesWhenMaterialPortionExists_DifferentLot() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
         
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(5L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(5L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doAnswer(i -> {
-            Collection<MaterialPortion> coll = i.getArgument(0, Collection.class);
+            Collection<MixtureMaterialPortion> coll = i.getArgument(0, Collection.class);
             coll.forEach(s -> {
                 s.setMaterialLot(new MaterialLot(5L));
                 s.setMixture(new Mixture(5L));
@@ -233,7 +233,7 @@ public class MaterialPortionServiceImplTest {
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(5L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(5L));
 
-        MaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
+        MixtureMaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(5L), materialPortion.getMaterialLot());
@@ -250,12 +250,12 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testPutMaterialPortion_AddsNewMaterialPortion_WhenNoMaterialPortionExists() {
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
-        MaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
+        MixtureMaterialPortion materialPortion = materialPortionService.putMaterialPortion(1L, update);
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(4L), materialPortion.getMaterialLot());
@@ -272,19 +272,19 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testPutMaterialPortion_ThrowsOptimisticLockingException_WhenExistingVersionDoesNotMatchUpdateVersion() {
-        MaterialPortion existing = new MaterialPortion(1L);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L);
         existing.setVersion(1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
 
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
 
         assertThrows(OptimisticLockException.class, () -> materialPortionService.putMaterialPortion(1L, update));
     }
     
     @Test
     public void testPatcbMaterialPortion_ThrowsWhenRequestedQuantityUnitIsNotCompatibleWithStockLotUnit() {
-        MaterialPortion materialPortion = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
@@ -293,9 +293,9 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPatchMaterialPortion_ThrowsWhenQuantityIsUnavailable() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
         
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("0"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
@@ -305,14 +305,14 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testPatchMaterialPortion_PatchesExistingMaterialPortion_SameLot() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
 
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(4L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(4L));
 
-        MaterialPortion materialPortion = materialPortionService.patchMaterialPortion(1L, update);
+        MixtureMaterialPortion materialPortion = materialPortionService.patchMaterialPortion(1L, update);
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(4L), materialPortion.getMaterialLot());
@@ -329,14 +329,14 @@ public class MaterialPortionServiceImplTest {
     
     @Test
     public void testPatchMaterialPortion_PatchesExistingMaterialPortion_DifferentLot() {
-        MaterialPortion existing = new MaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L, new MaterialLot(4L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), null, null, LocalDateTime.of(2019, 1, 2, 3, 4), null, 1);
 
-        MaterialPortion update = new MaterialPortion(null, new MaterialLot(5L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(null, new MaterialLot(5L), Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), new Mixture(5L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
         doReturn(List.of(new StockLot(5L, null, Quantities.getQuantity(new BigDecimal("200"), SupportedUnits.KILOGRAM), null, null, null, null))).when(stockLotService).getAllByIds(Set.of(5L));
 
-        MaterialPortion materialPortion = materialPortionService.patchMaterialPortion(1L, update);
+        MixtureMaterialPortion materialPortion = materialPortionService.patchMaterialPortion(1L, update);
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(5L), materialPortion.getMaterialLot());
@@ -353,12 +353,12 @@ public class MaterialPortionServiceImplTest {
 
     @Test
     public void testPatch_ThrowsOptimisticLockingException_WhenExistingVersionAndUpdateVersionsAreDifferent() {
-        MaterialPortion existing = new MaterialPortion(1L);
+        MixtureMaterialPortion existing = new MixtureMaterialPortion(1L);
         existing.setVersion(1);
 
         doReturn(Optional.of(existing)).when(materialPortionRepository).findById(1L);
 
-        MaterialPortion update = new MaterialPortion(1L);
+        MixtureMaterialPortion update = new MixtureMaterialPortion(1L);
         existing.setVersion(2);
 
         assertThrows(OptimisticLockException.class, () -> materialPortionService.patchMaterialPortion(1L, update));

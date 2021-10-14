@@ -4,17 +4,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import io.company.brewcraft.dto.AddMaterialPortionDto;
-import io.company.brewcraft.dto.MaterialPortionDto;
-import io.company.brewcraft.dto.UpdateMaterialPortionDto;
+import io.company.brewcraft.dto.AddMixtureMaterialPortionDto;
+import io.company.brewcraft.dto.MixtureMaterialPortionDto;
+import io.company.brewcraft.dto.UpdateMixtureMaterialPortionDto;
 import io.company.brewcraft.model.MaterialPortion;
+import io.company.brewcraft.model.MixtureMaterialPortion;
 
 @Mapper(uses = { MaterialLotMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MixtureMapper.class, MoneyMapper.class})
-public interface MaterialPortionMapper {
+public interface MixtureMaterialPortionMapper {
 
-    MaterialPortionMapper INSTANCE = Mappers.getMapper(MaterialPortionMapper.class);
+    MixtureMaterialPortionMapper INSTANCE = Mappers.getMapper(MixtureMaterialPortionMapper.class);
     
-    MaterialPortionDto toDto(MaterialPortion materialPortion);
+    MixtureMaterialPortionDto toDto(MixtureMaterialPortion materialPortion);
 
     @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
@@ -22,13 +23,13 @@ public interface MaterialPortionMapper {
     @Mapping(target = MaterialPortion.ATTR_VERSION, ignore = true)
     @Mapping(target = "materialLot", source = "materialLotId")
     @Mapping(target = "mixture", source = "mixtureId")
-    MaterialPortion fromDto(AddMaterialPortionDto dto);
+    MixtureMaterialPortion fromDto(AddMixtureMaterialPortionDto dto);
 
     @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "materialLot", source = "materialLotId")
     @Mapping(target = "mixture", source = "mixtureId")
-    MaterialPortion fromDto(UpdateMaterialPortionDto dto);
+    MixtureMaterialPortion fromDto(UpdateMixtureMaterialPortionDto dto);
 
 }

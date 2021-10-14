@@ -13,7 +13,7 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.repository.MaterialPortionRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
@@ -35,8 +35,8 @@ import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
 import io.company.brewcraft.service.LotAggregationService;
-import io.company.brewcraft.service.MaterialPortionService;
-import io.company.brewcraft.service.MaterialPortionServiceImpl;
+import io.company.brewcraft.service.MixtureMaterialPortionService;
+import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
 import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
@@ -280,11 +280,11 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
-        final MaterialPortionRepository materialPortionRepositoryMock = mock(MaterialPortionRepository.class);
+        final MixtureMaterialPortionRepository materialPortionRepositoryMock = mock(MixtureMaterialPortionRepository.class);
         final StockLotService stockLotServiceMock = mock(StockLotService.class);
-        final MaterialPortionService service = this.serviceAutoConfiguration.materialPortionService(materialPortionRepositoryMock, stockLotServiceMock);
+        final MixtureMaterialPortionService service = this.serviceAutoConfiguration.mixtureMaterialPortionService(materialPortionRepositoryMock, stockLotServiceMock);
 
-        assertTrue(service instanceof MaterialPortionServiceImpl);
+        assertTrue(service instanceof MixtureMaterialPortionServiceImpl);
     }
 
     @Test
