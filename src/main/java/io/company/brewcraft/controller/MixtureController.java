@@ -53,6 +53,7 @@ public class MixtureController extends BaseController {
     public PageDto<MixtureDto> getMixtures(@RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false, name = "parent_mixture_ids") Set<Long> parentMixtureIds,
             @RequestParam(required = false, name = "equipment_ids") Set<Long> equipmentIds,
+            @RequestParam(required = false, name = "brew_stage_ids") Set<Long> brewStageIds,
             @RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
             @RequestParam(required = false, name = "brew_batch_ids") Set<Long> brewBatchIds,
             @RequestParam(required = false, name = "stage_status_ids") Set<Long> stageStatusIds,
@@ -63,7 +64,7 @@ public class MixtureController extends BaseController {
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<Mixture> mixturePage = mixtureService.getMixtures(ids, parentMixtureIds, equipmentIds, brewIds,
+        Page<Mixture> mixturePage = mixtureService.getMixtures(ids, parentMixtureIds, equipmentIds, brewStageIds, brewIds,
                 brewBatchIds, stageStatusIds, stageTaskIds, productIds, page, size, sort, orderAscending);
 
         List<MixtureDto> mixtureList = mixturePage.stream().map(mixture -> mixtureMapper.toDto(mixture))

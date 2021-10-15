@@ -38,7 +38,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
 
     @Override
     public Page<BrewStage> getBrewStages(Set<Long> ids, Set<Long> brewIds, Set<Long> statusIds, Set<Long> taskIds,
-            Set<Long> brewLogIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
+            LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
             LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
             Specification<BrewStage> spec = SpecificationBuilder
@@ -47,7 +47,6 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
                 .in(new String[] {BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
                 .in(new String[] {BrewStage.FIELD_STATUS, BrewStageStatus.FIELD_ID}, statusIds)
                 .in(new String[] {BrewStage.FIELD_TASK, BrewTask.FIELD_ID}, taskIds)
-                .in(new String[] {BrewStage.FIELD_BREW_LOGS, BrewTask.FIELD_ID}, brewLogIds)
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
                 .build();

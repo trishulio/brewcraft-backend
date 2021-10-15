@@ -14,8 +14,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMixture;
+import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.model.BrewStageStatus;
+import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateMixture;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
@@ -33,18 +38,19 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
     @Override
     public Page<Mixture> getMixtures(Set<Long> ids, Set<Long> parentMixtureIds, Set<Long> equipmentIds,
-            Set<Long> brewIds, Set<Long> brewBatchIds, Set<Long> stageStatusIds, Set<Long> stageTaskIds,
-            Set<Long> productIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+            Set<Long> brewStageIds, Set<Long> brewIds, Set<Long> brewBatchIds, Set<Long> stageStatusIds, 
+            Set<Long> stageTaskIds, Set<Long> productIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<Mixture> spec = SpecificationBuilder
                 .builder()
                 .in(Mixture.FIELD_ID, ids)
                 .in(new String[] {Mixture.FIELD_PARENT_MIXTURE, Mixture.FIELD_ID}, parentMixtureIds)
                 .in(new String[] {Mixture.FIELD_EQUIPMENT, Equipment.FIELD_ID}, equipmentIds)
-                //.in(new String[] {Mixture.FIELD_BREW_LOGS, BrewLog.FIELD_BREWSTAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
-                //.in(new String[] {Mixture.FIELD_BREW_LOGS, BrewLog.FIELD_BREWSTAGE, BrewStage.FIELD_BREW, Brew.FIELD_BATCH_ID}, brewBatchIds)
-                //.in(new String[] {Mixture.FIELD_BREW_LOGS, BrewLog.FIELD_BREWSTAGE, BrewStage.FIELD_STATUS, BrewStageStatus.FIELD_ID}, stageStatusIds)
-                //.in(new String[] {Mixture.FIELD_BREW_LOGS, BrewLog.FIELD_BREWSTAGE, BrewStage.FIELD_TASK, BrewTask.FIELD_ID}, stageTaskIds)
-                //.in(new String[] {Mixture.FIELD_BREW_LOGS, BrewLog.FIELD_BREWSTAGE, BrewStage.FIELD_BREW, Brew.FIELD_PRODUCT, Product.FIELD_ID}, productIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, Brew.FIELD_ID}, brewStageIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_BATCH_ID}, brewBatchIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_STATUS, BrewStageStatus.FIELD_ID}, stageStatusIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_TASK, BrewTask.FIELD_ID}, stageTaskIds)
+                .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_PRODUCT, Product.FIELD_ID}, productIds)
                 .build();
 
             Page<Mixture> mixturePage = mixtureRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));

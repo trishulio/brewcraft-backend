@@ -38,7 +38,7 @@ public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, A
     public static final String FIELD_QUANTITY_VALUE = "quantityValue";
     public static final String FIELD_QUANTITY_UNIT = "quantityUnit";
     public static final String FIELD_EQUIPMENT = "equipment";
-    public static final String FIELD_BREW_LOGS = "brewLogs";
+    public static final String FIELD_BREW_STAGE = "brewStage";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mixture_generator")
