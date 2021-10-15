@@ -30,7 +30,6 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     public static final String FIELD_BREW = "brew";
     public static final String FIELD_STATUS = "status";
     public static final String FIELD_TASK = "task";
-    public static final String FIELD_BREW_LOGS = "brewLogs";
     public static final String FIELD_STARTED_AT = "startedAt";
     public static final String FIELD_ENDED_AT = "endedAt";
 

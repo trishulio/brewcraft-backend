@@ -56,7 +56,7 @@ public class MixtureControllerTest {
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
        doReturn(mPage).when(mixtureService).getMixtures(
-           null, null, null, null, null, null, null, null,
+           null, null, null, null, null, null, null, null, null,
            1,
            10,
            new TreeSet<>(List.of("id")),
@@ -64,7 +64,7 @@ public class MixtureControllerTest {
        );
 
        PageDto<MixtureDto> dto = mixtureController.getMixtures(
-               null, null, null, null, null, null, null, null,
+               null, null, null, null, null, null, null, null,  null,
                new TreeSet<>(List.of("id")),
                true,
                1,

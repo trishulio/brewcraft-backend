@@ -53,7 +53,6 @@ public class BrewStageController extends BaseController {
             @RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
             @RequestParam(required = false, name = "status_ids") Set<Long> statusIds,
             @RequestParam(required = false, name = "task_ids") Set<Long> taskIds,
-            @RequestParam(required = false, name = "brew_log_ids") Set<Long> brewLogIds,
             @RequestParam(required = false, name = "started_at_from") LocalDateTime startedAtFrom,
             @RequestParam(required = false, name = "started_at_to") LocalDateTime startedAtTo,
             @RequestParam(required = false, name = "ended_at_from") LocalDateTime endedAtFrom,
@@ -63,7 +62,7 @@ public class BrewStageController extends BaseController {
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<BrewStage> brewStagePage = brewStageService.getBrewStages(ids, brewLogIds, statusIds, taskIds, brewLogIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
+        Page<BrewStage> brewStagePage = brewStageService.getBrewStages(ids, brewIds, statusIds, taskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
 
         List<BrewStageDto> brewStageList = brewStagePage.stream()
                 .map(brewStage -> brewStageMapper.toDto(brewStage)).collect(Collectors.toList());
