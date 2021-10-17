@@ -27,22 +27,22 @@ import org.hibernate.annotations.UpdateTimestamp;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
-@Entity(name = "MATERIAL_PORTION")
+@Entity(name = "MIXTURE_PORTION")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion, Audited, CrudEntity<Long> {
+public class MixturePortion extends BaseEntity implements UpdateMixturePortion, CrudEntity<Long>, Audited {
     public static final String FIELD_ID = "id";
-    public static final String MATERIAL_LOT = "materialLot";
+    public static final String FIELD_MIXTURE = "mixture";
     public static final String FIELD_QUANTITY_VALUE = "quantityValue";
     public static final String FIELD_QUANTITY_UNIT = "quantityUnit";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_portion_generator")
-    @SequenceGenerator(name = "material_portion_generator", sequenceName = "material_portion_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mixture_portion_generator")
+    @SequenceGenerator(name = "mixture_portion_generator", sequenceName = "mixture_portion_sequence", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_lot_id", referencedColumnName = "id", nullable = false)
-    private MaterialLot materialLot;
+    @JoinColumn(name = "mixture_id", referencedColumnName = "id", nullable = false)
+    private Mixture mixture;
 
     @Embedded
     @AttributeOverrides({
@@ -67,17 +67,17 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
     @Version
     private Integer version;
 
-    public MaterialPortion() {
+    public MixturePortion() {
     }
 
-    public MaterialPortion(Long id) {
+    public MixturePortion(Long id) {
         this();
         setId(id);
     }
 
-    public MaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MixturePortion(Long id, Mixture mixture, Quantity<?> quantity, LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
-        setMaterialLot(materialLot);
+        setMixture(mixture);
         setQuantity(quantity);
         setAddedAt(addedAt);
         setCreatedAt(createdAt);
@@ -96,13 +96,13 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
     }
 
     @Override
-    public MaterialLot getMaterialLot() {
-        return materialLot;
+    public Mixture getMixture() {
+        return mixture;
     }
 
     @Override
-    public void setMaterialLot(MaterialLot materialLot) {
-        this.materialLot = materialLot;
+    public void setMixture(Mixture mixture) {
+        this.mixture = mixture;
     }
 
     @Override

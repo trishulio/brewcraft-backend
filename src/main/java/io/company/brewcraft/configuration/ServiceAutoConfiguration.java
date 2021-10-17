@@ -7,15 +7,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.model.BaseFinishedGood;
+import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
+import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
+import io.company.brewcraft.model.FinishedGood;
+import io.company.brewcraft.model.FinishedGoodMaterialPortion;
+import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -26,6 +33,8 @@ import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
+import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
+import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
@@ -39,6 +48,7 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
+import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
@@ -69,6 +79,10 @@ import io.company.brewcraft.service.BrewTaskServiceImpl;
 import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
+import io.company.brewcraft.service.FinishedGoodAccessor;
+import io.company.brewcraft.service.FinishedGoodMaterialPortionService;
+import io.company.brewcraft.service.FinishedGoodMixturePortionService;
+import io.company.brewcraft.service.FinishedGoodService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
@@ -372,5 +386,26 @@ public class ServiceAutoConfiguration {
         final UpdateService<Long, Sku, BaseSku<? extends BaseSkuMaterial<?>>, UpdateSku<? extends UpdateSkuMaterial<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseSku.class, UpdateSku.class, Sku.class, Set.of(BaseSku.ATTR_MATERIALS));
         final RepoService<Long, Sku, SkuAccessor> repoService = new CrudRepoService<>(skuRepository);
         return new SkuServiceImpl(repoService, updateService, skuMaterialService);
+    }
+    
+    @Bean
+    public FinishedGoodMaterialPortionService finishedGoodMaterialPortionService(UtilityProvider utilProvider) {
+        final UpdateService<Long, FinishedGoodMaterialPortion, BaseFinishedGoodMaterialPortion<?>, UpdateFinishedGoodMaterialPortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMaterialPortion.class, UpdateFinishedGoodMaterialPortion.class, FinishedGoodMaterialPortion.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
+        return new FinishedGoodMaterialPortionService(updateService);
+    }
+    
+    @Bean
+    public FinishedGoodMixturePortionService finishedGoodMixturePortionService(UtilityProvider utilProvider) {
+        final UpdateService<Long, FinishedGoodMixturePortion, BaseFinishedGoodMixturePortion<?>, UpdateFinishedGoodMixturePortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMixturePortion.class, UpdateFinishedGoodMixturePortion.class, FinishedGoodMixturePortion.class, Set.of(BaseFinishedGoodMixturePortion.ATTR_FINISHED_GOOD));
+        return new FinishedGoodMixturePortionService(updateService);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(FinishedGoodService.class)
+    public FinishedGoodService finishedGoodService(UtilityProvider utilProvider, FinishedGoodMixturePortionService fgMixturePortionService, FinishedGoodMaterialPortionService fgMaterialPortionService, final FinishedGoodRepository finishedGoodRepository) {       
+        final UpdateService<Long, FinishedGood, BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>, UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGood.class, UpdateFinishedGood.class, FinishedGood.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
+        
+        final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository);
+        return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
     }
 }

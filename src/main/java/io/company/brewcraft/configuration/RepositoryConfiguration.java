@@ -11,6 +11,9 @@ import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.FinishedGood;
+import io.company.brewcraft.model.FinishedGoodMaterialPortion;
+import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -44,6 +47,9 @@ import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
+import io.company.brewcraft.repository.FinishedGoodMaterialPortionRepository;
+import io.company.brewcraft.repository.FinishedGoodMixturePortionRepository;
+import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceItemRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
@@ -69,6 +75,9 @@ import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
+import io.company.brewcraft.service.FinishedGoodAccessor;
+import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
+import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
 import io.company.brewcraft.service.InvoiceItemAccessor;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
 import io.company.brewcraft.service.MaterialAccessor;
@@ -354,6 +363,36 @@ public class RepositoryConfiguration {
             Sku.class,
             accessor -> accessor.getSku(),
             (accessor, sku) -> accessor.setSku(sku),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodRefresher(FinishedGoodRepository repo) {
+        return new AccessorRefresher<>(
+            FinishedGood.class,
+            accessor -> accessor.getFinishedGood(),
+            (accessor, finishedGood) -> accessor.setFinishedGood(finishedGood),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> finishedGoodMaterialPortionRefresher(FinishedGoodMaterialPortionRepository repo) {
+        return new AccessorRefresher<>(
+            FinishedGoodMaterialPortion.class,
+            accessor -> accessor.getMaterialPortion(),
+            (accessor, finishedGoodMaterialPortion) -> accessor.setMaterialPortion(finishedGoodMaterialPortion),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> finishedGoodMixturePortionRefresher(FinishedGoodMixturePortionRepository repo) {
+        return new AccessorRefresher<>(
+            FinishedGoodMixturePortion.class,
+            accessor -> accessor.getMixturePortion(),
+            (accessor, finishedGoodMixturePortion) -> accessor.setMixturePortion(finishedGoodMixturePortion),
             ids -> repo.findAllById(ids)
         );
     }

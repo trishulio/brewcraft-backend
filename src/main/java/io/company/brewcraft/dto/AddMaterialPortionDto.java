@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-public class AddMaterialPortionBaseDto extends BaseDto {
+public class AddMaterialPortionDto extends BaseDto {
     
     @NotNull
     private Long materialLotId;
@@ -14,11 +14,11 @@ public class AddMaterialPortionBaseDto extends BaseDto {
     
     private LocalDateTime addedAt;
     
-    public AddMaterialPortionBaseDto() {
+    public AddMaterialPortionDto() {
         super();
     }
 
-    public AddMaterialPortionBaseDto(Long materialLotId, QuantityDto quantity, LocalDateTime addedAt) {
+    public AddMaterialPortionDto(Long materialLotId, QuantityDto quantity, LocalDateTime addedAt) {
         this();
         this.materialLotId = materialLotId;
         this.quantity = quantity;
