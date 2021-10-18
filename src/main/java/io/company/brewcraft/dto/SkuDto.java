@@ -17,10 +17,14 @@ public class SkuDto extends BaseDto {
     public SkuDto() {
         super();
     }
-
-    public SkuDto(Long id, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    
+    public SkuDto(Long id) {
         this();
         this.id = id;
+    }
+
+    public SkuDto(Long id, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+        this(id);
         this.product = product;
         this.materials = materials;
         this.quantity = quantity;

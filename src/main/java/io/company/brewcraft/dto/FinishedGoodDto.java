@@ -4,6 +4,8 @@ import java.util.List;
 
 public class FinishedGoodDto extends BaseDto {
     
+    private Long id;
+    
     private SkuDto sku;
     
     private List<MixturePortionDto> mixturePortions;
@@ -15,21 +17,34 @@ public class FinishedGoodDto extends BaseDto {
     public FinishedGoodDto() {
         super();
     }
-
-    public FinishedGoodDto(SkuDto sku, List<MixturePortionDto> mixturePortions,
-            List<MaterialPortionDto> materialPortions, Integer version) {
+    
+    public FinishedGoodDto(Long id) {
         this();
+        this.id = id;
+    }
+
+    public FinishedGoodDto(Long id, SkuDto sku, List<MixturePortionDto> mixturePortions,
+            List<MaterialPortionDto> materialPortions, Integer version) {
+        this(id);
         this.sku = sku;
         this.mixturePortions = mixturePortions;
         this.materialPortions = materialPortions;
         this.version = version;
     }
+    
+    public Long getId() {
+        return id;
+    }
 
-    public SkuDto getSkuId() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public SkuDto getSku() {
         return sku;
     }
 
-    public void setSkuId(SkuDto sku) {
+    public void setSku(SkuDto sku) {
         this.sku = sku;
     }
 
