@@ -18,7 +18,7 @@ public class Measure extends BaseEntity implements Identified<Long> {
     public static final String ABV = "abv";
     public static final String IBU = "ibu";
     public static final String PH = "ph";
-    public static final String MASH_TEMP = "mashTemperature";
+    public static final String TEMPERATURE = "temperature";
     public static final String GRAVITY = "gravity";
     public static final String YIELD = "yield";
     public static final String BREWHOUSE_DURATION = "brewhouseDuration";

@@ -51,7 +51,7 @@ public class BrewStage extends BaseEntity implements BaseBrewStage, UpdateBrewSt
     private BrewTask task;
 
     @OneToMany(mappedBy = "brewStage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @OrderBy("recordedAt ASC, id ASC")
+    @OrderBy("id ASC")
     @JsonIgnore
     private List<Mixture> mixtures;
 
