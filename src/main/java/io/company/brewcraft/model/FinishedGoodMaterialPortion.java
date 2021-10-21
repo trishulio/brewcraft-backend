@@ -11,7 +11,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-@Entity(name = "FINISHED_GOOD_MATERIAL_PORTION")
+@Entity(name = "finished_good_material_portion")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
 public class FinishedGoodMaterialPortion extends MaterialPortion implements UpdateFinishedGoodMaterialPortion<FinishedGood> {
     

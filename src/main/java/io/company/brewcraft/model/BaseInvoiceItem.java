@@ -1,13 +1,11 @@
 package io.company.brewcraft.model;
 
-import javax.measure.Quantity;
-
 import org.joda.money.Money;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.service.MaterialAccessor;
 
-public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem<T>>> extends MaterialAccessor {
+public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem<T>>> extends MaterialAccessor, QuantityAccessor {
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_INVOICE = "invoice";
     final String ATTR_QUANTITY = "quantity";
@@ -21,10 +19,6 @@ public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem
     T getInvoice();
 
     void setInvoice(T invoice);
-
-    Quantity<?> getQuantity();
-
-    void setQuantity(Quantity<?> quantity);
 
     Money getPrice();
 

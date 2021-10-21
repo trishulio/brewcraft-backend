@@ -21,13 +21,13 @@ public interface FinishedGoodMixturePortionMapper {
     @Mapping(target = MixturePortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MixturePortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = MixturePortion.ATTR_VERSION, ignore = true)
-    @Mapping(target = "mixture", source = "mixtureId")
+    @Mapping(target = MixturePortion.ATTR_MIXTURE, source = "mixtureId")
     FinishedGoodMixturePortion fromDto(AddMixturePortionDto dto);
 
     @Mapping(target = MixturePortion.ATTR_ID, ignore = true)
     @Mapping(target = MixturePortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MixturePortion.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = "mixture", source = "mixtureId")
+    @Mapping(target = MixturePortion.ATTR_MIXTURE, source = "mixtureId")
     FinishedGoodMixturePortion fromDto(UpdateMixturePortionDto dto);
 
 }

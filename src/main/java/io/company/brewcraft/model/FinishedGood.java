@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.service.CrudEntity;
 
-@Entity(name = "FINISHED_GOOD")
+@Entity(name = "finished_good")
 public class FinishedGood extends BaseEntity implements UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion>, CrudEntity<Long>, Audited {
     
     public static final String FIELD_ID = "id";

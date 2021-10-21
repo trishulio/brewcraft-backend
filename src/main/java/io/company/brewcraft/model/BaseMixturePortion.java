@@ -2,16 +2,10 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 
-import javax.measure.Quantity;
-
 import io.company.brewcraft.service.MixtureAccessor;
 
-public interface BaseMixturePortion extends MixtureAccessor {
-    
-    Quantity<?> getQuantity();
-
-    void setQuantity(Quantity<?> quantity);
-    
+public interface BaseMixturePortion extends MixtureAccessor, QuantityAccessor {
+        
     LocalDateTime getAddedAt();
     
     void setAddedAt(LocalDateTime addedAt);

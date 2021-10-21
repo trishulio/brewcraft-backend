@@ -3,7 +3,7 @@ package io.company.brewcraft.service;
 import io.company.brewcraft.model.FinishedGood;
 
 public interface FinishedGoodAccessor {
-    final String ATTR_MIXTURE = "finishedGood";
+    final String ATTR_FINISHED_GOOD = "finishedGood";
 
     FinishedGood getFinishedGood();
 

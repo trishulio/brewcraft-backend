@@ -11,11 +11,11 @@ import io.company.brewcraft.model.FinishedGood;
 @Repository
 public interface FinishedGoodRepository extends JpaRepository<FinishedGood, Long>, JpaSpecificationExecutor<FinishedGood>, EnhancedFinishedGoodRepository, ExtendedRepository<Long> {
     @Override
-    @Query("select count(i) > 0 from FINISHED_GOOD i where i.id in (:ids)")
+    @Query("select count(i) > 0 from finished_good i where i.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);
 
     @Override
     @Modifying
-    @Query("delete from FINISHED_GOOD i where i.id in (:ids)")
+    @Query("delete from finished_good i where i.id in (:ids)")
     int deleteByIds(Iterable<Long> ids);
 }

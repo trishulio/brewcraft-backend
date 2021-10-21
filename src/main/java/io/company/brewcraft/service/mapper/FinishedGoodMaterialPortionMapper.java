@@ -21,13 +21,13 @@ public interface FinishedGoodMaterialPortionMapper {
     @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_VERSION, ignore = true)
-    @Mapping(target = "materialLot", source = "materialLotId")
+    @Mapping(target = MaterialPortion.ATTR_MATERIAL_LOT, source = "materialLotId")
     FinishedGoodMaterialPortion fromDto(AddMaterialPortionDto dto);
 
     @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = "materialLot", source = "materialLotId")
+    @Mapping(target = MaterialPortion.ATTR_MATERIAL_LOT, source = "materialLotId")
     FinishedGoodMaterialPortion fromDto(UpdateMaterialPortionDto dto);
 
 }
