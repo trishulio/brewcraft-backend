@@ -17,7 +17,7 @@ public class AddMaterialDto extends BaseDto {
 
     @NotEmpty
     private String baseQuantityUnit;
-    
+
     private String imageSrc;
 
     public AddMaterialDto() {
@@ -73,7 +73,7 @@ public class AddMaterialDto extends BaseDto {
     public void setBaseQuantityUnit(String baseQuantityUnit) {
         this.baseQuantityUnit = baseQuantityUnit;
     }
-    
+
     public String getImageSrc() {
         return imageSrc;
     }

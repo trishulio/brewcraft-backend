@@ -3,14 +3,14 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotNull;
 
 public class UpdateMixturePortionDto extends BaseDto {
-    
+
     private Long mixtureId;
 
     private QuantityDto quantity;
-        
+
     @NotNull
     private Integer version;
-    
+
     public UpdateMixturePortionDto() {
         super();
     }
@@ -21,7 +21,7 @@ public class UpdateMixturePortionDto extends BaseDto {
         this.quantity = quantity;
         this.version = version;
     }
-    
+
     public Long getMixtureId() {
         return mixtureId;
     }
@@ -29,7 +29,7 @@ public class UpdateMixturePortionDto extends BaseDto {
     public void setMixtureId(Long mixtureId) {
         this.mixtureId = mixtureId;
     }
-    
+
     public QuantityDto getQuantity() {
         return quantity;
     }

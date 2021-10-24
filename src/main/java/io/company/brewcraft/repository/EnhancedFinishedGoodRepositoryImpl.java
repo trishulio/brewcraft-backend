@@ -19,9 +19,9 @@ public class EnhancedFinishedGoodRepositoryImpl implements EnhancedFinishedGoodR
     private final AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher;
 
     private final SkuRepository skuRepository;
-   
+
     private final FinishedGoodMixturePortionRepository fgMixturePortionRepository;
-    
+
     private final FinishedGoodMaterialPortionRepository fgMaterialPortionRepository;
 
     @Autowired
@@ -38,7 +38,7 @@ public class EnhancedFinishedGoodRepositoryImpl implements EnhancedFinishedGoodR
 
         final List<FinishedGoodMixturePortion> mixturePortions = finishedGoods.stream().filter(i -> i.getMixturePortions() != null).flatMap(i -> i.getMixturePortions().stream()).collect(Collectors.toList());
         this.fgMixturePortionRepository.refresh(mixturePortions);
-        
+
         final List<FinishedGoodMaterialPortion> materialPortions = finishedGoods.stream().filter(i -> i.getMaterialPortions() != null).flatMap(i -> i.getMaterialPortions().stream()).collect(Collectors.toList());
         this.fgMaterialPortionRepository.refresh(materialPortions);
     }

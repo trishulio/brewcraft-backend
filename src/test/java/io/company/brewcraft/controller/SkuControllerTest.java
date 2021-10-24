@@ -80,7 +80,7 @@ public class SkuControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       
+
        final SkuDto sku = dto.getContent().get(0);
        assertEquals(1L, sku.getId());
        assertEquals("testName", sku.getName());
@@ -88,7 +88,7 @@ public class SkuControllerTest {
        assertEquals(new ProductDto(2L), sku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), sku.getQuantity());
        assertEquals(1, sku.getVersion());
-       
+
        assertEquals(1, sku.getMaterials().size());
        final SkuMaterialDto skuMaterial = sku.getMaterials().get(0);
        assertEquals(1L, skuMaterial.getId());
@@ -111,7 +111,7 @@ public class SkuControllerTest {
        assertEquals(new ProductDto(2L), actualSku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), actualSku.getQuantity());
        assertEquals(1, actualSku.getVersion());
-       
+
        assertEquals(1, actualSku.getMaterials().size());
        final SkuMaterialDto skuMaterial = actualSku.getMaterials().get(0);
        assertEquals(1L, skuMaterial.getId());
@@ -147,7 +147,7 @@ public class SkuControllerTest {
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
        assertEquals(null, skuDto.getVersion());
-       
+
        assertEquals(1, skuDto.getMaterials().size());
        final SkuMaterialDto skuMaterial = skuDto.getMaterials().get(0);
        assertEquals(null, skuMaterial.getId());
@@ -170,7 +170,7 @@ public class SkuControllerTest {
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
        assertEquals(1, skuDto.getVersion());
-       
+
        assertEquals(1, skuDto.getMaterials().size());
        final SkuMaterialDto skuMaterial = skuDto.getMaterials().get(0);
        assertEquals(1L, skuMaterial.getId());
@@ -193,7 +193,7 @@ public class SkuControllerTest {
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
        assertEquals(1, skuDto.getVersion());
-       
+
        assertEquals(1, skuDto.getMaterials().size());
        final SkuMaterialDto skuMaterial = skuDto.getMaterials().get(0);
        assertEquals(1L, skuMaterial.getId());

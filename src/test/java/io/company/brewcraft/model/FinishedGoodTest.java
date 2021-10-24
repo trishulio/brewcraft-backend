@@ -34,15 +34,15 @@ public class FinishedGoodTest {
 
         assertEquals(1L, finishedGood.getId());
         assertEquals(new Sku(2L), finishedGood.getSku());
-        
+
         FinishedGoodMixturePortion expectedMixturePortion = new FinishedGoodMixturePortion(5L);
-        expectedMixturePortion.setFinishedGood(finishedGood);     
+        expectedMixturePortion.setFinishedGood(finishedGood);
         assertEquals(List.of(expectedMixturePortion), finishedGood.getMixturePortions());
-        
+
         FinishedGoodMaterialPortion expectedMaterialPortion = new FinishedGoodMaterialPortion(6L);
         expectedMaterialPortion.setFinishedGood(finishedGood);
         assertEquals(List.of(expectedMaterialPortion), finishedGood.getMaterialPortions());
-        
+
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), finishedGood.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), finishedGood.getLastUpdated());
         assertEquals(1, finishedGood.getVersion());
@@ -53,7 +53,7 @@ public class FinishedGoodTest {
         finishedGood.setId(1L);
         assertEquals(1L, finishedGood.getId());
     }
-    
+
     @Test
     public void testGetSetSku() {
         finishedGood.setSku(new Sku(3L));
@@ -63,17 +63,17 @@ public class FinishedGoodTest {
     @Test
     public void testGetSetMixturePortions() {
         FinishedGoodMixturePortion expectedMixturePortion = new FinishedGoodMixturePortion(5L);
-        expectedMixturePortion.setFinishedGood(finishedGood);     
-        
+        expectedMixturePortion.setFinishedGood(finishedGood);
+
         finishedGood.setMixturePortions(List.of(expectedMixturePortion));
         assertEquals(List.of(expectedMixturePortion), finishedGood.getMixturePortions());
     }
-    
+
     @Test
     public void testGetSetMaterialPortions() {
         FinishedGoodMaterialPortion expectedMaterialPortion = new FinishedGoodMaterialPortion(6L);
         expectedMaterialPortion.setFinishedGood(finishedGood);
-        
+
         finishedGood.setMaterialPortions(List.of(expectedMaterialPortion));
         assertEquals(List.of(expectedMaterialPortion), finishedGood.getMaterialPortions());
     }

@@ -10,7 +10,7 @@ import io.company.brewcraft.model.Measure;
 public interface MeasureMapper {
 
     MeasureMapper INSTANCE = Mappers.getMapper(MeasureMapper.class);
-    
+
     Measure fromDto(Long id);
 
     Measure fromDto(MeasureDto dto);

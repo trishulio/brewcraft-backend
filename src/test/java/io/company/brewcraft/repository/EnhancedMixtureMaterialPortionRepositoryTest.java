@@ -17,7 +17,7 @@ public class EnhancedMixtureMaterialPortionRepositoryTest {
     private MixtureRepository mixtureRepositoryMock;
 
     private MaterialLotRepository materialLotRepositoryMock;
-    
+
     private AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresherMock;
 
     @SuppressWarnings("unchecked")
@@ -39,7 +39,7 @@ public class EnhancedMixtureMaterialPortionRepositoryTest {
         verify(mixtureRepositoryMock, times(1)).refreshAccessors(materialPortions);
         verify(materialLotRepositoryMock, times(1)).refreshAccessors(materialPortions);
     }
-    
+
     @Test
     public void testRefreshAccessors_CallsRefresherAccessor() {
         List<MixtureMaterialPortionAccessor> accessors = List.of(mock(MixtureMaterialPortionAccessor.class), mock(MixtureMaterialPortionAccessor.class));

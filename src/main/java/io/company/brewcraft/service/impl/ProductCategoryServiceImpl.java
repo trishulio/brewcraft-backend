@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.repository.ProductCategoryRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -30,7 +30,7 @@ public class ProductCategoryServiceImpl extends BaseService implements ProductCa
     public Page<ProductCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames,
             int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
-        Specification<ProductCategory> spec = SpecificationBuilder.builder()
+        Specification<ProductCategory> spec = WhereClauseBuilder.builder()
                 .in(ProductCategory.FIELD_ID, ids)
                 .in(ProductCategory.FIELD_NAME, names)
                 .in(new String[] { ProductCategory.FIELD_PARENT_CATEGORY, ProductCategory.FIELD_ID }, parentCategoryIds)

@@ -3,11 +3,11 @@ package io.company.brewcraft.dto;
 public class MixturePortionDto extends BaseDto {
 
     private Long id;
-    
+
     private MixtureDto mixture;
 
     private QuantityDto quantity;
-            
+
     private Integer version;
 
     public MixturePortionDto() {
@@ -49,7 +49,7 @@ public class MixturePortionDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-    
+
     public Integer getVersion() {
         return version;
     }

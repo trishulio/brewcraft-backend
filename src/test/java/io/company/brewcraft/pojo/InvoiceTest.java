@@ -205,9 +205,9 @@ public class InvoiceTest {
         item2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
 
         this.invoice.setItems(List.of(item1, item2));
-        
+
         this.invoice.removeItem(item1);
-        
+
         assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
     }
 

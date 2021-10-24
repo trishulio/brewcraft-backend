@@ -45,7 +45,7 @@ public class AddSkuDtoTest {
         addSkuDto.setDescription("testDescription");
         assertEquals("testDescription", addSkuDto.getDescription());
     }
-    
+
     @Test
     public void testGetSetMaterials() {
         addSkuDto.setMaterials(List.of(new AddSkuMaterialDto(3L)));

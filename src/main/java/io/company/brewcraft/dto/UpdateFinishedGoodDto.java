@@ -5,16 +5,16 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class UpdateFinishedGoodDto extends BaseDto {
-    
+
     private Long skuId;
-    
+
     private List<UpdateMixturePortionDto> mixturePortions;
-    
+
     private List<UpdateMaterialPortionDto> materialPortions;
-    
+
     @NotNull
     private Integer version;
-        
+
     public UpdateFinishedGoodDto() {
         super();
     }
@@ -59,5 +59,5 @@ public class UpdateFinishedGoodDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-         
+
 }

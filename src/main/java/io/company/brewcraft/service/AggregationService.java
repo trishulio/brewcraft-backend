@@ -33,30 +33,30 @@ public class AggregationService {
     ) {
         final PageRequest pageable = pageRequest(sort, orderAscending, page, size);
 
-        final Selector selectAttr = new Selector();
-        final Selector groupByAttr = new Selector();
+        final SelectClauseBuilder selector = new SelectClauseBuilder();
+        final GroupByClauseBuilder grouper = new GroupByClauseBuilder();
 
         Arrays.stream(groupBy).forEach(col -> {
-            selectAttr.select(col);
-            groupByAttr.select(col);
+            selector.select(col);
+            grouper.groupBy(col);
         });
 
-        selectAttr.select(aggrFn.getAggregation(aggrField));
+        selector.select(aggrFn.getAggregation(aggrField));
 
-        List<T> content = this.aggrRepo.getAggregation(clazz, selectAttr, groupByAttr, spec, pageable);
-        Long total = this.getResultCount(clazz, groupByAttr, spec);
+        List<T> content = this.aggrRepo.getAggregation(clazz, selector, grouper, spec, pageable);
+        Long total = this.getResultCount(clazz, grouper, spec);
 
         return new PageImpl<>(content, pageable, total);
     }
 
-    public <T> Long getResultCount(Class<T> clazz, Selector groupBy, Specification<T> spec) {
+    public <T> Long getResultCount(Class<T> clazz, GroupByClauseBuilder groupBy, Specification<T> spec) {
         /**
          * Wrapper for the AggregationRepository's getResultCount method. The wrapper
          * doesn't use pageable to get the total number of rows. To minimize the data
          * fetched from DB in the Repo layer, the selection uses a null-literal as a
          * value
          */
-        Selector selection = new Selector().select(new NullSpec());
-        return this.aggrRepo.getResultCount(clazz, selection, groupBy, spec, null);
+        SelectClauseBuilder selector = new SelectClauseBuilder().select(new NullSpec());
+        return this.aggrRepo.getResultCount(clazz, selector, groupBy, spec, null);
     }
 }

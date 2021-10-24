@@ -23,7 +23,7 @@ import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -51,7 +51,7 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             int page,
             int size
          ) {
-        final Specification<FinishedGood> spec = SpecificationBuilder
+        final Specification<FinishedGood> spec = WhereClauseBuilder
                                             .builder()
                                             .in(FinishedGood.FIELD_ID, ids)
                                             .not().in(FinishedGood.FIELD_ID, excludeIds)
@@ -129,7 +129,7 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             final List<FinishedGoodMixturePortion> updatedMixturePortions = this.fgMixturePortionService.getPutEntities(existingMixturePortions, (List<UpdateFinishedGoodMixturePortion<?>>) updateMixturePortions);
 
             updated.get(i).setMixturePortions(updatedMixturePortions);
-            
+
             final List<FinishedGoodMaterialPortion> existingMaterialPortions = i < existing.size() ? existing.get(i).getMaterialPortions() : null;
             final List<? extends UpdateFinishedGoodMaterialPortion<?>> updateMaterialPortions = i < updates.size() ? updates.get(i).getMaterialPortions() : null;
 
@@ -165,7 +165,7 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             final List<FinishedGoodMixturePortion> updatedMixturePortions = this.fgMixturePortionService.getPatchEntities(existingMixturePortions, (List<UpdateFinishedGoodMixturePortion<?>>) updateMixturePortions);
 
             updated.get(i).setMixturePortions(updatedMixturePortions);
-            
+
             final List<FinishedGoodMaterialPortion> existingMaterialPortions = existing.get(i).getMaterialPortions();
             final List<? extends UpdateFinishedGoodMaterialPortion<?>> updateMaterialPortions = patches.get(i).getMaterialPortions();
 

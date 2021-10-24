@@ -14,14 +14,14 @@ import io.company.brewcraft.service.BetweenSpec;
 import io.company.brewcraft.service.InSpec;
 import io.company.brewcraft.service.IsNullSpec;
 import io.company.brewcraft.service.LikeSpec;
-import io.company.brewcraft.service.PathSpec;
+import io.company.brewcraft.service.SelectColumnSpec;
 
-public class CriteriaSpecBuilder {
-    private static final Logger log = LoggerFactory.getLogger(CriteriaSpecBuilder.class);
+public class WhereClauseBuilderDelegate {
+    private static final Logger log = LoggerFactory.getLogger(WhereClauseBuilderDelegate.class);
 
-    private SpecAccumulator accumulator;
+    private PredicateSpecAccumulator accumulator;
 
-    public CriteriaSpecBuilder(SpecAccumulator accumulator) {
+    public WhereClauseBuilderDelegate(PredicateSpecAccumulator accumulator) {
         this.accumulator = accumulator;
     }
 
@@ -30,7 +30,7 @@ public class CriteriaSpecBuilder {
     }
 
     public void isNull(String[] joins, String[] paths) {
-        CriteriaSpec<Boolean> spec = new IsNullSpec(new PathSpec<>(joins, paths));
+        CriteriaSpec<Boolean> spec = new IsNullSpec(new SelectColumnSpec<>(joins, paths));
         accumulator.add(spec);
 
         accumulator.setIsNot(false);
@@ -38,7 +38,7 @@ public class CriteriaSpecBuilder {
 
     public void in(String[] joins, String[] paths, Collection<?> collection) {
         if (collection != null) {
-            CriteriaSpec<Boolean> spec = new InSpec<>(new PathSpec<>(joins, paths), collection);
+            CriteriaSpec<Boolean> spec = new InSpec<>(new SelectColumnSpec<>(joins, paths), collection);
             accumulator.add(spec);
         }
 
@@ -49,7 +49,7 @@ public class CriteriaSpecBuilder {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    CriteriaSpec<Boolean> spec = new LikeSpec(new PathSpec<>(joins, paths), text);
+                    CriteriaSpec<Boolean> spec = new LikeSpec(new SelectColumnSpec<>(joins, paths), text);
                     accumulator.add(spec);
                 }
             }
@@ -62,7 +62,7 @@ public class CriteriaSpecBuilder {
         // Note: Null checks for start and end reduces the redundant clause for a true
         // literal. It only sort-of improves the Query performance but its not required.
         if (start != null || end != null) {
-            CriteriaSpec<Boolean> spec = new BetweenSpec<>(new PathSpec<>(joins, paths), start, end);
+            CriteriaSpec<Boolean> spec = new BetweenSpec<>(new SelectColumnSpec<>(joins, paths), start, end);
             accumulator.add(spec);
         }
 

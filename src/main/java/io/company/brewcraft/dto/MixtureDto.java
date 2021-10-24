@@ -17,7 +17,7 @@ public class MixtureDto extends BaseDto {
     public MixtureDto() {
         super();
     }
-    
+
     public MixtureDto(Long id) {
         this();
         this.id = id;

@@ -87,7 +87,7 @@ public class MixtureRecordingController extends BaseController {
 
         return addedMixtureRecordings.stream()
                                      .map(addedMixtureRecording -> mixtureRecordingMapper.toDto(addedMixtureRecording))
-                                     .collect(Collectors.toList());          
+                                     .collect(Collectors.toList());
     }
 
     @PutMapping("/{mixtureRecordingId}")

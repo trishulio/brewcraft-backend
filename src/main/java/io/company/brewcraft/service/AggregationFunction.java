@@ -35,7 +35,7 @@ public enum AggregationFunction {
         try {
             Constructor<? extends CriteriaSpec<? extends Number>> constructor = this.clazz.getConstructor(CriteriaSpec.class);
 
-            return constructor.newInstance(new PathSpec<>(path));
+            return constructor.newInstance(new SelectColumnSpec<>(path));
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             String msg = String.format("Failed to create an instance of type: '%s' with path: %s because: '%s'", this.clazz.getName(), Arrays.toString(path).replace(", ", "/"), e.getMessage());
 

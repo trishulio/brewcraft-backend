@@ -5,20 +5,20 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class AddSkuDto extends BaseDto {
-    
+
     @NotNull
     private String name;
 
     private String description;
-    
+
     @NotNull
     private Long productId;
-    
+
     @NotNull
     private List<AddSkuMaterialDto> materials;
-    
+
     private QuantityDto quantity;
-    
+
     public AddSkuDto() {
         super();
     }
@@ -31,7 +31,7 @@ public class AddSkuDto extends BaseDto {
         this.materials = materials;
         this.quantity = quantity;
     }
-    
+
     public String getName() {
         return name;
     }

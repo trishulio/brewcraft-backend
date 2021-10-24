@@ -89,10 +89,10 @@ public class BrewStageController extends BaseController {
                                                      .collect(Collectors.toList());
 
         List<BrewStage> addedBrewStages = brewStageService.addBrewStages(brewStages);
-        
+
         return addedBrewStages.stream()
                               .map(addedBrewStage -> brewStageMapper.toDto(addedBrewStage))
-                              .collect(Collectors.toList());    
+                              .collect(Collectors.toList());
     }
 
     @PutMapping("/{stageId}")

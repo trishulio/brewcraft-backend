@@ -20,7 +20,7 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.UpdateMaterial;
 import io.company.brewcraft.repository.MaterialRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
@@ -59,7 +59,7 @@ public class MaterialServiceImpl extends BaseService implements MaterialService 
             });
         }
 
-        Specification<Material> spec = SpecificationBuilder
+        Specification<Material> spec = WhereClauseBuilder
                 .builder()
                 .in(Material.FIELD_ID, ids)
                 .in(new String[] { Material.FIELD_CATEGORY, MaterialCategory.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)

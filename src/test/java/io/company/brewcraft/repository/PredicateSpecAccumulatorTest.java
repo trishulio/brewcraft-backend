@@ -18,16 +18,16 @@ import io.company.brewcraft.service.AndSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.NotSpec;
 
-public class SpecAccumulatorTest {
+public class PredicateSpecAccumulatorTest {
 
-    private SpecAccumulator accumulator;
+    private PredicateSpecAccumulator accumulator;
 
     private List<CriteriaSpec<Boolean>> mAggregations;
 
     @BeforeEach
     public void init() {
         mAggregations = new ArrayList<>();
-        accumulator = new SpecAccumulator(mAggregations);
+        accumulator = new PredicateSpecAccumulator(mAggregations);
     }
 
     @Test

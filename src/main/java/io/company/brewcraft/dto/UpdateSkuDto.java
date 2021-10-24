@@ -3,19 +3,19 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class UpdateSkuDto extends BaseDto {
-    
+
     private String name;
 
     private String description;
-    
+
     private Long productId;
-    
+
     private List<UpdateSkuMaterialDto> materials;
-    
+
     private QuantityDto quantity;
-    
+
     private Integer version;
-    
+
     public UpdateSkuDto() {
         super();
     }
@@ -29,7 +29,7 @@ public class UpdateSkuDto extends BaseDto {
         this.quantity = quantity;
         this.version = version;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -69,7 +69,7 @@ public class UpdateSkuDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-    
+
     public Integer getVersion() {
         return version;
     }

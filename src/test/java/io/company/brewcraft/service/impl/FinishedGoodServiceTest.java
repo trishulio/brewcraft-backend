@@ -33,15 +33,15 @@ import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class FinishedGoodServiceTest {
-   
-   private FinishedGoodService service;  
-   
+
+   private FinishedGoodService service;
+
    private FinishedGoodMaterialPortionService mFgMaterialPortionService;
-   
+
    private FinishedGoodMixturePortionService mFgMixturePortionService;
-   
+
    private UpdateService<Long, FinishedGood, BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>, UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> mUpdateService;
-   
+
    private RepoService<Long, FinishedGood, FinishedGoodAccessor> mRepoService;
 
    @BeforeEach
@@ -150,7 +150,7 @@ public class FinishedGoodServiceTest {
        final List<FinishedGood> expected = List.of(
            new FinishedGood(1L), new FinishedGood()
        );
-       
+
        expected.get(0).setMixturePortions(List.of(new FinishedGoodMixturePortion(10L)));
        expected.get(0).setMaterialPortions(List.of(new FinishedGoodMaterialPortion(30L)));
 
@@ -176,11 +176,11 @@ public class FinishedGoodServiceTest {
        final UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> finishedGood1 = new FinishedGood(1L);
        finishedGood1.setMixturePortions(List.of(new FinishedGoodMixturePortion(10L)));
        finishedGood1.setMaterialPortions(List.of(new FinishedGoodMaterialPortion(30L)));
-       
+
        final UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> finishedGood2 = new FinishedGood(2L);
        finishedGood2.setMixturePortions(List.of(new FinishedGoodMixturePortion(20L)));
        finishedGood2.setMaterialPortions(List.of(new FinishedGoodMaterialPortion(40L)));
-       
+
        doReturn(List.of(new FinishedGood(1L), new FinishedGood(2L))).when(this.mRepoService).getByIds(List.of(finishedGood1, finishedGood2));
 
        final List<FinishedGood> updated = this.service.put(List.of(finishedGood1, finishedGood2, new FinishedGood()));
@@ -188,7 +188,7 @@ public class FinishedGoodServiceTest {
        final List<FinishedGood> expected = List.of(
            new FinishedGood(1L), new FinishedGood(2L), new FinishedGood()
        );
-       
+
        expected.get(0).setMixturePortions(List.of(new FinishedGoodMixturePortion(10L)));
        expected.get(0).setMaterialPortions(List.of(new FinishedGoodMaterialPortion(30L)));
 
@@ -214,11 +214,11 @@ public class FinishedGoodServiceTest {
        final UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> finishedGood1 = new FinishedGood(1L);
        finishedGood1.setMixturePortions(List.of(new FinishedGoodMixturePortion(10L)));
        finishedGood1.setMaterialPortions(List.of(new FinishedGoodMaterialPortion(30L)));
-       
+
        final UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> finishedGood2 = new FinishedGood(2L);
        finishedGood2.setMixturePortions(List.of(new FinishedGoodMixturePortion(20L)));
        finishedGood2.setMaterialPortions(List.of(new FinishedGoodMaterialPortion(40L)));
-       
+
        doReturn(List.of(new FinishedGood(1L), new FinishedGood(2L))).when(this.mRepoService).getByIds(List.of(finishedGood1, finishedGood2));
 
        final List<FinishedGood> updated = this.service.patch(List.of(finishedGood1, finishedGood2));

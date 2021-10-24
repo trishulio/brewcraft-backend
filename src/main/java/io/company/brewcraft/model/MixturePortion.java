@@ -52,7 +52,7 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
         @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
-    
+
     @Column(name = "added_at")
     private LocalDateTime addedAt;
 
@@ -114,7 +114,7 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
     public void setQuantity(Quantity<?> quantity) {
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
-    
+
     @Override
     public LocalDateTime getAddedAt() {
         return addedAt;

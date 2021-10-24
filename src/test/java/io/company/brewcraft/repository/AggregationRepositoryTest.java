@@ -1,7 +1,8 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,7 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BaseModel;
-import io.company.brewcraft.service.Selector;
+import io.company.brewcraft.service.GroupByClauseBuilder;
+import io.company.brewcraft.service.SelectClauseBuilder;
 
 @SuppressWarnings("unchecked")
 public class AggregationRepositoryTest {
@@ -38,8 +40,8 @@ public class AggregationRepositoryTest {
 
     @Test
     public void testGetAggregation_ReturnsListOfResultsFromTypedQuery() {
-        Selector mSelector = mock(Selector.class);
-        Selector mGroupBy = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
+        GroupByClauseBuilder mGroupBy = mock(GroupByClauseBuilder.class);
         Specification<TestEntity> mSpec = mock(Specification.class);
 
         TypedQuery<Object> mTq = mock(TypedQuery.class);
@@ -53,8 +55,8 @@ public class AggregationRepositoryTest {
 
     @Test
     public void testGetAggregation_UsesSameClassForReturnClassAndReturnsListOFResultsFromTypedQuery_WhenOverloadedMethodIsUsed() {
-        Selector mSelector = mock(Selector.class);
-        Selector mGroupBy = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
+        GroupByClauseBuilder mGroupBy = mock(GroupByClauseBuilder.class);
         Specification<TestEntity> mSpec = mock(Specification.class);
 
         TypedQuery<TestEntity> mTq = mock(TypedQuery.class);
@@ -68,8 +70,8 @@ public class AggregationRepositoryTest {
 
     @Test
     public void testGetSingleAggregation_ReturnsSingleResultFromTypedQuery() {
-        Selector mSelector = mock(Selector.class);
-        Selector mGroupBy = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
+        GroupByClauseBuilder mGroupBy = mock(GroupByClauseBuilder.class);
         Specification<TestEntity> mSpec = mock(Specification.class);
 
         TypedQuery<TestEntity> mTq = mock(TypedQuery.class);
@@ -83,8 +85,8 @@ public class AggregationRepositoryTest {
 
     @Test
     public void testResultCount_ReturnsCountOfStream() {
-        Selector mSelector = mock(Selector.class);
-        Selector mGroupBy = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
+        GroupByClauseBuilder mGroupBy = mock(GroupByClauseBuilder.class);
         Specification<TestEntity> mSpec = mock(Specification.class);
 
         TypedQuery<TestEntity> mTq = mock(TypedQuery.class);

@@ -47,7 +47,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity baseQuantityUnit;
-    
+
     @URL
     @Column(name = "image_source")
     private String imageSrc;
@@ -144,7 +144,7 @@ public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial
     public void setBaseQuantityUnit(Unit<?> baseQuantityUnit) {
         this.baseQuantityUnit = QuantityUnitMapper.INSTANCE.toEntity(baseQuantityUnit);
     }
-    
+
     @Override
     public String getImageSrc() {
         return imageSrc;

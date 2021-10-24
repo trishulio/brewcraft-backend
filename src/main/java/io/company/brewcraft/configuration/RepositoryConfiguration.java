@@ -356,7 +356,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, SkuAccessor, Sku> skuRefresher(SkuRepository repo) {
         return new AccessorRefresher<>(
@@ -366,7 +366,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodRefresher(FinishedGoodRepository repo) {
         return new AccessorRefresher<>(
@@ -386,7 +386,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> finishedGoodMixturePortionRefresher(FinishedGoodMixturePortionRepository repo) {
         return new AccessorRefresher<>(

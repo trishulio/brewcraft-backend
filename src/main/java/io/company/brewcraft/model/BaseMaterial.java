@@ -23,7 +23,7 @@ public interface BaseMaterial {
     public Unit<?> getBaseQuantityUnit();
 
     public void setBaseQuantityUnit(Unit<?> baseQuantityUnit);
-    
+
     public String getImageSrc();
 
     public void setImageSrc(String imageSrc);

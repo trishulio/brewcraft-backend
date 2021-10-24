@@ -28,7 +28,7 @@ import io.company.brewcraft.service.CrudEntity;
 
 @Entity(name = "finished_good")
 public class FinishedGood extends BaseEntity implements UpdateFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion>, CrudEntity<Long>, Audited {
-    
+
     public static final String FIELD_ID = "id";
     public static final String FIELD_SKU = "sku";
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
@@ -42,7 +42,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
     private Sku sku;
-    
+
     @OneToMany(mappedBy = "finishedGood", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<FinishedGoodMixturePortion> mixturePortions;
@@ -50,7 +50,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @OneToMany(mappedBy = "finishedGood", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<FinishedGoodMaterialPortion> materialPortions;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -64,12 +64,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
     public FinishedGood() {
     }
-    
+
     public FinishedGood(Long id) {
         this();
         setId(id);
     }
-    
+
     public FinishedGood(Long id, Sku sku, List<FinishedGoodMixturePortion> mixturePortions, List<FinishedGoodMaterialPortion> materialPortions, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setSku(sku);
@@ -151,7 +151,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
         return removed;
     }
-    
+
     @Override
     public List<FinishedGoodMaterialPortion> getMaterialPortions() {
         return materialPortions;
@@ -203,7 +203,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
         return removed;
     }
-    
+
     @Override
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
@@ -223,7 +223,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
+
     @Override
     public Integer getVersion() {
         return this.version;
@@ -232,5 +232,5 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    } 
+    }
 }

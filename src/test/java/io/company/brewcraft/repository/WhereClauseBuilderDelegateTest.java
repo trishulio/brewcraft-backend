@@ -26,29 +26,29 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.InSpec;
 import io.company.brewcraft.service.IsNullSpec;
 import io.company.brewcraft.service.LikeSpec;
-import io.company.brewcraft.service.PathSpec;
+import io.company.brewcraft.service.SelectColumnSpec;
 
-public class CriteriaSpecBuilderTest {
+public class WhereClauseBuilderDelegateTest {
 
-    private CriteriaSpecBuilder builder;
-    private SpecAccumulator mAccumulator;
+    private WhereClauseBuilderDelegate builder;
+    private PredicateSpecAccumulator mAccumulator;
 
     private ArgumentCaptor<CriteriaSpec<Boolean>> captor;
 
     @BeforeEach
     public void init() {
-        mAccumulator = mock(SpecAccumulator.class);
+        mAccumulator = mock(PredicateSpecAccumulator.class);
         captor = ArgumentCaptor.forClass(CriteriaSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
-        builder = new CriteriaSpecBuilder(mAccumulator);
+        builder = new WhereClauseBuilderDelegate(mAccumulator);
     }
 
     @Test
     public void testIsNull_AddsInNullSpecAndResetNotFlag() {
         builder.isNull(new String[] { "join1" }, new String[] { "layer-1" });
 
-        CriteriaSpec<Boolean> expected = new IsNullSpec(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }));
+        CriteriaSpec<Boolean> expected = new IsNullSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }));
         assertEquals(expected, captor.getValue());
 
         verify(mAccumulator).setIsNot(false);
@@ -58,7 +58,7 @@ public class CriteriaSpecBuilderTest {
     public void testIn_AddsInSpecAndResetNotFlag_WhenCollectionIsNotNull() {
         builder.in(new String[] { "join1" }, new String[] { "layer-1" }, List.of("V1", "V2"));
 
-        CriteriaSpec<Boolean> expected = new InSpec<>(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), List.of("V1", "V2"));
+        CriteriaSpec<Boolean> expected = new InSpec<>(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), List.of("V1", "V2"));
         assertEquals(expected, captor.getValue());
 
         verify(mAccumulator).setIsNot(false);
@@ -78,8 +78,8 @@ public class CriteriaSpecBuilderTest {
         builder.like(new String[] { "join1" }, new String[] { "layer-1" }, Set.of("V1", "V2"));
 
         List<CriteriaSpec<Boolean>> expected = List.of(
-            new LikeSpec(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V1"),
-            new LikeSpec(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V2")
+            new LikeSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V1"),
+            new LikeSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V2")
         );
 
         Assertions.assertThat(expected).hasSameElementsAs(captor.getAllValues());
@@ -100,7 +100,7 @@ public class CriteriaSpecBuilderTest {
     public void testBetween_AddsBetweenSpecAndResetFlag_WhenStartAndEndAreNotNull() {
         builder.between(new String[] { "join1" }, new String[] { "layer-1" }, LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
 
-        CriteriaSpec<Boolean> expected = new BetweenSpec<>(new PathSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
+        CriteriaSpec<Boolean> expected = new BetweenSpec<>(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
 
         assertEquals(expected, captor.getValue());
 

@@ -23,7 +23,7 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateMixture;
 import io.company.brewcraft.repository.MixtureRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -38,9 +38,9 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
     @Override
     public Page<Mixture> getMixtures(Set<Long> ids, Set<Long> parentMixtureIds, Set<Long> equipmentIds,
-            Set<Long> brewStageIds, Set<Long> brewIds, Set<Long> brewBatchIds, Set<Long> stageStatusIds, 
+            Set<Long> brewStageIds, Set<Long> brewIds, Set<Long> brewBatchIds, Set<Long> stageStatusIds,
             Set<Long> stageTaskIds, Set<Long> productIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Specification<Mixture> spec = SpecificationBuilder
+        Specification<Mixture> spec = WhereClauseBuilder
                 .builder()
                 .in(Mixture.FIELD_ID, ids)
                 .in(new String[] {Mixture.FIELD_PARENT_MIXTURE, Mixture.FIELD_ID}, parentMixtureIds)

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.repository.MeasureRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.MeasureService;
 
@@ -26,7 +26,7 @@ public class MeasureServiceImpl extends BaseService implements MeasureService {
 
     @Override
     public Page<Measure> getMeasures(Set<Long> ids, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Specification<Measure> spec = SpecificationBuilder
+        Specification<Measure> spec = WhereClauseBuilder
                 .builder()
                 .in(Measure.FIELD_ID, ids)
                 .build();

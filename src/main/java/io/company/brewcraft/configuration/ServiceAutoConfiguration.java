@@ -373,13 +373,13 @@ public class ServiceAutoConfiguration {
         final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
         return mixtureRecordingService;
     }
-    
+
     @Bean
     public SkuMaterialService skuMaterialService(UtilityProvider utilProvider) {
         final UpdateService<Long, SkuMaterial, BaseSkuMaterial<?>, UpdateSkuMaterial<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseSkuMaterial.class, UpdateSkuMaterial.class, SkuMaterial.class, Set.of(BaseSkuMaterial.ATTR_SKU));
         return new SkuMaterialService(updateService);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(SkuService.class)
     public SkuService skuService(UtilityProvider utilProvider, SkuRepository skuRepository, SkuMaterialService skuMaterialService) {
@@ -387,24 +387,24 @@ public class ServiceAutoConfiguration {
         final RepoService<Long, Sku, SkuAccessor> repoService = new CrudRepoService<>(skuRepository);
         return new SkuServiceImpl(repoService, updateService, skuMaterialService);
     }
-    
+
     @Bean
     public FinishedGoodMaterialPortionService finishedGoodMaterialPortionService(UtilityProvider utilProvider) {
         final UpdateService<Long, FinishedGoodMaterialPortion, BaseFinishedGoodMaterialPortion<?>, UpdateFinishedGoodMaterialPortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMaterialPortion.class, UpdateFinishedGoodMaterialPortion.class, FinishedGoodMaterialPortion.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
         return new FinishedGoodMaterialPortionService(updateService);
     }
-    
+
     @Bean
     public FinishedGoodMixturePortionService finishedGoodMixturePortionService(UtilityProvider utilProvider) {
         final UpdateService<Long, FinishedGoodMixturePortion, BaseFinishedGoodMixturePortion<?>, UpdateFinishedGoodMixturePortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMixturePortion.class, UpdateFinishedGoodMixturePortion.class, FinishedGoodMixturePortion.class, Set.of(BaseFinishedGoodMixturePortion.ATTR_FINISHED_GOOD));
         return new FinishedGoodMixturePortionService(updateService);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(FinishedGoodService.class)
-    public FinishedGoodService finishedGoodService(UtilityProvider utilProvider, FinishedGoodMixturePortionService fgMixturePortionService, FinishedGoodMaterialPortionService fgMaterialPortionService, final FinishedGoodRepository finishedGoodRepository) {       
+    public FinishedGoodService finishedGoodService(UtilityProvider utilProvider, FinishedGoodMixturePortionService fgMixturePortionService, FinishedGoodMaterialPortionService fgMaterialPortionService, final FinishedGoodRepository finishedGoodRepository) {
         final UpdateService<Long, FinishedGood, BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>, UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGood.class, UpdateFinishedGood.class, FinishedGood.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
-        
+
         final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository);
         return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
     }

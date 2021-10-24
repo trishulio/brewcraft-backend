@@ -21,7 +21,7 @@ import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateBrew;
 import io.company.brewcraft.repository.BrewRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -41,7 +41,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
             Set<Long> stageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
             LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
-            Specification<Brew> spec = SpecificationBuilder
+            Specification<Brew> spec = WhereClauseBuilder
                 .builder()
                 .in(Brew.FIELD_ID, ids)
                 .in(Brew.FIELD_BATCH_ID, batchIds)

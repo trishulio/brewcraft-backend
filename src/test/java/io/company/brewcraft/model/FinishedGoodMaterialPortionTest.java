@@ -52,7 +52,7 @@ public class FinishedGoodMaterialPortionTest {
         materialPortion.setId(1L);
         assertEquals(1L, materialPortion.getId());
     }
-    
+
     @Test
     public void testGetSetMaterialLot() {
         materialPortion.setMaterialLot(new MaterialLot(3L));
@@ -64,7 +64,7 @@ public class FinishedGoodMaterialPortionTest {
         materialPortion.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.GRAM));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.GRAM), materialPortion.getQuantity());
     }
-    
+
     @Test
     public void testGetSetFinishedGood() {
         materialPortion.setFinishedGood(new FinishedGood(5L));

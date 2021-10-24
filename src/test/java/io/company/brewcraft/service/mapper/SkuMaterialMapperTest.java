@@ -44,7 +44,7 @@ public class SkuMaterialMapperTest {
         UpdateSkuMaterialDto dto = new UpdateSkuMaterialDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
 
         SkuMaterial skuMaterial = skuMaterialMapper.fromDto(dto);
-        
+
         SkuMaterial expectedSkuMaterial = new SkuMaterial(1L, null, new Material(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, 1);
 
         assertEquals(expectedSkuMaterial, skuMaterial);

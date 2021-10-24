@@ -1,19 +1,19 @@
 package io.company.brewcraft.dto;
 
 public class SkuMaterialDto extends BaseDto {
-    
+
     private Long id;
-    
+
     private MaterialDto material;
-    
+
     private QuantityDto quantity;
-    
+
     private Integer version;
-    
+
     public SkuMaterialDto() {
         super();
     }
-    
+
     public SkuMaterialDto(Long id) {
         this();
         this.id = id;
@@ -25,7 +25,7 @@ public class SkuMaterialDto extends BaseDto {
         this.quantity = quantity;
         this.version = version;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -49,11 +49,11 @@ public class SkuMaterialDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-    
+
     public Integer getVersion() {
         return version;
     }
-    
+
     public void setVersion(Integer version) {
         this.version = version;
     }

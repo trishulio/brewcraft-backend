@@ -10,9 +10,9 @@ import io.company.brewcraft.model.SkuMaterial;
 
 public class EnhancedSkuMaterialRepositoryImpl implements EnhancedSkuMaterialRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedSkuMaterialRepositoryImpl.class);
-    
+
     private MaterialRepository materialRepository;
-    
+
     @Autowired
     public EnhancedSkuMaterialRepositoryImpl(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;

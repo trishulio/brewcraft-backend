@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
@@ -36,6 +37,18 @@ public class ProcurementLotTest {
     @Test
     public void testAllArgConstructor() {
         lot = new ProcurementLot(1L, "LOT_NUMBER", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), new Material(1L), new Shipment(2L), new InvoiceItem(3L), new Storage(4L));
+        assertEquals(1L, this.lot.getId());
+        assertEquals("LOT_NUMBER", this.lot.getLotNumber());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+        assertEquals(new Material(1L), this.lot.getMaterial());
+        assertEquals(new Shipment(2L), this.lot.getShipment());
+        assertEquals(new InvoiceItem(3L), this.lot.getInvoiceItem());
+        assertEquals(new Storage(4L), this.lot.getStorage());
+    }
+
+    @Test
+    public void testAllArgJpaConstructor() {
+        lot = new ProcurementLot(1L, "LOT_NUMBER", new Material(1L), "MATERIAL_NAME", new InvoiceItem(3L), new Shipment(2L), new Storage(4L), new UnitEntity("kg"), new BigDecimal("10"));
         assertEquals(1L, this.lot.getId());
         assertEquals("LOT_NUMBER", this.lot.getLotNumber());
         assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());

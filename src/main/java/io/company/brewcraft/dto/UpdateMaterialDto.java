@@ -11,7 +11,7 @@ public class UpdateMaterialDto extends BaseDto {
     private String upc;
 
     private String baseQuantityUnit;
-    
+
     private String imageSrc;
 
     private Integer version;
@@ -70,7 +70,7 @@ public class UpdateMaterialDto extends BaseDto {
     public void setBaseQuantityUnit(String baseQuantityUnit) {
         this.baseQuantityUnit = baseQuantityUnit;
     }
-    
+
     public String getImageSrc() {
         return imageSrc;
     }

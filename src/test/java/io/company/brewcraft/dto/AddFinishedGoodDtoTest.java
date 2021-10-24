@@ -26,11 +26,11 @@ public class AddFinishedGoodDtoTest {
 
         AddFinishedGoodDto finishedGood = new AddFinishedGoodDto(skuId, mixturePortions, materialPortions);
 
-        assertEquals(2L, finishedGood.getSkuId());   
+        assertEquals(2L, finishedGood.getSkuId());
         assertEquals(List.of(new AddMixturePortionDto(5L, new QuantityDto("hl", BigDecimal.valueOf(100.0)))), finishedGood.getMixturePortions());
         assertEquals(List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4))), finishedGood.getMaterialPortions());
     }
-    
+
     @Test
     public void testGetSetSkuId() {
         finishedGood.setSkuId(3L);
@@ -42,7 +42,7 @@ public class AddFinishedGoodDtoTest {
         finishedGood.setMixturePortions(List.of(new AddMixturePortionDto(5L, new QuantityDto("hl", BigDecimal.valueOf(100.0)))));
         assertEquals(List.of(new AddMixturePortionDto(5L, new QuantityDto("hl", BigDecimal.valueOf(100.0)))), finishedGood.getMixturePortions());
     }
-    
+
     @Test
     public void testGetSetMaterialPortions() {
         finishedGood.setMaterialPortions(List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4))));
