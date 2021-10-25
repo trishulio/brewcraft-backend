@@ -22,15 +22,15 @@ public class MixtureMaterialPortion extends MaterialPortion implements UpdateMix
     public MixtureMaterialPortion() {
         super();
     }
+    
+    public MixtureMaterialPortion(Long id) {
+        super(id);
+    }
 
     public MixtureMaterialPortion(Long id, MaterialLot materialLot, Quantity<?> quantity, Mixture mixture,
             LocalDateTime addedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         super(id, materialLot, quantity, addedAt, createdAt, lastUpdated, version);
         setMixture(mixture);
-    }
-
-    public MixtureMaterialPortion(Long id) {
-        super(id);
     }
     
     @Override
