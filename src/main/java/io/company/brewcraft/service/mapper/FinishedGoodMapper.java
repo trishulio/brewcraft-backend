@@ -19,9 +19,9 @@ public interface FinishedGoodMapper {
     FinishedGood fromDto(FinishedGoodDto dto);
 
     @Mapping(target = FinishedGood.ATTR_ID, ignore = true)
-    @Mapping(target = FinishedGood.ATTR_SKU, source = "skuId")
     @Mapping(target = FinishedGood.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = FinishedGood.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = FinishedGood.ATTR_SKU, source = "skuId")
     FinishedGood fromDto(UpdateFinishedGoodDto dto);
 
     @Mapping(target = FinishedGood.ATTR_ID, ignore = true)
