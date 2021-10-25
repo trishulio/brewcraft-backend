@@ -56,8 +56,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
@@ -98,8 +99,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
@@ -140,8 +142,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
@@ -182,8 +185,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
@@ -224,8 +228,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
@@ -266,8 +271,9 @@ public class LotAggregationServiceTest {
             Set.of(2L), // excludeIds
             Set.of("lot_number"), //lotNumbers
             Set.of(3L), // materialIds
-            Set.of(4L), // shipmentIds
-            Set.of(5L), // storageIds
+            Set.of(4L), // materialCategoryIds
+            Set.of(5L), // shipmentIds
+            Set.of(6L), // storageIds
             Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo

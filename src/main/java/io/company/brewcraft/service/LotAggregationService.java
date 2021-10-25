@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.model.ProcurementLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.StockLot;
@@ -28,6 +29,7 @@ public class LotAggregationService {
         Set<Long> excludeIds,
         Set<String> lotNumbers,
         Set<Long> materialIds,
+        Set<Long> materialCategoryIds,
         Set<Long> shipmentIds,
         Set<Long> storageIds,
         Set<String> shipmentNumbers,
@@ -45,6 +47,7 @@ public class LotAggregationService {
                                                                        .not().in(ProcurementLot.FIELD_ID, excludeIds)
                                                                        .in(ProcurementLot.FIELD_LOT_NUMBER, lotNumbers)
                                                                        .in(new String[] { ProcurementLot.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
+                                                                       .in(new String[] { ProcurementLot.FIELD_MATERIAL, Material.FIELD_CATEGORY, MaterialCategory.FIELD_ID }, materialCategoryIds)
                                                                        .in(new String[] { ProcurementLot.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentIds)
                                                                        .in(new String[] { ProcurementLot.FIELD_STORAGE, Storage.FIELD_ID }, storageIds)
                                                                        .in(new String[] { ProcurementLot.FIELD_SHIPMENT, Shipment.FIELD_SHIPMENT_NUMBER }, shipmentNumbers)
@@ -79,6 +82,7 @@ public class LotAggregationService {
         Set<Long> excludeIds,
         Set<String> lotNumbers,
         Set<Long> materialIds,
+        Set<Long> materialCategoryIds,
         Set<Long> shipmentIds,
         Set<Long> storageIds,
         Set<String> shipmentNumbers,
@@ -96,6 +100,7 @@ public class LotAggregationService {
                                                                  .not().in(StockLot.FIELD_ID, excludeIds)
                                                                  .in(StockLot.FIELD_LOT_NUMBER, lotNumbers)
                                                                  .in(new String[] { StockLot.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
+                                                                 .in(new String[] { StockLot.FIELD_MATERIAL, Material.FIELD_CATEGORY, MaterialCategory.FIELD_ID }, materialCategoryIds)
                                                                  .in(new String[] { StockLot.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentIds)
                                                                  .in(new String[] { StockLot.FIELD_STORAGE, Storage.FIELD_ID }, storageIds)
                                                                  .in(new String[] { StockLot.FIELD_SHIPMENT, Shipment.FIELD_SHIPMENT_NUMBER }, shipmentNumbers)
