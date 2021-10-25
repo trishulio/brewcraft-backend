@@ -7,5 +7,5 @@ public interface FinishedGoodAccessor {
 
     FinishedGood getFinishedGood();
 
-    void setFinishedGood(FinishedGood mixture);
+    void setFinishedGood(FinishedGood finishedGood);
 }
