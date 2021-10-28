@@ -85,8 +85,8 @@ public class BrewStageController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public List<BrewStageDto> addBrewStages(@Valid @RequestBody List<AddBrewStageDto> addBrewStageDtos) {
         List<BrewStage> brewStages = addBrewStageDtos.stream()
-                .map(addBrewStageDto -> brewStageMapper.fromDto(addBrewStageDto))
-                .collect(Collectors.toList());
+                                                     .map(addBrewStageDto -> brewStageMapper.fromDto(addBrewStageDto))
+                                                     .collect(Collectors.toList());
 
         List<BrewStage> addedBrewStages = brewStageService.addBrewStages(brewStages);
         
