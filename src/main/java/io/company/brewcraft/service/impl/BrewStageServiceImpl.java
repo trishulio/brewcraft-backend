@@ -64,12 +64,13 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     }
 
     @Override
-    public BrewStage addBrewStage(BrewStage brewStage) {
-        brewStageRepository.refresh(List.of(brewStage));
+    public List<BrewStage> addBrewStages(List<BrewStage> brewStages) {
+        brewStageRepository.refresh(brewStages);
 
-        BrewStage addedBrewStage = brewStageRepository.saveAndFlush(brewStage);
+        List<BrewStage> addedBrewStages = brewStageRepository.saveAll(brewStages);
+        brewStageRepository.flush();
 
-        return addedBrewStage;
+        return addedBrewStages;
     }
 
     @Override

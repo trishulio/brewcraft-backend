@@ -52,9 +52,9 @@ public class MixtureMaterialPortionControllerTest {
         doReturn(materialPortionList.stream()).when(mPage).stream();
         doReturn(100).when(mPage).getTotalPages();
         doReturn(1000L).when(mPage).getTotalElements();
-        doReturn(mPage).when(materialPortionService).getMaterialPortions(null, null, null, 1, 10, new TreeSet<>(List.of("id")), true);
+        doReturn(mPage).when(materialPortionService).getMaterialPortions(null, null, null, null, null, 1, 10, new TreeSet<>(List.of("id")), true);
 
-        PageDto<MixtureMaterialPortionDto> dto = materialPortionController.getMaterialPortions(null, null, null, new TreeSet<>(List.of("id")), true, 1, 10);
+        PageDto<MixtureMaterialPortionDto> dto = materialPortionController.getMaterialPortions(null, null, null, null, null, new TreeSet<>(List.of("id")), true, 1, 10);
 
         assertEquals(100, dto.getTotalPages());
         assertEquals(1000L, dto.getTotalElements());

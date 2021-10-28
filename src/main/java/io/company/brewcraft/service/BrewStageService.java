@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -14,7 +15,7 @@ public interface BrewStageService {
 
     BrewStage getBrewStage(Long brewStageId);
 
-    BrewStage addBrewStage(BrewStage brewStage);
+    List<BrewStage> addBrewStages(List<BrewStage> brewStage);
 
     BrewStage putBrewStage(Long brewStageId, BrewStage brewStage);
 

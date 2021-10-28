@@ -14,6 +14,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMixtureRecording;
+import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.UpdateMixtureRecording;
@@ -32,11 +34,13 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
     }
 
     @Override
-    public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+    public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<MixtureRecording> spec = SpecificationBuilder
                 .builder()
                 .in(MixtureRecording.FIELD_ID, ids)
                 .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
+                .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID}, brewStageIds)
+                .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
                 .build();
 
             Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));

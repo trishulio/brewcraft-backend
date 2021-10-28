@@ -83,12 +83,16 @@ public class BrewStageController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public BrewStageDto addBrewStage(@Valid @RequestBody AddBrewStageDto addBrewDto) {
-        BrewStage brewStage = brewStageMapper.fromDto(addBrewDto);
+    public List<BrewStageDto> addBrewStages(@Valid @RequestBody List<AddBrewStageDto> addBrewStageDtos) {
+        List<BrewStage> brewStages = addBrewStageDtos.stream()
+                .map(addBrewStageDto -> brewStageMapper.fromDto(addBrewStageDto))
+                .collect(Collectors.toList());
 
-        BrewStage addedBrewStage = brewStageService.addBrewStage(brewStage);
-
-        return brewStageMapper.toDto(addedBrewStage);
+        List<BrewStage> addedBrewStages = brewStageService.addBrewStages(brewStages);
+        
+        return addedBrewStages.stream()
+                              .map(addedBrewStage -> brewStageMapper.toDto(addedBrewStage))
+                              .collect(Collectors.toList());    
     }
 
     @PutMapping("/{stageId}")

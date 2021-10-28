@@ -10,7 +10,7 @@ import io.company.brewcraft.model.MixtureRecording;
 
 public interface MixtureRecordingService {
 
-    public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public MixtureRecording getMixtureRecording(Long mixtureRecordingId);
 

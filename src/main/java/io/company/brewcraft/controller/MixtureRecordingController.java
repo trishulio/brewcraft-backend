@@ -50,12 +50,14 @@ public class MixtureRecordingController extends BaseController {
     public PageDto<MixtureRecordingDto> getMixtureRecordings(
             @RequestParam(name = "ids", required = false) Set<Long> ids,
             @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
+            @RequestParam(name = "brew_stage_ids", required = false) Set<Long> brewStageIds,
+            @RequestParam(name = "brew_ids", required = false) Set<Long> brewIds,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, page, size, sort, orderAscending);
+        Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()
                 .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording)).collect(Collectors.toList());

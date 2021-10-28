@@ -48,9 +48,9 @@ public class MixtureRecordingControllerTest {
         doReturn(mixtureRecordingList.stream()).when(mPage).stream();
         doReturn(100).when(mPage).getTotalPages();
         doReturn(1000L).when(mPage).getTotalElements();
-        doReturn(mPage).when(mixtureRecordingService).getMixtureRecordings(null, null, 1, 10, new TreeSet<>(List.of("id")), true);
+        doReturn(mPage).when(mixtureRecordingService).getMixtureRecordings(null, null, null, null, 1, 10, new TreeSet<>(List.of("id")), true);
 
-        PageDto<MixtureRecordingDto> dto = mixtureRecordingController.getMixtureRecordings(null, null, new TreeSet<>(List.of("id")), true, 1, 10);
+        PageDto<MixtureRecordingDto> dto = mixtureRecordingController.getMixtureRecordings(null, null, null, null, new TreeSet<>(List.of("id")), true, 1, 10);
 
         assertEquals(100, dto.getTotalPages());
         assertEquals(1000L, dto.getTotalElements());
