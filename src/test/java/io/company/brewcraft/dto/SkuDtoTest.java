@@ -20,14 +20,18 @@ public class SkuDtoTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
+        String name = "testName";
+        String description = "testDescription";
         ProductDto product = new ProductDto(2L);
         List<SkuMaterialDto> materials = List.of(new SkuMaterialDto(3L));
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
         int version = 1;
 
-        SkuDto skuDto = new SkuDto(id, product, materials, quantity, version);
+        SkuDto skuDto = new SkuDto(id, name, description, product, materials, quantity, version);
 
         assertEquals(1L, skuDto.getId());
+        assertEquals("testName", skuDto.getName());
+        assertEquals("testDescription", skuDto.getDescription());
         assertEquals(new ProductDto(2L), skuDto.getProduct());
         assertEquals(List.of(new SkuMaterialDto(3L)), skuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), skuDto.getQuantity());
@@ -38,6 +42,18 @@ public class SkuDtoTest {
     public void testGetSetId() {
         skuDto.setId(1L);
         assertEquals(1L, skuDto.getId());
+    }
+    
+    @Test
+    public void testGetSetName() {
+        skuDto.setName("testName");
+        assertEquals("testName", skuDto.getName());
+    }
+
+    @Test
+    public void testGetSetDescription() {
+        skuDto.setDescription("testDescription");
+        assertEquals("testDescription", skuDto.getDescription());
     }
 
     @Test

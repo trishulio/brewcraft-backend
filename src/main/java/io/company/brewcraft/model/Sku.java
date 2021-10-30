@@ -43,6 +43,10 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sku_generator")
     @SequenceGenerator(name = "sku_generator", sequenceName = "sku_sequence", allocationSize = 1)
     private Long id;
+    
+    private String name;
+
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -77,8 +81,10 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
         setId(id);
     }
 
-    public Sku(Long id, Product product, List<SkuMaterial> materials, Quantity<?> quantity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Sku(Long id, String name, String description, Product product, List<SkuMaterial> materials, Quantity<?> quantity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        setName(name);
+        setDescription(description);
         setProduct(product);
         setMaterials(materials);
         setQuantity(quantity);
@@ -95,6 +101,26 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
