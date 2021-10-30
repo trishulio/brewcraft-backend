@@ -51,12 +51,14 @@ public class MixtureMaterialPortionController extends BaseController {
             @RequestParam(name = "ids", required = false) Set<Long> ids,
             @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
             @RequestParam(name = "material_lot_ids", required = false) Set<Long> materialLotIds,
+            @RequestParam(name = "brew_stage_ids", required = false) Set<Long> brewStageIds,
+            @RequestParam(name = "brew_ids", required = false) Set<Long> brewIds,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<MixtureMaterialPortion> materialPortionPage = materialPortionService.getMaterialPortions(ids, mixtureIds, materialLotIds, page, size, sort, orderAscending);
+        Page<MixtureMaterialPortion> materialPortionPage = materialPortionService.getMaterialPortions(ids, mixtureIds, materialLotIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureMaterialPortionDto> materialPortionList = materialPortionPage.stream()
                 .map(materialPortion -> materialPortionMapper.toDto(materialPortion)).collect(Collectors.toList());

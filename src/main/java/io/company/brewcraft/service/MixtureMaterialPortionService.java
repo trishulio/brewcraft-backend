@@ -10,7 +10,7 @@ import io.company.brewcraft.model.MixtureMaterialPortion;
 
 public interface MixtureMaterialPortionService {
 
-    public Page<MixtureMaterialPortion> getMaterialPortions(Set<Long> ids, Set<Long> mixtureIds, Set<Long> materialLotIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    public Page<MixtureMaterialPortion> getMaterialPortions(Set<Long> ids, Set<Long> mixtureIds, Set<Long> materialLotIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public MixtureMaterialPortion getMaterialPortion(Long materialPortionId);
 

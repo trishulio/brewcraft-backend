@@ -42,6 +42,7 @@ public class BrewStageServiceImplTest {
             });
             return null;
         }).when(brewStageRepositoryMock).refresh(anyCollection());
+        doAnswer(i -> i.getArgument(0)).when(this.brewStageRepositoryMock).saveAll(anyList());
 
         brewStageService = new BrewStageServiceImpl(brewStageRepositoryMock);
     }
@@ -75,21 +76,24 @@ public class BrewStageServiceImplTest {
                 null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
                 LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
-        BrewStage addedBrewStage = brewStageService.addBrewStage(brewStage);
+        List<BrewStage> addedBrewStage = brewStageService.addBrewStages(List.of(brewStage));
 
-        assertEquals(null, addedBrewStage.getId());
-        assertEquals(new Brew(3L), addedBrewStage.getBrew());
-        assertEquals(new BrewStageStatus(1L), addedBrewStage.getStatus());
-        assertEquals(new BrewTask(2L), addedBrewStage.getTask());
-        assertEquals(null, addedBrewStage.getMixtures());
-        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrewStage.getStartedAt());
-        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedBrewStage.getEndedAt());
-        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedBrewStage.getCreatedAt());
-        assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedBrewStage.getLastUpdated());
-        assertEquals(1, addedBrewStage.getVersion());
+        assertEquals(1, addedBrewStage.size());
 
-        verify(brewStageRepositoryMock, times(1)).saveAndFlush(addedBrewStage);
-        verify(brewStageRepositoryMock, times(1)).refresh(List.of(addedBrewStage));
+        assertEquals(null, addedBrewStage.get(0).getId());
+        assertEquals(new Brew(3L), addedBrewStage.get(0).getBrew());
+        assertEquals(new BrewStageStatus(1L), addedBrewStage.get(0).getStatus());
+        assertEquals(new BrewTask(2L), addedBrewStage.get(0).getTask());
+        assertEquals(null, addedBrewStage.get(0).getMixtures());
+        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrewStage.get(0).getStartedAt());
+        assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedBrewStage.get(0).getEndedAt());
+        assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedBrewStage.get(0).getCreatedAt());
+        assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedBrewStage.get(0).getLastUpdated());
+        assertEquals(1, addedBrewStage.get(0).getVersion());
+
+        verify(brewStageRepositoryMock, times(1)).saveAll(addedBrewStage);
+        verify(brewStageRepositoryMock, times(1)).refresh(addedBrewStage);
+        verify(brewStageRepositoryMock, times(1)).flush();
     }
 
     @Test

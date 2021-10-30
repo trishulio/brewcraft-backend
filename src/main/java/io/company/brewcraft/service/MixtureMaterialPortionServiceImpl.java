@@ -19,10 +19,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseMixtureMaterialPortion;
+import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.MaterialPortion;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
 import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.SpecificationBuilder;
@@ -43,11 +46,13 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
     }
 
     @Override
-    public Page<MixtureMaterialPortion> getMaterialPortions(Set<Long> ids, Set<Long> mixtureIds, Set<Long> materialLotIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+    public Page<MixtureMaterialPortion> getMaterialPortions(Set<Long> ids, Set<Long> mixtureIds, Set<Long> materialLotIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<MixtureMaterialPortion> spec = SpecificationBuilder.builder()
                                                                   .in(MaterialPortion.FIELD_ID, ids)
                                                                   .in(new String[] {MixtureMaterialPortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
                                                                   .in(new String[] {MaterialPortion.MATERIAL_LOT, MaterialLot.FIELD_ID}, materialLotIds)
+                                                                  .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID}, brewStageIds)
+                                                                  .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
                                                                   .build();
 
             Page<MixtureMaterialPortion> materialPortionsPage = mixtureMaterialPortionRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
