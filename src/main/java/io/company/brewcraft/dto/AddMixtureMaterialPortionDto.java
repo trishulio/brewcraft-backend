@@ -5,18 +5,18 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class AddMixtureMaterialPortionDto extends BaseDto {
-        
+
     @NotNull
     private Long materialLotId;
 
     @NotNull
     private QuantityDto quantity;
-    
+
     @NotNull
     private Long mixtureId;
-    
+
     private LocalDateTime addedAt;
-        
+
     public AddMixtureMaterialPortionDto() {
         super();
     }
@@ -27,7 +27,7 @@ public class AddMixtureMaterialPortionDto extends BaseDto {
         this.quantity = quantity;
         this.addedAt = addedAt;
     }
-        
+
     public Long getMaterialLotId() {
         return materialLotId;
     }
@@ -43,7 +43,7 @@ public class AddMixtureMaterialPortionDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-    
+
     public Long getMixtureId() {
         return mixtureId;
     }
@@ -51,7 +51,7 @@ public class AddMixtureMaterialPortionDto extends BaseDto {
     public void setMixtureId(Long mixtureId) {
         this.mixtureId = mixtureId;
     }
-        
+
     public LocalDateTime getAddedAt() {
         return addedAt;
     }

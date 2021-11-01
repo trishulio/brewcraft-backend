@@ -126,7 +126,7 @@ public class ServiceAutoConfigurationTest {
         final PurchaseOrderRepository mInvoiceRepo = mock(PurchaseOrderRepository.class);
 
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        
+
         this.serviceAutoConfiguration.purchaseOrderService(mUtilProvider, mInvoiceRepo);
     }
 
@@ -298,7 +298,7 @@ public class ServiceAutoConfigurationTest {
 
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }
-    
+
     @Test
     public void testFinishedGoodService_ReturnsInstanceOfFinishedGoodervice() {
         final FinishedGoodRepository mFinishedGoodRepo = mock(FinishedGoodRepository.class);

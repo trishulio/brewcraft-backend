@@ -12,17 +12,17 @@ public class EnhancedFinishedGoodMixturePortionRepositoryImpl implements Enhance
     private static final Logger log = LoggerFactory.getLogger(EnhancedFinishedGoodMixturePortionRepositoryImpl.class);
 
     private MixtureRepository mixtureRepo;
-    
+
     private final AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher;
 
     public EnhancedFinishedGoodMixturePortionRepositoryImpl(MixtureRepository mixtureRepo, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher) {
         this.mixtureRepo = mixtureRepo;
         this.refresher = refresher;
     }
-    
+
     @Override
     public void refresh(Collection<FinishedGoodMixturePortion> portions) {
-        mixtureRepo.refreshAccessors(portions);       
+        mixtureRepo.refreshAccessors(portions);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class StockLotServiceImpl implements StockLotService {
     public StockLotServiceImpl(StockLotRepository stockLotRepository) {
         this.stockLotRepository = stockLotRepository;
     }
-    
+
     public List<StockLot> getAllByIds(Set<Long> ids) {
         return stockLotRepository.findAllById(ids);
     }

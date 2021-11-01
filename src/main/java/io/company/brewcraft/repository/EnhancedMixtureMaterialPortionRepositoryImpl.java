@@ -14,7 +14,7 @@ public class EnhancedMixtureMaterialPortionRepositoryImpl implements EnhancedMix
     private MixtureRepository mixtureRepository;
 
     private MaterialLotRepository materialLotRepository;
-    
+
     private final AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresher;
 
     public EnhancedMixtureMaterialPortionRepositoryImpl(MixtureRepository mixtureRepository, MaterialLotRepository materialLotRepository, AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresher) {

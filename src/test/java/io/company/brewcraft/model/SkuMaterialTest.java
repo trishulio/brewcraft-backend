@@ -50,7 +50,7 @@ public class SkuMaterialTest {
         skuMaterial.setId(1L);
         assertEquals(1L, skuMaterial.getId());
     }
-    
+
     @Test
     public void testGetSetSku() {
         skuMaterial.setSku(new Sku(3L));
@@ -62,7 +62,7 @@ public class SkuMaterialTest {
         skuMaterial.setMaterial(new Material(3L));
         assertEquals(new Material(3L), skuMaterial.getMaterial());
     }
-    
+
     @Test
     public void testGetSeQuantity() {
         skuMaterial.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));

@@ -96,7 +96,7 @@ public class MaterialDtoTest {
         material.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, material.getBaseQuantityUnit());
     }
-    
+
     @Test
     public void testGetSetImageSrc() {
         material.setImageSrc("http://www.test.com");

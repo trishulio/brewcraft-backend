@@ -46,7 +46,7 @@ public class EnhancedFinishedGoodRepositoryImplTest {
             new FinishedGoodMixturePortion(20L),
             new FinishedGoodMixturePortion(200L)
         );
-        
+
         final List<FinishedGoodMaterialPortion> materialPortions = List.of(
             new FinishedGoodMaterialPortion(30L),
             new FinishedGoodMaterialPortion(300L),

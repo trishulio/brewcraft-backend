@@ -43,7 +43,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sku_generator")
     @SequenceGenerator(name = "sku_generator", sequenceName = "sku_sequence", allocationSize = 1)
     private Long id;
-    
+
     private String name;
 
     private String description;
@@ -51,7 +51,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
-    
+
     @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<SkuMaterial> materials;
@@ -61,7 +61,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @AssociationOverrides({
             @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -152,7 +152,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
             }
         }
     }
-    
+
     public void addMaterial(SkuMaterial material) {
         if (material == null) {
             return;
@@ -187,7 +187,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
 
         return removed;
     }
-    
+
     @Override
     public Quantity<?> getQuantity() {
         return QuantityMapper.INSTANCE.fromEntity(this.quantity);

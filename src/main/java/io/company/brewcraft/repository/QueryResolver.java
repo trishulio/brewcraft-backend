@@ -17,7 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 
-import io.company.brewcraft.service.Selector;
+import io.company.brewcraft.service.GroupByClauseBuilder;
+import io.company.brewcraft.service.SelectClauseBuilder;
 
 public class QueryResolver {
     private static Logger log = LoggerFactory.getLogger(AggregationRepository.class);
@@ -28,7 +29,7 @@ public class QueryResolver {
         this.em = em;
     }
 
-    public <R, T> TypedQuery<R> buildQuery(Class<T> entityClz, Class<R> returnClz, Selector selection, Selector groupBy, Specification<T> spec, Pageable pageable) {
+    public <R, T> TypedQuery<R> buildQuery(Class<T> entityClz, Class<R> returnClz, SelectClauseBuilder selector, GroupByClauseBuilder grouper, Specification<T> spec, Pageable pageable) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<R> cq = cb.createQuery(returnClz);
 
@@ -36,12 +37,11 @@ public class QueryResolver {
 
         cq.where(spec.toPredicate(root, cq, cb));
 
-        List<Selection<?>> selectAttrs = selection.getSelection(root, cq, cb);
+        List<Selection<?>> selectAttrs = selector.getSelectClause(root, cq, cb);
         cq.multiselect(selectAttrs);
 
-        if (groupBy != null) {
-            @SuppressWarnings("unchecked")
-            List<Expression<?>> groupByAttrs = (List<Expression<?>>) (List<? extends Selection<?>>) groupBy.getSelection(root, cq, cb);
+        if (grouper != null) {
+            List<Expression<?>> groupByAttrs = grouper.getGroupByClause(root, cq, cb);
             cq.groupBy(groupByAttrs);
         }
 

@@ -56,7 +56,7 @@ public class MixtureMaterialPortionMapperTest {
         MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         MixtureMaterialPortionDto dto = materialPortionMapper.toDto(materialPortion);
-        
+
         MixtureMaterialPortionDto expectedMaterialPortionDto = new MixtureMaterialPortionDto(1L, new MaterialLotDto(2L), new QuantityDto("kg", new BigDecimal("100")), new MixtureDto(3L), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
         assertEquals(expectedMaterialPortionDto, dto);

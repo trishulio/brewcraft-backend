@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.company.brewcraft.dto.UpdateSupplierContact;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierContact;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.SupplierContactService;
@@ -37,7 +37,7 @@ public class SupplierContactServiceImpl extends BaseService implements SupplierC
 
     @Override
     public Page<SupplierContact> getSupplierContacts(Set<Long> ids, Set<Long> supplierIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Specification<SupplierContact> spec = SpecificationBuilder
+        Specification<SupplierContact> spec = WhereClauseBuilder
                 .builder()
                 .in(SupplierContact.FIELD_ID, ids)
                 .in(new String[] {SupplierContact.FIELD_SUPPLIER, Supplier.FIELD_ID}, supplierIds)

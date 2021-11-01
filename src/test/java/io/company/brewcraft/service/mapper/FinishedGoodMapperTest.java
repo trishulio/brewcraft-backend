@@ -47,7 +47,7 @@ public class FinishedGoodMapperTest {
             List.of(new AddMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)))),
             List.of(new AddMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1)))
         );
-        
+
         FinishedGood finishedGood = finishedGoodMapper.fromDto(dto);
 
         FinishedGood expectedFinishedGood = new FinishedGood(
@@ -71,9 +71,9 @@ public class FinishedGoodMapperTest {
             List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
             1
         );
-        
+
         FinishedGood finishedGood = finishedGoodMapper.fromDto(dto);
-        
+
         FinishedGood expectedFinishedGood = new FinishedGood(
             null,
             new Sku(5L),
@@ -83,7 +83,7 @@ public class FinishedGoodMapperTest {
             null,
             1
         );
-        
+
         assertEquals(expectedFinishedGood, finishedGood);
     }
 
@@ -98,9 +98,9 @@ public class FinishedGoodMapperTest {
             LocalDateTime.of(2020, 1, 2, 3, 4),
             1
         );
-        
+
         FinishedGoodDto dto = finishedGoodMapper.toDto(finishedGood);
-        
+
         FinishedGoodDto expectedDto = new FinishedGoodDto(
             1L,
             new SkuDto(5L),
@@ -108,7 +108,7 @@ public class FinishedGoodMapperTest {
             List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
             1
         );
-                
+
         assertEquals(expectedDto, dto);
     }
 

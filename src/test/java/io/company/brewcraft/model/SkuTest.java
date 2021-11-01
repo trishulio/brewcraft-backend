@@ -42,11 +42,11 @@ public class SkuTest {
         assertEquals(1L, sku.getId());
         assertEquals("testName", sku.getName());
         assertEquals("testDescription", sku.getDescription());
-        
+
         SkuMaterial expectedSkuMaterial = new SkuMaterial(9L);
         expectedSkuMaterial.setSku(sku);
         assertEquals(List.of(expectedSkuMaterial), sku.getMaterials());
-        
+
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), sku.getQuantity());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), sku.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), sku.getLastUpdated());
@@ -58,7 +58,7 @@ public class SkuTest {
         sku.setId(1L);
         assertEquals(1L, sku.getId());
     }
-    
+
     @Test
     public void testGetSetName() {
         sku.setName("testName");
@@ -70,7 +70,7 @@ public class SkuTest {
         sku.setDescription("testDescription");
         assertEquals("testDescription", sku.getDescription());
     }
-    
+
     @Test
     public void testGetSetProduct() {
         sku.setProduct(new Product(3L));
@@ -80,12 +80,12 @@ public class SkuTest {
     @Test
     public void testGetSetMaterials() {
         sku.setMaterials(List.of(new SkuMaterial(9L)));
-       
+
         SkuMaterial expectedSkuMaterial = new SkuMaterial(9L);
         expectedSkuMaterial.setSku(sku);
         assertEquals(List.of(expectedSkuMaterial), sku.getMaterials());
     }
-    
+
     @Test
     public void testGetSeQuantity() {
         sku.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));

@@ -29,6 +29,7 @@ services:
   postgresdb:
     image: postgres
     restart: always
+    command: ["postgres", "-c", "log_statement=all"]
     volumes:
       - ./db-init-scripts:/docker-entrypoint-initdb.d
     container_name: brewcraft_postgresdb

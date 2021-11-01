@@ -14,13 +14,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.criteria.JoinType;
 
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.PathProvider;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @MappedSuperclass
 public abstract class Lot extends BaseEntity {
     public enum AggregationField implements PathProvider {
+        // Note: Do not change the order. It will require cascading changes be made in other places like the AllArgJpaConstructor
+        ID(FIELD_ID),
         LOT_NUMBER (FIELD_LOT_NUMBER),
         MATERIAL (FIELD_MATERIAL),
         MATERIAL_NAME (FIELD_MATERIAL, Material.FIELD_NAME),
@@ -66,6 +70,17 @@ public abstract class Lot extends BaseEntity {
         this.setShipment(shipment);
         this.setInvoiceItem(invoiceItem);
         this.setStorage(storage);
+    }
+
+    // AllArgJpaConstructor
+    public Lot(Long id, String lotNumber, Material material, String materialName, InvoiceItem invoiceItem, Shipment shipment, Storage storage, UnitEntity unit, BigDecimal value) {
+        this(id);
+        this.setLotNumber(lotNumber);
+        this.setMaterial(material);
+        this.setInvoiceItem(invoiceItem);
+        this.setShipment(shipment);
+        this.setStorage(storage);
+        this.setQuantity(unit, value);
     }
 
     public Lot(String lotNumber, UnitEntity unit, BigDecimal value) {
@@ -272,6 +287,7 @@ public abstract class Lot extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "storage_id", referencedColumnName = "id")
+    @CriteriaJoin(type = JoinType.LEFT)
     private Storage storage;
 
     public Long getId() {

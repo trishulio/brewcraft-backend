@@ -20,7 +20,7 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.UpdateMixtureRecording;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -35,7 +35,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 
     @Override
     public Page<MixtureRecording> getMixtureRecordings(Set<Long> ids, Set<Long> mixtureIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Specification<MixtureRecording> spec = SpecificationBuilder
+        Specification<MixtureRecording> spec = WhereClauseBuilder
                 .builder()
                 .in(MixtureRecording.FIELD_ID, ids)
                 .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)

@@ -14,7 +14,7 @@ import io.company.brewcraft.model.MaterialPortion;
 public interface FinishedGoodMaterialPortionMapper {
 
     FinishedGoodMaterialPortionMapper INSTANCE = Mappers.getMapper(FinishedGoodMaterialPortionMapper.class);
-    
+
     MaterialPortionDto toDto(FinishedGoodMaterialPortion materialPortion);
 
     @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)

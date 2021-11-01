@@ -43,7 +43,7 @@ public class SkuDtoTest {
         skuDto.setId(1L);
         assertEquals(1L, skuDto.getId());
     }
-    
+
     @Test
     public void testGetSetName() {
         skuDto.setName("testName");

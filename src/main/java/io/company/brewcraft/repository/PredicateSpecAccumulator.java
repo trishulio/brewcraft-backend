@@ -16,17 +16,17 @@ import io.company.brewcraft.service.AndSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.NotSpec;
 
-public class SpecAccumulator {
-    private static final Logger log = LoggerFactory.getLogger(SpecAccumulator.class);
+public class PredicateSpecAccumulator {
+    private static final Logger log = LoggerFactory.getLogger(PredicateSpecAccumulator.class);
 
     private List<CriteriaSpec<Boolean>> aggregations;
     private boolean isNot;
 
-    public SpecAccumulator() {
+    public PredicateSpecAccumulator() {
         this(new ArrayList<>());
     }
 
-    protected SpecAccumulator(List<CriteriaSpec<Boolean>> aggregations) {
+    protected PredicateSpecAccumulator(List<CriteriaSpec<Boolean>> aggregations) {
         this.aggregations = aggregations;
         this.isNot = false;
     }

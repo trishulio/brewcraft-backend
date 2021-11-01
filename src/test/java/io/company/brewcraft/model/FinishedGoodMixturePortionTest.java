@@ -52,7 +52,7 @@ public class FinishedGoodMixturePortionTest {
         mixturePortion.setId(1L);
         assertEquals(1L, mixturePortion.getId());
     }
-    
+
     @Test
     public void testGetSetMixture() {
         mixturePortion.setMixture(new Mixture(3L));
@@ -64,7 +64,7 @@ public class FinishedGoodMixturePortionTest {
         mixturePortion.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.GRAM));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.GRAM), mixturePortion.getQuantity());
     }
-    
+
     @Test
     public void testGetSetFinishedGood() {
         mixturePortion.setFinishedGood(new FinishedGood(5L));

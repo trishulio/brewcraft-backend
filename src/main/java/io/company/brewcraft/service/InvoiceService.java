@@ -29,7 +29,7 @@ import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateInvoiceItem;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -71,7 +71,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             int page,
             int size
          ) {
-        final Specification<Invoice> spec = SpecificationBuilder
+        final Specification<Invoice> spec = WhereClauseBuilder
                                             .builder()
                                             .in(Invoice.FIELD_ID, ids)
                                             .not().in(Invoice.FIELD_ID, excludeIds)

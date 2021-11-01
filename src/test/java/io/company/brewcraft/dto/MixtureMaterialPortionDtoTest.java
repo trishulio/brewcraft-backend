@@ -54,7 +54,7 @@ public class MixtureMaterialPortionDtoTest {
         mixtureMaterialPortionDto.setQuantity(new QuantityDto("kg", new BigDecimal("100")));
         assertEquals(new QuantityDto("kg", new BigDecimal("100")), mixtureMaterialPortionDto.getQuantity());
     }
-    
+
     @Test
     public void testGetSetMixture() {
         mixtureMaterialPortionDto.setMixture(new MixtureDto(2L));

@@ -15,7 +15,7 @@ public class SumSpec<T extends Number> extends BaseModel implements CriteriaSpec
     }
 
     public SumSpec(String[] joins, String[] paths) {
-        this(new PathSpec<>(joins, paths));
+        this(new SelectColumnSpec<>(joins, paths));
     }
 
     public SumSpec(CriteriaSpec<T> path) {

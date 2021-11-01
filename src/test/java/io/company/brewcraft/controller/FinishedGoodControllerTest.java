@@ -97,7 +97,7 @@ public class FinishedGoodControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       
+
        final FinishedGoodDto finishedGood = dto.getContent().get(0);
        assertEquals(10L, finishedGood.getId());
        assertEquals(new SkuDto(5L), finishedGood.getSku());

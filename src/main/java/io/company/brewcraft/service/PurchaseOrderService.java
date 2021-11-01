@@ -18,7 +18,7 @@ import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -43,7 +43,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         int page,
         int size
     ) {
-        final Specification<PurchaseOrder> spec= SpecificationBuilder.builder()
+        final Specification<PurchaseOrder> spec= WhereClauseBuilder.builder()
                                                                      .in(PurchaseOrder.FIELD_ID, ids)
                                                                      .not().in(PurchaseOrder.FIELD_ID, excludeIds)
                                                                      .in(PurchaseOrder.FIELD_ORDER_NUMBER, orderNumbers)

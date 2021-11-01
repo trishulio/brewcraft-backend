@@ -12,9 +12,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @Entity(name = "MIXTURE_MATERIAL_PORTION")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
 public class MixtureMaterialPortion extends MaterialPortion implements UpdateMixtureMaterialPortion {
-    
+
     public static final String FIELD_MIXTURE = "mixture";
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mixture_id", referencedColumnName = "id", nullable = true)
     private Mixture mixture;
@@ -22,7 +22,7 @@ public class MixtureMaterialPortion extends MaterialPortion implements UpdateMix
     public MixtureMaterialPortion() {
         super();
     }
-    
+
     public MixtureMaterialPortion(Long id) {
         super(id);
     }
@@ -32,7 +32,7 @@ public class MixtureMaterialPortion extends MaterialPortion implements UpdateMix
         super(id, materialLot, quantity, addedAt, createdAt, lastUpdated, version);
         setMixture(mixture);
     }
-    
+
     @Override
     public Mixture getMixture() {
         return mixture;

@@ -38,7 +38,7 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/skus", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class SkuController extends BaseController {
-    
+
     private static final Logger log = LoggerFactory.getLogger(SkuController.class);
 
     private SkuService skuService;

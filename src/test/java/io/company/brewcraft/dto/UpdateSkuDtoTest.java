@@ -35,7 +35,7 @@ public class UpdateSkuDtoTest {
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), updateSkuDto.getQuantity());
         assertEquals(1, updateSkuDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetName() {
         updateSkuDto.setName("testName");

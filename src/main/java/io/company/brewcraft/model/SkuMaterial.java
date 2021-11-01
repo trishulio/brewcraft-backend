@@ -41,7 +41,7 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
     @JsonBackReference
     private Sku sku;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
     @JsonBackReference
@@ -52,7 +52,7 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     @AssociationOverrides({
             @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
-    
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -66,12 +66,12 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
 
     public SkuMaterial() {
     }
-    
+
     public SkuMaterial(Long id) {
         this();
         setId(id);
     }
-    
+
     public SkuMaterial(Long id, Sku sku, Material material, Quantity<?> quantity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setSku(sku);
@@ -121,7 +121,7 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     public void setQuantity(Quantity<?> quantity) {
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
-    
+
     @Override
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
@@ -141,7 +141,7 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
+
     @Override
     public Integer getVersion() {
         return this.version;
@@ -150,5 +150,5 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     @Override
     public void setVersion(Integer version) {
         this.version = version;
-    } 
+    }
 }

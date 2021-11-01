@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity(name = "finished_good_material_portion")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
 public class FinishedGoodMaterialPortion extends MaterialPortion implements UpdateFinishedGoodMaterialPortion<FinishedGood> {
-    
+
     public static final String FIELD_FINISHED_GOOD = "finishedGood";
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "finished_good_id", referencedColumnName = "id", nullable = true)
     @JsonBackReference
@@ -25,7 +25,7 @@ public class FinishedGoodMaterialPortion extends MaterialPortion implements Upda
     public FinishedGoodMaterialPortion() {
         super();
     }
-    
+
     public FinishedGoodMaterialPortion(Long id) {
         super(id);
     }
@@ -35,7 +35,7 @@ public class FinishedGoodMaterialPortion extends MaterialPortion implements Upda
         super(id, materialLot, quantity, addedAt, createdAt, lastUpdated, version);
         setFinishedGood(finishedGood);
     }
-    
+
     @Override
     public FinishedGood getFinishedGood() {
         return finishedGood;

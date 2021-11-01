@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -30,7 +30,7 @@ public class MaterialCategoryServiceImpl extends BaseService implements Material
     public Page<MaterialCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames,
             int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
-        Specification<MaterialCategory> spec = SpecificationBuilder.builder()
+        Specification<MaterialCategory> spec = WhereClauseBuilder.builder()
                 .in(MaterialCategory.FIELD_ID, ids)
                 .in(MaterialCategory.FIELD_NAME, names)
                 .in(new String[] { MaterialCategory.FIELD_PARENT_CATEGORY, MaterialCategory.FIELD_ID }, parentCategoryIds)

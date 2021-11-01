@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 public class MaterialPortionDto extends BaseDto {
 
     private Long id;
-    
+
     private MaterialLotDto materialLot;
 
     private QuantityDto quantity;
-        
+
     private LocalDateTime addedAt;
-    
+
     private Integer version;
 
     public MaterialPortionDto() {
@@ -54,7 +54,7 @@ public class MaterialPortionDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-    
+
     public LocalDateTime getAddedAt() {
         return addedAt;
     }
@@ -62,7 +62,7 @@ public class MaterialPortionDto extends BaseDto {
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
-    
+
     public Integer getVersion() {
         return version;
     }

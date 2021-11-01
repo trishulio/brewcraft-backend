@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 
 @Transactional
 public class BrewStageStatusServiceImpl implements BrewStageStatusService {
@@ -22,7 +22,7 @@ public class BrewStageStatusServiceImpl implements BrewStageStatusService {
     }
 
     public Page<BrewStageStatus> getStatuses(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-        Specification<BrewStageStatus> spec = SpecificationBuilder
+        Specification<BrewStageStatus> spec = WhereClauseBuilder
                     .builder()
                     .in(BrewStageStatus.FIELD_ID, ids)
                     .in(BrewStageStatus.FIELD_NAME, names)

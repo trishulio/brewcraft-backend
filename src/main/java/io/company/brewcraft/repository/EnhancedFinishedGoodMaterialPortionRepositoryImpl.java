@@ -12,17 +12,17 @@ public class EnhancedFinishedGoodMaterialPortionRepositoryImpl implements Enhanc
     private static final Logger log = LoggerFactory.getLogger(EnhancedFinishedGoodMaterialPortionRepositoryImpl.class);
 
     private MaterialLotRepository materialLotRepo;
-    
+
     private final AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher;
-    
+
     public EnhancedFinishedGoodMaterialPortionRepositoryImpl(MaterialLotRepository materialLotRepo, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher) {
         this.materialLotRepo = materialLotRepo;
         this.refresher = refresher;
     }
-    
+
     @Override
     public void refresh(Collection<FinishedGoodMaterialPortion> portions) {
-        materialLotRepo.refreshAccessors(portions);       
+        materialLotRepo.refreshAccessors(portions);
     }
 
     @Override

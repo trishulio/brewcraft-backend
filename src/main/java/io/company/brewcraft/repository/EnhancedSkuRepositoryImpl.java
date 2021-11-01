@@ -14,9 +14,9 @@ import io.company.brewcraft.model.SkuMaterial;
 
 public class EnhancedSkuRepositoryImpl implements EnhancedSkuRepository {
     private static final Logger log = LoggerFactory.getLogger(EnhancedSkuRepositoryImpl.class);
-    
+
     private ProductRepository productRepository;
-    
+
     private SkuMaterialRepository skuMaterialRepository;
 
     private AccessorRefresher<Long, SkuAccessor, Sku> refresher;
@@ -37,7 +37,7 @@ public class EnhancedSkuRepositoryImpl implements EnhancedSkuRepository {
     public void refresh(Collection<Sku> skus) {
         this.productRepository.refreshAccessors(skus);
         final List<SkuMaterial> materials = skus.stream().filter(i -> i.getMaterials() != null).flatMap(i -> i.getMaterials().stream()).collect(Collectors.toList());
-    
+
         this.skuMaterialRepository.refresh(materials);
     }
 }

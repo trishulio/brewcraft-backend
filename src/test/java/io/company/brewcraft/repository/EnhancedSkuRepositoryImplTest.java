@@ -36,7 +36,7 @@ public class EnhancedSkuRepositoryImplTest {
         List<SkuMaterial> skuMaterials = List.of(new SkuMaterial(1L));
 
         skus.get(0).setMaterials(skuMaterials);
-        
+
         repo.refresh(skus);
 
         verify(productRepository, times(1)).refreshAccessors(skus);

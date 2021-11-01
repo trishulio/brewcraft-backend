@@ -23,7 +23,7 @@ import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.model.UpdateProduct;
 import io.company.brewcraft.repository.ProductRepository;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.ProductCategoryService;
@@ -66,7 +66,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
             });
         }
 
-        Specification<Product> spec = SpecificationBuilder
+        Specification<Product> spec = WhereClauseBuilder
             .builder()
             .in(Product.FIELD_ID, ids)
             .in(new String[] { Product.FIELD_CATEGORY, ProductCategory.FIELD_ID }, categoryIdsAndDescendantIds.isEmpty() ? null : categoryIdsAndDescendantIds)

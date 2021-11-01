@@ -18,7 +18,7 @@ import io.company.brewcraft.model.user.UpdateUser;
 import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.IdpUserRepository;
@@ -40,7 +40,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public Page<User> getUsers(Set<Long> ids, Set<Long> excludeIds, Set<String> userNames, Set<String> displayNames, Set<String> emails, Set<String> phoneNumbers, Set<Long> statusIds, Set<Long> salutationIds, Set<String> roles, int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
-        final Specification<User> userSpecification = SpecificationBuilder
+        final Specification<User> userSpecification = WhereClauseBuilder
                 .builder()
                 .in(User.FIELD_ID, ids)
                 .not().in(User.FIELD_ID, excludeIds)

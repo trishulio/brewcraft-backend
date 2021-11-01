@@ -15,7 +15,7 @@ import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.UpdateSku;
 import io.company.brewcraft.model.UpdateSkuMaterial;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.SkuMaterialService;
 import io.company.brewcraft.service.SkuService;
@@ -25,9 +25,9 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class SkuServiceImpl implements SkuService {
 
     private final RepoService<Long, Sku, SkuAccessor> repoService;
-    
+
     private final UpdateService<Long, Sku, BaseSku<? extends BaseSkuMaterial<?>>, UpdateSku<? extends UpdateSkuMaterial<?>>> updateService;
-    
+
     private final SkuMaterialService skuMaterialService;
 
     public SkuServiceImpl(RepoService<Long, Sku, SkuAccessor> repoService, UpdateService<Long, Sku, BaseSku<? extends BaseSkuMaterial<?>>, UpdateSku<? extends UpdateSkuMaterial<?>>> updateService, SkuMaterialService skuMaterialService) {
@@ -39,7 +39,7 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public Page<Sku> getSkus(Set<Long> ids, Set<Long> productIds, int page, int size, SortedSet<String> sort,
             boolean orderAscending) {
-        final Specification<Sku> spec = SpecificationBuilder.builder()
+        final Specification<Sku> spec = WhereClauseBuilder.builder()
                                                             .in(Sku.FIELD_ID, ids)
                                                             .in(Sku.FIELD_PRODUCT, productIds).build();
 
@@ -56,26 +56,26 @@ public class SkuServiceImpl implements SkuService {
         if (skus == null) {
             return null;
         }
-        
+
         final List<Sku> entities = this.updateService.getAddEntities(skus);
-        
+
         for (int i = 0; i < skus.size(); i++) {
             final List<SkuMaterial> materials = this.skuMaterialService.getAddEntities((List<BaseSkuMaterial<?>>) skus.get(i).getMaterials());
             entities.get(i).setMaterials(materials);
         }
-        
+
         return this.repoService.saveAll(entities);
     }
 
     @Override
-    public List<Sku> putSkus(List<UpdateSku<? extends UpdateSkuMaterial<?>>> skus) {  
+    public List<Sku> putSkus(List<UpdateSku<? extends UpdateSkuMaterial<?>>> skus) {
         if (skus == null) {
             return null;
         }
-        
+
         final List<Sku> existing = this.repoService.getByIds(skus);
         final List<Sku> updated = this.updateService.getPutEntities(existing, skus);
-        
+
         final int length = Math.max(existing.size(), skus.size());
         for (int i = 0; i < length; i++) {
             final List<SkuMaterial> existingSkuMaterials = i < existing.size() ? existing.get(i).getMaterials() : null;
@@ -85,25 +85,25 @@ public class SkuServiceImpl implements SkuService {
 
             updated.get(i).setMaterials(updatedSkuMaterials);
         }
-        
+
         return this.repoService.saveAll(updated);
     }
 
     @Override
-    public List<Sku> patchSkus(List<UpdateSku<? extends UpdateSkuMaterial<?>>> skus) {   
+    public List<Sku> patchSkus(List<UpdateSku<? extends UpdateSkuMaterial<?>>> skus) {
         if (skus == null) {
             return null;
         }
-        
+
         final List<Sku> existing = this.repoService.getByIds(skus);
-        
+
         if (existing.size() != skus.size()) {
             final Set<Long> existingIds = existing.stream().map(sku -> sku.getId()).collect(Collectors.toSet());
             final Set<Long> nonExistingIds = skus.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
 
             throw new EntityNotFoundException(String.format("Cannot find skus with Ids: %s", nonExistingIds));
-        }        
-        
+        }
+
         final List<Sku> updated = this.updateService.getPatchEntities(existing, skus);
 
         for (int i = 0; i < existing.size(); i++) {
@@ -114,7 +114,7 @@ public class SkuServiceImpl implements SkuService {
 
             updated.get(i).setMaterials(updatedSkuMaterials);
         }
-                
+
         return this.repoService.saveAll(updated);
     }
 

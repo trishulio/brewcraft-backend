@@ -29,7 +29,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 
 import io.company.brewcraft.repository.AggregationRepositoryTest.TestEntity;
-import io.company.brewcraft.service.Selector;
+import io.company.brewcraft.service.GroupByClauseBuilder;
+import io.company.brewcraft.service.SelectClauseBuilder;
 
 public class QueryResolverTest {
 
@@ -74,13 +75,13 @@ public class QueryResolverTest {
         Predicate mPred = mock(Predicate.class);
         doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
 
-        Selector mSelector = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
         List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        doReturn(mSelection).when(mSelector).getSelectClause(mRoot, mCq, mCb);
 
-        Selector mGroupBySelector = mock(Selector.class);
+        GroupByClauseBuilder mGroupBySelector = mock(GroupByClauseBuilder.class);
         List<Expression<?>> mGroupSelection = List.of(mock(Expression.class));
-        doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCq, mCb);
+        doReturn(mGroupSelection).when(mGroupBySelector).getGroupByClause(mRoot, mCq, mCb);
 
         TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, mGroupBySelector, mSpec, PageRequest.of(10, 99, Direction.DESC, "id"));
         assertSame(mTq, q);
@@ -101,9 +102,9 @@ public class QueryResolverTest {
         Predicate mPred = mock(Predicate.class);
         doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
 
-        Selector mSelector = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
         List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        doReturn(mSelection).when(mSelector).getSelectClause(mRoot, mCq, mCb);
 
         TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, null, mSpec, PageRequest.of(10, 99, Direction.DESC, "id"));
         assertSame(mTq, q);
@@ -123,13 +124,13 @@ public class QueryResolverTest {
         Predicate mPred = mock(Predicate.class);
         doReturn(mPred).when(mSpec).toPredicate(mRoot, mCq, mCb);
 
-        Selector mSelector = mock(Selector.class);
+        SelectClauseBuilder mSelector = mock(SelectClauseBuilder.class);
         List<Selection<?>> mSelection = List.of(mock(Selection.class));
-        doReturn(mSelection).when(mSelector).getSelection(mRoot, mCq, mCb);
+        doReturn(mSelection).when(mSelector).getSelectClause(mRoot, mCq, mCb);
 
-        Selector mGroupBySelector = mock(Selector.class);
+        GroupByClauseBuilder mGroupBySelector = mock(GroupByClauseBuilder.class);
         List<Expression<?>> mGroupSelection = List.of(mock(Expression.class));
-        doReturn(mGroupSelection).when(mGroupBySelector).getSelection(mRoot, mCq, mCb);
+        doReturn(mGroupSelection).when(mGroupBySelector).getGroupByClause(mRoot, mCq, mCb);
 
         TypedQuery<Object> q = this.qResolver.buildQuery(TestEntity.class, Object.class, mSelector, mGroupBySelector, mSpec, null);
         assertSame(mTq, q);

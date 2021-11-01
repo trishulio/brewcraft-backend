@@ -149,7 +149,7 @@ public class MaterialControllerTest {
        assertEquals(addMaterialDto.getUPC(), addedMaterialCaptor.getValue().getUPC());
        assertEquals(addMaterialDto.getBaseQuantityUnit(), addedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
        assertEquals(addMaterialDto.getImageSrc(), addedMaterialCaptor.getValue().getImageSrc());
-       
+
        //Assert returned material
        assertEquals(material.getId(), materialDto.getId());
        assertEquals(material.getName(), materialDto.getName());

@@ -227,7 +227,7 @@ public class PurchaseOrderControllerTest {
     @Test
     public void testDeletePurchaseOrders_DeletesPurchaseOrders_WhenPurchaseOrderIdsAreProvided() {
         controller.deletePurchaseOrder(Set.of(1L, 2L, 3L));
-        
+
         verify(mService, times(1)).delete(Set.of(1L, 2L, 3L));
     }
 }

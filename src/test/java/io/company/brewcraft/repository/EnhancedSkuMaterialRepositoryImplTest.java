@@ -11,7 +11,7 @@ import io.company.brewcraft.model.SkuMaterial;
 
 public class EnhancedSkuMaterialRepositoryImplTest {
     private EnhancedSkuMaterialRepository skuMaterialRepository;
-    
+
     private MaterialRepository materialRepository;
 
     @SuppressWarnings("unchecked")
@@ -25,7 +25,7 @@ public class EnhancedSkuMaterialRepositoryImplTest {
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
         List<SkuMaterial> skuMaterials = List.of(new SkuMaterial(1L));
-        
+
         skuMaterialRepository.refresh(skuMaterials);
 
         verify(materialRepository, times(1)).refreshAccessors(skuMaterials);

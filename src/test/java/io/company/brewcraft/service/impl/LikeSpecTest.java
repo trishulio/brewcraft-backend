@@ -42,7 +42,7 @@ public class LikeSpecTest {
     public void testGetExpression_ReturnsLikeOnLowerCaseExpressionOnDelegatePath() {
         Expression<String> mLowerExpr = mock(Expression.class);
         doReturn(mLowerExpr).when(mCb).lower(mExpr);
-        
+
         Predicate mLikeExpr = mock(Predicate.class);
         doReturn(mLikeExpr).when(mCb).like(mLowerExpr, "%val1%");
 

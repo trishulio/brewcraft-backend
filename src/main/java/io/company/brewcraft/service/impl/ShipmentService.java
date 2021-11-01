@@ -23,7 +23,7 @@ import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdateShipment;
-import io.company.brewcraft.repository.SpecificationBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.RepoService;
@@ -59,7 +59,7 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
         int page,
         int size
     ) {
-        final Specification<Shipment> spec= SpecificationBuilder.builder()
+        final Specification<Shipment> spec= WhereClauseBuilder.builder()
                                                           .in(Shipment.FIELD_ID, ids)
                                                           .not().in(Shipment.FIELD_ID, excludeIds)
                                                           .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)

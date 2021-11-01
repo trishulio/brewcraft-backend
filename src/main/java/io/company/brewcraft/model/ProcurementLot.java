@@ -24,6 +24,10 @@ public class ProcurementLot extends Lot {
         super(id, lotNumber, quantity, material, shipment, invoiceItem, storage);
     }
 
+    public ProcurementLot(Long id, String lotNumber, Material material, String materialName, InvoiceItem invoiceItem, Shipment shipment, Storage storage, UnitEntity unit, BigDecimal value) {
+        super(id, lotNumber, material, materialName, invoiceItem, shipment, storage, unit, value);
+    }
+
     public ProcurementLot(String lotNumber, UnitEntity unit, BigDecimal value) {
         super(lotNumber, unit, value);
     }

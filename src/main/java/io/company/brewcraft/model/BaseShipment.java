@@ -11,7 +11,7 @@ public interface BaseShipment<T extends BaseMaterialLot<? extends BaseShipment<T
     final String ATTR_DELIVERY_DUE_DATE = "deliveryDueDate";
     final String ATTR_DELIVERED_DATE = "deliveredDate";
     final String ATTR_LOTS = "lots";
-    
+
     String getShipmentNumber();
 
     void setShipmentNumber(String shipmentNumber);

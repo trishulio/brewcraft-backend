@@ -3,25 +3,25 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class SkuDto extends BaseDto {
-    
+
     private Long id;
-    
+
     private String name;
 
     private String description;
-    
+
     private ProductDto product;
-    
+
     private List<SkuMaterialDto> materials;
-    
+
     private QuantityDto quantity;
-    
+
     private Integer version;
-    
+
     public SkuDto() {
         super();
     }
-    
+
     public SkuDto(Long id) {
         this();
         this.id = id;
@@ -36,7 +36,7 @@ public class SkuDto extends BaseDto {
         this.quantity = quantity;
         this.version = version;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -60,7 +60,7 @@ public class SkuDto extends BaseDto {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public ProductDto getProduct() {
         return product;
     }
@@ -92,5 +92,5 @@ public class SkuDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-  
+
 }

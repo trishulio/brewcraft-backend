@@ -5,16 +5,16 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class AddFinishedGoodDto extends BaseDto {
-    
+
     @NotNull
     private Long skuId;
-    
+
     @NotNull
     private List<AddMixturePortionDto> mixturePortions;
-    
+
     @NotNull
     private List<AddMaterialPortionDto> materialPortions;
-        
+
     public AddFinishedGoodDto() {
         super();
     }
@@ -50,5 +50,5 @@ public class AddFinishedGoodDto extends BaseDto {
     public void setMaterialPortions(List<AddMaterialPortionDto> materialPortions) {
         this.materialPortions = materialPortions;
     }
-      
+
 }

@@ -27,7 +27,7 @@ public class FinishedGoodDtoTest {
         FinishedGoodDto finishedGood = new FinishedGoodDto(id, sku, mixturePortions, materialPortions, version);
 
         assertEquals(1L, finishedGood.getId());
-        assertEquals(new SkuDto(2L), finishedGood.getSku());   
+        assertEquals(new SkuDto(2L), finishedGood.getSku());
         assertEquals(List.of(new MixturePortionDto(5L)), finishedGood.getMixturePortions());
         assertEquals(List.of(new MaterialPortionDto(6L)), finishedGood.getMaterialPortions());
         assertEquals(1, finishedGood.getVersion());
@@ -38,7 +38,7 @@ public class FinishedGoodDtoTest {
         finishedGood.setId(1L);
         assertEquals(1L, finishedGood.getId());
     }
-    
+
     @Test
     public void testGetSetSku() {
         finishedGood.setSku(new SkuDto(3L));
@@ -50,7 +50,7 @@ public class FinishedGoodDtoTest {
         finishedGood.setMixturePortions(List.of(new MixturePortionDto(5L)));
         assertEquals(List.of(new MixturePortionDto(5L)), finishedGood.getMixturePortions());
     }
-    
+
     @Test
     public void testGetSetMaterialPortions() {
         finishedGood.setMaterialPortions(List.of(new MaterialPortionDto(6L)));
