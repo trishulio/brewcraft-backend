@@ -28,6 +28,8 @@ public class SkuTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
+        String name = "testName";
+        String description = "testDescription";
         Product product = new Product(2L);
         List<SkuMaterial> materials = List.of(new SkuMaterial(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
@@ -35,9 +37,11 @@ public class SkuTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, name, description, product, materials, quantity, created, lastUpdated, version);
 
         assertEquals(1L, sku.getId());
+        assertEquals("testName", sku.getName());
+        assertEquals("testDescription", sku.getDescription());
         
         SkuMaterial expectedSkuMaterial = new SkuMaterial(9L);
         expectedSkuMaterial.setSku(sku);
@@ -53,6 +57,18 @@ public class SkuTest {
     public void testGetSetId() {
         sku.setId(1L);
         assertEquals(1L, sku.getId());
+    }
+    
+    @Test
+    public void testGetSetName() {
+        sku.setName("testName");
+        assertEquals("testName", sku.getName());
+    }
+
+    @Test
+    public void testGetSetDescription() {
+        sku.setDescription("testDescription");
+        assertEquals("testDescription", sku.getDescription());
     }
     
     @Test
@@ -100,6 +116,8 @@ public class SkuTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
+        String name = "testName";
+        String description = "testDescription";
         Product product = new Product(2L);
         List<SkuMaterial> materials = List.of(new SkuMaterial(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
@@ -107,9 +125,9 @@ public class SkuTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, name, description, product, materials, quantity, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":{\"nano\":0,\"year\":2019,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"WEDNESDAY\",\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"THURSDAY\",\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":{\"nano\":0,\"year\":2019,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"WEDNESDAY\",\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"THURSDAY\",\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
         JSONAssert.assertEquals(json, sku.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

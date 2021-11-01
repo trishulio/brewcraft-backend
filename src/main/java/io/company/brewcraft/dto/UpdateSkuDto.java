@@ -4,6 +4,10 @@ import java.util.List;
 
 public class UpdateSkuDto extends BaseDto {
     
+    private String name;
+
+    private String description;
+    
     private Long productId;
     
     private List<UpdateSkuMaterialDto> materials;
@@ -16,12 +20,30 @@ public class UpdateSkuDto extends BaseDto {
         super();
     }
 
-    public UpdateSkuDto(Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    public UpdateSkuDto(String name, String description, Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Integer version) {
         super();
+        this.name = name;
+        this.description = description;
         this.productId = productId;
         this.materials = materials;
         this.quantity = quantity;
         this.version = version;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getProductId() {
