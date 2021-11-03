@@ -11,6 +11,7 @@ import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
+import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
@@ -31,6 +32,8 @@ import io.company.brewcraft.service.BrewStageStatusServiceImpl;
 import io.company.brewcraft.service.BrewTaskService;
 import io.company.brewcraft.service.BrewTaskServiceImpl;
 import io.company.brewcraft.service.FacilityService;
+import io.company.brewcraft.service.FinishedGoodInventoryService;
+import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
 import io.company.brewcraft.service.FinishedGoodMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodMixturePortionService;
 import io.company.brewcraft.service.IdpUserRepository;
@@ -308,6 +311,14 @@ public class ServiceAutoConfigurationTest {
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
         this.serviceAutoConfiguration.finishedGoodService(mUtilProvider, mFgMixturePortionService, mFgMaterialPortionService, mFinishedGoodRepo);
+    }
+    
+    @Test
+    public void testFinishedGoodInventoryervice_ReturnsInstanceOfFinishedGoodInventoryService() {
+        final FinishedGoodInventoryRepository repository = mock(FinishedGoodInventoryRepository.class);
+        final FinishedGoodInventoryService service = this.serviceAutoConfiguration.finishedGoodInventoryService(repository);
+
+        assertTrue(service instanceof FinishedGoodInventoryServiceImpl);
     }
 
 }
