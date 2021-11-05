@@ -41,7 +41,7 @@ public class ProcurementControllerTest {
     @BeforeEach
     public void init() {
         mCrudController = mock(CrudControllerService.class);
-        controller = new ProcurementController(mCrudController);
+        controller = new ProcurementController(mCrudController, null);
     }
 
     @Test

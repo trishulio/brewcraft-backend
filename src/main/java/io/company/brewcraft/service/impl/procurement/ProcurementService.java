@@ -6,12 +6,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
@@ -57,6 +60,34 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         this.purchaseOrderService = poService;
         this.shipmentService = shipmentService;
         this.transactionService = transactionService;
+    }
+
+
+    public Page<Procurement> getAll(
+            SortedSet<String> sort,
+            boolean orderAscending,
+            int page,
+            int size
+    ) {
+        Page<Shipment> shipments = this.shipmentService.getShipments(
+            null, // ids,
+            null, // excludeIds,
+            null, // shipmentNumbers,
+            null, // descriptions,
+            null, // statusIds,
+            null, // deliveryDueDateFrom,
+            null, // deliveryDueDateTo,
+            null, // deliveredDateFrom,
+            null, // deliveredDateTo,
+            sort,
+            orderAscending,
+            page,
+            size
+        );
+
+        List<Procurement> procurements = shipments.stream().map(shipment -> new Procurement(shipment)).collect(Collectors.toList());
+
+        return new PageImpl<>(procurements, shipments.getPageable(), shipments.getTotalElements());
     }
 
     @Override

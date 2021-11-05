@@ -89,7 +89,7 @@ public class PurchaseOrderControllerTest {
             Set.of(2L), //excludeIds
             Set.of("ORDER_1"), //orderNumbers
             Set.of(3L), //supplierIds
-            new TreeSet<>(List.of("id")), //sortBy
+            new TreeSet<>(List.of("id")), //sort
             true, //orderAscending
             10, //page
             20 //size

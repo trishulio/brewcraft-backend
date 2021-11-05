@@ -66,8 +66,8 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             BigDecimal freightAmtTo,
             Set<Long> statusIds,
             Set<Long> supplierIds,
-            SortedSet<String> sortBy,
-            boolean ascending,
+            SortedSet<String> sort,
+            boolean orderAscending,
             int page,
             int size
          ) {
@@ -89,7 +89,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
 
-        return this.repoService.getAll(spec, sortBy, ascending, page, size);
+        return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }
 
     @Override

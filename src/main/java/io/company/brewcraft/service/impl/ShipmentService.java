@@ -54,7 +54,7 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
         LocalDateTime deliveryDueDateTo,
         LocalDateTime deliveredDateFrom,
         LocalDateTime deliveredDateTo,
-        SortedSet<String> sortBy,
+        SortedSet<String> sort,
         boolean orderAscending,
         int page,
         int size
@@ -69,7 +69,7 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
                                                           .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
                                                           .build();
 
-        return this.repoService.getAll(spec, sortBy, orderAscending, page, size);
+        return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }
 
     @Override

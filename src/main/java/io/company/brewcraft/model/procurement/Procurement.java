@@ -35,6 +35,20 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
         updateProperties(invoice);
     }
 
+    public Procurement(Shipment shipment) {
+        this();
+        Invoice invoice = null;
+        if (shipment.getLotCount() > 0) {
+            InvoiceItem invoiceItem = shipment.getLots().get(0).getInvoiceItem();
+            if (invoiceItem != null) {
+                invoice = invoiceItem.getInvoice();
+            }
+        }
+
+        updateProperties(invoice);
+        updateProperties(shipment);
+    }
+
     public Procurement() {
         super();
         this.shipment = new Shipment();

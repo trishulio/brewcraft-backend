@@ -2,12 +2,14 @@ package io.company.brewcraft.controller;
 
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
@@ -42,6 +45,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RequestMapping(path = "/api/v1/procurements", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProcurementController extends BaseController {
 
+    private ProcurementService service;
+
     private CrudControllerService<
         ProcurementId,
         Procurement,
@@ -54,7 +59,7 @@ public class ProcurementController extends BaseController {
 
     @Autowired
     public ProcurementController(AttributeFilter filter, ProcurementService service) {
-        this(new CrudControllerService<>(filter, ProcurementMapper.INSTANCE, service, ""));
+        this(new CrudControllerService<>(filter, ProcurementMapper.INSTANCE, service, ""), service);
     }
 
     protected ProcurementController(
@@ -66,8 +71,23 @@ public class ProcurementController extends BaseController {
             ProcurementDto,
             AddProcurementDto,
             UpdateProcurementDto
-        > controller) {
+        > controller,
+        ProcurementService service) {
         this.controller = controller;
+        this.service = service;
+    }
+
+    @GetMapping("/")
+    public PageDto<ProcurementDto> getAll(
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
+    ) {
+        Page<Procurement> procurements = this.service.getAll(sort, orderAscending, page, size);
+
+        return this.controller.getAll(procurements, attributes);
     }
 
     @GetMapping("/{shipmentId}/{invoiceId}")

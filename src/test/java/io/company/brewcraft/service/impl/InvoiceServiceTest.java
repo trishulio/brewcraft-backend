@@ -75,8 +75,8 @@ public class InvoiceServiceTest {
            new BigDecimal("4"), //freightAmtTo,
            Set.of(4L), //statusIds,
            Set.of(5L), //supplierIds,
-           new TreeSet<>(List.of("id")), //sortBy,
-           true, //ascending,
+           new TreeSet<>(List.of("id")), //sort,
+           true, //orderAscending,
            10, //page,
            20 //size
        );

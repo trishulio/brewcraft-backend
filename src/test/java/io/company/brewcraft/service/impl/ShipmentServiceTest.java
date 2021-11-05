@@ -61,8 +61,8 @@ public class ShipmentServiceTest {
            LocalDateTime.of(2001, 1, 1, 0, 0), //deliveryDueDateTo,
            LocalDateTime.of(2002, 1, 1, 0, 0), //deliveredDateFrom,
            LocalDateTime.of(2003, 1, 1, 0, 0), //deliveredDateTo,
-           new TreeSet<>(List.of("id")), //sortBy,
-           true, //ascending,
+           new TreeSet<>(List.of("id")), //sort,
+           true, //orderAscending,
            10, //page,
            20 //size
        );

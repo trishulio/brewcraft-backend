@@ -18,7 +18,7 @@ public interface RepoService<ID, E extends Identified<ID>, A> {
 
     E get(ID id);
 
-    Page<E> getAll(Specification<E> spec, SortedSet<String> sortBy, boolean ascending, int page, int size);
+    Page<E> getAll(Specification<E> spec, SortedSet<String> sort, boolean orderAscending, int page, int size);
 
     List<E> getByIds(Collection<? extends Identified<ID>> idProviders);
 
