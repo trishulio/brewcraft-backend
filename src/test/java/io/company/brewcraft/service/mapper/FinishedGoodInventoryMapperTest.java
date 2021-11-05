@@ -26,13 +26,5 @@ public class FinishedGoodInventoryMapperTest {
 
         assertEquals(new FinishedGoodInventoryDto(new SkuDto(2L), 50L), dto);
     }
-    
-    @Test
-    public void testFromDto_ReturnsEntity() {
-        FinishedGoodInventoryDto finishedGoodInventoryDto = new FinishedGoodInventoryDto(new SkuDto(2L), 50L);
-        FinishedGoodInventory entity = finishedGoodInventoryMapper.fromDto(finishedGoodInventoryDto);
-
-        assertEquals(new FinishedGoodInventory(null, new Sku(2L), 50L), entity);
-    }
 
 }

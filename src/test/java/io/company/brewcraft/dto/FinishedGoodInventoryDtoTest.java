@@ -2,8 +2,12 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import io.company.brewcraft.util.SupportedUnits;
 
 public class FinishedGoodInventoryDtoTest {
 
@@ -22,7 +26,7 @@ public class FinishedGoodInventoryDtoTest {
         FinishedGoodInventoryDto finishedGoodInventoryDto = new FinishedGoodInventoryDto(skuDto, quantity);
 
         assertEquals(new SkuDto(1L), finishedGoodInventoryDto.getSku());
-        assertEquals(50L, finishedGoodInventoryDto.getQuantity());
+        assertEquals(new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(50L)), finishedGoodInventoryDto.getQuantity());
     }
 
     @Test
@@ -34,6 +38,6 @@ public class FinishedGoodInventoryDtoTest {
     @Test
     public void testGetSetQuantity() {
         finishedGoodInventoryDto.setQuantity(50L);
-        assertEquals(50L, finishedGoodInventoryDto.getQuantity());
+        assertEquals(new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(50L)), finishedGoodInventoryDto.getQuantity());
     }
 }

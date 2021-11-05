@@ -3,6 +3,7 @@ package io.company.brewcraft.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,10 +14,12 @@ import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.FinishedGoodInventoryDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.SkuDto;
 import io.company.brewcraft.model.FinishedGoodInventory;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
+import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
@@ -69,6 +72,6 @@ public class FinishedGoodInventoryControllerTest {
        
        FinishedGoodInventoryDto finishedGoodInventory = dto.getContent().get(0);
        assertEquals(new SkuDto(2L), finishedGoodInventory.getSku());
-       assertEquals(50L, finishedGoodInventory.getQuantity());
+       assertEquals(new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(50L)), finishedGoodInventory.getQuantity());
    }
 }

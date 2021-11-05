@@ -12,6 +12,4 @@ public interface FinishedGoodInventoryMapper {
     FinishedGoodInventoryMapper INSTANCE = Mappers.getMapper(FinishedGoodInventoryMapper.class);
 
     FinishedGoodInventoryDto toDto(FinishedGoodInventory finishedGood);
-
-    FinishedGoodInventory fromDto(FinishedGoodInventoryDto dto);
 }
