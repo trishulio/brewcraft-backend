@@ -19,6 +19,7 @@
         <javax.measure.impl.version>1.0.10</javax.measure.impl.version>
         <org.joda.money.version>1.0.1</org.joda.money.version>
         <aws.sdk.version>1.12.12</aws.sdk.version>
+        <org.jacoco.plugin.version>0.8.7</org.jacoco.plugin.version>
     </properties>
 
     <parent>
@@ -139,10 +140,10 @@
             <version>${javax.measure.version}</version>
         </dependency>
         <dependency>
-           <groupId>tec.uom</groupId>
-           <artifactId>uom-se</artifactId>
+            <groupId>tec.uom</groupId>
+            <artifactId>uom-se</artifactId>
             <version>${javax.measure.impl.version}</version>
-       </dependency>
+        </dependency>
         <dependency>
             <groupId>org.joda</groupId>
             <artifactId>joda-money</artifactId>
@@ -193,6 +194,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${org.jacoco.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
