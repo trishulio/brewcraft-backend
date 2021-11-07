@@ -21,6 +21,9 @@ import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Identified;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.repository.WhereClauseBuilder;
@@ -55,7 +58,7 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
                                             .builder()
                                             .in(FinishedGood.FIELD_ID, ids)
                                             .not().in(FinishedGood.FIELD_ID, excludeIds)
-                                            .in(FinishedGood.FIELD_SKU, skuIds)
+                                            .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
                                             .build();
 
         return this.repoService.getAll(spec, sortBy, ascending, page, size);
