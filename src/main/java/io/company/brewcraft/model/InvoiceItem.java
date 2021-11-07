@@ -38,6 +38,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_QUANTITY = "quantity";
     public static final String FIELD_PRICE = "price";
     public static final String FIELD_TAX = "tax";

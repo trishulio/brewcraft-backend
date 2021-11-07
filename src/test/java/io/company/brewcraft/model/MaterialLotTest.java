@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -42,17 +42,6 @@ public class MaterialLotTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), this.lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), this.lot.getLastUpdated());
         assertEquals(1, this.lot.getVersion());
-    }
-
-    public void testInvoiceItemConstructor() {
-        final InvoiceItem item = new InvoiceItem();
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
-        item.setMaterial(new Material(1L));
-
-        this.lot = new MaterialLot(item);
-
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), this.lot.getQuantity());
-        assertEquals(item, this.lot.getInvoiceItem());
     }
 
     @Test

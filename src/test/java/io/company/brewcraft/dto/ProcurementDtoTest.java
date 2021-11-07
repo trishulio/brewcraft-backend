@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -124,6 +125,15 @@ public class ProcurementDtoTest {
     public void testAccessId() {
         dto.setId(new ProcurementIdDto(10L, 10L));
         assertEquals(new ProcurementIdDto(10L, 10L), dto.getId());
+    }
+
+    @Test
+    public void testAccessId_ReturnsNull_WhenShipmentOrInvoiceIsNull() {
+        dto.setId(new ProcurementIdDto(null, null));
+        assertNull(dto.getId());
+
+        dto.setId(null);
+        assertNull(dto.getId());
     }
 
     @Test

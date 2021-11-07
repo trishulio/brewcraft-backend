@@ -55,7 +55,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
     public static final String FIELD_AMOUNT = "amount";
     public static final String FIELD_FREIGHT = "freight";
-    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_INVOICE_STATUS = "invoiceStatus";
     public static final String FIELD_ITEMS = "items";
 
     @Id
@@ -328,6 +328,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         this.amount = MoneyMapper.INSTANCE.toEntity(amount);
     }
 
+    @Override
     @JsonIgnore
     public Tax getTax() {
         Tax tax = null;

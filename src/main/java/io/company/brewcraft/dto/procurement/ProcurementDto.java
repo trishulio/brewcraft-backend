@@ -224,12 +224,4 @@ public class ProcurementDto extends BaseDto {
     public void setInvoiceVersion(Integer invoiceVersion) {
         this.invoice.setVersion(invoiceVersion);
     }
-
-    protected InvoiceDto getInvoice() {
-        return this.invoice;
-    }
-
-    protected ShipmentDto getShipment() {
-        return this.shipment;
-    }
 }

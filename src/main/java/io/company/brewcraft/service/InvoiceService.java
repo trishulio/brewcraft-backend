@@ -85,7 +85,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .in(Invoice.FIELD_ITEMS, new String[] { InvoiceItem.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
                                             .between(new String[] { Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
-                                            .in(new String[] { Invoice.FIELD_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
+                                            .in(new String[] { Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
 

@@ -1,7 +1,8 @@
 package io.company.brewcraft.pojo;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -266,6 +267,12 @@ public class InvoiceTest {
     }
 
     @Test
+    public void testAddItem_DoesNothing_WhenItemIsNull() {
+        invoice.addItem(null);
+        assertNull(invoice.getItems());
+    }
+
+    @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsNull() {
         assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
@@ -294,5 +301,26 @@ public class InvoiceTest {
 
         assertTrue(this.invoice.removeItem(item));
         assertNull(item.getInvoice());
+    }
+
+    @Test
+    public void testGetItemCount_Returns0_WhenItemsIsNull() {
+        invoice.setItems(null);
+
+        assertEquals(0, invoice.getItemCount());
+    }
+
+    @Test
+    public void testGetItemCount_Returns0_WhenItemsIsEmpty() {
+        invoice.setItems(List.of());
+
+        assertEquals(0, invoice.getItemCount());
+    }
+
+    @Test
+    public void testGetItemCount_ReturnsItemCount() {
+        invoice.setItems(List.of(new InvoiceItem()));
+
+        assertEquals(1, invoice.getItemCount());
     }
 }

@@ -35,7 +35,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     public static final String FIELD_ID = "id";
     public static final String FIELD_SHIPMENT_NUMBER = "shipmentNumber";
     public static final String FIELD_DESCRIPTION = "description";
-    public static final String FIELD_STATUS = "status";
+    public static final String FIELD_SHIPMENT_STATUS = "shipmentStatus";
     public static final String FIELD_DELIVERY_DUE_DATE = "deliveryDueDate";
     public static final String FIELD_DELIVERED_DATE = "deliveredDate";
     public static final String FIELD_LOTS = "lots";

@@ -207,6 +207,17 @@ public class ProcurementLotTest {
     }
 
     @Test
+    public void testLotShipmentInvoiceItemQtyConstructor() {
+        final Shipment shipment = new Shipment(1L);
+        this.lot = new ProcurementLot("LOT_1", shipment, new InvoiceItem(10L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+
+        assertEquals("LOT_1", this.lot.getLotNumber());
+        assertEquals(shipment, this.lot.getShipment());
+        assertEquals(new InvoiceItem(10L), this.lot.getInvoiceItem());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
     public void testLotShipmentMaterialInvoiceItemQtyConstructor() {
         final Shipment shipment = new Shipment(1L);
         this.lot = new ProcurementLot("LOT_1", shipment, new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
@@ -226,6 +237,18 @@ public class ProcurementLotTest {
         assertEquals("LOT_1", this.lot.getLotNumber());
         assertEquals(shipment, this.lot.getShipment());
         assertEquals(new Storage(1L), this.lot.getStorage());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
+    public void testLotShipmentStorageInvoiceItemQtyConstructor() {
+        final Shipment shipment = new Shipment(1L);
+        this.lot = new ProcurementLot("LOT_1", shipment, new Storage(1L), new InvoiceItem(10L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+
+        assertEquals("LOT_1", this.lot.getLotNumber());
+        assertEquals(shipment, this.lot.getShipment());
+        assertEquals(new Storage(1L), this.lot.getStorage());
+        assertEquals(new InvoiceItem(10L), this.lot.getInvoiceItem());
         assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
     }
 

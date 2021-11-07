@@ -259,4 +259,86 @@ public class ProcurementItemTest {
 
         assertEquals(expected, lot);
     }
+
+    @Test
+    public void testUpdateProperties_ResetAllProperties_WhenLotIsNull() {
+        procurementItem.updateProperties((MaterialLot) null);
+        assertNull(procurementItem.getId());
+        assertNull(procurementItem.getLotNumber());
+        assertNull(procurementItem.getQuantity());
+        assertNull(procurementItem.getStorage());
+        assertNull(procurementItem.getLastUpdated());
+        assertNull(procurementItem.getCreatedAt());
+        assertNull(procurementItem.getVersion());
+    }
+
+    @Test
+    public void testUpdateProperties_SetsValuesFromLot() {
+        MaterialLot lot = new MaterialLot(
+            1L,
+            "LOT_1",
+            Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM),
+            null,
+            new Storage(300L),
+            LocalDateTime.of(1999, 1, 1, 0, 0),
+            LocalDateTime.of(2000, 1, 1, 0, 0),
+            1
+        );
+
+        procurementItem.updateProperties(lot);
+
+        ProcurementItem expected = new ProcurementItem();
+        expected.setId(new ProcurementItemId(1L, null));
+        expected.setLotNumber("LOT_1");
+        expected.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
+        expected.setStorage(new Storage(300L));
+        expected.setCreatedAt(LocalDateTime.of(1999, 1, 1, 0, 0));
+        expected.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        expected.setVersion(1);
+        assertEquals(expected, procurementItem);
+    }
+
+    @Test
+    public void testUpdateProperties_ResetAllProperties_WhenInvoiceItemIsNull() {
+        procurementItem.updateProperties((InvoiceItem) null);
+        assertNull(procurementItem.getId());
+        assertNull(procurementItem.getDescription());
+        assertNull(procurementItem.getQuantity());
+        assertNull(procurementItem.getPrice());
+        assertNull(procurementItem.getTax());
+        assertNull(procurementItem.getMaterial());
+        assertNull(procurementItem.getCreatedAt());
+        assertNull(procurementItem.getLastUpdated());
+        assertNull(procurementItem.getInvoiceItemVersion());
+    }
+
+    @Test
+    public void testUpdateProperties_SetsValuesFromInvoiceItem() {
+        InvoiceItem invoiceItem = new InvoiceItem(
+            2L,
+            "DESCRIPTION_ITEM",
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
+            Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
+            new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
+            new Material(7L),
+            LocalDateTime.of(2000, 1, 1, 1, 1),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            1
+        );
+
+        procurementItem.updateProperties(invoiceItem);
+
+        ProcurementItem expected = new ProcurementItem();
+        expected.setId(new ProcurementItemId(null, 2L));
+        expected.setDescription("DESCRIPTION_ITEM");
+        expected.setQuantity(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM));
+        expected.setPrice(Money.of(CurrencyUnit.CAD, new BigDecimal("5")));
+        expected.setTax(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))));
+        expected.setMaterial(new Material(7L));
+        expected.setCreatedAt(LocalDateTime.of(2000, 1, 1, 1, 1));
+        expected.setLastUpdated(LocalDateTime.of(1999, 1, 1, 1, 1));
+        expected.setInvoiceItemVersion(1);
+
+        assertEquals(expected, procurementItem);
+    }
 }

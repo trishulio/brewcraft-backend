@@ -4,16 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Identified;
@@ -26,6 +30,7 @@ import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.procurement.BaseProcurement;
 import io.company.brewcraft.model.procurement.Procurement;
+import io.company.brewcraft.model.procurement.ProcurementAccessor;
 import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.procurement.ProcurementItem;
 import io.company.brewcraft.model.procurement.ProcurementItemId;
@@ -178,6 +183,98 @@ public class ProcurementServiceTest {
     }
 
     @Test
+    public void testGetAll_ReturnsPageOfProcurementsBuiltFromShipments() {
+        InvoiceItem invoiceItem = new InvoiceItem(20L);
+        invoiceItem.setInvoice(new Invoice(2L));
+        MaterialLot lot = new MaterialLot(10L);
+        lot.setInvoiceItem(invoiceItem);
+        Shipment shipment = new Shipment(1L);
+        shipment.setLots(List.of(lot));
+        doReturn(new PageImpl<>(List.of(shipment))).when(mShipmentService).getShipments(
+            // shipment filters
+            Set.of(1L), // ids,
+            Set.of(2L), // excludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // statusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10 //size
+        );
+
+        Page<Procurement> page = service.getAll(
+            // shipment filters
+            Set.of(1L), // shipmentIds,
+            Set.of(2L), // shipmentExcludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // shipmentStatusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10 //size
+        );
+
+        Procurement procurement = new Procurement(new ProcurementId(1L, 2L));
+        procurement.setProcurementItems(List.of(new ProcurementItem(new ProcurementItemId(10L, 20L))));
+        Page<Procurement> expected = new PageImpl<>(List.of(procurement));
+
+        assertEquals(procurement.toString(), page.iterator().next().toString());
+        assertEquals(expected.getPageable(), page.getPageable());
+    }
+
+    @Test
     public void testGet_ReturnsProcurement_WhenShipmentAndInvoiceReturnsEntities() {
         doReturn(new Shipment(1L)).when(mShipmentService).get(1L);
         doReturn(new Invoice(10L)).when(mInvoiceService).get(10L);
@@ -257,6 +354,35 @@ public class ProcurementServiceTest {
         Iterator<? extends Identified<Long>> it2 = captor.getAllValues().get(0).iterator();
         assertEquals(10L, it2.next().getId());
         assertEquals(20L, it2.next().getId());
+    }
+
+    @Test
+    public void testGetByAccessorsIds_ReturnsListOfProcurementsMatchingTheProcurementIdOfAccessors() {
+        ArgumentCaptor<Collection<? extends Identified<Long>>> captor = ArgumentCaptor.forClass(Collection.class);
+
+        doReturn(List.of(new Shipment(1L))).when(mShipmentService).getByIds(captor.capture());
+        doReturn(List.of(new Invoice(10L))).when(mInvoiceService).getByIds(captor.capture());
+
+        List<Procurement> procurements = service.getByAccessorIds(List.of(
+                new ProcurementAccessor() {
+                    @Override
+                    public void setProcurement(Procurement procurement) {
+                    }
+
+                    @Override
+                    public Procurement getProcurement() {
+                        return new Procurement(new ProcurementId(1L, 10L));
+                    }
+                }
+        ));
+
+        List<Procurement> expected = List.of(new Procurement(new Shipment(1L), new Invoice(10L)));
+        assertEquals(expected, procurements);
+
+        Iterator<? extends Identified<Long>> it1 = captor.getAllValues().get(1).iterator();
+        assertEquals(1L, it1.next().getId());
+        Iterator<? extends Identified<Long>> it2 = captor.getAllValues().get(0).iterator();
+        assertEquals(10L, it2.next().getId());
     }
 
     @Test

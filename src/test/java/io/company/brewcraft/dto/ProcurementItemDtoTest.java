@@ -81,6 +81,15 @@ public class ProcurementItemDtoTest {
     }
 
     @Test
+    public void testAccessId_ReturnsNull_WhenShipmentOrInvoiceIsNull() {
+        dto.setId(new ProcurementItemIdDto(null, null));
+        assertNull(dto.getId());
+
+        dto.setId(null);
+        assertNull(dto.getId());
+    }
+
+    @Test
     public void testAccessDescription() {
         dto.setDescription("DESCRIPTION_1");
         assertEquals("DESCRIPTION_1", dto.getDescription());

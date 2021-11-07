@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -76,6 +77,172 @@ public class ProcurementTest {
     public void testIdArgConstructor_SetsId() {
         procurement = new Procurement(new ProcurementId(1L, 2L));
         assertEquals(new ProcurementId(1L, 2L), procurement.getId());
+    }
+
+    @Test
+    public void testShipmentConstructor_SetsShipmentValuesOnly_WhenInvoiceItemIsNull() {
+        Shipment shipment = new Shipment(1L,
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus(99L),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0),
+            List.of(
+                new MaterialLot(
+                    1L,
+                    "LOT_1",
+                    Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM),
+                    null,
+                    new Storage(300L),
+                    LocalDateTime.of(1999, 1, 1, 0, 0),
+                    LocalDateTime.of(2000, 1, 1, 0, 0),
+                    1
+                )
+            ),
+            1
+        );
+
+        procurement = new Procurement(shipment);
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setId(new ProcurementItemId(1L, null));
+        procurementItem.setLotNumber("LOT_1");
+        procurementItem.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
+        procurementItem.setStorage(new Storage(300L));
+        procurementItem.setCreatedAt(LocalDateTime.of(1999, 1, 1, 0, 0));
+        procurementItem.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        procurementItem.setVersion(1);
+
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1L, procurement.getId().getShipmentId());
+        assertEquals("SHIPMENT_1", procurement.getShipmentNumber());
+        assertEquals("DESCRIPTION_1", procurement.getDescription());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), procurement.getDeliveryDueDate());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), procurement.getDeliveredDate());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), procurement.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), procurement.getLastUpdated());
+        assertEquals(new ShipmentStatus(99L), procurement.getShipmentStatus());
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1, procurement.getVersion());
+    }
+
+    @Test
+    public void testShipmentConstructor_SetsShipmentValuesOnly_WhenInvoiceIsNull() {
+        Shipment shipment = new Shipment(1L);
+        MaterialLot lot = new MaterialLot(10L);
+        lot.setInvoiceItem(new InvoiceItem(20L));
+        shipment.setLots(List.of(lot));
+
+        procurement = new Procurement(shipment);
+        ProcurementItem procurementItem = new ProcurementItem(new ProcurementItemId(10L, null));
+
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1L, procurement.getId().getShipmentId());
+    }
+
+    @Test
+    public void testShipmentConstructor_SetsInvoiceValues_WhenInvoiceIsNotNull() {
+        InvoiceItem invoiceItem = new InvoiceItem(
+            2L,
+            "DESCRIPTION_ITEM",
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
+            Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
+            new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
+            new Material(7L),
+            LocalDateTime.of(2000, 1, 1, 1, 1),
+            LocalDateTime.of(1999, 1, 1, 1, 1),
+            1
+        );
+        new Invoice(
+            1L,
+            "INVOICE_1",
+            "DESCRIPTION",
+            new PurchaseOrder(1L),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+            LocalDateTime.of(2002, 1, 1, 12, 0),
+            LocalDateTime.of(2003, 1, 1, 12, 0),
+            new InvoiceStatus(99L),
+            List.of(invoiceItem),
+            1
+        );
+
+        MaterialLot lot = new MaterialLot(10L);
+        lot.setInvoiceItem(invoiceItem);
+        Shipment shipment = new Shipment(1L);
+        shipment.setLots(List.of(lot));
+
+        procurement = new Procurement(shipment);
+
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setId(new ProcurementItemId(10L, 2L));
+        procurementItem.setDescription("DESCRIPTION_ITEM");
+        procurementItem.setPrice(Money.of(CurrencyUnit.CAD, new BigDecimal("5")));
+        procurementItem.setTax(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))));
+        procurementItem.setMaterial(new Material(7L));
+        procurementItem.setInvoiceItemVersion(1);
+
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1L, procurement.getId().getInvoiceId());
+        assertEquals("INVOICE_1", procurement.getInvoiceNumber());
+        assertEquals(new PurchaseOrder(1L), procurement.getPurchaseOrder());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), procurement.getGeneratedOn());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), procurement.getReceivedOn());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), procurement.getPaymentDueDate());
+        assertEquals(new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))), procurement.getFreight());
+        assertEquals( new InvoiceStatus(99L), procurement.getInvoiceStatus());
+        assertEquals(1, procurement.getInvoiceVersion());
+    }
+
+    @Test
+    public void testShipmentConstructor_SetsShipmentAndInvoiceValues() {
+        Shipment shipment = new Shipment(1L,
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus(99L),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            LocalDateTime.of(2001, 1, 1, 12, 0),
+            LocalDateTime.of(2002, 1, 1, 12, 0),
+            List.of(
+                new MaterialLot(
+                    1L,
+                    "LOT_1",
+                    Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM),
+                    new InvoiceItem(1L),
+                    new Storage(300L),
+                    LocalDateTime.of(1999, 1, 1, 0, 0),
+                    LocalDateTime.of(2000, 1, 1, 0, 0),
+                    1
+                )
+            ),
+            1
+        );
+
+        procurement = new Procurement(shipment);
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setId(new ProcurementItemId(1L, null));
+        procurementItem.setLotNumber("LOT_1");
+        procurementItem.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
+        procurementItem.setStorage(new Storage(300L));
+        procurementItem.setCreatedAt(LocalDateTime.of(1999, 1, 1, 0, 0));
+        procurementItem.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        procurementItem.setVersion(1);
+
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1L, procurement.getId().getShipmentId());
+        assertEquals("SHIPMENT_1", procurement.getShipmentNumber());
+        assertEquals("DESCRIPTION_1", procurement.getDescription());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), procurement.getDeliveryDueDate());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), procurement.getDeliveredDate());
+        assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), procurement.getCreatedAt());
+        assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), procurement.getLastUpdated());
+        assertEquals(new ShipmentStatus(99L), procurement.getShipmentStatus());
+        assertEquals(List.of(procurementItem), procurement.getProcurementItems());
+        assertEquals(1, procurement.getVersion());
     }
 
     @Test
@@ -399,7 +566,6 @@ public class ProcurementTest {
         assertEquals(new ShipmentStatus(99L), procurement.getShipmentStatus());
         assertEquals(List.of(procurementItem), procurement.getProcurementItems());
         assertEquals(1, procurement.getVersion());
-
     }
 
     @Test
@@ -476,5 +642,29 @@ public class ProcurementTest {
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), procurement.getLastUpdated());
         assertEquals( new InvoiceStatus(99L), procurement.getInvoiceStatus());
         assertEquals(1, procurement.getInvoiceVersion());
+    }
+
+    @Test
+    public void testGetItemCount_ReturnsInvoiceItemCount_WhenInvoiceItemCountIsMax() {
+        Invoice invoice = new Invoice();
+        invoice.setItems(List.of(new InvoiceItem(1L), new InvoiceItem(2L)));
+        Shipment shipment = new Shipment();
+        shipment.setLots(List.of(new MaterialLot(1L)));
+
+        Procurement procurement = new Procurement(shipment, invoice);
+
+        assertEquals(2, procurement.getItemCount());
+    }
+
+    @Test
+    public void testGetItemCount_ReturnsShipmentItemCount_WhenShipmentItemCountIsMax() {
+        Invoice invoice = new Invoice();
+        invoice.setItems(List.of(new InvoiceItem(1L)));
+        Shipment shipment = new Shipment();
+        shipment.setLots(List.of(new MaterialLot(1L), new MaterialLot(2L)));
+
+        Procurement procurement = new Procurement(shipment, invoice);
+
+        assertEquals(2, procurement.getItemCount());
     }
 }

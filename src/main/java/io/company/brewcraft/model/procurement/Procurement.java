@@ -391,7 +391,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
         }
     }
 
-    public int itemCount() {
+    public int getItemCount() {
         return Math.max(this.invoice.getItemCount(), this.shipment.getLotCount());
     }
 }

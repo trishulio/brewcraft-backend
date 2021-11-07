@@ -34,4 +34,20 @@ public class GroupByColumnSpecTest {
 
         assertEquals(mPath, expression);
     }
+
+    @Test
+    public void testConstructor_String_AddsSelectColumnWithPathFromProvider() {
+        column = new GroupByColumnSpec<>(new String[] {"JOIN_1", "JOIN_2"}, new String[] { "PATH_1", "PATH_2" });
+
+        GroupByColumnSpec<String> expected = new GroupByColumnSpec<>(RootUtil.INSTANCE, new String[] {"JOIN_1", "JOIN_2"}, new String[] {"PATH_1", "PATH_2"});
+        assertEquals(expected, column);
+    }
+
+    @Test
+    public void testConstructor_StringString_AddsSelectColumnWithPathValues() {
+        column = new GroupByColumnSpec<>(new String[] { "PATH_1", "PATH_2" });
+
+        GroupByColumnSpec<String> expected = new GroupByColumnSpec<>(RootUtil.INSTANCE, null, new String[] {"PATH_1", "PATH_2"});
+        assertEquals(expected, column);
+    }
 }

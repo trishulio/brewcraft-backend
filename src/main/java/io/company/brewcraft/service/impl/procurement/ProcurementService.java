@@ -1,5 +1,7 @@
 package io.company.brewcraft.service.impl.procurement;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -64,21 +66,74 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
 
     public Page<Procurement> getAll(
+         // Shipment Filters
+            Set<Long> shipmentIds,
+            Set<Long> shipmentExcludeIds,
+            Set<String> shipmentNumbers,
+            Set<String> descriptions,
+            Set<Long> shipmentStatusIds,
+            LocalDateTime deliveryDueDateFrom,
+            LocalDateTime deliveryDueDateTo,
+            LocalDateTime deliveredDateFrom,
+            LocalDateTime deliveredDateTo,
+            // Invoice Filters
+            Set<Long> invoiceIds,
+            Set<Long> invoiceExcludeIds,
+            Set<String> invoiceNumbers,
+            Set<String> invoiceDescriptions,
+            Set<String> invoiceItemDescriptions,
+            LocalDateTime generatedOnFrom,
+            LocalDateTime generatedOnTo,
+            LocalDateTime receivedOnFrom,
+            LocalDateTime receivedOnTo,
+            LocalDateTime paymentDueDateFrom,
+            LocalDateTime paymentDueDateTo,
+            Set<Long> purchaseOrderIds,
+            Set<Long> materialIds,
+            BigDecimal amtFrom,
+            BigDecimal amtTo,
+            BigDecimal freightAmtFrom,
+            BigDecimal freightAmtTo,
+            Set<Long> invoiceStatusIds,
+            Set<Long> supplierIds,
+            // Misc
             SortedSet<String> sort,
             boolean orderAscending,
             int page,
             int size
     ) {
         Page<Shipment> shipments = this.shipmentService.getShipments(
-            null, // ids,
-            null, // excludeIds,
-            null, // shipmentNumbers,
-            null, // descriptions,
-            null, // statusIds,
-            null, // deliveryDueDateFrom,
-            null, // deliveryDueDateTo,
-            null, // deliveredDateFrom,
-            null, // deliveredDateTo,
+            // shipment filters
+            shipmentIds,
+            shipmentExcludeIds,
+            shipmentNumbers,
+            descriptions,
+            shipmentStatusIds,
+            deliveryDueDateFrom,
+            deliveryDueDateTo,
+            deliveredDateFrom,
+            deliveredDateTo,
+            // invoice filters
+            invoiceIds,
+            invoiceExcludeIds,
+            invoiceNumbers,
+            invoiceDescriptions,
+            invoiceItemDescriptions,
+            generatedOnFrom,
+            generatedOnTo,
+            receivedOnFrom,
+            receivedOnTo,
+            paymentDueDateFrom,
+            paymentDueDateTo,
+            purchaseOrderIds,
+            materialIds,
+            amtFrom,
+            amtTo,
+            freightAmtFrom,
+            freightAmtTo,
+            invoiceStatusIds,
+            supplierIds,
+            // misc
             sort,
             orderAscending,
             page,

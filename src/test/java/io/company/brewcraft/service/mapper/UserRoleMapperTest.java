@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
 
@@ -54,5 +55,10 @@ public class UserRoleMapperTest {
         );
 
         assertEquals(expected, dto);
+    }
+
+    @Test
+    public void testToDto_ReturnsNull_WhenPojoIsNull() {
+        assertNull(mapper.toDto(null));
     }
 }

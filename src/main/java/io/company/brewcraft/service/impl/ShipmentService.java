@@ -1,5 +1,6 @@
 package io.company.brewcraft.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -16,11 +17,18 @@ import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Identified;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.MoneyEntity;
+import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.repository.WhereClauseBuilder;
@@ -45,28 +53,66 @@ public class ShipmentService extends BaseService implements CrudService<Long, Sh
     }
 
     public Page<Shipment> getShipments(
+        // shipment filters
         Set<Long> ids,
         Set<Long> excludeIds,
         Set<String> shipmentNumbers,
-        Set<String> descriptions,
-        Set<Long> statusIds,
+        Set<String> shipmentDescriptions,
+        Set<Long> shipmentStatusIds,
         LocalDateTime deliveryDueDateFrom,
         LocalDateTime deliveryDueDateTo,
         LocalDateTime deliveredDateFrom,
         LocalDateTime deliveredDateTo,
+        // invoice filters
+        Set<Long> invoiceIds,
+        Set<Long> invoiceExcludeIds,
+        Set<String> invoiceNumbers,
+        Set<String> invoiceDescriptions,
+        Set<String> invoiceItemDescriptions,
+        LocalDateTime generatedOnFrom,
+        LocalDateTime generatedOnTo,
+        LocalDateTime receivedOnFrom,
+        LocalDateTime receivedOnTo,
+        LocalDateTime paymentDueDateFrom,
+        LocalDateTime paymentDueDateTo,
+        Set<Long> purchaseOrderIds,
+        Set<Long> materialIds,
+        BigDecimal amtFrom,
+        BigDecimal amtTo,
+        BigDecimal freightAmtFrom,
+        BigDecimal freightAmtTo,
+        Set<Long> invoiceStatusIds,
+        Set<Long> supplierIds,
+        // misc
         SortedSet<String> sort,
         boolean orderAscending,
         int page,
         int size
     ) {
         final Specification<Shipment> spec= WhereClauseBuilder.builder()
+                                                          // shipment filters
                                                           .in(Shipment.FIELD_ID, ids)
                                                           .not().in(Shipment.FIELD_ID, excludeIds)
                                                           .in(Shipment.FIELD_SHIPMENT_NUMBER, shipmentNumbers)
-                                                          .in(Shipment.FIELD_DESCRIPTION, descriptions)
-                                                          .in(new String[] {Shipment.FIELD_STATUS, ShipmentStatus.FIELD_ID}, statusIds)
+                                                          .in(Shipment.FIELD_DESCRIPTION, shipmentDescriptions)
+                                                          .in(new String[] {Shipment.FIELD_SHIPMENT_STATUS, ShipmentStatus.FIELD_ID}, shipmentStatusIds)
                                                           .between(Shipment.FIELD_DELIVERY_DUE_DATE, deliveryDueDateFrom, deliveryDueDateTo)
                                                           .between(Shipment.FIELD_DELIVERED_DATE, deliveredDateFrom, deliveredDateTo)
+                                                          // invoice filters
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_ID}, invoiceIds)
+                                                          .not().in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_ID}, invoiceExcludeIds)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_INVOICE_NUMBER}, invoiceNumbers)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_DESCRITION}, invoiceDescriptions)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_DESCRIPTION}, invoiceItemDescriptions)
+                                                          .between(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_GENERATED_ON}, generatedOnFrom, generatedOnTo)
+                                                          .between(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_RECEIVED_ON}, receivedOnFrom, receivedOnTo)
+                                                          .between(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_PAYMENT_DUE_DATE}, paymentDueDateFrom, paymentDueDateTo)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID}, purchaseOrderIds)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_MATERIAL}, materialIds)
+                                                          .between(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
+                                                          .between(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID}, invoiceStatusIds)
+                                                          .in(Shipment.FIELD_LOTS, new String[] {MaterialLot.FIELD_INVOICE_ITEM, InvoiceItem.FIELD_INVOICE, Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID}, supplierIds)
                                                           .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);
