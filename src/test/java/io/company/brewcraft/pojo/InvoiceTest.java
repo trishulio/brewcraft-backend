@@ -62,10 +62,10 @@ public class InvoiceTest {
         assertEquals(new InvoiceStatus(99L), this.invoice.getInvoiceStatus());
         assertNull(this.invoice.getAmount());
         assertNull(this.invoice.getTax());
-        assertEquals(1, this.invoice.getItems().size());
+        assertEquals(1, this.invoice.getInvoiceItems().size());
         final InvoiceItem item = new InvoiceItem();
         item.setInvoice(this.invoice);
-        assertEquals(item, this.invoice.getItems().iterator().next());
+        assertEquals(item, this.invoice.getInvoiceItems().iterator().next());
     }
 
     @Test
@@ -154,21 +154,21 @@ public class InvoiceTest {
 
     @Test
     public void testAccessItems() {
-        assertNull(this.invoice.getItems());
+        assertNull(this.invoice.getInvoiceItems());
         final InvoiceItem item = new InvoiceItem(2L);
-        this.invoice.setItems(List.of(item));
+        this.invoice.setInvoiceItems(List.of(item));
 
         final InvoiceItem expected = new InvoiceItem(2L);
         expected.setInvoice(new Invoice());
 
-        assertEquals(List.of(expected), this.invoice.getItems());
+        assertEquals(List.of(expected), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testAccessItems_SetsNull_WhenInputIsNull() {
-        this.invoice.setItems(null);
-        assertNull(this.invoice.getItems());
+        this.invoice.setInvoiceItems(null);
+        assertNull(this.invoice.getInvoiceItems());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class InvoiceTest {
         item2.setPrice(Money.parse("CAD 20"));
         item2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
 
-        this.invoice.setItems(List.of(item1, item2));
+        this.invoice.setInvoiceItems(List.of(item1, item2));
         assertEquals(Money.parse("CAD 300"), this.invoice.getAmount());
     }
 
@@ -205,7 +205,7 @@ public class InvoiceTest {
         item2.setPrice(Money.parse("CAD 20"));
         item2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
 
-        this.invoice.setItems(List.of(item1, item2));
+        this.invoice.setInvoiceItems(List.of(item1, item2));
 
         this.invoice.removeItem(item1);
 
@@ -220,35 +220,35 @@ public class InvoiceTest {
         final InvoiceItem item2 = spy(new InvoiceItem());
         doReturn(new Tax(Money.parse("CAD 200"))).when(item2).getTax();
 
-        this.invoice.setItems(List.of(item1, item2));
+        this.invoice.setInvoiceItems(List.of(item1, item2));
         assertEquals(new Tax(Money.parse("CAD 300")), this.invoice.getTax());
     }
 
     @Test
     public void testAddItem_CreatesNewItemList_WhenItemIsNotNull() {
-        assertNull(this.invoice.getItems());
+        assertNull(this.invoice.getInvoiceItems());
 
         final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
         this.invoice.addItem(item);
 
-        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(List.of(item), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testAddItem_AddsItemsToList_WhenItemIsNotNull() {
         final InvoiceItem existing = new InvoiceItem(0L);
-        this.invoice.setItems(List.of(existing));
-        assertEquals(List.of(existing), this.invoice.getItems());
+        this.invoice.setInvoiceItems(List.of(existing));
+        assertEquals(List.of(existing), this.invoice.getInvoiceItems());
 
         final InvoiceItem item = new InvoiceItem(1L);
         assertNull(item.getInvoice());
 
         this.invoice.addItem(item);
 
-        assertEquals(List.of(existing, item), this.invoice.getItems());
+        assertEquals(List.of(existing, item), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, existing.getInvoice());
         assertEquals(this.invoice, item.getInvoice());
     }
@@ -262,14 +262,14 @@ public class InvoiceTest {
         this.invoice.addItem(item);
         this.invoice.addItem(item);
 
-        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(List.of(item), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, item.getInvoice());
     }
 
     @Test
     public void testAddItem_DoesNothing_WhenItemIsNull() {
         invoice.addItem(null);
-        assertNull(invoice.getItems());
+        assertNull(invoice.getInvoiceItems());
     }
 
     @Test
@@ -279,13 +279,13 @@ public class InvoiceTest {
 
     @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsEmpty() {
-        this.invoice.setItems(new ArrayList<>());
+        this.invoice.setInvoiceItems(new ArrayList<>());
         assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
 
     @Test
     public void testRemoveItem_ReturnsFalse_WhenItemExistInList() {
-        this.invoice.setItems(List.of(new InvoiceItem(2L)));
+        this.invoice.setInvoiceItems(List.of(new InvoiceItem(2L)));
 
         assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
@@ -296,7 +296,7 @@ public class InvoiceTest {
         assertNull(item.getInvoice());
 
         this.invoice.addItem(item);
-        assertEquals(List.of(item), this.invoice.getItems());
+        assertEquals(List.of(item), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, item.getInvoice());
 
         assertTrue(this.invoice.removeItem(item));
@@ -305,21 +305,21 @@ public class InvoiceTest {
 
     @Test
     public void testGetItemCount_Returns0_WhenItemsIsNull() {
-        invoice.setItems(null);
+        invoice.setInvoiceItems(null);
 
         assertEquals(0, invoice.getItemCount());
     }
 
     @Test
     public void testGetItemCount_Returns0_WhenItemsIsEmpty() {
-        invoice.setItems(List.of());
+        invoice.setInvoiceItems(List.of());
 
         assertEquals(0, invoice.getItemCount());
     }
 
     @Test
     public void testGetItemCount_ReturnsItemCount() {
-        invoice.setItems(List.of(new InvoiceItem()));
+        invoice.setInvoiceItems(List.of(new InvoiceItem()));
 
         assertEquals(1, invoice.getItemCount());
     }

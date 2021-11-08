@@ -647,7 +647,7 @@ public class ProcurementTest {
     @Test
     public void testGetItemCount_ReturnsInvoiceItemCount_WhenInvoiceItemCountIsMax() {
         Invoice invoice = new Invoice();
-        invoice.setItems(List.of(new InvoiceItem(1L), new InvoiceItem(2L)));
+        invoice.setInvoiceItems(List.of(new InvoiceItem(1L), new InvoiceItem(2L)));
         Shipment shipment = new Shipment();
         shipment.setLots(List.of(new MaterialLot(1L)));
 
@@ -659,7 +659,7 @@ public class ProcurementTest {
     @Test
     public void testGetItemCount_ReturnsShipmentItemCount_WhenShipmentItemCountIsMax() {
         Invoice invoice = new Invoice();
-        invoice.setItems(List.of(new InvoiceItem(1L)));
+        invoice.setInvoiceItems(List.of(new InvoiceItem(1L)));
         Shipment shipment = new Shipment();
         shipment.setLots(List.of(new MaterialLot(1L), new MaterialLot(2L)));
 

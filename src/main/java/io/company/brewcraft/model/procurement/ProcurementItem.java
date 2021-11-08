@@ -260,7 +260,6 @@ public class ProcurementItem extends BaseEntity implements UpdateProcurementItem
     @Override
     @JsonBackReference
     public void setProcurement(Procurement procurement) {
-        // TODO: Manage circular source of truth.
         this.procurement = procurement;
     }
 

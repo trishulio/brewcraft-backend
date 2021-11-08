@@ -48,7 +48,6 @@ import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.impl.ShipmentService;
 
 @Transactional
-// TODO: Test partial POST call after removing the @Transaction annotation
 public class ProcurementService extends BaseService implements CrudService<ProcurementId, Procurement, BaseProcurement<InvoiceItem, MaterialLot, ProcurementItem>, UpdateProcurement<InvoiceItem, MaterialLot, ProcurementItem>, ProcurementAccessor> {
     private static final Logger log = LoggerFactory.getLogger(ProcurementService.class);
 
@@ -288,10 +287,10 @@ public class ProcurementService extends BaseService implements CrudService<Procu
             Invoice invoice = invoices.get(i);
 
             List<? extends BaseMaterialLot<?>> lots = bShipment.getLots();
-            List<InvoiceItem> items = invoice.getItems();
+            List<InvoiceItem> invoiceItems = invoice.getInvoiceItems();
             if (lots != null) {
                 for (int j = 0; j < lots.size(); j++) {
-                    lots.get(i).setInvoiceItem(items.get(i));
+                    lots.get(i).setInvoiceItem(invoiceItems.get(i));
                 }
             }
         }
@@ -337,10 +336,10 @@ public class ProcurementService extends BaseService implements CrudService<Procu
             Invoice invoice = invoices.get(i);
 
             List<? extends UpdateMaterialLot<?>> lots = uShipment.getLots();
-            List<InvoiceItem> items = invoice.getItems();
+            List<InvoiceItem> invoiceItems = invoice.getInvoiceItems();
             if (lots != null) {
                 for (int j = 0; j < lots.size(); j++) {
-                    lots.get(i).setInvoiceItem(items.get(i));
+                    lots.get(i).setInvoiceItem(invoiceItems.get(i));
                 }
             }
         }
@@ -386,10 +385,10 @@ public class ProcurementService extends BaseService implements CrudService<Procu
             Invoice invoice = invoices.get(i);
 
             List<? extends UpdateMaterialLot<?>> lots = uShipment.getLots();
-            List<InvoiceItem> items = invoice.getItems();
+            List<InvoiceItem> invoiceItems = invoice.getInvoiceItems();
             if (lots != null) {
                 for (int j = 0; j < lots.size(); j++) {
-                    lots.get(i).setInvoiceItem(items.get(i));
+                    lots.get(i).setInvoiceItem(invoiceItems.get(i));
                 }
             }
         }

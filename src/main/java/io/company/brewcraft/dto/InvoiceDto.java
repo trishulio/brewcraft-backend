@@ -20,7 +20,7 @@ public class InvoiceDto extends BaseDto {
     private LocalDateTime lastUpdated;
     private LocalDateTime createdAt;
     private InvoiceStatusDto invoiceStatus;
-    private List<InvoiceItemDto> items;
+    private List<InvoiceItemDto> invoiceItems;
     private Integer version;
 
     public InvoiceDto() {
@@ -31,7 +31,7 @@ public class InvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> items, Integer version) {
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> invoiceItems, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -45,7 +45,7 @@ public class InvoiceDto extends BaseDto {
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setInvoiceStatus(invoiceStatus);
-        setItems(items);
+        setInvoiceItems(invoiceItems);
         setVersion(version);
     }
 
@@ -153,12 +153,12 @@ public class InvoiceDto extends BaseDto {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public List<InvoiceItemDto> getItems() {
-        return items;
+    public List<InvoiceItemDto> getInvoiceItems() {
+        return invoiceItems;
     }
 
-    public void setItems(List<InvoiceItemDto> items) {
-        this.items = items;
+    public void setInvoiceItems(List<InvoiceItemDto> invoiceItems) {
+        this.invoiceItems = invoiceItems;
     }
 
     public Integer getVersion() {

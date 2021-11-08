@@ -40,22 +40,22 @@ public class EnhancedInvoiceRepositoryImplTest {
             new Invoice(2L)
         );
 
-        final List<InvoiceItem> items = List.of(
+        final List<InvoiceItem> invoiceItems = List.of(
             new InvoiceItem(10L),
             new InvoiceItem(100L),
             new InvoiceItem(20L),
             new InvoiceItem(200L)
         );
 
-        invoices.get(0).setItems(List.of(items.get(0), items.get(1)));
-        invoices.get(1).setItems(List.of(items.get(2), items.get(3)));
+        invoices.get(0).setInvoiceItems(List.of(invoiceItems.get(0), invoiceItems.get(1)));
+        invoices.get(1).setInvoiceItems(List.of(invoiceItems.get(2), invoiceItems.get(3)));
 
         this.repo.refresh(invoices);
 
         verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
         verify(this.mPoRepo, times(1)).refreshAccessors(invoices);
 
-        verify(this.mItemRepo, times(1)).refresh(items);
+        verify(this.mItemRepo, times(1)).refresh(invoiceItems);
     }
 
     @Test
@@ -65,15 +65,15 @@ public class EnhancedInvoiceRepositoryImplTest {
         invoices.add(null);
         invoices.add(new Invoice(2L));
 
-        final List<InvoiceItem> items = List.of(new InvoiceItem(10L), new InvoiceItem(20L));
+        final List<InvoiceItem> invoiceItems = List.of(new InvoiceItem(10L), new InvoiceItem(20L));
 
-        invoices.get(0).setItems(List.of(items.get(0)));
-        invoices.get(2).setItems(List.of(items.get(1)));
+        invoices.get(0).setInvoiceItems(List.of(invoiceItems.get(0)));
+        invoices.get(2).setInvoiceItems(List.of(invoiceItems.get(1)));
 
         this.repo.refresh(invoices);
 
         verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
-        verify(this.mItemRepo, times(1)).refresh(items);
+        verify(this.mItemRepo, times(1)).refresh(invoiceItems);
     }
 
     @Test
@@ -105,9 +105,9 @@ public class EnhancedInvoiceRepositoryImplTest {
             new Invoice(2L),
             new Invoice(3L)
         );
-        invoices.get(0).setItems(List.of());
-        invoices.get(1).setItems(List.of());
-        invoices.get(2).setItems(List.of());
+        invoices.get(0).setInvoiceItems(List.of());
+        invoices.get(1).setInvoiceItems(List.of());
+        invoices.get(2).setInvoiceItems(List.of());
 
         this.repo.refresh(invoices);
 

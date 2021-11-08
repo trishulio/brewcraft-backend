@@ -21,8 +21,8 @@ public class EnhancedInvoiceItemRepositoryImpl implements EnhancedInvoiceItemRep
     }
 
     @Override
-    public void refresh(Collection<InvoiceItem> items) {
-        materialRepo.refreshAccessors(items);
+    public void refresh(Collection<InvoiceItem> lots) {
+        materialRepo.refreshAccessors(lots);
     }
 
     @Override

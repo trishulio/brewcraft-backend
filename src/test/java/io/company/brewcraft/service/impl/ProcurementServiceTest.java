@@ -394,7 +394,7 @@ public class ProcurementServiceTest {
         doAnswer(inv -> {
             List<Invoice> invoices = inv.getArgument(0, List.class);
             invoices.get(0).setId(2L);
-            invoices.get(0).getItems().get(0).setId(20L);
+            invoices.get(0).getInvoiceItems().get(0).setId(20L);
             return invoices;
         }).when(mInvoiceService).add(anyList());
         doAnswer(inv -> {
@@ -499,7 +499,7 @@ public class ProcurementServiceTest {
         doAnswer(inv -> {
             List<Invoice> invoices = inv.getArgument(0, List.class);
             invoices.get(0).setId(2L);
-            invoices.get(0).getItems().get(0).setId(20L);
+            invoices.get(0).getInvoiceItems().get(0).setId(20L);
             return invoices;
         }).when(mInvoiceService).put(anyList());
         doAnswer(inv -> {
@@ -604,7 +604,7 @@ public class ProcurementServiceTest {
         doAnswer(inv -> {
             List<Invoice> invoices = inv.getArgument(0, List.class);
             invoices.get(0).setId(2L);
-            invoices.get(0).getItems().get(0).setId(20L);
+            invoices.get(0).getInvoiceItems().get(0).setId(20L);
             return invoices;
         }).when(mInvoiceService).patch(anyList());
         doAnswer(inv -> {

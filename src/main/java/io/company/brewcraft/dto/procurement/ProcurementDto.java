@@ -19,7 +19,6 @@ import io.company.brewcraft.dto.TaxDto;
 public class ProcurementDto extends BaseDto {
     private ShipmentDto shipment;
     private InvoiceDto invoice;
-    // TODO: Rename the items in Invoice to InvoiceItems
     private List<ProcurementItemDto> procurementItems;
 
     public ProcurementDto() {

@@ -7,7 +7,12 @@ import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseShipment;
 
-public interface BaseProcurement<II extends BaseInvoiceItem<? extends BaseInvoice<II>>, ML extends BaseMaterialLot<? extends BaseShipment<ML>>, PI extends ProcurementItem> extends BaseInvoice<II>, BaseShipment<ML> {
+public interface BaseProcurement<
+        II extends BaseInvoiceItem<? extends BaseInvoice<II>>,
+        ML extends BaseMaterialLot<? extends BaseShipment<ML>>,
+        PI extends ProcurementItem
+    > extends BaseInvoice<II>, BaseShipment<ML>
+{
     final String ATTR_PROCUREMENT_ITEMS = "procurementItems";
     final String ATTR_INVOICE_VERSION = "invoiceVersion";
 

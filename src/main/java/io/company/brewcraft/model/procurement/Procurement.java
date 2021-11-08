@@ -247,14 +247,14 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     @Deprecated
     @Override
     @JsonIgnore
-    public List<InvoiceItem> getItems() {
+    public List<InvoiceItem> getInvoiceItems() {
         throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
-    public void setItems(List<InvoiceItem> items) {
+    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
         throw new NoSuchMethodError("This method is not implemented for not being required. Use setProcurementItems(List<ProcurementItems> procurementItems) instead");
     }
 
@@ -268,7 +268,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     @Deprecated
     @Override
     @JsonIgnore
-    public void setLots(List<MaterialLot> items) {
+    public void setLots(List<MaterialLot> lots) {
         throw new NoSuchMethodError("This method is not implemented for not being required. Use setProcurementItems(List<ProcurementItems> procurementItems) instead");
     }
 
@@ -276,7 +276,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     @JsonManagedReference
     public List<ProcurementItem> getProcurementItems() {
         List<ProcurementItem> procurementItems = null;
-        List<InvoiceItem> invoiceItems = invoice.getItems();
+        List<InvoiceItem> invoiceItems = invoice.getInvoiceItems();
         List<MaterialLot> lots = shipment.getLots();
 
         if (invoiceItems != null || lots != null) {
@@ -318,7 +318,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
             lots.add(procurementItem.buildMaterialLot());
         });
 
-        this.invoice.setItems(invoiceItems);
+        this.invoice.setInvoiceItems(invoiceItems);
         this.shipment.setLots(lots);
     }
 

@@ -34,8 +34,8 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
         this.poRepo.refreshAccessors(invoices);
         this.statusRepo.refreshAccessors(invoices);
 
-        final List<InvoiceItem> items = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getItems().stream()).collect(Collectors.toList());
-        this.itemRepo.refresh(items);
+        final List<InvoiceItem> invoiceItems = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getInvoiceItems().stream()).collect(Collectors.toList());
+        this.itemRepo.refresh(invoiceItems);
     }
 
     @Override

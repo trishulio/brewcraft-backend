@@ -24,7 +24,7 @@ public class ShipmentDtoTest {
 
     @Test
     public void testAllArgConstructor_SetsAllFieldValues() {
-        List<MaterialLotDto> items = List.of(new MaterialLotDto(1L));
+        List<MaterialLotDto> lots = List.of(new MaterialLotDto(1L));
         dto = new ShipmentDto(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
@@ -33,7 +33,7 @@ public class ShipmentDtoTest {
             LocalDateTime.of(2000, 1, 1, 0, 0),
             LocalDateTime.of(2001, 1, 1, 0, 0),
             LocalDateTime.of(2002, 1, 1, 0, 0),
-            items,
+            lots,
             1
         );
 

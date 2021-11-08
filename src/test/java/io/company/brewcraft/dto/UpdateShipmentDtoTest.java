@@ -18,8 +18,8 @@ public class UpdateShipmentDtoTest {
 
     @Test
     public void testAllArgConstructor_SetsAllFieldValues() {
-        List<UpdateMaterialLotDto> items = List.of(new UpdateMaterialLotDto(100L));
-        dto = new UpdateShipmentDto("SHIPMENT_1", "DESCRIPTION_1", 99L, LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), items, 1);
+        List<UpdateMaterialLotDto> lots = List.of(new UpdateMaterialLotDto(100L));
+        dto = new UpdateShipmentDto("SHIPMENT_1", "DESCRIPTION_1", 99L, LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), lots, 1);
 
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());

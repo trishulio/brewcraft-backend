@@ -38,7 +38,7 @@ public interface ProcurementMapper extends BaseMapper<Procurement, ProcurementDt
         @Mapping(target = Procurement.ATTR_LOTS, ignore = true),
         @Mapping(target = Procurement.ATTR_SHIPMENT_STATUS, source = "shipmentStatusId"),
         @Mapping(target = Procurement.ATTR_INVOICE_VERSION, ignore = true),
-        @Mapping(target = Procurement.ATTR_ITEMS, ignore = true),
+        @Mapping(target = Procurement.ATTR_INVOICE_ITEMS, ignore = true),
         @Mapping(target = Procurement.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
     })
     Procurement fromAddDto(AddProcurementDto dto);
@@ -50,7 +50,7 @@ public interface ProcurementMapper extends BaseMapper<Procurement, ProcurementDt
         @Mapping(target = Procurement.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = Procurement.ATTR_LOTS, ignore = true),
         @Mapping(target = Procurement.ATTR_SHIPMENT_STATUS, source = "shipmentStatusId"),
-        @Mapping(target = Procurement.ATTR_ITEMS, ignore = true),
+        @Mapping(target = Procurement.ATTR_INVOICE_ITEMS, ignore = true),
         @Mapping(target = Procurement.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
     })
     Procurement fromUpdateDto(UpdateProcurementDto dto);

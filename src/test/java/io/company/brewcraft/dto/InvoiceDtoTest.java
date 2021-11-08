@@ -51,8 +51,8 @@ public class InvoiceDtoTest {
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
         assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
-        assertEquals(1, invoice.getItems().size());
-        assertEquals(new InvoiceItemDto(), invoice.getItems().get(0));
+        assertEquals(1, invoice.getInvoiceItems().size());
+        assertEquals(new InvoiceItemDto(), invoice.getInvoiceItems().get(0));
     }
 
     @Test
@@ -147,9 +147,9 @@ public class InvoiceDtoTest {
     }
 
     @Test
-    public void testAccessItems() {
-        assertNull(invoice.getItems());
-        invoice.setItems(List.of(new InvoiceItemDto()));
-        assertEquals(List.of(new InvoiceItemDto()), invoice.getItems());
+    public void testAccessInvoiceItems() {
+        assertNull(invoice.getInvoiceItems());
+        invoice.setInvoiceItems(List.of(new InvoiceItemDto()));
+        assertEquals(List.of(new InvoiceItemDto()), invoice.getInvoiceItems());
     }
 }
