@@ -22,11 +22,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.company.brewcraft.dto.BaseMaterialCategory;
 import io.company.brewcraft.dto.UpdateMaterialCategory;
 
 @Entity(name = "MATERIAL_CATEGORY")
-public class MaterialCategory extends BaseEntity implements UpdateMaterialCategory<MaterialCategory>, BaseMaterialCategory<MaterialCategory>, Audited, Identified<Long>{
+public class MaterialCategory extends BaseEntity implements UpdateMaterialCategory<MaterialCategory>, Audited, Identified<Long>{
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";

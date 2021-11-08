@@ -16,6 +16,8 @@ import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BaseMixtureMaterialPortion;
+import io.company.brewcraft.model.BaseMixtureRecording;
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.BaseSku;
@@ -27,6 +29,8 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
@@ -37,6 +41,8 @@ import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
+import io.company.brewcraft.model.UpdateMixtureRecording;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.model.UpdateSku;
@@ -94,8 +100,10 @@ import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MixtureMaterialPortionService;
 import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
+import io.company.brewcraft.service.MixtureRecordingAccessor;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.MeasureService;
+import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
@@ -365,16 +373,20 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(MixtureMaterialPortionService.class)
-    public MixtureMaterialPortionService mixtureMaterialPortionService(MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
-        final MixtureMaterialPortionService mixtureMaterialPortionService = new MixtureMaterialPortionServiceImpl(materialPortionRepository, stockLotService);
-        return mixtureMaterialPortionService;
+    public MixtureMaterialPortionService mixtureMaterialPortionService(UtilityProvider utilProvider, MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
+        final RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService = new CrudRepoService<>(materialPortionRepository);
+        
+        final UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService = new SimpleUpdateService<>(utilProvider, BaseMixtureMaterialPortion.class, UpdateMixtureMaterialPortion.class, MixtureMaterialPortion.class, Set.of());
+        
+        return new MixtureMaterialPortionServiceImpl(repoService, updateService, stockLotService);
     }
 
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
-    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
-        final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
-        return mixtureRecordingService;
+    public MixtureRecordingService mixtureRecordingService(UtilityProvider utilProvider, MixtureRecordingRepository mixtureRecordingRepository) {
+        final RepoService<Long, MixtureRecording, MixtureRecordingAccessor> repoService = new CrudRepoService<>(mixtureRecordingRepository);
+        final UpdateService<Long, MixtureRecording, BaseMixtureRecording, UpdateMixtureRecording> updateService = new SimpleUpdateService<>(utilProvider, BaseMixtureRecording.class, UpdateMixtureRecording.class, MixtureRecording.class, Set.of());
+        return new MixtureRecordingServiceImpl(repoService, updateService);
     }
 
     @Bean

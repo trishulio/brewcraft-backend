@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.URL;
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 
 @Entity(name = "MATERIAL")
-public class Material extends BaseEntity implements BaseMaterial, UpdateMaterial, Audited, Identified<Long> {
+public class Material extends BaseEntity implements UpdateMaterial, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";

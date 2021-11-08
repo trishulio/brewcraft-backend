@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MIXTURE")
-public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, Audited, Identified<Long> {
+public class Mixture extends BaseEntity implements UpdateMixture, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_PARENT_MIXTURE = "parentMixture";
     public static final String FIELD_QUANTITY_VALUE = "quantityValue";

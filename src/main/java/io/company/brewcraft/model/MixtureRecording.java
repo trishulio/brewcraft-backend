@@ -17,8 +17,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.CrudEntity;
+
 @Entity(name = "MIXTURE_RECORDING")
-public class MixtureRecording extends BaseEntity implements BaseMixtureRecording, UpdateMixtureRecording, Audited, Identified<Long> {
+public class MixtureRecording extends BaseEntity implements UpdateMixtureRecording, CrudEntity<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_MIXTURE = "mixture";
     public static final String FIELD_MEASURE = "measure";

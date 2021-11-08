@@ -42,11 +42,11 @@ public class MixtureMaterialPortionMapperTest {
 
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
-        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(1L, new QuantityDto("kg", new BigDecimal("100")), 2L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(5L, 1L, new QuantityDto("kg", new BigDecimal("100")), 2L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
 
-        MixtureMaterialPortion expectedMaterialPortion = new MixtureMaterialPortion(null, new MaterialLot(1L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(2L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureMaterialPortion expectedMaterialPortion = new MixtureMaterialPortion(5L, new MaterialLot(1L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(2L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
 
         assertEquals(expectedMaterialPortion, materialPortion);
     }

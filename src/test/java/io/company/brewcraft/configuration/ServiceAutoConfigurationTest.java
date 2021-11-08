@@ -287,18 +287,20 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testMaterialPortionService_ReturnsInstanceOfMaterialPortionService() {
         final MixtureMaterialPortionRepository materialPortionRepositoryMock = mock(MixtureMaterialPortionRepository.class);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
         final StockLotService stockLotServiceMock = mock(StockLotService.class);
-        final MixtureMaterialPortionService service = this.serviceAutoConfiguration.mixtureMaterialPortionService(materialPortionRepositoryMock, stockLotServiceMock);
-
+        final MixtureMaterialPortionService service = this.serviceAutoConfiguration.mixtureMaterialPortionService(mUtilProvider, materialPortionRepositoryMock, stockLotServiceMock);
+    
         assertTrue(service instanceof MixtureMaterialPortionServiceImpl);
     }
-
+    
     @Test
     public void testMixtureRecordingService_ReturnsInstanceOfMixtureRecordingService() {
         final MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
-
-        final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mixtureRecordingRepositoryMock);
-
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+    
+        final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mUtilProvider, mixtureRecordingRepositoryMock);
+    
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }
 

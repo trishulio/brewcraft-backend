@@ -39,11 +39,11 @@ public class MixtureRecordingMapperTest {
 
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
-        UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(2L, 1L, new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureRecordingDto updateMixtureRecordingDto = new UpdateMixtureRecordingDto(5L, 2L, 1L, new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
         MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
 
-        MixtureRecording expectedMixtureRecording = new MixtureRecording(null, new Mixture(2L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureRecording expectedMixtureRecording = new MixtureRecording(5L, new Mixture(2L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
 
         assertEquals(expectedMixtureRecording, mixtureRecording);
     }
