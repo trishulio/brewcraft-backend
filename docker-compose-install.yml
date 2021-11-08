@@ -4,7 +4,10 @@ services:
     image: maven:3.6.3-jdk-13
     container_name: brewcraft_maven
     working_dir: /usr/code/app
-    command: ['mvn', 'clean', 'install', 'jacoco:report']
+    command: ['mvn', 'clean', 'install']
+    environment:
+      MUTATION_COVERAGE: "${MUTATION_COVERAGE}"
+      SKIP_TESTS: "${SKIP_TESTS}"
     volumes:
       - ${PWD}:/usr/code/app
       - m2-data:/root/.m2
