@@ -375,9 +375,7 @@ public class ServiceAutoConfiguration {
     @ConditionalOnMissingBean(MixtureMaterialPortionService.class)
     public MixtureMaterialPortionService mixtureMaterialPortionService(UtilityProvider utilProvider, MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
         final RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService = new CrudRepoService<>(materialPortionRepository);
-        
         final UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService = new SimpleUpdateService<>(utilProvider, BaseMixtureMaterialPortion.class, UpdateMixtureMaterialPortion.class, MixtureMaterialPortion.class, Set.of());
-        
         return new MixtureMaterialPortionServiceImpl(repoService, updateService, stockLotService);
     }
 
