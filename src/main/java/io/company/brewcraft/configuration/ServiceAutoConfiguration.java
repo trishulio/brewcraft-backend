@@ -48,6 +48,7 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
+import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
@@ -80,6 +81,8 @@ import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.FinishedGoodAccessor;
+import io.company.brewcraft.service.FinishedGoodInventoryService;
+import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
 import io.company.brewcraft.service.FinishedGoodMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodMixturePortionService;
 import io.company.brewcraft.service.FinishedGoodService;
@@ -413,5 +416,12 @@ public class ServiceAutoConfiguration {
 
         final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository);
         return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(FinishedGoodInventoryService.class)
+    public FinishedGoodInventoryService finishedGoodInventoryService(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {
+        final FinishedGoodInventoryService finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(finishedGoodInventoryRepository);
+        return finishedGoodInventoryService;
     }
 }
