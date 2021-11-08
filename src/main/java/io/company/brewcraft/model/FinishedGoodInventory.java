@@ -14,16 +14,16 @@ import org.hibernate.annotations.Immutable;
 @Immutable
 public class FinishedGoodInventory extends BaseEntity {
     public static final String FIELD_SKU = "sku";
-    
+
     @Id
     Long id;
- 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
     private Sku sku;
 
     private Long quantity;
-    
+
     public FinishedGoodInventory() {
         super();
     }
@@ -34,7 +34,7 @@ public class FinishedGoodInventory extends BaseEntity {
         this.sku = sku;
         this.quantity = quantity;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -57,5 +57,5 @@ public class FinishedGoodInventory extends BaseEntity {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
-    }         
+    }
 }

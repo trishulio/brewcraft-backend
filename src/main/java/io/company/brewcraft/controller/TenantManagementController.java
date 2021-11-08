@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.company.brewcraft.dto.TenantDto;
-import io.company.brewcraft.model.IdentityAccessor;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -46,7 +46,7 @@ public class TenantManagementController extends BaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, String> addTenant(@Valid @RequestBody TenantDto newTenant) {
         UUID id = tenantService.addTenant(newTenant);
-        return Map.of(IdentityAccessor.ATTR_ID, id.toString());
+        return Map.of(Identified.ATTR_ID, id.toString());
     }
 
     @PutMapping("/tenants/{id}")

@@ -24,7 +24,6 @@ public class CrudControllerService<
     AddDto extends BaseDto,
     UpdateDto extends BaseDto
 > {
-
     private AttributeFilter filter;
     private BaseMapper<Entity, EntityDto, AddDto, UpdateDto> mapper;
     private CrudService<ID, Entity, AddEntity, UpdateEntity, ?> service;

@@ -26,7 +26,7 @@ public class FinishedGoodInventoryTest {
         assertEquals(new Sku(1L), finishedGoodInventory.getSku());
         assertEquals(50L, finishedGoodInventory.getQuantity());
     }
-    
+
     @Test
     public void testGetSetId() {
         finishedGoodInventory.setId(9L);;
@@ -38,7 +38,7 @@ public class FinishedGoodInventoryTest {
         finishedGoodInventory.setSku(new Sku(1L));
         assertEquals(new Sku(1L), finishedGoodInventory.getSku());
     }
-    
+
     @Test
     public void testGetSetQuantity() {
         finishedGoodInventory.setQuantity(50L);

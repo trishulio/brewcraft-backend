@@ -270,8 +270,7 @@ public class ProcurementServiceTest {
         procurement.setProcurementItems(List.of(new ProcurementItem(new ProcurementItemId(10L, 20L))));
         Page<Procurement> expected = new PageImpl<>(List.of(procurement));
 
-        assertEquals(procurement.toString(), page.iterator().next().toString());
-        assertEquals(expected.getPageable(), page.getPageable());
+        assertEquals(expected, page);
     }
 
     @Test
@@ -448,7 +447,7 @@ public class ProcurementServiceTest {
             100, // invoiceVersion
             1 // version
         ));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 
     @Test
@@ -487,7 +486,7 @@ public class ProcurementServiceTest {
             new Procurement(new ProcurementId(3L, 4L))
         );
         expected.get(1).setPurchaseOrder(new PurchaseOrder(100L));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 
     @Test
@@ -553,7 +552,7 @@ public class ProcurementServiceTest {
             100, // invoiceVersion
             1 // version
         ));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 
     @Test
@@ -592,7 +591,7 @@ public class ProcurementServiceTest {
             new Procurement(new ProcurementId(3L, 4L))
         );
         expected.get(1).setPurchaseOrder(new PurchaseOrder(100L));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 
     @Test
@@ -658,7 +657,7 @@ public class ProcurementServiceTest {
             100, // invoiceVersion
             1 // version
         ));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 
     @Test
@@ -697,6 +696,6 @@ public class ProcurementServiceTest {
             new Procurement(new ProcurementId(3L, 4L))
         );
         expected.get(1).setPurchaseOrder(new PurchaseOrder(100L));
-        assertEquals(expected.toString(), procurements.toString());
+        assertEquals(expected, procurements);
     }
 }

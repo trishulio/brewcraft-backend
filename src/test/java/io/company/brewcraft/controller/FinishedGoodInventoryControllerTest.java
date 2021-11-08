@@ -28,7 +28,7 @@ public class FinishedGoodInventoryControllerTest {
    private FinishedGoodInventoryController finishedGoodInventoryController;
 
    private FinishedGoodInventoryService finishedGoodInventoryService;
-   
+
    private AttributeFilter filter;
 
    @BeforeEach
@@ -44,7 +44,7 @@ public class FinishedGoodInventoryControllerTest {
        List<FinishedGoodInventory> skus = List.of(
                new FinishedGoodInventory(1L, new Sku(2L), 50L)
        );
-       
+
        Page<FinishedGoodInventory> mPage = mock(Page.class);
        doReturn(skus.stream()).when(mPage).stream();
        doReturn(100).when(mPage).getTotalPages();
@@ -69,7 +69,7 @@ public class FinishedGoodInventoryControllerTest {
        assertEquals(100, dto.getTotalPages());
        assertEquals(1000L, dto.getTotalElements());
        assertEquals(1, dto.getContent().size());
-       
+
        FinishedGoodInventoryDto finishedGoodInventory = dto.getContent().get(0);
        assertEquals(new SkuDto(2L), finishedGoodInventory.getSku());
        assertEquals(new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(50L)), finishedGoodInventory.getQuantity());

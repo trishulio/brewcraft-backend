@@ -316,7 +316,7 @@ public class ServiceAutoConfigurationTest {
 
         this.serviceAutoConfiguration.finishedGoodService(mUtilProvider, mFgMixturePortionService, mFgMaterialPortionService, mFinishedGoodRepo);
     }
-    
+
     @Test
     public void testFinishedGoodInventoryervice_ReturnsInstanceOfFinishedGoodInventoryService() {
         final FinishedGoodInventoryRepository repository = mock(FinishedGoodInventoryRepository.class);

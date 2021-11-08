@@ -27,8 +27,8 @@ import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.RepoService;
 
 public class CrudRepoServiceTest {
-    // Hack to mock instance of type Long parameterized IdentityAccessor interface
-    interface LongIdentityAccessor extends Identified<Long>{}
+    // Hack to mock instance of type Long parameterized Identified interface
+    interface LongIdentified extends Identified<Long>{}
 
     private DummyCrudEntityRepository mRepo;
     private RepoService<Long, DummyCrudEntity, DummyCrudEntityAccessor> service;
@@ -91,7 +91,7 @@ public class CrudRepoServiceTest {
         final List<DummyCrudEntity> mEntities = List.of(new DummyCrudEntity(1L));
         doReturn(mEntities).when(this.mRepo).findAllById(Set.of(1L));
 
-        final List<? extends Identified<Long>> idProviders = new ArrayList<>(List.of(mock(LongIdentityAccessor.class), mock(LongIdentityAccessor.class)));
+        final List<? extends Identified<Long>> idProviders = new ArrayList<>(List.of(mock(LongIdentified.class), mock(LongIdentified.class)));
         idProviders.add(null);
         doReturn(1L).when(idProviders.get(0)).getId();
 

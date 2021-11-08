@@ -203,42 +203,42 @@ public class ProcurementItem extends BaseEntity implements UpdateProcurementItem
     @Override
     @JsonIgnore
     public Invoice getInvoice() {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use getProcurement() instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use buildInvoice() instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
     public void setInvoice(Invoice invoice) {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use setProcurement(Procurement procurement) instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use updateProperties(Invoice invoice) instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
     public Shipment getShipment() {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use getProcurement() instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use buildShipment() instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
     public void setShipment(Shipment shipment) {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use setProcurement(Procurement procurement) instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use updateProperties(Shipment shipment) instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
     public InvoiceItem getInvoiceItem() {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use buildInvoiceItem() instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
     }
 
     @Override
     @JsonIgnore
     @Deprecated
     public void setInvoiceItem(InvoiceItem item) {
-        throw new NoSuchMethodError("This method is implemented for not being required. Use updateProperties(InvoiceItem invoiceItem) instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
     }
 
     @Override
@@ -302,7 +302,7 @@ public class ProcurementItem extends BaseEntity implements UpdateProcurementItem
 
     @Override
     public boolean equals(Object o) {
-        // TODO: Think about how equality should be tested throughout the application? - using fields or properties?
+        // Note: Converting to string might not be the efficient way to compare
         if (o == null || !(o instanceof ProcurementItem)) {
             return false;
         }

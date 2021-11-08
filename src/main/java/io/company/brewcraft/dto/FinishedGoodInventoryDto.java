@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class FinishedGoodInventoryDto extends BaseDto {
-        
+
     private SkuDto sku;
-            
+
     private QuantityDto quantity;
-        
+
     public FinishedGoodInventoryDto() {
         super();
     }
@@ -18,7 +18,7 @@ public class FinishedGoodInventoryDto extends BaseDto {
         this.sku = sku;
         this.quantity = new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(quantity));
     }
-    
+
     public SkuDto getSku() {
         return sku;
     }
@@ -30,9 +30,9 @@ public class FinishedGoodInventoryDto extends BaseDto {
     public QuantityDto getQuantity() {
         return quantity;
     }
-    
+
     public void setQuantity(Long quantity) {
         this.quantity = new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(quantity));
     }
-         
+
 }

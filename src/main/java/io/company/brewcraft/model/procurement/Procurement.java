@@ -262,14 +262,14 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     @Override
     @JsonIgnore
     public List<MaterialLot> getLots() {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use buildMaterialLot() instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
     }
 
     @Deprecated
     @Override
     @JsonIgnore
     public void setLots(List<MaterialLot> items) {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use setMaterialLot(List<MaterialLot> materialLots) instead");
+        throw new NoSuchMethodError("This method is not implemented for not being required. Use setProcurementItems(List<ProcurementItems> procurementItems) instead");
     }
 
     @Override
@@ -393,5 +393,15 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
 
     public int getItemCount() {
         return Math.max(this.invoice.getItemCount(), this.shipment.getLotCount());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // Note: Converting to string might not be the efficient way to compare
+        if (o == null || !(o instanceof Procurement)) {
+            return false;
+        }
+
+        return this.toString().equals(o.toString());
     }
 }

@@ -417,7 +417,7 @@ public class ServiceAutoConfiguration {
         final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository);
         return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(FinishedGoodInventoryService.class)
     public FinishedGoodInventoryService finishedGoodInventoryService(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {

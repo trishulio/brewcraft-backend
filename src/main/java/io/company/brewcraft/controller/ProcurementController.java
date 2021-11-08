@@ -62,7 +62,7 @@ public class ProcurementController extends BaseController {
 
     @Autowired
     public ProcurementController(AttributeFilter filter, ProcurementService service) {
-        this(new CrudControllerService<>(filter, ProcurementMapper.INSTANCE, service, ""), service);
+        this(new CrudControllerService<>(filter, ProcurementMapper.INSTANCE, service, "Procurement"), service);
     }
 
     protected ProcurementController(
@@ -180,13 +180,13 @@ public class ProcurementController extends BaseController {
 
     @PatchMapping("/")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<ProcurementDto> patch(List<UpdateProcurementDto> dtos) {
+    public List<ProcurementDto> patch(@Valid @RequestBody @NotNull List<UpdateProcurementDto> dtos) {
         return this.controller.patch(dtos);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int delete(@RequestParam("ids") Set<ProcurementIdDto> ids) {
+    public int delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
         Set<ProcurementId> pIds = ids.stream().map(id -> ProcurementIdMapper.INSTANCE.fromDto(id)).collect(Collectors.toSet());
         return this.controller.delete(pIds);
     }
