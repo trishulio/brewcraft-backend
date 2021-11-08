@@ -11,14 +11,16 @@ import io.company.brewcraft.dto.UpdateMaterialLotDto;
 import io.company.brewcraft.model.MaterialLot;
 
 @Mapper(uses = { MaterialMapper.class, InvoiceItemMapper.class, StorageMapper.class, QuantityMapper.class })
-public interface MaterialLotMapper {
+public interface MaterialLotMapper extends BaseMapper<MaterialLot, MaterialLotDto, AddMaterialLotDto, UpdateMaterialLotDto> {
 
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
 
     MaterialLot fromDto(Long id);
 
+    @Override
     MaterialLotDto toDto(MaterialLot lot);
 
+    @Override
     @Mappings({
         @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),
@@ -26,8 +28,9 @@ public interface MaterialLotMapper {
         @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, source = "invoiceItemId"),
         @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
     })
-    MaterialLot fromDto(UpdateMaterialLotDto item);
+    MaterialLot fromUpdateDto(UpdateMaterialLotDto item);
 
+    @Override
     @Mappings({
         @Mapping(target = MaterialLot.ATTR_ID, ignore = true),
         @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
@@ -37,5 +40,5 @@ public interface MaterialLotMapper {
         @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId"),
         @Mapping(target = MaterialLot.ATTR_VERSION, ignore = true)
     })
-    MaterialLot fromDto(AddMaterialLotDto item);
+    MaterialLot fromAddDto(AddMaterialLotDto item);
 }

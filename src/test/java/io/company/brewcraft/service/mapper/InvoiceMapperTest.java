@@ -103,7 +103,7 @@ public class InvoiceMapperTest {
             1
         );
 
-        Invoice invoice = mapper.fromDto(dto);
+        Invoice invoice = mapper.fromUpdateDto(dto);
 
         Invoice expected = new Invoice(
             null,
@@ -126,7 +126,7 @@ public class InvoiceMapperTest {
 
     @Test
     public void testFromDto_ReturnsNull_WhenUpdateInvoiceDtoIsNull() {
-        assertNull(mapper.fromDto((UpdateInvoiceDto) null));
+        assertNull(mapper.fromUpdateDto((UpdateInvoiceDto) null));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class InvoiceMapperTest {
             List.of(new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L))
         );
 
-        Invoice invoice = mapper.fromDto(dto);
+        Invoice invoice = mapper.fromAddDto(dto);
 
         Invoice expected = new Invoice(
             null,
@@ -166,6 +166,6 @@ public class InvoiceMapperTest {
 
     @Test
     public void testFromDto_ReturnsNull_WhenAddInvoiceDtoIsNull() {
-        assertNull(mapper.fromDto((AddInvoiceDto) null));
+        assertNull(mapper.fromAddDto((AddInvoiceDto) null));
     }
 }

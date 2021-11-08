@@ -47,7 +47,7 @@ public class ShipmentMapperTest {
             1
         );
 
-        final Shipment shipment = this.mapper.fromDto(dto);
+        final Shipment shipment = this.mapper.fromUpdateDto(dto);
 
         final Shipment expected = new Shipment(
             null,
@@ -67,8 +67,8 @@ public class ShipmentMapperTest {
 
     @Test
     public void testFromDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(this.mapper.fromDto((UpdateShipmentDto) null));
-        assertNull(this.mapper.fromDto((AddShipmentDto) null));
+        assertNull(this.mapper.fromUpdateDto((UpdateShipmentDto) null));
+        assertNull(this.mapper.fromAddDto((AddShipmentDto) null));
     }
 
     @Test

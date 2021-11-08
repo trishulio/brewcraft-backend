@@ -3,11 +3,11 @@ package io.company.brewcraft.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,22 +26,46 @@ import io.company.brewcraft.dto.AddPurchaseOrderDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.PurchaseOrderDto;
 import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
+import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.service.PurchaseOrderService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.PurchaseOrderMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/purchases/orders")
 public class PurchaseOrderController extends BaseController {
 
-    private PurchaseOrderService service;
+    private CrudControllerService<
+        Long,
+        PurchaseOrder,
+        BasePurchaseOrder,
+        UpdatePurchaseOrder,
+        PurchaseOrderDto,
+        AddPurchaseOrderDto,
+        UpdatePurchaseOrderDto
+    > controller;
 
-    public PurchaseOrderController(PurchaseOrderService service, AttributeFilter filter) {
-        super(filter);
-        this.service = service;
+    private final PurchaseOrderService purchaseOrderService;
+
+    protected PurchaseOrderController(CrudControllerService<
+            Long,
+            PurchaseOrder,
+            BasePurchaseOrder,
+            UpdatePurchaseOrder,
+            PurchaseOrderDto,
+            AddPurchaseOrderDto,
+            UpdatePurchaseOrderDto
+        > controller, PurchaseOrderService purchaseOrderService)
+    {
+        this.controller = controller;
+        this.purchaseOrderService = purchaseOrderService;
+    }
+
+    @Autowired
+    public PurchaseOrderController(PurchaseOrderService purchaseOrderService, AttributeFilter filter) {
+        this(new CrudControllerService<>(filter, PurchaseOrderMapper.INSTANCE, purchaseOrderService, "PurchaseOrder"), purchaseOrderService);
     }
 
     @GetMapping
@@ -56,65 +80,35 @@ public class PurchaseOrderController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
+        Page<PurchaseOrder> orders = purchaseOrderService.getPurchaseOrders(ids, excludeIds, orderNumbers, supplierIds, sort, orderAscending, page, size);
 
-        Page<PurchaseOrder> orders = service.getPurchaseOrders(ids, excludeIds, orderNumbers, supplierIds, sort, orderAscending, page, size);
-
-        return response(orders, attributes);
+        return this.controller.getAll(orders, attributes);
     }
 
     @GetMapping("/{id}")
-    public PurchaseOrderDto getPurchaseOrder(@PathVariable("id") Long id) {
-        PurchaseOrder po = service.get(id);
-
-        PurchaseOrderDto dto = PurchaseOrderMapper.INSTANCE.toDto(po);
-
-        Validator.assertion(dto != null, EntityNotFoundException.class, "Purchase Order", id.toString());
-
-        return dto;
+    public PurchaseOrderDto getPurchaseOrder(@PathVariable("id") Long id, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        return this.controller.get(id, attributes);
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public PurchaseOrderDto postPurchaseOrder(@Valid @NotNull @RequestBody AddPurchaseOrderDto dto) {
-        PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-
-        PurchaseOrder po = service.add(List.of(addition)).get(0);
-
-        return PurchaseOrderMapper.INSTANCE.toDto(po);
+    public List<PurchaseOrderDto> postPurchaseOrder(@Valid @NotNull @RequestBody List<AddPurchaseOrderDto> addDtos) {
+        return this.controller.add(addDtos);
     }
 
-    @PutMapping("/{purchaseOrderId}")
-    public PurchaseOrderDto putPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
-        PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-
-        PurchaseOrder po = service.put(List.of(addition)).get(0);
-
-        return PurchaseOrderMapper.INSTANCE.toDto(po);
+    @PutMapping
+    public List<PurchaseOrderDto> putPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
+        return this.controller.put(updateDtos);
     }
 
-    @PatchMapping("/{purchaseOrderId}")
-    public PurchaseOrderDto patchPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody UpdatePurchaseOrderDto dto) {
-        PurchaseOrder addition = PurchaseOrderMapper.INSTANCE.fromDto(dto);
-
-        PurchaseOrder po = service.patch(List.of(addition)).get(0);
-
-        return PurchaseOrderMapper.INSTANCE.toDto(po);
+    @PatchMapping
+    public List<PurchaseOrderDto> patchPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
+        return this.controller.patch(updateDtos);
     }
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public void deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
-        this.service.delete(ids);
-    }
-
-    private PageDto<PurchaseOrderDto> response(Page<PurchaseOrder> purchaseOrder, Set<String> attributes) {
-        List<PurchaseOrderDto> content = purchaseOrder.stream().map(i -> PurchaseOrderMapper.INSTANCE.toDto(i)).collect(Collectors.toList());
-        content.forEach(invoice -> filter(invoice, attributes));
-
-        PageDto<PurchaseOrderDto> dto = new PageDto<PurchaseOrderDto>();
-        dto.setContent(content);
-        dto.setTotalElements(purchaseOrder.getTotalElements());
-        dto.setTotalPages(purchaseOrder.getTotalPages());
-        return dto;
+    public int deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
+        return this.controller.delete(ids);
     }
 }

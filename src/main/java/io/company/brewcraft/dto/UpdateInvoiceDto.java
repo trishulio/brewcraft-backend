@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class UpdateInvoiceDto extends BaseDto {
+    private Long id;
     private String invoiceNumber;
     private Long purchaseOrderId;
     private String description;
@@ -20,9 +21,16 @@ public class UpdateInvoiceDto extends BaseDto {
     private Integer version;
 
     public UpdateInvoiceDto() {
+        super();
     }
 
-    public UpdateInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, List<UpdateInvoiceItemDto> invoiceItems, Integer version) {
+    public UpdateInvoiceDto(Long id) {
+        this();
+        setId(id);
+    }
+
+    public UpdateInvoiceDto(Long id, String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, List<UpdateInvoiceItemDto> invoiceItems, Integer version) {
+        this(id);
         setInvoiceNumber(invoiceNumber);
         setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
@@ -33,6 +41,14 @@ public class UpdateInvoiceDto extends BaseDto {
         setInvoiceStatusId(invoiceStatusId);
         setInvoiceItems(invoiceItems);
         setVersion(version);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getInvoiceNumber() {

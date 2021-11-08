@@ -108,7 +108,7 @@ public class InvoiceControllerTest {
            10
        );
 
-       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
+       final PageDto<InvoiceDto> dto = this.controller.getAll(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),
@@ -210,7 +210,7 @@ public class InvoiceControllerTest {
            10
        );
 
-       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
+       final PageDto<InvoiceDto> dto = this.controller.getAll(
            Set.of(1L),
            Set.of(2L),
            Set.of("ABCDE-12345"),

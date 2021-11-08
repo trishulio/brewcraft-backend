@@ -4,17 +4,33 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class UpdatePurchaseOrderDto extends BaseDto {
+    private Long id;
     private String orderNumber;
     private Long supplierId;
     private Integer version;
 
     public UpdatePurchaseOrderDto() {
+        super();
     }
 
-    public UpdatePurchaseOrderDto(String orderNumber, Long supplierId, Integer version) {
+    public UpdatePurchaseOrderDto(Long id) {
+        this();
+        setId(id);
+    }
+
+    public UpdatePurchaseOrderDto(Long id, String orderNumber, Long supplierId, Integer version) {
+        this(id);
         setOrderNumber(orderNumber);
         setSupplierId(supplierId);
         setVersion(version);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOrderNumber() {
