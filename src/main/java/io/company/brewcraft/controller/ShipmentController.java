@@ -166,12 +166,12 @@ public class ShipmentController extends BaseController {
     }
 
     @PutMapping
-    public List<ShipmentDto> putShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
+    public List<ShipmentDto> putShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
     @PatchMapping
-    public List<ShipmentDto> patchShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
+    public List<ShipmentDto> patchShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 

@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.procurement.ProcurementIdDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemIdDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementItemDto;
-import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
 
 public class UpdateProcurementDtoTest {
     private UpdateProcurementDto dto;
@@ -44,9 +44,10 @@ public class UpdateProcurementDtoTest {
     @Test
     public void testAllArgConstructor_SetsAllValues() {
         dto = new UpdateProcurementDto(
+            new ProcurementIdDto(1L, 1L),
             "INVOICE_NUMBER",
             "SHIPMENT_NUMBER",
-            new UpdateProcurementPurchaseOrderDto(1L, "ORDER_NUMBER", 2L, 30), //  TODO: Delete this class when UpdatePurchaseOrder class accepts ID
+            new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER", 2L, 30),
             "DESCRIPTION",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
             LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
@@ -74,9 +75,10 @@ public class UpdateProcurementDtoTest {
             2 // version
         );
 
+        assertEquals(new ProcurementIdDto(1L, 1L), dto.getId());
         assertEquals("INVOICE_NUMBER", dto.getInvoiceNumber());
         assertEquals("SHIPMENT_NUMBER", dto.getShipmentNumber());
-        assertEquals(new UpdateProcurementPurchaseOrderDto(1L, "ORDER_NUMBER", 2L, 30), dto.getPurchaseOrder());
+        assertEquals(new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER", 2L, 30), dto.getPurchaseOrder());
         assertEquals("DESCRIPTION", dto.getDescription());
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), dto.getFreight());
         assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), dto.getGeneratedOn());
@@ -105,6 +107,28 @@ public class UpdateProcurementDtoTest {
     }
 
     @Test
+    public void testIdArgConstructor() {
+        dto = new UpdateProcurementDto(new ProcurementIdDto(1L, 1L));
+
+        assertEquals(new ProcurementIdDto(1L, 1L), dto.getId());
+    }
+
+    @Test
+    public void testAccessId() {
+        dto.setId(new ProcurementIdDto(10L, 10L));
+        assertEquals(new ProcurementIdDto(10L, 10L), dto.getId());
+    }
+
+    @Test
+    public void testAccessId_ReturnsNull_WhenShipmentOrInvoiceIsNull() {
+        dto.setId(new ProcurementIdDto(null, null));
+        assertNull(dto.getId());
+
+        dto.setId(null);
+        assertNull(dto.getId());
+    }
+
+    @Test
     public void testAccessInvoiceNumber() {
         dto.setInvoiceNumber("INVOICE_NUMBER_1");
         assertEquals("INVOICE_NUMBER_1", dto.getInvoiceNumber());
@@ -118,8 +142,8 @@ public class UpdateProcurementDtoTest {
 
     @Test
     public void testAccessPurchaseOrder() {
-        dto.setPurchaseOrder(new UpdateProcurementPurchaseOrderDto(1L, "ORDER_NUMBER_1", 3L, 30));
-        assertEquals(new UpdateProcurementPurchaseOrderDto(1L, "ORDER_NUMBER_1", 3L, 30), dto.getPurchaseOrder());
+        dto.setPurchaseOrder(new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER_1", 3L, 30));
+        assertEquals(new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER_1", 3L, 30), dto.getPurchaseOrder());
     }
 
     @Test

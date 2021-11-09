@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
 
@@ -55,11 +56,11 @@ public class PurchaseOrderMapperTest {
 
     @Test
     public void testFromDto_ReturnsPurchaseOrder_WhenUpdateDtoIsNotNull() {
-        UpdatePurchaseOrderDto dto = new UpdatePurchaseOrderDto("ORDER_1", 2L, 3);
+        UpdatePurchaseOrderDto dto = new UpdatePurchaseOrderDto(1L, "ORDER_1", 2L, 3);
 
         PurchaseOrder po = mapper.fromUpdateDto(dto);
 
-        PurchaseOrder expected = new PurchaseOrder(null, "ORDER_1", new Supplier(2L), null, null, 3);
+        PurchaseOrder expected = new PurchaseOrder(1L, "ORDER_1", new Supplier(2L), null, null, 3);
 
         assertEquals(expected, po);
     }

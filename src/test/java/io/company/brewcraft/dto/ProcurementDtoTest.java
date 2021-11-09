@@ -122,6 +122,13 @@ public class ProcurementDtoTest {
     }
 
     @Test
+    public void testIdArgConstructor() {
+        dto = new ProcurementDto(new ProcurementIdDto(1L, 1L));
+
+        assertEquals(new ProcurementIdDto(1L, 1L), dto.getId());
+    }
+
+    @Test
     public void testAccessId() {
         dto.setId(new ProcurementIdDto(10L, 10L));
         assertEquals(new ProcurementIdDto(10L, 10L), dto.getId());

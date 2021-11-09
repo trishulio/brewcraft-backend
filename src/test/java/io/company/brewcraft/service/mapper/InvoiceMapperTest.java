@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -91,6 +92,7 @@ public class InvoiceMapperTest {
     @Test
     public void testFromDto_ReturnsInvoiceWithUpdateProperties_WhenUpdateInvoiceDtoIsNotNull() {
         UpdateInvoiceDto dto = new UpdateInvoiceDto(
+            1L,
             "ABCDE-12345",
             1L,
             "desc1",
@@ -106,7 +108,7 @@ public class InvoiceMapperTest {
         Invoice invoice = mapper.fromUpdateDto(dto);
 
         Invoice expected = new Invoice(
-            null,
+            1L,
             "ABCDE-12345",
             "desc1",
             new PurchaseOrder(1L),

@@ -97,12 +97,12 @@ public class PurchaseOrderController extends BaseController {
     }
 
     @PutMapping
-    public List<PurchaseOrderDto> putPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
+    public List<PurchaseOrderDto> putPurchaseOrder(@Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
     @PatchMapping
-    public List<PurchaseOrderDto> patchPurchaseOrder(@PathVariable("purchaseOrderId") Long purchaseOrderId, @Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
+    public List<PurchaseOrderDto> patchPurchaseOrder(@Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 

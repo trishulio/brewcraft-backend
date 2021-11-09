@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class UpdateInvoiceDtoTest {
     @Test
     public void testAllArgsConstructor() {
         invoice = new UpdateInvoiceDto(
+            1L,
             "ABCDE-12345",
             2L,
             "desc1",
@@ -33,6 +35,7 @@ public class UpdateInvoiceDtoTest {
             1
         );
 
+        assertEquals(1L, invoice.getId());
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
         assertEquals(2L, invoice.getPurchaseOrderId());
         assertEquals("desc1", invoice.getDescription());
@@ -43,6 +46,13 @@ public class UpdateInvoiceDtoTest {
         assertEquals(99L, invoice.getInvoiceStatusId());
         assertEquals(1, invoice.getInvoiceItems().size());
         assertEquals(new UpdateInvoiceItemDto(), invoice.getInvoiceItems().get(0));
+    }
+
+    @Test
+    public void testIdArgConstructor_SetsId() {
+        UpdateInvoiceDto dto = new UpdateInvoiceDto(1L);
+
+        assertEquals(1L, dto.getId());
     }
 
     @Test

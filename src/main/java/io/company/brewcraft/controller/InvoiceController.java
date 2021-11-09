@@ -149,13 +149,13 @@ public class InvoiceController extends BaseController {
 
     @PutMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public List<InvoiceDto> updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
+    public List<InvoiceDto> updateInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
     @PatchMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public List<InvoiceDto> patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
+    public List<InvoiceDto> patchInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 }
