@@ -3,6 +3,8 @@ package io.company.brewcraft.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -51,15 +53,13 @@ public class SimpleUpdateServiceTest {
     }
 
     @Test
-    public void testGetPutEntities_ReturnsNull_WhenUpdatesAreNull() {
+    public void testGetPutEntities_ReturnsNull_WhenExistingAndUpdatesAreNull() {
         assertNull(this.service.getPutEntities(null, null));
-        assertNull(this.service.getPutEntities(List.of(), null));
-        assertNull(this.service.getPutEntities(List.of(new DummyCrudEntity(1L)), null));
     }
 
     @Test
     public void testGetPutEntities_ReturnsListOfEntitiesWithUpdateProperties_WhenUpdatesAreNotNull() {
-        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L, null, null, 1));
+        final List<DummyCrudEntity> existing = new ArrayList<>(Arrays.asList(new DummyCrudEntity(1L, null, null, 1)));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(1L, "VALUE", "EXCLUDED_VALUE", 1), new DummyCrudEntity(null, "VALUE", "EXCLUDED_VALUE", 1));
 
         final List<DummyCrudEntity> entities = this.service.getPutEntities(existing, updates);
@@ -70,7 +70,7 @@ public class SimpleUpdateServiceTest {
 
     @Test
     public void testGetPutEntities_ThrowsEntityNotFoundException_WhenUpdateEntityIdDoesNotExistInExistingEntities() {
-        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
+        final List<DummyCrudEntity> existing = new ArrayList<>(Arrays.asList(new DummyCrudEntity(1L)));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(3L));
 
         assertThrows(ValidationException.class, () -> this.service.getPutEntities(existing, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");

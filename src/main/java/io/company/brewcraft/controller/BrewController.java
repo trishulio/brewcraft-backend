@@ -58,6 +58,7 @@ public class BrewController extends BaseController {
             @RequestParam(required = false, name = "names") Set<String> names,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
             @RequestParam(required = false, name = "stage_task_ids") Set<Long> stageTaskIds,
+            @RequestParam(required = false, name = "exclude_stage_task_ids") Set<Long> excludeStageTaskIds,
             @RequestParam(required = false, name = "started_at_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startedAtFrom,
             @RequestParam(required = false, name = "started_at_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startedAtTo,
             @RequestParam(required = false, name = "ended_at_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAtFrom,
@@ -67,7 +68,7 @@ public class BrewController extends BaseController {
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<Brew> brewPage = brewService.getBrews(ids, batchIds, names, productIds, stageTaskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
+        Page<Brew> brewPage = brewService.getBrews(ids, batchIds, names, productIds, stageTaskIds, excludeStageTaskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, page, size, sort, orderAscending);
 
         List<BrewDto> brewList = brewPage.stream()
                                          .map(brew -> brewMapper.toDto(brew))

@@ -3,6 +3,7 @@ package io.company.brewcraft.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,32 +46,39 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
 
     @Override
     public List<E> getPutEntities(List<E> existingItems, List<UE> updates) {
-        if (updates == null) {
+        if (existingItems == null && updates == null) {
             return null;
         }
-
+        
         final Validator validator = this.utilProvider.getValidator();
 
         existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
         final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
-        final List<E> targetItems = updates.stream().map(update -> {
-            final E item = this.newEntity();
-            Class<?> itemCls = this.baseEntityCls;
-            if (update.getId() != null) {
-                final E existing = idToItemLookup.get(update.getId());
-                if (validator.rule(existing != null, "No existing %s found with Id: %s.", this.entityCls.getSimpleName(), update.getId())) {
-                    existing.optimisticLockCheck(update);
-                    itemCls = this.updateEntityCls;
+        List<E> targetItems = null;
+        if (updates != null && !updates.isEmpty()) {
+            targetItems = updates.stream().map(update -> {
+                final E item = this.newEntity();
+                Class<?> itemCls = this.baseEntityCls;
+                if (update.getId() != null) {
+                    final E existing = idToItemLookup.get(update.getId());
+                    if (validator.rule(existing != null, "No existing %s found with Id: %s.", this.entityCls.getSimpleName(), update.getId())) {
+                        existing.optimisticLockCheck(update);
+                        itemCls = this.updateEntityCls;
+                    }
                 }
-            }
-            item.override(update, this.getPropertyNames(itemCls, this.excludeProps));
-            item.setId(update.getId()); // TODO: During creation, this ID is ignored.
-            return item;
-        }).collect(Collectors.toList());
+                item.override(update, this.getPropertyNames(itemCls, this.excludeProps));
+                item.setId(update.getId()); // TODO: During creation, this ID is ignored.
+                return item;
+            }).collect(Collectors.toList());
+        }
+          
+        existingItems.clear();
+        Optional.ofNullable(targetItems).ifPresent(existingItems::addAll);
 
         validator.raiseErrors();
-        return targetItems;
+
+        return existingItems;
     }
 
     @Override
