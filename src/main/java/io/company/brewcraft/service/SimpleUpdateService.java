@@ -3,7 +3,6 @@ package io.company.brewcraft.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,12 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
 
         final Validator validator = this.utilProvider.getValidator();
 
-        existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
+        if (existingItems == null) {
+            existingItems = new ArrayList<>(0);
+        } else {
+            existingItems = !existingItems.isEmpty() ? existingItems : new ArrayList<>(0);
+        }
+        
         final Map<ID, E> idToItemLookup = existingItems.stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 
         List<E> targetItems = null;
@@ -74,7 +78,9 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         }
           
         existingItems.clear();
-        Optional.ofNullable(targetItems).ifPresent(existingItems::addAll);
+        if (targetItems != null && !targetItems.isEmpty()) {
+            existingItems.addAll(targetItems);
+        }
 
         validator.raiseErrors();
 
