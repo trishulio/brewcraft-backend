@@ -2,9 +2,9 @@ package io.company.brewcraft.model.user;
 
 import java.util.List;
 
-import io.company.brewcraft.model.Versioned;
+import io.company.brewcraft.service.UpdatableEntity;
 
-public interface UpdateUser<R extends UpdateUserRole> extends Versioned, UserStatusAccessor, UserSalutationAccessor {
+public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Long>, UserStatusAccessor, UserSalutationAccessor {
     String getDisplayName();
 
     void setDisplayName(String displayName);

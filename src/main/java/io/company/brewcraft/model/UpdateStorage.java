@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
-public interface UpdateStorage extends BaseStorage, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateStorage extends BaseStorage, UpdatableEntity<Long> {
 
 }

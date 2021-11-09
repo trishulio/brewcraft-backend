@@ -58,31 +58,31 @@ public class InvoiceItemTest {
     }
 
     @Test
-    public void testSetInvoice_RemovesItselfFromTheSourceInvoiceItemsAndSetsNewListOnTarget_WhenTargetInvoiceItemsAreNull() {
+    public void testSetInvoice_RemovesItselfFromTheSourceinvoiceItemsAndSetsNewListOnTarget_WhenTargetinvoiceItemsAreNull() {
         Invoice source = new Invoice();
-        source.setItems(List.of(item));
+        source.setInvoiceItems(List.of(item));
 
         Invoice target = new Invoice();
         item.setInvoice(target);
 
-        assertEquals(List.of(), source.getItems());
-        assertEquals(List.of(item), target.getItems());
+        assertEquals(List.of(), source.getInvoiceItems());
+        assertEquals(List.of(item), target.getInvoiceItems());
     }
 
     @Test
-    public void testSetInvoice_RemovesItemFromInvoiceAndAddsToExistingTargetInvoiceItemList_WhenTargetInvoiceItemsAreNotNull() {
+    public void testSetInvoice_RemovesItemFromInvoiceAndAddsToExistingTargetInvoiceItemList_WhenTargetinvoiceItemsAreNotNull() {
         Invoice source = new Invoice();
-        source.setItems(List.of(item));
+        source.setInvoiceItems(List.of(item));
 
         Invoice target = new Invoice();
-        target.setItems(List.of(new InvoiceItem()));
+        target.setInvoiceItems(List.of(new InvoiceItem()));
 
         item.setInvoice(target);
 
-        assertEquals(List.of(), source.getItems());
+        assertEquals(List.of(), source.getInvoiceItems());
 
         Invoice expectedTarget = new Invoice();
-        expectedTarget.setItems(List.of(new InvoiceItem(), new InvoiceItem()));
+        expectedTarget.setInvoiceItems(List.of(new InvoiceItem(), new InvoiceItem()));
         assertEquals(expectedTarget, target);
     }
 

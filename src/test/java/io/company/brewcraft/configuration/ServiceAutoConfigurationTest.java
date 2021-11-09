@@ -1,7 +1,8 @@
 package io.company.brewcraft.configuration;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,8 @@ import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
-import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MeasureRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
@@ -41,9 +42,9 @@ import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
 import io.company.brewcraft.service.LotAggregationService;
+import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.MixtureMaterialPortionService;
 import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
-import io.company.brewcraft.service.MeasureService;
 import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
@@ -56,6 +57,7 @@ import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
@@ -64,12 +66,12 @@ import io.company.brewcraft.service.impl.MeasureServiceImpl;
 import io.company.brewcraft.service.impl.ProductCategoryServiceImpl;
 import io.company.brewcraft.service.impl.ProductMeasureValueServiceImpl;
 import io.company.brewcraft.service.impl.ProductServiceImpl;
+import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
+import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
-import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -236,10 +238,12 @@ public class ServiceAutoConfigurationTest {
     public void testProcurementService_ReturnsInstanceOfProcurementService() {
         final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
         final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
+        final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
+        final TransactionService transactionServiceMock = mock(TransactionService.class);
 
-        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock);
+        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock, transactionServiceMock);
 
-        assertTrue(service instanceof ProcurementServiceImpl);
+        assertTrue(service instanceof ProcurementService);
     }
 
     @Test
@@ -314,7 +318,7 @@ public class ServiceAutoConfigurationTest {
 
         this.serviceAutoConfiguration.finishedGoodService(mUtilProvider, mFgMixturePortionService, mFgMaterialPortionService, mFinishedGoodRepo);
     }
-    
+
     @Test
     public void testFinishedGoodInventoryervice_ReturnsInstanceOfFinishedGoodInventoryService() {
         final FinishedGoodInventoryRepository repository = mock(FinishedGoodInventoryRepository.class);

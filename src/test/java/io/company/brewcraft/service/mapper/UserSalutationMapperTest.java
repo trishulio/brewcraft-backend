@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDateTime;
 
@@ -32,6 +33,11 @@ public class UserSalutationMapperTest {
     @Test
     public void testFromDto_ReturnsEntity_WhenIdIsNull() {
         assertNull(mapper.fromDto((Long) null));
+    }
+
+    @Test
+    public void testToDto_ReturnsNull_WhenEntityIsNull() {
+        assertNull(mapper.toDto(null));
     }
 
     @Test

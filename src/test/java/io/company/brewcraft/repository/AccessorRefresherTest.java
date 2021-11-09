@@ -1,7 +1,9 @@
 package io.company.brewcraft.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +21,12 @@ public class AccessorRefresherTest {
         private Long id;
 
         public Entity(Long id) {
-            setId(id);
+            this.id = id;
         }
 
         @Override
         public Long getId() {
             return id;
-        }
-
-        @Override
-        public void setId(Long id) {
-            this.id = id;
         }
     }
 

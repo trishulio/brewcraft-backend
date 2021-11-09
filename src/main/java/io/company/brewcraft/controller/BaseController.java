@@ -20,14 +20,18 @@ public abstract class BaseController {
 
     private AttributeFilter filter;
 
+    public BaseController() {
+    }
+
+    @Deprecated(forRemoval = true)
     public BaseController(AttributeFilter filter) {
         this.filter = filter;
     }
 
+    @Deprecated(forRemoval = true)
     public void filter(BaseDto dto, Set<String> retainAttr) {
         if (retainAttr != null && retainAttr.size() > 0) {
             this.filter.retain(dto, retainAttr);
         }
     }
-
 }

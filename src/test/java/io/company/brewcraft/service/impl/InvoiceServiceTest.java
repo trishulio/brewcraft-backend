@@ -75,8 +75,8 @@ public class InvoiceServiceTest {
            new BigDecimal("4"), //freightAmtTo,
            Set.of(4L), //statusIds,
            Set.of(5L), //supplierIds,
-           new TreeSet<>(List.of("id")), //sortBy,
-           true, //ascending,
+           new TreeSet<>(List.of("id")), //sort,
+           true, //orderAscending,
            10, //page,
            20 //size
        );
@@ -145,17 +145,17 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(0)).when(this.mUpdateService).getAddEntities(any());
 
        final BaseInvoice<InvoiceItem> invoice1 = new Invoice(1L);
-       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       invoice1.setInvoiceItems(List.of(new InvoiceItem(10L)));
        final BaseInvoice<InvoiceItem> invoice2 = new Invoice();
-       invoice2.setItems(List.of(new InvoiceItem(20L)));
+       invoice2.setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        final List<Invoice> added = this.service.add(List.of(invoice1, invoice2));
 
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice()
        );
-       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
-       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
+       expected.get(0).setInvoiceItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        assertEquals(expected, added);
        verify(this.mRepoService, times(1)).saveAll(added);
@@ -173,9 +173,9 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPutEntities(any(), any());
 
        final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
-       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       invoice1.setInvoiceItems(List.of(new InvoiceItem(10L)));
        final UpdateInvoice<InvoiceItem> invoice2 = new Invoice(2L);
-       invoice2.setItems(List.of(new InvoiceItem(20L)));
+       invoice2.setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
@@ -184,8 +184,8 @@ public class InvoiceServiceTest {
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice(2L), new Invoice()
        );
-       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
-       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
+       expected.get(0).setInvoiceItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        assertEquals(expected, updated);
        verify(this.mRepoService, times(1)).saveAll(updated);
@@ -203,9 +203,9 @@ public class InvoiceServiceTest {
        doAnswer(inv -> inv.getArgument(1)).when(this.mUpdateService).getPatchEntities(any(), any());
 
        final UpdateInvoice<InvoiceItem> invoice1 = new Invoice(1L);
-       invoice1.setItems(List.of(new InvoiceItem(10L)));
+       invoice1.setInvoiceItems(List.of(new InvoiceItem(10L)));
        final UpdateInvoice<InvoiceItem> invoice2 = new Invoice(2L);
-       invoice2.setItems(List.of(new InvoiceItem(20L)));
+       invoice2.setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        doReturn(List.of(new Invoice(1L), new Invoice(2L))).when(this.mRepoService).getByIds(List.of(invoice1, invoice2));
 
@@ -214,8 +214,8 @@ public class InvoiceServiceTest {
        final List<Invoice> expected = List.of(
            new Invoice(1L), new Invoice(2L)
        );
-       expected.get(0).setItems(List.of(new InvoiceItem(10L)));
-       expected.get(1).setItems(List.of(new InvoiceItem(20L)));
+       expected.get(0).setInvoiceItems(List.of(new InvoiceItem(10L)));
+       expected.get(1).setInvoiceItems(List.of(new InvoiceItem(20L)));
 
        assertEquals(expected, updated);
        verify(this.mRepoService, times(1)).saveAll(updated);

@@ -2,6 +2,7 @@ package io.company.brewcraft.repository;
 
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +48,63 @@ public class EnhancedShipmentRepositoryImplTest {
 
         verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
         verify(this.mLotRepo, times(1)).refresh(lots);
+    }
+
+    @Test
+    public void testRefresh_SkipsNullShipments() {
+        final List<Shipment> shipments = new ArrayList<>();
+        shipments.add(new Shipment(1L));
+        shipments.add(null);
+        shipments.add(new Shipment(2L));
+
+        final List<MaterialLot> lots = List.of(new MaterialLot(10L), new MaterialLot(20L));
+
+        shipments.get(0).setLots(List.of(lots.get(0)));
+        shipments.get(2).setLots(List.of(lots.get(1)));
+
+        this.repo.refresh(shipments);
+
+        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRepo, times(1)).refresh(lots);
+    }
+
+    @Test
+    public void testRefresh_DoesNotRefreshShipments_WhenListIsNull() {
+        this.repo.refresh(null);
+
+        verify(this.mStatusRepo, times(1)).refreshAccessors(null);
+        verify(this.mLotRepo, times(1)).refresh(null);
+    }
+
+    @Test
+    public void testRefresh_DoesNotRefreshLots_WhenLotsAreNull() {
+        final List<Shipment> shipments = List.of(
+            new Shipment(1L),
+            new Shipment(2L),
+            new Shipment(3L)
+        );
+
+        this.repo.refresh(shipments);
+
+        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRepo, times(1)).refresh(List.of());
+    }
+
+    @Test
+    public void testRefresh_DoesNotRefreshLots_WhenLotsSizeIs0() {
+        final List<Shipment> shipments = List.of(
+            new Shipment(1L),
+            new Shipment(2L),
+            new Shipment(3L)
+        );
+        shipments.get(0).setLots(List.of());
+        shipments.get(1).setLots(List.of());
+        shipments.get(2).setLots(List.of());
+
+        this.repo.refresh(shipments);
+
+        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRepo, times(1)).refresh(List.of());
     }
 
     @Test

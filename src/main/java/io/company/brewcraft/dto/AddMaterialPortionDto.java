@@ -40,7 +40,6 @@ public class AddMaterialPortionDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-
     public LocalDateTime getAddedAt() {
         return addedAt;
     }

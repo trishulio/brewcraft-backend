@@ -25,8 +25,8 @@ public class QuantitySerializer extends JsonSerializer<Quantity> {
         } else {
             gen.writeStartObject();
             QuantityDto dto = QuantityMapper.INSTANCE.toDto(value);
-            gen.writeStringField("symbol", dto.getSymbol());
-            gen.writeNumberField("value", (BigDecimal) dto.getValue());
+            gen.writeStringField(QuantityDto.ATTR_SYMBOL, dto.getSymbol());
+            gen.writeNumberField(QuantityDto.ATTR_VALUE, (BigDecimal) dto.getValue());
             gen.writeEndObject();
         }
     }

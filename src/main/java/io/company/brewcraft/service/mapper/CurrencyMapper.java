@@ -16,12 +16,22 @@ public abstract class CurrencyMapper {
 
     public Currency toEntity(String code) {
         Currency entity = null;
-        if (code != null) {
-            CurrencyUnit unit = CurrencyUnit.of(code);
-            entity = fromUnit(unit);
+        CurrencyUnit unit = toUnit(code);
+        if (unit != null) {
+            entity = toEntity(unit);
         }
+
         return entity;
     }
 
-    public abstract Currency fromUnit(CurrencyUnit unit);
+    public CurrencyUnit toUnit(String code) {
+        CurrencyUnit unit = null;
+        if (code != null) {
+            unit = CurrencyUnit.of(code);
+        }
+
+        return unit;
+    }
+
+    public abstract Currency toEntity(CurrencyUnit unit);
 }

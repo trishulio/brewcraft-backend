@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
-public interface UpdateMaterialPortion extends BaseMaterialPortion, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateMaterialPortion extends BaseMaterialPortion, UpdatableEntity<Long> {
 
 }

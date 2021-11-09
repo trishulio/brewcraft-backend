@@ -146,6 +146,17 @@ public class StockLotTest {
     }
 
     @Test
+    public void testLotShipmentInvoiceItemQtyConstructor() {
+        final Shipment shipment = new Shipment(1L);
+        this.lot = new StockLot("LOT_1", shipment, new InvoiceItem(10L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+
+        assertEquals("LOT_1", this.lot.getLotNumber());
+        assertEquals(shipment, this.lot.getShipment());
+        assertEquals(new InvoiceItem(10L), this.lot.getInvoiceItem());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
     public void testLotMaterialInvoiceItemQtyConstructor() {
         this.lot = new StockLot("LOT_1", new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
@@ -230,6 +241,18 @@ public class StockLotTest {
     }
 
     @Test
+    public void testLotShipmentStorageInvoiceItemQtyConstructor() {
+        final Shipment shipment = new Shipment(1L);
+        this.lot = new StockLot("LOT_1", shipment, new Storage(1L), new InvoiceItem(10L), new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+
+        assertEquals("LOT_1", this.lot.getLotNumber());
+        assertEquals(shipment, this.lot.getShipment());
+        assertEquals(new Storage(1L), this.lot.getStorage());
+        assertEquals(new InvoiceItem(10L), this.lot.getInvoiceItem());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), this.lot.getQuantity());
+    }
+
+    @Test
     public void testLotShipmentStorageMaterialInvoiceItemQtyConstructor() {
         final Shipment shipment = new Shipment(1L);
         this.lot = new StockLot("LOT_1", shipment, new Storage(1L), new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
@@ -295,7 +318,7 @@ public class StockLotTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         this.lot = new StockLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM), new Material(3L), new Shipment(1L), new InvoiceItem(4L), new Storage(2L));
 
-        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"material\":{\"id\":3,\"name\":null,\"description\":null,\"category\":null,\"upc\":null,\"baseQuantityUnit\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"shipment\":{\"id\":1,\"shipmentNumber\":null,\"description\":null,\"status\":null,\"deliveryDueDate\":null,\"deliveredDate\":null,\"lots\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"invoiceItem\":{\"id\":4,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"amount\":null},\"storage\":{\"id\":2,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}}";
+        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"material\":{\"id\":3,\"name\":null,\"description\":null,\"category\":null,\"upc\":null,\"baseQuantityUnit\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"shipment\":{\"id\":1,\"shipmentNumber\":null,\"description\":null,\"shipmentStatus\":null,\"deliveryDueDate\":null,\"deliveredDate\":null,\"lots\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"invoiceItem\":{\"id\":4,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":2,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}}";
         JSONAssert.assertEquals(json, this.lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

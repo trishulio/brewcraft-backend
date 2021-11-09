@@ -39,6 +39,7 @@ public class EnhancedUserRepositoryImpl implements EnhancedUserRepository {
         this.salutationRepo.refreshAccessors(users);
         List<UserRoleBinding> bindings = users.stream().filter(u -> u != null && u.getRoleBindings() != null && u.getRoleBindings().size() > 0).flatMap(u -> u.getRoleBindings().stream()).collect(Collectors.toList());
         this.roleBindingRepo.refreshRoles(bindings);
+        this.roleBindingRepo.refresh(bindings);
     }
 
     @Override

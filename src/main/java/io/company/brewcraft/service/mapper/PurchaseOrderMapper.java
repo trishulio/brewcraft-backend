@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddPurchaseOrderDto;
 import io.company.brewcraft.dto.PurchaseOrderDto;
 import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
 import io.company.brewcraft.model.PurchaseOrder;
 
 @Mapper(uses = { SupplierMapper.class })
@@ -40,6 +41,13 @@ public interface PurchaseOrderMapper {
         @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     })
     PurchaseOrder fromDto(UpdatePurchaseOrderDto dto);
+
+    @Mappings({
+        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
+        @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
+    })
+    PurchaseOrder fromDto(UpdateProcurementPurchaseOrderDto dto); // TODO: Delete this mapping when UpdatePurchaseOrderDto is changed to have Id
 
     PurchaseOrderDto toDto(PurchaseOrder po);
 }

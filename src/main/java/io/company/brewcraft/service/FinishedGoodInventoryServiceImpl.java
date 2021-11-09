@@ -24,7 +24,7 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
     public FinishedGoodInventoryServiceImpl(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {
         this.finishedGoodInventoryRepository = finishedGoodInventoryRepository;
     }
-    
+
     public Page<FinishedGoodInventory> getAll(Set<Long> skuIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<FinishedGoodInventory> spec = WhereClauseBuilder.builder()
                                                                         .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
@@ -32,7 +32,7 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
 
         Page<FinishedGoodInventory> finishedGoodInventory = finishedGoodInventoryRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
 
-        return finishedGoodInventory; 
+        return finishedGoodInventory;
     }
 
 }

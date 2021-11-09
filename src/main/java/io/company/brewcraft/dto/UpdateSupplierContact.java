@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import io.company.brewcraft.model.Versioned;
+import io.company.brewcraft.service.UpdatableEntity;
 
-public interface UpdateSupplierContact extends BaseSupplierContact, Versioned {
+public interface UpdateSupplierContact extends BaseSupplierContact, UpdatableEntity<Long> {
 }

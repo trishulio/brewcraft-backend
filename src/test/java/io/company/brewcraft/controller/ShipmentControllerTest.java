@@ -1,6 +1,7 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -89,42 +90,86 @@ public class ShipmentControllerTest {
         doReturn(1000L).when(mPage).getTotalElements();
 
         doReturn(mPage).when(this.mService).getShipments(
-            Set.of(1L),
-            Set.of(2L),
-            Set.of("SHIPMENT_1"),
-            Set.of("DESC_1"),
-            Set.of(99L),
-            LocalDateTime.of(1999, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-            new TreeSet<>(List.of("col_1")),
-            true,
-            1,
-            10
+            // shipment filters
+            Set.of(1L), // ids,
+            Set.of(2L), // excludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // statusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10 //size
         );
 
         final PageDto<ShipmentDto> dto = this.controller.getShipments(
-                                    Set.of(1L),
-                                    Set.of(2L),
-                                    Set.of("SHIPMENT_1"),
-                                    Set.of("DESC_1"),
-                                    Set.of(99L),
-                                    LocalDateTime.of(1999, 1, 1, 12, 0, 0),
-                                    LocalDateTime.of(2000, 1, 1, 12, 0, 0),
-                                    LocalDateTime.of(2001, 1, 1, 12, 0, 0),
-                                    LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-                                    new TreeSet<>(List.of("col_1")),
-                                    true,
-                                    1,
-                                    10,
-                                    Set.of()
-                                );
+            // shipment filters
+            Set.of(1L), // ids,
+            Set.of(2L), // excludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // statusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10, //size
+            Set.of()
+        );
         final ShipmentDto shipmentDto = dto.getContent().get(0);
         assertEquals(1L, shipmentDto.getId());
         assertEquals("SHIPMENT_1", shipmentDto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", shipmentDto.getDescription());
-        assertEquals(new ShipmentStatusDto(99L), shipmentDto.getStatus());
+        assertEquals(new ShipmentStatusDto(99L), shipmentDto.getShipmentStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), shipmentDto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), shipmentDto.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), shipmentDto.getCreatedAt());
@@ -163,37 +208,81 @@ public class ShipmentControllerTest {
         doReturn(1000L).when(mPage).getTotalElements();
 
         doReturn(mPage).when(this.mService).getShipments(
-            Set.of(1L),
-            Set.of(2L),
-            Set.of("SHIPMENT_1"),
-            Set.of("DESC_1"),
-            Set.of(99L),
-            LocalDateTime.of(1999, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2000, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2001, 1, 1, 12, 0, 0),
-            LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-            new TreeSet<>(List.of("col_1")),
-            true,
-            1,
-            10
+            // shipment filters
+            Set.of(1L), // ids,
+            Set.of(2L), // excludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // statusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10 //size
         );
 
         final PageDto<ShipmentDto> dto = this.controller.getShipments(
-                                        Set.of(1L),
-                                        Set.of(2L),
-                                        Set.of("SHIPMENT_1"),
-                                        Set.of("DESC_1"),
-                                        Set.of(99L),
-                                        LocalDateTime.of(1999, 1, 1, 12, 0, 0),
-                                        LocalDateTime.of(2000, 1, 1, 12, 0, 0),
-                                        LocalDateTime.of(2001, 1, 1, 12, 0, 0),
-                                        LocalDateTime.of(2002, 1, 1, 12, 0, 0),
-                                        new TreeSet<>(List.of("col_1")),
-                                        true,
-                                        1,
-                                        10,
-                                        Set.of("id")
-                                    );
+            // shipment filters
+            Set.of(1L), // ids,
+            Set.of(2L), // excludeIds,
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
+            Set.of("S_DESCRIPTION"), // descriptions,
+            Set.of(3L), // statusIds,
+            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
+            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 4), // deliveredDateTo,
+            // invoice filters
+            Set.of(10L), // invoiceIds,
+            Set.of(20L), // invoiceExcludeIds,
+            Set.of("INVOICE_NUMBER"), // invoiceNumbers,
+            Set.of("I_DESCRIPTION"), // invoiceDescriptions,
+            Set.of("II_DESCRIPTION"), // invoiceItemDescriptions,
+            LocalDateTime.of(2000, 1, 1, 0, 5), // generatedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 6), // generatedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 7), // receivedOnFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 8), // receivedOnTo,
+            LocalDateTime.of(2000, 1, 1, 0, 9), // paymentDueDateFrom,
+            LocalDateTime.of(2000, 1, 1, 0, 10), // paymentDueDateTo,
+            Set.of(100L), // purchaseOrderIds,
+            Set.of(1000L), // materialIds,
+            new BigDecimal("1"), // amtFrom,
+            new BigDecimal("2"), // amtTo,
+            new BigDecimal("3"), // freightAmtFrom,
+            new BigDecimal("4"), // freightAmtTo,
+            Set.of(30L), // invoiceStatusIds,
+            Set.of(200L), // supplierIds,
+            // misc
+            new TreeSet<>(Set.of("col_1", "col_2")), // sort,
+            true, // orderAscending,
+            1, // page,
+            10, //size
+            Set.of("id")
+        );
         assertEquals(new ShipmentDto(1L), dto.getContent().get(0));
     }
 

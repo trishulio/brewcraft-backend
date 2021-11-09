@@ -51,7 +51,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -70,7 +70,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10, // size
@@ -102,7 +102,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -121,7 +121,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10, // size

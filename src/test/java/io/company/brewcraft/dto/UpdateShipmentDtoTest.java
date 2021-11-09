@@ -18,12 +18,12 @@ public class UpdateShipmentDtoTest {
 
     @Test
     public void testAllArgConstructor_SetsAllFieldValues() {
-        List<UpdateMaterialLotDto> items = List.of(new UpdateMaterialLotDto(100L));
-        dto = new UpdateShipmentDto("SHIPMENT_1", "DESCRIPTION_1", 99L, LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), items, 1);
+        List<UpdateMaterialLotDto> lots = List.of(new UpdateMaterialLotDto(100L));
+        dto = new UpdateShipmentDto("SHIPMENT_1", "DESCRIPTION_1", 99L, LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), lots, 1);
 
         assertEquals("SHIPMENT_1", dto.getShipmentNumber());
         assertEquals("DESCRIPTION_1", dto.getDescription());
-        assertEquals(99L, dto.getStatusId());
+        assertEquals(99L, dto.getShipmentStatusId());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getDeliveredDate());
         assertEquals(List.of(new UpdateMaterialLotDto(100L)), dto.getLots());
@@ -46,9 +46,9 @@ public class UpdateShipmentDtoTest {
 
     @Test
     public void testAccessStatusId() {
-        assertNull(dto.getStatusId());
-        dto.setStatusId(99L);
-        assertEquals(99L, dto.getStatusId());
+        assertNull(dto.getShipmentStatusId());
+        dto.setShipmentStatusId(99L);
+        assertEquals(99L, dto.getShipmentStatusId());
     }
 
     @Test

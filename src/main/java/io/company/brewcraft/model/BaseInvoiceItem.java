@@ -4,8 +4,10 @@ import org.joda.money.Money;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.service.MaterialAccessor;
+import io.company.brewcraft.service.MoneySupplier;
+import io.company.brewcraft.service.TaxAccessor;
 
-public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem<T>>> extends MaterialAccessor, QuantityAccessor {
+public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem<T>>> extends MaterialAccessor, QuantityAccessor, MoneySupplier, TaxAccessor {
     final String ATTR_DESCRIPTION = "description";
     final String ATTR_INVOICE = "invoice";
     final String ATTR_QUANTITY = "quantity";
@@ -23,8 +25,4 @@ public interface BaseInvoiceItem<T extends BaseInvoice<? extends BaseInvoiceItem
     Money getPrice();
 
     void setPrice(Money price);
-
-    Tax getTax();
-
-    void setTax(Tax tax);
 }

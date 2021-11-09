@@ -1,7 +1,8 @@
 package io.company.brewcraft.service.mapper;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import javax.measure.MetricPrefix;
 import javax.measure.Unit;
@@ -106,5 +107,26 @@ public class QuantityUnitMapperTest {
     @Test
     public void testFromDto_ReturnsNull_WhenDtoIsNull() {
         assertNull(mapper.fromDto(null));
+    }
+
+    @Test
+    public void testToSymbol_ReturnsNull_WhenArgIsNull() {
+        assertNull(mapper.toSymbol(null));
+    }
+
+    @Test
+    public void testToSymbol_ReturnsSymbol_WhenUnitIsNotNull() {
+        assertEquals(Units.KILOGRAM.toString(), mapper.toSymbol(Units.KILOGRAM));
+        assertEquals("kg", mapper.toSymbol(Units.KILOGRAM));
+    }
+
+    @Test
+    public void testToDto_ReturnsNull_WhenPojoIsNull() {
+        assertNull(mapper.toDto(null));
+    }
+
+    @Test
+    public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
+        assertEquals(new UnitDto("kg"), mapper.toDto(Units.KILOGRAM));
     }
 }

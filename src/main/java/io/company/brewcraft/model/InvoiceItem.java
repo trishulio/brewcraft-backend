@@ -25,17 +25,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CrudEntity;
-import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "invoice_item")
 @Table
-public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_QUANTITY = "quantity";
     public static final String FIELD_PRICE = "price";
     public static final String FIELD_TAX = "tax";
@@ -199,6 +202,7 @@ public class InvoiceItem extends BaseEntity implements MoneySupplier, UpdateInvo
     }
 
     @Override
+    @JsonIgnore
     public Money getAmount() {
         Money amount = null;
 

@@ -28,10 +28,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MIXTURE")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Mixture extends BaseEntity implements UpdateMixture, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_PARENT_MIXTURE = "parentMixture";

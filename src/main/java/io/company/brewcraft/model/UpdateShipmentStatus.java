@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
-public interface UpdateShipmentStatus extends BaseShipmentStatus, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateShipmentStatus extends BaseShipmentStatus, UpdatableEntity<Long> {
 
 }

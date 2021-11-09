@@ -38,7 +38,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         Set<Long> excludeIds,
         Set<String> orderNumbers,
         Set<Long> supplierIds,
-        SortedSet<String> sortBy,
+        SortedSet<String> sort,
         boolean orderAscending,
         int page,
         int size
@@ -50,7 +50,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                                                      .in(new String[] { PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                                                      .build();
 
-        return this.repoService.getAll(spec, sortBy, orderAscending, page, size);
+        return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
     }
 
     @Override
-    public void delete(Long id) {
-        this.repoService.delete(id);
+    public int delete(Long id) {
+        return this.repoService.delete(id);
     }
 
     @Override

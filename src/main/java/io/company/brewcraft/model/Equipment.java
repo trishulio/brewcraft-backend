@@ -20,6 +20,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,6 +31,7 @@ import tec.uom.se.quantity.Quantities;
 
 @Entity
 @Table(name="EQUIPMENT")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Equipment extends BaseEntity implements Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_FACILITY = "facility";

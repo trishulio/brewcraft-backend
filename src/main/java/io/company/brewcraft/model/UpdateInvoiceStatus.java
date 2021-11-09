@@ -1,4 +1,6 @@
 package io.company.brewcraft.model;
 
-public interface UpdateInvoiceStatus extends BaseInvoiceStatus, Versioned {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateInvoiceStatus extends BaseInvoiceStatus, UpdatableEntity<Long> {
 }

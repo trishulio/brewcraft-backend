@@ -27,11 +27,11 @@ public class EnhancedInvoiceItemRepositoryImplTest {
 
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
-        List<InvoiceItem> items = List.of(new InvoiceItem(1L));
+        List<InvoiceItem> invoiceItems = List.of(new InvoiceItem(1L));
 
-        repo.refresh(items);
+        repo.refresh(invoiceItems);
 
-        verify(mMaterialRepo, times(1)).refreshAccessors(items);
+        verify(mMaterialRepo, times(1)).refreshAccessors(invoiceItems);
     }
 
     @Test

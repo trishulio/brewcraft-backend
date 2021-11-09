@@ -17,12 +17,12 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
-import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.Versioned;
+import io.company.brewcraft.service.UpdatableEntity;
 
 /***
  * There exists a many-to-many relationship between a user and a user-role. But due to
@@ -36,7 +36,8 @@ import io.company.brewcraft.model.Versioned;
 
 @Entity
 @Table(name = "user_role_binding")
-public class UserRoleBinding extends BaseEntity implements Identified<Long>, Audited, Versioned, UserRoleAccessor, UserAccessor {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class UserRoleBinding extends BaseEntity implements Audited, UserRoleAccessor, UserAccessor, UpdatableEntity<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_ROLE_TYPE = "role";
     public static final String FIELD_USER = "user";

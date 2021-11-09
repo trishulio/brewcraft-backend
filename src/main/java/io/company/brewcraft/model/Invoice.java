@@ -31,17 +31,19 @@ import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneyService;
-import io.company.brewcraft.service.MoneySupplier;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Entity(name = "invoice")
 @Table
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited, MoneySupplier {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -53,8 +55,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public static final String FIELD_PAYMENT_DUE_DATE = "paymentDueDate";
     public static final String FIELD_AMOUNT = "amount";
     public static final String FIELD_FREIGHT = "freight";
-    public static final String FIELD_STATUS = "status";
-    public static final String FIELD_ITEMS = "items";
+    public static final String FIELD_INVOICE_STATUS = "invoiceStatus";
+    public static final String FIELD_ITEMS = "invoiceItems";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_generator")
@@ -102,11 +104,11 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_status_id", referencedColumnName = "id")
-    private InvoiceStatus status;
+    private InvoiceStatus invoiceStatus;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<InvoiceItem> items;
+    private List<InvoiceItem> invoiceItems;
 
     @Version
     private Integer version;
@@ -119,7 +121,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
-            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> items, Integer version) {
+            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> invoiceItems, Integer version) {
         this(id);
         this.setInvoiceNumber(invoiceNumber);
         this.setDescription(description);
@@ -130,8 +132,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         this.setFreight(freight);
         this.setCreatedAt(createdAt);
         this.setLastUpdated(lastUpdated);
-        this.setStatus(status);
-        this.setItems(items);
+        this.setInvoiceStatus(status);
+        this.setInvoiceItems(invoiceItems);
         this.setVersion(version);
     }
 
@@ -226,36 +228,36 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     @Override
-    public InvoiceStatus getStatus() {
-        return this.status;
+    public InvoiceStatus getInvoiceStatus() {
+        return this.invoiceStatus;
     }
 
     @Override
-    public void setStatus(InvoiceStatus status) {
-        this.status = status;
+    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
     @Override
-    public List<InvoiceItem> getItems() {
-        List<InvoiceItem> items = null;
-        if (this.items != null) {
-            items = this.items.stream().collect(Collectors.toList());
+    public List<InvoiceItem> getInvoiceItems() {
+        List<InvoiceItem> invoiceItems = null;
+        if (this.invoiceItems != null) {
+            invoiceItems = this.invoiceItems.stream().collect(Collectors.toList());
         }
-        return items;
+        return invoiceItems;
     }
 
     @Override
-    public void setItems(List<InvoiceItem> items) {
-        if (this.items == null) {
-            this.items = new ArrayList<>();
+    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+        if (this.invoiceItems == null) {
+            this.invoiceItems = new ArrayList<>();
         } else {
-            this.items.stream().collect(Collectors.toList()).forEach(this::removeItem);
+            this.invoiceItems.stream().collect(Collectors.toList()).forEach(this::removeItem);
         }
 
-        if (items == null) {
-            this.items = null;
+        if (invoiceItems == null) {
+            this.invoiceItems = null;
         } else {
-            items.stream().collect(Collectors.toList()).forEach(this::addItem);
+            invoiceItems.stream().collect(Collectors.toList()).forEach(this::addItem);
         }
     }
 
@@ -264,27 +266,27 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
             return;
         }
 
-        if (this.items == null) {
-            this.items = new ArrayList<>();
+        if (this.invoiceItems == null) {
+            this.invoiceItems = new ArrayList<>();
         }
 
         if (item.getInvoice() != this) {
             item.setInvoice(this);
         }
 
-        if (!this.items.contains(item)) {
-            this.items.add(item);
+        if (!this.invoiceItems.contains(item)) {
+            this.invoiceItems.add(item);
         }
 
         setAmount();
     }
 
     public boolean removeItem(InvoiceItem item) {
-        if (item == null || this.items == null) {
+        if (item == null || this.invoiceItems == null) {
             return false;
         }
 
-        final boolean removed = this.items.remove(item);
+        final boolean removed = this.invoiceItems.remove(item);
 
         if (removed) {
             item.setInvoice(null);
@@ -316,22 +318,35 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     @Override
+    @JsonIgnore
     public Money getAmount() {
         return MoneyMapper.INSTANCE.fromEntity(this.amount);
     }
 
     private void setAmount() {
-        Money amount = MoneyService.total(this.getItems());
+        Money amount = MoneyService.total(this.getInvoiceItems());
         this.amount = MoneyMapper.INSTANCE.toEntity(amount);
     }
 
+    @Override
+    @JsonIgnore
     public Tax getTax() {
         Tax tax = null;
-        if (this.getItems() != null) {
-            final Collection<Tax> taxes = this.getItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
+        if (this.getInvoiceItems() != null) {
+            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
 
         return tax;
+    }
+
+    @JsonIgnore
+    public int getItemCount() {
+        int count = 0;
+        if (this.invoiceItems != null) {
+            count = this.invoiceItems.size();
+        }
+
+        return count;
     }
 }

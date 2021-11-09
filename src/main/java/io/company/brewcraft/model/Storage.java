@@ -15,12 +15,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "STORAGE")
-public class Storage extends BaseEntity implements Identified<Long>, BaseStorage, Audited, UpdateStorage {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Storage extends BaseEntity implements BaseStorage, Audited, UpdateStorage {
     public static final String FIELD_ID = "id";
     public static final String FIELD_FACILITY = "facility";
     public static final String FIELD_NAME = "name";

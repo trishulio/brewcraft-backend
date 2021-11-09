@@ -6,7 +6,7 @@ import java.util.Collection;
 public class AddShipmentDto extends BaseDto {
     private String shipmentNumber;
     private String description;
-    private Long statusId;
+    private Long shipmentStatusId;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
     private Collection<AddMaterialLotDto> lots;
@@ -15,10 +15,10 @@ public class AddShipmentDto extends BaseDto {
 
     }
 
-    public AddShipmentDto(String shipmentNumber, String description, Long statusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<AddMaterialLotDto> lots) {
+    public AddShipmentDto(String shipmentNumber, String description, Long shipmentStatusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<AddMaterialLotDto> lots) {
         setShipmentNumber(shipmentNumber);
         setDescription(description);
-        setStatusId(statusId);
+        setShipmentStatusId(shipmentStatusId);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
         setLots(lots);
@@ -39,12 +39,12 @@ public class AddShipmentDto extends BaseDto {
         this.description = description;
     }
 
-    public Long getStatusId() {
-        return statusId;
+    public Long getShipmentStatusId() {
+        return shipmentStatusId;
     }
 
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public void setShipmentStatusId(Long shipmentStatusId) {
+        this.shipmentStatusId = shipmentStatusId;
     }
 
     public LocalDateTime getDeliveryDueDate() {

@@ -75,7 +75,7 @@ public class ShipmentStatusTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         status = new ShipmentStatus(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
 
-        final String json = "{\"id\":99,\"name\":\"FINAL\",\"createdAt\":{\"nano\":0,\"year\":1999,\"monthValue\":12,\"dayOfMonth\":12,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"SUNDAY\",\"dayOfYear\":346,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2000,\"monthValue\":12,\"dayOfMonth\":12,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"TUESDAY\",\"dayOfYear\":347,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":99,\"name\":\"FINAL\",\"createdAt\":\"1999-12-12T00:00:00\",\"lastUpdated\":\"2000-12-12T00:00:00\",\"version\":1}";
         JSONAssert.assertEquals(json, status.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
