@@ -49,8 +49,8 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             Set<Long> ids,
             Set<Long> excludeIds,
             Set<Long> skuIds,
-            SortedSet<String> sortBy,
-            boolean ascending,
+            SortedSet<String> sort,
+            boolean orderAscending,
             int page,
             int size
          ) {
@@ -61,7 +61,7 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
                                             .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
                                             .build();
 
-        return this.repoService.getAll(spec, sortBy, ascending, page, size);
+        return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }
 
     @Override
@@ -95,8 +95,8 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
     }
 
     @Override
-    public void delete(Long id) {
-        this.repoService.delete(id);
+    public int delete(Long id) {
+        return this.repoService.delete(id);
     }
 
     @Override

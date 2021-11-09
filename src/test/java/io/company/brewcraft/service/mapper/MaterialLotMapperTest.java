@@ -49,7 +49,7 @@ public class MaterialLotMapperTest {
     public void fromDto_ReturnMaterialLot_WhenDtoIsNotNull() {
         final UpdateMaterialLotDto dto = new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("1")), 1L, 3L, 1);
 
-        final MaterialLot lot = this.mapper.fromDto(dto);
+        final MaterialLot lot = this.mapper.fromUpdateDto(dto);
 
         final MaterialLot expected = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, 1);
         assertEquals(expected, lot);
@@ -57,8 +57,8 @@ public class MaterialLotMapperTest {
 
     @Test
     public void fromDto_ReturnsNull_WhenMaterialLotDtoIsNull() {
-        assertNull(this.mapper.fromDto((UpdateMaterialLotDto) null));
-        assertNull(this.mapper.fromDto((AddMaterialLotDto) null));
+        assertNull(this.mapper.fromUpdateDto((UpdateMaterialLotDto) null));
+        assertNull(this.mapper.fromAddDto((AddMaterialLotDto) null));
     }
 
 }

@@ -1,7 +1,7 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -160,8 +160,11 @@ public class CrudRepoServiceTest {
     }
 
     @Test
-    public void testDelete_DelegatesToRepository() {
-        this.service.delete(1L);
-        verify(this.mRepo, times(1)).deleteById(1L);
+    public void testDelete_ReturnsCountFromRepoDelete() {
+        doReturn(1).when(mRepo).deleteOneById(1L);
+
+        int count = this.service.delete(1L);
+
+        assertEquals(1, count);
     }
 }

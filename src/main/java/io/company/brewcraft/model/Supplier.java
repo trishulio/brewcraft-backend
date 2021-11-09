@@ -21,12 +21,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.dto.UpdateSupplier;
 
 @Entity
 @Table(name = "SUPPLIER")
-public class Supplier extends BaseEntity implements UpdateSupplier, Identified<Long>, Audited {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class Supplier extends BaseEntity implements UpdateSupplier, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_CONTACTS = "contacts";

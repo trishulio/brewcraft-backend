@@ -70,7 +70,7 @@ public class TenantTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", "TENANT_URL", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
 
-        final String json = "{\"id\":\"89efec46-fd0b-4fec-bcde-7f4bcef4f8e9\",\"name\":\"TENANT_1\",\"url\":\"TENANT_URL\",\"createdAt\":{\"nano\":0,\"year\":2000,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"SATURDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2001,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"MONDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}}}";
+        final String json = "{\"id\":\"89efec46-fd0b-4fec-bcde-7f4bcef4f8e9\",\"name\":\"TENANT_1\",\"url\":\"TENANT_URL\",\"createdAt\":\"2000-01-01T00:00:00\",\"lastUpdated\":\"2001-01-01T00:00:00\"}";
         JSONAssert.assertEquals(json, tenant.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

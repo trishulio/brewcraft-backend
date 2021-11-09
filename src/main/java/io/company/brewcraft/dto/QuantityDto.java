@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuantityDto extends BaseDto {
+    public static final String ATTR_SYMBOL = "symbol";
+    public static final String ATTR_VALUE = "value";
 
     private String symbol;
     private BigDecimal value;

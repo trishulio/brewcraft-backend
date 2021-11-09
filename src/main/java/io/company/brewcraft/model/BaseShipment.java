@@ -30,5 +30,5 @@ public interface BaseShipment<T extends BaseMaterialLot<? extends BaseShipment<T
 
     List<T> getLots();
 
-    void setLots(List<T> items);
+    void setLots(List<T> lots);
 }

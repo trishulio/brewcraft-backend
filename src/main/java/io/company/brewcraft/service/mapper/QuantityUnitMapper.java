@@ -37,8 +37,6 @@ public abstract class QuantityUnitMapper {
             unit = this.map.get(symbol);
         }
 
-        logger.info("Mapping for symbol: {} is: {}", symbol, unit);
-
         return unit;
     }
 
@@ -50,9 +48,23 @@ public abstract class QuantityUnitMapper {
         return unit;
     }
 
-    public abstract String toSymbol(Unit<?> unit);
+    public String toSymbol(Unit<?> unit) {
+        String symbol = null;
+        if (unit != null) {
+            symbol = unit.toString();
+        }
 
-    public abstract UnitEntity toEntity(Unit<?> unit);
+        return symbol;
+    }
+
+    public UnitEntity toEntity(Unit<?> unit) {
+        UnitEntity entity = null;
+        if (unit != null) {
+            entity = new UnitEntity(unit.toString());
+        }
+
+        return entity;
+    }
 
     Unit<?> fromDto(UnitDto dto) {
         Unit<?> unit = null;
@@ -63,7 +75,14 @@ public abstract class QuantityUnitMapper {
         return unit;
     }
 
-    public abstract UnitDto toDto(Unit<?> unit);
+    public UnitDto toDto(Unit<?> unit) {
+        UnitDto dto = null;
+        if (unit != null) {
+            dto = new UnitDto(toSymbol(unit));
+        }
+
+        return dto;
+    }
 
     private Map<String, Unit<?>> getAllUnits() {
         try {
@@ -85,7 +104,7 @@ public abstract class QuantityUnitMapper {
                          .filter(field -> isPublicStaticFinal.test(field.getModifiers()) && !field.getName().contains("DEFAULT"))
                          .map(getValue)
                          .filter(o -> o instanceof Unit)
-                         .collect(Collectors.toMap(o -> ((Unit<?>) o).toString(), o -> (Unit<?>) o));
+                         .collect(Collectors.toMap(o -> toSymbol(((Unit<?>) o)), o -> (Unit<?>) o));
 
             return unitMap;
         } catch (IllegalArgumentException e) {

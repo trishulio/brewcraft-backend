@@ -11,12 +11,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = "invoice_status")
 @Table
-public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Audited, Identified<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
 

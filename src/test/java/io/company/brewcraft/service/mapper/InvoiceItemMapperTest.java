@@ -103,7 +103,7 @@ public class InvoiceItemMapperTest {
             7L,
             1
         );
-        InvoiceItem item = mapper.fromDto(dto);
+        InvoiceItem item = mapper.fromUpdateDto(dto);
 
         assertEquals(1L, item.getId());
         assertEquals("desc2", item.getDescription());
@@ -116,6 +116,6 @@ public class InvoiceItemMapperTest {
 
     @Test
     public void testFromDto_ReturnsNull_WhenUpdateInvoiceItemIsNull() {
-        assertNull(mapper.fromDto((UpdateInvoiceItemDto) null));
+        assertNull(mapper.fromUpdateDto((UpdateInvoiceItemDto) null));
     }
 }

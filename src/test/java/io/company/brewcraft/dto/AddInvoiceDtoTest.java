@@ -39,9 +39,9 @@ public class AddInvoiceDtoTest {
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
-        assertEquals(99L, invoice.getStatusId());
-        assertEquals(1, invoice.getItems().size());
-        assertEquals(new AddInvoiceItemDto(), invoice.getItems().get(0));
+        assertEquals(99L, invoice.getInvoiceStatusId());
+        assertEquals(1, invoice.getInvoiceItems().size());
+        assertEquals(new AddInvoiceItemDto(), invoice.getInvoiceItems().get(0));
     }
 
     @Test
@@ -95,15 +95,15 @@ public class AddInvoiceDtoTest {
 
     @Test
     public void testAccessStatus() {
-        assertNull(invoice.getStatusId());
-        invoice.setStatusId(99L);
-        assertEquals(99L, invoice.getStatusId());
+        assertNull(invoice.getInvoiceStatusId());
+        invoice.setInvoiceStatusId(99L);
+        assertEquals(99L, invoice.getInvoiceStatusId());
     }
 
     @Test
-    public void testAccessItems() {
-        assertNull(invoice.getItems());
-        invoice.setItems(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)));
-        assertEquals(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)), invoice.getItems());
+    public void testAccessInvoiceItems() {
+        assertNull(invoice.getInvoiceItems());
+        invoice.setInvoiceItems(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)));
+        assertEquals(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)), invoice.getInvoiceItems());
     }
 }

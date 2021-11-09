@@ -64,7 +64,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new ProcurementLot.AggregationField[] { ProcurementLot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -107,7 +107,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new ProcurementLot.AggregationField[] { ProcurementLot.AggregationField.ID }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -150,7 +150,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new ProcurementLot.AggregationField[] { ProcurementLot.AggregationField.LOT_NUMBER }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -193,7 +193,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new ProcurementLot.AggregationField[] { ProcurementLot.AggregationField.MATERIAL }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -236,7 +236,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new ProcurementLot.AggregationField[] { ProcurementLot.AggregationField.LOT_NUMBER }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size
@@ -279,7 +279,7 @@ public class LotAggregationServiceTest {
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
             new StockLot.AggregationField[] { StockLot.AggregationField.ID }, // groupBy
-            new TreeSet<>(List.of("id")), // sortBy
+            new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
             10 // size

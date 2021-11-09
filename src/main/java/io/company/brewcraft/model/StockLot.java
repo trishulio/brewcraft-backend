@@ -6,11 +6,14 @@ import javax.measure.Quantity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Immutable;
 
 @Entity(name = "stock_lot")
 @Table
 @Immutable
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class StockLot extends Lot {
     public StockLot() {
         super();

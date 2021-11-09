@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,5 +53,15 @@ public class PageDtoTest {
     public void testAccessTotalPages() {
         dto.setTotalPages(99);
         assertEquals(99, dto.getTotalPages());
+    }
+
+    @Test
+    public void testIterator_ReturnsContentIterator() {
+        dto.setContent(List.of(new DummyDto()));
+
+        Iterator<DummyDto> it = dto.iterator();
+
+        assertTrue(it.hasNext());
+        assertEquals(new DummyDto(), it.next());
     }
 }

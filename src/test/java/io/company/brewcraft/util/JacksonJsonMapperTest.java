@@ -3,7 +3,12 @@ package io.company.brewcraft.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import javax.measure.Quantity;
+import javax.measure.Unit;
+
+import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -82,9 +87,92 @@ public class JacksonJsonMapperTest {
     }
 
     @Test
+    public void testQuantityDeserialization_ReturnsQuantityWithValueAndUnit_WhenJsonIsNotNull() {
+        String json = "{\"symbol\":\"kg\",\"value\":10.99}";
+
+        Quantity<?> qty = mapper.readString(json, Quantity.class);
+
+        assertEquals(Quantities.getQuantity("10.99 kg"), qty);
+    }
+
+    @Test
+    public void testQuantityDeserialization_ReturnsNull_WhenJsonIsNull() {
+        Quantity<?> qty = mapper.readString("null", Quantity.class);
+        assertNull(qty);
+    }
+
+    @Test
     public void testUnitSerialization_ReturnsJsonWithSymbol_WhenUnitIsNotNull() {
         String json = mapper.writeString(Units.KILOGRAM);
 
         assertEquals("{\"symbol\":\"kg\"}", json);
+    }
+
+    @Test
+    public void testUnitDeserialization_ReturnsUnit_WhenJsonIsNotNull() {
+        String json = "{\"symbol\":\"kg\"}";
+
+        Unit<?> unit = mapper.readString(json, Unit.class);
+
+        assertEquals(Units.KILOGRAM, unit);
+    }
+
+    @Test
+    public void testUnitDeserialization_ReturnsNull_WhenJsonIsNull() {
+        String json = "null";
+
+        Unit<?> unit = mapper.readString(json, Unit.class);
+
+        assertNull(unit);
+    }
+
+    @Test
+    public void testMoneySerialization_ReturnsMoneyJson_WhenEntityIsNotNull() {
+        Money money = Money.parse("CAD 10");
+        String json = mapper.writeString(money);
+
+        assertEquals("{\"currency\":\"CAD\",\"amount\":10}", json);
+    }
+
+    @Test
+    public void testMoneySerialization_ReturnsNullString_WhenEntityIsNull() {
+        String json = mapper.writeString(null);
+
+        assertEquals("null", json);
+    }
+
+    @Test
+    public void testMoneyDeserialization_ReturnsMoney_WhenJsonIsNotNull() {
+        String json = "{\"currency\":\"CAD\",\"amount\":10}";
+        Money money = mapper.readString(json, Money.class);
+
+        assertEquals(Money.parse("CAD 10"), money);
+    }
+
+    @Test
+    public void testMoneyDeserialization_ReturnsNull_WhenJsonStringIsNull() {
+        String json = "null";
+        Money money = mapper.readString(json, Money.class);
+
+        assertNull(money);
+    }
+
+    @Test
+    public void testLocalDateTimeDeserialization_ReturnsTimestamp_WhenStringIsNotNull() {
+        String json = "\"2020-12-31T12:00:00\"";
+
+        LocalDateTime d = mapper.readString(json, LocalDateTime.class);
+
+        LocalDateTime expected = LocalDateTime.of(2020, 12, 31, 12, 0, 0);
+        assertEquals(expected, d);
+    }
+
+    @Test
+    public void testLocalDateTimeSerialization_ReturnsISOTimestamp_WhenDateIsNotNull() {
+        LocalDateTime date = LocalDateTime.of(2020, 12, 31, 12, 0, 0);
+
+        String json = mapper.writeString(date);
+
+        assertEquals("\"2020-12-31T12:00:00\"", json);
     }
 }

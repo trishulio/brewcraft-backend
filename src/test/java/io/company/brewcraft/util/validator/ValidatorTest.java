@@ -69,4 +69,16 @@ public class ValidatorTest {
     public void testAssertion_DoesNotThrowException_WhenConditionIsTrue() {
         Validator.assertion(true, RuntimeException.class, "This will never be thrown");
     }
+
+    @Test
+    public void testHasErrors_ReturnsTrue_WhenAtleastOneErrorExists() {
+        validator.rule(false, "Error");
+
+        assertTrue(validator.hasErrors());
+    }
+
+    @Test
+    public void testHasErrors_ReturnsFalse_WhenNoErrorExists() {
+        assertFalse(validator.hasErrors());
+    }
 }

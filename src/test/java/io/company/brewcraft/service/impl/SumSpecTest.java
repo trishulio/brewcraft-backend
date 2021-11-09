@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaSpec;
+import io.company.brewcraft.service.SelectColumnSpec;
 import io.company.brewcraft.service.SumSpec;
 
 public class SumSpecTest {
@@ -43,5 +45,21 @@ public class SumSpecTest {
 
         spec = new SumSpec<>(mDelegate);
         assertSame(mSumExpr, spec.getExpression(mRoot, mCq, mCb));
+    }
+
+    @Test
+    public void testConstructor_PathProvider_AddsSelectColumnWithPathFromProvider() {
+        spec = new SumSpec<>(() -> new String[] { "PATH_1", "PATH_2" });
+
+        SumSpec<Number> expected = new SumSpec<>(new SelectColumnSpec<>(new String[] { "PATH_1", "PATH_2" }));
+        assertEquals(expected, spec);
+    }
+
+    @Test
+    public void testConstructor_StringString_AddsSelectColumnWithPathValues() {
+        spec = new SumSpec<>(new String[] { "JOIN_1", "JOIN_2" }, new String[] { "PATH_1", "PATH_2" });
+
+        SumSpec<Number> expected = new SumSpec<>(new SelectColumnSpec<>(new String[] { "JOIN_1", "JOIN_2" }, new String[] { "PATH_1", "PATH_2" }));
+        assertEquals(expected, spec);
     }
 }

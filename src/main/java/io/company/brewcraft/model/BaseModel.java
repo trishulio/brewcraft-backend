@@ -5,17 +5,31 @@ import java.util.Set;
 import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
-public abstract class BaseModel {
-    protected ReflectionManipulator util;
-    protected JsonMapper jsonMapper;
+public abstract class BaseModel implements Cloneable {
 
-    protected BaseModel() {
-        this(ReflectionManipulator.INSTANCE, JsonMapper.INSTANCE);
+    protected static ReflectionManipulator util;
+    protected static JsonMapper jsonMapper;
+
+    static {
+        BaseModel.util = ReflectionManipulator.INSTANCE;
+        BaseModel.jsonMapper = JsonMapper.INSTANCE;
+    }
+
+    public BaseModel() {
     }
 
     protected BaseModel(ReflectionManipulator util, JsonMapper jsonMapper) {
-        this.util = util;
-        this.jsonMapper = jsonMapper;
+        // Note: This prevents the tests from running in parallel (project-wide).
+        // This constructor is used in unit tests to inject mock values. However,
+        // since these are static values, that means the mocks are injected at the
+        // class level. If tests are being run in parallel, a call to this constructor
+        // will replace these instances with mocks and cause the other tests to fail.
+        // We currently don't run tests in parallel so it's fine.
+        // Recommendation: BaseModel being an abstract should not have unit-tests in the
+        // first place. The logic should be tested by the subclasses themselves. But I
+        // am leaving them now because they tests some common edge cases.
+        BaseModel.util = util;
+        BaseModel.jsonMapper = jsonMapper;
     }
 
     public void outerJoin(Object other) {
@@ -38,6 +52,15 @@ public abstract class BaseModel {
         util.copy(this, other, pd -> include.contains(pd.getName()));
     }
 
+    public <T extends BaseModel> T deepClone() {
+        @SuppressWarnings("unchecked")
+        Class<T> clazz = (Class<T>) this.getClass();
+
+        String json = this.toString();
+
+        return fromString(json, clazz);
+    }
+
     @Override
     public boolean equals(Object o) {
         return util.equals(this, o);
@@ -46,5 +69,9 @@ public abstract class BaseModel {
     @Override
     public String toString() {
         return jsonMapper.writeString(this);
+    }
+
+    public static <T extends BaseModel> T fromString(String str, Class<T> clazz) {
+        return (T) jsonMapper.readString(str, clazz);
     }
 }

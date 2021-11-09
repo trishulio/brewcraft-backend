@@ -136,7 +136,7 @@ public class SupplierTest {
 
         Supplier supplier = new Supplier(id, name, contacts, address, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"Supplier1\",\"address\":{\"addressLine1\":null,\"addressLine2\":null,\"country\":null,\"province\":null,\"city\":null,\"postalCode\":null,\"createdAt\":null,\"lastUpdated\":null,\"id\":null},\"createdAt\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfWeek\":\"THURSDAY\",\"dayOfYear\":2,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"Supplier1\",\"address\":{\"addressLine1\":null,\"addressLine2\":null,\"country\":null,\"province\":null,\"city\":null,\"postalCode\":null,\"createdAt\":null,\"lastUpdated\":null,\"id\":null},\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, supplier.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

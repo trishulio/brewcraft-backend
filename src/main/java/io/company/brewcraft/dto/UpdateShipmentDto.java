@@ -4,25 +4,41 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class UpdateShipmentDto extends BaseDto {
+    private Long id;
     private String shipmentNumber;
     private String description;
-    private Long statusId;
+    private Long shipmentStatusId;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
     private Collection<UpdateMaterialLotDto> lots;
     private Integer version;
 
     public UpdateShipmentDto() {
+        super();
     }
 
-    public UpdateShipmentDto(String shipmentNumber, String description, Long statusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateMaterialLotDto> lots, Integer version) {
+    public UpdateShipmentDto(Long id) {
+        this();
+        setId(id);
+    }
+
+    public UpdateShipmentDto(Long id, String shipmentNumber, String description, Long shipmentStatusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<UpdateMaterialLotDto> lots, Integer version) {
+        this(id);
         setShipmentNumber(shipmentNumber);
         setDescription(description);
-        setStatusId(statusId);
+        setShipmentStatusId(shipmentStatusId);
         setDeliveryDueDate(deliveryDueDate);
         setDeliveredDate(deliveredDate);
         setLots(lots);
         setVersion(version);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getShipmentNumber() {
@@ -40,12 +56,12 @@ public class UpdateShipmentDto extends BaseDto {
         this.description = description;
     }
 
-    public Long getStatusId() {
-        return statusId;
+    public Long getShipmentStatusId() {
+        return shipmentStatusId;
     }
 
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public void setShipmentStatusId(Long shipmentStatusId) {
+        this.shipmentStatusId = shipmentStatusId;
     }
 
     public LocalDateTime getDeliveryDueDate() {

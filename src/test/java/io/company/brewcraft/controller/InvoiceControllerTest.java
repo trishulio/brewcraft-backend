@@ -1,8 +1,8 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,82 +10,51 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.AddInvoiceDto;
-import io.company.brewcraft.dto.AddInvoiceItemDto;
-import io.company.brewcraft.dto.FreightDto;
+import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.InvoiceDto;
-import io.company.brewcraft.dto.InvoiceItemDto;
-import io.company.brewcraft.dto.InvoiceStatusDto;
-import io.company.brewcraft.dto.MaterialDto;
-import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.PageDto;
-import io.company.brewcraft.dto.PurchaseOrderDto;
-import io.company.brewcraft.dto.QuantityDto;
-import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
-import io.company.brewcraft.dto.UpdateInvoiceItemDto;
-import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.InvoiceItem;
-import io.company.brewcraft.model.InvoiceStatus;
-import io.company.brewcraft.model.Material;
-import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.util.SupportedUnits;
-import io.company.brewcraft.util.controller.AttributeFilter;
-import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class InvoiceControllerTest {
 
    private InvoiceController controller;
 
+   private CrudControllerService<
+               Long,
+               Invoice,
+               BaseInvoice<? extends BaseInvoiceItem<?>>,
+               UpdateInvoice<? extends UpdateInvoiceItem<?>>,
+               InvoiceDto,
+               AddInvoiceDto,
+               UpdateInvoiceDto
+           > mCrudController;
+
    private InvoiceService mService;
-   private AttributeFilter filter;
 
    @BeforeEach
    public void init() {
+       this.mCrudController = mock(CrudControllerService.class);
        this.mService = mock(InvoiceService.class);
-       this.filter = new AttributeFilter();
-
-       this.controller = new InvoiceController(this.mService, this.filter);
+       this.controller = new InvoiceController(mCrudController, mService);
    }
 
    @Test
-   public void testGetInvoices_CallsServicesWithArguments_AndReturnsPageDtoOfInvoiceDtosMappedFromInvoicesPage() {
-       final List<Invoice> mInvoices = List.of(
-           new Invoice(
-               12345L,
-               "ABCDE-12345",
-               "desc1",
-               new PurchaseOrder(1L),
-               LocalDateTime.of(1999, 1, 1, 12, 0),
-               LocalDateTime.of(2000, 1, 1, 12, 0),
-               LocalDateTime.of(2001, 1, 1, 12, 0),
-               new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
-               LocalDateTime.of(2002, 1, 1, 12, 0),
-               LocalDateTime.of(2003, 1, 1, 12, 0),
-               new InvoiceStatus(99L),
-               List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
-               1
-           )
-       );
-       final Page<Invoice> mPage = mock(Page.class);
-       doReturn(mInvoices.stream()).when(mPage).stream();
-       doReturn(100).when(mPage).getTotalPages();
-       doReturn(1000L).when(mPage).getTotalElements();
-       doReturn(mPage).when(this.mService).getInvoices(
+   public void testGetAllInvoice_ReturnsDtosFromController() {
+       doReturn(new PageImpl<>(List.of(new Invoice(1L)))).when(mService).getInvoices(
            Set.of(1L),
            Set.of(2L),
-           Set.of("ABCDE-12345"),
+           Set.of("Invoice Number"),
            Set.of("invoice description"),
            Set.of("item description"),
            LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -107,11 +76,12 @@ public class InvoiceControllerTest {
            1,
            10
        );
+       doReturn(new PageDto<>(List.of(new InvoiceDto(1L)), 1, 1)).when(mCrudController).getAll(new PageImpl<>(List.of(new Invoice(1L))), Set.of(""));
 
-       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
+       PageDto<InvoiceDto> page = this.controller.getAll(
            Set.of(1L),
            Set.of(2L),
-           Set.of("ABCDE-12345"),
+           Set.of("Invoice Number"),
            Set.of("invoice description"),
            Set.of("item description"),
            LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -132,341 +102,54 @@ public class InvoiceControllerTest {
            true,
            1,
            10,
-           Set.of() // empty means no fields should be filtered out, i.e. no field should be null
+           Set.of("")
        );
 
-       assertEquals(100, dto.getTotalPages());
-       assertEquals(1000L, dto.getTotalElements());
-       assertEquals(1, dto.getContent().size());
-       final InvoiceDto invoice = dto.getContent().get(0);
-       assertEquals(12345L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrderDto(1L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))), invoice.getFreight());
-       assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
-       assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
-       assertEquals(1, invoice.getItems().size());
-       final InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(1L, item.getId());
-       assertEquals("desc2", item.getDescription());
-       assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
-       assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
-       assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
+       PageDto<InvoiceDto> expected = new PageDto<>(List.of(new InvoiceDto(1L)), 1, 1);
+       assertEquals(expected, page);
    }
 
    @Test
-   public void testGetInvoices_CallsServicesWithArguments_AndReturnsPageDtoWithAllFieldsFilteredOut() {
-       final List<Invoice> mInvoices = List.of(
-           new Invoice(
-               12345L,
-               "ABCDE-12345",
-               "desc1",
-               new PurchaseOrder(1L),
-               LocalDateTime.of(1999, 1, 1, 12, 0),
-               LocalDateTime.of(2000, 1, 1, 12, 0),
-               LocalDateTime.of(2001, 1, 1, 12, 0),
-               new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
-               LocalDateTime.of(2002, 1, 1, 12, 0),
-               LocalDateTime.of(2003, 1, 1, 12, 0),
-               new InvoiceStatus(99L),
-               List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
-               1
-           )
-       );
-       final Page<Invoice> mPage = mock(Page.class);
-       doReturn(mInvoices.stream()).when(mPage).stream();
-       doReturn(100).when(mPage).getTotalPages();
-       doReturn(1000L).when(mPage).getTotalElements();
-       doReturn(mPage).when(this.mService).getInvoices(
-           Set.of(1L),
-           Set.of(2L),
-           Set.of("ABCDE-12345"),
-           Set.of("invoice description"),
-           Set.of("item description"),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           LocalDateTime.of(2004, 1, 1, 12, 0),
-           Set.of(3L),
-           Set.of(4L),
-           new BigDecimal("1"),
-           new BigDecimal("2"),
-           new BigDecimal("3"),
-           new BigDecimal("4"),
-           Set.of(99L),
-           Set.of(4L),
-           new TreeSet<>(List.of("id")),
-           true,
-           1,
-           10
-       );
+   public void testGetInvoice_ReturnsDtoFromController() {
+       doReturn(new InvoiceDto(1L)).when(mCrudController).get(1L, Set.of(""));
 
-       final PageDto<InvoiceDto> dto = this.controller.getInvoices(
-           Set.of(1L),
-           Set.of(2L),
-           Set.of("ABCDE-12345"),
-           Set.of("invoice description"),
-           Set.of("item description"),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           LocalDateTime.of(2004, 1, 1, 12, 0),
-           Set.of(3L),
-           Set.of(4L),
-           new BigDecimal("1"),
-           new BigDecimal("2"),
-           new BigDecimal("3"),
-           new BigDecimal("4"),
-           Set.of(99L),
-           Set.of(4L),
-           new TreeSet<>(List.of("id")),
-           true,
-           1,
-           10,
-           Set.of("id")
-       );
+       InvoiceDto dto = this.controller.getInvoice(1L, Set.of(""));
 
-       assertEquals(100, dto.getTotalPages());
-       assertEquals(1000L, dto.getTotalElements());
-       assertEquals(1, dto.getContent().size());
-       final InvoiceDto invoice = dto.getContent().get(0);
-       assertEquals(12345L, invoice.getId());
-       assertNull(invoice.getInvoiceNumber());
-       assertNull(invoice.getDescription());
-       assertNull(invoice.getPurchaseOrder());
-       assertNull(invoice.getGeneratedOn());
-       assertNull(invoice.getReceivedOn());
-       assertNull(invoice.getPaymentDueDate());
-       assertNull(invoice.getFreight());
-       assertNull(invoice.getCreatedAt());
-       assertNull(invoice.getLastUpdated());
-       assertNull(invoice.getStatus());
-       assertNull(invoice.getItems());
+       InvoiceDto expected = new InvoiceDto(1L);
+       assertEquals(expected, dto);
    }
 
    @Test
-   public void testGetInvoice_ReturnsInvoiceDtoMappedFromServiceInvoice() {
-       final Invoice mInvoice = new Invoice(
-           12345L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(1L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
-           1
-       );
-       doReturn(mInvoice).when(this.mService).get(1L);
+   public void testDeleteInvoices_ReturnsDeleteCountFromController() {
+       doReturn(1).when(mCrudController).delete(Set.of(1L));
 
-       final InvoiceDto invoice = this.controller.getInvoice(1L, Set.of());
-       assertEquals(12345L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrderDto(1L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))), invoice.getFreight());
-       assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), invoice.getCreatedAt());
-       assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
-       assertEquals(1, invoice.getItems().size());
-       final InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(2L, item.getId());
-       assertEquals("desc2", item.getDescription());
-       assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
-       assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
-       assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
+       assertEquals(1, this.controller.deleteInvoices(Set.of(1L)));
    }
 
    @Test
-   public void testGetInvoice_FiltersOutAllAttributesExceptId_WhenAttributeSetOnlyContainsId() {
-       final Invoice mInvoice = new Invoice(
-           12345L,
-           "ABCDE-12345",
-           "desc1",
-           new PurchaseOrder(1L),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
-           LocalDateTime.of(2002, 1, 1, 12, 0),
-           LocalDateTime.of(2003, 1, 1, 12, 0),
-           new InvoiceStatus(99L),
-           List.of(new InvoiceItem(2L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
-           1
-       );
-       doReturn(mInvoice).when(this.mService).get(1L);
+   public void testAddInvoices_AddsToControllerAndReturnsListOfDtos() {
+       doReturn(List.of(new InvoiceDto(1L))).when(mCrudController).add(List.of(new AddInvoiceDto()));
 
-       final InvoiceDto invoice = this.controller.getInvoice(1L, Set.of("id"));
+       List<InvoiceDto> dtos = this.controller.addInvoice(List.of(new AddInvoiceDto()));
 
-       assertEquals(12345L, invoice.getId());
-       assertNull(invoice.getInvoiceNumber());
-       assertNull(invoice.getDescription());
-       assertNull(invoice.getPurchaseOrder());
-       assertNull(invoice.getGeneratedOn());
-       assertNull(invoice.getReceivedOn());
-       assertNull(invoice.getPaymentDueDate());
-       assertNull(invoice.getFreight());
-       assertNull(invoice.getCreatedAt());
-       assertNull(invoice.getLastUpdated());
-       assertNull(invoice.getStatus());
-       assertNull(invoice.getItems());
+       assertEquals(List.of(new InvoiceDto(1L)), dtos);
    }
 
    @Test
-   public void testGetInvoice_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
-       doReturn(null).when(this.mService).get(1L);
-       assertThrows(EntityNotFoundException.class, () -> this.controller.getInvoice(1L, Set.of()), "Invoice not found with id: 1");
+   public void testUpdateInvoices_PutsToControllerAndReturnsListOfDtos() {
+       doReturn(List.of(new InvoiceDto(1L))).when(mCrudController).put(List.of(new UpdateInvoiceDto(1L)));
+
+       List<InvoiceDto> dtos = this.controller.updateInvoice(List.of(new UpdateInvoiceDto(1L)));
+
+       assertEquals(List.of(new InvoiceDto(1L)), dtos);
    }
 
    @Test
-   public void testDeleteInvoices_ReturnsDeleteCountFromService() {
-       doReturn(99).when(this.mService).delete(Set.of(1L, 11L, 111L));
-       int count = this.controller.deleteInvoices(Set.of(1L, 11L, 111L));
-       assertEquals(99, count);
+   public void testPatchInvoices_PatchToControllerAndReturnsListOfDtos() {
+       doReturn(List.of(new InvoiceDto(1L))).when(mCrudController).patch(List.of(new UpdateInvoiceDto(1L)));
 
-       doReturn(9999).when(this.mService).delete(Set.of(1L, 11L, 111L));
-       count = this.controller.deleteInvoices(Set.of(1L, 11L, 111L));
-       assertEquals(9999, count);
-   }
+       List<InvoiceDto> dtos = this.controller.patchInvoice(List.of(new UpdateInvoiceDto(1L)));
 
-   @Test
-   public void testAddInvoice_ReturnsInvoiceDtoAfterAddingToService() {
-       doAnswer(i -> i.getArgument(0)).when(this.mService).add(anyList());
-
-       final AddInvoiceDto payload = new AddInvoiceDto(
-           "ABCDE-12345",
-           2L,
-           "desc1",
-           new FreightDto(new MoneyDto("CAD", new BigDecimal("4"))),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           99L,
-           List.of(new AddInvoiceItemDto("desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L))
-       );
-
-       final InvoiceDto invoice = this.controller.addInvoice(payload);
-       assertEquals(null, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrderDto(2L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
-       assertEquals(null, invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
-       assertEquals(1, invoice.getItems().size());
-       final InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(null, item.getId());
-       assertEquals("desc2", item.getDescription());
-       assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
-       assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
-       assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L), item.getMaterial());
-       assertEquals(null, item.getVersion());
-   }
-
-   @Test
-   public void testUpdateInvoice_ReturnsInvoiceDtoAfterUpdatingItToService() {
-       doAnswer(i -> i.getArgument(0)).when(this.mService).put(anyList());
-
-       final UpdateInvoiceDto payload = new UpdateInvoiceDto(
-           "ABCDE-12345",
-           2L,
-           "desc1",
-           new FreightDto(new MoneyDto("CAD", new BigDecimal("4"))),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           99L,
-           List.of(new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L, 1)),
-           1
-       );
-
-       final InvoiceDto invoice = this.controller.updateInvoice(1L, payload);
-
-       assertEquals(1L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrderDto(2L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
-       assertEquals(null, invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
-       assertEquals(1, invoice.getItems().size());
-       final InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(1L, item.getId());
-       assertEquals("desc2", item.getDescription());
-       assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
-       assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
-       assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
-   }
-
-   @Test
-   public void testPatchInvoice_ReturnsInvoiceDtoAfterPatchingItToService() {
-       doAnswer(i -> i.getArgument(0)).when(this.mService).patch(anyList());
-
-       final UpdateInvoiceDto payload = new UpdateInvoiceDto(
-           "ABCDE-12345",
-           2L,
-           "desc1",
-           new FreightDto(new MoneyDto("CAD", new BigDecimal("4"))),
-           LocalDateTime.of(1999, 1, 1, 12, 0),
-           LocalDateTime.of(2000, 1, 1, 12, 0),
-           LocalDateTime.of(2001, 1, 1, 12, 0),
-           99L,
-           List.of(new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("KG", new BigDecimal("1")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L, 1)),
-           1
-       );
-
-       final InvoiceDto invoice = this.controller.patchInvoice(1L, payload);
-
-       assertEquals(1L, invoice.getId());
-       assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
-       assertEquals("desc1", invoice.getDescription());
-       assertEquals(new PurchaseOrderDto(2L), invoice.getPurchaseOrder());
-       assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
-       assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
-       assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
-       assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("4.00"))), invoice.getFreight());
-       assertEquals(null, invoice.getCreatedAt());
-       assertEquals(null, invoice.getLastUpdated());
-       assertEquals(new InvoiceStatusDto(99L), invoice.getStatus());
-       assertEquals(1, invoice.getItems().size());
-       final InvoiceItemDto item = invoice.getItems().get(0);
-       assertEquals(1L, item.getId());
-       assertEquals("desc2", item.getDescription());
-       assertEquals(new QuantityDto("KG", new BigDecimal("1")), item.getQuantity());
-       assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), item.getPrice());
-       assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), item.getTax());
-       assertEquals(new MaterialDto(7L), item.getMaterial());
-       assertEquals(1, item.getVersion());
+       assertEquals(List.of(new InvoiceDto(1L)), dtos);
    }
 }

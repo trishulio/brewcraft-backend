@@ -25,7 +25,6 @@ public interface MixtureMaterialPortionMapper {
     @Mapping(target = "mixture", source = "mixtureId")
     MixtureMaterialPortion fromDto(AddMixtureMaterialPortionDto dto);
 
-    @Mapping(target = MaterialPortion.ATTR_ID, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MaterialPortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "materialLot", source = "materialLotId")

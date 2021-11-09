@@ -9,8 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "FACILITY_ADDRESS")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class FacilityAddress extends AddressEntity {
 
     @Id

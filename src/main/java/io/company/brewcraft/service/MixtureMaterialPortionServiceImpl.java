@@ -1,11 +1,9 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
-
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
@@ -27,7 +25,6 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
-import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.exception.MaterialLotQuantityNotAvailableException;
@@ -38,11 +35,14 @@ import io.company.brewcraft.util.validator.Validator;
 public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionService implements MixtureMaterialPortionService {
     private static final Logger log = LoggerFactory.getLogger(MixtureMaterialPortionServiceImpl.class);
 
-    private MixtureMaterialPortionRepository mixtureMaterialPortionRepository;
-
-    public MixtureMaterialPortionServiceImpl(MixtureMaterialPortionRepository mixtureMaterialPortionRepository, StockLotService stockLotService) {
+    private final RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService;
+    
+    private final UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService;
+    
+    public MixtureMaterialPortionServiceImpl(RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService, UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService, StockLotService stockLotService) {
         super(stockLotService);
-        this.mixtureMaterialPortionRepository = mixtureMaterialPortionRepository;
+        this.repoService = repoService;
+        this.updateService = updateService;
     }
 
     @Override
@@ -55,27 +55,30 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
                                                                   .in(new String[] {MixtureRecording.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
                                                                   .build();
 
-            Page<MixtureMaterialPortion> materialPortionsPage = mixtureMaterialPortionRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
+            Page<MixtureMaterialPortion> materialPortionsPage = repoService.getAll(spec, sort, orderAscending, page, size);
 
             return materialPortionsPage;
     }
 
     @Override
     public MixtureMaterialPortion getMaterialPortion(Long materialPortionId) {
-        MixtureMaterialPortion materialPortion = mixtureMaterialPortionRepository.findById(materialPortionId).orElse(null);
-
-        return materialPortion;
+        return this.repoService.get(materialPortionId);
     }
 
     @Override
-    public List<MixtureMaterialPortion> addMaterialPortions(List<MixtureMaterialPortion> materialPortions) {
-        mixtureMaterialPortionRepository.refresh(materialPortions);
-
+    public List<MixtureMaterialPortion> addMaterialPortions(List<BaseMixtureMaterialPortion> materialPortions) {
+        if (materialPortions == null) {
+            return null;
+        }
+        
+        List<Long> lotIds = materialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
+        
         materialPortions.forEach(materialPortion -> {
             Validator.assertion(new BigDecimal(materialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
         });
 
-        Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getMaterialLot().getId(), MixtureMaterialPortion::getQuantity));
+        Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getMaterialLot().getId(), BaseMixtureMaterialPortion::getQuantity));
         Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotToQuantity);
 
         Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
@@ -84,102 +87,124 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
         }
 
-        List<MixtureMaterialPortion> addedMaterialPortions = mixtureMaterialPortionRepository.saveAll(materialPortions);
-        mixtureMaterialPortionRepository.flush();
+        final List<MixtureMaterialPortion> entities = this.updateService.getAddEntities(materialPortions);
 
-        return addedMaterialPortions;
+        return this.repoService.saveAll(entities);
     }
 
     @Override
-    public MixtureMaterialPortion addMaterialPortion(MixtureMaterialPortion materialPortion) {
+    public MixtureMaterialPortion addMaterialPortion(BaseMixtureMaterialPortion materialPortion) {
         return this.addMaterialPortions(List.of(materialPortion)).get(0);
     }
 
     @Override
-    public MixtureMaterialPortion putMaterialPortion(Long materialPortionId, MixtureMaterialPortion putMaterialPortion) {
-        mixtureMaterialPortionRepository.refresh(List.of(putMaterialPortion));
-
-        Validator.assertion(new BigDecimal(putMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
-
-        MixtureMaterialPortion existingMaterialPortion = getMaterialPortion(materialPortionId);
-
-        if (existingMaterialPortion == null) {
-            existingMaterialPortion = putMaterialPortion;
-            existingMaterialPortion.setId(materialPortionId);
-
-            Boolean quantityAvailable = this.isQuantityAvailable(existingMaterialPortion.getMaterialLot().getId(), existingMaterialPortion.getQuantity());
-
-            if (!quantityAvailable) {
-                throw new MaterialLotQuantityNotAvailableException(Set.of(existingMaterialPortion.getMaterialLot().getId()));
-            }
-        } else {
-            existingMaterialPortion.optimisticLockCheck(putMaterialPortion);
-
-            boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existingMaterialPortion.getMaterialLot().getId();
-
-            //If put is on the same lot, we only need to check if the difference in quantity is available
-            Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.subtract(putMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity()) : putMaterialPortion.getQuantity();
-
-            if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
-                Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), quantityToCheck);
+    public List<MixtureMaterialPortion> putMaterialPortions(List<UpdateMixtureMaterialPortion> putMaterialPortions) {
+        if (putMaterialPortions == null) {
+            return null;
+        }
+        
+        List<Long> lotIds = putMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
+        
+        final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(putMaterialPortions);
+        Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
+          
+        putMaterialPortions.forEach(putMaterialPortion -> {
+            Validator.assertion(new BigDecimal(putMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
+            
+            boolean isNewMaterialPortion = putMaterialPortion.getId() == null || !idToExistingEntity.containsKey(putMaterialPortion.getId());
+            
+            if (isNewMaterialPortion) {
+                Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), putMaterialPortion.getQuantity());
 
                 if (!quantityAvailable) {
                     throw new MaterialLotQuantityNotAvailableException(Set.of(putMaterialPortion.getMaterialLot().getId()));
                 }
-            }
+            } else {
+                MixtureMaterialPortion existing = idToExistingEntity.get(putMaterialPortion.getId());
+                
+                boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
 
-            existingMaterialPortion.override(putMaterialPortion, getPropertyNames(BaseMixtureMaterialPortion.class));
-        }
+                //If put is on the same lot, we only need to check if the difference in quantity is available
+                Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.subtract(putMaterialPortion.getQuantity(), existing.getQuantity()) : putMaterialPortion.getQuantity();
 
-        return mixtureMaterialPortionRepository.saveAndFlush(existingMaterialPortion);
-    }
+                if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                    Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), quantityToCheck);
 
-    @Override
-    public MixtureMaterialPortion patchMaterialPortion(Long materialPortionId, MixtureMaterialPortion patchMaterialPortion) {
-        MixtureMaterialPortion existingMaterialPortion = Optional.ofNullable(getMaterialPortion(materialPortionId)).orElseThrow(() -> new EntityNotFoundException("MaterialPortion", materialPortionId.toString()));
-
-        mixtureMaterialPortionRepository.refresh(List.of(existingMaterialPortion));
-
-        if (patchMaterialPortion.getQuantity() != null) {
-            Validator.assertion(new BigDecimal(patchMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
-        }
-
-        existingMaterialPortion.optimisticLockCheck(patchMaterialPortion);
-
-        boolean isPatchOnSameLot = patchMaterialPortion.getMaterialLot() == null || patchMaterialPortion.getMaterialLot().getId() == null
-                || patchMaterialPortion.getMaterialLot().getId() == existingMaterialPortion.getMaterialLot().getId();
-
-        boolean isQuantityCheckRequired = (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) || !isPatchOnSameLot;
-
-        if (isQuantityCheckRequired) {
-            Long lotIdToCheck = isPatchOnSameLot ? existingMaterialPortion.getMaterialLot().getId() : patchMaterialPortion.getMaterialLot().getId();
-
-            //If patch is on the same lot, we only need to check if the difference in quantity is available
-            Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.subtract(patchMaterialPortion.getQuantity(), existingMaterialPortion.getQuantity()) :
-                patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existingMaterialPortion.getQuantity();
-
-            if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
-                Boolean quantityAvailable = this.isQuantityAvailable(lotIdToCheck, quantityToCheck);
-
-                if (!quantityAvailable) {
-                    throw new MaterialLotQuantityNotAvailableException(Set.of(lotIdToCheck));
+                    if (!quantityAvailable) {
+                        throw new MaterialLotQuantityNotAvailableException(Set.of(putMaterialPortion.getMaterialLot().getId()));
+                    }
                 }
             }
-        }
+        });
 
-        existingMaterialPortion.outerJoin(patchMaterialPortion, getPropertyNames(UpdateMixtureMaterialPortion.class));
-
-        return mixtureMaterialPortionRepository.saveAndFlush(existingMaterialPortion);
+        final List<MixtureMaterialPortion> updated = this.updateService.getPutEntities(existingEntities, putMaterialPortions);
+            
+        return this.repoService.saveAll(updated);
     }
 
     @Override
-    public void deleteMaterialPortion(Long materialPortionId) {
-        mixtureMaterialPortionRepository.deleteById(materialPortionId);
+    public List<MixtureMaterialPortion> patchMaterialPortions(List<UpdateMixtureMaterialPortion> patchMaterialPortions) {
+        if (patchMaterialPortions == null) {
+            return null;
+        }
+        
+        List<Long> lotIds = patchMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
+      
+        final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(patchMaterialPortions);
+        Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
+
+        if (existingEntities.size() != patchMaterialPortions.size()) {
+            final Set<Long> existingIds = existingEntities.stream().map(materialPortion -> materialPortion.getId()).collect(Collectors.toSet());
+            final Set<Long> nonExistingIds = patchMaterialPortions.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
+
+            throw new EntityNotFoundException(String.format("Cannot find material portion with Ids: %s", nonExistingIds));
+        }
+        
+        patchMaterialPortions.forEach(patchMaterialPortion -> {
+            if (patchMaterialPortion.getQuantity() != null) {
+                Validator.assertion(new BigDecimal(patchMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
+            }
+            
+            MixtureMaterialPortion existing = idToExistingEntity.get(patchMaterialPortion.getId());
+            
+            boolean isPatchOnSameLot = patchMaterialPortion.getMaterialLot() == null || patchMaterialPortion.getMaterialLot().getId() == null
+                    || patchMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
+            
+        
+            boolean isQuantityCheckRequired = (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) || !isPatchOnSameLot;
+
+            if (isQuantityCheckRequired) {
+                Long lotIdToCheck = isPatchOnSameLot ? existing.getMaterialLot().getId() : patchMaterialPortion.getMaterialLot().getId();
+
+                //If patch is on the same lot, we only need to check if the difference in quantity is available
+                Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.subtract(patchMaterialPortion.getQuantity(), existing.getQuantity()) :
+                    patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existing.getQuantity();
+
+                if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                    Boolean quantityAvailable = this.isQuantityAvailable(lotIdToCheck, quantityToCheck);
+
+                    if (!quantityAvailable) {
+                        throw new MaterialLotQuantityNotAvailableException(Set.of(lotIdToCheck));
+                    }
+                }
+            }
+        });
+
+        final List<MixtureMaterialPortion> updated = this.updateService.getPatchEntities(existingEntities, patchMaterialPortions);
+
+        return this.repoService.saveAll(updated);
+    }
+
+    @Override
+    public int deleteMaterialPortions(Set<Long> materialPortionIds) {
+        return this.repoService.delete(materialPortionIds);
     }
 
     @Override
     public boolean materialPortionExists(Long materialPortionId) {
-        return mixtureMaterialPortionRepository.existsById(materialPortionId);
+        return this.repoService.exists(materialPortionId);
     }
 
 }

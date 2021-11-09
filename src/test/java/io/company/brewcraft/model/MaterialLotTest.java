@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -42,17 +42,6 @@ public class MaterialLotTest {
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), this.lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), this.lot.getLastUpdated());
         assertEquals(1, this.lot.getVersion());
-    }
-
-    public void testInvoiceItemConstructor() {
-        final InvoiceItem item = new InvoiceItem();
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM));
-        item.setMaterial(new Material(1L));
-
-        this.lot = new MaterialLot(item);
-
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), this.lot.getQuantity());
-        assertEquals(item, this.lot.getInvoiceItem());
     }
 
     @Test
@@ -159,7 +148,7 @@ public class MaterialLotTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         this.lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
-        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"invoiceItem\":{\"id\":200,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"amount\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":{\"nano\":0,\"year\":1999,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"FRIDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"lastUpdated\":{\"nano\":0,\"year\":2000,\"monthValue\":1,\"dayOfMonth\":1,\"hour\":0,\"minute\":0,\"second\":0,\"dayOfWeek\":\"SATURDAY\",\"dayOfYear\":1,\"month\":\"JANUARY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"invoiceItem\":{\"id\":200,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"1999-01-01T00:00:00\",\"lastUpdated\":\"2000-01-01T00:00:00\",\"version\":1}";
         JSONAssert.assertEquals(json, this.lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

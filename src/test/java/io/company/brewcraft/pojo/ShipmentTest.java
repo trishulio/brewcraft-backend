@@ -45,7 +45,7 @@ public class ShipmentTest {
         assertEquals(1L, this.shipment.getId());
         assertEquals("SHIPMENT_1", this.shipment.getShipmentNumber());
         assertEquals("DESCRIPTION_1", this.shipment.getDescription());
-        assertEquals(new ShipmentStatus(99L), this.shipment.getStatus());
+        assertEquals(new ShipmentStatus(99L), this.shipment.getShipmentStatus());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), this.shipment.getDeliveryDueDate());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), this.shipment.getDeliveredDate());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), this.shipment.getCreatedAt());
@@ -78,9 +78,9 @@ public class ShipmentTest {
 
     @Test
     public void testAccessStatus() {
-        assertNull(this.shipment.getStatus());
-        this.shipment.setStatus(new ShipmentStatus(99L));
-        assertEquals(new ShipmentStatus(99L), this.shipment.getStatus());
+        assertNull(this.shipment.getShipmentStatus());
+        this.shipment.setShipmentStatus(new ShipmentStatus(99L));
+        assertEquals(new ShipmentStatus(99L), this.shipment.getShipmentStatus());
     }
 
     @Test
@@ -177,6 +177,12 @@ public class ShipmentTest {
     }
 
     @Test
+    public void testAddLot_DoesNothing_WhenLotIsNull() {
+        shipment.addLot(null);
+        assertNull(shipment.getLots());
+    }
+
+    @Test
     public void testRemoveLot_ReturnsFalse_WhenListIsNull() {
         assertFalse(this.shipment.removeLot(new MaterialLot(1L)));
     }
@@ -205,5 +211,26 @@ public class ShipmentTest {
 
         assertTrue(this.shipment.removeLot(lot));
         assertNull(lot.getShipment());
+    }
+
+    @Test
+    public void testGetItemCount_Returns0_WhenLotsIsNull() {
+        shipment.setLots(null);
+
+        assertEquals(0, shipment.getLotCount());
+    }
+
+    @Test
+    public void testGetLotCount_Returns0_WhenLotsIsEmpty() {
+        shipment.setLots(List.of());
+
+        assertEquals(0, shipment.getLotCount());
+    }
+
+    @Test
+    public void testGetLotCount_ReturnsLotCount() {
+        shipment.setLots(List.of(new MaterialLot()));
+
+        assertEquals(1, shipment.getLotCount());
     }
 }

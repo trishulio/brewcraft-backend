@@ -20,17 +20,19 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
-import io.company.brewcraft.model.Identified;
 
 @Entity
 @Table(name = "_user")
-public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited, Identified<Long> {
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_NAME = "userName";
     public static final String FIELD_DISPLAY_NAME = "displayName";

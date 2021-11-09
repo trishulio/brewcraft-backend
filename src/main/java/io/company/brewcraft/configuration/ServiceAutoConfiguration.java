@@ -16,6 +16,8 @@ import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BaseMixtureMaterialPortion;
+import io.company.brewcraft.model.BaseMixtureRecording;
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.BaseSku;
@@ -27,6 +29,8 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
@@ -37,6 +41,8 @@ import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
+import io.company.brewcraft.model.UpdateMixtureRecording;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.model.UpdateSku;
@@ -53,9 +59,9 @@ import io.company.brewcraft.repository.FinishedGoodRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
-import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
+import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
@@ -94,8 +100,10 @@ import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MixtureMaterialPortionService;
 import io.company.brewcraft.service.MixtureMaterialPortionServiceImpl;
+import io.company.brewcraft.service.MixtureRecordingAccessor;
 import io.company.brewcraft.service.MaterialService;
 import io.company.brewcraft.service.MeasureService;
+import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
@@ -116,6 +124,7 @@ import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
@@ -135,10 +144,9 @@ import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.impl.procurement.ProcurementServiceImpl;
+import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
-import io.company.brewcraft.service.procurement.ProcurementService;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -177,7 +185,7 @@ public class ServiceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(InvoiceService.class)
     public InvoiceService invoiceService(UtilityProvider utilProvider, InvoiceItemService invoiceItemService, final InvoiceRepository invoiceRepo) {
-        final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoice.class, UpdateInvoice.class, Invoice.class, Set.of(BaseInvoice.ATTR_ITEMS));
+        final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoice.class, UpdateInvoice.class, Invoice.class, Set.of(BaseInvoice.ATTR_INVOICE_ITEMS));
         final RepoService<Long, Invoice, InvoiceAccessor> repoService = new CrudRepoService<>(invoiceRepo);
         return new InvoiceService(updateService, invoiceItemService, repoService);
     }
@@ -304,9 +312,15 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(TransactionService.class)
+    public TransactionService transactionService() {
+        return new TransactionService();
+    }
+
+    @Bean
     @ConditionalOnMissingBean(ProcurementService.class)
-    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService) {
-        return new ProcurementServiceImpl(invoiceService, purchaseOrderService);
+    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService, TransactionService transactionService) {
+        return new ProcurementService(invoiceService, purchaseOrderService, shipmentService, transactionService);
     }
 
     @Bean
@@ -365,16 +379,18 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(MixtureMaterialPortionService.class)
-    public MixtureMaterialPortionService mixtureMaterialPortionService(MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
-        final MixtureMaterialPortionService mixtureMaterialPortionService = new MixtureMaterialPortionServiceImpl(materialPortionRepository, stockLotService);
-        return mixtureMaterialPortionService;
+    public MixtureMaterialPortionService mixtureMaterialPortionService(UtilityProvider utilProvider, MixtureMaterialPortionRepository materialPortionRepository, StockLotService stockLotService) {
+        final RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService = new CrudRepoService<>(materialPortionRepository);
+        final UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService = new SimpleUpdateService<>(utilProvider, BaseMixtureMaterialPortion.class, UpdateMixtureMaterialPortion.class, MixtureMaterialPortion.class, Set.of());
+        return new MixtureMaterialPortionServiceImpl(repoService, updateService, stockLotService);
     }
 
     @Bean
     @ConditionalOnMissingBean(MixtureRecordingService.class)
-    public MixtureRecordingService mixtureRecordingService(MixtureRecordingRepository mixtureRecordingRepository) {
-        final MixtureRecordingService mixtureRecordingService = new MixtureRecordingServiceImpl(mixtureRecordingRepository);
-        return mixtureRecordingService;
+    public MixtureRecordingService mixtureRecordingService(UtilityProvider utilProvider, MixtureRecordingRepository mixtureRecordingRepository) {
+        final RepoService<Long, MixtureRecording, MixtureRecordingAccessor> repoService = new CrudRepoService<>(mixtureRecordingRepository);
+        final UpdateService<Long, MixtureRecording, BaseMixtureRecording, UpdateMixtureRecording> updateService = new SimpleUpdateService<>(utilProvider, BaseMixtureRecording.class, UpdateMixtureRecording.class, MixtureRecording.class, Set.of());
+        return new MixtureRecordingServiceImpl(repoService, updateService);
     }
 
     @Bean
@@ -411,7 +427,7 @@ public class ServiceAutoConfiguration {
         final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository);
         return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(FinishedGoodInventoryService.class)
     public FinishedGoodInventoryService finishedGoodInventoryService(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {

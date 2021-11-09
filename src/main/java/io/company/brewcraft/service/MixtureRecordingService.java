@@ -6,7 +6,9 @@ import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 
+import io.company.brewcraft.model.BaseMixtureRecording;
 import io.company.brewcraft.model.MixtureRecording;
+import io.company.brewcraft.model.UpdateMixtureRecording;
 
 public interface MixtureRecordingService {
 
@@ -14,15 +16,13 @@ public interface MixtureRecordingService {
 
     public MixtureRecording getMixtureRecording(Long mixtureRecordingId);
 
-    public List<MixtureRecording> addMixtureRecordings(List<MixtureRecording> mixtureRecordings);
+    public List<MixtureRecording> addMixtureRecordings(List<BaseMixtureRecording> mixtureRecordings);
 
-    public MixtureRecording addMixtureRecording(MixtureRecording mixtureRecording);
+    public List<MixtureRecording> putMixtureRecordings(List<UpdateMixtureRecording> mixtureRecording);
 
-    public MixtureRecording putMixtureRecording(Long mixtureRecordingId, MixtureRecording mixtureRecording);
+    public List<MixtureRecording> patchMixtureRecordings(List<UpdateMixtureRecording> mixtureRecording);
 
-    public MixtureRecording patchMixtureRecording(Long mixtureRecordingId, MixtureRecording mixtureRecording);
-
-    public void deleteMixtureRecording(Long mixtureRecordingId);
+    public int deleteMixtureRecordings(Set<Long> mixtureRecordingIds);
 
     public boolean mixtureRecordingExists(Long mixtureRecordingId);
 

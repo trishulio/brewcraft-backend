@@ -42,10 +42,6 @@ public class Validator {
     public static void assertion(boolean pass, Class<? extends RuntimeException> clazz, Object... args) {
         if (!pass) {
             try {
-                if (args == null) {
-                    args = new Object[0];
-                }
-
                 Class<?>[] argClasses = new Class[args.length];
                 argClasses = Arrays.stream(args).map(arg -> arg.getClass()).collect(Collectors.toList()).toArray(argClasses);
 

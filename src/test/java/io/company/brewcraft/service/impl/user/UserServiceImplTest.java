@@ -1,18 +1,26 @@
 package io.company.brewcraft.service.impl.user;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.OptimisticLockException;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.user.BaseUser;
 import io.company.brewcraft.model.user.BaseUserRole;
@@ -43,9 +51,28 @@ public class UserServiceImplTest {
     }
 
     @Test
-    @Disabled(value = "TODO: Need to figure out a way to assert the spec behaviour based on the inputs")
     public void testGetusersCallsRepositoryWithACustomSpec_AndReturnsPageOfEntities() {
-        fail("TODO: Need to figure out a way to assert the spec behaviour based on the inputs");
+        ArgumentCaptor<Specification<User>> captor = ArgumentCaptor.forClass(Specification.class);
+        Page<User> mPage = new PageImpl<>(List.of(new User(1L)));
+        doReturn(mPage).when(mUserRepo).findAll(captor.capture(), eq(PageRequest.of(1, 10, Direction.ASC, "col1", "col2")));
+
+        Page<User> page = service.getUsers(
+            Set.of(1L), // ids
+            Set.of(2L), // excludeIds
+            Set.of("USERNAME"), // userNames
+            Set.of("DISPLAY_NAME"), // displayNames
+            Set.of("EMAIL"), // emails
+            Set.of("PHONE_NUMBER"), // phoneNumbers
+            Set.of(3L), // statusIds
+            Set.of(4L), // salutationIds
+            Set.of(), // roles
+            1, // page
+            10, // size
+            new TreeSet<>(Set.of("col1", "col2")), // sort
+            true// orderAscending
+        );
+
+        // TODO: Test spec
     }
 
     @Test

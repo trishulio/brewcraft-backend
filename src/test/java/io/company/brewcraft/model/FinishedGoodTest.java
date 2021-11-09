@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -111,7 +111,7 @@ public class FinishedGoodTest {
 
         FinishedGood finishedGood = new FinishedGood(id, sku, mixturePortions, materialPortions, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"sku\":{\"id\":2,\"name\":null,\"description\":null,\"product\":null,\"materials\":null,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"mixturePortions\":[{\"id\":5,\"mixture\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"materialPortions\":[{\"id\":6,\"materialLot\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"createdAt\":{\"nano\":0,\"year\":2019,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"WEDNESDAY\",\"month\":\"JANUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"lastUpdated\":{\"nano\":0,\"year\":2020,\"monthValue\":1,\"dayOfMonth\":2,\"hour\":3,\"minute\":4,\"second\":0,\"dayOfYear\":2,\"dayOfWeek\":\"THURSDAY\",\"month\":\"JANUARY\",\"chronology\":{\"id\":\"ISO\",\"calendarType\":\"iso8601\"}},\"version\":1}";
+        final String json = "{\"id\":1,\"sku\":{\"id\":2,\"name\":null,\"description\":null,\"product\":null,\"materials\":null,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"mixturePortions\":[{\"id\":5,\"mixture\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"materialPortions\":[{\"id\":6,\"materialLot\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, finishedGood.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

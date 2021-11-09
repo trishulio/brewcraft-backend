@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity(name = "currency")
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Currency extends BaseEntity implements BaseCurrency, UpdateCurrency {
     public static final String FIELD_NUMERIC_CODE = "numericCode";
     public static final String FIELD_CODE = "code";

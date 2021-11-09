@@ -11,13 +11,13 @@ public class AddInvoiceDto extends BaseDto {
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
-    private Long statusId;
-    private List<AddInvoiceItemDto> items;
+    private Long invoiceStatusId;
+    private List<AddInvoiceItemDto> invoiceItems;
 
     public AddInvoiceDto() {
     }
 
-    public AddInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long statusId, List<AddInvoiceItemDto> items) {
+    public AddInvoiceDto(String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, List<AddInvoiceItemDto> invoiceItems) {
         setInvoiceNumber(invoiceNumber);
         setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
@@ -25,8 +25,8 @@ public class AddInvoiceDto extends BaseDto {
         setGeneratedOn(generatedOn);
         setReceivedOn(receivedOn);
         setPaymentDueDate(paymentDueDate);
-        setStatusId(statusId);
-        setItems(items);
+        setInvoiceStatusId(invoiceStatusId);
+        setInvoiceItems(invoiceItems);
     }
 
     public String getInvoiceNumber() {
@@ -85,19 +85,19 @@ public class AddInvoiceDto extends BaseDto {
         this.paymentDueDate = paymentDueDate;
     }
 
-    public Long getStatusId() {
-        return statusId;
+    public Long getInvoiceStatusId() {
+        return invoiceStatusId;
     }
 
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public void setInvoiceStatusId(Long invoiceStatusId) {
+        this.invoiceStatusId = invoiceStatusId;
     }
 
-    public List<AddInvoiceItemDto> getItems() {
-        return items;
+    public List<AddInvoiceItemDto> getInvoiceItems() {
+        return invoiceItems;
     }
 
-    public void setItems(List<AddInvoiceItemDto> items) {
-        this.items = items;
+    public void setInvoiceItems(List<AddInvoiceItemDto> invoiceItems) {
+        this.invoiceItems = invoiceItems;
     }
 }

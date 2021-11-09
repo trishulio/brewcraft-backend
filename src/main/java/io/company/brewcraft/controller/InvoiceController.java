@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,34 +31,56 @@ import io.company.brewcraft.dto.InvoiceDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
+import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.InvoiceMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/purchases")
+@RequestMapping(path = "/api/v1/purchases/invoices")
 public class InvoiceController extends BaseController {
     private static InvoiceMapper mapper = InvoiceMapper.INSTANCE;
 
+    private CrudControllerService<
+        Long,
+        Invoice,
+        BaseInvoice<? extends BaseInvoiceItem<?>>,
+        UpdateInvoice<? extends UpdateInvoiceItem<?>>,
+        InvoiceDto,
+        AddInvoiceDto,
+        UpdateInvoiceDto
+    > controller;
+
     private final InvoiceService invoiceService;
 
-    @Autowired
-    public InvoiceController(InvoiceService invoiceService, AttributeFilter filter) {
-        super(filter);
+    protected InvoiceController(CrudControllerService<
+            Long,
+            Invoice,
+            BaseInvoice<? extends BaseInvoiceItem<?>>,
+            UpdateInvoice<? extends UpdateInvoiceItem<?>>,
+            InvoiceDto,
+            AddInvoiceDto,
+            UpdateInvoiceDto
+        > controller, InvoiceService invoiceService)
+    {
+        this.controller = controller;
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping("/invoices")
-    public PageDto<InvoiceDto> getInvoices(
+    @Autowired
+    public InvoiceController(InvoiceService invoiceService, AttributeFilter filter) {
+        this(new CrudControllerService<>(filter, InvoiceMapper.INSTANCE, invoiceService, "Invoice"), invoiceService);
+    }
+
+    @GetMapping
+    public PageDto<InvoiceDto> getAll(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "invoice_numbers") Set<String> invoiceNumbers,
-        @RequestParam(required = false, name = "invoice_desc") Set<String> invoiceDescriptions,
-        @RequestParam(required = false, name = "invoice_item_desc") Set<String> invoiceItemDescriptions,
+        @RequestParam(required = false, name = "invoice_descriptions") Set<String> invoiceDescriptions,
+        @RequestParam(required = false, name = "invoice_item_descriptions") Set<String> invoiceItemDescriptions,
         @RequestParam(required = false, name = "generated_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnFrom,
         @RequestParam(required = false, name = "generated_on_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime generatedOnTo,
         @RequestParam(required = false, name = "received_on_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime receivedOnFrom,
@@ -106,69 +127,35 @@ public class InvoiceController extends BaseController {
             size
         );
 
-        return this.response(invoices, attributes);
+        return this.controller.getAll(invoices, attributes);
     }
 
-    @GetMapping("/invoices/{invoiceId}")
+    @GetMapping("/{invoiceId}")
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
-        final Invoice invoice = this.invoiceService.get(invoiceId);
-        Validator.assertion(invoice != null, EntityNotFoundException.class, "Invoice", invoiceId.toString());
-
-        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
-        this.filter(dto, attributes);
-
-        return dto;
+        return this.controller.get(invoiceId, attributes);
     }
 
-    @DeleteMapping("/invoices")
+    @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
-        return this.invoiceService.delete(invoiceIds);
+        return this.controller.delete(invoiceIds);
     }
 
-    @PostMapping("/invoices")
+    @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public InvoiceDto addInvoice(@Valid @NotNull @RequestBody AddInvoiceDto payload) {
-        final BaseInvoice<InvoiceItem> addition = InvoiceMapper.INSTANCE.fromDto(payload);
-        final Invoice added = this.invoiceService.add(List.of(addition)).get(0);
-
-        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(added);
-
-        return dto;
+    public List<InvoiceDto> addInvoice(@Valid @NotNull @RequestBody List<AddInvoiceDto> addDtos) {
+        return this.controller.add(addDtos);
     }
 
-    @PutMapping("/invoices/{invoiceId}")
+    @PutMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto updateInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        final UpdateInvoice<InvoiceItem> update = InvoiceMapper.INSTANCE.fromDto(payload);
-        update.setId(invoiceId);
-
-        final Invoice invoice = this.invoiceService.put(List.of(update)).get(0);
-        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
-
-        return dto;
+    public List<InvoiceDto> updateInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
+        return this.controller.put(updateDtos);
     }
 
-    @PatchMapping("/invoices/{invoiceId}")
+    @PatchMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public InvoiceDto patchInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @Valid @NotNull @RequestBody UpdateInvoiceDto payload) {
-        final UpdateInvoice<InvoiceItem> patch = InvoiceMapper.INSTANCE.fromDto(payload);
-        patch.setId(invoiceId);
-
-        final Invoice invoice = this.invoiceService.patch(List.of(patch)).get(0);
-        final InvoiceDto dto = InvoiceMapper.INSTANCE.toDto(invoice);
-
-        return dto;
-    }
-
-    private PageDto<InvoiceDto> response(Page<Invoice> invoices, Set<String> attributes) {
-        final List<InvoiceDto> content = invoices.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
-        content.forEach(invoice -> this.filter(invoice, attributes));
-
-        final PageDto<InvoiceDto> dto = new PageDto<>();
-        dto.setContent(content);
-        dto.setTotalElements(invoices.getTotalElements());
-        dto.setTotalPages(invoices.getTotalPages());
-        return dto;
+    public List<InvoiceDto> patchInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
+        return this.controller.patch(updateDtos);
     }
 }

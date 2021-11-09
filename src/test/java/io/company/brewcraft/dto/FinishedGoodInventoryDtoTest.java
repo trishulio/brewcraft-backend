@@ -34,7 +34,7 @@ public class FinishedGoodInventoryDtoTest {
         finishedGoodInventoryDto.setSku(new SkuDto(1L));
         assertEquals(new SkuDto(1L), finishedGoodInventoryDto.getSku());
     }
-    
+
     @Test
     public void testGetSetQuantity() {
         finishedGoodInventoryDto.setQuantity(50L);

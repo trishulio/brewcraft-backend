@@ -11,7 +11,7 @@ import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
 import io.company.brewcraft.model.PurchaseOrder;
 
 @Mapper(uses = { SupplierMapper.class })
-public interface PurchaseOrderMapper {
+public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder, PurchaseOrderDto, AddPurchaseOrderDto, UpdatePurchaseOrderDto>{
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
     @Mappings({
@@ -24,6 +24,7 @@ public interface PurchaseOrderMapper {
     })
     PurchaseOrder fromDto(Long id);
 
+    @Override
     @Mappings({
         @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
@@ -31,15 +32,16 @@ public interface PurchaseOrderMapper {
         @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     })
-    PurchaseOrder fromDto(AddPurchaseOrderDto dto);
+    PurchaseOrder fromAddDto(AddPurchaseOrderDto dto);
 
+    @Override
     @Mappings({
-        @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     })
-    PurchaseOrder fromDto(UpdatePurchaseOrderDto dto);
+    PurchaseOrder fromUpdateDto(UpdatePurchaseOrderDto dto);
 
+    @Override
     PurchaseOrderDto toDto(PurchaseOrder po);
 }
