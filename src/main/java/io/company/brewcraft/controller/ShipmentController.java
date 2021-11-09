@@ -40,7 +40,7 @@ import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/purchases", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/purchases/shipments", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
