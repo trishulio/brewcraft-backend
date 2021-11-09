@@ -49,7 +49,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
         if (existingItems == null && updates == null) {
             return null;
         }
-        
+
         final Validator validator = this.utilProvider.getValidator();
 
         existingItems = existingItems != null ? existingItems : new ArrayList<>(0);
