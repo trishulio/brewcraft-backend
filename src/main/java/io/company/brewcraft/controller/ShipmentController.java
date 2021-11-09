@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -31,8 +30,11 @@ import io.company.brewcraft.dto.AddShipmentDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ShipmentDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
+import io.company.brewcraft.model.BaseMaterialLot;
+import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.model.UpdateMaterialLot;
+import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -42,28 +44,43 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
-    private final ShipmentService service;
+    private CrudControllerService<
+        Long,
+        Shipment,
+        BaseShipment<? extends BaseMaterialLot<?>>,
+        UpdateShipment<? extends UpdateMaterialLot<?>>,
+        ShipmentDto,
+        AddShipmentDto,
+        UpdateShipmentDto
+    > controller;
+
+    private final ShipmentService shipmentService;
+
+    protected ShipmentController(CrudControllerService<
+            Long,
+            Shipment,
+            BaseShipment<? extends BaseMaterialLot<?>>,
+            UpdateShipment<? extends UpdateMaterialLot<?>>,
+            ShipmentDto,
+            AddShipmentDto,
+            UpdateShipmentDto
+        > controller, ShipmentService shipmentService)
+    {
+        this.controller = controller;
+        this.shipmentService = shipmentService;
+    }
 
     @Autowired
-    public ShipmentController(ShipmentService service, AttributeFilter filter) {
-        super(filter);
-        this.service = service;
+    public ShipmentController(ShipmentService shipmentService, AttributeFilter filter) {
+        this(new CrudControllerService<>(filter, ShipmentMapper.INSTANCE, shipmentService, "Shipment"), shipmentService);
     }
 
-    @GetMapping(value = "/shipments/{shipmentId}")
-    public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId) {
-        log.debug("Fetching shipment with Id: {}", shipmentId);
-        final Shipment shipment = this.service.get(shipmentId);
-
-        if (shipment == null) {
-            log.debug("No shipment found with Id: {}", shipmentId);
-            throw new EntityNotFoundException("Shipment", shipmentId);
-        }
-
-        return ShipmentMapper.INSTANCE.toDto(shipment);
+    @GetMapping(value = "/{shipmentId}")
+    public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        return this.controller.get(shipmentId, attributes);
     }
 
-    @GetMapping("/shipments")
+    @GetMapping("")
     public PageDto<ShipmentDto> getShipments(
         // shipment filters
         @RequestParam(required = false, name = "ids") Set<Long> ids,
@@ -102,7 +119,7 @@ public class ShipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
-        final Page<Shipment> shipmentsPage = this.service.getShipments(
+        final Page<Shipment> shipmentsPage = this.shipmentService.getShipments(
             // shipment filters
             ids,
             excludeIds,
@@ -139,54 +156,28 @@ public class ShipmentController extends BaseController {
             page,
             size
         );
-        final List<ShipmentDto> shipments = shipmentsPage.stream().map(shipment -> ShipmentMapper.INSTANCE.toDto(shipment)).collect(Collectors.toList());
-        shipments.stream().forEach(shipment -> this.filter(shipment, attributes));
 
-        return new PageDto<>(shipments, shipmentsPage.getTotalPages(), shipmentsPage.getTotalElements());
+        return this.controller.getAll(shipmentsPage, attributes);
     }
 
-    @DeleteMapping("/shipments")
+    @DeleteMapping
     public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
-        log.debug("Attempting to delete shipments with Ids: {}", shipmentIds);
-        final int count = this.service.delete(shipmentIds);
-        log.debug("Number of shipments deleted: {}", count);
-
-        return count;
+        return this.controller.delete(shipmentIds);
     }
 
-    @PutMapping("/shipments/{shipmentId}")
-    public ShipmentDto putShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
-        log.debug("Updating shipment with Id: {}", shipmentId);
-        final Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
-        update.setId(shipmentId);
-
-        final Shipment updated = this.service.put(List.of(update)).get(0);
-
-        log.debug("Put successful");
-        return ShipmentMapper.INSTANCE.toDto(updated);
+    @PutMapping
+    public List<ShipmentDto> putShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
+        return this.controller.put(updateDtos);
     }
 
-    @PatchMapping("/shipments/{shipmentId}")
-    public ShipmentDto patchShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestBody @Valid @NotNull UpdateShipmentDto updateDto) {
-        log.debug("Patching shipment with Id: {}", shipmentId);
-        final Shipment update = ShipmentMapper.INSTANCE.fromDto(updateDto);
-        update.setId(shipmentId);
-
-        final Shipment updated = this.service.patch(List.of(update)).get(0);
-
-        log.debug("Patch successful");
-        return ShipmentMapper.INSTANCE.toDto(updated);
+    @PatchMapping
+    public List<ShipmentDto> patchShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
+        return this.controller.patch(updateDtos);
     }
 
-    @PostMapping("/shipments")
-    public ShipmentDto addShipment(@RequestBody @Valid @NotNull AddShipmentDto addDto) {
-        log.debug("Adding a new shipment item");
-        final Shipment shipment = ShipmentMapper.INSTANCE.fromDto(addDto);
-
-        final Shipment added = this.service.add(List.of(shipment)).get(0);
-
-        log.debug("Added a new shipment item with Id: {}", shipment.getId());
-        return ShipmentMapper.INSTANCE.toDto(added);
+    @PostMapping
+    public List<ShipmentDto> addShipment(@RequestBody @Valid @NotNull List<AddShipmentDto> addDtos) {
+        return this.controller.add(addDtos);
     }
 
 }

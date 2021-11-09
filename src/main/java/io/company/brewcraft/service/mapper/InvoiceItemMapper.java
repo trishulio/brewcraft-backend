@@ -11,9 +11,10 @@ import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItem;
 
 @Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, MaterialMapper.class, TaxMapper.class })
-public interface InvoiceItemMapper {
+public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDto, AddInvoiceItemDto, UpdateInvoiceItemDto> {
     InvoiceItemMapper INSTANCE = Mappers.getMapper(InvoiceItemMapper.class);
 
+    @Override
     InvoiceItemDto toDto(InvoiceItem item);
 
     @Mappings({
@@ -35,14 +36,16 @@ public interface InvoiceItemMapper {
     })
     InvoiceItem fromDto(InvoiceItemDto dto);
 
+    @Override
     @Mappings({
         @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
         @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId"),
         @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     })
-    InvoiceItem fromDto(UpdateInvoiceItemDto dto);
+    InvoiceItem fromUpdateDto(UpdateInvoiceItemDto dto);
 
+    @Override
     @Mappings({
         @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true),
         @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId"),
@@ -51,5 +54,5 @@ public interface InvoiceItemMapper {
         @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     })
-    InvoiceItem fromDto(AddInvoiceItemDto dto);
+    InvoiceItem fromAddDto(AddInvoiceItemDto dto);
 }

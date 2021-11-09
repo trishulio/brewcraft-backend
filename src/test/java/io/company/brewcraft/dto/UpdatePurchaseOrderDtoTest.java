@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,19 @@ public class UpdatePurchaseOrderDtoTest {
 
     @Test
     public void testAllArgsConstructor() {
-        dto = new UpdatePurchaseOrderDto("ORDER_1", 2L, 1);
+        dto = new UpdatePurchaseOrderDto(1L, "ORDER_1", 2L, 1);
 
+        assertEquals(1L, dto.getId());
         assertEquals("ORDER_1", dto.getOrderNumber());
         assertEquals(2L, dto.getSupplierId());
         assertEquals(1, dto.getVersion());
+    }
+
+    @Test
+    public void testIdArgConstructor_SetsId() {
+        UpdatePurchaseOrderDto dto = new UpdatePurchaseOrderDto(1L);
+
+        assertEquals(1L, dto.getId());
     }
 
     @Test

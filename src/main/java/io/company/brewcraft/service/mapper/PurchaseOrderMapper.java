@@ -8,11 +8,10 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddPurchaseOrderDto;
 import io.company.brewcraft.dto.PurchaseOrderDto;
 import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
-import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
 import io.company.brewcraft.model.PurchaseOrder;
 
 @Mapper(uses = { SupplierMapper.class })
-public interface PurchaseOrderMapper {
+public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder, PurchaseOrderDto, AddPurchaseOrderDto, UpdatePurchaseOrderDto>{
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
     @Mappings({
@@ -25,6 +24,7 @@ public interface PurchaseOrderMapper {
     })
     PurchaseOrder fromDto(Long id);
 
+    @Override
     @Mappings({
         @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
@@ -32,22 +32,16 @@ public interface PurchaseOrderMapper {
         @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     })
-    PurchaseOrder fromDto(AddPurchaseOrderDto dto);
+    PurchaseOrder fromAddDto(AddPurchaseOrderDto dto);
 
-    @Mappings({
-        @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
-    })
-    PurchaseOrder fromDto(UpdatePurchaseOrderDto dto);
-
+    @Override
     @Mappings({
         @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     })
-    PurchaseOrder fromDto(UpdateProcurementPurchaseOrderDto dto); // TODO: Delete this mapping when UpdatePurchaseOrderDto is changed to have Id
+    PurchaseOrder fromUpdateDto(UpdatePurchaseOrderDto dto);
 
+    @Override
     PurchaseOrderDto toDto(PurchaseOrder po);
 }

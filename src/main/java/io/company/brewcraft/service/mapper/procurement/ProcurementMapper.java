@@ -45,7 +45,6 @@ public interface ProcurementMapper extends BaseMapper<Procurement, ProcurementDt
 
     @Override
     @Mappings({
-        @Mapping(target = Procurement.ATTR_ID, ignore = true),
         @Mapping(target = Procurement.ATTR_CREATED_AT, ignore = true),
         @Mapping(target = Procurement.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = Procurement.ATTR_LOTS, ignore = true),

@@ -8,12 +8,13 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.UpdateInvoiceDto;
+import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
 import io.company.brewcraft.dto.UpdateShipmentDto;
 
 public class UpdateProcurementDto extends BaseDto {
     private UpdateInvoiceDto invoice;
 
-    private UpdateProcurementPurchaseOrderDto purchaseOrder;
+    private UpdatePurchaseOrderDto purchaseOrder;
 
     private UpdateShipmentDto shipment;
 
@@ -23,12 +24,18 @@ public class UpdateProcurementDto extends BaseDto {
     private Integer version;
 
     public UpdateProcurementDto() {
+        super();
         this.invoice = new UpdateInvoiceDto();
         this.shipment = new UpdateShipmentDto();
     }
 
-    public UpdateProcurementDto(String invoiceNumber, String shipmentNumber, UpdateProcurementPurchaseOrderDto purchaseOrder, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Long invoiceStatusId, Long shipmentStatusId, List<UpdateProcurementItemDto> procurementItems, Integer invoiceVersion, Integer version) {
+    public UpdateProcurementDto(ProcurementIdDto id) {
         this();
+        setId(id);
+    }
+
+    public UpdateProcurementDto(ProcurementIdDto id, String invoiceNumber, String shipmentNumber, UpdatePurchaseOrderDto purchaseOrder, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Long invoiceStatusId, Long shipmentStatusId, List<UpdateProcurementItemDto> procurementItems, Integer invoiceVersion, Integer version) {
+        this(id);
         setInvoiceNumber(invoiceNumber);
         setShipmentNumber(shipmentNumber);
         setPurchaseOrder(purchaseOrder);
@@ -46,7 +53,23 @@ public class UpdateProcurementDto extends BaseDto {
         setVersion(version);
     }
 
-    // TODO: Add the ID property when shipment and invoices are refactored.
+    public ProcurementIdDto getId() {
+        ProcurementIdDto id = null;
+        if (this.shipment.getId() != null || this.invoice.getId() != null) {
+            id = new ProcurementIdDto(this.shipment.getId(), this.invoice.getId());
+        }
+        return id;
+    }
+
+    public void setId(ProcurementIdDto id) {
+        if (id != null) {
+            this.shipment.setId(id.getShipmentId());
+            this.invoice.setId(id.getInvoiceId());
+        } else {
+            this.shipment.setId(null);
+            this.invoice.setId(null);
+        }
+    }
 
     public String getInvoiceNumber() {
         return this.invoice.getInvoiceNumber();
@@ -56,11 +79,11 @@ public class UpdateProcurementDto extends BaseDto {
         this.invoice.setInvoiceNumber(invoiceNumber);
     }
 
-    public UpdateProcurementPurchaseOrderDto getPurchaseOrder() {
+    public UpdatePurchaseOrderDto getPurchaseOrder() {
         return this.purchaseOrder;
     }
 
-    public void setPurchaseOrder(UpdateProcurementPurchaseOrderDto purchaseOrder) {
+    public void setPurchaseOrder(UpdatePurchaseOrderDto purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
     }
 

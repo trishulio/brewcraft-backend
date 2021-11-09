@@ -21,6 +21,7 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
@@ -29,7 +30,6 @@ import io.company.brewcraft.dto.procurement.ProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemIdDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementItemDto;
-import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Material;
@@ -224,9 +224,10 @@ public class ProcurementMapperTest {
     @Test
     public void testFromUpdateDto_ReturnsProcurementWithUncommonValuesIgnored() {
         UpdateProcurementDto dto  = new UpdateProcurementDto(
+            new ProcurementIdDto(1L, 1L), // id
             "INVOICE_NUMBER", // invoiceNumber
             "SHIPMENT_NUMBER", // shipmentNumber
-            new UpdateProcurementPurchaseOrderDto(1L, "ORDER_NUMBER", 1L, 1),
+            new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER", 1L, 1),
             "DESCRIPTION",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
             LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
@@ -257,7 +258,7 @@ public class ProcurementMapperTest {
         Procurement procurement = mapper.fromUpdateDto(dto);
 
         Procurement expected = new Procurement(
-            null,
+            new ProcurementId(1L, 1L), // id
             "INVOICE_NUMBER",
             "SHIPMENT_NUMBER",
             "DESCRIPTION",

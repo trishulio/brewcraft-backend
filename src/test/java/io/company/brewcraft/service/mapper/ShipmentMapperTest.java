@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class ShipmentMapperTest {
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
         final UpdateShipmentDto dto = new UpdateShipmentDto(
+            1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
             100L,
@@ -47,10 +49,10 @@ public class ShipmentMapperTest {
             1
         );
 
-        final Shipment shipment = this.mapper.fromDto(dto);
+        final Shipment shipment = this.mapper.fromUpdateDto(dto);
 
         final Shipment expected = new Shipment(
-            null,
+            1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
             new ShipmentStatus(100L),
@@ -67,8 +69,8 @@ public class ShipmentMapperTest {
 
     @Test
     public void testFromDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(this.mapper.fromDto((UpdateShipmentDto) null));
-        assertNull(this.mapper.fromDto((AddShipmentDto) null));
+        assertNull(this.mapper.fromUpdateDto((UpdateShipmentDto) null));
+        assertNull(this.mapper.fromAddDto((AddShipmentDto) null));
     }
 
     @Test
