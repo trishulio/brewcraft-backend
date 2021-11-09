@@ -34,7 +34,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MIXTURE")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class Mixture extends BaseEntity implements BaseMixture, UpdateMixture, Audited {
+public class Mixture extends BaseEntity implements UpdateMixture, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_PARENT_MIXTURE = "parentMixture";
     public static final String FIELD_QUANTITY_VALUE = "quantityValue";

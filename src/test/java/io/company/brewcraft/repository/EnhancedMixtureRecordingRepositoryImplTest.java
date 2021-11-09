@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.MixtureRecording;
+import io.company.brewcraft.service.MixtureRecordingAccessor;
 
 public class EnhancedMixtureRecordingRepositoryImplTest {
 
@@ -16,14 +17,17 @@ public class EnhancedMixtureRecordingRepositoryImplTest {
     private MeasureRepository measureRepositoryMock;
 
     private MixtureRepository mixtureRepositoryMock;
+    
+    private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
         measureRepositoryMock = mock(MeasureRepository.class);
         mixtureRepositoryMock = mock(MixtureRepository.class);
+        refresherMock = mock(AccessorRefresher.class);
 
-        repo = new EnhancedMixtureRecordingRepositoryImpl(measureRepositoryMock, mixtureRepositoryMock);
+        repo = new EnhancedMixtureRecordingRepositoryImpl(measureRepositoryMock, mixtureRepositoryMock, refresherMock);
     }
 
     @Test

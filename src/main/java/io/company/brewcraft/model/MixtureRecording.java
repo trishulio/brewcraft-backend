@@ -19,9 +19,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.CrudEntity;
+
 @Entity(name = "MIXTURE_RECORDING")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class MixtureRecording extends BaseEntity implements BaseMixtureRecording, UpdateMixtureRecording, Audited {
+public class MixtureRecording extends BaseEntity implements UpdateMixtureRecording, CrudEntity<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_MIXTURE = "mixture";
     public static final String FIELD_MEASURE = "measure";

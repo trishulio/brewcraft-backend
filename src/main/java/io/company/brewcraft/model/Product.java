@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "PRODUCT")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class Product extends BaseEntity implements BaseProduct, UpdateProduct, Audited {
+public class Product extends BaseEntity implements UpdateProduct, Identified<Long>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_DESCRIPTION = "description";

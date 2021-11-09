@@ -23,6 +23,7 @@ import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
@@ -57,6 +58,7 @@ import io.company.brewcraft.repository.MaterialLotRepository;
 import io.company.brewcraft.repository.MaterialRepository;
 import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
+import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
@@ -85,6 +87,7 @@ import io.company.brewcraft.service.MaterialLotAccessor;
 import io.company.brewcraft.service.MeasureAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
+import io.company.brewcraft.service.MixtureRecordingAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ParentMixtureAccessor;
 import io.company.brewcraft.service.ProductAccessor;
@@ -393,6 +396,16 @@ public class RepositoryConfiguration {
             FinishedGoodMixturePortion.class,
             accessor -> accessor.getMixturePortion(),
             (accessor, finishedGoodMixturePortion) -> accessor.setMixturePortion(finishedGoodMixturePortion),
+            ids -> repo.findAllById(ids)
+        );
+    }
+    
+    @Bean
+    public AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> mixtureRecordingRefresher(MixtureRecordingRepository repo) {
+        return new AccessorRefresher<>(
+                MixtureRecording.class,
+            accessor -> accessor.getMixtureRecording(),
+            (accessor, mixtureRecording) -> accessor.setMixtureRecording(mixtureRecording),
             ids -> repo.findAllById(ids)
         );
     }

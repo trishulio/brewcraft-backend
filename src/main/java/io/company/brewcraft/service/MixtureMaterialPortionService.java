@@ -6,7 +6,9 @@ import java.util.SortedSet;
 
 import org.springframework.data.domain.Page;
 
+import io.company.brewcraft.model.BaseMixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
 
 public interface MixtureMaterialPortionService {
 
@@ -14,15 +16,15 @@ public interface MixtureMaterialPortionService {
 
     public MixtureMaterialPortion getMaterialPortion(Long materialPortionId);
 
-    public List<MixtureMaterialPortion> addMaterialPortions(List<MixtureMaterialPortion> materialPortions);
+    public List<MixtureMaterialPortion> addMaterialPortions(List<BaseMixtureMaterialPortion> materialPortions);
 
-    public MixtureMaterialPortion addMaterialPortion(MixtureMaterialPortion materialPortion);
+    public MixtureMaterialPortion addMaterialPortion(BaseMixtureMaterialPortion materialPortion);
 
-    public MixtureMaterialPortion putMaterialPortion(Long materialPortionId, MixtureMaterialPortion materialPortion);
+    public List<MixtureMaterialPortion> putMaterialPortions(List<UpdateMixtureMaterialPortion> materialPortion);
 
-    public MixtureMaterialPortion patchMaterialPortion(Long materialPortionId, MixtureMaterialPortion materialPortion);
+    public List<MixtureMaterialPortion> patchMaterialPortions(List<UpdateMixtureMaterialPortion> materialPortion);
 
-    public void deleteMaterialPortion(Long materialPortionId);
+    public int deleteMaterialPortions(Set<Long> materialPortionIds);
 
     public boolean materialPortionExists(Long materialPortionId);
 
