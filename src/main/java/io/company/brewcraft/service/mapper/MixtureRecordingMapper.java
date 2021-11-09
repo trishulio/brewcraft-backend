@@ -25,7 +25,6 @@ public interface MixtureRecordingMapper {
     @Mapping(target = "mixture", source = "mixtureId")
     MixtureRecording fromDto(AddMixtureRecordingDto dto);
 
-    @Mapping(target = Brew.ATTR_ID, ignore = true)
     @Mapping(target = Brew.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Brew.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = "measure", source = "measureId")

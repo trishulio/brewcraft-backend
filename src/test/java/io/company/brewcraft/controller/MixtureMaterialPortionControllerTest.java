@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -113,30 +114,19 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testPutMaterialPortion() {
-        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(2L, new QuantityDto("kg", new BigDecimal("100")), 1L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("kg", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureMaterialPortion putMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MixtureMaterialPortion> putMaterialPortionCaptor = ArgumentCaptor.forClass(MixtureMaterialPortion.class);
-
-        doReturn(materialPortion).when(materialPortionService).putMaterialPortion(eq(1L), putMaterialPortionCaptor.capture());
+        doReturn(List.of(putMaterialPortion)).when(materialPortionService).putMaterialPortions(List.of(materialPortion));
 
         MixtureMaterialPortionDto materialPortionDto = materialPortionController.putMaterialPortion(1L, updateMaterialPortionDto);
-
-        // Assert put material portion
-        assertEquals(null, putMaterialPortionCaptor.getValue().getId());
-        assertEquals(new MaterialLot(2L), putMaterialPortionCaptor.getValue().getMaterialLot());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), putMaterialPortionCaptor.getValue().getQuantity());
-        assertEquals(new Mixture(1L), putMaterialPortionCaptor.getValue().getMixture());
-        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), putMaterialPortionCaptor.getValue().getAddedAt());
-        assertEquals(null, putMaterialPortionCaptor.getValue().getCreatedAt());
-        assertEquals(null, putMaterialPortionCaptor.getValue().getLastUpdated());
-        assertEquals(1, putMaterialPortionCaptor.getValue().getVersion());
 
         // Assert returned material portion
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10.5")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
@@ -144,30 +134,19 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testPatchMaterialPortion() {
-        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(2L, new QuantityDto("kg", new BigDecimal("100")), 1L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("kg", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureMaterialPortion patchMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        ArgumentCaptor<MixtureMaterialPortion> patchMaterialPortionCaptor = ArgumentCaptor.forClass(MixtureMaterialPortion.class);
-
-        doReturn(materialPortion).when(materialPortionService).patchMaterialPortion(eq(1L), patchMaterialPortionCaptor.capture());
+        doReturn(List.of(patchMaterialPortion)).when(materialPortionService).patchMaterialPortions(List.of(materialPortion));
 
         MixtureMaterialPortionDto materialPortionDto = materialPortionController.patchMaterialPortion(1L, updateMaterialPortionDto);
-
-        // Assert patch material portion
-        assertEquals(null, patchMaterialPortionCaptor.getValue().getId());
-        assertEquals(new MaterialLot(2L), patchMaterialPortionCaptor.getValue().getMaterialLot());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), patchMaterialPortionCaptor.getValue().getQuantity());
-        assertEquals(new Mixture(1L), patchMaterialPortionCaptor.getValue().getMixture());
-        assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), patchMaterialPortionCaptor.getValue().getAddedAt());
-        assertEquals(null, patchMaterialPortionCaptor.getValue().getCreatedAt());
-        assertEquals(null, patchMaterialPortionCaptor.getValue().getLastUpdated());
-        assertEquals(1, patchMaterialPortionCaptor.getValue().getVersion());
 
         // Assert returned material portion
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("kg", new BigDecimal("10.5")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
@@ -175,8 +154,8 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testDeleteMaterialPortion() {
-        materialPortionController.deleteMaterialPortion(1L);
+        materialPortionController.deleteMaterialPortion(Set.of(1L, 2L));
 
-        verify(materialPortionService, times(1)).deleteMaterialPortion(1L);
+        verify(materialPortionService, times(1)).deleteMaterialPortions(Set.of(1L, 2L));
     }
 }

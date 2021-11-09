@@ -9,9 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import io.company.brewcraft.service.CrudEntity;
+
 @Entity(name = "MIXTURE_MATERIAL_PORTION")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
-public class MixtureMaterialPortion extends MaterialPortion implements UpdateMixtureMaterialPortion {
+public class MixtureMaterialPortion extends MaterialPortion implements UpdateMixtureMaterialPortion, CrudEntity<Long>, Audited {
 
     public static final String FIELD_MIXTURE = "mixture";
 

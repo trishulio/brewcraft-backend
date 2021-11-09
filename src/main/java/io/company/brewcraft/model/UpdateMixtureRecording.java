@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
-public interface UpdateMixtureRecording extends BaseMixtureRecording, Versioned  {
+import io.company.brewcraft.service.UpdatableEntity;
+
+public interface UpdateMixtureRecording extends BaseMixtureRecording, UpdatableEntity<Long> {
 
 }
