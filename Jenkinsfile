@@ -22,7 +22,11 @@ pipeline {
         stage ('Install') {
             steps {
                 // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
-                sh "make install PWD=${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}"
+                sh """
+                    export SKIP_TESTS=false
+                    export MUTATION_COVERAGE=false
+                    make install PWD=${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}
+                """
             }
         }
 
