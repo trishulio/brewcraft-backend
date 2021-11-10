@@ -185,8 +185,8 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <property>
-                    <name>env.SKIP_TESTS</name>
-                    <value>true</value>
+                    <name>env.CODE_COVERAGE</name>
+                    <value>false</value>
                 </property>
             </activation>
             <properties>
