@@ -30,6 +30,8 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.dto.UpdateFinishedGoodDto;
 import io.company.brewcraft.model.BaseFinishedGood;
+import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
+import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
@@ -101,13 +103,17 @@ public class FinishedGoodController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public FinishedGoodDto addFinishedGood(@Valid @NotNull @RequestBody AddFinishedGoodDto payload) {
-        final BaseFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> addition = mapper.fromDto(payload);
-        final FinishedGood added = this.finishedGoodService.add(List.of(addition)).get(0);
+    public List<FinishedGoodDto> addFinishedGood(@Valid @NotNull @RequestBody List<AddFinishedGoodDto> payloads) {
+        final List<BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>> additions = payloads.stream()
+                                                                                                                                                    .map(addition -> mapper.fromDto(addition))
+                                                                                                                                                    .collect(Collectors.toList());
+        final List<FinishedGood> added = this.finishedGoodService.add(additions);
 
-        final FinishedGoodDto dto = mapper.toDto(added);
+        final List<FinishedGoodDto> dtos = added.stream()
+                                                .map(finishedGood -> mapper.toDto(finishedGood))
+                                                .collect(Collectors.toList());
 
-        return dto;
+        return dtos;
     }
 
     @PutMapping("/{finishedGoodId}")
