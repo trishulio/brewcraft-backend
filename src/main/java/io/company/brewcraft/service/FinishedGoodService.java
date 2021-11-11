@@ -17,12 +17,14 @@ import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.model.BaseFinishedGood;
 import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
+import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.model.MixturePortion;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
@@ -49,6 +51,9 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             Set<Long> ids,
             Set<Long> excludeIds,
             Set<Long> skuIds,
+            Set<Long> mixtureIds,
+            Set<Long> brewStageIds,
+            Set<Long> brewIds,
             SortedSet<String> sort,
             boolean orderAscending,
             int page,
@@ -59,6 +64,9 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
                                             .in(FinishedGood.FIELD_ID, ids)
                                             .not().in(FinishedGood.FIELD_ID, excludeIds)
                                             .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
+                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
+                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
                                             .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);
