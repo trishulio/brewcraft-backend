@@ -33,7 +33,6 @@ pipeline {
             }
         }
 
-
         stage ('Install') {
             steps {
                 // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
@@ -45,27 +44,22 @@ pipeline {
             }
         }
 
-        stage ('Upload') {
-            parallel {
-                stage ('Upload Test Coverage') {
-                    when { environment name: 'CODE_COVERAGE', value: 'true' }
-                    steps {
-                        sh """
-                            make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${JACOCO_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.JACOCO_TARGET_HTML_DIR}'
-                        """
-                    }
-                }
-
-                stage ('Upload Mutation Coverage') {
-                    when { environment name: 'MUTATION_COVERAGE', value: 'true' }
-                    steps {
-                        sh """
-                            make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${PITEST_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.PITEST_TARGET_HTML_DIR}'
-                        """
-                    }
-                }
+        stage ('Upload Test Coverage') {
+            when { environment name: 'CODE_COVERAGE', value: 'true' }
+            steps {
+                sh """
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${JACOCO_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.JACOCO_TARGET_HTML_DIR}'
+                """
             }
         }
 
+        stage ('Upload Mutation Coverage') {
+            when { environment name: 'MUTATION_COVERAGE', value: 'true' }
+            steps {
+                sh """
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${PITEST_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.PITEST_TARGET_HTML_DIR}'
+                """
+            }
+        }
     }
 }
