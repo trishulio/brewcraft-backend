@@ -1,0 +1,51 @@
+pipeline {
+    agent {
+        label 'docker'
+    }
+
+    environment {
+        SSH_CREDS = credentials('jaas_user')
+    }
+
+    parameters {
+        string(name: 'HOST_URL', defaultValue: '172.17.0.1')
+        string(name: 'PITEST_SOURCE_HTML_DIR', defaultValue: "target/pit-reports", description: 'Location of the mutation coverage files.')
+        string(name: 'PITEST_TARGET_HTML_DIR', defaultValue: '/home/mrishab/brewcraft/code/html/pit-reports', description: 'Absolute path of the host directory where mutation coverage is hosted')
+    }
+
+    stages {
+        stage ('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage ('Setup SSH') {
+            steps {
+                sh """
+                    mkdir -p ~/.ssh/
+                    ssh-keyscan -H '${params.HOST_URL}' > ~/.ssh/known_hosts
+                """
+            }
+        }
+
+        stage ('Install') {
+            steps {
+                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
+                sh """
+                    export CODE_COVERAGE=false
+                    export MUTATION_COVERAGE=true
+                    make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
+                """
+            }
+        }
+
+        stage ('Upload') {
+            steps {
+                sh """
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${PITEST_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.PITEST_TARGET_HTML_DIR}'
+                """
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+pipeline {
+    agent {
+        label 'docker'
+    }
+
+    environment {
+        SSH_CREDS = credentials('jaas_user')
+    }
+
+    parameters {
+        string(name: 'HOST_URL', defaultValue: '172.17.0.1')
+        string(name: 'JACOCO_SOURCE_HTML_DIR', defaultValue: "target/site/jacoco", description: 'Location of the code coverage files.')
+        string(name: 'JACOCO_TARGET_HTML_DIR', defaultValue: '/home/mrishab/brewcraft/code/html/jacoco', description: 'Absolute path of the host directory where code coverage is hosted')
+    }
+
+    stages {
+        stage ('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage ('Setup SSH') {
+            steps {
+                sh """
+                    mkdir -p ~/.ssh/
+                    ssh-keyscan -H '${params.HOST_URL}' > ~/.ssh/known_hosts
+                """
+            }
+        }
+
+        stage ('Install') {
+            steps {
+                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
+                sh """
+                    export CODE_COVERAGE=true
+                    export MUTATION_COVERAGE=false
+                    make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
+                """
+            }
+        }
+
+        stage ('Upload') {
+            steps {
+                sh """
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${JACOCO_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.JACOCO_TARGET_HTML_DIR}'
+                """
+            }
+        }
+    }
+}
