@@ -25,14 +25,14 @@ pipeline {
                 sh """
                     export CODE_COVERAGE=true
                     export MUTATION_COVERAGE=false
-                    make install PWD=${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}
+                    make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
         }
 
         stage ('Containerize') {
             steps {
-                sh "make containerize VERSION=${IMAGE_TAG}"
+                sh "make containerize VERSION='${IMAGE_TAG}'"
             }
         }
 

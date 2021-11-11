@@ -9,8 +9,8 @@ pipeline {
 
     parameters {
         string(name: 'HOST_URL', defaultValue: '172.17.0.1')
-        string(name: 'JACOCO_SOURCE_HTML_DIR', defaultValue: './target/site/jacoco', description: 'Relative location of the code coverage files.')
-        string(name: 'PITEST_SOURCE_HTML_DIR', defaultValue: './target/site/pit-reports', description: 'Relative location of the mutation coverage files.')
+        string(name: 'JACOCO_SOURCE_HTML_DIR', defaultValue: "${env.WORKSPACE_HOME}/target/site/jacoco", description: 'Location of the code coverage files.')
+        string(name: 'PITEST_SOURCE_HTML_DIR', defaultValue: "${env.WORKSPACE_HOME}/target/site/pit-reports", description: 'Location of the mutation coverage files.')
         string(name: 'JACOCO_TARGET_HTML_DIR', defaultValue: '/home/mrishab/brewcraft/code/html/jacoco', description: 'Absolute path of the host directory where code coverage is hosted')
         string(name: 'PITEST_TARGET_HTML_DIR', defaultValue: '/home/mrishab/brewcraft/code/html/pit-reports', description: 'Absolute path of the host directory where mutation coverage is hosted')
         booleanParam(name: 'CODE_COVERAGE', defaultValue: true, description: 'Set true if you want to generate code coverage')
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 sh """
                     mkdir -p ~/.ssh/
-                    ssh-keyscan -H ${params.HOST_URL} > ~/.ssh/known_hosts
+                    ssh-keyscan -H '${params.HOST_URL}' > ~/.ssh/known_hosts
                 """
             }
         }
@@ -40,7 +40,7 @@ pipeline {
                 sh """
                     export CODE_COVERAGE=${env.CODE_COVERAGE}
                     export MUTATION_COVERAGE=${env.MUTATION_COVERAGE}
-                    make install PWD="${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}"
+                    make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
         }
@@ -50,14 +50,18 @@ pipeline {
                 stage ('Upload Test Coverage') {
                     when { environment name: 'CODE_COVERAGE', value: 'true' }
                     steps {
-                        sh "make upload ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} SOURCE_UPLOAD_DIR=${params.JACOCO_SOURCE_HTML_DIR} TARGET_UPLOAD_DIR=${params.JACOCO_TARGET_HTML_DIR}"
+                        sh """
+                            make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${JACOCO_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.JACOCO_TARGET_HTML_DIR}'
+                        """
                     }
                 }
 
                 stage ('Upload Mutation Coverage') {
                     when { environment name: 'MUTATION_COVERAGE', value: 'true' }
                     steps {
-                        sh "make upload ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} SOURCE_UPLOAD_DIR=${params.PITEST_SOURCE_HTML_DIR} TARGET_UPLOAD_DIR=${params.PITEST_TARGET_HTML_DIR}"
+                        sh """
+                            make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' SOURCE_UPLOAD_DIR='${PITEST_SOURCE_HTML_DIR}' TARGET_UPLOAD_DIR='${params.PITEST_TARGET_HTML_DIR}'
+                        """
                     }
                 }
             }
