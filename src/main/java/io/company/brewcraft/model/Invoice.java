@@ -63,7 +63,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     @SequenceGenerator(name = "invoice_generator", sequenceName = "invoice_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "invoice_number", nullable = false, unique = true)
+    @Column(name = "invoice_number")
     private String invoiceNumber;
 
     @Column(name = "description")
