@@ -53,8 +53,8 @@ public class SimpleUpdateServiceTest {
     }
 
     @Test
-    public void testGetPutEntities_ReturnsNull_WhenExistingAndUpdatesAreNull() {
-        assertNull(this.service.getPutEntities(null, null));
+    public void testGetPutEntities_ReturnsEmptyList_WhenExistingAndUpdatesAreNull() {
+        assertEquals(new ArrayList<>(), this.service.getPutEntities(null, null));
     }
 
     @Test

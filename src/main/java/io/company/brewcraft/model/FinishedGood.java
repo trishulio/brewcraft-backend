@@ -113,6 +113,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
         if (mixturePortions != null) {
             if (this.mixturePortions == null) {
+                this.mixturePortions = new ArrayList<>();
                 mixturePortions.stream().collect(Collectors.toList()).forEach(this::addMixturePortion);
             } else {
                 mixturePortions.stream().filter(mixturePortion -> !this.mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::addMixturePortion);
@@ -165,6 +166,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
         if (materialPortions != null) {
             if (this.materialPortions == null) {
+                this.materialPortions = new ArrayList<>();
                 materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
             } else {
                 materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);

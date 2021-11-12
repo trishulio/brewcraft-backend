@@ -45,7 +45,7 @@ public class BrewMapperTest {
 
         Brew parentBrew = new Brew(3L);
         parentBrew.addChildBrew(brew);
-        Brew expectedBrew = new Brew(null, "testName", "testDesc", "2", new Product(3L), parentBrew, List.of(), null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
+        Brew expectedBrew = new Brew(null, "testName", "testDesc", "2", new Product(3L), parentBrew, null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
 
         org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals(expectedBrew, brew);
     }

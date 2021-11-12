@@ -187,6 +187,7 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
 
         if (childBrews != null) {
             if (this.childBrews == null) {
+                this.childBrews = new ArrayList<>();
                 childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
             } else {
                 childBrews.stream().filter(childBrew -> !this.childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::addChildBrew);
@@ -239,6 +240,7 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
 
         if (brewStages != null) {
             if (this.brewStages == null) {
+                this.brewStages = new ArrayList<>();
                 brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
             } else {
                 brewStages.stream().filter(brewStage -> !this.brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::addBrewStage);
