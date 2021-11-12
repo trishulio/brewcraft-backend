@@ -81,7 +81,7 @@ public class SkuServiceImpl implements SkuService {
             final List<SkuMaterial> existingSkuMaterials = i < existing.size() ? existing.get(i).getMaterials() : null ;
             final List<? extends UpdateSkuMaterial<?>> updateSkuMaterials = i < skus.size() ? skus.get(i).getMaterials() : null;
 
-            final List<SkuMaterial> updatedSkuMaterials = this.skuMaterialService.getPutEntities(existingSkuMaterials, (List<UpdateSkuMaterial<?>>) updateSkuMaterials);      
+            final List<SkuMaterial> updatedSkuMaterials = this.skuMaterialService.getPutEntities(existingSkuMaterials, (List<UpdateSkuMaterial<?>>) updateSkuMaterials);
 
             updated.get(i).setMaterials(updatedSkuMaterials);
         }
