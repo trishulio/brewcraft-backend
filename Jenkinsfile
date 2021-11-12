@@ -32,7 +32,7 @@ pipeline {
 
         stage ('Containerize') {
             steps {
-                sh "make containerize VERSION='${IMAGE_TAG}'"
+                sh "make containerize VERSION=${IMAGE_TAG}"
             }
         }
 
