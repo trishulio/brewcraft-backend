@@ -70,7 +70,7 @@ public class SimpleUpdateServiceTest {
 
     @Test
     public void testGetPutEntities_ThrowsEntityNotFoundException_WhenUpdateEntityIdDoesNotExistInExistingEntities() {
-        final List<DummyCrudEntity> existing = new ArrayList<>(Arrays.asList(new DummyCrudEntity(1L)));
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(3L));
 
         assertThrows(ValidationException.class, () -> this.service.getPutEntities(existing, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
