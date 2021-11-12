@@ -36,11 +36,11 @@ pipeline {
             }
         }
 
-        stage ('Deliver') {
+        stage ('Post Success') {
             when { branch 'master' }
 
             stages {
-                stage ('Prune') {
+                stage ('Prune Host') {
                     steps {
                         build job: '../Nucleus Prune', parameters: [
                             string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
@@ -48,7 +48,7 @@ pipeline {
                     }
                 }
 
-                stage ('Deploy') {
+                stage ('Deploy Host') {
                     steps {
                         build job: '../Brewcraft Deploy', parameters: [
                             string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com'),
