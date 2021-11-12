@@ -46,7 +46,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
     @Override
     public List<E> getPutEntities(List<E> existingItems, List<UE> updates) {
         if (updates == null) {
-            return null;
+            return new ArrayList<>(0);
         }
 
         final Validator validator = this.utilProvider.getValidator();

@@ -38,16 +38,17 @@ public class BrewServiceImpl extends BaseService implements BrewService {
 
     @Override
     public Page<Brew> getBrews(Set<Long> ids, Set<Long> batchIds, Set<String> names, Set<Long> productIds,
-            Set<Long> stageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo, LocalDateTime endedAtFrom,
-            LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
+            Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,
+            LocalDateTime endedAtFrom, LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
             Specification<Brew> spec = WhereClauseBuilder
                 .builder()
                 .in(Brew.FIELD_ID, ids)
                 .in(Brew.FIELD_BATCH_ID, batchIds)
                 .in(Brew.FIELD_NAME, names)
-                .in(new String[] {Brew.FIELD_PRODUCT, Product.FIELD_ID}, productIds)
-                .in(new String[] {Brew.FIELD_BREW_STAGES, BrewStage.FIELD_TASK, BrewTask.FIELD_ID}, stageTaskIds)
+                .in(new String[] { Brew.FIELD_PRODUCT, Product.FIELD_ID }, productIds)
+                .in(Brew.FIELD_BREW_STAGES, new String[] { BrewStage.FIELD_TASK, BrewTask.FIELD_ID }, stageTaskIds)
+                .not().in(Brew.FIELD_BREW_STAGES, new String[] { BrewStage.FIELD_TASK, BrewTask.FIELD_ID }, excludeStageTaskIds)
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
                 .build();

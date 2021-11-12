@@ -3,6 +3,7 @@ package io.company.brewcraft.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,10 +52,10 @@ public class SimpleUpdateServiceTest {
     }
 
     @Test
-    public void testGetPutEntities_ReturnsNull_WhenUpdatesAreNull() {
-        assertNull(this.service.getPutEntities(null, null));
-        assertNull(this.service.getPutEntities(List.of(), null));
-        assertNull(this.service.getPutEntities(List.of(new DummyCrudEntity(1L)), null));
+    public void testGetPutEntities_ReturnsEmptyList_WhenUpdatesAreNull() {
+        assertEquals(new ArrayList<>(), this.service.getPutEntities(null, null));
+        assertEquals(new ArrayList<>(), this.service.getPutEntities(List.of(), null));
+        assertEquals(new ArrayList<>(), this.service.getPutEntities(List.of(new DummyCrudEntity(1L)), null));
     }
 
     @Test

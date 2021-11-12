@@ -108,11 +108,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @Override
     public void setMixturePortions(List<FinishedGoodMixturePortion> mixturePortions) {
         if (this.mixturePortions != null) {
-            this.mixturePortions.stream().filter(mixturePortion -> !mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::removeMixturePortion);
+            this.mixturePortions.stream().filter(mixturePortion -> mixturePortions != null && !mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::removeMixturePortion);
         }
 
         if (mixturePortions != null) {
             if (this.mixturePortions == null) {
+                this.mixturePortions = new ArrayList<>();
                 mixturePortions.stream().collect(Collectors.toList()).forEach(this::addMixturePortion);
             } else {
                 mixturePortions.stream().filter(mixturePortion -> !this.mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::addMixturePortion);
@@ -160,11 +161,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @Override
     public void setMaterialPortions(List<FinishedGoodMaterialPortion> materialPortions) {
         if (this.materialPortions != null) {
-            this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+            this.materialPortions.stream().filter(materialPortion -> materialPortions != null && !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
         }
 
         if (materialPortions != null) {
             if (this.materialPortions == null) {
+                this.materialPortions = new ArrayList<>();
                 materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
             } else {
                 materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);

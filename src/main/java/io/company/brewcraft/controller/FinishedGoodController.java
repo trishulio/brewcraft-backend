@@ -30,6 +30,8 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.dto.UpdateFinishedGoodDto;
 import io.company.brewcraft.model.BaseFinishedGood;
+import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
+import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
@@ -57,6 +59,9 @@ public class FinishedGoodController extends BaseController {
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "sku_ids") Set<Long> skuIds,
+        @RequestParam(required = false, name = "mixture_ids") Set<Long> mixtureIds,
+        @RequestParam(required = false, name = "brew_stage_ids") Set<Long> brewStageIds,
+        @RequestParam(required = false, name = "brew_ids") Set<Long> brewIds,
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
@@ -67,6 +72,9 @@ public class FinishedGoodController extends BaseController {
             ids,
             excludeIds,
             skuIds,
+            mixtureIds,
+            brewStageIds,
+            brewIds,
             sort,
             orderAscending,
             page,
@@ -95,13 +103,17 @@ public class FinishedGoodController extends BaseController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public FinishedGoodDto addFinishedGood(@Valid @NotNull @RequestBody AddFinishedGoodDto payload) {
-        final BaseFinishedGood<FinishedGoodMixturePortion, FinishedGoodMaterialPortion> addition = mapper.fromDto(payload);
-        final FinishedGood added = this.finishedGoodService.add(List.of(addition)).get(0);
+    public List<FinishedGoodDto> addFinishedGood(@Valid @NotNull @RequestBody List<AddFinishedGoodDto> payloads) {
+        final List<BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>> additions = payloads.stream()
+                                                                                                                                                    .map(addition -> mapper.fromDto(addition))
+                                                                                                                                                    .collect(Collectors.toList());
+        final List<FinishedGood> added = this.finishedGoodService.add(additions);
 
-        final FinishedGoodDto dto = mapper.toDto(added);
+        final List<FinishedGoodDto> dtos = added.stream()
+                                                .map(finishedGood -> mapper.toDto(finishedGood))
+                                                .collect(Collectors.toList());
 
-        return dto;
+        return dtos;
     }
 
     @PutMapping("/{finishedGoodId}")

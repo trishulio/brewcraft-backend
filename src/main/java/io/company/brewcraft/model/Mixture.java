@@ -144,11 +144,12 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @Override
     public void setChildMixtures(List<Mixture> childMixtures) {
         if (this.childMixtures != null) {
-            this.childMixtures.stream().filter(childMixture -> !childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::removeChildMixture);
+            this.childMixtures.stream().filter(childMixture -> childMixtures!= null && !childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::removeChildMixture);
         }
 
         if (childMixtures != null) {
             if (this.childMixtures == null) {
+                this.childMixtures = new ArrayList<>();
                 childMixtures.stream().collect(Collectors.toList()).forEach(this::addChildMixture);
             } else {
                 childMixtures.stream().filter(childMixture -> !this.childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::addChildMixture);
@@ -217,11 +218,12 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @Override
     public void setMaterialPortions(List<MixtureMaterialPortion> materialPortions) {
         if (this.materialPortions != null) {
-            this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+            this.materialPortions.stream().filter(materialPortion -> materialPortions!= null && !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
         }
 
         if (materialPortions != null) {
             if (this.materialPortions == null) {
+                this.materialPortions = new ArrayList<>();
                 materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
             } else {
                 materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);
@@ -269,11 +271,12 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @Override
     public void setRecordedMeasures(List<MixtureRecording> recordedMeasures) {
         if (this.recordedMeasures != null) {
-            this.recordedMeasures.stream().filter(recordedMeasure -> !recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
+            this.recordedMeasures.stream().filter(recordedMeasure -> recordedMeasures != null && !recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
         }
 
         if (recordedMeasures != null) {
             if (this.recordedMeasures == null) {
+                this.recordedMeasures = new ArrayList<>();
                 recordedMeasures.stream().collect(Collectors.toList()).forEach(this::addRecordedMeasure);
             } else {
                 recordedMeasures.stream().filter(recordedMeasure -> !this.recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::addRecordedMeasure);

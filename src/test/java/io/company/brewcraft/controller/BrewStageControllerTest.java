@@ -108,7 +108,7 @@ public class BrewStageControllerTest {
    public void testAddBrewStage() {
        AddBrewStageDto addBrewStageDto = new AddBrewStageDto(2L, 3L, 4L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4));
 
-       BrewStage brewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), List.of(), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
+       BrewStage brewStage = new BrewStage(null, new Brew(2L), new BrewStageStatus(3L), new BrewTask(4L), null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
        BrewStage addedBrewStage = new BrewStage(1L, new Brew(2L), new BrewStageStatus(3L, "COMPLETE"), new BrewTask(4L, "MASH"), List.of(new Mixture()), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
        doReturn(List.of(addedBrewStage)).when(brewStageService).addBrewStages(List.of(brewStage));
