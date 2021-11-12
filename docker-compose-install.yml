@@ -7,7 +7,7 @@ services:
     command: ['mvn', 'clean', 'install']
     environment:
       MUTATION_COVERAGE: "${MUTATION_COVERAGE}"
-      SKIP_TESTS: "${SKIP_TESTS}"
+      CODE_COVERAGE: "${CODE_COVERAGE}"
     volumes:
       - ${PWD}:/usr/code/app
       - m2-data:/root/.m2

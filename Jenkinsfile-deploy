@@ -9,6 +9,8 @@ pipeline {
 
     parameters {
         string(name: 'HOST_URL', defaultValue: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
+        string(name: 'TARGET_UPLOAD_DIR', defaultValue: '/var/server/brewcraft')
+        string(name: 'SOURCE_UPLOAD_DIR', defaultValue: './dist')
     }
 
     stages {
@@ -33,7 +35,7 @@ pipeline {
             steps {
                 sh """
                     mkdir -p ~/.ssh/
-                    ssh-keyscan -H ${params.HOST_URL} > ~/.ssh/known_hosts
+                    ssh-keyscan -H '${params.HOST_URL}' > ~/.ssh/known_hosts
                 """
             }
         }
@@ -41,7 +43,7 @@ pipeline {
         stage ('Pack') {
             steps {
                 sh """
-                    make pack VERSION=${IMAGE_TAG}
+                    make pack VERSION='${IMAGE_TAG}'
                 """
             }
         }
@@ -49,7 +51,7 @@ pipeline {
         stage ('Upload') {
             steps {
                 sh """
-                    make upload ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL}
+                    make upload ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' TARGET_UPLOAD_DIR='${params.TARGET_UPLOAD_DIR}' SOURCE_UPLOAD_DIR='${params.SOURCE_UPLOAD_DIR}'
                 """
             }
         }
@@ -59,7 +61,7 @@ pipeline {
                 stage ('Start Backend') {
                     steps {
                         sh """
-                            make deploy ID_KEY='${SSH_CREDS}' USERNAME=${SSH_CREDS_USR} HOST=${params.HOST_URL} VERSION=${IMAGE_TAG}
+                            make deploy ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' VERSION='${IMAGE_TAG}'
                         """
                     }
                 }
@@ -67,7 +69,7 @@ pipeline {
                 stage ('Start Frontend') {
                     steps {
                         sh """
-                            ssh -i '${SSH_CREDS}' ${SSH_CREDS_USR}@${params.HOST_URL} "cd /var/server/brewcraft-ui && make restart"
+                            ssh -i '${SSH_CREDS}' '${SSH_CREDS_USR}'@'${params.HOST_URL}' 'cd /var/server/brewcraft-ui && make restart'
                         """
                     }
                 }
