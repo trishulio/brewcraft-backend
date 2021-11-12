@@ -59,7 +59,7 @@ public class SimpleUpdateServiceTest {
 
     @Test
     public void testGetPutEntities_ReturnsListOfEntitiesWithUpdateProperties_WhenUpdatesAreNotNull() {
-        final List<DummyCrudEntity> existing = new ArrayList<>(Arrays.asList(new DummyCrudEntity(1L, null, null, 1)));
+        final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L, null, null, 1));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(1L, "VALUE", "EXCLUDED_VALUE", 1), new DummyCrudEntity(null, "VALUE", "EXCLUDED_VALUE", 1));
 
         final List<DummyCrudEntity> entities = this.service.getPutEntities(existing, updates);
