@@ -197,6 +197,10 @@
             <id>export-code-coverage</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.CODE_COVERAGE</name>
+                    <value>true</value>
+                </property>
             </activation>
             <build>
                 <plugins>
