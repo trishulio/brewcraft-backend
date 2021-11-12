@@ -36,11 +36,11 @@ pipeline {
             }
         }
 
-        stage ('Post Success') {
+        stage ('Deliver') {
             when { branch 'master' }
 
             stages {
-                stage ('Prune Host') {
+                stage ('Prune') {
                     steps {
                         build job: '../Nucleus Prune', parameters: [
                             string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
@@ -48,7 +48,7 @@ pipeline {
                     }
                 }
 
-                stage ('Deploy Host') {
+                stage ('Deploy') {
                     steps {
                         build job: '../Brewcraft Deploy', parameters: [
                             string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com'),
@@ -61,7 +61,13 @@ pipeline {
                 stage ('Report Coverage') {
                     steps {
                         build job: '../Brewcraft Report Coverage', parameters: [
-                            string(name: 'HOST_URL', value: '172.17.0.1')
+                            string(name: 'HOST_URL', value: '172.17.0.1'),
+                            string(name: 'JACOCO_SOURCE_HTML_DIR', value: 'target/site/jacoco'),
+                            string(name: 'PITEST_SOURCE_HTML_DIR', value: 'target/pit-reports'),
+                            string(name: 'JACOCO_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/jacoco'), 
+                            string(name: 'PITEST_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/pit-reports'),
+                            booleanParam(name: 'CODE_COVERAGE', value: true),
+                            booleanParam(name: 'MUTATION_COVERAGE', value: true)
                         ]
                     }
                 }
