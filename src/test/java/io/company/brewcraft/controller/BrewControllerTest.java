@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,16 @@ public class BrewControllerTest {
        doReturn(100).when(mPage).getTotalPages();
        doReturn(1000L).when(mPage).getTotalElements();
        doReturn(mPage).when(brewService).getBrews(
-           null, null, null, null, null, null, null, null, null, null,
+           Set.of(1L), 
+           Set.of(2L), 
+           Set.of("test"), 
+           Set.of(3L), 
+           Set.of(4L), 
+           Set.of(5L), 
+           LocalDateTime.of(1999, 1, 1, 12, 0), 
+           LocalDateTime.of(2000, 1, 1, 12, 0), 
+           LocalDateTime.of(2001, 1, 1, 12, 0), 
+           LocalDateTime.of(2002, 1, 1, 12, 0),
            1,
            10,
            new TreeSet<>(List.of("id")),
@@ -56,7 +66,16 @@ public class BrewControllerTest {
        );
 
        PageDto<BrewDto> dto = brewController.getBrews(
-               null, null, null, null, null, null, null, null, null, null,
+               Set.of(1L), 
+               Set.of(2L), 
+               Set.of("test"), 
+               Set.of(3L), 
+               Set.of(4L), 
+               Set.of(5L), 
+               LocalDateTime.of(1999, 1, 1, 12, 0), 
+               LocalDateTime.of(2000, 1, 1, 12, 0), 
+               LocalDateTime.of(2001, 1, 1, 12, 0), 
+               LocalDateTime.of(2002, 1, 1, 12, 0),
                new TreeSet<>(List.of("id")),
                true,
                1,
