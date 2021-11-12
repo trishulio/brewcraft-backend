@@ -43,7 +43,7 @@ pipeline {
         stage ('Pack') {
             steps {
                 sh """
-                    make pack VERSION='${IMAGE_TAG}'
+                    make pack VERSION=${IMAGE_TAG}
                 """
             }
         }
@@ -61,7 +61,7 @@ pipeline {
                 stage ('Start Backend') {
                     steps {
                         sh """
-                            make deploy ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' VERSION='${IMAGE_TAG}'
+                            make deploy ID_KEY='${SSH_CREDS}' USERNAME='${SSH_CREDS_USR}' HOST='${params.HOST_URL}' VERSION=${IMAGE_TAG}
                         """
                     }
                 }
