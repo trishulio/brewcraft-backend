@@ -18,7 +18,7 @@ pipeline {
             parallel {
                 stage ('Generate Code Coverage') {
                     steps {
-                        build job: 'Brewcraft Report Code Coverage', parameters: [
+                        build job: '../Brewcraft Report Code Coverage', parameters: [
                             string(name: 'HOST_URL', value: params.HOST_URL),
                             string(name: 'JACOCO_SOURCE_HTML_DIR', value: 'target/site/jacoco'),
                             string(name: 'JACOCO_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/jacoco')
@@ -28,7 +28,7 @@ pipeline {
 
                 stage ('Generate Mutation Coverage') {
                     steps {
-                        build job: 'Brewcraft Report Mutation Coverage', parameters: [
+                        build job: '../Brewcraft Report Mutation Coverage', parameters: [
                             string(name: 'HOST_URL', value: params.HOST_URL),
                             string(name: 'PITEST_SOURCE_HTML_DIR', value: 'target/pit-reports'),
                             string(name: 'PITEST_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/pit-reports')
