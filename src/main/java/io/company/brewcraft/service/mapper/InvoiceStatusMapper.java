@@ -25,10 +25,10 @@ public interface InvoiceStatusMapper {
     @Mappings({
         @Mapping(target = InvoiceStatus.ATTR_ID, source = "id")
     })
-    InvoiceStatus fromDto(InvoiceStatusDto status);
+    InvoiceStatus fromDto(InvoiceStatusDto invoiceStatus);
 
     @Mappings({
         @Mapping(target = "id", source = InvoiceStatus.ATTR_ID)
     })
-    InvoiceStatusDto toDto(InvoiceStatus status);
+    InvoiceStatusDto toDto(InvoiceStatus invoiceStatus);
 }

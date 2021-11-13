@@ -58,7 +58,7 @@ public class ShipmentServiceTest {
            Set.of(2L), // excludeIds,
            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers,
            Set.of("S_DESCRIPTION"), // descriptions,
-           Set.of(3L), // statusIds,
+           Set.of(3L), // shipmentStatusIds,
            LocalDateTime.of(2000, 1, 1, 0, 1), // deliveryDueDateFrom,
            LocalDateTime.of(2000, 1, 1, 0, 2), // deliveryDueDateTo,
            LocalDateTime.of(2000, 1, 1, 0, 3), // deliveredDateFrom,

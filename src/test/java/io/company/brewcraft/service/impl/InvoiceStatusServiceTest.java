@@ -29,15 +29,15 @@ public class InvoiceStatusServiceTest {
     public void testGetInvoiceStatus_ReturnsPojo_WhenEntityExists() {
         doReturn(Optional.of(new InvoiceStatus(99L))).when(mRepo).findById(99L);
 
-        InvoiceStatus status = service.getStatus(99L);
-        assertEquals(new InvoiceStatus(99L), status);
+        InvoiceStatus invoiceStatus = service.getStatus(99L);
+        assertEquals(new InvoiceStatus(99L), invoiceStatus);
     }
 
     @Test
     public void testGetInvoiceStatus_ReturnsNull_WhenEntityDoesNotExists() {
         doReturn(new ArrayList<>()).when(mRepo).findAllById(Set.of(99L));
 
-        InvoiceStatus status = service.getStatus(99L);
-        assertNull(status);
+        InvoiceStatus invoiceStatus = service.getStatus(99L);
+        assertNull(invoiceStatus);
     }
 }

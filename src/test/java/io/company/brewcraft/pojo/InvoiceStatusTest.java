@@ -11,62 +11,62 @@ import io.company.brewcraft.model.InvoiceStatus;
 
 public class InvoiceStatusTest {
 
-    private InvoiceStatus status;
+    private InvoiceStatus invoiceStatus;
 
     @BeforeEach
     public void init() {
-        status = new InvoiceStatus();
+        invoiceStatus = new InvoiceStatus();
     }
 
     @Test
     public void testIdArgConstructor() {
-        status = new InvoiceStatus(99L);
-        assertEquals(99L, status.getId());
+        invoiceStatus = new InvoiceStatus(99L);
+        assertEquals(99L, invoiceStatus.getId());
     }
 
     @Test
     public void testAllArgConstructor() {
-        status = new InvoiceStatus(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
+        invoiceStatus = new InvoiceStatus(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
 
-        assertEquals(99L, status.getId());
-        assertEquals("FINAL", status.getName());
-        assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), status.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), status.getLastUpdated());
-        assertEquals(1, status.getVersion());
+        assertEquals(99L, invoiceStatus.getId());
+        assertEquals("FINAL", invoiceStatus.getName());
+        assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), invoiceStatus.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), invoiceStatus.getLastUpdated());
+        assertEquals(1, invoiceStatus.getVersion());
     }
 
     @Test
     public void testAccessId() {
-        assertNull(status.getId());
-        status.setId(1L);
-        assertEquals(1L, status.getId());
+        assertNull(invoiceStatus.getId());
+        invoiceStatus.setId(1L);
+        assertEquals(1L, invoiceStatus.getId());
     }
 
     @Test
     public void testAccessName() {
-        assertNull(status.getName());
-        status.setName("STATUS_NAME");
-        assertEquals("STATUS_NAME", status.getName());
+        assertNull(invoiceStatus.getName());
+        invoiceStatus.setName("STATUS_NAME");
+        assertEquals("STATUS_NAME", invoiceStatus.getName());
     }
 
     @Test
     public void testAccessCreatedAt() {
-        assertNull(status.getCreatedAt());
-        status.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), status.getCreatedAt());
+        assertNull(invoiceStatus.getCreatedAt());
+        invoiceStatus.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), invoiceStatus.getCreatedAt());
     }
 
     @Test
     public void testAccessLastUpdated() {
-        assertNull(status.getLastUpdated());
-        status.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), status.getLastUpdated());
+        assertNull(invoiceStatus.getLastUpdated());
+        invoiceStatus.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), invoiceStatus.getLastUpdated());
     }
 
     @Test
     public void testAccessVersion() {
-        assertNull(status.getVersion());
-        status.setVersion(1);
-        assertEquals(1, status.getVersion());
+        assertNull(invoiceStatus.getVersion());
+        invoiceStatus.setVersion(1);
+        assertEquals(1, invoiceStatus.getVersion());
     }
 }

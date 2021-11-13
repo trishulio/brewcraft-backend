@@ -8,56 +8,56 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AddInvoiceItemDtoTest {
-    AddInvoiceItemDto item;
+    AddInvoiceItemDto invoiceItem;
 
     @BeforeEach
     public void init() {
-        item = new AddInvoiceItemDto();
+        invoiceItem = new AddInvoiceItemDto();
     }
 
     @Test
     public void testAllArgs() {
-        item = new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
+        invoiceItem = new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
 
-        assertEquals("desc2", item.getDescription());
-        assertEquals(new QuantityDto("KG", new BigDecimal("4")), item.getQuantity());
-        assertEquals(new MoneyDto("CAD", new BigDecimal("5")), item.getPrice());
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), item.getTax());
-        assertEquals(7L, item.getMaterialId());
+        assertEquals("desc2", invoiceItem.getDescription());
+        assertEquals(new QuantityDto("KG", new BigDecimal("4")), invoiceItem.getQuantity());
+        assertEquals(new MoneyDto("CAD", new BigDecimal("5")), invoiceItem.getPrice());
+        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), invoiceItem.getTax());
+        assertEquals(7L, invoiceItem.getMaterialId());
     }
 
     @Test
     public void testAccessDescription() {
-        assertNull(item.getDescription());
-        item.setDescription("Description ABC");
-        assertEquals("Description ABC", item.getDescription());
+        assertNull(invoiceItem.getDescription());
+        invoiceItem.setDescription("Description ABC");
+        assertEquals("Description ABC", invoiceItem.getDescription());
     }
 
     @Test
     public void testAccessQuantity() {
-        assertNull(item.getQuantity());
-        item.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
-        assertEquals(new QuantityDto("kg", new BigDecimal(100)), item.getQuantity());
+        assertNull(invoiceItem.getQuantity());
+        invoiceItem.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
+        assertEquals(new QuantityDto("kg", new BigDecimal(100)), invoiceItem.getQuantity());
     }
 
     @Test
     public void testAccessPrice() {
-        assertNull(item.getPrice());
-        item.setPrice(new MoneyDto("CAD", new BigDecimal("100")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100")), item.getPrice());
+        assertNull(invoiceItem.getPrice());
+        invoiceItem.setPrice(new MoneyDto("CAD", new BigDecimal("100")));
+        assertEquals(new MoneyDto("CAD", new BigDecimal("100")), invoiceItem.getPrice());
     }
 
     @Test
     public void testAccessTax() {
-        assertNull(item.getTax());
-        item.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), item.getTax());
+        assertNull(invoiceItem.getTax());
+        invoiceItem.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
+        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), invoiceItem.getTax());
     }
 
     @Test
     public void testAccessMaterial() {
-        assertNull(item.getMaterialId());
-        item.setMaterialId(8L);
-        assertEquals(8L, item.getMaterialId());
+        assertNull(invoiceItem.getMaterialId());
+        invoiceItem.setMaterialId(8L);
+        assertEquals(8L, invoiceItem.getMaterialId());
     }
 }

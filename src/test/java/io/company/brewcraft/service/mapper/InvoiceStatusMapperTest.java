@@ -18,10 +18,10 @@ public class InvoiceStatusMapperTest {
 
     @Test
     public void testFromDto_ReturnPojo_WhenIdIsNotNull() {
-        InvoiceStatus status = mapper.fromDto(99l);
+        InvoiceStatus invoiceStatus = mapper.fromDto(99l);
         InvoiceStatus expected = new InvoiceStatus(99l);
 
-        assertEquals(expected, status);
+        assertEquals(expected, invoiceStatus);
     }
 
     @Test
@@ -31,10 +31,10 @@ public class InvoiceStatusMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-        InvoiceStatus status = mapper.fromDto(new InvoiceStatusDto(99l));
+        InvoiceStatus invoiceStatus = mapper.fromDto(new InvoiceStatusDto(99l));
         InvoiceStatus expected = new InvoiceStatus(99l);
 
-        assertEquals(expected, status);
+        assertEquals(expected, invoiceStatus);
     }
 
     @Test
@@ -44,10 +44,10 @@ public class InvoiceStatusMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        InvoiceStatusDto status = mapper.toDto(new InvoiceStatus(99l));
+        InvoiceStatusDto invoiceStatus = mapper.toDto(new InvoiceStatus(99l));
 
         InvoiceStatusDto expected = new InvoiceStatusDto(99l);
-        assertEquals(expected, status);
+        assertEquals(expected, invoiceStatus);
     }
 
     @Test

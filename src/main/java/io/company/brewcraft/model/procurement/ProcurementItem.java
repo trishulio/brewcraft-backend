@@ -237,7 +237,7 @@ public class ProcurementItem extends BaseEntity implements UpdateProcurementItem
     @Override
     @JsonIgnore
     @Deprecated
-    public void setInvoiceItem(InvoiceItem item) {
+    public void setInvoiceItem(InvoiceItem invoiceItem) {
         throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
     }
 

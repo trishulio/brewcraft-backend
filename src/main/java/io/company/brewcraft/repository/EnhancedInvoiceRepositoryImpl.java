@@ -17,25 +17,25 @@ public class EnhancedInvoiceRepositoryImpl implements EnhancedInvoiceRepository 
 
     private final AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher;
 
-    private final InvoiceItemRepository itemRepo;
-    private final InvoiceStatusRepository statusRepo;
+    private final InvoiceItemRepository invoiceItemRepo;
+    private final InvoiceStatusRepository invoiceStatusRepo;
     private final PurchaseOrderRepository poRepo;
 
     @Autowired
-    public EnhancedInvoiceRepositoryImpl(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, InvoiceItemRepository itemRepo, InvoiceStatusRepository statusRepo, PurchaseOrderRepository poRepo) {
+    public EnhancedInvoiceRepositoryImpl(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, InvoiceItemRepository invoiceItemRepo, InvoiceStatusRepository invoiceStatusRepo, PurchaseOrderRepository poRepo) {
         this.refresher = refresher;
-        this.itemRepo = itemRepo;
-        this.statusRepo = statusRepo;
+        this.invoiceItemRepo = invoiceItemRepo;
+        this.invoiceStatusRepo = invoiceStatusRepo;
         this.poRepo = poRepo;
     }
 
     @Override
     public void refresh(Collection<Invoice> invoices) {
         this.poRepo.refreshAccessors(invoices);
-        this.statusRepo.refreshAccessors(invoices);
+        this.invoiceStatusRepo.refreshAccessors(invoices);
 
         final List<InvoiceItem> invoiceItems = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getInvoiceItems().stream()).collect(Collectors.toList());
-        this.itemRepo.refresh(invoiceItems);
+        this.invoiceItemRepo.refresh(invoiceItems);
     }
 
     @Override

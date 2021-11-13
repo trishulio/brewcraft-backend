@@ -37,12 +37,12 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
     private static final Logger log = LoggerFactory.getLogger(InvoiceService.class);
 
     private final UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService;
-    private final InvoiceItemService itemService;
+    private final InvoiceItemService invoiceItemService;
     private final RepoService<Long, Invoice, InvoiceAccessor> repoService;
 
-    public InvoiceService(UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService, InvoiceItemService itemService, RepoService<Long, Invoice, InvoiceAccessor> repoService) {
+    public InvoiceService(UpdateService<Long, Invoice, BaseInvoice<? extends BaseInvoiceItem<?>>, UpdateInvoice<? extends UpdateInvoiceItem<?>>> updateService, InvoiceItemService invoiceItemService, RepoService<Long, Invoice, InvoiceAccessor> repoService) {
         this.updateService = updateService;
-        this.itemService = itemService;
+        this.invoiceItemService = invoiceItemService;
         this.repoService = repoService;
     }
 
@@ -64,7 +64,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             BigDecimal amtTo,
             BigDecimal freightAmtFrom,
             BigDecimal freightAmtTo,
-            Set<Long> statusIds,
+            Set<Long> invoiceStatusIds,
             Set<Long> supplierIds,
             SortedSet<String> sort,
             boolean orderAscending,
@@ -85,7 +85,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .in(Invoice.FIELD_ITEMS, new String[] { InvoiceItem.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
                                             .between(new String[] { Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
-                                            .in(new String[] { Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID }, statusIds)
+                                            .in(new String[] { Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID }, invoiceStatusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                             .build();
 
@@ -136,7 +136,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
         final List<Invoice> entities = this.updateService.getAddEntities(additions);
 
         for (int i = 0; i < additions.size(); i++) {
-            final List<InvoiceItem> invoiceItems = this.itemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getInvoiceItems());
+            final List<InvoiceItem> invoiceItems = this.invoiceItemService.getAddEntities((List<BaseInvoiceItem<?>>) additions.get(i).getInvoiceItems());
             entities.get(i).setInvoiceItems(invoiceItems);
         }
 
@@ -157,7 +157,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             final List<InvoiceItem> existingInvoiceItems = i < existing.size() ? existing.get(i).getInvoiceItems() : null;
             final List<? extends UpdateInvoiceItem<?>> updateInvoiceItems = i < updates.size() ? updates.get(i).getInvoiceItems() : null;
 
-            final List<InvoiceItem> updatedInvoiceItems = this.itemService.getPutEntities(existingInvoiceItems, (List<UpdateInvoiceItem<?>>) updateInvoiceItems);
+            final List<InvoiceItem> updatedInvoiceItems = this.invoiceItemService.getPutEntities(existingInvoiceItems, (List<UpdateInvoiceItem<?>>) updateInvoiceItems);
 
             updated.get(i).setInvoiceItems(updatedInvoiceItems);
         }
@@ -186,7 +186,7 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             final List<InvoiceItem> existingInvoiceItems = existing.get(i).getInvoiceItems();
             final List<? extends UpdateInvoiceItem<?>> updateInvoiceItems = patches.get(i).getInvoiceItems();
 
-            final List<InvoiceItem> updatedInvoiceItems = this.itemService.getPatchEntities(existingInvoiceItems, (List<UpdateInvoiceItem<?>>) updateInvoiceItems);
+            final List<InvoiceItem> updatedInvoiceItems = this.invoiceItemService.getPatchEntities(existingInvoiceItems, (List<UpdateInvoiceItem<?>>) updateInvoiceItems);
 
             updated.get(i).setInvoiceItems(updatedInvoiceItems);
         }

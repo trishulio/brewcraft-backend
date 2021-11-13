@@ -15,7 +15,7 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
     InvoiceItemMapper INSTANCE = Mappers.getMapper(InvoiceItemMapper.class);
 
     @Override
-    InvoiceItemDto toDto(InvoiceItem item);
+    InvoiceItemDto toDto(InvoiceItem invoiceItem);
 
     @Mappings({
         @Mapping(target = InvoiceItem.ATTR_ID),
