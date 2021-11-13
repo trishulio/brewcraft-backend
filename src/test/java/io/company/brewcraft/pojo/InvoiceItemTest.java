@@ -20,16 +20,16 @@ import tec.uom.se.quantity.Quantities;
 
 public class InvoiceItemTest {
 
-    private InvoiceItem item;
+    private InvoiceItem invoiceItem;
 
     @BeforeEach
     public void init() {
-        item = new InvoiceItem();
+        invoiceItem = new InvoiceItem();
     }
 
     @Test
     public void testAllArgsConstructor_SetsValues() {
-        InvoiceItem item = new InvoiceItem(2L,
+        InvoiceItem invoiceItem = new InvoiceItem(2L,
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
@@ -39,45 +39,45 @@ public class InvoiceItemTest {
                 LocalDateTime.of(1999, 1, 1, 1, 1),
                 1);
 
-        assertEquals(2L, item.getId());
-        assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), item.getPrice());
-        assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), item.getTax());
-        assertEquals(Money.parse("CAD 20"), item.getAmount());
-        assertEquals(new Material(7L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(2L, invoiceItem.getId());
+        assertEquals("desc2", invoiceItem.getDescription());
+        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), invoiceItem.getPrice());
+        assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), invoiceItem.getTax());
+        assertEquals(Money.parse("CAD 20"), invoiceItem.getAmount());
+        assertEquals(new Material(7L), invoiceItem.getMaterial());
+        assertEquals(1, invoiceItem.getVersion());
     }
 
     @Test
     public void testAccessInvoice() {
         Invoice invoice = new Invoice();
 
-        item.setInvoice(invoice);
-        assertEquals(invoice, item.getInvoice());
+        invoiceItem.setInvoice(invoice);
+        assertEquals(invoice, invoiceItem.getInvoice());
     }
 
     @Test
     public void testSetInvoice_RemovesItselfFromTheSourceinvoiceItemsAndSetsNewListOnTarget_WhenTargetinvoiceItemsAreNull() {
         Invoice source = new Invoice();
-        source.setInvoiceItems(List.of(item));
+        source.setInvoiceItems(List.of(invoiceItem));
 
         Invoice target = new Invoice();
-        item.setInvoice(target);
+        invoiceItem.setInvoice(target);
 
         assertEquals(List.of(), source.getInvoiceItems());
-        assertEquals(List.of(item), target.getInvoiceItems());
+        assertEquals(List.of(invoiceItem), target.getInvoiceItems());
     }
 
     @Test
     public void testSetInvoice_RemovesItemFromInvoiceAndAddsToExistingTargetInvoiceItemList_WhenTargetinvoiceItemsAreNotNull() {
         Invoice source = new Invoice();
-        source.setInvoiceItems(List.of(item));
+        source.setInvoiceItems(List.of(invoiceItem));
 
         Invoice target = new Invoice();
         target.setInvoiceItems(List.of(new InvoiceItem()));
 
-        item.setInvoice(target);
+        invoiceItem.setInvoice(target);
 
         assertEquals(List.of(), source.getInvoiceItems());
 
@@ -88,72 +88,72 @@ public class InvoiceItemTest {
 
     @Test
     public void testAccessId() {
-        assertNull(item.getId());
-        item.setId(1L);
-        assertEquals(1L, item.getId());
+        assertNull(invoiceItem.getId());
+        invoiceItem.setId(1L);
+        assertEquals(1L, invoiceItem.getId());
     }
 
     @Test
     public void testAccessDescription() {
-        assertNull(item.getDescription());
-        item.setDescription("Descriptio 1");
-        assertEquals("Descriptio 1", item.getDescription());
+        assertNull(invoiceItem.getDescription());
+        invoiceItem.setDescription("Descriptio 1");
+        assertEquals("Descriptio 1", invoiceItem.getDescription());
     }
 
     @Test
     public void testAccessQuantity() {
-        assertNull(item.getQuantity());
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM));
-        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), item.getQuantity());
+        assertNull(invoiceItem.getQuantity());
+        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
     }
 
     @Test
     public void testAccessPrice() {
-        assertNull(item.getPrice());
-        item.setPrice(Money.parse("CAD 1"));
-        assertEquals(Money.parse("CAD 1"), item.getPrice());
+        assertNull(invoiceItem.getPrice());
+        invoiceItem.setPrice(Money.parse("CAD 1"));
+        assertEquals(Money.parse("CAD 1"), invoiceItem.getPrice());
     }
 
     @Test
     public void testAccessTax() {
-        assertNull(item.getTax());
-        item.setTax(new Tax());
-        assertEquals(new Tax(), item.getTax());
+        assertNull(invoiceItem.getTax());
+        invoiceItem.setTax(new Tax());
+        assertEquals(new Tax(), invoiceItem.getTax());
     }
 
     @Test
     public void testAccessMaterial() {
-        assertNull(item.getMaterial());
-        item.setMaterial(new Material(1L));
-        assertEquals(new Material(1L), item.getMaterial());
+        assertNull(invoiceItem.getMaterial());
+        invoiceItem.setMaterial(new Material(1L));
+        assertEquals(new Material(1L), invoiceItem.getMaterial());
     }
 
     @Test
     public void testAccessCreatedAt() {
-        assertNull(item.getCreatedAt());
-        item.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), item.getCreatedAt());
+        assertNull(invoiceItem.getCreatedAt());
+        invoiceItem.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), invoiceItem.getCreatedAt());
     }
 
     @Test
     public void testAccessLastUpdated() {
-        assertNull(item.getLastUpdated());
-        item.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), item.getLastUpdated());
+        assertNull(invoiceItem.getLastUpdated());
+        invoiceItem.setLastUpdated(LocalDateTime.of(2001, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), invoiceItem.getLastUpdated());
     }
 
     @Test
     public void testAccessVersion() {
-        assertNull(item.getVersion());
-        item.setVersion(1);
-        assertEquals(1, item.getVersion());
+        assertNull(invoiceItem.getVersion());
+        invoiceItem.setVersion(1);
+        assertEquals(1, invoiceItem.getVersion());
     }
 
     @Test
     public void testGetAmount_ReturnsProductOfQuantityAndPrice() {
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM));
-        item.setPrice(Money.parse("CAD 10"));
+        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM));
+        invoiceItem.setPrice(Money.parse("CAD 10"));
 
-        assertEquals(Money.parse("CAD 110"), item.getAmount());
+        assertEquals(Money.parse("CAD 110"), invoiceItem.getAmount());
     }
 }

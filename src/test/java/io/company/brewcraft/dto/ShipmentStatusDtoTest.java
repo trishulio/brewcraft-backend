@@ -9,62 +9,62 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ShipmentStatusDtoTest {
-    private ShipmentStatusDto status;
+    private ShipmentStatusDto shipmentStatus;
 
     @BeforeEach
     public void init() {
-        status = new ShipmentStatusDto();
+        shipmentStatus = new ShipmentStatusDto();
     }
 
     @Test
     public void testIdArgConstructor() {
-        status = new ShipmentStatusDto(99L);
-        assertEquals(99L, status.getId());
+        shipmentStatus = new ShipmentStatusDto(99L);
+        assertEquals(99L, shipmentStatus.getId());
     }
 
     @Test
     public void testAllArgConstructor() {
-        status = new ShipmentStatusDto(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
+        shipmentStatus = new ShipmentStatusDto(99L, "FINAL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
 
-        assertEquals(99L, status.getId());
-        assertEquals("FINAL", status.getName());
-        assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), status.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), status.getLastUpdated());
-        assertEquals(1, status.getVersion());
+        assertEquals(99L, shipmentStatus.getId());
+        assertEquals("FINAL", shipmentStatus.getName());
+        assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), shipmentStatus.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), shipmentStatus.getLastUpdated());
+        assertEquals(1, shipmentStatus.getVersion());
     }
 
     @Test
     public void testAccessId() {
-        assertNull(status.getId());
-        status.setId(1L);
-        assertEquals(1L, status.getId());
+        assertNull(shipmentStatus.getId());
+        shipmentStatus.setId(1L);
+        assertEquals(1L, shipmentStatus.getId());
     }
 
     @Test
     public void testAccessName() {
-        assertNull(status.getName());
-        status.setName("STATUS_NAME");
-        assertEquals("STATUS_NAME", status.getName());
+        assertNull(shipmentStatus.getName());
+        shipmentStatus.setName("STATUS_NAME");
+        assertEquals("STATUS_NAME", shipmentStatus.getName());
     }
 
     @Test
     public void testAccessCreatedAt() {
-        assertNull(status.getCreatedAt());
-        status.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), status.getCreatedAt());
+        assertNull(shipmentStatus.getCreatedAt());
+        shipmentStatus.setCreatedAt(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), shipmentStatus.getCreatedAt());
     }
 
     @Test
     public void testAccessLastUpdated() {
-        assertNull(status.getLastUpdated());
-        status.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
-        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), status.getLastUpdated());
+        assertNull(shipmentStatus.getLastUpdated());
+        shipmentStatus.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), shipmentStatus.getLastUpdated());
     }
 
     @Test
     public void testAccessVersion() {
-        assertNull(status.getVersion());
-        status.setVersion(1);
-        assertEquals(1, status.getVersion());
+        assertNull(shipmentStatus.getVersion());
+        shipmentStatus.setVersion(1);
+        assertEquals(1, shipmentStatus.getVersion());
     }
 }

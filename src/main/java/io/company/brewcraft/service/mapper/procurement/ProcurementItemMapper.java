@@ -20,7 +20,7 @@ import io.company.brewcraft.service.mapper.TaxMapper;
 public interface ProcurementItemMapper {
     ProcurementItemMapper INSTANCE = Mappers.getMapper(ProcurementItemMapper.class);
 
-    ProcurementItemDto toDto(ProcurementItem item);
+    ProcurementItemDto toDto(ProcurementItem procurementItem);
 
     @Mappings({
         @Mapping(target = ProcurementItem.ATTR_ID, ignore = true),

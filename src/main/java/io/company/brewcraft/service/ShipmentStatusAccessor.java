@@ -7,5 +7,5 @@ public interface ShipmentStatusAccessor {
 
     ShipmentStatus getShipmentStatus();
 
-    void setShipmentStatus(ShipmentStatus status);
+    void setShipmentStatus(ShipmentStatus shipmentStatus);
 }

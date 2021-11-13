@@ -33,7 +33,7 @@ public class InvoiceItemMapperTest {
 
     @Test
     public void testToDto_ReturnsInvoiceItemDto_WhenInvoiceItemIsNotNull() {
-        InvoiceItem item = new InvoiceItem(
+        InvoiceItem invoiceItem = new InvoiceItem(
             2L,
             "desc2",
             Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
@@ -44,7 +44,7 @@ public class InvoiceItemMapperTest {
             LocalDateTime.of(1999, 1, 1, 1, 1),
             1
         );
-        InvoiceItemDto dto = mapper.toDto(item);
+        InvoiceItemDto dto = mapper.toDto(invoiceItem);
 
         assertEquals(2L, dto.getId());
         assertEquals("desc2", dto.getDescription());
@@ -74,16 +74,16 @@ public class InvoiceItemMapperTest {
             LocalDateTime.of(2000, 1, 1, 1, 1),
             1
         );
-        InvoiceItem item = mapper.fromDto(dto);
+        InvoiceItem invoiceItem = mapper.fromDto(dto);
 
-        assertEquals(2L, item.getId());
-        assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(Money.parse("CAD 101"), item.getPrice());
-        assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L), item.getMaterial());
-        assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), item.getCreatedAt());
-        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), item.getLastUpdated());
+        assertEquals(2L, invoiceItem.getId());
+        assertEquals("desc2", invoiceItem.getDescription());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Money.parse("CAD 101"), invoiceItem.getPrice());
+        assertEquals(new Tax(Money.parse("CAD 10")), invoiceItem.getTax());
+        assertEquals(new Material(7L), invoiceItem.getMaterial());
+        assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), invoiceItem.getCreatedAt());
+        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), invoiceItem.getLastUpdated());
         assertEquals(1, dto.getVersion());
     }
 
@@ -103,15 +103,15 @@ public class InvoiceItemMapperTest {
             7L,
             1
         );
-        InvoiceItem item = mapper.fromUpdateDto(dto);
+        InvoiceItem invoiceItem = mapper.fromUpdateDto(dto);
 
-        assertEquals(1L, item.getId());
-        assertEquals("desc2", item.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), item.getQuantity());
-        assertEquals(Money.parse("CAD 101"), item.getPrice());
-        assertEquals(new Tax(Money.parse("CAD 10")), item.getTax());
-        assertEquals(new Material(7L), item.getMaterial());
-        assertEquals(1, item.getVersion());
+        assertEquals(1L, invoiceItem.getId());
+        assertEquals("desc2", invoiceItem.getDescription());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Money.parse("CAD 101"), invoiceItem.getPrice());
+        assertEquals(new Tax(Money.parse("CAD 10")), invoiceItem.getTax());
+        assertEquals(new Material(7L), invoiceItem.getMaterial());
+        assertEquals(1, invoiceItem.getVersion());
     }
 
     @Test

@@ -16,13 +16,13 @@ public class InvoiceStatusService {
     }
 
     public InvoiceStatus getStatus(Long id) {
-        InvoiceStatus status = null;
+        InvoiceStatus invoiceStatus = null;
 
         Optional<InvoiceStatus> optional = repo.findById(id);
         if (optional.isPresent()) {
-            status = optional.get();
+            invoiceStatus = optional.get();
         }
 
-        return status;
+        return invoiceStatus;
     }
 }

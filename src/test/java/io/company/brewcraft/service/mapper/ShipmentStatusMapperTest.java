@@ -18,10 +18,10 @@ public class ShipmentStatusMapperTest {
 
     @Test
     public void testFromDto_ReturnPojo_WhenIdIsNotNull() {
-        ShipmentStatus status = mapper.fromDto(99L);
+        ShipmentStatus shipmentStatus = mapper.fromDto(99L);
         ShipmentStatus expected = new ShipmentStatus(99L);
 
-        assertEquals(expected, status);
+        assertEquals(expected, shipmentStatus);
     }
 
     @Test
@@ -31,10 +31,10 @@ public class ShipmentStatusMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-        ShipmentStatus status = mapper.fromDto(new ShipmentStatusDto(99L));
+        ShipmentStatus shipmentStatus = mapper.fromDto(new ShipmentStatusDto(99L));
         ShipmentStatus expected = new ShipmentStatus(99L);
 
-        assertEquals(expected, status);
+        assertEquals(expected, shipmentStatus);
     }
 
     @Test
@@ -44,10 +44,10 @@ public class ShipmentStatusMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        ShipmentStatusDto status = mapper.toDto(new ShipmentStatus(99L));
+        ShipmentStatusDto shipmentStatus = mapper.toDto(new ShipmentStatus(99L));
 
         ShipmentStatusDto expected = new ShipmentStatusDto(99L);
-        assertEquals(expected, status);
+        assertEquals(expected, shipmentStatus);
     }
 
     @Test

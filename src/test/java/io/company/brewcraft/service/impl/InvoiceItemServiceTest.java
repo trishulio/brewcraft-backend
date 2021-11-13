@@ -39,14 +39,14 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
 
-        final List<UpdateInvoiceItem<?>> itemUpdates = List.of(
+        final List<UpdateInvoiceItem<?>> invoiceItemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
 
-        doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPutEntities(existingItems, itemUpdates);
+        doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPutEntities(existingItems, invoiceItemUpdates);
 
-        final List<InvoiceItem> updatedItems = this.service.getPutEntities(existingItems, itemUpdates);
+        final List<InvoiceItem> updatedItems = this.service.getPutEntities(existingItems, invoiceItemUpdates);
 
         final List<UpdateInvoiceItem<?>> expected = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
@@ -63,14 +63,14 @@ public class InvoiceItemServiceTest {
             new InvoiceItem(2L, "Description_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), Money.parse("CAD 200"), new Tax(), new Material(20L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
 
-        final List<UpdateInvoiceItem<?>> itemUpdates = List.of(
+        final List<UpdateInvoiceItem<?>> invoiceItemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
 
-        doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPatchEntities(existingItems, itemUpdates);
+        doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPatchEntities(existingItems, invoiceItemUpdates);
 
-        final List<InvoiceItem> updatedItems = this.service.getPatchEntities(existingItems, itemUpdates);
+        final List<InvoiceItem> updatedItems = this.service.getPatchEntities(existingItems, invoiceItemUpdates);
 
         final List<UpdateInvoiceItem<?>> expected = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
@@ -82,14 +82,14 @@ public class InvoiceItemServiceTest {
 
     @Test
     public void testAddCollection_ReturnsCollectionOfBaseItems_WhenInputIsNotNull() {
-        final List<BaseInvoiceItem<?>> itemUpdates = List.of(
+        final List<BaseInvoiceItem<?>> invoiceItemUpdates = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),
             new InvoiceItem(2L, "New_Description_2", Quantities.getQuantity(new BigDecimal("21"), SupportedUnits.KILOGRAM), Money.parse("CAD 201"), null, new Material(21L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 2)
         );
 
-        doAnswer(inv -> inv.getArgument(0, List.class)).when(this.mUpdateService).getAddEntities(itemUpdates);
+        doAnswer(inv -> inv.getArgument(0, List.class)).when(this.mUpdateService).getAddEntities(invoiceItemUpdates);
 
-        final List<InvoiceItem> updatedItems = this.service.getAddEntities(itemUpdates);
+        final List<InvoiceItem> updatedItems = this.service.getAddEntities(invoiceItemUpdates);
 
         final List<BaseInvoiceItem<?>> expected = List.of(
             new InvoiceItem(1L, "New_Description_1", Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM), Money.parse("CAD 101"), null, new Material(11L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1),

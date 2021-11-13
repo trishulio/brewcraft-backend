@@ -17,19 +17,19 @@ public class EnhancedShipmentRepositoryImpl implements EnhancedShipmentRepositor
 
     private final AccessorRefresher<Long, ShipmentAccessor, Shipment> refresher;
 
-    private final ShipmentStatusRepository statusRepo;
+    private final ShipmentStatusRepository shipmentStatusRepo;
     private final MaterialLotRepository materialLotRepo;
 
     @Autowired
-    public EnhancedShipmentRepositoryImpl(AccessorRefresher<Long, ShipmentAccessor, Shipment> refresher, ShipmentStatusRepository statusRepo, MaterialLotRepository materialLotRepo) {
+    public EnhancedShipmentRepositoryImpl(AccessorRefresher<Long, ShipmentAccessor, Shipment> refresher, ShipmentStatusRepository shipmentStatusRepo, MaterialLotRepository materialLotRepo) {
         this.refresher = refresher;
-        this.statusRepo = statusRepo;
+        this.shipmentStatusRepo = shipmentStatusRepo;
         this.materialLotRepo = materialLotRepo;
     }
 
     @Override
     public void refresh(Collection<Shipment> shipments) {
-        this.statusRepo.refreshAccessors(shipments);
+        this.shipmentStatusRepo.refreshAccessors(shipments);
         final List<MaterialLot> lots = shipments == null ? null : shipments.stream().filter(s -> s != null && s.getLotCount() > 0).flatMap(s -> s.getLots().stream()).collect(Collectors.toList());
         this.materialLotRepo.refresh(lots);
     }

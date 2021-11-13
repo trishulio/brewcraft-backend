@@ -24,7 +24,7 @@ public interface ShipmentStatusMapper {
     @Mappings({
         @Mapping(target = "id", source = ShipmentStatus.ATTR_ID)
     })
-    ShipmentStatusDto toDto(ShipmentStatus status);
+    ShipmentStatusDto toDto(ShipmentStatus shipmentStatus);
 
     @Mappings({
         @Mapping(target = ShipmentStatus.ATTR_ID, source = "id"),
@@ -32,5 +32,5 @@ public interface ShipmentStatusMapper {
         @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true),
         @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true)
     })
-    ShipmentStatus fromDto(ShipmentStatusDto status);
+    ShipmentStatus fromDto(ShipmentStatusDto shipmentStatus);
 }

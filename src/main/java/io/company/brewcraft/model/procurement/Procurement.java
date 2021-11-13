@@ -168,8 +168,8 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     }
 
     @Override
-    public void setInvoiceStatus(InvoiceStatus status) {
-        this.invoice.setInvoiceStatus(status);
+    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoice.setInvoiceStatus(invoiceStatus);
     }
 
     @Override
@@ -218,8 +218,8 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Invoice
     }
 
     @Override
-    public void setShipmentStatus(ShipmentStatus status) {
-        this.shipment.setShipmentStatus(status);
+    public void setShipmentStatus(ShipmentStatus shipmentStatus) {
+        this.shipment.setShipmentStatus(shipmentStatus);
     }
 
     @Override

@@ -7,5 +7,5 @@ public interface InvoiceItemAccessor {
 
     InvoiceItem getInvoiceItem();
 
-    void setInvoiceItem(InvoiceItem item);
+    void setInvoiceItem(InvoiceItem invoiceItem);
 }

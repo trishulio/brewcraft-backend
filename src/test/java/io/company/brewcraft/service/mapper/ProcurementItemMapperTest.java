@@ -44,7 +44,7 @@ public class ProcurementItemMapperTest {
 
     @Test
     public void testToDto_ReturnsDtoWithAllValues_WhenEntityIsNotNull() {
-        ProcurementItem item = new ProcurementItem(
+        ProcurementItem procurementItem = new ProcurementItem(
             new ProcurementItemId(1L, 2L),
             "DESCRIPTION",
             "LOT_NUMBER",
@@ -59,7 +59,7 @@ public class ProcurementItemMapperTest {
             10
         );
 
-        ProcurementItemDto dto = mapper.toDto(item);
+        ProcurementItemDto dto = mapper.toDto(procurementItem);
 
         ProcurementItemDto expected = new ProcurementItemDto(
             new ProcurementItemIdDto(1L, 2L),
@@ -97,7 +97,7 @@ public class ProcurementItemMapperTest {
             2L // storageId
         );
 
-        ProcurementItem item = mapper.fromDto(dto);
+        ProcurementItem procurementItem = mapper.fromDto(dto);
 
         ProcurementItem expected = new ProcurementItem(
             null,
@@ -114,7 +114,7 @@ public class ProcurementItemMapperTest {
             null // version
         );
 
-        assertEquals(expected, item);
+        assertEquals(expected, procurementItem);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class ProcurementItemMapperTest {
             10 // version
         );
 
-        ProcurementItem item = mapper.fromDto(dto);
+        ProcurementItem procurementItem = mapper.fromDto(dto);
 
         ProcurementItem expected = new ProcurementItem(
             new ProcurementItemId(1L, 2L),
@@ -154,6 +154,6 @@ public class ProcurementItemMapperTest {
             10 // version
         );
 
-        assertEquals(expected, item);
+        assertEquals(expected, procurementItem);
     }
 }

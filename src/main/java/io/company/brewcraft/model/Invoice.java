@@ -121,7 +121,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     public Invoice(Long id, String invoiceNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Freight freight, LocalDateTime createdAt,
-            LocalDateTime lastUpdated, InvoiceStatus status, List<InvoiceItem> invoiceItems, Integer version) {
+            LocalDateTime lastUpdated, InvoiceStatus invoiceStatus, List<InvoiceItem> invoiceItems, Integer version) {
         this(id);
         this.setInvoiceNumber(invoiceNumber);
         this.setDescription(description);
@@ -132,7 +132,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         this.setFreight(freight);
         this.setCreatedAt(createdAt);
         this.setLastUpdated(lastUpdated);
-        this.setInvoiceStatus(status);
+        this.setInvoiceStatus(invoiceStatus);
         this.setInvoiceItems(invoiceItems);
         this.setVersion(version);
     }
@@ -261,8 +261,8 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         }
     }
 
-    public void addItem(InvoiceItem item) {
-        if (item == null) {
+    public void addItem(InvoiceItem invoiceItem) {
+        if (invoiceItem == null) {
             return;
         }
 
@@ -270,26 +270,26 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
             this.invoiceItems = new ArrayList<>();
         }
 
-        if (item.getInvoice() != this) {
-            item.setInvoice(this);
+        if (invoiceItem.getInvoice() != this) {
+            invoiceItem.setInvoice(this);
         }
 
-        if (!this.invoiceItems.contains(item)) {
-            this.invoiceItems.add(item);
+        if (!this.invoiceItems.contains(invoiceItem)) {
+            this.invoiceItems.add(invoiceItem);
         }
 
         setAmount();
     }
 
-    public boolean removeItem(InvoiceItem item) {
-        if (item == null || this.invoiceItems == null) {
+    public boolean removeItem(InvoiceItem invoiceItem) {
+        if (invoiceItem == null || this.invoiceItems == null) {
             return false;
         }
 
-        final boolean removed = this.invoiceItems.remove(item);
+        final boolean removed = this.invoiceItems.remove(invoiceItem);
 
         if (removed) {
-            item.setInvoice(null);
+            invoiceItem.setInvoice(null);
         }
 
         setAmount();

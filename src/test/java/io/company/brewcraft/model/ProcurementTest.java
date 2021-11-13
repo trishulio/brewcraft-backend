@@ -365,18 +365,18 @@ public class ProcurementTest {
 
     @Test
     public void testAccessAmount() {
-        ProcurementItem item = new ProcurementItem();
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
-        item.setPrice(Money.parse("CAD 10"));
-        procurement.setProcurementItems(List.of(item));
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        procurementItem.setPrice(Money.parse("CAD 10"));
+        procurement.setProcurementItems(List.of(procurementItem));
         assertEquals(Money.parse("CAD 100"), procurement.getAmount());
     }
 
     @Test
     public void testAccessTax() {
-        ProcurementItem item = new ProcurementItem();
-        item.setTax(new Tax(Money.parse("CAD 10")));
-        procurement.setProcurementItems(List.of(item));
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setTax(new Tax(Money.parse("CAD 10")));
+        procurement.setProcurementItems(List.of(procurementItem));
 
         assertEquals(new Tax(Money.parse("CAD 10")), procurement.getTax());
     }
@@ -395,16 +395,16 @@ public class ProcurementTest {
 
     @Test
     public void testBuildInvoice_ReturnsAnInvoiceBuiltFromProcurementProperties() {
-        ProcurementItem item = new ProcurementItem();
-        item.setId(new ProcurementItemId(null, 2L));
-        item.setDescription("DESCRIPTION_ITEM");
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM));
-        item.setPrice(Money.of(CurrencyUnit.CAD, new BigDecimal("5")));
-        item.setMaterial(new Material(7L));
-        item.setTax(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))));
-        item.setCreatedAt(LocalDateTime.of(1999, 1, 1, 1, 1));
-        item.setLastUpdated(LocalDateTime.of(1999, 1, 1, 1, 1));
-        item.setInvoiceItemVersion(1);
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setId(new ProcurementItemId(null, 2L));
+        procurementItem.setDescription("DESCRIPTION_ITEM");
+        procurementItem.setQuantity(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM));
+        procurementItem.setPrice(Money.of(CurrencyUnit.CAD, new BigDecimal("5")));
+        procurementItem.setMaterial(new Material(7L));
+        procurementItem.setTax(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))));
+        procurementItem.setCreatedAt(LocalDateTime.of(1999, 1, 1, 1, 1));
+        procurementItem.setLastUpdated(LocalDateTime.of(1999, 1, 1, 1, 1));
+        procurementItem.setInvoiceItemVersion(1);
 
         procurement.setId(new ProcurementId(null, 1L));
         procurement.setInvoiceNumber("INVOICE_1");
@@ -418,7 +418,7 @@ public class ProcurementTest {
         procurement.setLastUpdated(LocalDateTime.of(2003, 1, 1, 12, 0));
         procurement.setInvoiceStatus(new InvoiceStatus(99L));
         procurement.setInvoiceVersion(1);
-        procurement.setProcurementItems(List.of(item));
+        procurement.setProcurementItems(List.of(procurementItem));
 
         Invoice invoice = procurement.buildInvoice();
 
@@ -455,14 +455,14 @@ public class ProcurementTest {
 
     @Test
     public void testBuildShipment_ReturnsAShipmentBuiltFromProcurementProperties() {
-        ProcurementItem item = new ProcurementItem();
-        item.setId(new ProcurementItemId(1L, null));
-        item.setLotNumber("LOT_1");
-        item.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
-        item.setStorage(new Storage(300L));
-        item.setCreatedAt(LocalDateTime.of(1999, 1, 1, 0, 0));
-        item.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
-        item.setVersion(1);
+        ProcurementItem procurementItem = new ProcurementItem();
+        procurementItem.setId(new ProcurementItemId(1L, null));
+        procurementItem.setLotNumber("LOT_1");
+        procurementItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        procurementItem.setStorage(new Storage(300L));
+        procurementItem.setCreatedAt(LocalDateTime.of(1999, 1, 1, 0, 0));
+        procurementItem.setLastUpdated(LocalDateTime.of(2000, 1, 1, 0, 0));
+        procurementItem.setVersion(1);
 
         procurement.setId(new ProcurementId(1L, null));
         procurement.setShipmentNumber("SHIPMENT_1");
@@ -473,7 +473,7 @@ public class ProcurementTest {
         procurement.setCreatedAt(LocalDateTime.of(2001, 1, 1, 12, 0));
         procurement.setLastUpdated(LocalDateTime.of(2002, 1, 1, 12, 0));
         procurement.setVersion(1);
-        procurement.setProcurementItems(List.of(item));
+        procurement.setProcurementItems(List.of(procurementItem));
 
         Shipment shipment = procurement.buildShipmentWithoutInvoice();
 

@@ -10,7 +10,7 @@ public class ShipmentDto extends BaseDto {
     private Long id;
     private String shipmentNumber;
     private String description;
-    private ShipmentStatusDto status;
+    private ShipmentStatusDto shipmentStatus;
     private LocalDateTime deliveryDueDate;
     private LocalDateTime deliveredDate;
     private LocalDateTime createdAt;
@@ -64,11 +64,11 @@ public class ShipmentDto extends BaseDto {
     }
 
     public ShipmentStatusDto getShipmentStatus() {
-        return status;
+        return shipmentStatus;
     }
 
-    public void setShipmentStatus(ShipmentStatusDto status) {
-        this.status = status;
+    public void setShipmentStatus(ShipmentStatusDto shipmentStatus) {
+        this.shipmentStatus = shipmentStatus;
     }
 
     public LocalDateTime getDeliveryDueDate() {
