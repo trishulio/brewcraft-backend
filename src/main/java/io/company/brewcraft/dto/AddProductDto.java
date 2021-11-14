@@ -18,17 +18,20 @@ public class AddProductDto extends BaseDto {
 
     @Valid
     private List<AddProductMeasureValueDto> targetMeasures;
+    
+    private String imageSrc;
 
     public AddProductDto() {
         super();
     }
 
-    public AddProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures) {
-        super();
+    public AddProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures, String imageSrc) {
+        this();
         this.name = name;
         this.description = description;
         this.categoryId = categoryId;
         this.targetMeasures = targetMeasures;
+        this.imageSrc = imageSrc;
     }
 
     public String getName() {
@@ -63,4 +66,11 @@ public class AddProductDto extends BaseDto {
         this.targetMeasures = targetMeasures;
     }
 
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
 }

@@ -49,7 +49,7 @@ public class ProductControllerTest {
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), null, 1);
 
        List<Product> productList = List.of(product);
        Page<Product> mPage = mock(Page.class);
@@ -99,6 +99,7 @@ public class ProductControllerTest {
        assertEquals(product.getTargetMeasures().get(0).getMeasure().getName(), productDto.getTargetMeasures().get(0).getMeasure().getName());
        assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
 
+       assertEquals(product.getImageSrc(), productDto.getImageSrc());
        assertEquals(product.getVersion(), productDto.getVersion());
    }
 
@@ -109,7 +110,7 @@ public class ProductControllerTest {
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(2L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        doReturn(product).when(productService).getProduct(1L);
 
@@ -133,6 +134,7 @@ public class ProductControllerTest {
        assertEquals(product.getTargetMeasures().get(0).getMeasure().getName(), productDto.getTargetMeasures().get(0).getMeasure().getName());
        assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
 
+       assertEquals(product.getImageSrc(), productDto.getImageSrc());
        assertEquals(product.getVersion(), productDto.getVersion());
    }
 
@@ -145,14 +147,14 @@ public class ProductControllerTest {
    @Test
    public void testAddProduct() {
        List<AddProductMeasureValueDto> targetMeasuresDto = List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100")));
-       AddProductDto addProductDto = new AddProductDto("testProduct", "testDescription", 2L, targetMeasuresDto);
+       AddProductDto addProductDto = new AddProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, "http://www.test.com");
 
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(10L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Product> addProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -169,6 +171,8 @@ public class ProductControllerTest {
        assertEquals(addProductDto.getTargetMeasures().size(), addProductCaptor.getValue().getTargetMeasures().size());
        assertEquals(addProductDto.getTargetMeasures().get(0).getMeasureId(), addProductCaptor.getValue().getTargetMeasures().get(0).getMeasure().getId());
        assertEquals(addProductDto.getTargetMeasures().get(0).getValue(), addProductCaptor.getValue().getTargetMeasures().get(0).getValue());
+
+       assertEquals(addProductDto.getImageSrc(), addProductCaptor.getValue().getImageSrc());
 
        //Assert returned product
        assertEquals(product.getId(), productDto.getId());
@@ -189,20 +193,21 @@ public class ProductControllerTest {
        assertEquals(product.getTargetMeasures().get(0).getMeasure().getId(), productDto.getTargetMeasures().get(0).getMeasure().getId());
        assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
 
+       assertEquals(product.getImageSrc(), productDto.getImageSrc());
        assertEquals(product.getVersion(), productDto.getVersion());
    }
 
    @Test
    public void testPutProduct() {
        List<AddProductMeasureValueDto> targetMeasuresDto = List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100")));
-       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
+       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, "http://www.test.com", 1);
 
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Product> putProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -220,6 +225,7 @@ public class ProductControllerTest {
        assertEquals(updateProductDto.getTargetMeasures().get(0).getMeasureId(), putProductCaptor.getValue().getTargetMeasures().get(0).getMeasure().getId());
        assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), putProductCaptor.getValue().getTargetMeasures().get(0).getValue());
 
+       assertEquals(updateProductDto.getImageSrc(), putProductCaptor.getValue().getImageSrc());
        assertEquals(updateProductDto.getVersion(), putProductCaptor.getValue().getVersion());
 
        //Assert returned product
@@ -241,20 +247,21 @@ public class ProductControllerTest {
        assertEquals(product.getTargetMeasures().get(0).getMeasure().getName(), productDto.getTargetMeasures().get(0).getMeasure().getName());
        assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
 
+       assertEquals(product.getImageSrc(), productDto.getImageSrc());
        assertEquals(product.getVersion(), productDto.getVersion());
    }
 
    @Test
    public void testPatchProduct() {
        List<AddProductMeasureValueDto> targetMeasuresDto = List.of(new AddProductMeasureValueDto(1L, new BigDecimal("100")));
-       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, 1);
+       UpdateProductDto updateProductDto = new UpdateProductDto("testProduct", "testDescription", 2L, targetMeasuresDto, "http://www.test.com", 1);
 
        ProductCategory productClass = new ProductCategory(1L, "testClass", null, null, null, null, null);
        ProductCategory type = new ProductCategory(2L, "testType", productClass, null, null, null, null);
        ProductCategory style = new ProductCategory(3L, "testStyle", type, null, null, null, null);
        List<ProductMeasureValue> targetMeasures = List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+       Product product = new Product(1L, "testProduct", "testDescription", style, targetMeasures, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Product> patchProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -272,6 +279,7 @@ public class ProductControllerTest {
        assertEquals(updateProductDto.getTargetMeasures().get(0).getMeasureId(), patchProductCaptor.getValue().getTargetMeasures().get(0).getMeasure().getId());
        assertEquals(updateProductDto.getTargetMeasures().get(0).getValue(), patchProductCaptor.getValue().getTargetMeasures().get(0).getValue());
 
+       assertEquals(updateProductDto.getImageSrc(), patchProductCaptor.getValue().getImageSrc());
        assertEquals(updateProductDto.getVersion(), patchProductCaptor.getValue().getVersion());
 
        //Assert returned product
@@ -293,6 +301,7 @@ public class ProductControllerTest {
        assertEquals(product.getTargetMeasures().get(0).getMeasure().getName(), productDto.getTargetMeasures().get(0).getMeasure().getName());
        assertEquals(product.getTargetMeasures().get(0).getValue(), productDto.getTargetMeasures().get(0).getValue());
 
+       assertEquals(product.getImageSrc(), productDto.getImageSrc());
        assertEquals(product.getVersion(), productDto.getVersion());
    }
 

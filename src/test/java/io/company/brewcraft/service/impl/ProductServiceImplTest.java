@@ -62,7 +62,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testGetProducts_returnsProducts() throws Exception {
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         List<Product> productEntities = Arrays.asList(productEntity);
 
@@ -87,6 +87,7 @@ public class ProductServiceImplTest {
         assertSame(productEntity.getDescription(), actualProduct.getDescription());
         assertSame(productEntity.getCategory().getId(), actualProduct.getCategory().getId());
         assertSame(productEntity.getTargetMeasures(), actualProduct.getTargetMeasures());
+        assertSame(productEntity.getImageSrc(), actualProduct.getImageSrc());
         assertSame(productEntity.getLastUpdated(), actualProduct.getLastUpdated());
         assertSame(productEntity.getCreatedAt(), actualProduct.getCreatedAt());
         assertSame(productEntity.getVersion(), actualProduct.getVersion());
@@ -95,7 +96,7 @@ public class ProductServiceImplTest {
     @Test
     public void testGetProduct_returnsProduct() throws Exception {
         Long id = 1L;
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         Optional<Product> expectedProductEntity = Optional.ofNullable(productEntity);
 
         when(productRepositoryMock.findById(id)).thenReturn(expectedProductEntity);
@@ -107,6 +108,7 @@ public class ProductServiceImplTest {
         assertEquals(expectedProductEntity.get().getDescription(), returnedProduct.getDescription());
         assertEquals(expectedProductEntity.get().getCategory().getId(), returnedProduct.getCategory().getId());
         assertEquals(expectedProductEntity.get().getTargetMeasures(), returnedProduct.getTargetMeasures());
+        assertEquals(expectedProductEntity.get().getImageSrc(), returnedProduct.getImageSrc());
         assertEquals(expectedProductEntity.get().getLastUpdated(), returnedProduct.getLastUpdated());
         assertEquals(expectedProductEntity.get().getCreatedAt(), returnedProduct.getCreatedAt());
         assertEquals(expectedProductEntity.get().getVersion(), returnedProduct.getVersion());
@@ -114,9 +116,9 @@ public class ProductServiceImplTest {
 
     @Test
     public void testAddProduct_SavesProduct() throws Exception {
-        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product newProduct = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L, new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -132,6 +134,7 @@ public class ProductServiceImplTest {
         assertEquals(product.getDescription(), persistedProductCaptor.getValue().getDescription());
         assertEquals(product.getCategory().getId(), persistedProductCaptor.getValue().getCategory().getId());
         assertEquals(product.getTargetMeasures(), persistedProductCaptor.getValue().getTargetMeasures());
+        assertEquals(product.getImageSrc(), persistedProductCaptor.getValue().getImageSrc());
         assertEquals(product.getLastUpdated(), persistedProductCaptor.getValue().getLastUpdated());
         assertEquals(product.getCreatedAt(), persistedProductCaptor.getValue().getCreatedAt());
         assertEquals(product.getVersion(), persistedProductCaptor.getValue().getVersion());
@@ -142,6 +145,7 @@ public class ProductServiceImplTest {
         assertEquals(newProduct.getDescription(), returnedProduct.getDescription());
         assertEquals(newProduct.getCategory().getId(), returnedProduct.getCategory().getId());
         assertEquals(newProduct.getTargetMeasures(), returnedProduct.getTargetMeasures());
+        assertEquals(newProduct.getImageSrc(), returnedProduct.getImageSrc());
         assertEquals(newProduct.getLastUpdated(), returnedProduct.getLastUpdated());
         assertEquals(newProduct.getCreatedAt(), returnedProduct.getCreatedAt());
         assertEquals(newProduct.getVersion(), returnedProduct.getVersion());
@@ -149,7 +153,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testAddProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
 
@@ -164,8 +168,8 @@ public class ProductServiceImplTest {
     @Test
     public void testPutProduct_successWhenNoExistingEntity() throws Exception {
         Long id = 1L;
-        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product putProduct = new Product(1L, "product1", "new desc", new ProductCategory(2L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -183,6 +187,7 @@ public class ProductServiceImplTest {
         assertEquals(putProduct.getDescription(), persistedProductCaptor.getValue().getDescription());
         assertEquals(putProduct.getCategory().getId(), persistedProductCaptor.getValue().getCategory().getId());
         assertEquals(putProduct.getTargetMeasures(), persistedProductCaptor.getValue().getTargetMeasures());
+        assertEquals(putProduct.getImageSrc(), persistedProductCaptor.getValue().getImageSrc());
         assertEquals(putProduct.getLastUpdated(), persistedProductCaptor.getValue().getLastUpdated());
         assertEquals(putProduct.getCreatedAt(), persistedProductCaptor.getValue().getCreatedAt());
         assertEquals(putProduct.getVersion(), persistedProductCaptor.getValue().getVersion());
@@ -193,6 +198,7 @@ public class ProductServiceImplTest {
         assertEquals(putProduct.getDescription(), returnedProduct.getDescription());
         assertEquals(putProduct.getCategory().getId(), returnedProduct.getCategory().getId());
         assertEquals(putProduct.getTargetMeasures(), returnedProduct.getTargetMeasures());
+        assertEquals(putProduct.getImageSrc(), returnedProduct.getImageSrc());
         assertEquals(putProduct.getLastUpdated(), returnedProduct.getLastUpdated());
         assertEquals(putProduct.getCreatedAt(), returnedProduct.getCreatedAt());
         assertEquals(putProduct.getVersion(), returnedProduct.getVersion());
@@ -205,9 +211,9 @@ public class ProductServiceImplTest {
         List<ProductMeasureValue> list = new ArrayList<>();
         list.add(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()));
 
-        Product putProduct = new Product(1L, "testProductupdated", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product putProduct = new Product(1L, "testProductupdated", "testDescription", new ProductCategory(1L), list, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), list, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -227,6 +233,7 @@ public class ProductServiceImplTest {
         assertEquals(putProduct.getDescription(), persistedProductCaptor.getValue().getDescription());
         assertEquals(putProduct.getCategory().getId(), persistedProductCaptor.getValue().getCategory().getId());
         assertEquals(putProduct.getTargetMeasures(), persistedProductCaptor.getValue().getTargetMeasures());
+        assertEquals(putProduct.getImageSrc(), persistedProductCaptor.getValue().getImageSrc());
         assertEquals(putProduct.getLastUpdated(), persistedProductCaptor.getValue().getLastUpdated());
         assertEquals(putProduct.getCreatedAt(), persistedProductCaptor.getValue().getCreatedAt());
         assertEquals(1, persistedProductCaptor.getValue().getVersion());
@@ -237,6 +244,7 @@ public class ProductServiceImplTest {
         assertEquals(putProduct.getDescription(), returnedProduct.getDescription());
         assertEquals(putProduct.getCategory().getId(), returnedProduct.getCategory().getId());
         assertEquals(putProduct.getTargetMeasures(), returnedProduct.getTargetMeasures());
+        assertEquals(putProduct.getImageSrc(), returnedProduct.getImageSrc());
         assertEquals(putProduct.getLastUpdated(), returnedProduct.getLastUpdated());
         assertEquals(putProduct.getCreatedAt(), returnedProduct.getCreatedAt());
         assertEquals(putProduct.getVersion(), returnedProduct.getVersion());
@@ -244,7 +252,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testPutProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
 
@@ -259,9 +267,9 @@ public class ProductServiceImplTest {
     @Test
     public void testPatchProduct_success() throws Exception {
         Long id = 1L;
-        Product patchedProduct = new Product(null, "updatedName", null, null, new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), null, null, null, 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
-        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product patchedProduct = new Product(null, "updatedName", null, null, new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), "http://www.test.com", null, null, null, 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product()))), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product persistedProductEntity = new Product(1L, "updatedName", "testDescription", new ProductCategory(1L), new ArrayList<>(List.of(new ProductMeasureValue(1L,new Measure(2L, "ibu", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("200"), new Product()))), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         ArgumentCaptor<Product> persistedProductCaptor = ArgumentCaptor.forClass(Product.class);
 
@@ -281,6 +289,7 @@ public class ProductServiceImplTest {
         assertEquals(existingProductEntity.getDescription(), persistedProductCaptor.getValue().getDescription());
         assertEquals(existingProductEntity.getCategory().getId(), persistedProductCaptor.getValue().getCategory().getId());
         assertEquals(patchedProduct.getTargetMeasures(), persistedProductCaptor.getValue().getTargetMeasures());
+        assertEquals(patchedProduct.getImageSrc(), persistedProductCaptor.getValue().getImageSrc());
         assertEquals(existingProductEntity.getLastUpdated(), persistedProductCaptor.getValue().getLastUpdated());
         assertEquals(existingProductEntity.getCreatedAt(), persistedProductCaptor.getValue().getCreatedAt());
         assertEquals(existingProductEntity.getVersion(), persistedProductCaptor.getValue().getVersion());
@@ -291,6 +300,7 @@ public class ProductServiceImplTest {
         assertEquals(persistedProductEntity.getDescription(), returnedProduct.getDescription());
         assertEquals(persistedProductEntity.getCategory().getId(), returnedProduct.getCategory().getId());
         assertEquals(persistedProductEntity.getTargetMeasures(), returnedProduct.getTargetMeasures());
+        assertEquals(persistedProductEntity.getImageSrc(), returnedProduct.getImageSrc());
         assertEquals(persistedProductEntity.getLastUpdated(), returnedProduct.getLastUpdated());
         assertEquals(persistedProductEntity.getCreatedAt(), returnedProduct.getCreatedAt());
         assertEquals(persistedProductEntity.getVersion(), returnedProduct.getVersion());
@@ -311,7 +321,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testPatchProduct_throwsIllegalArgumentException() throws Exception {
-        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product product = new Product(null, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(99L, "unknown", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         when(productCategoryServiceMock.getCategory(1L)).thenReturn(new ProductCategory(1L));
 
@@ -326,8 +336,8 @@ public class ProductServiceImplTest {
     @Test
     public void testPatchProduct_throwsOptimisticLockingException() throws Exception {
         Long id = 1L;
-        Product patchedProduct = new Product(null, "updatedName", null, null, null, null, null, null, 1);
-        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), null, LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
+        Product patchedProduct = new Product(null, "updatedName", null, null, null, null, null, null, null, 1);
+        Product existingProductEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), null, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 2);
 
         when(productRepositoryMock.findById(id)).thenReturn(Optional.of(existingProductEntity));
 

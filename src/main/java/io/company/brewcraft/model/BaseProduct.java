@@ -25,4 +25,8 @@ public interface BaseProduct {
     void setTargetMeasures(List<ProductMeasureValue> trgtMeasures);
 
     void addTargetMeasure(ProductMeasureValue productMeasureValue);
+    
+    public String getImageSrc();
+
+    public void setImageSrc(String imageSrc);
 }

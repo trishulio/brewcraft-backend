@@ -15,6 +15,8 @@ public class UpdateProductDto extends BaseDto {
 
     @Valid
     private List<AddProductMeasureValueDto> targetMeasures;
+    
+    private String imageSrc;
 
     private Integer version;
 
@@ -23,12 +25,13 @@ public class UpdateProductDto extends BaseDto {
     }
 
     public UpdateProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures,
-            Integer version) {
-        super();
+            String imageSrc, Integer version) {
+        this();
         this.name = name;
         this.description = description;
         this.categoryId = categoryId;
         this.targetMeasures = targetMeasures;
+        this.imageSrc = imageSrc;
         this.version = version;
     }
 
@@ -62,6 +65,14 @@ public class UpdateProductDto extends BaseDto {
 
     public void setTargetMeasures(List<AddProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
+    }
+    
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     public Integer getVersion() {

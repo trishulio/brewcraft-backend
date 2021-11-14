@@ -17,6 +17,8 @@ public class ProductDto extends BaseDto {
     private CategoryDto style;
 
     private List<ProductMeasureValueDto> targetMeasures;
+    
+    private String imageSrc;
 
     private Integer version;
 
@@ -30,7 +32,7 @@ public class ProductDto extends BaseDto {
     }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
-            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, Integer version) {
+            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, String imageSrc, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -38,6 +40,7 @@ public class ProductDto extends BaseDto {
         this.type = type;
         this.style = style;
         this.targetMeasures = targetMeasures;
+        this.imageSrc = imageSrc;
         this.version = version;
     }
 
@@ -95,6 +98,14 @@ public class ProductDto extends BaseDto {
 
     public void setTargetMeasures(List<ProductMeasureValueDto> targetMeasures) {
         this.targetMeasures = targetMeasures;
+    }
+    
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     public Integer getVersion() {

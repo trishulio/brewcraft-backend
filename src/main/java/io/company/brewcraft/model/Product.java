@@ -18,6 +18,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -48,6 +49,10 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ProductMeasureValue> targetMeasures;
+    
+    @URL
+    @Column(name = "image_source")
+    private String imageSrc;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -73,12 +78,13 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
-            LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
+            String imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
         this.category = category;
         this.targetMeasures = targetMeasures;
+        this.imageSrc = imageSrc;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.deletedAt = deletedAt;
@@ -157,6 +163,16 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
         if (!targetMeasures.contains(productMeasureValue)) {
             this.targetMeasures.add(productMeasureValue);
         }
+    }
+    
+    @Override
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    @Override
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     @Override

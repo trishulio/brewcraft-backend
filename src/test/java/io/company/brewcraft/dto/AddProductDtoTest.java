@@ -22,13 +22,15 @@ public class AddProductDtoTest {
         String description = "testDesc";
         Long categoryId = 1L;
         List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
+        String imageSrc = "http://www.test.com";
 
-        AddProductDto addProductDto = new AddProductDto(name, description, categoryId, targetMeasures);
+        AddProductDto addProductDto = new AddProductDto(name, description, categoryId, targetMeasures, imageSrc);
 
         assertEquals("testName", addProductDto.getName());
         assertEquals("testDesc", addProductDto.getDescription());
         assertEquals(1L, addProductDto.getCategoryId());
         assertEquals(List.of(new AddProductMeasureValueDto()), addProductDto.getTargetMeasures());
+        assertEquals(imageSrc, addProductDto.getImageSrc());
     }
 
     @Test
@@ -57,5 +59,11 @@ public class AddProductDtoTest {
         List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
         addProductDto.setTargetMeasures(targetMeasures);
         assertEquals(List.of(new AddProductMeasureValueDto()), addProductDto.getTargetMeasures());
+    }
+    
+    @Test
+    public void testGetSetImageSrc() {
+        addProductDto.setImageSrc("http://www.test.com");
+        assertEquals("http://www.test.com", addProductDto.getImageSrc());
     }
 }
