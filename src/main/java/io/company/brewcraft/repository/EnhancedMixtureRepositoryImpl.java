@@ -13,7 +13,7 @@ public class EnhancedMixtureRepositoryImpl implements EnhancedMixtureRepository 
     private static final Logger log = LoggerFactory.getLogger(EnhancedMixtureRepositoryImpl.class);
 
     private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher;
-    
+
     private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher;
 
     private MixtureRepository mixtureRepository;
@@ -31,19 +31,19 @@ public class EnhancedMixtureRepositoryImpl implements EnhancedMixtureRepository 
     }
 
     @Override
-    public void refresh(Collection<Mixture> mixtures) {                
+    public void refresh(Collection<Mixture> mixtures) {
         this.mixtureRepository.refreshParentMixturesAccessors(mixtures);
         this.equipmentRepository.refreshAccessors(mixtures);
         this.brewStageRepository.refreshAccessors(mixtures);
     }
-    
+
     @Override
     public void refreshParentMixturesAccessors(Collection<? extends ParentMixturesAccessor> accessors) {
         this.parentMixtureRefresher.refreshAccessors(accessors);
     }
 
     @Override
-    
+
     public void refreshAccessors(Collection<? extends MixtureAccessor> accessors) {
         this.mixtureRefresher.refreshAccessors(accessors);
     }
