@@ -104,7 +104,7 @@ public class CollectionAccessorRefresherTest {
 
         assertEquals(1, consumers.get(0).getEntityList().size());
         assertSame(repoEntities.get(1), consumers.get(0).getEntityList().get(0));
-        
+
         assertEquals(2, consumers.get(1).getEntityList().size());
         assertSame(repoEntities.get(2), consumers.get(1).getEntityList().get(0));
         assertSame(repoEntities.get(0), consumers.get(1).getEntityList().get(1));
@@ -130,18 +130,18 @@ public class CollectionAccessorRefresherTest {
         );
 
         refresher.refreshAccessors(consumers);
-        
+
         assertEquals(1, consumers.get(0).getEntityList().size());
         assertSame(repoEntities.get(1), consumers.get(0).getEntityList().get(0));
 
         assertSame(null, consumers.get(1).getEntityList());
-        
+
         assertEquals(1, consumers.get(0).getEntityList().size());
         assertSame(repoEntities.get(0), consumers.get(2).getEntityList().get(0));
-        
+
         assertSame(null, consumers.get(3).getEntityList());
     }
-    
+
     @Test
     public void testRefreshAccessors_IgnoresConsumerWithEntitiesContainingEmptyLists() {
         List<Entity> repoEntities = List.of( // Unordered on purpose to capture any edge case
@@ -158,15 +158,15 @@ public class CollectionAccessorRefresherTest {
         );
 
         refresher.refreshAccessors(consumers);
-        
+
         assertEquals(1, consumers.get(0).getEntityList().size());
         assertSame(repoEntities.get(1), consumers.get(0).getEntityList().get(0));
 
         assertSame(List.of(), consumers.get(1).getEntityList());
-        
+
         assertEquals(1, consumers.get(0).getEntityList().size());
         assertSame(repoEntities.get(0), consumers.get(2).getEntityList().get(0));
-        
+
         assertSame(List.of(), consumers.get(3).getEntityList());
     }
 

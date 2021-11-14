@@ -17,7 +17,7 @@ import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
-    private static final Logger log = LoggerFactory.getLogger(AccessorRefresher.class);
+    private static final Logger log = LoggerFactory.getLogger(CollectionAccessorRefresher.class);
 
     private Class<V> clazz;
     private Function<A, Collection<V>> getter;
@@ -33,30 +33,29 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
 
     public void refreshAccessors(Collection<? extends A> accessors) {
         if (accessors != null && accessors.size() > 0) {
-
             final Map<A, Set<I>> entityToCollectionEntitiesIds = new HashMap<>();
             final Set<I> allCollectionEntitiesIds = new HashSet<>();
-                    
+
             accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null && !getter.apply(accessor).isEmpty())
                      .forEach(accessor -> {
                          Set<I> collectionEntitiesIds = getter.apply(accessor).stream().map(collectionEntity -> collectionEntity.getId()).collect(Collectors.toSet());
                          entityToCollectionEntitiesIds.put(accessor, collectionEntitiesIds);
                          allCollectionEntitiesIds.addAll(collectionEntitiesIds);
                      });
-                        
+
             final List<V> collectionEntities = entityRetriever.apply(allCollectionEntitiesIds);
-            
+
             if(collectionEntities.size() != allCollectionEntitiesIds.size()) {
                 List<?> existingCollectionEntitiesIds = collectionEntities.stream().map(entity -> entity.getId()).collect(Collectors.toList());
                 throw new EntityNotFoundException(String.format("Cannot find all %ss in Id-Set: %s. Only found the ones with Ids: %s", this.clazz.getSimpleName(), allCollectionEntitiesIds, existingCollectionEntitiesIds));
              }
-            
+
             final Map<I, V> idToCollectionEntity = collectionEntities.stream().collect(Collectors.toMap(entity -> entity.getId(), Function.identity()));
-            
+
             for (var entry : entityToCollectionEntitiesIds.entrySet()) {
                 A entity = entry.getKey();
                 final Set<I> collectionIds = entry.getValue();
-                
+
                 final Collection<V> refreshedCollectionEntities = collectionIds.stream().map(idToCollectionEntity::get).collect(Collectors.toList());
                 setter.accept(entity, refreshedCollectionEntities);
             }
