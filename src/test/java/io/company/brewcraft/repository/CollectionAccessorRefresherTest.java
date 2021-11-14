@@ -68,7 +68,7 @@ public class CollectionAccessorRefresherTest {
         refresher = new CollectionAccessorRefresher<Long, EntityAccessor, Entity>(
             Entity.class,
             accessor -> accessor.getEntityList(),
-            (accessor, e) -> accessor.setEntityList(e),
+            (accessor, e) -> accessor.setEntityList(new ArrayList<Entity>(e)),
             ids -> mRepo.findAllById(ids)
         );
     }

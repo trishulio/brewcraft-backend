@@ -57,7 +57,7 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
                 A entity = entry.getKey();
                 final Set<I> collectionIds = entry.getValue();
                 
-                final List<V> refreshedCollectionEntities = collectionIds.stream().map(idToCollectionEntity::get).collect(Collectors.toList());
+                final Collection<V> refreshedCollectionEntities = collectionIds.stream().map(idToCollectionEntity::get).collect(Collectors.toList());
                 setter.accept(entity, refreshedCollectionEntities);
             }
         }

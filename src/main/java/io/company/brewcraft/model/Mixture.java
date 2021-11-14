@@ -49,7 +49,7 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @SequenceGenerator(name = "mixture_generator", sequenceName = "mixture_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToMany(cascade = { })
+    @ManyToMany()
     @JoinTable(
         name = "MIXTURE_TO_PARENT_MIXTURE", 
         joinColumns = { @JoinColumn(name = "mixture_id") }, 

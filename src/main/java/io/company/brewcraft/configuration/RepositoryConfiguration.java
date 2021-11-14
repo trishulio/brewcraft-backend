@@ -1,6 +1,6 @@
 package io.company.brewcraft.configuration;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -322,13 +322,13 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixturesRefresher(MixtureRepository repo) {
         return new CollectionAccessorRefresher<>(
             Mixture.class,
             accessor -> accessor.getParentMixtures(),
-            (accessor, parentMixtures) -> accessor.setParentMixtures(parentMixtures),
+            (accessor, parentMixtures) -> accessor.setParentMixtures(new ArrayList<Mixture>(parentMixtures)),
             ids -> repo.findAllById(ids)
         );
     }
