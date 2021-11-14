@@ -43,7 +43,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
         Specification<Mixture> spec = WhereClauseBuilder
                 .builder()
                 .in(Mixture.FIELD_ID, ids)
-                .in(new String[] {Mixture.FIELD_PARENT_MIXTURE, Mixture.FIELD_ID}, parentMixtureIds)
+                .in(Mixture.FIELD_PARENT_MIXTURES, new String[] { Mixture.FIELD_ID}, parentMixtureIds)
                 .in(new String[] {Mixture.FIELD_EQUIPMENT, Equipment.FIELD_ID}, equipmentIds)
                 .in(new String[] {Mixture.FIELD_BREW_STAGE, Brew.FIELD_ID}, brewStageIds)
                 .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)
@@ -83,7 +83,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
         if (existingMixture == null) {
             existingMixture = putMixture;
             existingMixture.setId(mixtureId);
-        } else {
+        } else {            
             existingMixture.optimisticLockCheck(putMixture);
             existingMixture.override(putMixture, getPropertyNames(BaseMixture.class));
         }

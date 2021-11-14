@@ -141,7 +141,11 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     @Override
     public void setMaterials(List<SkuMaterial> materials) {
         if (this.materials != null) {
-            this.materials.stream().filter(material -> materials != null && !materials.contains(material)).collect(Collectors.toList()).forEach(this::removeMaterial);
+            if (materials == null) {
+                this.materials.clear();
+            } else {
+                this.materials.stream().filter(material -> !materials.contains(material)).collect(Collectors.toList()).forEach(this::removeMaterial);
+            }
         }
 
         if (materials != null) {

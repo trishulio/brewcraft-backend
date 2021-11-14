@@ -1,10 +1,12 @@
 package io.company.brewcraft.dto;
 
+import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 
 public class AddMixtureDto extends BaseDto {
 
-    private Long parentMixtureId;
+    private Set<Long> parentMixtureIds;
 
     @NotNull
     private QuantityDto quantity;
@@ -18,21 +20,21 @@ public class AddMixtureDto extends BaseDto {
         super();
     }
 
-    public AddMixtureDto(Long parentMixtureId, QuantityDto quantity, Long equipmentId,
+    public AddMixtureDto(Set<Long> parentMixtureIds, QuantityDto quantity, Long equipmentId,
             Long brewStageId) {
         this();
-        this.parentMixtureId = parentMixtureId;
+        this.parentMixtureIds = parentMixtureIds;
         this.quantity = quantity;
         this.equipmentId = equipmentId;
         this.brewStageId = brewStageId;
     }
 
-    public Long getParentMixtureId() {
-        return parentMixtureId;
+    public Set<Long> getParentMixtureIds() {
+        return parentMixtureIds;
     }
 
-    public void setParentMixtureId(Long parentMixtureId) {
-        this.parentMixtureId = parentMixtureId;
+    public void setParentMixtureIds(Set<Long> parentMixtureId) {
+        this.parentMixtureIds = parentMixtureId;
     }
 
     public QuantityDto getQuantity() {

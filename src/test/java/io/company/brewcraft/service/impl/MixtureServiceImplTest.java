@@ -40,9 +40,8 @@ public class MixtureServiceImplTest {
             Collection<Mixture> coll = i.getArgument(0, Collection.class);
             coll.forEach(s -> {
                 s.setBrewStage(new BrewStage(4L));
-                s.setParentMixture(new Mixture(2L));
+                s.setParentMixtures(List.of(new Mixture(2L)));
                 s.setEquipment(new Equipment(3L));
-
             });
             return null;
         }).when(mixtureRepositoryMock).refresh(anyCollection());
@@ -75,16 +74,13 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testAddMixture_AddsMixture() {
-        Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         Mixture addedMixture = mixtureService.addMixture(mixture);
 
         assertEquals(1L, addedMixture.getId());
 
-        Mixture parentMixture = new Mixture(2L);
-        parentMixture.addChildMixture(mixture);
-        assertEquals(parentMixture, addedMixture.getParentMixture());
-
+        assertEquals(List.of(new Mixture(2L)), addedMixture.getParentMixtures());
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), addedMixture.getQuantity());
         assertEquals(new Equipment(3L), addedMixture.getEquipment());
         assertEquals(1, addedMixture.getMaterialPortions().size());
@@ -102,20 +98,16 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPutMixture_OverridesWhenMixtureExists() {
-        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture existing = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, List.of(new Mixture(2L)), Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(mixtureRepositoryMock).findById(1L);
 
         Mixture putMixture = mixtureService.putMixture(1L, update);
 
         assertEquals(1L, putMixture.getId());
-
-        Mixture parentMixture = new Mixture(2L);
-        parentMixture.addChildMixture(putMixture);
-        assertEquals(parentMixture, putMixture.getParentMixture());
-
+        assertEquals(List.of(new Mixture(2L)), putMixture.getParentMixtures());
         assertEquals(Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), putMixture.getQuantity());
         assertEquals(new Equipment(3L), putMixture.getEquipment());
         assertEquals(1, putMixture.getMaterialPortions().size());
@@ -133,18 +125,14 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPutMixture_AddsNewMixture_WhenNoMixtureExists() {
-        Mixture update = new Mixture(null, new Mixture(2L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, List.of(new Mixture(2L)), Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(mixtureRepositoryMock).findById(1L);
 
         Mixture putMixture = mixtureService.putMixture(1L, update);
 
         assertEquals(1L, putMixture.getId());
-
-        Mixture parentMixture = new Mixture(2L);
-        parentMixture.addChildMixture(putMixture);
-        assertEquals(parentMixture, putMixture.getParentMixture());
-
+        assertEquals(List.of(new Mixture(2L)), putMixture.getParentMixtures());
         assertEquals(Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), putMixture.getQuantity());
         assertEquals(new Equipment(3L), putMixture.getEquipment());
         assertEquals(1, putMixture.getMaterialPortions().size());
@@ -174,20 +162,16 @@ public class MixtureServiceImplTest {
 
     @Test
     public void testPatchMixture_PatchesExistingMixture() {
-        Mixture existing = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture existing = new Mixture(1L, List.of(new Mixture(5L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
-        Mixture update = new Mixture(null, new Mixture(12L), null, Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Mixture update = new Mixture(null, List.of(new Mixture(2L)), Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(6L)), List.of(new MixtureRecording(7L)), new BrewStage(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(mixtureRepositoryMock).findById(1L);
 
         Mixture patchMixture = mixtureService.patchMixture(1L, update);
 
         assertEquals(1L, patchMixture.getId());
-
-        Mixture parentMixture = new Mixture(2L);
-        parentMixture.addChildMixture(patchMixture);
-        assertEquals(parentMixture, patchMixture.getParentMixture());
-
+        assertEquals(List.of(new Mixture(2L)), patchMixture.getParentMixtures());
         assertEquals(Quantities.getQuantity(150.0, SupportedUnits.HECTOLITRE), patchMixture.getQuantity());
         assertEquals(new Equipment(3L), patchMixture.getEquipment());
         assertEquals(1, patchMixture.getMaterialPortions().size());

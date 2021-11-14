@@ -4,12 +4,12 @@ import java.util.Collection;
 
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.service.MixtureAccessor;
-import io.company.brewcraft.service.ParentMixtureAccessor;
+import io.company.brewcraft.service.ParentMixturesAccessor;
 
 public interface EnhancedMixtureRepository {
     void refresh(Collection<Mixture> mixtures);
 
-    void refreshParentMixtureAccessors(Collection<? extends ParentMixtureAccessor> accessors);
-
     void refreshAccessors(Collection<? extends MixtureAccessor> accessors);
+    
+    void refreshParentMixturesAccessors(Collection<? extends ParentMixturesAccessor> accessors);
 }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ public class MixtureControllerTest {
 
    @Test
    public void testGetMixtures() {
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        List<Mixture> mixtureList = List.of(mixture);
        Page<Mixture> mPage = mock(Page.class);
@@ -77,7 +78,7 @@ public class MixtureControllerTest {
        MixtureDto mixtureDto = dto.getContent().get(0);
 
        assertEquals(1L, mixtureDto.getId());
-       assertEquals(2L, mixtureDto.getParentMixtureId());
+       assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
@@ -86,14 +87,14 @@ public class MixtureControllerTest {
 
    @Test
    public void testGetMixture() {
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), List.of(new MixtureMaterialPortion(4L)), List.of(new MixtureRecording(5L)), new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        doReturn(mixture).when(mixtureService).getMixture(1L);
 
        MixtureDto mixtureDto = mixtureController.getMixture(1L);
 
        assertEquals(1L, mixtureDto.getId());
-       assertEquals(2L, mixtureDto.getParentMixtureId());
+       assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
@@ -108,9 +109,9 @@ public class MixtureControllerTest {
 
    @Test
    public void testAddMixture() {
-       AddMixtureDto addMixtureDto = new AddMixtureDto(2L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L);
+       AddMixtureDto addMixtureDto = new AddMixtureDto(Set.of(2L), new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L);
 
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Mixture> addMixtureCaptor = ArgumentCaptor.forClass(Mixture.class);
 
@@ -120,7 +121,7 @@ public class MixtureControllerTest {
 
        //Assert added mixture
        assertEquals(null, addMixtureCaptor.getValue().getId());
-       assertEquals(2L, addMixtureCaptor.getValue().getParentMixture().getId());
+       assertEquals(List.of(new Mixture(2L)), addMixtureCaptor.getValue().getParentMixtures());
        assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), addMixtureCaptor.getValue().getQuantity());
        assertEquals(new Equipment(3L), addMixtureCaptor.getValue().getEquipment());
        assertEquals(null, addMixtureCaptor.getValue().getMaterialPortions());
@@ -132,7 +133,7 @@ public class MixtureControllerTest {
 
        //Assert returned mixture
        assertEquals(1L, mixtureDto.getId());
-       assertEquals(2L, mixtureDto.getParentMixtureId());
+       assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
@@ -141,9 +142,9 @@ public class MixtureControllerTest {
 
    @Test
    public void testPutMixture() {
-       UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(2L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L, 1);
+       UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(Set.of(2L), new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L, 1);
 
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Mixture> putMixtureCaptor = ArgumentCaptor.forClass(Mixture.class);
 
@@ -153,7 +154,7 @@ public class MixtureControllerTest {
 
        //Assert put mixture
        assertEquals(null, putMixtureCaptor.getValue().getId());
-       assertEquals(2L, putMixtureCaptor.getValue().getParentMixture().getId());
+       assertEquals(List.of(new Mixture(2L)), putMixtureCaptor.getValue().getParentMixtures());
        assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), putMixtureCaptor.getValue().getQuantity());
        assertEquals(new Equipment(3L), putMixtureCaptor.getValue().getEquipment());
        assertEquals(null, putMixtureCaptor.getValue().getMaterialPortions());
@@ -165,7 +166,7 @@ public class MixtureControllerTest {
 
        //Assert returned mixture
        assertEquals(1L, mixtureDto.getId());
-       assertEquals(2L, mixtureDto.getParentMixtureId());
+       assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());
@@ -174,9 +175,9 @@ public class MixtureControllerTest {
 
    @Test
    public void testPatchMixture() {
-       UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(2L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L, 1);
+       UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(Set.of(2L), new QuantityDto("hl", BigDecimal.valueOf(100.0)), 3L, 6L, 1);
 
-       Mixture mixture = new Mixture(1L, new Mixture(2L), null, Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       Mixture mixture = new Mixture(1L, List.of(new Mixture(2L)), Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), new Equipment(3L), null, null, new BrewStage(6L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        ArgumentCaptor<Mixture> patchMixtureCaptor = ArgumentCaptor.forClass(Mixture.class);
 
@@ -186,7 +187,7 @@ public class MixtureControllerTest {
 
        //Assert patched mixture
        assertEquals(null, patchMixtureCaptor.getValue().getId());
-       assertEquals(2L, patchMixtureCaptor.getValue().getParentMixture().getId());
+       assertEquals(List.of(new Mixture(2L)), patchMixtureCaptor.getValue().getParentMixtures());
        assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), patchMixtureCaptor.getValue().getQuantity());
        assertEquals(new Equipment(3L), patchMixtureCaptor.getValue().getEquipment());
        assertEquals(null, patchMixtureCaptor.getValue().getMaterialPortions());
@@ -198,7 +199,7 @@ public class MixtureControllerTest {
 
        //Assert returned mixture
        assertEquals(1L, mixtureDto.getId());
-       assertEquals(2L, mixtureDto.getParentMixtureId());
+       assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
        assertEquals(new BrewStageDto(6L), mixtureDto.getBrewStage());

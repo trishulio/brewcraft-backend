@@ -3,6 +3,7 @@ package io.company.brewcraft.dto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,15 +19,15 @@ public class UpdateMixtureDtoTest {
 
     @Test
     public void testConstructor() {
-        Long parentMixtureId = 2L;
+        Set<Long> parentMixtureIds = Set.of(2L);
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
         Long equipmentId = 3L;
         Long brewStageId = 4L;
         Integer version = 1;
 
-        UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(parentMixtureId, quantity, equipmentId, brewStageId, version);
+        UpdateMixtureDto updateMixtureDto = new UpdateMixtureDto(parentMixtureIds, quantity, equipmentId, brewStageId, version);
 
-        assertEquals(2L, updateMixtureDto.getParentMixtureId());
+        assertEquals(Set.of(2L), updateMixtureDto.getParentMixtureIds());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), updateMixtureDto.getQuantity());
         assertEquals(3L, updateMixtureDto.getEquipmentId());
         assertEquals(4L, updateMixtureDto.getBrewStageId());
@@ -34,9 +35,9 @@ public class UpdateMixtureDtoTest {
     }
 
     @Test
-    public void testGetSetParentMixtureId() {
-        updateMixtureDto.setParentMixtureId(2L);
-        assertEquals(2L, updateMixtureDto.getParentMixtureId());
+    public void testGetSetParentMixtureIds() {
+        updateMixtureDto.setParentMixtureIds(Set.of(2L));
+        assertEquals(Set.of(2L), updateMixtureDto.getParentMixtureIds());
     }
 
     @Test
