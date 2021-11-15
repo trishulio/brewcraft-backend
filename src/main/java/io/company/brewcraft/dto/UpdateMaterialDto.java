@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UpdateMaterialDto extends BaseDto {
 
@@ -11,6 +12,7 @@ public class UpdateMaterialDto extends BaseDto {
 
     private Long categoryId;
 
+    @Size(max = 12)
     private String upc;
 
     private String baseQuantityUnit;

@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateSupplierContactDto {
 
+    @NullOrNotBlank
     private String firstName;
 
     private String lastName;
