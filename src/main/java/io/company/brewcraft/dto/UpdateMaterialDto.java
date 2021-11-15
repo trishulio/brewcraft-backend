@@ -1,7 +1,10 @@
 package io.company.brewcraft.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateMaterialDto extends BaseDto {
 
+    @NullOrNotBlank
     private String name;
 
     private String description;
@@ -14,6 +17,7 @@ public class UpdateMaterialDto extends BaseDto {
 
     private String imageSrc;
 
+    @NotNull
     private Integer version;
 
     public UpdateMaterialDto() {

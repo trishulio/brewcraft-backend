@@ -1,10 +1,13 @@
 package io.company.brewcraft.dto;
 
+import javax.validation.constraints.NotNull;
+
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class UpdateEquipmentDto extends BaseDto {
 
+    @NullOrNotBlank()
     private String name;
 
     private EquipmentType type;
@@ -13,6 +16,7 @@ public class UpdateEquipmentDto extends BaseDto {
 
     private QuantityDto maxCapacity;
 
+    @NotNull
     private Integer version;
 
     public UpdateEquipmentDto() {

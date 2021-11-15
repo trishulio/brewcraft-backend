@@ -2,8 +2,11 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateSkuDto extends BaseDto {
 
+    @NullOrNotBlank
     private String name;
 
     private String description;
@@ -14,6 +17,7 @@ public class UpdateSkuDto extends BaseDto {
 
     private QuantityDto quantity;
 
+    @NotNull
     private Integer version;
 
     public UpdateSkuDto() {

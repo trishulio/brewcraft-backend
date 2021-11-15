@@ -5,21 +5,27 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import io.company.brewcraft.dto.BaseDto;
+import io.company.brewcraft.dto.NullOrNotBlank;
 
 public class UpdateUserDto extends BaseDto {
 
+    @NullOrNotBlank
     private String displayName;
 
+    @NullOrNotBlank
     private String firstName;
 
+    @NullOrNotBlank
     private String lastName;
 
+    @NullOrNotBlank
     private String email;
 
     private Long statusId;
 
     private Long salutationId;
 
+    @NullOrNotBlank
     private String phoneNumber;
 
     private String imageUrl;

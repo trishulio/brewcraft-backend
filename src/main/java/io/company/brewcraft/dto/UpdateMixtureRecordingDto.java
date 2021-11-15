@@ -3,11 +3,13 @@ package io.company.brewcraft.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateMixtureRecordingDto extends BaseDto {
-    
+
     private Long id;
 
     private Long mixtureId;
@@ -18,6 +20,7 @@ public class UpdateMixtureRecordingDto extends BaseDto {
 
     private LocalDateTime recordedAt;
 
+    @NotNull
     private Integer version;
 
     public UpdateMixtureRecordingDto() {
@@ -33,7 +36,7 @@ public class UpdateMixtureRecordingDto extends BaseDto {
         this.recordedAt = recordedAt;
         this.version = version;
     }
-    
+
     public Long getId() {
         return id;
     }

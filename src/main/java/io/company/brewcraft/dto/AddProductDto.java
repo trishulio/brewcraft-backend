@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class AddProductDto extends BaseDto {
 
-    @NotBlank(message = "The field name cannot be null or empty")
+    @NotBlank
     private String name;
 
     private String description;

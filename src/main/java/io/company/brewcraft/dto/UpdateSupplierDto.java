@@ -4,11 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 public class UpdateSupplierDto {
 
-    @Pattern(regexp = "^(?!\\s*$).+", message = "must not be empty")
+    @NullOrNotBlank
     private String name;
 
     @Valid
