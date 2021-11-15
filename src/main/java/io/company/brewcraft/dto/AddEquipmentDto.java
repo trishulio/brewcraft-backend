@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +9,7 @@ import io.company.brewcraft.model.EquipmentType;
 
 public class AddEquipmentDto extends BaseDto {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @NotNull

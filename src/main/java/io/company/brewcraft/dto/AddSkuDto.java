@@ -2,11 +2,12 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddSkuDto extends BaseDto {
 
-    @NotNull
+    @NotBlank
     private String name;
 
     private String description;

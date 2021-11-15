@@ -3,12 +3,13 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddSupplierDto extends BaseDto {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     @NotNull

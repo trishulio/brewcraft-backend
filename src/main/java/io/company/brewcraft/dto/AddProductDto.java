@@ -3,12 +3,12 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddProductDto extends BaseDto {
 
-    @NotEmpty
+    @NotBlank(message = "The field name cannot be null or empty")
     private String name;
 
     private String description;

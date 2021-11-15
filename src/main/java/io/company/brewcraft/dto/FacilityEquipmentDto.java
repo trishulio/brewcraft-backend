@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
@@ -9,7 +9,7 @@ public class FacilityEquipmentDto extends BaseDto {
 
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     private EquipmentType type;

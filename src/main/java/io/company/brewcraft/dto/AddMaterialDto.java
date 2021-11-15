@@ -1,11 +1,12 @@
 package io.company.brewcraft.dto;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class AddMaterialDto extends BaseDto {
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     private String description;
@@ -13,9 +14,10 @@ public class AddMaterialDto extends BaseDto {
     @NotNull
     private Long categoryId;
 
+    @Size(max = 12)
     private String upc;
 
-    @NotEmpty
+    @NotBlank
     private String baseQuantityUnit;
 
     private String imageSrc;
