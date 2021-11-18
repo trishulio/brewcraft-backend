@@ -36,12 +36,15 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
             final Map<A, Set<I>> entityToCollectionEntitiesIds = new HashMap<>();
             final Set<I> allCollectionEntitiesIds = new HashSet<>();
 
-            accessors.stream().filter(accessor -> accessor != null && getter.apply(accessor) != null && !getter.apply(accessor).isEmpty())
-                     .forEach(accessor -> {
-                         Set<I> collectionEntitiesIds = getter.apply(accessor).stream().filter(collectionEntity -> collectionEntity.getId() != null).map(collectionEntity -> collectionEntity.getId()).collect(Collectors.toSet());
-                         entityToCollectionEntitiesIds.put(accessor, collectionEntitiesIds);
-                         allCollectionEntitiesIds.addAll(collectionEntitiesIds);
-                     });
+            accessors.stream().filter(accessor -> accessor != null).forEach(accessor -> {
+                Collection<V> collectionEntities = getter.apply(accessor);
+
+                if (collectionEntities != null && !collectionEntities.isEmpty()) {
+                    Set<I> collectionEntitiesIds = collectionEntities.stream().filter(collectionEntity -> collectionEntity.getId() != null).map(collectionEntity -> collectionEntity.getId()).collect(Collectors.toSet());
+                    entityToCollectionEntitiesIds.put(accessor, collectionEntitiesIds);
+                    allCollectionEntitiesIds.addAll(collectionEntitiesIds);
+                }
+            });
 
             final List<V> collectionEntities = entityRetriever.apply(allCollectionEntitiesIds);
 
