@@ -1,5 +1,7 @@
 package io.company.brewcraft.configuration;
 
+import java.util.ArrayList;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -41,6 +43,7 @@ import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserSalutationAccessor;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.model.user.UserStatusAccessor;
+import io.company.brewcraft.repository.CollectionAccessorRefresher;
 import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
@@ -89,7 +92,7 @@ import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
-import io.company.brewcraft.service.ParentMixtureAccessor;
+import io.company.brewcraft.service.ParentMixturesAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.ShipmentStatusAccessor;
@@ -311,21 +314,21 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, ParentMixtureAccessor, Mixture> parentMixtureRefresher(MixtureRepository repo) {
-        return new AccessorRefresher<>(
-            Mixture.class,
-            accessor -> accessor.getParentMixture(),
-            (accessor, parentMixture) -> accessor.setParentMixture(parentMixture),
-            ids -> repo.findAllById(ids)
-        );
-    }
-
-    @Bean
     public AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher(MixtureRepository repo) {
         return new AccessorRefresher<>(
             Mixture.class,
             accessor -> accessor.getMixture(),
             (accessor, mixture) -> accessor.setMixture(mixture),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixturesRefresher(MixtureRepository repo) {
+        return new CollectionAccessorRefresher<>(
+            Mixture.class,
+            accessor -> accessor.getParentMixtures(),
+            (accessor, parentMixtures) -> accessor.setParentMixtures(new ArrayList<Mixture>(parentMixtures)),
             ids -> repo.findAllById(ids)
         );
     }

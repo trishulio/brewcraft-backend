@@ -19,6 +19,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -36,7 +38,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Mixture extends BaseEntity implements UpdateMixture, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
-    public static final String FIELD_PARENT_MIXTURE = "parentMixture";
+    public static final String FIELD_PARENT_MIXTURES = "parentMixtures";
     public static final String FIELD_QUANTITY_VALUE = "quantityValue";
     public static final String FIELD_QUANTITY_UNIT = "quantityUnit";
     public static final String FIELD_EQUIPMENT = "equipment";
@@ -47,13 +49,13 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @SequenceGenerator(name = "mixture_generator", sequenceName = "mixture_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "parent_mixture_id", referencedColumnName = "id")
-    private Mixture parentMixture;
-
-    @OneToMany(mappedBy = "parentMixture", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Mixture> childMixtures;
+    @ManyToMany()
+    @JoinTable(
+        name = "MIXTURE_TO_PARENT_MIXTURE", 
+        joinColumns = { @JoinColumn(name = "mixture_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "parent_mixture_id") }
+    )
+    private List<Mixture> parentMixtures;
 
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "quantity_value")) })
@@ -65,11 +67,11 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @JoinColumn(name = "equipment_id", referencedColumnName = "id", nullable = true)
     private Equipment equipment;
 
-    @OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mixture", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<MixtureMaterialPortion> materialPortions;
 
-    @OneToMany(mappedBy = "mixture", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mixture", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<MixtureRecording> recordedMeasures;
 
@@ -96,12 +98,11 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
         setId(id);
     }
 
-    public Mixture(Long id, Mixture parentMixture, List<Mixture> childMixtures, Quantity<?> quantity,
+    public Mixture(Long id, List<Mixture> parentMixtures, Quantity<?> quantity,
             Equipment equipment, List<MixtureMaterialPortion> materialPortions, List<MixtureRecording> recordedMeasures,
             BrewStage brewStage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
-        setParentMixture(parentMixture);
-        setChildMixtures(childMixtures);
+        setParentMixtures(parentMixtures);
         setQuantity(quantity);
         setEquipment(equipment);
         setMaterialPortions(materialPortions);
@@ -123,69 +124,49 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     }
 
     @Override
-    public Mixture getParentMixture() {
-        return parentMixture;
+    public List<Mixture> getParentMixtures() {
+        return parentMixtures;
     }
 
     @Override
-    public void setParentMixture(Mixture parentMixture) {
-        this.parentMixture = parentMixture;
-
-        if (parentMixture != null) {
-            parentMixture.addChildMixture(this);
-        }
-    }
-
-    @Override
-    public List<Mixture> getChildMixtures() {
-        return childMixtures;
-    }
-
-    @Override
-    public void setChildMixtures(List<Mixture> childMixtures) {
-        if (this.childMixtures != null) {
-            this.childMixtures.stream().filter(childMixture -> childMixtures!= null && !childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::removeChildMixture);
-        }
-
-        if (childMixtures != null) {
-            if (this.childMixtures == null) {
-                this.childMixtures = new ArrayList<>();
-                childMixtures.stream().collect(Collectors.toList()).forEach(this::addChildMixture);
+    public void setParentMixtures(List<Mixture> parentMixtures) {
+        if (this.parentMixtures != null) {
+            if (parentMixtures == null) {
+                this.parentMixtures.clear();
             } else {
-                childMixtures.stream().filter(childMixture -> !this.childMixtures.contains(childMixture)).collect(Collectors.toList()).forEach(this::addChildMixture);
+                this.parentMixtures.stream().filter(parentMixture -> !parentMixtures.contains(parentMixture)).collect(Collectors.toList()).forEach(this::removeParentMixture);
             }
         }
-    }
 
-    @Override
-    public void addChildMixture(Mixture childMixture) {
-        if (childMixture == null) {
+        if (parentMixtures != null) {
+            if (this.parentMixtures == null) {
+                parentMixtures.stream().collect(Collectors.toList()).forEach(this::addParentMixture);
+            } else {
+                parentMixtures.stream().filter(parentMixture -> !this.parentMixtures.contains(parentMixture)).collect(Collectors.toList()).forEach(this::addParentMixture);
+            }
+        }    
+    }
+    
+    public void addParentMixture(Mixture parentMixture) {
+        if (parentMixture == null) {
             return;
         }
 
-        if (this.childMixtures == null) {
-            this.childMixtures = new ArrayList<>();
+        if (this.parentMixtures == null) {
+            this.parentMixtures = new ArrayList<>();
         }
 
-        if (childMixture.getParentMixture() != this) {
-            childMixture.setParentMixture(this);
-        }
-
-        if (!this.childMixtures.contains(childMixture)) {
-            this.childMixtures.add(childMixture);
+        if (!this.parentMixtures.contains(parentMixture)) {
+            this.parentMixtures.add(parentMixture);
         }
     }
 
-    public boolean removeChildMixture(Mixture childMixture) {
-        if (childMixture == null || this.childMixtures == null) {
+    public boolean removeParentMixture(Mixture parentMixture) {
+        if (parentMixture == null || this.parentMixtures == null) {
             return false;
         }
 
-        boolean removed = this.childMixtures.remove(childMixture);
-
-        if (removed) {
-            childMixture.setParentMixture(null);
-        }
+        boolean removed = this.parentMixtures.remove(parentMixture);
 
         return removed;
     }
@@ -218,7 +199,11 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @Override
     public void setMaterialPortions(List<MixtureMaterialPortion> materialPortions) {
         if (this.materialPortions != null) {
-            this.materialPortions.stream().filter(materialPortion -> materialPortions!= null && !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+            if (materialPortions == null) {
+                this.materialPortions.clear();
+            } else {
+                this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+            }
         }
 
         if (materialPortions != null) {
@@ -271,7 +256,11 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     @Override
     public void setRecordedMeasures(List<MixtureRecording> recordedMeasures) {
         if (this.recordedMeasures != null) {
-            this.recordedMeasures.stream().filter(recordedMeasure -> recordedMeasures != null && !recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
+            if (recordedMeasures == null) {
+                this.recordedMeasures.clear();
+            } else {
+                this.recordedMeasures.stream().filter(recordedMeasure -> !recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
+            }
         }
 
         if (recordedMeasures != null) {

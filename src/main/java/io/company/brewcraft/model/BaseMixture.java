@@ -4,16 +4,10 @@ import java.util.List;
 
 import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
-import io.company.brewcraft.service.ParentMixtureAccessor;
+import io.company.brewcraft.service.ParentMixturesAccessor;
 
-public interface BaseMixture extends ParentMixtureAccessor, EquipmentAccessor, BrewStageAccessor, QuantityAccessor {
-
-    List<Mixture> getChildMixtures();
-
-    void setChildMixtures(List<Mixture> childMixtures);
-
-    void addChildMixture(Mixture childMixture);
-
+public interface BaseMixture extends ParentMixturesAccessor, EquipmentAccessor, BrewStageAccessor, QuantityAccessor {
+    
     List<MixtureMaterialPortion> getMaterialPortions();
 
     void setMaterialPortions(List<MixtureMaterialPortion> materialPortions);

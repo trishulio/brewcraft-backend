@@ -28,8 +28,7 @@ public class MixtureTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
-        Mixture parentMixture = new Mixture(2L);
-        List<Mixture> childMixtures = List.of(new Mixture(9L));
+        List<Mixture> parentMixtures = List.of(new Mixture(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
         Equipment equipment = new Equipment(3L);
         BrewStage brewStage = new BrewStage(4L);
@@ -39,18 +38,10 @@ public class MixtureTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Mixture mixture = new Mixture(id, parentMixture, childMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
+        Mixture mixture = new Mixture(id, parentMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
 
         assertEquals(1L, mixture.getId());
-
-        Mixture expectedParentMixture = new Mixture(2L);
-        expectedParentMixture.addChildMixture(mixture);
-        assertEquals(expectedParentMixture, mixture.getParentMixture());
-
-        Mixture expectedChildMixture = new Mixture(9L);
-        expectedChildMixture.setParentMixture(mixture);
-        assertEquals(List.of(expectedChildMixture), mixture.getChildMixtures());
-
+        assertEquals(List.of(new Mixture(9L)), mixture.getParentMixtures());
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), mixture.getQuantity());
         assertEquals(new Equipment(3L), mixture.getEquipment());
         assertEquals(new BrewStage(4L), mixture.getBrewStage());
@@ -75,23 +66,9 @@ public class MixtureTest {
     }
 
     @Test
-    public void testGetSetParentMixture() {
-        mixture.setParentMixture(new Mixture(2L));
-
-        Mixture expectedParentMixture = new Mixture(2L);
-        expectedParentMixture.addChildMixture(mixture);
-
-        assertEquals(expectedParentMixture, mixture.getParentMixture());
-    }
-
-    @Test
-    public void testGetSetChildMixtures() {
-        mixture.setChildMixtures(List.of(new Mixture(9L)));
-
-        Mixture expectedChildMixture = new Mixture(9L);
-        expectedChildMixture.setParentMixture(mixture);
-
-        assertEquals(List.of(expectedChildMixture), mixture.getChildMixtures());
+    public void testGetSetParentMixtures() {
+        mixture.setParentMixtures(List.of(new Mixture(9L)));
+        assertEquals(List.of(new Mixture(9L)), mixture.getParentMixtures());
     }
 
     @Test
@@ -150,8 +127,7 @@ public class MixtureTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
-        Mixture parentMixture = new Mixture(2L);
-        List<Mixture> childMixtures = List.of(new Mixture(9L));
+        List<Mixture> parentMixtures = List.of(new Mixture(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
         Equipment equipment = new Equipment(3L);
         BrewStage brewStage = new BrewStage(4L);
@@ -161,9 +137,9 @@ public class MixtureTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Mixture mixture = new Mixture(id, parentMixture, childMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
+        Mixture mixture = new Mixture(id, parentMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"parentMixture\":{\"id\":2,\"parentMixture\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"equipment\":{\"id\":3,\"facility\":null,\"name\":null,\"type\":null,\"status\":null,\"maxCapacityValue\":null,\"maxCapacityUnit\":null,\"maxCapacityDisplayUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"maxCapacity\":null,\"maxCapacityInDisplayUnit\":null},\"brewStage\":{\"id\":4,\"brew\":null,\"status\":null,\"task\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"parentMixtures\":[{\"id\":9,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"equipment\":{\"id\":3,\"facility\":null,\"name\":null,\"type\":null,\"status\":null,\"maxCapacityValue\":null,\"maxCapacityUnit\":null,\"maxCapacityDisplayUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"maxCapacityInDisplayUnit\":null,\"maxCapacity\":null},\"brewStage\":{\"id\":4,\"brew\":null,\"status\":null,\"task\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, mixture.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

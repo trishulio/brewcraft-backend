@@ -182,7 +182,11 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     @Override
     public void setChildBrews(List<Brew> childBrews) {
         if (this.childBrews != null) {
-            this.childBrews.stream().filter(childBrew -> childBrews != null && !childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::removeChildBrew);
+            if (childBrews == null) {
+                this.childBrews.clear();
+            } else {
+                this.childBrews.stream().filter(childBrew -> !childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::removeChildBrew);
+            }
         }
 
         if (childBrews != null) {
@@ -235,7 +239,11 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     @Override
     public void setBrewStages(List<BrewStage> brewStages) {
         if (this.brewStages != null) {
-            this.brewStages.stream().filter(brewStage -> brewStages != null && !brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::removeBrewStage);
+            if (brewStages == null) {
+                this.brewStages.clear();
+            } else {
+                this.brewStages.stream().filter(brewStage -> !brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::removeBrewStage);
+            }
         }
 
         if (brewStages != null) {
