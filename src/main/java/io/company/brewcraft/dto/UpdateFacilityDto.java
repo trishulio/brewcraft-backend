@@ -2,8 +2,11 @@ package io.company.brewcraft.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateFacilityDto extends BaseDto {
 
+    @NullOrNotBlank
     private String name;
 
     private AddressDto address;
@@ -16,6 +19,7 @@ public class UpdateFacilityDto extends BaseDto {
 
     private List<FacilityStorageDto> storages;
 
+    @NotNull
     private Integer version;
 
     public UpdateFacilityDto() {

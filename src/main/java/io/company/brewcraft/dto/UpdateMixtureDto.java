@@ -1,5 +1,7 @@
 package io.company.brewcraft.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateMixtureDto extends BaseDto {
 
     private Long parentMixtureId;
@@ -10,6 +12,7 @@ public class UpdateMixtureDto extends BaseDto {
 
     private Long brewStageId;
 
+    @NotNull
     private Integer version;
 
     public UpdateMixtureDto() {

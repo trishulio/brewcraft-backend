@@ -3,7 +3,7 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
 public class TenantDto {
@@ -11,10 +11,10 @@ public class TenantDto {
     @Null
     private UUID id;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
-    @NotEmpty
+    @NotBlank
     private String url;
 
     @Null

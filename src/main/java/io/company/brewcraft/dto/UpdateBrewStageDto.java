@@ -2,6 +2,8 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateBrewStageDto extends BaseDto {
 
     private Long brewId;
@@ -14,6 +16,7 @@ public class UpdateBrewStageDto extends BaseDto {
 
     private LocalDateTime endedAt;
 
+    @NotNull
     private Integer version;
 
     public UpdateBrewStageDto() {

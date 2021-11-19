@@ -1,11 +1,15 @@
 package io.company.brewcraft.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateCategoryDto extends BaseDto {
 
     private Long parentCategoryId;
 
+    @NullOrNotBlank
     private String name;
 
+    @NotNull
     private Integer version;
 
     public UpdateCategoryDto() {

@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddBrewDto extends BaseDto {
@@ -10,7 +11,7 @@ public class AddBrewDto extends BaseDto {
 
     private String description;
 
-    @NotNull
+    @NotBlank
     private String batchId;
 
     @NotNull

@@ -1,12 +1,12 @@
 package io.company.brewcraft.dto;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 public class AddCategoryDto extends BaseDto {
 
     private Long parentCategoryId;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
     public AddCategoryDto() {

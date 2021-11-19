@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 public class UpdateProductDto extends BaseDto {
 
+    @NullOrNotBlank
     private String name;
 
     private String description;

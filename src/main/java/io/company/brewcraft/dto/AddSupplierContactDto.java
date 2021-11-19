@@ -1,21 +1,18 @@
 package io.company.brewcraft.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class AddSupplierContactDto {
-    @NotNull
+
+    @NotBlank
     private String firstName;
 
-    @NotNull
     private String lastName;
 
-    @NotNull
     private String position;
 
-    @NotNull
     private String email;
 
-    @NotNull
     private String phoneNumber;
 
     public AddSupplierContactDto() {

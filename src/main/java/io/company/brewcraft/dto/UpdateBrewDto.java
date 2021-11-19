@@ -2,12 +2,15 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateBrewDto extends BaseDto {
 
     private String name;
 
     private String description;
 
+    @NullOrNotBlank
     private String batchId;
 
     private Long productId;
@@ -18,6 +21,7 @@ public class UpdateBrewDto extends BaseDto {
 
     private LocalDateTime endedAt;
 
+    @NotNull
     private Integer version;
 
     public UpdateBrewDto() {
