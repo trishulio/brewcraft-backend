@@ -81,7 +81,7 @@ public class ProductTest {
         product.setTargetMeasures(targetMeasures);
         assertEquals(List.of(), product.getTargetMeasures());
     }
-    
+
     @Test
     public void testGetSetImageSrc() {
         product.setImageSrc("http://www.test.com");
@@ -131,7 +131,7 @@ public class ProductTest {
 
         Product product = new Product(id, name, description, category, targetMeasures, imageSrc, created, lastUpdated, deletedAt, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"targetMeasures\":[],\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"deletedAt\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"targetMeasures\":[],\"imageSrc\":\"http://www.test.com\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"deletedAt\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, product.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
