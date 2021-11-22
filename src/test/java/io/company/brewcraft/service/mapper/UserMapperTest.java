@@ -33,7 +33,6 @@ public class UserMapperTest {
     @Test
     public void testFromDto_ReturnsEntity_WhenAddDtoIsNotNull() {
         AddUserDto dto =  new AddUserDto(
-            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -49,7 +48,7 @@ public class UserMapperTest {
 
         User expected = new User(
             null,
-            "userName",
+            null,
             "displayName",
             "firstName",
             "lastName",
@@ -78,7 +77,6 @@ public class UserMapperTest {
             "displayName",
             "firstName",
             "lastName",
-            "email",
             1L,
             2L,
             "phoneNumber",
@@ -95,7 +93,7 @@ public class UserMapperTest {
             "displayName",
             "firstName",
             "lastName",
-            "email",
+            null,
             "phoneNumber",
             "imageUrl",
             new UserStatus(1L),

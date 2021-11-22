@@ -2,15 +2,13 @@ package io.company.brewcraft.dto.user;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import io.company.brewcraft.dto.BaseDto;
 
 public class AddUserDto extends BaseDto {
-
-    @NotBlank
-    private String userName;
 
     @NotBlank
     private String displayName;
@@ -22,6 +20,7 @@ public class AddUserDto extends BaseDto {
     private String lastName;
 
     @NotBlank
+    @Email
     private String email;
 
     @NotNull
@@ -40,8 +39,7 @@ public class AddUserDto extends BaseDto {
     public AddUserDto() {
     }
 
-    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageUrl, List<Long> roleIds) {
-        setUserName(userName);
+    public AddUserDto(@NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageUrl, List<Long> roleIds) {
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);
@@ -51,14 +49,6 @@ public class AddUserDto extends BaseDto {
         setPhoneNumber(phoneNumber);
         setImageUrl(imageUrl);
         setRoleIds(roleIds);
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getDisplayName() {
@@ -132,4 +122,5 @@ public class AddUserDto extends BaseDto {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

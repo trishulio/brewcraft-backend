@@ -31,12 +31,14 @@ import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.IdpUserRepository;
 
 public class UserServiceImplTest {
 
     private UserRepository mUserRepo;
     private IdpUserRepository idpRepo;
+    private ContextHolder contextHolder;
 
     private UserServiceImpl service;
 
@@ -46,8 +48,9 @@ public class UserServiceImplTest {
         doAnswer(inv -> inv.getArgument(0, User.class)).when(mUserRepo).saveAndFlush(any(User.class));
 
         idpRepo = mock(IdpUserRepository.class);
+        contextHolder = mock(ContextHolder.class);
 
-        service = new UserServiceImpl(mUserRepo, idpRepo);
+        service = new UserServiceImpl(mUserRepo, idpRepo, contextHolder);
     }
 
     @Test

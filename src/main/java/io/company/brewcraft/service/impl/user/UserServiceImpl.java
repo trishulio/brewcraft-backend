@@ -20,6 +20,7 @@ import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -31,10 +32,12 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     private final UserRepository userRepo;
     private final IdpUserRepository idpRepo;
+    private final ContextHolder contextHolder;
 
-    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo) {
+    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo, ContextHolder contextHolder) {
         this.userRepo = userRepo;
         this.idpRepo = idpRepo;
+        this.contextHolder = contextHolder;
     }
 
     @Override
@@ -70,16 +73,15 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     @Override
     public User addUser(BaseUser<?> addition) {
-        log.debug("Attempting to persist user : {}", addition.getUserName());
+        log.debug("Attempting to persist user : {}", addition.getEmail());
 
         User user = new User();
         user.override(addition, getPropertyNames(BaseUser.class));
         userRepo.refresh(List.of(user));
 
         User addedUser = userRepo.saveAndFlush(user);
-        // TODO: Revert this change back when the StatusCode: 302 is resolved.
-        // https://github.com/northstacksoftware/brewcraft-backend/projects/1#card-63885392
-        // idpRepo.createUser(addedUser);
+
+        idpRepo.createUserAndAddToGroup(addedUser, contextHolder.getPrincipalContext().getTenantId());
 
         return addedUser;
     }
@@ -89,29 +91,23 @@ public class UserServiceImpl extends BaseService implements UserService {
         log.debug("Updating the User with Id: {}", userId);
 
         User existing = getUser(userId);
-        Class<? super User> userClz = BaseUser.class;
-        boolean isNewUser = true;
 
         if (existing == null) {
-            existing = new User(userId); // Gotcha: The save function ignores this ID
-
-        } else {
-            existing.optimisticLockCheck(update);
-            userClz = UpdateUser.class;
-            isNewUser = false;
+            throw new RuntimeException("No existing User found with id: " + userId);
         }
 
-        User temp = new User();
+        Class<? super User> userClz = BaseUser.class;
+
+        existing.optimisticLockCheck(update);
+        userClz = UpdateUser.class;
+
+        User temp = new User(userId);
         temp.override(update, getPropertyNames(userClz));
         userRepo.refresh(List.of(temp));
 
         existing.override(temp, getPropertyNames(userClz));
 
         User updated = userRepo.saveAndFlush(existing);
-
-        if (isNewUser) {
-            idpRepo.createUser(updated);
-        }
 
         return updated;
     }

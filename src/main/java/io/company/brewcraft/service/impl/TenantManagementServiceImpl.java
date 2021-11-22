@@ -32,22 +32,26 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         this.tenantMapper = tenantMapper;
     }
 
+    @Override
     public List<TenantDto> getTenants() {
         return tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).collect(Collectors.toList());
     }
 
+    @Override
     public TenantDto getTenant(UUID id) {
         Tenant tenant = tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tenant", id.toString()));
 
         return tenantMapper.tenantToTenantDto(tenant);
     }
 
+    @Override
     public UUID addTenant(TenantDto tenantDto) {
         Tenant tenant = tenantMapper.tenantDtoToTenant(tenantDto);
 
         tenant = tenantRepository.saveAndFlush(tenant);
 
         String tenantId = tenant.getId().toString().replace("-", "_");
+
         try {
             migrationManager.migrate(tenantId);
         } catch (Exception e) {
@@ -58,6 +62,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         return tenant.getId();
     }
 
+    @Override
     public void updateTenant(TenantDto tenantDto, UUID id) {
         Tenant tenantToUpdate = tenantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tenant", id.toString()));
         tenantToUpdate.setName(tenantDto.getName());
@@ -66,6 +71,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         tenantRepository.save(tenantToUpdate);
     }
 
+    @Override
     public void deleteTenant(UUID id) {
         tenantRepository.deleteById(id);
 

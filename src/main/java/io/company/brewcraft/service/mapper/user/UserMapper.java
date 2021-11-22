@@ -14,6 +14,8 @@ import io.company.brewcraft.model.user.User;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+    User fromDto(Long id);
+
     @Mappings({
         @Mapping(target = "roleBindings", ignore = true),
         @Mapping(target = User.ATTR_ID, ignore = true),

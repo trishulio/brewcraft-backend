@@ -17,10 +17,6 @@ public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Lo
 
     void setLastName(String lastName);
 
-    String getEmail();
-
-    void setEmail(String email);
-
     String getImageUrl();
 
     void setImageUrl(String imageUrl);

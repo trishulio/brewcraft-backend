@@ -13,10 +13,12 @@ public class SequentialMigrationManager implements MigrationManager {
 
     private TenantRegister tenantReg;
     private MigrationRegister migrationReg;
+    private IdpRegister idpReg;
 
-    public SequentialMigrationManager(TenantRegister register, MigrationRegister mgr) {
+    public SequentialMigrationManager(TenantRegister register, MigrationRegister mgr, IdpRegister idpReg) {
         this.tenantReg = register;
         this.migrationReg = mgr;
+        this.idpReg = idpReg;
     }
 
     @Override
@@ -35,6 +37,11 @@ public class SequentialMigrationManager implements MigrationManager {
         if (!tenantReg.exists(tenantId)) {
             log.info("Registering new tenantId: {}", tenantId);
             tenantReg.add(tenantId);
+        }
+
+        if (!idpReg.groupExists(tenantId)) {
+            log.info("Registering new idp user group: {}", tenantId);
+            idpReg.createGroup(tenantId);
         }
 
         log.info("Applying migration to tenant: {}", tenantId);

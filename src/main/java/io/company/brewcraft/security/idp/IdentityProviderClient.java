@@ -9,4 +9,14 @@ public interface IdentityProviderClient {
     void updateUser(String userName, final Map<String, String> userAttr);
 
     void deleteUser(String userName);
+
+    void addUserToGroup(String userName, String group);
+
+    void removeUserFromGroup(String userName, String group);
+
+    void createUserGroup(String group);
+
+    void deleteUserGroup(String group);
+
+    boolean groupExists(String group);
 }
