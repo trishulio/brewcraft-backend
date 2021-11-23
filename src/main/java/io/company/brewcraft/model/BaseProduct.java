@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.net.URL;
 import java.util.List;
 
 public interface BaseProduct {
@@ -25,8 +26,8 @@ public interface BaseProduct {
     void setTargetMeasures(List<ProductMeasureValue> trgtMeasures);
 
     void addTargetMeasure(ProductMeasureValue productMeasureValue);
-    
-    public String getImageSrc();
 
-    public void setImageSrc(String imageSrc);
+    public URL getImageSrc();
+
+    public void setImageSrc(URL imageSrc);
 }

@@ -2,10 +2,10 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -21,13 +21,13 @@ public class ProductTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructor() throws Exception {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
-        String imageSrc = "http://www.test.com";
+        URL imageSrc = new URL("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -83,9 +83,9 @@ public class ProductTest {
     }
 
     @Test
-    public void testGetSetImageSrc() {
-        product.setImageSrc("http://www.test.com");
-        assertEquals("http://www.test.com", product.getImageSrc());
+    public void testGetSetImageSrc() throws Exception {
+        product.setImageSrc(new URL("http://www.test.com"));
+        assertEquals(new URL("http://www.test.com"), product.getImageSrc());
     }
 
     @Test
@@ -117,13 +117,13 @@ public class ProductTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() throws JSONException {
+    public void testToString_ReturnsJsonifiedString() throws Exception {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
-        String imageSrc = "http://www.test.com";
+        URL imageSrc = new URL("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);

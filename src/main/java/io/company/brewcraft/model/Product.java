@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -49,10 +49,9 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ProductMeasureValue> targetMeasures;
-    
-    @URL
+
     @Column(name = "image_source")
-    private String imageSrc;
+    private URL imageSrc;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -78,7 +77,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
-            String imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
+            URL imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -164,14 +163,14 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
             this.targetMeasures.add(productMeasureValue);
         }
     }
-    
+
     @Override
-    public String getImageSrc() {
+    public URL getImageSrc() {
         return imageSrc;
     }
 
     @Override
-    public void setImageSrc(String imageSrc) {
+    public void setImageSrc(URL imageSrc) {
         this.imageSrc = imageSrc;
     }
 
