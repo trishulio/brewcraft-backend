@@ -32,6 +32,7 @@ import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.security.session.ContextHolder;
+import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.service.IdpUserRepository;
 
 public class UserServiceImplTest {
@@ -39,6 +40,8 @@ public class UserServiceImplTest {
     private UserRepository mUserRepo;
     private IdpUserRepository idpRepo;
     private ContextHolder contextHolder;
+    private PrincipalContext principalContext;
+
 
     private UserServiceImpl service;
 
@@ -49,6 +52,10 @@ public class UserServiceImplTest {
 
         idpRepo = mock(IdpUserRepository.class);
         contextHolder = mock(ContextHolder.class);
+        principalContext = mock(PrincipalContext.class);
+
+        when(contextHolder.getPrincipalContext()).thenReturn(principalContext);
+        when(principalContext.getTenantId()).thenReturn("tenant-uuid");
 
         service = new UserServiceImpl(mUserRepo, idpRepo, contextHolder);
     }
@@ -164,7 +171,7 @@ public class UserServiceImplTest {
 
         assertEquals(expected, added);
 
-//        verify(idpRepo, times(1)).createUser(expected);
+        verify(idpRepo, times(1)).createUserInGroup(expected, "tenant-uuid");
     }
 
     @Test
@@ -260,7 +267,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testPutUser_AddsNewUser_WhenNoExistingUserInRepo() {
+    public void testPutUser_Throws_WhenNoExistingUserInRepo() {
         doReturn(Optional.empty()).when(mUserRepo).findById(1L);
 
         UpdateUser<? extends UpdateUserRole> user = new User(
@@ -280,28 +287,7 @@ public class UserServiceImplTest {
                 1
             );
 
-            User added = service.putUser(1L, user);
-
-            User expected = new User(
-                1L,
-                "USER_NAME",
-                "DISPLAY_NAME",
-                "FIRST_NAME",
-                "LAST_NAME",
-                "EMAIL",
-                "PHONE_NUMBER",
-                "IMAGE_URL",
-                new UserStatus(1L),
-                new UserSalutation(2L),
-                List.of(new UserRole(3L)),
-                null,
-                null,
-                null
-            );
-
-            assertEquals(expected, added);
-
-            verify(idpRepo, times(1)).createUser(expected);
+            assertThrows(RuntimeException.class, () -> service.putUser(1L, user));
     }
 
     @Test

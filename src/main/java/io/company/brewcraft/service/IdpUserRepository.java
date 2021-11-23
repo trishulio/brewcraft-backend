@@ -19,5 +19,5 @@ public interface IdpUserRepository {
 
     boolean groupExists(String group);
 
-    void createUserAndAddToGroup(User user, String group);
+    void createUserInGroup(User user, String group);
 }

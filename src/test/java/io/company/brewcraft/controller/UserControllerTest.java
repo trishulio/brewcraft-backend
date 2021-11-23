@@ -235,7 +235,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             null,
-            "userName",
+            null,
             "displayName",
             "firstName",
             "lastName",

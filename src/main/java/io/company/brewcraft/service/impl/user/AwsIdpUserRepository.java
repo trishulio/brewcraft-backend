@@ -66,7 +66,7 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     }
 
     @Override
-    public void createUserAndAddToGroup(User user, String group) {
+    public void createUserInGroup(User user, String group) {
         this.createUser(user);
 
         try {
