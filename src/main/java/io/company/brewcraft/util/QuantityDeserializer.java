@@ -16,7 +16,6 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 import tec.uom.se.quantity.Quantities;
 
-
 public class QuantityDeserializer extends JsonDeserializer<Quantity<?>>{
     @Override
     public Quantity<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {

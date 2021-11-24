@@ -13,7 +13,6 @@ import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.service.mapper.user.UserSalutationMapper;
 
 public class UserSalutationMapperTest {
-
     private UserSalutationMapper mapper;
 
     @BeforeEach

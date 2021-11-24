@@ -117,5 +117,4 @@ public class InvoiceItemDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

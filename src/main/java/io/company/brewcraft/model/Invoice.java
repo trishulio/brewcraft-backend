@@ -114,9 +114,11 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     private Integer version;
 
     public Invoice() {
+        super();
     }
 
     public Invoice(Long id) {
+        this();
         this.setId(id);
     }
 

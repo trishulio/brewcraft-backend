@@ -22,7 +22,7 @@ public interface MixtureMapper {
     MixtureMapper INSTANCE = Mappers.getMapper(MixtureMapper.class);
 
     Mixture fromDto(Long id);
-    
+
     List<Mixture> fromDto(Set<Long> parentMixtureIds);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)
@@ -43,7 +43,7 @@ public interface MixtureMapper {
     Mixture fromDto(UpdateMixtureDto dto);
 
     MixtureDto toDto(Mixture mixture);
-    
+
     @AfterMapping
     default void afterToDto(@MappingTarget MixtureDto mixtureDto, Mixture mixture) {
         if (mixture.getParentMixtures() != null && !mixture.getParentMixtures().isEmpty()) {

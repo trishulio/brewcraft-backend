@@ -35,7 +35,7 @@ public class UpdateMixtureRecordingDtoTest {
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), updateMixtureRecordingDto.getRecordedAt());
         assertEquals(1, updateMixtureRecordingDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         updateMixtureRecordingDto.setId(5L);

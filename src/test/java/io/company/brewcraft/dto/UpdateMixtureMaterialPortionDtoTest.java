@@ -35,7 +35,7 @@ public class UpdateMixtureMaterialPortionDtoTest {
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), updateMixtureMaterialPortionDto.getAddedAt());
         assertEquals(1, updateMixtureMaterialPortionDto.getVersion());
     }
-    
+
     @Test
     public void testGetSetId() {
         updateMixtureMaterialPortionDto.setId(3L);

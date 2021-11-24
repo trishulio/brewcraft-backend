@@ -17,7 +17,7 @@ public class EnhancedMixtureRecordingRepositoryImplTest {
     private MeasureRepository measureRepositoryMock;
 
     private MixtureRepository mixtureRepositoryMock;
-    
+
     private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresherMock;
 
     @SuppressWarnings("unchecked")

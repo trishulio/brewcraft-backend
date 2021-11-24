@@ -1,53 +1,61 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.dto.AddPurchaseOrderDto;
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.InvoiceStatusDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.MoneyDto;
-import io.company.brewcraft.dto.PurchaseOrderDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.StorageDto;
+import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.TaxDto;
-import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
-import io.company.brewcraft.dto.procurement.AddProcurementDto;
-import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
+import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
+import io.company.brewcraft.dto.procurement.ProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemIdDto;
+import io.company.brewcraft.dto.procurement.ProcurementMaterialLotDto;
+import io.company.brewcraft.dto.procurement.ProcurementPurchaseOrderDto;
+import io.company.brewcraft.dto.procurement.ProcurementShipmentDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementItemDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementMaterialLotDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementShipmentDto;
 import io.company.brewcraft.model.Freight;
+import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.model.procurement.Procurement;
-import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.procurement.ProcurementItem;
-import io.company.brewcraft.model.procurement.ProcurementItemId;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
 
 public class ProcurementMapperTest {
-
     private ProcurementMapper mapper;
 
     @BeforeEach
@@ -56,243 +64,186 @@ public class ProcurementMapperTest {
     }
 
     @Test
-    public void testToDto_ReturnsNull_WhenProcurementIsNull() {
-        assertNull(mapper.toDto((Procurement) null));
+    public void testToDto_ReturnsNull_WhenEntityIsNull() {
+        assertNull(mapper.toDto(null));
     }
 
     @Test
-    public void testToDto_ReturnsDto_WhenProcurementIsNotNull() {
-        Procurement procurement = new Procurement(
-            new ProcurementId(1L, 2L),
-            "INVOICE_NO_1",
-            "SHIPMENT_NO_1",
-            "DESCRIPTION",
-            new PurchaseOrder(3L),
-            LocalDateTime.of(1999, 1, 1, 0, 0), // generatedOn
-            LocalDateTime.of(1999, 2, 1, 0, 0), // receivedOn
-            LocalDateTime.of(1999, 3, 1, 0, 0), // paymentDueDate
-            LocalDateTime.of(1999, 4, 1, 0, 0), // deliveryDueDate
-            LocalDateTime.of(1999, 5, 1, 0, 0), // deliveredDate
-            new Freight(Money.parse("CAD 10")),
-            LocalDateTime.of(1999, 6, 1, 0, 0), // createdAt
-            LocalDateTime.of(1999, 7, 1, 0, 0), // lastUpdated
-            new InvoiceStatus(4L),
-            new ShipmentStatus(5L),
-            List.of(
-                new ProcurementItem(
-                    new ProcurementItemId(1L, 2L),
-                    "DESCRIPTION",
-                    "LOT_NUMBER",
-                    Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-                    new Storage(1L), // storage
-                    Money.parse("CAD 10"), // price
-                    new Tax(Money.parse("CAD 20")), // tax
-                    new Material(1L), // material
-                    LocalDateTime.of(1999, 1, 1, 0, 0), // createdAt
-                    LocalDateTime.of(2000, 1, 1, 0, 0), // lastUpdated
-                    1,
-                    10
-                )
+    public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
+        ProcurementDto dto = mapper.toDto(new Procurement(
+            new Shipment(
+                1L, // id
+                "SHIPMENT", // shipmentNumber,
+                "DESCRIPTION", // description
+                new ShipmentStatus(1L), // shipmentStatus,
+                LocalDateTime.of(2000, 1, 1, 0, 0), // deliveryDueDate
+                LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
+                LocalDateTime.of(2002, 1, 1, 0, 0), // createdAt
+                LocalDateTime.of(2003, 1, 1, 0, 0), // lastUpdated
+                null,
+                1 // version
             ),
-            100, // invoiceVersion
-            1 // version
-        );
-
-        ProcurementDto dto = mapper.toDto(procurement);
+            new Invoice(
+                2L,
+                "ABCDE-12345",
+                "desc1",
+                new PurchaseOrder(1L),
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+                LocalDateTime.of(2002, 1, 1, 12, 0),
+                LocalDateTime.of(2003, 1, 1, 12, 0),
+                new InvoiceStatus(99L),
+                null,
+                1
+            ),
+            new PurchaseOrder(
+                3L,
+                "ORDER_1",
+                new Supplier(1L),
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                1
+            ),
+            List.of(new ProcurementItem(
+                new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+                new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
+            ))
+        ));
 
         ProcurementDto expected = new ProcurementDto(
-            new ProcurementIdDto(1L, 2L),
-            "INVOICE_NO_1",
-            "SHIPMENT_NO_1",
-            new PurchaseOrderDto(3L),
-            "DESCRIPTION",
-            new FreightDto(new MoneyDto("CAD", new BigDecimal("10.00"))), // freight
-            new MoneyDto("CAD", new BigDecimal("100.00")), // amount
-            new TaxDto(new MoneyDto("CAD", new BigDecimal("20.00"))),
-            LocalDateTime.of(1999, 1, 1, 0, 0), // generatedOn
-            LocalDateTime.of(1999, 2, 1, 0, 0), // receivedOn
-            LocalDateTime.of(1999, 3, 1, 0, 0), // paymentDueDate
-            LocalDateTime.of(1999, 4, 1, 0, 0), // deliveryDueDate
-            LocalDateTime.of(1999, 5, 1, 0, 0), // deliveredDate
-            LocalDateTime.of(1999, 6, 1, 0, 0), // createdAt
-            LocalDateTime.of(1999, 7, 1, 0, 0), // lastUpdated
-            new InvoiceStatusDto(4L),
-            new ShipmentStatusDto(5L),
+            new ProcurementIdDto(1L, 2L, 3L),
+            new ProcurementInvoiceDto(
+                2L,
+                "ABCDE-12345",
+                "desc1",
+                new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
+                new MoneyDto("CAD", new BigDecimal("20.00")),
+                new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))),
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                LocalDateTime.of(2002, 1, 1, 12, 0),
+                LocalDateTime.of(2003, 1, 1, 12, 0),
+                new InvoiceStatusDto(99L),
+                1
+            ),
+            new ProcurementShipmentDto(
+                1L,
+                "SHIPMENT",
+                "DESCRIPTION",
+                new ShipmentStatusDto(1L),
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                LocalDateTime.of(2002, 1, 1, 0, 0),
+                LocalDateTime.of(2003, 1, 1, 0, 0),
+                1
+            ),
+            new ProcurementPurchaseOrderDto(
+                3L,
+                "ORDER_1",
+                new SupplierDto(1L),
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                1
+            ),
             List.of(
                 new ProcurementItemDto(
-                    new ProcurementItemIdDto(1L, 2L),
-                    "DESCRIPTION", // description
-                    "LOT_NUMBER", // lotNumber
-                    new QuantityDto("kg", new BigDecimal("10")), // quantity
-                    new MoneyDto("CAD", new BigDecimal("10.00")), // price
-                    new TaxDto(new MoneyDto("CAD", new BigDecimal("20.00"))), // tax
-                    new MoneyDto("CAD", new BigDecimal("100.00")), // amount
-                    new MaterialDto(1L), // material
-                    new StorageDto(1L), // storage
-                    LocalDateTime.of(1999, 1, 1, 0, 0), // createdAt
-                    LocalDateTime.of(2000, 1, 1, 0, 0), // lastUpdated
-                    1, // invoiceItemVersion
-                    10 // version
+                    new ProcurementItemIdDto(1L, 1L),
+                    new ProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+                    new ProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MoneyDto("CAD", new BigDecimal("20.00")), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
                 )
-            ),
-            100, // invoiceVersion
-            1 // version
+            )
         );
-
         assertEquals(expected, dto);
     }
 
     @Test
-    public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(mapper.fromAddDto((AddProcurementDto) null));
-    }
-
-    @Test
-    public void testFromAddDto_ReturnsProcurementWithUncommonValuesIgnored() {
-        AddProcurementDto dto  = new AddProcurementDto(
-            "INVOICE_NUMBER", // invoiceNumber
-            "SHIPMENT_NUMBER", // shipmentNumber
-            new AddPurchaseOrderDto("ORDER_NUMBER", 1L),
-            "DESCRIPTION",
-            new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
-            LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
-            LocalDateTime.of(2001, 12, 12, 0, 0), // receivedOn
-            LocalDateTime.of(2002, 12, 12, 0, 0), // paymentDueDate
-            LocalDateTime.of(2003, 12, 12, 0, 0), // deliveryDueDate
-            LocalDateTime.of(2004, 12, 12, 0, 0), // deliveredDate
-            2L,
-            3L,
-            List.of(
-                new AddProcurementItemDto(
-                    "DESCRIPTION", // description
-                    "LOT_NUMBER", // lotNumber
-                    new QuantityDto("kg", new BigDecimal("10")), // quantity
-                    new MoneyDto("CAD", new BigDecimal("20")), // price
-                    new TaxDto(new MoneyDto("CAD", new BigDecimal("5"))), // tax
-                    1L, // materialId
-                    2L // storageId
-                )
-            )
-        );
-
-        Procurement procurement = mapper.fromAddDto(dto);
-
-        Procurement expected = new Procurement(
-            null,
-            "INVOICE_NUMBER",
-            "SHIPMENT_NUMBER",
-            "DESCRIPTION",
-            new PurchaseOrder(null, "ORDER_NUMBER", new Supplier(1L), null, null, null),
-            LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
-            LocalDateTime.of(2001, 12, 12, 0, 0), // receivedOn
-            LocalDateTime.of(2002, 12, 12, 0, 0), // paymentDueDate
-            LocalDateTime.of(2003, 12, 12, 0, 0), // deliveryDueDate
-            LocalDateTime.of(2004, 12, 12, 0, 0), // deliveredDate
-            new Freight(Money.parse("CAD 10")),
-            null, // createdAt
-            null, // lastUpdated
-            new InvoiceStatus(2L),
-            new ShipmentStatus(3L),
-            List.of(
-                new ProcurementItem(
-                    null,
-                    "DESCRIPTION",
-                    "LOT_NUMBER",
-                    Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-                    new Storage(2L), // storage
-                    Money.parse("CAD 20"), // price
-                    new Tax(Money.parse("CAD 5")), // tax
-                    new Material(1L), // material
-                    null, // createdAt
-                    null, // lastUpdated
-                    null, // invoiceItemVersion
-                    null // version
-                )
-            ),
-            null, // invoiceVersion
-            null // version
-        );
-
-        assertEquals(expected, procurement);
-    }
-
-    @Test
     public void testFromUpdateDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(mapper.fromUpdateDto((UpdateProcurementDto) null));
+        assertNull(mapper.fromUpdateDto(null));
     }
 
     @Test
-    public void testFromUpdateDto_ReturnsProcurementWithUncommonValuesIgnored() {
-        UpdateProcurementDto dto  = new UpdateProcurementDto(
-            new ProcurementIdDto(1L, 1L), // id
-            "INVOICE_NUMBER", // invoiceNumber
-            "SHIPMENT_NUMBER", // shipmentNumber
-            new UpdatePurchaseOrderDto(1L, "ORDER_NUMBER", 1L, 1),
-            "DESCRIPTION",
-            new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
-            LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
-            LocalDateTime.of(2001, 12, 12, 0, 0), // receivedOn
-            LocalDateTime.of(2002, 12, 12, 0, 0), // paymentDueDate
-            LocalDateTime.of(2003, 12, 12, 0, 0), // deliveryDueDate
-            LocalDateTime.of(2004, 12, 12, 0, 0), // deliveredDate
-            2L,
-            3L,
+    public void testFromUpdateDto_ReturnsEntity_WhenDtoIsNotNull() {
+        UpdateProcurementDto dto = new UpdateProcurementDto(
+            new UpdateProcurementInvoiceDto(
+                2L,
+                "ABCDE-12345",
+                "desc1",
+                new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                99L,
+                1
+            ),
+            new UpdateProcurementShipmentDto(
+                1L,
+                "SHIPMENT",
+                "DESCRIPTION",
+                1L,
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                1
+            ),
+            new UpdateProcurementPurchaseOrderDto(
+                3L,
+                "ORDER_1",
+                1L,
+                1
+            ),
             List.of(
                 new UpdateProcurementItemDto(
-                    new ProcurementItemIdDto(1L, 2L),
-                    "DESCRIPTION", // description
-                    "LOT_NUMBER", // lotNumber
-                    new QuantityDto("kg", new BigDecimal("10")), // quantity
-                    new MoneyDto("CAD", new BigDecimal("20")), // price
-                    new TaxDto(new MoneyDto("CAD", new BigDecimal("5"))), // tax
-                    1L, // materialId
-                    2L, // storageId
-                    1, // invoiceItemVersion
-                    10 // version
+                    new UpdateProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 3L, 1),
+                    new UpdateProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L, 1)
                 )
-            ),
-            100,
-            1
+            )
         );
 
         Procurement procurement = mapper.fromUpdateDto(dto);
 
         Procurement expected = new Procurement(
-            new ProcurementId(1L, 1L), // id
-            "INVOICE_NUMBER",
-            "SHIPMENT_NUMBER",
-            "DESCRIPTION",
-            new PurchaseOrder(1L, "ORDER_NUMBER", new Supplier(1L), null, null, 1),
-            LocalDateTime.of(2000, 12, 12, 0, 0), // generatedOn
-            LocalDateTime.of(2001, 12, 12, 0, 0), // receivedOn
-            LocalDateTime.of(2002, 12, 12, 0, 0), // paymentDueDate
-            LocalDateTime.of(2003, 12, 12, 0, 0), // deliveryDueDate
-            LocalDateTime.of(2004, 12, 12, 0, 0), // deliveredDate
-            new Freight(Money.parse("CAD 10")),
-            null, // createdAt
-            null, // lastUpdated
-            new InvoiceStatus(2L),
-            new ShipmentStatus(3L),
-            List.of(
-                new ProcurementItem(
-                    new ProcurementItemId(1L, 2L),
-                    "DESCRIPTION",
-                    "LOT_NUMBER",
-                    Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-                    new Storage(2L), // storage
-                    Money.parse("CAD 20"), // price
-                    new Tax(Money.parse("CAD 5")), // tax
-                    new Material(1L), // material
-                    null, // createdAt
-                    null, // lastUpdated
-                    1, // invoiceItemVersion
-                    10 // version
-                )
+            new Shipment(
+                1L, // id
+                "SHIPMENT", // shipmentNumber,
+                "DESCRIPTION", // description
+                new ShipmentStatus(1L), // shipmentStatus,
+                LocalDateTime.of(2000, 1, 1, 0, 0), // deliveryDueDate
+                LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
+                null,
+                null,
+                null,
+                1 // version
             ),
-            100, // invoiceVersion
-            1 // version
+            new Invoice(
+                2L,
+                "ABCDE-12345",
+                "desc1",
+                null,
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+                null,
+                null,
+                new InvoiceStatus(99L),
+                null,
+                1
+            ),
+            new PurchaseOrder(
+                3L,
+                "ORDER_1",
+                new Supplier(1L),
+                null,
+                null,
+                1
+            ),
+            List.of(new ProcurementItem(
+                new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, 1),
+                new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)
+            ))
         );
-
         assertEquals(expected, procurement);
     }
 }

@@ -1,407 +1,174 @@
 package io.company.brewcraft.model.procurement;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.joda.money.Money;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
-import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
-import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
-import io.company.brewcraft.model.ShipmentStatus;
-import io.company.brewcraft.model.Tax;
 
-public class Procurement extends BaseEntity implements UpdateProcurement<InvoiceItem, MaterialLot, ProcurementItem>, Audited {
-    private static final Logger log = LoggerFactory.getLogger(Procurement.class);
-
-    private Shipment shipment;
+public class Procurement extends BaseEntity implements UpdateProcurement<ProcurementItem> {
+    private PurchaseOrder purchaseOrder;
     private Invoice invoice;
+    private Shipment shipment;
 
-    public Procurement(Shipment shipment, Invoice invoice) {
-        this();
-        updateProperties(shipment);
-        updateProperties(invoice);
-    }
-
-    public Procurement(Shipment shipment) {
-        this();
-        Invoice invoice = null;
-        if (shipment.getLotCount() > 0) {
-            InvoiceItem invoiceItem = shipment.getLots().get(0).getInvoiceItem();
-            if (invoiceItem != null) {
-                invoice = invoiceItem.getInvoice();
-            }
-        }
-
-        updateProperties(invoice);
-        updateProperties(shipment);
-    }
+    private List<ProcurementItem> procurementItems;
 
     public Procurement() {
         super();
-        this.shipment = new Shipment();
-        this.invoice = new Invoice();
+        setShipment(null);
+        setInvoice(null);
+        setPurchaseOrder(null);
     }
 
     public Procurement(ProcurementId id) {
-        this();
-        this.setId(id);
+        super();
+        this.shipment = new Shipment(id.getShipmentId());
+        this.invoice = new Invoice(id.getInvoiceId());
+        this.purchaseOrder = new PurchaseOrder(id.getPurchaseOrderId());
     }
 
-    public Procurement(ProcurementId id, String invoiceNumber, String shipmentNumber, String description, PurchaseOrder purchaseOrder, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Freight freight, LocalDateTime createdAt,
-            LocalDateTime lastUpdated, InvoiceStatus invoiceStatus, ShipmentStatus shipmentStatus, List<ProcurementItem> procurementItems, Integer invoiceVersion, Integer shipmentVersion) {
-        this(id);
-        this.setInvoiceNumber(invoiceNumber);
-        this.setShipmentNumber(shipmentNumber);
-        this.setDescription(description);
-        this.setPurchaseOrder(purchaseOrder);
-        this.setGeneratedOn(generatedOn);
-        this.setReceivedOn(receivedOn);
-        this.setPaymentDueDate(paymentDueDate);
-        this.setDeliveryDueDate(deliveryDueDate);
-        this.setDeliveredDate(deliveredDate);
-        this.setFreight(freight);
-        this.setCreatedAt(createdAt);
-        this.setLastUpdated(lastUpdated);
-        this.setInvoiceStatus(invoiceStatus);
-        this.setShipmentStatus(shipmentStatus);
-        this.setProcurementItems(procurementItems);
-        this.setInvoiceVersion(invoiceVersion);
-        this.setVersion(shipmentVersion);
+    public Procurement(Shipment shipment, Invoice invoice, PurchaseOrder purchaseOrder, List<ProcurementItem> procurementItems) {
+        super();
+        setShipment(shipment);
+        setInvoice(invoice);
+        setPurchaseOrder(purchaseOrder);
+        setProcurementItems(procurementItems);
     }
 
     @Override
     public ProcurementId getId() {
         ProcurementId id = null;
-        if (this.shipment.getId() != null || this.invoice.getId() != null) {
-            id = new ProcurementId(this.shipment.getId(), this.invoice.getId());
+
+        if (shipment != null || invoice != null || purchaseOrder != null) {
+            id = new ProcurementId();
         }
+
+        if (shipment != null) {
+            id.setShipmentId(shipment.getId());
+        }
+
+        if (invoice != null) {
+            id.setInvoiceId(invoice.getId());
+        }
+
+        if (purchaseOrder != null) {
+            id.setPurchaseOrderId(purchaseOrder.getId());
+        }
+
         return id;
     }
 
     @Override
-    public void setId(ProcurementId id) {
-        if (id != null) {
-            this.invoice.setId(id.getInvoiceId());
-            this.shipment.setId(id.getShipmentId());
-        } else {
-            this.invoice.setId(null);
-            this.shipment.setId(null);
-        }
-    }
-    @Override
-    public String getInvoiceNumber() {
-        return this.invoice.getInvoiceNumber();
-    }
-
-    @Override
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoice.setInvoiceNumber(invoiceNumber);
-    }
-
-    @Override
-    public String getDescription() {
-        return this.invoice.getDescription();
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.invoice.setDescription(description);
-        this.shipment.setDescription(description);
-    }
-
-    @Override
-    public LocalDateTime getGeneratedOn() {
-        return this.invoice.getGeneratedOn();
-    }
-
-    @Override
-    public void setGeneratedOn(LocalDateTime generatedOn) {
-        this.invoice.setGeneratedOn(generatedOn);
-    }
-
-    @Override
-    public LocalDateTime getReceivedOn() {
-        return this.invoice.getReceivedOn();
-    }
-
-    @Override
-    public void setReceivedOn(LocalDateTime receivedOn) {
-        this.invoice.setReceivedOn(receivedOn);
-    }
-
-    @Override
-    public LocalDateTime getPaymentDueDate() {
-        return this.invoice.getPaymentDueDate();
-    }
-
-    @Override
-    public void setPaymentDueDate(LocalDateTime paymentDueDate) {
-        this.invoice.setPaymentDueDate(paymentDueDate);
-    }
-
-    @Override
-    public Freight getFreight() {
-        return this.invoice.getFreight();
-    }
-
-    @Override
-    public void setFreight(Freight freight) {
-        this.invoice.setFreight(freight);
-    }
-
-    @Override
-    public InvoiceStatus getInvoiceStatus() {
-        return this.invoice.getInvoiceStatus();
-    }
-
-    @Override
-    public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-        this.invoice.setInvoiceStatus(invoiceStatus);
-    }
-
-    @Override
     public PurchaseOrder getPurchaseOrder() {
-        return this.invoice.getPurchaseOrder();
+        return purchaseOrder;
     }
 
     @Override
     public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.invoice.setPurchaseOrder(purchaseOrder);
+        if (purchaseOrder != null) {
+            this.purchaseOrder = purchaseOrder.deepClone();
+        } else {
+            this.purchaseOrder = new PurchaseOrder();
+        }
     }
 
     @Override
-    public String getShipmentNumber() {
-        return this.shipment.getShipmentNumber();
+    public Invoice getInvoice() {
+        Invoice invoice = null;
+        if (this.invoice != null) {
+            invoice = this.invoice.deepClone();
+        }
+
+        List<InvoiceItem> invoiceItems = null;
+        if (this.procurementItems != null) {
+            invoiceItems = this.procurementItems.stream().map(ProcurementItem::getInvoiceItem).collect(Collectors.toList());
+        }
+
+        if (invoice == null && invoiceItems != null) {
+            invoice = new Invoice();
+        }
+
+        if (invoice != null) {
+            invoice.setInvoiceItems(invoiceItems);
+        }
+
+        return invoice;
     }
 
     @Override
-    public void setShipmentNumber(String shipmentNumber) {
-        this.shipment.setShipmentNumber(shipmentNumber);
+    public void setInvoice(Invoice invoice) {
+        if (invoice != null) {
+            this.invoice = invoice.deepClone();
+            this.invoice.setInvoiceItems(null);
+            this.invoice.setPurchaseOrder(null);
+        } else {
+            this.invoice = new Invoice();
+        }
     }
 
     @Override
-    public LocalDateTime getDeliveryDueDate() {
-        return this.shipment.getDeliveryDueDate();
+    public Shipment getShipment() {
+        Shipment shipment = null;
+        if (this.shipment != null) {
+            shipment = this.shipment.deepClone();
+        }
+
+        List<MaterialLot> lots = null;
+        if (this.procurementItems != null) {
+            lots = this.procurementItems.stream().map(ProcurementItem::getMaterialLot).collect(Collectors.toList());
+        }
+
+        if (shipment == null && lots != null) {
+            shipment = new Shipment();
+            shipment.setLots(lots);
+        }
+
+        if (shipment != null) {
+            shipment.setLots(lots);
+        }
+
+        return shipment;
     }
 
     @Override
-    public void setDeliveryDueDate(LocalDateTime deliveryDueDate) {
-        this.shipment.setDeliveryDueDate(deliveryDueDate);
+    public void setShipment(Shipment shipment) {
+        if (shipment != null) {
+            this.shipment = shipment.deepClone();
+            this.shipment.setLots(null);
+        } else {
+            this.shipment = new Shipment();
+        }
     }
 
     @Override
-    public LocalDateTime getDeliveredDate() {
-        return this.shipment.getDeliveredDate();
-    }
-
-    @Override
-    public void setDeliveredDate(LocalDateTime deliveredDate) {
-        this.shipment.setDeliveredDate(deliveredDate);
-    }
-
-    @Override
-    public ShipmentStatus getShipmentStatus() {
-        return this.shipment.getShipmentStatus();
-    }
-
-    @Override
-    public void setShipmentStatus(ShipmentStatus shipmentStatus) {
-        this.shipment.setShipmentStatus(shipmentStatus);
-    }
-
-    @Override
-    public LocalDateTime getCreatedAt() {
-        return this.shipment.getCreatedAt();
-    }
-
-    @Override
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.shipment.setCreatedAt(createdAt);
-        this.invoice.setCreatedAt(createdAt);
-    }
-
-    @Override
-    public LocalDateTime getLastUpdated() {
-        return this.shipment.getLastUpdated();
-    }
-
-    @Override
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.shipment.setLastUpdated(lastUpdated);
-        this.invoice.setLastUpdated(lastUpdated);
-    }
-
-    @Deprecated
-    @Override
-    @JsonIgnore
-    public List<InvoiceItem> getInvoiceItems() {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
-    }
-
-    @Deprecated
-    @Override
-    @JsonIgnore
-    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use setProcurementItems(List<ProcurementItems> procurementItems) instead");
-    }
-
-    @Deprecated
-    @Override
-    @JsonIgnore
-    public List<MaterialLot> getLots() {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use getProcurementItems() instead");
-    }
-
-    @Deprecated
-    @Override
-    @JsonIgnore
-    public void setLots(List<MaterialLot> lots) {
-        throw new NoSuchMethodError("This method is not implemented for not being required. Use setProcurementItems(List<ProcurementItems> procurementItems) instead");
-    }
-
-    @Override
-    @JsonManagedReference
     public List<ProcurementItem> getProcurementItems() {
-        List<ProcurementItem> procurementItems = null;
-        List<InvoiceItem> invoiceItems = invoice.getInvoiceItems();
-        List<MaterialLot> lots = shipment.getLots();
-
-        if (invoiceItems != null || lots != null) {
-            procurementItems = new ArrayList<>();
-        }
-
-        if (invoiceItems != null) {
-            for (int i= 0; i < invoiceItems.size(); i++) {
-                ProcurementItem procurementItem = new ProcurementItem();
-                procurementItem.updateProperties(invoiceItems.get(i));
-                procurementItems.add(procurementItem);
-            }
-        }
-
-        if (lots != null) {
-            int min = Math.min(procurementItems.size(), lots.size());
-            for (int i = 0; i < min; i++) {
-                procurementItems.get(i).updateProperties(lots.get(i));
-            }
-
-            for(int i = min; i < lots.size(); i++) {
-                ProcurementItem procurementItem = new ProcurementItem();
-                procurementItem.updateProperties(lots.get(i));
-                procurementItems.add(procurementItem);
-            }
-        }
-
         return procurementItems;
     }
 
     @Override
-    @JsonManagedReference
     public void setProcurementItems(List<ProcurementItem> procurementItems) {
-        final List<InvoiceItem> invoiceItems = new ArrayList<>();
-        final List<MaterialLot> lots = new ArrayList<>();
+        this.procurementItems = procurementItems;
 
-        procurementItems.forEach(procurementItem -> {
-            invoiceItems.add(procurementItem.buildInvoiceItem());
-            lots.add(procurementItem.buildMaterialLot());
-        });
-
-        this.invoice.setInvoiceItems(invoiceItems);
-        this.shipment.setLots(lots);
     }
 
-    @Override
     @JsonIgnore
-    public Money getAmount() {
-        return this.invoice.getAmount();
-    }
+    public int getProcurementCount() {
+        int count = 0;
 
-    @Override
-    @JsonIgnore
-    public Tax getTax() {
-        return this.invoice.getTax();
-    }
-
-    @Override
-    public Integer getVersion() {
-        return this.shipment.getVersion();
-    }
-
-    @Override
-    public void setVersion(Integer version) {
-        this.shipment.setVersion(version);
-    }
-
-    @Override
-    public Integer getInvoiceVersion() {
-        return this.invoice.getVersion();
-    }
-
-    @Override
-    public void setInvoiceVersion(Integer version) {
-        this.invoice.setVersion(version);
-    }
-
-
-    public Invoice buildInvoice() {
-        return this.invoice.deepClone();
-    }
-
-    public Shipment buildShipmentWithoutInvoice() {
-        return this.shipment.deepClone();
-    }
-
-    public void updateProperties(Shipment shipment) {
-        if (shipment != null) {
-            this.shipment = shipment.deepClone();
-            this.setDescription(this.shipment.getDescription());
-            this.setCreatedAt(this.shipment.getCreatedAt());
-            this.setLastUpdated(this.shipment.getLastUpdated());
-        } else {
-            this.shipment = new Shipment();
-            this.setDescription(null);
-            this.setCreatedAt(null);
-            this.setLastUpdated(null);
-        }
-    }
-
-    public void updateProperties(Invoice invoice) {
-        if (invoice != null) {
-            this.invoice = invoice.deepClone();
-            this.setDescription(this.invoice.getDescription());
-            this.setCreatedAt(this.invoice.getCreatedAt());
-            this.setLastUpdated(this.invoice.getLastUpdated());
-        } else {
-            this.invoice = new Invoice();
-            this.setDescription(null);
-            this.setCreatedAt(null);
-            this.setLastUpdated(null);
-        }
-    }
-
-    public int getItemCount() {
-        return Math.max(this.invoice.getItemCount(), this.shipment.getLotCount());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        // Note: Converting to string might not be the efficient way to compare
-        if (o == null || !(o instanceof Procurement)) {
-            return false;
+        if (this.invoice != null) {
+            count = this.invoice.getItemCount();
         }
 
-        return this.toString().equals(o.toString());
+        if (this.shipment != null) {
+            count = Math.max(count, this.shipment.getLotCount());
+        }
+
+        return count;
     }
 }

@@ -67,7 +67,6 @@ public class MixtureMaterialPortionTest {
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), mixtureMaterialPortion.getQuantity());
     }
 
-
     @Test
     public void testGetSetMixture() {
         mixtureMaterialPortion.setMixture(new Mixture(2L));

@@ -21,7 +21,6 @@ public class MoneyDeserializer extends JsonDeserializer<Money>{
     public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = p.getCodec().readTree(p);
 
-
         CurrencyUnit currency = CurrencyMapper.INSTANCE.toUnit(node.get(MoneyDto.ATTR_CURRENCY).asText());
         BigDecimal amount = new BigDecimal(node.get(MoneyDto.ATTR_AMOUNT).asText());
 

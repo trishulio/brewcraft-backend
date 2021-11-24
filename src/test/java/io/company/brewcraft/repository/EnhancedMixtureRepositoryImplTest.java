@@ -21,9 +21,8 @@ public class EnhancedMixtureRepositoryImplTest {
     private BrewStageRepository brewStageRepositoryMock;
 
     private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorMock;
-    
-    private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixturesAccessorMock;
 
+    private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixturesAccessorMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
@@ -40,7 +39,7 @@ public class EnhancedMixtureRepositoryImplTest {
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
         List<Mixture> mixtures = List.of(new Mixture(1L));
-        
+
         List<Mixture> parentMixtures = List.of(new Mixture(2L));
         mixtures.get(0).setParentMixtures(parentMixtures);
 

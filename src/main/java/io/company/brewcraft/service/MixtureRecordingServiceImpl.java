@@ -25,9 +25,9 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingServiceImpl.class);
 
     private final RepoService<Long, MixtureRecording, MixtureRecordingAccessor> repoService;
-    
+
     private final UpdateService<Long, MixtureRecording, BaseMixtureRecording, UpdateMixtureRecording> updateService;
-    
+
     public MixtureRecordingServiceImpl(RepoService<Long, MixtureRecording, MixtureRecordingAccessor> repoService, UpdateService<Long, MixtureRecording, BaseMixtureRecording, UpdateMixtureRecording> updateService) {
         this.repoService = repoService;
         this.updateService = updateService;
@@ -63,7 +63,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
 
         return this.repoService.saveAll(entities);
     }
-    
+
     @Override
     public List<MixtureRecording> putMixtureRecordings(List<UpdateMixtureRecording> putMixtureRecordings) {
         if (putMixtureRecordings == null) {

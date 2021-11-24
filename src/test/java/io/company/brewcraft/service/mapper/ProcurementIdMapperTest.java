@@ -25,9 +25,9 @@ public class ProcurementIdMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-        ProcurementId id = mapper.fromDto(new ProcurementIdDto(1L, 2L));
+        ProcurementId id = mapper.fromDto(new ProcurementIdDto(1L, 2L, 3L));
 
-        ProcurementId expected = new ProcurementId(1L, 2L);
+        ProcurementId expected = new ProcurementId(1L, 2L, 3L);
         assertEquals(expected, id);
     }
 
@@ -38,9 +38,9 @@ public class ProcurementIdMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        ProcurementIdDto id = mapper.toDto(new ProcurementId(1L, 2L));
+        ProcurementIdDto id = mapper.toDto(new ProcurementId(1L, 2L, 3L));
 
-        ProcurementIdDto expected = new ProcurementIdDto(1L, 2L);
+        ProcurementIdDto expected = new ProcurementIdDto(1L, 2L, 3L);
         assertEquals(expected, id);
     }
 }

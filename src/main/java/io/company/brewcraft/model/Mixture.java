@@ -51,8 +51,8 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
 
     @ManyToMany()
     @JoinTable(
-        name = "MIXTURE_TO_PARENT_MIXTURE", 
-        joinColumns = { @JoinColumn(name = "mixture_id") }, 
+        name = "MIXTURE_TO_PARENT_MIXTURE",
+        joinColumns = { @JoinColumn(name = "mixture_id") },
         inverseJoinColumns = { @JoinColumn(name = "parent_mixture_id") }
     )
     private List<Mixture> parentMixtures;
@@ -144,9 +144,9 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
             } else {
                 parentMixtures.stream().filter(parentMixture -> !this.parentMixtures.contains(parentMixture)).collect(Collectors.toList()).forEach(this::addParentMixture);
             }
-        }    
+        }
     }
-    
+
     public void addParentMixture(Mixture parentMixture) {
         if (parentMixture == null) {
             return;

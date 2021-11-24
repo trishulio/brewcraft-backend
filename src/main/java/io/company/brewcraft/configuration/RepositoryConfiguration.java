@@ -402,7 +402,7 @@ public class RepositoryConfiguration {
             ids -> repo.findAllById(ids)
         );
     }
-    
+
     @Bean
     public AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> mixtureRecordingRefresher(MixtureRecordingRepository repo) {
         return new AccessorRefresher<>(

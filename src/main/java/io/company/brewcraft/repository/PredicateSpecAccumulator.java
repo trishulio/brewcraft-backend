@@ -32,7 +32,6 @@ public class PredicateSpecAccumulator {
     }
 
     public void add(CriteriaSpec<Boolean> spec) {
-        log.debug("Not = {}", isNot);
         if (this.isNot) {
             spec = new NotSpec(spec);
         }
@@ -48,7 +47,6 @@ public class PredicateSpecAccumulator {
 
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate[] predicates = new Predicate[this.aggregations.size()];
-        log.debug("Total Predicates = {}", predicates.length);
         predicates = this.aggregations.stream().map(spec -> spec.getExpression(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
 
         return predicates;

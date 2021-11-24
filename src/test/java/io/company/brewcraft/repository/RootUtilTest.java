@@ -28,7 +28,6 @@ public class RootUtilTest {
     class Layer3 {
     }
 
-
     private From<?, Layer0> mRoot;
 
     private From<?, Layer1> mLayer1;

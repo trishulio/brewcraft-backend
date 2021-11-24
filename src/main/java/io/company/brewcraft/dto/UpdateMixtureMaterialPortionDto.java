@@ -3,7 +3,7 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class UpdateMixtureMaterialPortionDto extends BaseDto {
-    
+
     private Long id;
 
     private Long materialLotId;
@@ -28,7 +28,7 @@ public class UpdateMixtureMaterialPortionDto extends BaseDto {
         this.addedAt = addedAt;
         this.version = version;
     }
-    
+
     public Long getId() {
         return id;
     }

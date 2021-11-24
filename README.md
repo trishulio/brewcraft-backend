@@ -18,7 +18,6 @@ PWD=/c/Users/<username>/code/brewcraft/
 ```
 The first time this command is run, the maven container fetches all the JAR dependencies and stores them in the volume. Unless, the volumes is removed explicitly, the subsequent builds will be faster.
 
-
 Run app (development mode) in docker using:
 ```
 make run

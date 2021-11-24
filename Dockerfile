@@ -1,4 +1,4 @@
-FROM openjdk:11 AS prod
+FROM openjdk:17 AS prod
 
 ARG JAR_FILE=./target/brewcraft-1.0.0.jar
 

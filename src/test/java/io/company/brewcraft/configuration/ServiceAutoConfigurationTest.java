@@ -70,6 +70,8 @@ import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.procurement.ProcurementFactory;
+import io.company.brewcraft.service.impl.procurement.ProcurementItemFactory;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.user.UserService;
@@ -240,8 +242,10 @@ public class ServiceAutoConfigurationTest {
         final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
         final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
         final TransactionService transactionServiceMock = mock(TransactionService.class);
+        final ProcurementFactory procurementFactoryMock = mock(ProcurementFactory.class);
+        final ProcurementItemFactory procurementItemFactoryMock = mock(ProcurementItemFactory.class);
 
-        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock, transactionServiceMock);
+        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock, transactionServiceMock, procurementFactoryMock, procurementItemFactoryMock);
 
         assertTrue(service instanceof ProcurementService);
     }
@@ -294,17 +298,17 @@ public class ServiceAutoConfigurationTest {
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
         final StockLotService stockLotServiceMock = mock(StockLotService.class);
         final MixtureMaterialPortionService service = this.serviceAutoConfiguration.mixtureMaterialPortionService(mUtilProvider, materialPortionRepositoryMock, stockLotServiceMock);
-    
+
         assertTrue(service instanceof MixtureMaterialPortionServiceImpl);
     }
-    
+
     @Test
     public void testMixtureRecordingService_ReturnsInstanceOfMixtureRecordingService() {
         final MixtureRecordingRepository mixtureRecordingRepositoryMock = mock(MixtureRecordingRepository.class);
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-    
+
         final MixtureRecordingService service = this.serviceAutoConfiguration.mixtureRecordingService(mUtilProvider, mixtureRecordingRepositoryMock);
-    
+
         assertTrue(service instanceof MixtureRecordingServiceImpl);
     }
 
