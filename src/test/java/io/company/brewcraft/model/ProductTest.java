@@ -2,10 +2,10 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -21,24 +21,26 @@ public class ProductTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructor() throws Exception {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
+        URL imageSrc = new URL("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Product product = new Product(id, name, description, category, targetMeasures, created, lastUpdated, deletedAt, version);
+        Product product = new Product(id, name, description, category, targetMeasures, imageSrc, created, lastUpdated, deletedAt, version);
 
         assertEquals(1L, product.getId());
         assertEquals("testName", product.getName());
         assertEquals("testDesc", product.getDescription());
         assertEquals(new ProductCategory(), product.getCategory());
         assertEquals(List.of(), product.getTargetMeasures());
+        assertEquals(imageSrc, product.getImageSrc());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getLastUpdated());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), product.getDeletedAt());
@@ -81,6 +83,12 @@ public class ProductTest {
     }
 
     @Test
+    public void testGetSetImageSrc() throws Exception {
+        product.setImageSrc(new URL("http://www.test.com"));
+        assertEquals(new URL("http://www.test.com"), product.getImageSrc());
+    }
+
+    @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         product.setCreatedAt(created);
@@ -109,20 +117,21 @@ public class ProductTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() throws JSONException {
+    public void testToString_ReturnsJsonifiedString() throws Exception {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
+        URL imageSrc = new URL("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Product product = new Product(id, name, description, category, targetMeasures, created, lastUpdated, deletedAt, version);
+        Product product = new Product(id, name, description, category, targetMeasures, imageSrc, created, lastUpdated, deletedAt, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"targetMeasures\":[],\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"deletedAt\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"targetMeasures\":[],\"imageSrc\":\"http://www.test.com\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"deletedAt\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, product.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

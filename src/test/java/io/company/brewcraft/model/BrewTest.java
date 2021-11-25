@@ -177,7 +177,7 @@ public class BrewTest {
 
         Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"batchId\":\"2\",\"product\":{\"id\":null,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"parentBrew\":{\"id\":null,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"startedAt\":\"2020-01-02T03:04:00\",\"endedAt\":\"2020-01-02T03:04:00\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"batchId\":\"2\",\"product\":{\"id\":null,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"parentBrew\":{\"id\":null,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"startedAt\":\"2020-01-02T03:04:00\",\"endedAt\":\"2020-01-02T03:04:00\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, brew.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
