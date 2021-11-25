@@ -18,5 +18,5 @@ public interface IdentityProviderClient {
 
     void deleteUserGroup(String group);
 
-    boolean groupExists(String group);
+    boolean userGroupExists(String group);
 }

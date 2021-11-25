@@ -61,8 +61,15 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     }
 
     @Override
-    public boolean groupExists(String group) {
-        return this.idpClient.groupExists(group);
+    public boolean userGroupExists(String group) {
+        return this.idpClient.userGroupExists(group);
+    }
+
+    @Override
+    public void putUserGroup(String group) {
+        if (!this.userGroupExists(group)) {
+            this.createUserGroup(group);
+        }
     }
 
     @Override

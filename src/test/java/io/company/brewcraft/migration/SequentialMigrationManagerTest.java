@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.service.IdpUserRepository;
+
 @SuppressWarnings("unchecked")
 public class SequentialMigrationManagerTest {
 
@@ -17,48 +19,35 @@ public class SequentialMigrationManagerTest {
 
     private TenantRegister mTenantReg;
     private MigrationRegister mMigrationReg;
-    private IdpRegister mIdpReg;
+    private IdpUserRepository mIdpUserRepo;
 
     @BeforeEach
     public void init() {
         mTenantReg = mock(TenantRegister.class);
         mMigrationReg = mock(MigrationRegister.class);
-        mIdpReg = mock(IdpRegister.class);
+        mIdpUserRepo = mock(IdpUserRepository.class);
 
-        mgr = new SequentialMigrationManager(mTenantReg, mMigrationReg, mIdpReg);
+        mgr = new SequentialMigrationManager(mTenantReg, mMigrationReg, mIdpUserRepo);
     }
 
     @Test
     public void testMigrate_DoesNotAddTenantAndRunsMigration_WhenTenantExist() {
         doReturn(true).when(mTenantReg).exists("12345");
-        doReturn(false).when(mIdpReg).groupExists("12345");
         mgr.migrate("12345");
 
         verify(mTenantReg, times(0)).add("12345");
         verify(mMigrationReg, times(1)).migrate("12345");
-        verify(mIdpReg, times(1)).createGroup("12345");
-    }
-
-    @Test
-    public void testMigrate_DoesNotCreateGroupAndRunsMigration_WhenGroupExists() {
-        doReturn(false).when(mTenantReg).exists("12345");
-        doReturn(true).when(mIdpReg).groupExists("12345");
-        mgr.migrate("12345");
-
-        verify(mTenantReg, times(1)).add("12345");
-        verify(mMigrationReg, times(1)).migrate("12345");
-        verify(mIdpReg, times(0)).createGroup("12345");
+        verify(mIdpUserRepo, times(1)).putUserGroup("12345");
     }
 
     @Test
     public void testMigrate_AddsTenantAndCreatesGroupAndRunsMigration_WhenTenantDoesNotExist() {
         doReturn(false).when(mTenantReg).exists("12345");
-        doReturn(false).when(mIdpReg).groupExists("12345");
         mgr.migrate("12345");
 
         verify(mTenantReg, times(1)).add("12345");
         verify(mMigrationReg, times(1)).migrate("12345");
-        verify(mIdpReg, times(1)).createGroup("12345");
+        verify(mIdpUserRepo, times(1)).putUserGroup("12345");
     }
 
     @Test
@@ -75,10 +64,10 @@ public class SequentialMigrationManagerTest {
     public void migrateAllImpl_SubmitsSetupAndAllMigrationTasksToTaskSet() {
         SequentialMigrationManager sqMgr = spy((SequentialMigrationManager) mgr);
         doReturn(false).when(mTenantReg).exists(any(String.class));
-        doReturn(false).when(mIdpReg).groupExists(any(String.class));
+        doReturn(false).when(mIdpUserRepo).userGroupExists(any(String.class));
         doNothing().when(mMigrationReg).migrate();
         doNothing().when(mTenantReg).add(startsWith("SUCCESS_"));
-        doNothing().when(mIdpReg).createGroup(startsWith("SUCCESS_"));
+        doNothing().when(mIdpUserRepo).putUserGroup(startsWith("SUCCESS_"));
         doThrow(new RuntimeException()).when(mTenantReg).add(startsWith("FAIL_"));
 
         TaskSet tasks = new SequentialTaskSet();

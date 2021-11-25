@@ -29,15 +29,9 @@ public class MigrationAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IdpRegister.class)
-    public IdpRegister idpRegister(IdpUserRepository idpUserRepository) {
-        return new CognitoIdpRegister(idpUserRepository);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(MigrationManager.class)
-    public MigrationManager migrationMgr(TenantRegister tenantRegister, MigrationRegister migrationReg, IdpRegister idpRegister) {
-        return new SequentialMigrationManager(tenantRegister, migrationReg, idpRegister);
+    public MigrationManager migrationMgr(TenantRegister tenantRegister, MigrationRegister migrationReg, IdpUserRepository idpUserRepository) {
+        return new SequentialMigrationManager(tenantRegister, migrationReg, idpUserRepository);
     }
 
     @Bean

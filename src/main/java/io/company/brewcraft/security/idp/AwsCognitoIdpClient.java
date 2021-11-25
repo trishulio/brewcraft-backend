@@ -18,6 +18,7 @@ import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.CreateGroupRequest;
 import com.amazonaws.services.cognitoidp.model.DeleteGroupRequest;
+import com.amazonaws.services.cognitoidp.model.DeliveryMediumType;
 import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
 import com.amazonaws.services.cognitoidp.model.ResourceNotFoundException;
 
@@ -36,7 +37,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     @Override
     public void createUser(final String userName, final Map<String, String> userAttr) {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
-        final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withDesiredDeliveryMediums("EMAIL").withUserAttributes(attributeTypes);
+        final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withDesiredDeliveryMediums(DeliveryMediumType.EMAIL).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
         try {
             final AdminCreateUserResult adminCreateUserResult = this.awsIdpProvider.adminCreateUser(adminCreateUserRequest);
@@ -122,7 +123,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public boolean groupExists(final String group) {
+    public boolean userGroupExists(final String group) {
         final GetGroupRequest getGroupRequest = new GetGroupRequest().withUserPoolId(userPoolId).withGroupName(group);
         logger.debug("Attempting to get group {} in cognito user pool {}", group, userPoolId);
         try {

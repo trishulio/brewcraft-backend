@@ -17,7 +17,9 @@ public interface IdpUserRepository {
 
     void deleteUserGroup(String group);
 
-    boolean groupExists(String group);
+    boolean userGroupExists(String group);
+
+    void putUserGroup(String group);
 
     void createUserInGroup(User user, String group);
 }

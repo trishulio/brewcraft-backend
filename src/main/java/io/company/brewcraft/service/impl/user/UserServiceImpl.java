@@ -96,10 +96,8 @@ public class UserServiceImpl extends BaseService implements UserService {
             throw new RuntimeException("No existing User found with id: " + userId);
         }
 
-        Class<? super User> userClz = BaseUser.class;
-
         existing.optimisticLockCheck(update);
-        userClz = UpdateUser.class;
+        Class<? super User> userClz = UpdateUser.class;
 
         User temp = new User(userId);
         temp.override(update, getPropertyNames(userClz));
