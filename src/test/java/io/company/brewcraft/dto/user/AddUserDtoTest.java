@@ -20,6 +20,7 @@ public class AddUserDtoTest {
     @Test
     public void testAllArgConstructors_SetsAllValues() {
         dto = new AddUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -31,6 +32,7 @@ public class AddUserDtoTest {
             List.of(10L)
         );
 
+        assertEquals("userName", dto.getUserName());
         assertEquals("displayName", dto.getDisplayName());
         assertEquals("firstName", dto.getFirstName());
         assertEquals("lastName", dto.getLastName());
@@ -40,6 +42,13 @@ public class AddUserDtoTest {
         assertEquals("phoneNumber", dto.getPhoneNumber());
         assertEquals("imageUrl", dto.getImageUrl());
         assertEquals(List.of(10L), dto.getRoleIds());
+    }
+
+    @Test
+    public void testAccessUserName() {
+        assertNull(dto.getUserName());
+        dto.setUserName("userName");
+        assertEquals("userName", dto.getUserName());
     }
 
     @Test

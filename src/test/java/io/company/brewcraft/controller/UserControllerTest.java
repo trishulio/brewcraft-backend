@@ -220,6 +220,7 @@ public class UserControllerTest {
     public void testAddUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(0, User.class)).when(mService).addUser(any(User.class));
         AddUserDto additionDto = new AddUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -235,7 +236,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             null,
-            null,
+            "userName",
             "displayName",
             "firstName",
             "lastName",

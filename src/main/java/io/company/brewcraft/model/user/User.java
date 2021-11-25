@@ -49,7 +49,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "user_name", updatable = false)
+    @Column(name = "user_name", updatable = false, unique = true)
     private String userName;
 
     @Column(name = "display_name")
