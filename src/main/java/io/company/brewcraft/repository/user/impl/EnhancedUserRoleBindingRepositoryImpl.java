@@ -2,6 +2,8 @@ package io.company.brewcraft.repository.user.impl;
 
 import java.util.Collection;
 
+import org.springframework.context.annotation.Lazy;
+
 import io.company.brewcraft.model.user.UserRoleBinding;
 import io.company.brewcraft.repository.user.EnhancedUserRoleBindingRepository;
 import io.company.brewcraft.repository.user.UserRepository;
@@ -12,7 +14,7 @@ public class EnhancedUserRoleBindingRepositoryImpl implements EnhancedUserRoleBi
     private UserRepository userRepo;
     private UserRoleRepository userRoleRepo;
 
-    public EnhancedUserRoleBindingRepositoryImpl(UserRepository userRepo, UserRoleRepository userRoleRepo) {
+    public EnhancedUserRoleBindingRepositoryImpl(@Lazy UserRepository userRepo, UserRoleRepository userRoleRepo) {
         this.userRepo = userRepo;
         this.userRoleRepo = userRoleRepo;
     }

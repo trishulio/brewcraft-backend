@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.service.MixtureAccessor;
@@ -22,7 +23,7 @@ public class EnhancedMixtureRepositoryImpl implements EnhancedMixtureRepository 
 
     private BrewStageRepository brewStageRepository;
 
-    public EnhancedMixtureRepositoryImpl(MixtureRepository mixtureRepository, EquipmentRepository equipmentRepository, BrewStageRepository brewStageRepository, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
+    public EnhancedMixtureRepositoryImpl(@Lazy MixtureRepository mixtureRepository, EquipmentRepository equipmentRepository, BrewStageRepository brewStageRepository, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
         this.mixtureRepository = mixtureRepository;
         this.equipmentRepository = equipmentRepository;
         this.brewStageRepository = brewStageRepository;

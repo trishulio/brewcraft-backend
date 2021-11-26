@@ -13,6 +13,7 @@
         <java.version>17</java.version>
         <org.springframework.boot.version>2.6.0</org.springframework.boot.version> <!-- spring-boot-starter-parent version is explicitly specified. Update it if this is updated -->
         <org.springframework.security.version>2.6.0</org.springframework.security.version>
+        <org.springdoc.openapi.version>1.5.12</org.springdoc.openapi.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <com.google.guava.version>29.0-jre</com.google.guava.version>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
@@ -128,7 +129,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.5.0</version>
+            <version>${org.springdoc.openapi.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.measure/unit-api -->
