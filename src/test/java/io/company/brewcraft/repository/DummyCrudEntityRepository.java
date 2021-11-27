@@ -8,5 +8,5 @@ import io.company.brewcraft.model.DummyCrudEntity;
 import io.company.brewcraft.model.DummyCrudEntityAccessor;
 
 @Profile("IgnoredFromSpringContextTests")
-public interface DummyCrudEntityRepository extends JpaRepository<DummyCrudEntity, Long>, JpaSpecificationExecutor<DummyCrudEntity>, EnhancedRepository<DummyCrudEntity, DummyCrudEntityAccessor>, ExtendedRepository<Long> {
+public interface DummyCrudEntityRepository extends JpaRepository<DummyCrudEntity, Long>, JpaSpecificationExecutor<DummyCrudEntity>, Refresher<DummyCrudEntity, DummyCrudEntityAccessor>, ExtendedRepository<Long> {
 }

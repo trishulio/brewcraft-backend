@@ -17,10 +17,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.repository.EnhancedRepository;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.ExtendedRepository;
 
-public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID> & EnhancedRepository<E, A>, ID, A, E extends Identified<ID>> implements RepoService<ID, E, A> {
+public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID> & Refresher<E, A>, ID, A, E extends Identified<ID>> implements RepoService<ID, E, A> {
     private final T repo;
 
     public CrudRepoService(T repo) {

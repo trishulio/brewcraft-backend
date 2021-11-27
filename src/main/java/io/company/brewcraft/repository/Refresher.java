@@ -2,7 +2,7 @@ package io.company.brewcraft.repository;
 
 import java.util.Collection;
 
-public interface EnhancedRepository<E, A> {
+public interface Refresher<E, A> {
     void refresh(Collection<E> entities);
 
     void refreshAccessors(Collection<? extends A> accessors);

@@ -5,7 +5,7 @@ import java.util.Collection;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
 
-public interface EnhancedMixtureRecordingRepository extends EnhancedRepository<MixtureRecording, MixtureRecordingAccessor> {
+public interface EnhancedMixtureRecordingRepository extends Refresher<MixtureRecording, MixtureRecordingAccessor> {
 
     void refresh(Collection<MixtureRecording> mixtureRecordings);
 
