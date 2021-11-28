@@ -21,8 +21,10 @@ import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.UpdateBrewStage;
 import io.company.brewcraft.repository.BrewStageRepository;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
+import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,8 +34,11 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
 
     private BrewStageRepository brewStageRepository;
 
-    public BrewStageServiceImpl(BrewStageRepository brewStageRepository) {
+    private Refresher<BrewStage, BrewStageAccessor> brewStageRefresher;
+
+    public BrewStageServiceImpl(BrewStageRepository brewStageRepository, Refresher<BrewStage, BrewStageAccessor> brewStageRefresher) {
         this.brewStageRepository = brewStageRepository;
+        this.brewStageRefresher = brewStageRefresher;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
 
     @Override
     public List<BrewStage> addBrewStages(List<BrewStage> brewStages) {
-        brewStageRepository.refresh(brewStages);
+        brewStageRefresher.refresh(brewStages);
 
         List<BrewStage> addedBrewStages = brewStageRepository.saveAll(brewStages);
         brewStageRepository.flush();
@@ -75,7 +80,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
 
     @Override
     public BrewStage putBrewStage(Long brewStageId, BrewStage putBrewStage) {
-        brewStageRepository.refresh(List.of(putBrewStage));
+        brewStageRefresher.refresh(List.of(putBrewStage));
 
         BrewStage existingBrewStage = getBrewStage(brewStageId);
 
@@ -96,7 +101,7 @@ public class BrewStageServiceImpl extends BaseService implements BrewStageServic
     public BrewStage patchBrewStage(Long brewStageId, BrewStage brewStagePatch) {
         BrewStage existingBrewStage = Optional.ofNullable(getBrewStage(brewStageId)).orElseThrow(() -> new EntityNotFoundException("BrewStage", brewStageId.toString()));
 
-        brewStageRepository.refresh(List.of(brewStagePatch));
+        brewStageRefresher.refresh(List.of(brewStagePatch));
 
         existingBrewStage.optimisticLockCheck(brewStagePatch);
 

@@ -5,9 +5,9 @@ import java.util.Collection;
 import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.model.user.UserStatusAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
-import io.company.brewcraft.repository.user.EnhancedUserStatusRepository;
+import io.company.brewcraft.repository.Refresher;
 
-public class UserStatusRefresher implements EnhancedUserStatusRepository {
+public class UserStatusRefresher implements Refresher<UserStatus, UserStatusAccessor> {
 
     private AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher;
 

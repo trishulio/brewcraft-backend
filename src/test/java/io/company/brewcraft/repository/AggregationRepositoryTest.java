@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.repository.AggregationRepository;
+import io.company.brewcraft.repository.QueryResolver;
 import io.company.brewcraft.service.GroupByClauseBuilder;
 import io.company.brewcraft.service.SelectClauseBuilder;
 

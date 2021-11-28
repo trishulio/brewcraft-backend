@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.InvoiceItemRefresher;
+import io.company.brewcraft.repository.InvoiceRefresher;
+import io.company.brewcraft.repository.InvoiceStatusRefresher;
+import io.company.brewcraft.repository.PurchaseOrderRefresher;
 
 public class InvoiceRefresherTest {
 
@@ -19,18 +24,18 @@ public class InvoiceRefresherTest {
 
     private AccessorRefresher<Long, InvoiceAccessor, Invoice> mRefresher;
 
-    private InvoiceItemRepository mItemRepo;
-    private InvoiceStatusRepository mStatusRepo;
-    private PurchaseOrderRepository mPoRepo;
+    private InvoiceItemRefresher mItemRefresher;
+    private InvoiceStatusRefresher mStatusRefresher;
+    private PurchaseOrderRefresher poRefresher;
 
     @BeforeEach
     public void init() {
-        this.mStatusRepo = mock(InvoiceStatusRepository.class);
-        this.mPoRepo = mock(PurchaseOrderRepository.class);
-        this.mItemRepo = mock(InvoiceItemRepository.class);
+        this.mStatusRefresher = mock(InvoiceStatusRefresher.class);
+        this.poRefresher = mock(PurchaseOrderRefresher.class);
+        this.mItemRefresher = mock(InvoiceItemRefresher.class);
         this.mRefresher = mock(AccessorRefresher.class);
 
-        this.invoiceRefresher = new InvoiceRefresher(this.mRefresher, this.mItemRepo, this.mStatusRepo, this.mPoRepo);
+        this.invoiceRefresher = new InvoiceRefresher(this.mRefresher, this.mItemRefresher, this.mStatusRefresher, this.poRefresher);
     }
 
     @Test
@@ -52,10 +57,10 @@ public class InvoiceRefresherTest {
 
         this.invoiceRefresher.refresh(invoices);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
-        verify(this.mPoRepo, times(1)).refreshAccessors(invoices);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(invoices);
+        verify(this.poRefresher, times(1)).refreshAccessors(invoices);
 
-        verify(this.mItemRepo, times(1)).refresh(invoiceItems);
+        verify(this.mItemRefresher, times(1)).refresh(invoiceItems);
     }
 
     @Test
@@ -72,16 +77,16 @@ public class InvoiceRefresherTest {
 
         this.invoiceRefresher.refresh(invoices);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
-        verify(this.mItemRepo, times(1)).refresh(invoiceItems);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(invoices);
+        verify(this.mItemRefresher, times(1)).refresh(invoiceItems);
     }
 
     @Test
     public void testRefresh_DoesNotRefreshInvoices_WhenListIsNull() {
         this.invoiceRefresher.refresh(null);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(null);
-        verify(this.mItemRepo, times(1)).refresh(null);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(null);
+        verify(this.mItemRefresher, times(1)).refresh(null);
     }
 
     @Test
@@ -94,8 +99,8 @@ public class InvoiceRefresherTest {
 
         this.invoiceRefresher.refresh(invoices);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
-        verify(this.mItemRepo, times(1)).refresh(List.of());
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(invoices);
+        verify(this.mItemRefresher, times(1)).refresh(List.of());
     }
 
     @Test
@@ -111,8 +116,8 @@ public class InvoiceRefresherTest {
 
         this.invoiceRefresher.refresh(invoices);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(invoices);
-        verify(this.mItemRepo, times(1)).refresh(List.of());
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(invoices);
+        verify(this.mItemRefresher, times(1)).refresh(List.of());
     }
 
     @Test

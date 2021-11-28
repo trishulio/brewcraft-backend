@@ -7,19 +7,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
+import io.company.brewcraft.service.SupplierAccessor;
 
-public class PurchaseOrderRefresher implements EnhancedPurchaseOrderRepository {
+public class PurchaseOrderRefresher implements Refresher<PurchaseOrder, PurchaseOrderAccessor> {
     private static final Logger log = LoggerFactory.getLogger(PurchaseOrderRefresher.class);
 
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher;
 
-    private SupplierRepository supplierRepo;
+    private Refresher<Supplier, SupplierAccessor> supplierRefresher;
 
     @Autowired
-    public PurchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, SupplierRepository supplierRepo) {
+    public PurchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, Refresher<Supplier, SupplierAccessor> supplierRefresher) {
         this.refresher = refresher;
-        this.supplierRepo = supplierRepo;
+        this.supplierRefresher = supplierRefresher;
     }
 
     @Override
@@ -29,6 +31,6 @@ public class PurchaseOrderRefresher implements EnhancedPurchaseOrderRepository {
 
     @Override
     public void refresh(Collection<PurchaseOrder> purchaseOrders) {
-        this.supplierRepo.refreshAccessors(purchaseOrders);
+        this.supplierRefresher.refreshAccessors(purchaseOrders);
     }
 }

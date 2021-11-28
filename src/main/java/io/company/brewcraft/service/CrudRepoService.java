@@ -17,14 +17,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.Identified;
-import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.ExtendedRepository;
+import io.company.brewcraft.repository.Refresher;
 
-public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID> & Refresher<E, A>, ID, A, E extends Identified<ID>> implements RepoService<ID, E, A> {
+public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationExecutor<E> & ExtendedRepository<ID>, ID, A, E extends Identified<ID>, U extends Refresher<E, A>> implements RepoService<ID, E, A> {
     private final T repo;
+    private final U refresher;
 
-    public CrudRepoService(T repo) {
+    public CrudRepoService(T repo, U refresher) {
         this.repo = repo;
+        this.refresher = refresher;
     }
 
     @Override
@@ -87,7 +89,7 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
 
     @Override
     public List<E> saveAll(List<E> entities) {
-        this.repo.refresh(entities);
+        this.refresher.refresh(entities);
         final Iterable<E> saved = this.repo.saveAll(entities);
         this.repo.flush();
 

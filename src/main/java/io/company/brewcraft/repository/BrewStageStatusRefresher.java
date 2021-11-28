@@ -5,7 +5,7 @@ import java.util.Collection;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 
-public class BrewStageStatusRefresher implements EnhancedBrewStageStatusRepository {
+public class BrewStageStatusRefresher implements Refresher<BrewStageStatus, BrewStageStatusAccessor> {
 
     private AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresher;
 
@@ -16,6 +16,11 @@ public class BrewStageStatusRefresher implements EnhancedBrewStageStatusReposito
     @Override
     public void refreshAccessors(Collection<? extends BrewStageStatusAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<BrewStageStatus> entities) {
+        // TODO
     }
 
 }

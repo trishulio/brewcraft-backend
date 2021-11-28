@@ -21,6 +21,8 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.MixtureRecording;
 import io.company.brewcraft.repository.MixtureRepository;
+import io.company.brewcraft.repository.Refresher;
+import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.MixtureService;
 import io.company.brewcraft.service.MixtureServiceImpl;
 import io.company.brewcraft.util.SupportedUnits;
@@ -32,9 +34,12 @@ public class MixtureServiceImplTest {
 
     private MixtureRepository mixtureRepositoryMock;
 
+    private Refresher<Mixture, MixtureAccessor> mixtureRefresherMock;
+
     @BeforeEach
     public void init() {
         mixtureRepositoryMock = mock(MixtureRepository.class);
+        mixtureRefresherMock = mock(Refresher.class);
         doAnswer(i -> i.getArgument(0, Mixture.class)).when(mixtureRepositoryMock).saveAndFlush(any(Mixture.class));
         doAnswer(i -> {
             Collection<Mixture> coll = i.getArgument(0, Collection.class);
@@ -44,9 +49,9 @@ public class MixtureServiceImplTest {
                 s.setEquipment(new Equipment(3L));
             });
             return null;
-        }).when(mixtureRepositoryMock).refresh(anyCollection());
+        }).when(mixtureRefresherMock).refresh(anyCollection());
 
-        mixtureService = new MixtureServiceImpl(mixtureRepositoryMock);
+        mixtureService = new MixtureServiceImpl(mixtureRepositoryMock, mixtureRefresherMock);
     }
 
     @Test
@@ -93,7 +98,7 @@ public class MixtureServiceImplTest {
         assertEquals(1, addedMixture.getVersion());
 
         verify(mixtureRepositoryMock, times(1)).saveAndFlush(addedMixture);
-        verify(mixtureRepositoryMock, times(1)).refresh(List.of(addedMixture));
+        verify(mixtureRefresherMock, times(1)).refresh(List.of(addedMixture));
     }
 
     @Test
@@ -120,7 +125,7 @@ public class MixtureServiceImplTest {
         assertEquals(1, putMixture.getVersion());
 
         verify(mixtureRepositoryMock, times(1)).saveAndFlush(putMixture);
-        verify(mixtureRepositoryMock, times(1)).refresh(anyList());
+        verify(mixtureRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -145,7 +150,7 @@ public class MixtureServiceImplTest {
         assertEquals(1, putMixture.getVersion());
 
         verify(mixtureRepositoryMock, times(1)).saveAndFlush(putMixture);
-        verify(mixtureRepositoryMock, times(1)).refresh(anyList());
+        verify(mixtureRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -184,7 +189,7 @@ public class MixtureServiceImplTest {
         assertEquals(1, patchMixture.getVersion());
 
         verify(mixtureRepositoryMock, times(1)).saveAndFlush(patchMixture);
-        verify(mixtureRepositoryMock, times(1)).refresh(anyList());
+        verify(mixtureRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test

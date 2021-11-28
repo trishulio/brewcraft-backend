@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.PurchaseOrder;
 
 @Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long>, JpaSpecificationExecutor<PurchaseOrder>, EnhancedPurchaseOrderRepository, ExtendedRepository<Long> {
+public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long>, JpaSpecificationExecutor<PurchaseOrder>, ExtendedRepository<Long> {
     @Override
     @Query("select count(i) > 0 from purchase_order p where p.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);

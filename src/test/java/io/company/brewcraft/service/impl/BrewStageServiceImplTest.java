@@ -19,7 +19,10 @@ import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
+import io.company.brewcraft.repository.BrewStageRefresher;
 import io.company.brewcraft.repository.BrewStageRepository;
+import io.company.brewcraft.repository.Refresher;
+import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageService;
 
 public class BrewStageServiceImplTest {
@@ -28,9 +31,12 @@ public class BrewStageServiceImplTest {
 
     private BrewStageRepository brewStageRepositoryMock;
 
+    private Refresher<BrewStage, BrewStageAccessor> brewStageRefresherMock;
+
     @BeforeEach
     public void init() {
         brewStageRepositoryMock = mock(BrewStageRepository.class);
+        brewStageRefresherMock = mock(Refresher.class);
 
         doAnswer(i -> i.getArgument(0, BrewStage.class)).when(brewStageRepositoryMock).saveAndFlush(any(BrewStage.class));
         doAnswer(i -> {
@@ -41,10 +47,10 @@ public class BrewStageServiceImplTest {
                 s.setBrew(new Brew(3L));
             });
             return null;
-        }).when(brewStageRepositoryMock).refresh(anyCollection());
+        }).when(brewStageRefresherMock).refresh(anyCollection());
         doAnswer(i -> i.getArgument(0)).when(this.brewStageRepositoryMock).saveAll(anyList());
 
-        brewStageService = new BrewStageServiceImpl(brewStageRepositoryMock);
+        brewStageService = new BrewStageServiceImpl(brewStageRepositoryMock, brewStageRefresherMock);
     }
 
     @Test
@@ -92,7 +98,7 @@ public class BrewStageServiceImplTest {
         assertEquals(1, addedBrewStage.get(0).getVersion());
 
         verify(brewStageRepositoryMock, times(1)).saveAll(addedBrewStage);
-        verify(brewStageRepositoryMock, times(1)).refresh(addedBrewStage);
+        verify(brewStageRefresherMock, times(1)).refresh(addedBrewStage);
         verify(brewStageRepositoryMock, times(1)).flush();
     }
 
@@ -122,7 +128,7 @@ public class BrewStageServiceImplTest {
         assertEquals(1, brewStage.getVersion());
 
         verify(brewStageRepositoryMock, times(1)).saveAndFlush(brewStage);
-        verify(brewStageRepositoryMock, times(1)).refresh(anyList());
+        verify(brewStageRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -147,7 +153,7 @@ public class BrewStageServiceImplTest {
         assertEquals(1, brewStage.getVersion());
 
         verify(brewStageRepositoryMock, times(1)).saveAndFlush(brewStage);
-        verify(brewStageRepositoryMock, times(1)).refresh(anyList());
+        verify(brewStageRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -189,7 +195,7 @@ public class BrewStageServiceImplTest {
         assertEquals(1, brewStage.getVersion());
 
         verify(brewStageRepositoryMock, times(1)).saveAndFlush(brewStage);
-        verify(brewStageRepositoryMock, times(1)).refresh(anyList());
+        verify(brewStageRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test

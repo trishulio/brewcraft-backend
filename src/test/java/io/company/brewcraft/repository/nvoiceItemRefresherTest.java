@@ -8,21 +8,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.InvoiceItemRefresher;
+import io.company.brewcraft.repository.MaterialRefresher;
 import io.company.brewcraft.service.InvoiceItemAccessor;
 
 public class nvoiceItemRefresherTest {
     private InvoiceItemRefresher invoiceItemRefresher;
 
-    private MaterialRepository mMaterialRepo;
+    private MaterialRefresher mMaterialRefresher;
     private AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> mRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        mMaterialRepo = mock(MaterialRepository.class);
+        mMaterialRefresher = mock(MaterialRefresher.class);
         mRefresher = mock(AccessorRefresher.class);
 
-        invoiceItemRefresher = new InvoiceItemRefresher(mMaterialRepo, mRefresher);
+        invoiceItemRefresher = new InvoiceItemRefresher(mMaterialRefresher, mRefresher);
     }
 
     @Test
@@ -31,7 +34,7 @@ public class nvoiceItemRefresherTest {
 
         invoiceItemRefresher.refresh(invoiceItems);
 
-        verify(mMaterialRepo, times(1)).refreshAccessors(invoiceItems);
+        verify(mMaterialRefresher, times(1)).refreshAccessors(invoiceItems);
     }
 
     @Test

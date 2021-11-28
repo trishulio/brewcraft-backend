@@ -21,8 +21,10 @@ import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateBrew;
 import io.company.brewcraft.repository.BrewRepository;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
+import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,8 +34,11 @@ public class BrewServiceImpl extends BaseService implements BrewService {
 
     private BrewRepository brewRepository;
 
-    public BrewServiceImpl(BrewRepository brewRepository) {
+    private Refresher<Brew, BrewAccessor> brewRefresher;
+
+    public BrewServiceImpl(BrewRepository brewRepository, Refresher<Brew, BrewAccessor> brewRefresher) {
         this.brewRepository = brewRepository;
+        this.brewRefresher = brewRefresher;
     }
 
     @Override
@@ -67,7 +72,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
 
     @Override
     public Brew addBrew(Brew brew) {
-        brewRepository.refresh(List.of(brew));
+        brewRefresher.refresh(List.of(brew));
 
         Brew addedBrew = brewRepository.saveAndFlush(brew);
 
@@ -76,7 +81,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
 
     @Override
     public Brew putBrew(Long brewId, Brew putBrew) {
-        brewRepository.refresh(List.of(putBrew));
+        brewRefresher.refresh(List.of(putBrew));
 
         Brew existingBrew = getBrew(brewId);
 
@@ -95,7 +100,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
     public Brew patchBrew(Long brewId, Brew brewPatch) {
         Brew existingBrew = Optional.ofNullable(getBrew(brewId)).orElseThrow(() -> new EntityNotFoundException("Brew", brewId.toString()));
 
-        brewRepository.refresh(List.of(brewPatch));
+        brewRefresher.refresh(List.of(brewPatch));
 
         existingBrew.optimisticLockCheck(brewPatch);
 

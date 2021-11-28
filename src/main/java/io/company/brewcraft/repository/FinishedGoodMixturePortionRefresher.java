@@ -6,23 +6,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
+import io.company.brewcraft.service.MixtureAccessor;
 
-public class FinishedGoodMixturePortionRefresher implements EnhancedFinishedGoodMixturePortionRepository{
+public class FinishedGoodMixturePortionRefresher implements Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodMixturePortionRefresher.class);
 
-    private MixtureRepository mixtureRepo;
+    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
 
     private final AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher;
 
-    public FinishedGoodMixturePortionRefresher(MixtureRepository mixtureRepo, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher) {
-        this.mixtureRepo = mixtureRepo;
+    public FinishedGoodMixturePortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher) {
+        this.mixtureRefresher = mixtureRefresher;
         this.refresher = refresher;
     }
 
     @Override
     public void refresh(Collection<FinishedGoodMixturePortion> portions) {
-        mixtureRepo.refreshAccessors(portions);
+        mixtureRefresher.refreshAccessors(portions);
     }
 
     @Override

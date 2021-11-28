@@ -5,7 +5,7 @@ import java.util.Collection;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.service.SupplierAccessor;
 
-public class SupplierRefresher implements EnhancedSupplierRepository {
+public class SupplierRefresher implements Refresher<Supplier, SupplierAccessor> {
 
     private AccessorRefresher<Long, SupplierAccessor, Supplier> refresher;
 

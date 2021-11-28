@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.SkuMaterial;
 
-public interface SkuMaterialRepository extends JpaRepository<SkuMaterial, Long>, JpaSpecificationExecutor<SkuMaterial>, EnhancedSkuMaterialRepository {
+public interface SkuMaterialRepository extends JpaRepository<SkuMaterial, Long>, JpaSpecificationExecutor<SkuMaterial> {
 
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.Shipment;
 
 @Repository
-public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSpecificationExecutor<Shipment>, EnhancedShipmentRepository, ExtendedRepository<Long> {
+public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSpecificationExecutor<Shipment>, ExtendedRepository<Long> {
     @Override
     @Query("select count(i) > 0 from shipment s where s.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);

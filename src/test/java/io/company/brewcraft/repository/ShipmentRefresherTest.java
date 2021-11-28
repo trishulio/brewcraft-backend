@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.MaterialLotRefresher;
+import io.company.brewcraft.repository.ShipmentRefresher;
+import io.company.brewcraft.repository.ShipmentStatusRefresher;
 
 public class ShipmentRefresherTest {
 
@@ -19,16 +23,16 @@ public class ShipmentRefresherTest {
 
     private AccessorRefresher<Long, ShipmentAccessor, Shipment> mRefresher;
 
-    private ShipmentStatusRepository mStatusRepo;
-    private MaterialLotRepository mLotRepo;
+    private ShipmentStatusRefresher mStatusRefresher;
+    private MaterialLotRefresher mLotRefresher;
 
     @BeforeEach
     public void init() {
         this.mRefresher = mock(AccessorRefresher.class);
-        this.mStatusRepo = mock(ShipmentStatusRepository.class);
-        this.mLotRepo = mock(MaterialLotRepository.class);
+        this.mStatusRefresher = mock(ShipmentStatusRefresher.class);
+        this.mLotRefresher = mock(MaterialLotRefresher.class);
 
-        this.shipmentRefresher = new ShipmentRefresher(this.mRefresher, this.mStatusRepo, this.mLotRepo);
+        this.shipmentRefresher = new ShipmentRefresher(this.mRefresher, this.mStatusRefresher, this.mLotRefresher);
     }
 
     @Test
@@ -46,8 +50,8 @@ public class ShipmentRefresherTest {
 
         this.shipmentRefresher.refresh(shipments);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
-        verify(this.mLotRepo, times(1)).refresh(lots);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRefresher, times(1)).refresh(lots);
     }
 
     @Test
@@ -64,16 +68,16 @@ public class ShipmentRefresherTest {
 
         this.shipmentRefresher.refresh(shipments);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
-        verify(this.mLotRepo, times(1)).refresh(lots);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRefresher, times(1)).refresh(lots);
     }
 
     @Test
     public void testRefresh_DoesNotRefreshShipments_WhenListIsNull() {
         this.shipmentRefresher.refresh(null);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(null);
-        verify(this.mLotRepo, times(1)).refresh(null);
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(null);
+        verify(this.mLotRefresher, times(1)).refresh(null);
     }
 
     @Test
@@ -86,8 +90,8 @@ public class ShipmentRefresherTest {
 
         this.shipmentRefresher.refresh(shipments);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
-        verify(this.mLotRepo, times(1)).refresh(List.of());
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRefresher, times(1)).refresh(List.of());
     }
 
     @Test
@@ -103,8 +107,8 @@ public class ShipmentRefresherTest {
 
         this.shipmentRefresher.refresh(shipments);
 
-        verify(this.mStatusRepo, times(1)).refreshAccessors(shipments);
-        verify(this.mLotRepo, times(1)).refresh(List.of());
+        verify(this.mStatusRefresher, times(1)).refreshAccessors(shipments);
+        verify(this.mLotRefresher, times(1)).refresh(List.of());
     }
 
     @Test

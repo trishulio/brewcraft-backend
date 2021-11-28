@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
 
-public class InvoiceStatusRefresher implements EnhancedInvoiceStatusRepository {
+public class InvoiceStatusRefresher implements Refresher<InvoiceStatus, InvoiceStatusAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceStatusRefresher.class);
 
     private AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> refresher;
@@ -20,6 +20,11 @@ public class InvoiceStatusRefresher implements EnhancedInvoiceStatusRepository {
     @Override
     public void refreshAccessors(Collection<? extends InvoiceStatusAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<InvoiceStatus> entities) {
+        // TODO
     }
 
 }

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.MaterialRefresher;
 import io.company.brewcraft.service.MaterialAccessor;
 
 public class MaterialRefresherTest {

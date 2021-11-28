@@ -11,25 +11,34 @@ import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserRoleBinding;
+import io.company.brewcraft.model.user.UserRoleBindingAccessor;
+import io.company.brewcraft.model.user.UserSalutation;
+import io.company.brewcraft.model.user.UserSalutationAccessor;
+import io.company.brewcraft.model.user.UserStatus;
+import io.company.brewcraft.model.user.UserStatusAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.impl.UserRefresher;
+import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
+import io.company.brewcraft.repository.user.impl.UserSalutationRefresher;
+import io.company.brewcraft.repository.user.impl.UserStatusRefresher;
 
 public class UserRefresherTest {
 
     private AccessorRefresher<Long, UserAccessor, User> mRefresher;
-    private UserStatusRepository mStatusRepo;
-    private UserSalutationRepository mSalutationRepo;
-    private UserRoleBindingRepository mRoleBindingRepo;
+    private Refresher<UserStatus, UserStatusAccessor> mStatusRefresher;
+    private Refresher<UserSalutation, UserSalutationAccessor> mSalutationRefresher;
+    private Refresher<UserRoleBinding, UserRoleBindingAccessor> mRoleBindingRefresher;
 
     private UserRefresher userRefresher;
 
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
-        mStatusRepo = mock(UserStatusRepository.class);
-        mSalutationRepo = mock(UserSalutationRepository.class);
-        mRoleBindingRepo = mock(UserRoleBindingRepository.class);
-        userRefresher = new UserRefresher(mRefresher, mStatusRepo, mSalutationRepo, mRoleBindingRepo);
+        mStatusRefresher = mock(Refresher.class);
+        mSalutationRefresher = mock(Refresher.class);
+        mRoleBindingRefresher = mock(Refresher.class);
+        userRefresher = new UserRefresher(mRefresher, mStatusRefresher, mSalutationRefresher, mRoleBindingRefresher);
     }
 
     @Test
@@ -48,10 +57,10 @@ public class UserRefresherTest {
             new UserRoleBinding(null, new UserRole(10L), users.get(0)),
             new UserRoleBinding(null, new UserRole(20L), users.get(1))
         );
-        verify(mRoleBindingRepo, times(1)).refresh(expected);
+        verify(mRoleBindingRefresher, times(1)).refresh(expected);
 
-        verify(mStatusRepo, times(1)).refreshAccessors(users);
-        verify(mSalutationRepo, times(1)).refreshAccessors(users);
+        verify(mStatusRefresher, times(1)).refreshAccessors(users);
+        verify(mSalutationRefresher, times(1)).refreshAccessors(users);
     }
 
     @Test

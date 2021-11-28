@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.Material;
 
 @Repository
-public interface MaterialRepository extends JpaRepository<Material, Long>, JpaSpecificationExecutor<Material>, EnhancedMaterialRepository {
+public interface MaterialRepository extends JpaRepository<Material, Long>, JpaSpecificationExecutor<Material> {
     @Query("select count(m) > 0 from MATERIAL m where m.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);
 }

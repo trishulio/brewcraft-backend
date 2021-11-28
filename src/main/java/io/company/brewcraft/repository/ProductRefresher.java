@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.service.ProductAccessor;
 
-public class ProductRefresher implements EnhancedProductRepository {
+public class ProductRefresher implements Refresher<Product, ProductAccessor> {
     private static final Logger log = LoggerFactory.getLogger(ProductRefresher.class);
 
     private AccessorRefresher<Long, ProductAccessor, Product> refresher;
@@ -22,5 +22,10 @@ public class ProductRefresher implements EnhancedProductRepository {
     @Override
     public void refreshAccessors(Collection<? extends ProductAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<Product> entities) {
+        // TODO
     }
 }

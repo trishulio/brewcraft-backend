@@ -10,6 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.domain.Specification;
 
+import io.company.brewcraft.repository.WhereClauseBuilder;
+import io.company.brewcraft.repository.WhereClauseBuilderDelegate;
+import io.company.brewcraft.repository.WhereClauseBuilderWrapper;
+
 @SuppressWarnings({ "unchecked" })
 public class DelegatorSpecBuilderTest {
 

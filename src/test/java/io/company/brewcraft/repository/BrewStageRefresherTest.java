@@ -8,28 +8,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.BrewRefresher;
+import io.company.brewcraft.repository.BrewStageRefresher;
+import io.company.brewcraft.repository.BrewStageStatusRefresher;
+import io.company.brewcraft.repository.BrewTaskRefresher;
 import io.company.brewcraft.service.BrewStageAccessor;
 
 public class BrewStageRefresherTest {
     private BrewStageRefresher brewStsgeRefresher;
 
-    private BrewTaskRepository brewTaskRepositoryMock;
+    private BrewTaskRefresher brewTaskRefresher;
 
-    private BrewStageStatusRepository brewStageStatusRepositoryMock;
+    private BrewStageStatusRefresher brewStageStatusRefresher;
 
-    private BrewRepository brewRepositoryMock;
+    private BrewRefresher brewRefresherMock;
 
     private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        brewTaskRepositoryMock = mock(BrewTaskRepository.class);
-        brewStageStatusRepositoryMock = mock(BrewStageStatusRepository.class);
-        brewRepositoryMock = mock(BrewRepository.class);
+        brewTaskRefresher = mock(BrewTaskRefresher.class);
+        brewStageStatusRefresher = mock(BrewStageStatusRefresher.class);
+        brewRefresherMock = mock(BrewRefresher.class);
         refresherMock = mock(AccessorRefresher.class);
 
-        brewStsgeRefresher = new BrewStageRefresher(brewTaskRepositoryMock, brewStageStatusRepositoryMock, brewRepositoryMock, refresherMock);
+        brewStsgeRefresher = new BrewStageRefresher(brewTaskRefresher, brewStageStatusRefresher, brewRefresherMock, refresherMock);
     }
 
     @Test
@@ -38,9 +43,9 @@ public class BrewStageRefresherTest {
 
         brewStsgeRefresher.refresh(brewStages);
 
-        verify(brewTaskRepositoryMock, times(1)).refreshAccessors(brewStages);
-        verify(brewStageStatusRepositoryMock, times(1)).refreshAccessors(brewStages);
-        verify(brewRepositoryMock, times(1)).refreshAccessors(brewStages);
+        verify(brewTaskRefresher, times(1)).refreshAccessors(brewStages);
+        verify(brewStageStatusRefresher, times(1)).refreshAccessors(brewStages);
+        verify(brewRefresherMock, times(1)).refreshAccessors(brewStages);
     }
 
     @Test

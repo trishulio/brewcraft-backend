@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.MaterialLot;
 
 @Repository
-public interface MaterialLotRepository extends JpaSpecificationExecutor<MaterialLot>, JpaRepository<MaterialLot, Long>, EnhancedMaterialLotRepository {
+public interface MaterialLotRepository extends JpaSpecificationExecutor<MaterialLot>, JpaRepository<MaterialLot, Long> {
 }

@@ -27,9 +27,11 @@ import io.company.brewcraft.model.user.BaseUserRole;
 import io.company.brewcraft.model.user.UpdateUser;
 import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.PrincipalContext;
@@ -41,6 +43,7 @@ public class UserServiceImplTest {
     private IdpUserRepository idpRepo;
     private ContextHolder contextHolder;
     private PrincipalContext principalContext;
+    private Refresher<User, UserAccessor> userRefresher;
 
 
     private UserServiceImpl service;
@@ -48,6 +51,7 @@ public class UserServiceImplTest {
     @BeforeEach
     public void init() {
         mUserRepo = mock(UserRepository.class);
+        userRefresher = mock(Refresher.class);
         doAnswer(inv -> inv.getArgument(0, User.class)).when(mUserRepo).saveAndFlush(any(User.class));
 
         idpRepo = mock(IdpUserRepository.class);
@@ -57,7 +61,7 @@ public class UserServiceImplTest {
         when(contextHolder.getPrincipalContext()).thenReturn(principalContext);
         when(principalContext.getTenantId()).thenReturn("tenant-uuid");
 
-        service = new UserServiceImpl(mUserRepo, idpRepo, contextHolder);
+        service = new UserServiceImpl(mUserRepo, idpRepo, userRefresher, contextHolder);
     }
 
     @Test

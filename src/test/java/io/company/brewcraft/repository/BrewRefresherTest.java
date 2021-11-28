@@ -6,17 +6,22 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 
 import io.company.brewcraft.model.Brew;
+import io.company.brewcraft.model.Product;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.BrewRefresher;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
+import io.company.brewcraft.service.ProductAccessor;
 
 public class BrewRefresherTest {
-    private BrewRefresher brewRefresher;
 
-    private ProductRepository productRepositoryMock;
+    private IBrewRefresher<Brew, BrewAccessor, ParentBrewAccessor> brewRefresher;
 
-    private BrewRepository brewRepositoryMock;
+    private Refresher<Product, ProductAccessor> productRefresherMock;
 
     private AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorMock;
 
@@ -25,12 +30,11 @@ public class BrewRefresherTest {
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        productRepositoryMock = mock(ProductRepository.class);
-        brewRepositoryMock = mock(BrewRepository.class);
+        productRefresherMock = mock(Refresher.class);
         parentBrewAccessorMock = mock(AccessorRefresher.class);
         brewAccessorMock = mock(AccessorRefresher.class);
 
-        brewRefresher = new BrewRefresher(productRepositoryMock, brewRepositoryMock, parentBrewAccessorMock, brewAccessorMock);
+        brewRefresher = spy(new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock));
     }
 
     @Test
@@ -39,8 +43,8 @@ public class BrewRefresherTest {
 
         brewRefresher.refresh(brews);
 
-        verify(productRepositoryMock, times(1)).refreshAccessors(brews);
-        verify(brewRepositoryMock, times(1)).refreshParentBrewAccessors(brews);
+        verify(productRefresherMock, times(1)).refreshAccessors(brews);
+        verify(brewRefresher, times(1)).refreshParentBrewAccessors(brews);
     }
 
     @Test

@@ -11,36 +11,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.model.Sku;
+import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.service.FinishedGoodAccessor;
+import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
+import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
 
-public class FinishedGoodRefresher implements EnhancedFinishedGoodRepository {
+public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGoodAccessor> {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodRefresher.class);
 
     private final AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher;
 
-    private final SkuRepository skuRepository;
+    private final Refresher<Sku, SkuAccessor> skuRefresher;
 
-    private final FinishedGoodMixturePortionRepository fgMixturePortionRepository;
+    private final Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher;
 
-    private final FinishedGoodMaterialPortionRepository fgMaterialPortionRepository;
+    private final Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher;
 
     @Autowired
-    public FinishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, SkuRepository skuRepository, FinishedGoodMixturePortionRepository fgMixturePortionRepository, FinishedGoodMaterialPortionRepository fgMaterialPortionRepository) {
+    public FinishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
         this.refresher = refresher;
-        this.skuRepository = skuRepository;
-        this.fgMixturePortionRepository = fgMixturePortionRepository;
-        this.fgMaterialPortionRepository = fgMaterialPortionRepository;
+        this.skuRefresher = skuRefresher;
+        this.fgMixturePortionRefresher = fgMixturePortionRefresher;
+        this.fgMaterialPortionRefresher = fgMaterialPortionRefresher;
     }
 
     @Override
     public void refresh(Collection<FinishedGood> finishedGoods) {
-        this.skuRepository.refreshAccessors(finishedGoods);
+        this.skuRefresher.refreshAccessors(finishedGoods);
 
         final List<FinishedGoodMixturePortion> mixturePortions = finishedGoods.stream().filter(i -> i.getMixturePortions() != null).flatMap(i -> i.getMixturePortions().stream()).collect(Collectors.toList());
-        this.fgMixturePortionRepository.refresh(mixturePortions);
+        this.fgMixturePortionRefresher.refresh(mixturePortions);
 
         final List<FinishedGoodMaterialPortion> materialPortions = finishedGoods.stream().filter(i -> i.getMaterialPortions() != null).flatMap(i -> i.getMaterialPortions().stream()).collect(Collectors.toList());
-        this.fgMaterialPortionRepository.refresh(materialPortions);
+        this.fgMaterialPortionRefresher.refresh(materialPortions);
     }
 
     @Override

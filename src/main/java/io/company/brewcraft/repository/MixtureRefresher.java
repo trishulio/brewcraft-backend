@@ -5,36 +5,37 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.service.BrewStageAccessor;
+import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 
-public class MixtureRefresher implements EnhancedMixtureRepository {
+public class MixtureRefresher implements IMixtureRefresher<Mixture, MixtureAccessor, ParentMixturesAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureRefresher.class);
 
-    private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher;
+    private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher;
 
     private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher;
 
-    private MixtureRepository mixtureRepository;
+    private Refresher<Equipment, EquipmentAccessor> equipmentRefresher;
 
-    private EquipmentRepository equipmentRepository;
+    private Refresher<BrewStage, BrewStageAccessor> brewStageRefresher;
 
-    private BrewStageRepository brewStageRepository;
-
-    public MixtureRefresher(MixtureRepository mixtureRepository, EquipmentRepository equipmentRepository, BrewStageRepository brewStageRepository, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
-        this.mixtureRepository = mixtureRepository;
-        this.equipmentRepository = equipmentRepository;
-        this.brewStageRepository = brewStageRepository;
-        this.mixtureRefresher = mixtureRefresher;
+    public MixtureRefresher(Refresher<Equipment, EquipmentAccessor> equipmentRefresher, Refresher<BrewStage, BrewStageAccessor> brewStageRefresher, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
+        this.equipmentRefresher = equipmentRefresher;
+        this.brewStageRefresher = brewStageRefresher;
+        this.mixtureAccessorRefresher = mixtureAccessorRefresher;
         this.parentMixtureRefresher = parentMixtureRefresher;
     }
 
     @Override
     public void refresh(Collection<Mixture> mixtures) {
-        this.mixtureRepository.refreshParentMixturesAccessors(mixtures);
-        this.equipmentRepository.refreshAccessors(mixtures);
-        this.brewStageRepository.refreshAccessors(mixtures);
+        this.refreshParentMixturesAccessors(mixtures);
+        this.equipmentRefresher.refreshAccessors(mixtures);
+        this.brewStageRefresher.refreshAccessors(mixtures);
     }
 
     @Override
@@ -44,6 +45,6 @@ public class MixtureRefresher implements EnhancedMixtureRepository {
 
     @Override
     public void refreshAccessors(Collection<? extends MixtureAccessor> accessors) {
-        this.mixtureRefresher.refreshAccessors(accessors);
+        this.mixtureAccessorRefresher.refreshAccessors(accessors);
     }
 }

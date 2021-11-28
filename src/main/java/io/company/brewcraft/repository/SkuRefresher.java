@@ -8,23 +8,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
+import io.company.brewcraft.service.ProductAccessor;
+import io.company.brewcraft.service.SkuMaterialAccessor;
 
-public class SkuRefresher implements EnhancedSkuRepository {
+public class SkuRefresher implements Refresher<Sku, SkuAccessor> {
     private static final Logger log = LoggerFactory.getLogger(SkuRefresher.class);
 
-    private ProductRepository productRepository;
+    private Refresher<Product, ProductAccessor> productRefresher;
 
-    private SkuMaterialRepository skuMaterialRepository;
+    private Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher;
 
     private AccessorRefresher<Long, SkuAccessor, Sku> refresher;
 
     @Autowired
-    public SkuRefresher(ProductRepository productRepository, SkuMaterialRepository skuMaterialRepository, AccessorRefresher<Long, SkuAccessor, Sku> refresher) {
-        this.productRepository = productRepository;
-        this.skuMaterialRepository = skuMaterialRepository;
+    public SkuRefresher(Refresher<Product, ProductAccessor> productRefresher, Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher, AccessorRefresher<Long, SkuAccessor, Sku> refresher) {
+        this.productRefresher = productRefresher;
+        this.skuMaterialRefresher = skuMaterialRefresher;
         this.refresher = refresher;
     }
 
@@ -35,9 +38,9 @@ public class SkuRefresher implements EnhancedSkuRepository {
 
     @Override
     public void refresh(Collection<Sku> skus) {
-        this.productRepository.refreshAccessors(skus);
+        this.productRefresher.refreshAccessors(skus);
         final List<SkuMaterial> materials = skus.stream().filter(i -> i.getMaterials() != null).flatMap(i -> i.getMaterials().stream()).collect(Collectors.toList());
 
-        this.skuMaterialRepository.refresh(materials);
+        this.skuMaterialRefresher.refresh(materials);
     }
 }

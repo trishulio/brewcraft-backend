@@ -5,7 +5,7 @@ import java.util.Collection;
 import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.service.MeasureAccessor;
 
-public class MeasureRefresher implements EnhancedMeasureRepository {
+public class MeasureRefresher implements Refresher<Measure, MeasureAccessor> {
 
     private AccessorRefresher<Long, MeasureAccessor, Measure> refresher;
 
@@ -16,6 +16,11 @@ public class MeasureRefresher implements EnhancedMeasureRepository {
     @Override
     public void refreshAccessors(Collection<? extends MeasureAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<Measure> entities) {
+        // TODO
     }
 
 }

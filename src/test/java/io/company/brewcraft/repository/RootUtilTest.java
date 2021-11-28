@@ -12,6 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import io.company.brewcraft.repository.CriteriaJoinAnnotationProcessor;
+import io.company.brewcraft.repository.CriteriaJoinIgnorer;
+import io.company.brewcraft.repository.CriteriaJoinProcessor;
+import io.company.brewcraft.repository.RootUtil;
+
 public class RootUtilTest {
     class Layer0 {
         private Layer1 layer1;

@@ -23,6 +23,7 @@ import io.company.brewcraft.model.DummyCrudEntity;
 import io.company.brewcraft.model.DummyCrudEntityAccessor;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.repository.DummyCrudEntityRepository;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.RepoService;
 
@@ -31,12 +32,14 @@ public class CrudRepoServiceTest {
     interface LongIdentified extends Identified<Long>{}
 
     private DummyCrudEntityRepository mRepo;
+    private Refresher<DummyCrudEntity, DummyCrudEntityAccessor> mRefresher;
     private RepoService<Long, DummyCrudEntity, DummyCrudEntityAccessor> service;
 
     @BeforeEach
     public void init() {
         this.mRepo = mock(DummyCrudEntityRepository.class);
-        this.service = new CrudRepoService<>(this.mRepo);
+        this.mRefresher = mock(Refresher.class);
+        this.service = new CrudRepoService<>(this.mRepo, this.mRefresher);
     }
 
     @Test
@@ -146,8 +149,8 @@ public class CrudRepoServiceTest {
 
         assertEquals(List.of(new DummyCrudEntity(1L)), entities);
 
-        final InOrder order = inOrder(this.mRepo);
-        order.verify(this.mRepo, times(1)).refresh(List.of(new DummyCrudEntity(1L)));
+        final InOrder order = inOrder(this.mRefresher, this.mRepo);
+        order.verify(this.mRefresher, times(1)).refresh(List.of(new DummyCrudEntity(1L)));
         order.verify(this.mRepo, times(1)).saveAll(List.of(new DummyCrudEntity(1L)));
         order.verify(this.mRepo, times(1)).flush();
     }

@@ -6,17 +6,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
+import io.company.brewcraft.service.MaterialLotAccessor;
 
-public class FinishedGoodMaterialPortionRefresher implements EnhancedFinishedGoodMaterialPortionRepository {
+public class FinishedGoodMaterialPortionRefresher implements Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodMaterialPortionRefresher.class);
 
-    private MaterialLotRepository materialLotRepo;
+    private Refresher<MaterialLot, MaterialLotAccessor> materialLotRepo;
 
     private final AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher;
 
-    public FinishedGoodMaterialPortionRefresher(MaterialLotRepository materialLotRepo, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher) {
-        this.materialLotRepo = materialLotRepo;
+    public FinishedGoodMaterialPortionRefresher(Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher) {
+        this.materialLotRepo = materialLotRefresher;
         this.refresher = refresher;
     }
 

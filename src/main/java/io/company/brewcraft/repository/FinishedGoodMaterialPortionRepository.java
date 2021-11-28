@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 
 @Repository
-public interface FinishedGoodMaterialPortionRepository extends JpaRepository<FinishedGoodMaterialPortion, Long>, JpaSpecificationExecutor<FinishedGoodMaterialPortion>, EnhancedFinishedGoodMaterialPortionRepository {
+public interface FinishedGoodMaterialPortionRepository extends JpaRepository<FinishedGoodMaterialPortion, Long>, JpaSpecificationExecutor<FinishedGoodMaterialPortion> {
 }

@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.FinishedGoodMaterialPortionRefresher;
+import io.company.brewcraft.repository.FinishedGoodMixturePortionRefresher;
+import io.company.brewcraft.repository.FinishedGoodRefresher;
+import io.company.brewcraft.repository.SkuRefresher;
 import io.company.brewcraft.service.FinishedGoodAccessor;
 
 public class FinishedGoodRefresherTest {
@@ -19,18 +24,18 @@ public class FinishedGoodRefresherTest {
 
     private AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> mRefresher;
 
-    private FinishedGoodMixturePortionRepository fgMixturePortionRepository;
-    private FinishedGoodMaterialPortionRepository fgMaterialPortionRepository;
-    private SkuRepository skuRepository;
+    private FinishedGoodMixturePortionRefresher fgMixturePortionRefresher;
+    private FinishedGoodMaterialPortionRefresher fgMaterialPortionRefresher;
+    private SkuRefresher skuRefresher;
 
     @BeforeEach
     public void init() {
-        this.fgMaterialPortionRepository = mock(FinishedGoodMaterialPortionRepository.class);
-        this.skuRepository = mock(SkuRepository.class);
-        this.fgMixturePortionRepository = mock(FinishedGoodMixturePortionRepository.class);
+        this.fgMaterialPortionRefresher = mock(FinishedGoodMaterialPortionRefresher.class);
+        this.skuRefresher = mock(SkuRefresher.class);
+        this.fgMixturePortionRefresher = mock(FinishedGoodMixturePortionRefresher.class);
         this.mRefresher = mock(AccessorRefresher.class);
 
-        this.finishedGoodRefresher = new FinishedGoodRefresher(mRefresher, skuRepository, fgMixturePortionRepository, fgMaterialPortionRepository);
+        this.finishedGoodRefresher = new FinishedGoodRefresher(mRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher);
     }
 
     @Test
@@ -62,10 +67,10 @@ public class FinishedGoodRefresherTest {
 
         this.finishedGoodRefresher.refresh(finishedGoods);
 
-        verify(this.skuRepository, times(1)).refreshAccessors(finishedGoods);
+        verify(this.skuRefresher, times(1)).refreshAccessors(finishedGoods);
 
-        verify(this.fgMaterialPortionRepository, times(1)).refresh(materialPortions);
-        verify(this.fgMixturePortionRepository, times(1)).refresh(mixturePortions);
+        verify(this.fgMaterialPortionRefresher, times(1)).refresh(materialPortions);
+        verify(this.fgMixturePortionRefresher, times(1)).refresh(mixturePortions);
     }
 
     @Test

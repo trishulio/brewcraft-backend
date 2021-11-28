@@ -8,26 +8,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.MixtureRecording;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.MeasureRefresher;
+import io.company.brewcraft.repository.MixtureRecordingRefresher;
+import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
 
 public class MixtureRecordingRefresherTest {
 
     private MixtureRecordingRefresher mixtureRecordingRefresher;
 
-    private MeasureRepository measureRepositoryMock;
+    private MeasureRefresher measureRefresherMock;
 
-    private MixtureRepository mixtureRepositoryMock;
+    private MixtureRefresher mixtureRefresher;
 
     private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        measureRepositoryMock = mock(MeasureRepository.class);
-        mixtureRepositoryMock = mock(MixtureRepository.class);
+        measureRefresherMock = mock(MeasureRefresher.class);
+        mixtureRefresher = mock(MixtureRefresher.class);
         refresherMock = mock(AccessorRefresher.class);
 
-        mixtureRecordingRefresher = new MixtureRecordingRefresher(measureRepositoryMock, mixtureRepositoryMock, refresherMock);
+        mixtureRecordingRefresher = new MixtureRecordingRefresher(measureRefresherMock, mixtureRefresher, refresherMock);
     }
 
     @Test
@@ -36,8 +40,8 @@ public class MixtureRecordingRefresherTest {
 
         mixtureRecordingRefresher.refresh(mixtureRecordings);
 
-        verify(measureRepositoryMock, times(1)).refreshAccessors(mixtureRecordings);
-        verify(mixtureRepositoryMock, times(1)).refreshAccessors(mixtureRecordings);
+        verify(measureRefresherMock, times(1)).refreshAccessors(mixtureRecordings);
+        verify(mixtureRefresher, times(1)).refreshAccessors(mixtureRecordings);
     }
 
 }

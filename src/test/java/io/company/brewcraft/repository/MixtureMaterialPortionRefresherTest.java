@@ -8,26 +8,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.MixtureMaterialPortion;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.MaterialLotRefresher;
+import io.company.brewcraft.repository.MixtureMaterialPortionRefresher;
+import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 
 public class MixtureMaterialPortionRefresherTest {
 
     private MixtureMaterialPortionRefresher mixtureMaterialPortionRefresher;
 
-    private MixtureRepository mixtureRepositoryMock;
+    private MixtureRefresher mixtureRefresherMock;
 
-    private MaterialLotRepository materialLotRepositoryMock;
+    private MaterialLotRefresher materialLotRefresherMock;
 
     private AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresherMock;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        mixtureRepositoryMock = mock(MixtureRepository.class);
-        materialLotRepositoryMock = mock(MaterialLotRepository.class);
+        mixtureRefresherMock = mock(MixtureRefresher.class);
+        materialLotRefresherMock = mock(MaterialLotRefresher.class);
         refresherMock = mock(AccessorRefresher.class);
 
-        mixtureMaterialPortionRefresher = new MixtureMaterialPortionRefresher(mixtureRepositoryMock, materialLotRepositoryMock, refresherMock);
+        mixtureMaterialPortionRefresher = new MixtureMaterialPortionRefresher(mixtureRefresherMock, materialLotRefresherMock, refresherMock);
     }
 
     @Test
@@ -36,8 +40,8 @@ public class MixtureMaterialPortionRefresherTest {
 
         mixtureMaterialPortionRefresher.refresh(materialPortions);
 
-        verify(mixtureRepositoryMock, times(1)).refreshAccessors(materialPortions);
-        verify(materialLotRepositoryMock, times(1)).refreshAccessors(materialPortions);
+        verify(mixtureRefresherMock, times(1)).refreshAccessors(materialPortions);
+        verify(materialLotRefresherMock, times(1)).refreshAccessors(materialPortions);
     }
 
     @Test

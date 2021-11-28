@@ -5,27 +5,31 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.model.Storage;
+import io.company.brewcraft.service.InvoiceItemAccessor;
 import io.company.brewcraft.service.MaterialLotAccessor;
+import io.company.brewcraft.service.StorageAccessor;
 
-public class MaterialLotRefresher implements EnhancedMaterialLotRepository {
+public class MaterialLotRefresher implements Refresher<MaterialLot, MaterialLotAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MaterialLotRefresher.class);
 
-    private InvoiceItemRepository itemRepo;
-    private StorageRepository storageRepo;
+    private Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher;
+    private Refresher<Storage, StorageAccessor> storageRefresher;
 
     private final AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher;
 
-    public MaterialLotRefresher(InvoiceItemRepository itemRepo, StorageRepository storageRepo, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
-        this.itemRepo = itemRepo;
-        this.storageRepo = storageRepo;
+    public MaterialLotRefresher(Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher, Refresher<Storage, StorageAccessor> storageRefresher, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
+        this.itemRefresher = itemRefresher;
+        this.storageRefresher = storageRefresher;
         this.refresher = refresher;
     }
 
     @Override
     public void refresh(Collection<MaterialLot> lots) {
-        this.itemRepo.refreshAccessors(lots);
-        this.storageRepo.refreshAccessors(lots);
+        this.itemRefresher.refreshAccessors(lots);
+        this.storageRefresher.refreshAccessors(lots);
     }
 
     @Override

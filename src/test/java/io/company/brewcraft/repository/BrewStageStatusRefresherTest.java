@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.BrewStageStatus;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.BrewStageStatusRefresher;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 
 public class BrewStageStatusRefresherTest {

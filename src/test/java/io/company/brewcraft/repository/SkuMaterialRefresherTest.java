@@ -8,18 +8,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.SkuMaterial;
+import io.company.brewcraft.repository.MaterialRefresher;
+import io.company.brewcraft.repository.SkuMaterialRefresher;
 
 public class SkuMaterialRefresherTest {
     private SkuMaterialRefresher skuMaterialRefresher;
 
-    private MaterialRepository materialRepository;
+    private MaterialRefresher materialRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        materialRepository = mock(MaterialRepository.class);
+        materialRefresher = mock(MaterialRefresher.class);
 
-        skuMaterialRefresher = new SkuMaterialRefresher(materialRepository);
+        skuMaterialRefresher = new SkuMaterialRefresher(materialRefresher);
     }
 
     @Test
@@ -28,7 +30,7 @@ public class SkuMaterialRefresherTest {
 
         skuMaterialRefresher.refresh(skuMaterials);
 
-        verify(materialRepository, times(1)).refreshAccessors(skuMaterials);
+        verify(materialRefresher, times(1)).refreshAccessors(skuMaterials);
     }
 
 }

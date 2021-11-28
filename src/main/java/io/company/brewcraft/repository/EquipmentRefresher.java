@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.service.EquipmentAccessor;
 
-public class EquipmentRefresher implements EnhancedEquipmentRepository {
+public class EquipmentRefresher implements Refresher<Equipment, EquipmentAccessor> {
     private static final Logger log = LoggerFactory.getLogger(EquipmentRefresher.class);
 
     private final AccessorRefresher<Long, EquipmentAccessor, Equipment> refresher;
@@ -20,5 +20,10 @@ public class EquipmentRefresher implements EnhancedEquipmentRepository {
     @Override
     public void refreshAccessors(Collection<? extends EquipmentAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<Equipment> entities) {
+        // TODO
     }
 }

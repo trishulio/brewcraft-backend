@@ -5,32 +5,38 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.model.BrewStageStatus;
+import io.company.brewcraft.model.BrewTask;
+import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewStageAccessor;
+import io.company.brewcraft.service.BrewStageStatusAccessor;
+import io.company.brewcraft.service.BrewTaskAccessor;
 
-public class BrewStageRefresher implements EnhancedBrewStageRepository {
+public class BrewStageRefresher implements Refresher<BrewStage, BrewStageAccessor> {
     private static final Logger log = LoggerFactory.getLogger(BrewStageRefresher.class);
 
     private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher;
 
-    private BrewTaskRepository brewTaskRepository;
+    private Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher;
 
-    private BrewStageStatusRepository brewStageStatusRepository;
+    private Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher;
 
-    private BrewRepository brewRepository;
+    private Refresher<Brew, BrewAccessor> brewRefresher;
 
-    public BrewStageRefresher(BrewTaskRepository brewTaskRepository, BrewStageStatusRepository brewStageStatusRepository, BrewRepository brewRepository, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
-        this.brewStageStatusRepository = brewStageStatusRepository;
-        this.brewTaskRepository = brewTaskRepository;
-        this.brewRepository = brewRepository;
+    public BrewStageRefresher(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
+        this.brewStageStatusRefresher = brewStageStatusRefresher;
+        this.brewTaskRefresher = brewTaskRefresher;
+        this.brewRefresher = brewRefresher;
         this.refresher = refresher;
     }
 
     @Override
     public void refresh(Collection<BrewStage> brewStages) {
-        this.brewStageStatusRepository.refreshAccessors(brewStages);
-        this.brewTaskRepository.refreshAccessors(brewStages);
-        this.brewRepository.refreshAccessors(brewStages);
+        this.brewStageStatusRefresher.refreshAccessors(brewStages);
+        this.brewTaskRefresher.refreshAccessors(brewStages);
+        this.brewRefresher.refreshAccessors(brewStages);
     }
 
     @Override

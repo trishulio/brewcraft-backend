@@ -10,21 +10,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.FinishedGoodMixturePortionRefresher;
+import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
 
 public class FinishedGoodMixturePortionRefresherTest {
     private FinishedGoodMixturePortionRefresher finishedGoodMixturePortionefresher;
 
-    private MixtureRepository mixtureRepository;
+    private MixtureRefresher mixtureRefresher;
     private AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> mRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        mixtureRepository = mock(MixtureRepository.class);
+        mixtureRefresher = mock(MixtureRefresher.class);
         mRefresher = mock(AccessorRefresher.class);
 
-        finishedGoodMixturePortionefresher = new FinishedGoodMixturePortionRefresher(mixtureRepository, mRefresher);
+        finishedGoodMixturePortionefresher = new FinishedGoodMixturePortionRefresher(mixtureRefresher, mRefresher);
     }
 
     @Test
@@ -33,7 +36,7 @@ public class FinishedGoodMixturePortionRefresherTest {
 
         finishedGoodMixturePortionefresher.refresh(materialPortions);
 
-        verify(mixtureRepository, times(1)).refreshAccessors(materialPortions);
+        verify(mixtureRefresher, times(1)).refreshAccessors(materialPortions);
     }
 
     @Test

@@ -8,25 +8,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.InvoiceItemRefresher;
+import io.company.brewcraft.repository.MaterialLotRefresher;
+import io.company.brewcraft.repository.StorageRefresher;
 import io.company.brewcraft.service.MaterialLotAccessor;
 
 public class MaterialLotRefresherTest {
 
     private MaterialLotRefresher materialLotRefresher;
 
-    private InvoiceItemRepository mItemRepo;
-    private StorageRepository mStorageRepo;
+    private InvoiceItemRefresher mItemRefresher;
+    private StorageRefresher mStorageRefresher;
 
     private AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> mRefresher;
 
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        mItemRepo =  mock(InvoiceItemRepository.class);
-        mStorageRepo = mock(StorageRepository.class);
+        mItemRefresher =  mock(InvoiceItemRefresher.class);
+        mStorageRefresher = mock(StorageRefresher.class);
         mRefresher = mock(AccessorRefresher.class);
 
-        materialLotRefresher = new MaterialLotRefresher(mItemRepo, mStorageRepo, mRefresher);
+        materialLotRefresher = new MaterialLotRefresher(mItemRefresher, mStorageRefresher, mRefresher);
     }
 
     @Test
@@ -35,8 +39,8 @@ public class MaterialLotRefresherTest {
 
         materialLotRefresher.refresh(lots);
 
-        verify(mItemRepo, times(1)).refreshAccessors(lots);
-        verify(mStorageRepo, times(1)).refreshAccessors(lots);
+        verify(mItemRefresher, times(1)).refreshAccessors(lots);
+        verify(mStorageRefresher, times(1)).refreshAccessors(lots);
     }
 
     @Test

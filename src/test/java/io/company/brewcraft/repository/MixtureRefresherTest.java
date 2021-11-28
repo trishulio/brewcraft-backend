@@ -7,18 +7,24 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Mixture;
+import io.company.brewcraft.repository.AccessorRefresher;
+import io.company.brewcraft.repository.CollectionAccessorRefresher;
+import io.company.brewcraft.repository.MixtureRefresher;
+import io.company.brewcraft.repository.Refresher;
+import io.company.brewcraft.service.BrewStageAccessor;
+import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 
 public class MixtureRefresherTest {
-    private MixtureRefresher mixtureRefresher;
+    private IMixtureRefresher<Mixture, MixtureAccessor, ParentMixturesAccessor> mixtureRefresher;
 
-    private MixtureRepository mixtureRepositoryMock;
+    private Refresher<Equipment, EquipmentAccessor> equipmentRefresher;
 
-    private EquipmentRepository equipmentRepositoryMock;
-
-    private BrewStageRepository brewStageRepositoryMock;
+    private Refresher<BrewStage, BrewStageAccessor> brewStageRefresherMock;
 
     private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorMock;
 
@@ -28,13 +34,12 @@ public class MixtureRefresherTest {
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
-        mixtureRepositoryMock = mock(MixtureRepository.class);
-        equipmentRepositoryMock = mock(EquipmentRepository.class);
-        brewStageRepositoryMock = mock(BrewStageRepository.class);
+        equipmentRefresher = mock(Refresher.class);
+        brewStageRefresherMock = mock(Refresher.class);
         mixtureAccessorMock = mock(AccessorRefresher.class);
         parentMixturesAccessorMock = mock(CollectionAccessorRefresher.class);
 
-        mixtureRefresher = new MixtureRefresher(mixtureRepositoryMock, equipmentRepositoryMock, brewStageRepositoryMock, mixtureAccessorMock, parentMixturesAccessorMock);
+        mixtureRefresher = spy(new MixtureRefresher(equipmentRefresher, brewStageRefresherMock, mixtureAccessorMock, parentMixturesAccessorMock));
     }
 
     @Test
@@ -46,9 +51,9 @@ public class MixtureRefresherTest {
 
         mixtureRefresher.refresh(mixtures);
 
-        verify(equipmentRepositoryMock, times(1)).refreshAccessors(mixtures);
-        verify(brewStageRepositoryMock, times(1)).refreshAccessors(mixtures);
-        verify(mixtureRepositoryMock, times(1)).refreshParentMixturesAccessors(mixtures);
+        verify(equipmentRefresher, times(1)).refreshAccessors(mixtures);
+        verify(brewStageRefresherMock, times(1)).refreshAccessors(mixtures);
+        verify(mixtureRefresher, times(1)).refreshParentMixturesAccessors(mixtures);
     }
 
     @Test

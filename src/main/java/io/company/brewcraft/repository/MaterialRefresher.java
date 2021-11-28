@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.service.MaterialAccessor;
 
-public class MaterialRefresher implements EnhancedMaterialRepository {
+public class MaterialRefresher implements Refresher<Material, MaterialAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MaterialRefresher.class);
 
     private AccessorRefresher<Long, MaterialAccessor, Material> refresher;
@@ -22,5 +22,10 @@ public class MaterialRefresher implements EnhancedMaterialRepository {
     @Override
     public void refreshAccessors(Collection<? extends MaterialAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<Material> entities) {
+        // TODO
     }
 }

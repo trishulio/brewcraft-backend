@@ -7,23 +7,22 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserAccessor;
+import io.company.brewcraft.model.user.UserRole;
+import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.model.user.UserRoleBinding;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 
 public class UserRoleBindingRefresherTest {
 
-    private UserRoleRepository mRoleRepo;
-
-    private UserRoleBindingRefresher userRoleBindingRefresher;
+    private Refresher<UserRole, UserRoleAccessor> mUserRoleRefresher;
 
     @BeforeEach
     public void init() {
-        mRoleRepo = mock(UserRoleRepository.class);
-<<<<<<< HEAD:src/test/java/io/company/brewcraft/repository/user/EnhancedUserRoleBindingRepositoryImplTest.java
-        repo = new EnhancedUserRoleBindingRepositoryImpl( mRoleRepo);
-=======
-        userRoleBindingRefresher = new UserRoleBindingRefresher(mUserRepo, mRoleRepo);
->>>>>>> 8dc54b6 (Rename EnhancedRepos to Refreshers):src/test/java/io/company/brewcraft/repository/user/UserRoleBindingRefresherTest.java
+        mUserRoleRefresher = mock(Refresher.class);
+        userRoleBindingRefresher = new UserRoleBindingRefresher(mUserRoleRefresher);
     }
 
     @Test
@@ -31,7 +30,7 @@ public class UserRoleBindingRefresherTest {
         List<UserRoleBinding> bindings = List.of(new UserRoleBinding(1L), new UserRoleBinding(2L));
         userRoleBindingRefresher.refresh(bindings);
 
-        verify(mRoleRepo, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
+        verify(mUserRoleRefresher, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
     }
 
     @Test
@@ -39,6 +38,6 @@ public class UserRoleBindingRefresherTest {
         List<UserRoleBinding> bindings = List.of(new UserRoleBinding(1L), new UserRoleBinding(2L));
         userRoleBindingRefresher.refresh(bindings);
 
-        verify(mRoleRepo, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
+        verify(mUserRoleRefresher, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
     }
 }

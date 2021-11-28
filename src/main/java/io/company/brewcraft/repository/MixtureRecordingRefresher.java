@@ -5,28 +5,32 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.model.Measure;
+import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
+import io.company.brewcraft.service.MeasureAccessor;
+import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
 
-public class MixtureRecordingRefresher implements EnhancedMixtureRecordingRepository {
+public class MixtureRecordingRefresher implements Refresher<MixtureRecording, MixtureRecordingAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingRefresher.class);
 
-    private MeasureRepository measureRepository;
+    private Refresher<Measure, MeasureAccessor> measureRefresher;
 
-    private MixtureRepository mixtureRepository;
+    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
 
     private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher;
 
-    public MixtureRecordingRefresher(MeasureRepository measureRepository, MixtureRepository mixtureRepository, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher) {
-        this.measureRepository = measureRepository;
-        this.mixtureRepository = mixtureRepository;
+    public MixtureRecordingRefresher(Refresher<Measure, MeasureAccessor> measureRefresher, Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher) {
+        this.measureRefresher = measureRefresher;
+        this.mixtureRefresher = mixtureRefresher;
         this.refresher = refresher;
     }
 
     @Override
     public void refresh(Collection<MixtureRecording> mixtureRecordings) {
-        this.measureRepository.refreshAccessors(mixtureRecordings);
-        this.mixtureRepository.refreshAccessors(mixtureRecordings);
+        this.measureRefresher.refreshAccessors(mixtureRecordings);
+        this.mixtureRefresher.refreshAccessors(mixtureRecordings);
     }
 
     @Override

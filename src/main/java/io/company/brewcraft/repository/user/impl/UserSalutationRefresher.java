@@ -5,9 +5,9 @@ import java.util.Collection;
 import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserSalutationAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
-import io.company.brewcraft.repository.user.EnhancedUserSalutationRepository;
+import io.company.brewcraft.repository.Refresher;
 
-public class UserSalutationRefresher implements EnhancedUserSalutationRepository {
+public class UserSalutationRefresher implements Refresher<UserSalutation, UserSalutationAccessor> {
 
     private AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher;
 

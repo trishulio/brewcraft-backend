@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.jpa.domain.Specification;
 
+import io.company.brewcraft.repository.PredicateSpecAccumulator;
+import io.company.brewcraft.repository.WhereClauseBuilderDelegate;
 import io.company.brewcraft.service.BetweenSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.InSpec;

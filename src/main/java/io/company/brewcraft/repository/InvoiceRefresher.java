@@ -11,31 +11,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.service.InvoiceItemAccessor;
+import io.company.brewcraft.service.InvoiceStatusAccessor;
+import io.company.brewcraft.service.PurchaseOrderAccessor;
 
-public class InvoiceRefresher implements EnhancedInvoiceRepository {
+public class InvoiceRefresher implements Refresher<Invoice, InvoiceAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceRefresher.class);
 
     private final AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher;
 
-    private final InvoiceItemRepository invoiceItemRepo;
-    private final InvoiceStatusRepository invoiceStatusRepo;
-    private final PurchaseOrderRepository poRepo;
+    private final Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher;
+    private final Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher;
+    private final Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher;
 
     @Autowired
-    public InvoiceRefresher(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, InvoiceItemRepository invoiceItemRepo, InvoiceStatusRepository invoiceStatusRepo, PurchaseOrderRepository poRepo) {
+    public InvoiceRefresher(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher, Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher, Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher) {
         this.refresher = refresher;
-        this.invoiceItemRepo = invoiceItemRepo;
-        this.invoiceStatusRepo = invoiceStatusRepo;
-        this.poRepo = poRepo;
+        this.invoiceItemRefresher = invoiceItemRefresher;
+        this.invoiceStatusRefresher = invoiceStatusRefresher;
+        this.poRefresher = poRefresher;
     }
 
     @Override
     public void refresh(Collection<Invoice> invoices) {
-        this.poRepo.refreshAccessors(invoices);
-        this.invoiceStatusRepo.refreshAccessors(invoices);
+        this.poRefresher.refreshAccessors(invoices);
+        this.invoiceStatusRefresher.refreshAccessors(invoices);
 
         final List<InvoiceItem> invoiceItems = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getInvoiceItems().stream()).collect(Collectors.toList());
-        this.invoiceItemRepo.refresh(invoiceItems);
+        this.invoiceItemRefresher.refresh(invoiceItems);
     }
 
     @Override

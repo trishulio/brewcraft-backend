@@ -8,6 +8,9 @@ import javax.persistence.criteria.From;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.repository.CriteriaJoinIgnorer;
+import io.company.brewcraft.repository.CriteriaJoinProcessor;
+
 public class CriteriaJoinIgnorerTest {
     class Entity {}
 

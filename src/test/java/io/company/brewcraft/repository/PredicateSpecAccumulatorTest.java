@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.repository.PredicateSpecAccumulator;
 import io.company.brewcraft.service.AndSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.NotSpec;

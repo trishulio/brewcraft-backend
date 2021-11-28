@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.StorageAccessor;
 
-public class StorageRefresher implements EnhancedStorageRepository {
+public class StorageRefresher implements Refresher<Storage, StorageAccessor> {
     private static final Logger log = LoggerFactory.getLogger(StorageRefresher.class);
 
     private AccessorRefresher<Long, StorageAccessor, Storage> refresher;
@@ -20,5 +20,10 @@ public class StorageRefresher implements EnhancedStorageRepository {
     @Override
     public void refreshAccessors(Collection<? extends StorageAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
+    }
+
+    @Override
+    public void refresh(Collection<Storage> entities) {
+        // TODO
     }
 }
