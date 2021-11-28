@@ -120,7 +120,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
     @Override
     public void setSubcategories(Set<MaterialCategory> subcategories) {
         if (subcategories != null) {
-            subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
+            subcategories.forEach(subcategory -> subcategory.setParentCategory(this));
         }
 
         if (this.getSubcategories() != null) {

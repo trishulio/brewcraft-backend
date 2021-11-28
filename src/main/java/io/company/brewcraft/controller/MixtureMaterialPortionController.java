@@ -63,7 +63,8 @@ public class MixtureMaterialPortionController extends BaseController {
         Page<MixtureMaterialPortion> materialPortionPage = materialPortionService.getMaterialPortions(ids, mixtureIds, materialLotIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureMaterialPortionDto> materialPortionList = materialPortionPage.stream()
-                .map(materialPortion -> materialPortionMapper.toDto(materialPortion)).collect(Collectors.toList());
+                                                                                 .map(materialPortion -> materialPortionMapper.toDto(materialPortion))
+                                                                                 .collect(Collectors.toList());
 
         PageDto<MixtureMaterialPortionDto> dto = new PageDto<>(materialPortionList, materialPortionPage.getTotalPages(), materialPortionPage.getTotalElements());
 

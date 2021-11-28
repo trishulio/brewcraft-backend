@@ -6,7 +6,7 @@ import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.StorageDto;
 
-public class ProcurementMaterialLotDto extends BaseDto{
+public class ProcurementMaterialLotDto extends BaseDto {
     private Long id;
     private String lotNumber;
     private QuantityDto qty;

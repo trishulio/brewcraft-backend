@@ -19,25 +19,21 @@ public class ProcurementFactory {
 
     public Procurement buildFromShipment(Shipment shipment) {
         Procurement procurement = null;
-        Invoice invoice = null;
-        PurchaseOrder purchaseOrder = null;
-        List<ProcurementItem> procurementItems = null;
 
         if (shipment != null) {
-            invoice = shipment.getFirstInvoice();
-
+            Invoice invoice = null;
+            List<ProcurementItem> procurementItems = null;
+            PurchaseOrder purchaseOrder = null;
+            
             if (shipment.getLotCount() > 0) {
                 procurementItems = shipment.getLots().stream().map(s -> procurementItemFactory.buildFromLot(s)).collect(Collectors.toList());
             }
-        }
 
-        if (invoice != null) {
-            purchaseOrder = invoice.getPurchaseOrder();
-        }
-
-        if (shipment != null) {
-            // Ideally, if shipment != null, then invoice and purchaseOrder != null as well
-            // in case of procurement. But handling null values here regardless.
+            invoice = shipment.getFirstInvoice();
+            if (invoice != null) {
+                purchaseOrder = invoice.getPurchaseOrder();
+            }
+    
             procurement = new Procurement(shipment, invoice, purchaseOrder, procurementItems);
         }
 
@@ -49,17 +45,17 @@ public class ProcurementFactory {
         Invoice invoice = null;
         PurchaseOrder purchaseOrder = null;
 
-        if (shipment != null && shipment.getId().equals(procurementId.getShipmentId())) {
+        if (shipment != null && shipment.getId() != null && shipment.getId().equals(procurementId.getShipmentId())) {
             // Note: Procurement service assumes 1-1 relationship between an Invoice
             // and a Shipment. Therefore firstInvoice == the only invoice a shipment has.
             invoice = shipment.getFirstInvoice();
         }
 
-        if (invoice != null && invoice.getId().equals(procurementId.getInvoiceId())) {
+        if (invoice != null && invoice.getId() != null && invoice.getId().equals(procurementId.getInvoiceId())) {
             purchaseOrder = invoice.getPurchaseOrder();
         }
 
-        if (purchaseOrder != null && purchaseOrder.getId().equals(procurementId.getPurchaseOrderId())) {
+        if (purchaseOrder != null && purchaseOrder.getId() != null && purchaseOrder.getId().equals(procurementId.getPurchaseOrderId())) {
             isEligible = true;
         }
 

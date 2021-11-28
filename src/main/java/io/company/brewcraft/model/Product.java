@@ -133,7 +133,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     @Override
     public void setTargetMeasures(List<ProductMeasureValue> trgtMeasures) {
         if (trgtMeasures != null) {
-            trgtMeasures.stream().forEach(measure -> measure.setProduct(this));
+            trgtMeasures.forEach(measure -> measure.setProduct(this));
         }
 
         if (this.getTargetMeasures() != null) {

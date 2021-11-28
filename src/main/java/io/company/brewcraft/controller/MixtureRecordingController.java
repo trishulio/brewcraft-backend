@@ -62,7 +62,8 @@ public class MixtureRecordingController extends BaseController {
         Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()
-                .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording)).collect(Collectors.toList());
+                                                                             .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording))
+                                                                             .collect(Collectors.toList());
 
         PageDto<MixtureRecordingDto> dto = new PageDto<>(mixtureRecordingList, mixtureRecordingPage.getTotalPages(), mixtureRecordingPage.getTotalElements());
 

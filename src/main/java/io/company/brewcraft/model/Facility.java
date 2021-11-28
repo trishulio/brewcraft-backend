@@ -151,7 +151,7 @@ public class Facility extends BaseModel implements UpdateFacility, Audited {
     @Override
     public void setEquipment(List<Equipment> equipment) {
         if (equipment != null) {
-            equipment.stream().forEach(eqpt -> eqpt.setFacility(this));
+            equipment.forEach(eqpt -> eqpt.setFacility(this));
         }
 
         if (this.getEquipment() != null) {
@@ -191,7 +191,7 @@ public class Facility extends BaseModel implements UpdateFacility, Audited {
     @Override
     public void setStorages(List<Storage> storages) {
         if (storages != null) {
-            storages.stream().forEach(storage -> storage.setFacility(this));
+            storages.forEach(storage -> storage.setFacility(this));
         }
 
         if (this.getStorages() != null) {

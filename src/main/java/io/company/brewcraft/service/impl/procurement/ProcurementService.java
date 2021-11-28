@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -204,22 +205,22 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     @Override
     public List<Procurement> getByIds(Collection<? extends Identified<ProcurementId>> idProviders) {
         List<ProcurementId> procurementIds = idProviders.stream()
-                                                .map(provider -> provider.getId())
-                                                .collect(Collectors.toList());
+                                                        .map(provider -> provider.getId())
+                                                        .collect(Collectors.toList());
 
         Collection<? extends Identified<Long>> shipmentIdProviders = procurementIds.stream()
-                                                                       .map(id -> (Identified<Long>) () -> id.getShipmentId())
-                                                                       .collect(Collectors.toList());
+                                                                                   .map(id -> (Identified<Long>) () -> id.getShipmentId())
+                                                                                   .collect(Collectors.toList());
 
         Map<Long, Shipment> idToShipment = shipmentService.getByIds(shipmentIdProviders).stream().collect(Collectors.toMap(
             shipment -> shipment.getId(),
-            shipment -> shipment
+            Function.identity()
         ));
 
         return procurementIds.stream()
-                      .map(id -> procurementFactory.buildFromShipmentIfIdMatches(id, idToShipment.get(id.getShipmentId())))
-                      .filter(p -> p != null)
-                      .collect(Collectors.toList());
+                             .map(id -> procurementFactory.buildFromShipmentIfIdMatches(id, idToShipment.get(id.getShipmentId())))
+                             .filter(p -> p != null)
+                             .collect(Collectors.toList());
     }
 
     @Override
@@ -249,9 +250,9 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         bShipments.forEach(bShipment -> bShipment.setInvoiceItemsFromInvoice(invoices.next()));
 
         return shipmentService.add(bShipments)
-                       .stream()
-                       .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                       .collect(Collectors.toList());
+                              .stream()
+                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
+                              .collect(Collectors.toList());
     }
 
     @Override
@@ -274,9 +275,9 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         uShipments.forEach(bShipment -> bShipment.setInvoiceItemsFromInvoice(invoices.next()));
 
         return shipmentService.put(uShipments)
-                       .stream()
-                       .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                       .collect(Collectors.toList());
+                              .stream()
+                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
+                              .collect(Collectors.toList());
     }
 
     @Override
@@ -299,8 +300,8 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         uShipments.forEach(uShipment -> uShipment.setInvoiceItemsFromInvoice(invoices.next()));
 
         return shipmentService.patch(uShipments)
-                       .stream()
-                       .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                       .collect(Collectors.toList());
+                              .stream()
+                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
+                              .collect(Collectors.toList());
     }
 }

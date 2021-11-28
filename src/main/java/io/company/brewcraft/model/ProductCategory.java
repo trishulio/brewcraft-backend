@@ -112,7 +112,7 @@ public class ProductCategory extends BaseEntity {
 
     public void setSubcategories(Set<ProductCategory> subcategories) {
         if (subcategories != null) {
-            subcategories.stream().forEach(subcategory -> subcategory.setParentCategory(this));
+            subcategories.forEach(subcategory -> subcategory.setParentCategory(this));
         }
 
         if (this.getSubcategories() != null) {

@@ -60,7 +60,8 @@ public class MaterialController extends BaseController {
         Page<Material> materialsPage = materialService.getMaterials(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
 
         List<MaterialDto> materialsList = materialsPage.stream()
-                .map(material -> materialMapper.toDto(material)).collect(Collectors.toList());
+                                                       .map(material -> materialMapper.toDto(material))
+                                                       .collect(Collectors.toList());
 
         PageDto<MaterialDto> dto = new PageDto<MaterialDto>(materialsList, materialsPage.getTotalPages(), materialsPage.getTotalElements());
 

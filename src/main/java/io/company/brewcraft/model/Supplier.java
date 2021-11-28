@@ -105,7 +105,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Audited {
     @Override
     public void setContacts(List<SupplierContact> contacts) {
         if (contacts != null) {
-            contacts.stream().forEach(contact -> contact.setSupplier(this));
+            contacts.forEach(contact -> contact.setSupplier(this));
         }
 
         if (this.getContacts() != null) {
