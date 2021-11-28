@@ -580,8 +580,8 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<UserRoleBinding, UserRoleBindingAccessor> userRoleBindingRefresher(Refresher<User, UserAccessor> userRefresher, Refresher<UserRole, UserRoleAccessor> userRoleRefresher) {
-        return new UserRoleBindingRefresher(userRefresher, userRoleRefresher);
+    public Refresher<UserRoleBinding, UserRoleBindingAccessor> userRoleBindingRefresher(Refresher<UserRole, UserRoleAccessor> userRoleRefresher) {
+        return new UserRoleBindingRefresher(userRoleRefresher);
     }
 
     @Bean

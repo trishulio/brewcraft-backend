@@ -7,17 +7,18 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.model.user.UserRoleBinding;
+import io.company.brewcraft.model.user.UserRoleBindingAccessor;
 import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 
 public class UserRoleBindingRefresherTest {
 
     private Refresher<UserRole, UserRoleAccessor> mUserRoleRefresher;
+
+    private Refresher<UserRoleBinding, UserRoleBindingAccessor> userRoleBindingRefresher;
 
     @BeforeEach
     public void init() {
