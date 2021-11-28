@@ -19,8 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -47,7 +49,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "user_name", updatable = false)
+    @Column(name = "user_name", updatable = false, unique = true)
     private String userName;
 
     @Column(name = "display_name")
@@ -59,10 +61,12 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", updatable = false, unique = true)
+    @Email
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<UserRoleBinding> roleBindings;
 
     @Column(name = "image_url")

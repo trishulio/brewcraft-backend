@@ -76,6 +76,7 @@ import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
@@ -307,8 +308,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UserService.class)
-    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo) {
-        return new UserServiceImpl(userRepository, idpRepo);
+    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo, ContextHolder contexHolder) {
+        return new UserServiceImpl(userRepository, idpRepo, contexHolder);
     }
 
     @Bean

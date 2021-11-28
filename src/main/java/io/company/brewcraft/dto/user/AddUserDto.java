@@ -1,7 +1,9 @@
+
 package io.company.brewcraft.dto.user;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -22,6 +24,7 @@ public class AddUserDto extends BaseDto {
     private String lastName;
 
     @NotBlank
+    @Email
     private String email;
 
     @NotNull
@@ -132,4 +135,5 @@ public class AddUserDto extends BaseDto {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

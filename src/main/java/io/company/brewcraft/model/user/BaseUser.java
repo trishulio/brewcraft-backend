@@ -43,4 +43,5 @@ public interface BaseUser<R extends BaseUserRole> extends UserStatusAccessor, Us
     List<R> getRoles();
 
     void setRoles(List<R> roles);
+
 }

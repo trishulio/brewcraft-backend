@@ -18,9 +18,6 @@ public class UpdateUserDto extends BaseDto {
     @NullOrNotBlank
     private String lastName;
 
-    @NullOrNotBlank
-    private String email;
-
     private Long statusId;
 
     private Long salutationId;
@@ -38,11 +35,10 @@ public class UpdateUserDto extends BaseDto {
     public UpdateUserDto() {
     }
 
-    public UpdateUserDto(String displayName, String firstName, String lastName, String email, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
+    public UpdateUserDto(String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);
-        setEmail(email);
         setStatusId(statusId);
         setSalutationId(salutationId);
         setPhoneNumber(phoneNumber);
@@ -73,14 +69,6 @@ public class UpdateUserDto extends BaseDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Long getStatusId() {

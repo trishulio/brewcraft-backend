@@ -23,7 +23,6 @@ public class UpdateUserDtoTest {
             "displayName",
             "firstName",
             "lastName",
-            "email",
             1L,
             2L,
             "phoneNumber",
@@ -35,7 +34,6 @@ public class UpdateUserDtoTest {
         assertEquals("displayName", dto.getDisplayName());
         assertEquals("firstName", dto.getFirstName());
         assertEquals("lastName", dto.getLastName());
-        assertEquals("email", dto.getEmail());
         assertEquals(1L, dto.getStatusId());
         assertEquals(2L, dto.getSalutationId());
         assertEquals("phoneNumber", dto.getPhoneNumber());
@@ -63,13 +61,6 @@ public class UpdateUserDtoTest {
         assertNull(dto.getLastName());
         dto.setLastName("lastName");
         assertEquals("lastName", dto.getLastName());
-    }
-
-    @Test
-    public void testAccessEmail() {
-        assertNull(dto.getEmail());
-        dto.setEmail("email");
-        assertEquals("email", dto.getEmail());
     }
 
     @Test

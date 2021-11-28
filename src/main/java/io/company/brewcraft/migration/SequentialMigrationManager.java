@@ -8,15 +8,19 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.company.brewcraft.service.IdpUserRepository;
+
 public class SequentialMigrationManager implements MigrationManager {
     private static final Logger log = LoggerFactory.getLogger(SequentialMigrationManager.class);
 
     private TenantRegister tenantReg;
     private MigrationRegister migrationReg;
+    private IdpUserRepository idpUserRepo;
 
-    public SequentialMigrationManager(TenantRegister register, MigrationRegister mgr) {
+    public SequentialMigrationManager(TenantRegister register, MigrationRegister mgr, IdpUserRepository idpUserRepo) {
         this.tenantReg = register;
         this.migrationReg = mgr;
+        this.idpUserRepo = idpUserRepo;
     }
 
     @Override
@@ -36,6 +40,9 @@ public class SequentialMigrationManager implements MigrationManager {
             log.info("Registering new tenantId: {}", tenantId);
             tenantReg.add(tenantId);
         }
+
+        log.info("Registering idp user group: {}", tenantId);
+        idpUserRepo.putUserGroup(tenantId);
 
         log.info("Applying migration to tenant: {}", tenantId);
         migrationReg.migrate(tenantId);
