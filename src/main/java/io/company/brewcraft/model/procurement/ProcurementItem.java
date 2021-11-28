@@ -3,8 +3,10 @@ package io.company.brewcraft.model.procurement;
 import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
+import io.company.brewcraft.service.impl.procurement.ProcurementItemIdFactory;
 
 public class ProcurementItem extends BaseEntity implements UpdateProcurementItem {
+    private static final ProcurementItemIdFactory idFactory = ProcurementItemIdFactory.INSTANCE;
     private InvoiceItem invoiceItem;
     private MaterialLot materialLot;
 
@@ -26,21 +28,7 @@ public class ProcurementItem extends BaseEntity implements UpdateProcurementItem
 
     @Override
     public ProcurementItemId getId() {
-        ProcurementItemId id = null;
-
-        if (this.invoiceItem != null || this.materialLot != null) {
-            id = new ProcurementItemId();
-        }
-
-        if (this.invoiceItem != null) {
-            id.setInvoiceItemId(this.invoiceItem.getId());
-        }
-
-        if (this.materialLot != null) {
-            id.setLotId(this.materialLot.getId());
-        }
-
-        return id;
+        return idFactory.build(this.materialLot, this.invoiceItem);
     }
 
     @Override

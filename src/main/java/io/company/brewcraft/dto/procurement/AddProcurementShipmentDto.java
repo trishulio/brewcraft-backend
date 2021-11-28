@@ -29,6 +29,7 @@ public class AddProcurementShipmentDto extends BaseDto {
     public void setShipmentNumber(String shipmentNumber) {
         this.shipmentNumber = shipmentNumber;
     }
+
     public String getDescription() {
         return this.description;
     }

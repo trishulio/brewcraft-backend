@@ -21,6 +21,13 @@ import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.SupplierDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.procurement.AddProcurementDto;
+import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
+import io.company.brewcraft.dto.procurement.AddProcurementInvoiceItemDto;
+import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
+import io.company.brewcraft.dto.procurement.AddProcurementMaterialLotDto;
+import io.company.brewcraft.dto.procurement.AddProcurementPurchaseOrderDto;
+import io.company.brewcraft.dto.procurement.AddProcurementShipmentDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
@@ -157,6 +164,88 @@ public class ProcurementMapperTest {
             )
         );
         assertEquals(expected, dto);
+    }
+    
+    @Test
+    public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
+        assertNull(mapper.fromAddDto(null));
+    }
+
+    @Test
+    public void testFromAddDto_ReturnsEntity_WhenDtoIsNotNull() {
+        AddProcurementDto dto = new AddProcurementDto(
+            new AddProcurementInvoiceDto(
+                "ABCDE-12345",
+                "desc1",
+                new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                99L
+            ),
+            new AddProcurementShipmentDto(
+                "SHIPMENT",
+                "DESCRIPTION",
+                1L,
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0)
+            ),
+            new AddProcurementPurchaseOrderDto(
+                "ORDER_1",
+                1L
+            ),
+            List.of(
+                new AddProcurementItemDto(
+                    new AddProcurementMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 3L),
+                    new AddProcurementInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L)
+                )
+            )
+        );
+
+        Procurement procurement = mapper.fromAddDto(dto);
+
+        Procurement expected = new Procurement(
+            new Shipment(
+                null, // id
+                "SHIPMENT", // shipmentNumber,
+                "DESCRIPTION", // description
+                new ShipmentStatus(1L), // shipmentStatus,
+                LocalDateTime.of(2000, 1, 1, 0, 0), // deliveryDueDate
+                LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
+                null,
+                null,
+                null,
+                null // version
+            ),
+            new Invoice(
+                null,
+                "ABCDE-12345",
+                "desc1",
+                null,
+                LocalDateTime.of(1999, 1, 1, 12, 0),
+                LocalDateTime.of(2000, 1, 1, 12, 0),
+                LocalDateTime.of(2001, 1, 1, 12, 0),
+                new Freight(Money.of(CurrencyUnit.CAD, new BigDecimal("3"))),
+                null,
+                null,
+                new InvoiceStatus(99L),
+                null,
+                null
+            ),
+            new PurchaseOrder(
+                null,
+                "ORDER_1",
+                new Supplier(1L),
+                null,
+                null,
+                null
+            ),
+            List.of(new ProcurementItem(
+                new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, null),
+                new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)
+            ))
+        );
+        assertEquals(expected, procurement);
     }
 
     @Test

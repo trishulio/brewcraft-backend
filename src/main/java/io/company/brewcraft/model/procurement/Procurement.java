@@ -11,8 +11,11 @@ import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.service.impl.procurement.ProcurementIdFactory;
 
 public class Procurement extends BaseEntity implements UpdateProcurement<ProcurementItem> {
+    private static final ProcurementIdFactory idFactory = ProcurementIdFactory.INSTANCE;
+
     private PurchaseOrder purchaseOrder;
     private Invoice invoice;
     private Shipment shipment;
@@ -43,25 +46,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
 
     @Override
     public ProcurementId getId() {
-        ProcurementId id = null;
-
-        if (shipment != null || invoice != null || purchaseOrder != null) {
-            id = new ProcurementId();
-        }
-
-        if (shipment != null) {
-            id.setShipmentId(shipment.getId());
-        }
-
-        if (invoice != null) {
-            id.setInvoiceId(invoice.getId());
-        }
-
-        if (purchaseOrder != null) {
-            id.setPurchaseOrderId(purchaseOrder.getId());
-        }
-
-        return id;
+        return idFactory.build(shipment, invoice, purchaseOrder);
     }
 
     @Override
@@ -158,15 +143,11 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
     }
 
     @JsonIgnore
-    public int getProcurementCount() {
+    public int getProcurementItemsCount() {
         int count = 0;
 
-        if (this.invoice != null) {
-            count = this.invoice.getItemCount();
-        }
-
-        if (this.shipment != null) {
-            count = Math.max(count, this.shipment.getLotCount());
+        if (this.procurementItems != null) {
+            count = this.procurementItems.size();
         }
 
         return count;

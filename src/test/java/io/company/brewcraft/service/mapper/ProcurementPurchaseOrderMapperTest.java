@@ -26,7 +26,7 @@ public class ProcurementPurchaseOrderMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsPurchaseOrder_WhenAddDtoIsNotNull() {
+    public void testFromAddDto_ReturnsPurchaseOrder_WhenAddDtoIsNotNull() {
         AddProcurementPurchaseOrderDto dto = new AddProcurementPurchaseOrderDto("ORDER_1", 1L);
 
         PurchaseOrder po = mapper.fromAddDto(dto);
@@ -37,12 +37,12 @@ public class ProcurementPurchaseOrderMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenAddDtoIsNull() {
-        assertNull(mapper.fromAddDto((AddProcurementPurchaseOrderDto) null));
+    public void testFromAddDto_ReturnsNull_WhenAddDtoIsNull() {
+        assertNull(mapper.fromAddDto(null));
     }
 
     @Test
-    public void testFromDto_ReturnsPurchaseOrder_WhenUpdateDtoIsNotNull() {
+    public void testFromUpdateDto_ReturnsPurchaseOrder_WhenUpdateDtoIsNotNull() {
         UpdateProcurementPurchaseOrderDto dto = new UpdateProcurementPurchaseOrderDto(1L, "ORDER_1", 2L, 3);
 
         PurchaseOrder po = mapper.fromUpdateDto(dto);
@@ -50,6 +50,11 @@ public class ProcurementPurchaseOrderMapperTest {
         PurchaseOrder expected = new PurchaseOrder(1L, "ORDER_1", new Supplier(2L), null, null, 3);
 
         assertEquals(expected, po);
+    }
+
+    @Test
+    public void testFromUpdateDto_ReturnsNull_WhenDtoIsNull() {
+        assertNull(mapper.fromUpdateDto(null));
     }
 
     @Test

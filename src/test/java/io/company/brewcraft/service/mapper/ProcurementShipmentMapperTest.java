@@ -33,7 +33,7 @@ public class ProcurementShipmentMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
+    public void testFromUpdateDto_ReturnsPojo_WhenDtoIsNotNull() {
         final UpdateProcurementShipmentDto dto = new UpdateProcurementShipmentDto(
             1L,
             "SHIPMENT_1",
@@ -63,8 +63,40 @@ public class ProcurementShipmentMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenDtoIsNull() {
+    public void testFromUpdateDto_ReturnsNull_WhenDtoIsNull() {
         assertNull(this.mapper.fromUpdateDto((UpdateProcurementShipmentDto) null));
+    }
+
+    @Test
+    public void testFromAddDto_ReturnsPojo_WhenDtoIsNotNull() {
+        final AddProcurementShipmentDto dto = new AddProcurementShipmentDto(
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            100L,
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0)
+        );
+
+        final Shipment shipment = this.mapper.fromAddDto(dto);
+
+        final Shipment expected = new Shipment(
+            null,
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus(100L),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            null,
+            null,
+            null,
+            null
+        );
+
+        assertEquals(expected, shipment);
+    }
+
+    @Test
+    public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
         assertNull(this.mapper.fromAddDto((AddProcurementShipmentDto) null));
     }
 

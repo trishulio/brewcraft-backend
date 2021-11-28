@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -53,6 +54,7 @@ public class InvoiceDtoTest {
         assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
         assertEquals(1, invoice.getInvoiceItems().size());
         assertEquals(new InvoiceItemDto(), invoice.getInvoiceItems().get(0));
+        assertEquals(1, invoice.getVersion());
     }
 
     @Test
@@ -151,5 +153,12 @@ public class InvoiceDtoTest {
         assertNull(invoice.getInvoiceItems());
         invoice.setInvoiceItems(List.of(new InvoiceItemDto()));
         assertEquals(List.of(new InvoiceItemDto()), invoice.getInvoiceItems());
+    }
+    
+    @Test
+    public void testAccessVersion() {
+        assertNull(invoice.getVersion());
+        invoice.setVersion(99);
+        assertEquals(99, invoice.getVersion());
     }
 }
