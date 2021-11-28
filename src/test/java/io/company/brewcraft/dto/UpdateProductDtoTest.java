@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.URL;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,19 +18,21 @@ public class UpdateProductDtoTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructor() throws Exception {
         String name = "testName";
         String description = "testDesc";
         Long categoryId = 1L;
         List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
+        URL imageSrc = new URL("http://www.test.com");
         Integer version = 1;
 
-        UpdateProductDto productDto = new UpdateProductDto(name, description, categoryId, targetMeasures, version);
+        UpdateProductDto productDto = new UpdateProductDto(name, description, categoryId, targetMeasures, imageSrc, version);
 
         assertEquals("testName", productDto.getName());
         assertEquals("testDesc", productDto.getDescription());
         assertEquals(1L, productDto.getCategoryId());
         assertEquals(List.of(new AddProductMeasureValueDto()), productDto.getTargetMeasures());
+        assertEquals(imageSrc, productDto.getImageSrc());
         assertEquals(1, productDto.getVersion());
     }
 
@@ -59,6 +62,12 @@ public class UpdateProductDtoTest {
         List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
         updateProductDto.setTargetMeasures(targetMeasures);
         assertEquals(List.of(new AddProductMeasureValueDto()), updateProductDto.getTargetMeasures());
+    }
+
+    @Test
+    public void testGetSetImageSrc() throws Exception {
+        updateProductDto.setImageSrc(new URL("http://www.test.com"));
+        assertEquals(new URL("http://www.test.com"), updateProductDto.getImageSrc());
     }
 
     @Test

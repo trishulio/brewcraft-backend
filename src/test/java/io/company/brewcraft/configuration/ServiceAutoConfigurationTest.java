@@ -25,6 +25,7 @@ import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
@@ -230,8 +231,9 @@ public class ServiceAutoConfigurationTest {
     public void testUserService_ReturnsInstanceOfUserService() {
         final UserRepository userRepositoryMock = mock(UserRepository.class);
         final IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
+        final ContextHolder contextHolderMock = mock(ContextHolder.class);
 
-        final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock);
+        final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock, contextHolderMock);
 
         assertTrue(service instanceof UserServiceImpl);
     }

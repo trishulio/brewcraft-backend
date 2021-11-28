@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.security.store.SecretsManager;
+import io.company.brewcraft.service.IdpUserRepository;
 
 @Configuration
 public class MigrationAutoConfiguration {
@@ -29,8 +30,8 @@ public class MigrationAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(MigrationManager.class)
-    public MigrationManager migrationMgr(TenantRegister tenantRegister, MigrationRegister migrationReg) {
-        return new SequentialMigrationManager(tenantRegister, migrationReg);
+    public MigrationManager migrationMgr(TenantRegister tenantRegister, MigrationRegister migrationReg, IdpUserRepository idpUserRepository) {
+        return new SequentialMigrationManager(tenantRegister, migrationReg, idpUserRepository);
     }
 
     @Bean
@@ -38,4 +39,5 @@ public class MigrationAutoConfiguration {
     public MigrationRegister migrationReg(TenantDataSourceManager dsMgr, @Value("${app.config.data.migration.path.tenant}") String dbScriptPathTenant, @Value("${app.config.data.migration.path.admin}") String dbScriptPathAdmin) {
         return new FlywayMigrationRegister(dsMgr, dbScriptPathTenant, dbScriptPathAdmin);
     }
+
 }

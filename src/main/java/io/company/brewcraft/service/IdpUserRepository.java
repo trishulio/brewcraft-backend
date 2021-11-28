@@ -8,4 +8,18 @@ public interface IdpUserRepository {
     void updateUser(User user);
 
     void deleteUser(User user);
+
+    void addUserToGroup(User user, String group);
+
+    void removeUserFromGroup(User user, String group);
+
+    void createUserGroup(String group);
+
+    void deleteUserGroup(String group);
+
+    boolean userGroupExists(String group);
+
+    void putUserGroup(String group);
+
+    void createUserInGroup(User user, String group);
 }

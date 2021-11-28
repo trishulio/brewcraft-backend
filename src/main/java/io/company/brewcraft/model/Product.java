@@ -1,5 +1,6 @@
 package io.company.brewcraft.model;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,9 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     @JsonManagedReference
     private List<ProductMeasureValue> targetMeasures;
 
+    @Column(name = "image_source")
+    private URL imageSrc;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -73,12 +77,13 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
-            LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
+            URL imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
         this.category = category;
         this.targetMeasures = targetMeasures;
+        this.imageSrc = imageSrc;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.deletedAt = deletedAt;
@@ -157,6 +162,16 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
         if (!targetMeasures.contains(productMeasureValue)) {
             this.targetMeasures.add(productMeasureValue);
         }
+    }
+
+    @Override
+    public URL getImageSrc() {
+        return imageSrc;
+    }
+
+    @Override
+    public void setImageSrc(URL imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     @Override

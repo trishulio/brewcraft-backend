@@ -6,12 +6,10 @@ import org.springframework.context.annotation.Lazy;
 
 import io.company.brewcraft.model.user.UserRoleBinding;
 import io.company.brewcraft.repository.user.EnhancedUserRoleBindingRepository;
-import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 
 public class EnhancedUserRoleBindingRepositoryImpl implements EnhancedUserRoleBindingRepository {
 
-    private UserRepository userRepo;
     private UserRoleRepository userRoleRepo;
 
     public EnhancedUserRoleBindingRepositoryImpl(@Lazy UserRepository userRepo, UserRoleRepository userRoleRepo) {
@@ -21,8 +19,7 @@ public class EnhancedUserRoleBindingRepositoryImpl implements EnhancedUserRoleBi
 
     @Override
     public void refresh(Collection<UserRoleBinding> bindings) {
-        this.userRepo.refreshAccessors(bindings);
-        refreshRoles(bindings);
+        userRoleRepo.refreshAccessors(bindings);
     }
 
     @Override

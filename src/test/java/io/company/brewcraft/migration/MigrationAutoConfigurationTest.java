@@ -28,7 +28,7 @@ public class MigrationAutoConfigurationTest {
 
     @Test
     public void testMigrationMgr_ReturnsInstanceOfSequentialMigrationManager() {
-        MigrationManager mgr = config.migrationMgr(null, null);
+        MigrationManager mgr = config.migrationMgr(null, null, null);
         assertTrue(mgr instanceof SequentialMigrationManager);
     }
 

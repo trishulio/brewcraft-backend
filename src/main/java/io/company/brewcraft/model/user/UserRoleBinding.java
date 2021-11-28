@@ -17,8 +17,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
@@ -53,7 +53,7 @@ public class UserRoleBinding extends BaseEntity implements Audited, UserRoleAcce
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
+    @JsonBackReference
     private User user;
 
     @CreationTimestamp

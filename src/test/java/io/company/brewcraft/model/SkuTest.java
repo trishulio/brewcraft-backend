@@ -127,7 +127,7 @@ public class SkuTest {
 
         Sku sku = new Sku(id, name, description, product, materials, quantity, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, sku.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
