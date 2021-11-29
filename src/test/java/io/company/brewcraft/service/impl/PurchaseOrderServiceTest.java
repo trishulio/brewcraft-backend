@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.PurchaseOrder;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 import io.company.brewcraft.service.PurchaseOrderService;
@@ -190,5 +193,37 @@ public class PurchaseOrderServiceTest {
         doReturn(List.of(new PurchaseOrder(1L), new PurchaseOrder(2L))).when(this.mRepoService).getByIds(updates);
 
         assertThrows(EntityNotFoundException.class, () -> this.service.patch(updates), "Cannot find purchaseOrders with Ids: [3, 4]");
+    }
+
+    @Test
+    public void testPutByOrderNumberAndSupplier_ReturnsSavedPurchaseOrdersAfterApplyingUpdatesOnExisting_WhenUpdatesAreNotNull() {
+        ArgumentCaptor<Specification<PurchaseOrder>> captor = ArgumentCaptor.forClass(Specification.class);
+
+        List<PurchaseOrder> existing = List.of(new PurchaseOrder(10L, "ORDER_1", new Supplier(1L), LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0), 1));
+        doReturn(existing).when(mRepoService).getAll(captor.capture());
+
+        List<BasePurchaseOrder> updates = new ArrayList<>();
+        updates.add(new PurchaseOrder(null, "ORDER_1", new Supplier(1L), null, null, null));
+        updates.add(null);
+        updates.add(new PurchaseOrder(null, "ORDER_2", new Supplier(1L), null, null, null));
+        updates.add(new PurchaseOrder(null, null, new Supplier(1L), null, null, null));
+        updates.add(new PurchaseOrder(null, "ORDER_2", null, null, null, null));
+        updates.add(new PurchaseOrder());
+
+        List<PurchaseOrder> purchaseOrders = service.putBySupplierAndOrderNumber(updates);
+
+        List<PurchaseOrder> expected = List.of(
+            new PurchaseOrder(10L, "ORDER_1", new Supplier(1L), null, null, 1),
+            new PurchaseOrder(null, "ORDER_2", new Supplier(1L), null, null, null),
+            new PurchaseOrder(null, null, new Supplier(1L), null, null, null),
+            new PurchaseOrder(null, "ORDER_2", null, null, null, null),
+            new PurchaseOrder()
+        );
+
+        assertEquals(expected, purchaseOrders);
+        verify(this.mRepoService, times(1)).saveAll(anyList());
+
+        // TODO: Spec is not tested
+        captor.getValue();
     }
 }

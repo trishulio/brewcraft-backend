@@ -159,18 +159,21 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                                                                             .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
 
         List<PurchaseOrder> pOs = updates.stream()
+                                         .filter(update -> update != null)
                                          .map(update -> {
-                                                Class<? super PurchaseOrder> clz = BasePurchaseOrder.class;
-                                                PurchaseOrder existing = orderNumberToEntity.get(new PurchaseOrderNumberSupplierIdKey(update));
-                                                if (existing != null) {
-                                                    existing.optimisticLockCheck((UpdatePurchaseOrder) update);
-                                                    clz = UpdatePurchaseOrder.class;
-                                                } else {
-                                                    existing = new PurchaseOrder();
-                                                }
-                                                existing.override(update, getPropertyNames(clz));
-                                                return existing;
-                                            })
+                                            PurchaseOrder purchaseOrder = new PurchaseOrder();
+                                            Class<? super PurchaseOrder> clz = BasePurchaseOrder.class;
+                                            PurchaseOrder existing = orderNumberToEntity.get(new PurchaseOrderNumberSupplierIdKey(update));
+                                            if (existing != null) {
+                                                // Note: RISK. OptimisticLockCheck cannot be performed because the UPDATE object is
+                                                // not expected to have a version. Solution: Remove this method altogether.
+                                                purchaseOrder.setId(existing.getId());
+                                                purchaseOrder.setVersion(existing.getVersion());
+                                                clz = UpdatePurchaseOrder.class;
+                                            }
+                                            purchaseOrder.override(update, getPropertyNames(clz, Set.of(PurchaseOrder.ATTR_ID, PurchaseOrder.ATTR_VERSION)));
+                                            return purchaseOrder;
+                                         })
                                          .collect(Collectors.toList());
 
         return this.repoService.saveAll(pOs);

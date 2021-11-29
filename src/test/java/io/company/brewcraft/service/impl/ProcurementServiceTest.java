@@ -333,7 +333,7 @@ public class ProcurementServiceTest {
             List<PurchaseOrder> pOs = inv.getArgument(0, List.class);
             pOs.get(0).setId(3L);
             return pOs;
-        }).when(mPoService).add(anyList());
+        }).when(mPoService).putBySupplierAndOrderNumber(anyList());
         doAnswer(inv -> {
             List<Invoice> invoices = inv.getArgument(0, List.class);
             invoices.get(0).setId(2L);
