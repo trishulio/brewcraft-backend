@@ -47,6 +47,13 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     }
 
     @Override
+    public List<E> getAll(Specification<E> spec) {
+        final List<E> entities = this.repo.findAll(spec);
+
+        return entities;
+    }
+
+    @Override
     public List<E> getByIds(Collection<? extends Identified<ID>> idProviders) {
         if (idProviders == null) {
             return null;

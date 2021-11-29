@@ -51,7 +51,7 @@ public class ProcurementItemIdFactoryTest {
     public void testBuild_InvoiceItemMaterialLotPurchaseOrder_ReturnsIdWithMaterialLot_WhenMaterialLotIsNull() {
         ProcurementItemId id = factory.build(null, new InvoiceItem(10L));
 
-        assertEquals(new ProcurementItemId(null, 10L), id);    
+        assertEquals(new ProcurementItemId(null, 10L), id);
     }
 
     @Test

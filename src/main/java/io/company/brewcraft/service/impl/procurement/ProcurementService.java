@@ -243,7 +243,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                     bShipments.add(addition.getShipment());
                 });
 
-        Iterator<PurchaseOrder> purchaseOrders = purchaseOrderService.add(bPos).iterator();
+        Iterator<PurchaseOrder> purchaseOrders = purchaseOrderService.putBySupplierAndOrderNumber(bPos).iterator();
         bInvoices.forEach(bInvoice -> bInvoice.setPurchaseOrder(purchaseOrders.next()));
 
         Iterator<Invoice> invoices = invoiceService.add(bInvoices).iterator();

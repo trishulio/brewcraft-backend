@@ -20,6 +20,8 @@ public interface RepoService<ID, E extends Identified<ID>, A> {
 
     Page<E> getAll(Specification<E> spec, SortedSet<String> sort, boolean orderAscending, int page, int size);
 
+    List<E> getAll(Specification<E> spec);
+
     List<E> getByIds(Collection<? extends Identified<ID>> idProviders);
 
     List<E> getByAccessorIds(Collection<? extends A> accessors, Function<A, ? extends Identified<ID>> entityGetter);
