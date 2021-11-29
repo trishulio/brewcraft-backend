@@ -62,6 +62,63 @@ public class ReflectionManipulatorTest {
     }
 
     @Test
+    public void testHashCode_ReturnsSameHashCode_WhenObjectIsUnchanged() {
+        final TestData a = new TestData();
+
+        int hashCode = util.hashCode(a);
+        assertEquals(hashCode, util.hashCode(a));
+        assertEquals(hashCode, util.hashCode(a));
+        assertEquals(hashCode, util.hashCode(a));
+    }
+
+    @Test
+    public void testHashCode_ReturnsDifferentHashCode_WhenObjectPropertiesChange() {
+        final TestData a = new TestData();
+
+        a.x = 0;
+        int hashCode0 = util.hashCode(a);
+
+        a.x = 1;
+        int hashCode1 = util.hashCode(a);
+
+        a.x = 2;
+        int hashCode2 = util.hashCode(a);
+
+        assertNotEquals(hashCode0, hashCode1);
+        assertNotEquals(hashCode1, hashCode2);
+        assertNotEquals(hashCode2, hashCode0);
+    }
+
+    @Test
+    public void testHashCode_ReturnsSameHash_WhenDifferentObjectsHaveSamePropertyValues() {
+        final TestData a = new TestData();
+        final TestData b = new TestData();
+        assertEquals(util.hashCode(a), util.hashCode(b));
+
+        a.x = 10;
+        b.x = 10;
+        assertEquals(util.hashCode(a), util.hashCode(b));
+
+        a.y = 20;
+        b.y = 20;
+        assertEquals(util.hashCode(a), util.hashCode(b));
+    }
+
+    @Test
+    public void testHashCode_ReturnsDifferentHashCode_WhenObjectsHaveDifferentPropertyValues() {
+        final TestData a = new TestData();
+        final TestData b = new TestData();
+
+        a.x = 1;
+        b.x = 2;
+        assertNotEquals(util.hashCode(a), util.hashCode(b));
+
+        a.y = 2;
+        b.y = 1;
+        assertNotEquals(util.hashCode(a), util.hashCode(b));
+    }
+
+    @Test
     public void testOuterJoin_ThrowsException_WhenEitherObjectIsNull() {
         assertThrows(NullPointerException.class, () -> this.util.copy(null, null, pd -> true), "Outer Joins can not be on null objects");
         assertThrows(NullPointerException.class, () -> this.util.copy(null, new Dummy(), pd -> true), "Outer Joins can not be on null objects");
