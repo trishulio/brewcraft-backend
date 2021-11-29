@@ -34,7 +34,6 @@ public class SequentialMigrationManager implements MigrationManager {
     }
 
     @Override
-
     public void migrate(String tenantId) {
         if (!tenantReg.exists(tenantId)) {
             log.info("Registering new tenantId: {}", tenantId);

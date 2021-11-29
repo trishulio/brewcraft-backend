@@ -2,7 +2,6 @@ package io.company.brewcraft.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddInvoiceDto;
@@ -19,22 +18,18 @@ public interface InvoiceMapper extends BaseMapper<Invoice, InvoiceDto, AddInvoic
     InvoiceDto toDto(Invoice invoice);
 
     @Override
-    @Mappings({
-        @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId"),
-        @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId"),
-        @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true),
-    })
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId")
+    @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
+    @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
     Invoice fromUpdateDto(UpdateInvoiceDto dto);
 
     @Override
-    @Mappings({
-        @Mapping(target = Invoice.ATTR_ID, ignore = true),
-        @Mapping(target = Invoice.ATTR_VERSION, ignore = true),
-        @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId"),
-        @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId"),
-        @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
-    })
+    @Mapping(target = Invoice.ATTR_ID, ignore = true)
+    @Mapping(target = Invoice.ATTR_VERSION, ignore = true)
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId")
+    @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
+    @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
     Invoice fromAddDto(AddInvoiceDto dto);
 }

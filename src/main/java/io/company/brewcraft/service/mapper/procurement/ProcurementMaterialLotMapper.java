@@ -2,7 +2,6 @@ package io.company.brewcraft.service.mapper.procurement;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.procurement.AddProcurementMaterialLotDto;
@@ -23,24 +22,20 @@ public interface ProcurementMaterialLotMapper extends BaseMapper<MaterialLot, Pr
     ProcurementMaterialLotDto toDto(MaterialLot lot);
 
     @Override
-    @Mappings({
-        @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
-    })
+    @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
     MaterialLot fromUpdateDto(UpdateProcurementMaterialLotDto item);
 
     @Override
-    @Mappings({
-        @Mapping(target = MaterialLot.ATTR_ID, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, ignore = true),
-        @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId"),
-        @Mapping(target = MaterialLot.ATTR_VERSION, ignore = true)
-    })
+    @Mapping(target = MaterialLot.ATTR_ID, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
+    @Mapping(target = MaterialLot.ATTR_VERSION, ignore = true)
     MaterialLot fromAddDto(AddProcurementMaterialLotDto item);
 }
