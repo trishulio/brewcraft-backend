@@ -14,7 +14,7 @@ import io.company.brewcraft.service.SkuMaterialAccessor;
 public class SkuMaterialRefresher implements Refresher<SkuMaterial, SkuMaterialAccessor> {
     private static final Logger log = LoggerFactory.getLogger(SkuMaterialRefresher.class);
 
-    private Refresher<Material, MaterialAccessor> materialRefresher;
+    private final Refresher<Material, MaterialAccessor> materialRefresher;
 
     @Autowired
     public SkuMaterialRefresher(Refresher<Material, MaterialAccessor> materialRefresher) {

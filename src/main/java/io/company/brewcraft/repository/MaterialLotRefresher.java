@@ -15,8 +15,8 @@ import io.company.brewcraft.service.StorageAccessor;
 public class MaterialLotRefresher implements Refresher<MaterialLot, MaterialLotAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MaterialLotRefresher.class);
 
-    private Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher;
-    private Refresher<Storage, StorageAccessor> storageRefresher;
+    private final Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher;
+    private final Refresher<Storage, StorageAccessor> storageRefresher;
 
     private final AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher;
 

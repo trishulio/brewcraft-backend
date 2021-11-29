@@ -15,11 +15,11 @@ import io.company.brewcraft.service.ProductAccessor;
 public class BrewRefresher implements IBrewRefresher<Brew, BrewAccessor, ParentBrewAccessor> {
     private static final Logger log = LoggerFactory.getLogger(BrewRefresher.class);
 
-    private AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher;
+    private final AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher;
 
-    private AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher;
+    private final AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher;
 
-    private Refresher<Product, ProductAccessor> productRefresher;
+    private final Refresher<Product, ProductAccessor> productRefresher;
 
     @Autowired
     public BrewRefresher(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {

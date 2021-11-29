@@ -7,7 +7,7 @@ import io.company.brewcraft.service.MeasureAccessor;
 
 public class MeasureRefresher implements Refresher<Measure, MeasureAccessor> {
 
-    private AccessorRefresher<Long, MeasureAccessor, Measure> refresher;
+    private final AccessorRefresher<Long, MeasureAccessor, Measure> refresher;
 
     public MeasureRefresher(AccessorRefresher<Long, MeasureAccessor, Measure> refresher) {
         this.refresher = refresher;

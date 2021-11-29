@@ -7,7 +7,7 @@ import io.company.brewcraft.service.SupplierAccessor;
 
 public class SupplierRefresher implements Refresher<Supplier, SupplierAccessor> {
 
-    private AccessorRefresher<Long, SupplierAccessor, Supplier> refresher;
+    private final AccessorRefresher<Long, SupplierAccessor, Supplier> refresher;
 
     public SupplierRefresher(AccessorRefresher<Long, SupplierAccessor, Supplier> refresher) {
         this.refresher = refresher;

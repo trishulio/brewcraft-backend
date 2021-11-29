@@ -15,11 +15,11 @@ import io.company.brewcraft.service.MixtureRecordingAccessor;
 public class MixtureRecordingRefresher implements Refresher<MixtureRecording, MixtureRecordingAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureRecordingRefresher.class);
 
-    private Refresher<Measure, MeasureAccessor> measureRefresher;
+    private final Refresher<Measure, MeasureAccessor> measureRefresher;
 
-    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
+    private final Refresher<Mixture, MixtureAccessor> mixtureRefresher;
 
-    private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher;
+    private final AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher;
 
     public MixtureRecordingRefresher(Refresher<Measure, MeasureAccessor> measureRefresher, Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher) {
         this.measureRefresher = measureRefresher;

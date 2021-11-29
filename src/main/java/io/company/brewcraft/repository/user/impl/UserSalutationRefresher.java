@@ -9,7 +9,7 @@ import io.company.brewcraft.repository.Refresher;
 
 public class UserSalutationRefresher implements Refresher<UserSalutation, UserSalutationAccessor> {
 
-    private AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher;
+    private final AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher;
 
     public UserSalutationRefresher (AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher) {
         this.refresher = refresher;

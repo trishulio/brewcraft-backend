@@ -13,7 +13,7 @@ import io.company.brewcraft.service.MaterialAccessor;
 public class InvoiceItemRefresher implements Refresher<InvoiceItem, InvoiceItemAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemRefresher.class);
 
-    private Refresher<Material, MaterialAccessor> materialRefresher;
+    private final Refresher<Material, MaterialAccessor> materialRefresher;
 
     private final AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> refresher;
 

@@ -18,11 +18,11 @@ import io.company.brewcraft.service.SkuMaterialAccessor;
 public class SkuRefresher implements Refresher<Sku, SkuAccessor> {
     private static final Logger log = LoggerFactory.getLogger(SkuRefresher.class);
 
-    private Refresher<Product, ProductAccessor> productRefresher;
+    private final Refresher<Product, ProductAccessor> productRefresher;
 
-    private Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher;
+    private final Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher;
 
-    private AccessorRefresher<Long, SkuAccessor, Sku> refresher;
+    private final AccessorRefresher<Long, SkuAccessor, Sku> refresher;
 
     @Autowired
     public SkuRefresher(Refresher<Product, ProductAccessor> productRefresher, Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher, AccessorRefresher<Long, SkuAccessor, Sku> refresher) {

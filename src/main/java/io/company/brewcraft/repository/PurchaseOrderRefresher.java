@@ -14,9 +14,9 @@ import io.company.brewcraft.service.SupplierAccessor;
 public class PurchaseOrderRefresher implements Refresher<PurchaseOrder, PurchaseOrderAccessor> {
     private static final Logger log = LoggerFactory.getLogger(PurchaseOrderRefresher.class);
 
-    private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher;
+    private final AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher;
 
-    private Refresher<Supplier, SupplierAccessor> supplierRefresher;
+    private final Refresher<Supplier, SupplierAccessor> supplierRefresher;
 
     @Autowired
     public PurchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, Refresher<Supplier, SupplierAccessor> supplierRefresher) {

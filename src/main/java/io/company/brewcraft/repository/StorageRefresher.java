@@ -11,7 +11,7 @@ import io.company.brewcraft.service.StorageAccessor;
 public class StorageRefresher implements Refresher<Storage, StorageAccessor> {
     private static final Logger log = LoggerFactory.getLogger(StorageRefresher.class);
 
-    private AccessorRefresher<Long, StorageAccessor, Storage> refresher;
+    private final AccessorRefresher<Long, StorageAccessor, Storage> refresher;
 
     public StorageRefresher(AccessorRefresher<Long, StorageAccessor, Storage> refresher) {
         this.refresher = refresher;

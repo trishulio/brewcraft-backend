@@ -12,7 +12,7 @@ import io.company.brewcraft.service.ProductAccessor;
 public class ProductRefresher implements Refresher<Product, ProductAccessor> {
     private static final Logger log = LoggerFactory.getLogger(ProductRefresher.class);
 
-    private AccessorRefresher<Long, ProductAccessor, Product> refresher;
+    private final AccessorRefresher<Long, ProductAccessor, Product> refresher;
 
     @Autowired
     public ProductRefresher(AccessorRefresher<Long, ProductAccessor, Product> refresher) {

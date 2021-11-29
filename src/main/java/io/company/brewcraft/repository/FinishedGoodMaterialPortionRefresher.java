@@ -13,7 +13,7 @@ import io.company.brewcraft.service.MaterialLotAccessor;
 public class FinishedGoodMaterialPortionRefresher implements Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodMaterialPortionRefresher.class);
 
-    private Refresher<MaterialLot, MaterialLotAccessor> materialLotRepo;
+    private final Refresher<MaterialLot, MaterialLotAccessor> materialLotRepo;
 
     private final AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher;
 

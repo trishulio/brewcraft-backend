@@ -15,9 +15,9 @@ import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 public class MixtureMaterialPortionRefresher implements Refresher<MixtureMaterialPortion, MixtureMaterialPortionAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureMaterialPortionRefresher.class);
 
-    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
+    private final Refresher<Mixture, MixtureAccessor> mixtureRefresher;
 
-    private Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher;
+    private final Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher;
 
     private final AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresher;
 

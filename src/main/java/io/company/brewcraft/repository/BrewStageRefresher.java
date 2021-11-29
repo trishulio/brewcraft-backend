@@ -17,13 +17,13 @@ import io.company.brewcraft.service.BrewTaskAccessor;
 public class BrewStageRefresher implements Refresher<BrewStage, BrewStageAccessor> {
     private static final Logger log = LoggerFactory.getLogger(BrewStageRefresher.class);
 
-    private AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher;
+    private final AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher;
 
-    private Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher;
+    private final Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher;
 
-    private Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher;
+    private final Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher;
 
-    private Refresher<Brew, BrewAccessor> brewRefresher;
+    private final Refresher<Brew, BrewAccessor> brewRefresher;
 
     public BrewStageRefresher(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
         this.brewStageStatusRefresher = brewStageStatusRefresher;

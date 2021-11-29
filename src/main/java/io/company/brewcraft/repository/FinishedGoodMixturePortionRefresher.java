@@ -13,7 +13,7 @@ import io.company.brewcraft.service.MixtureAccessor;
 public class FinishedGoodMixturePortionRefresher implements Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodMixturePortionRefresher.class);
 
-    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
+    private final Refresher<Mixture, MixtureAccessor> mixtureRefresher;
 
     private final AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher;
 

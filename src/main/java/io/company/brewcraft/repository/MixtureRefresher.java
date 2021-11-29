@@ -16,13 +16,13 @@ import io.company.brewcraft.service.ParentMixturesAccessor;
 public class MixtureRefresher implements IMixtureRefresher<Mixture, MixtureAccessor, ParentMixturesAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureRefresher.class);
 
-    private AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher;
+    private final AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher;
 
-    private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher;
+    private final CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher;
 
-    private Refresher<Equipment, EquipmentAccessor> equipmentRefresher;
+    private final Refresher<Equipment, EquipmentAccessor> equipmentRefresher;
 
-    private Refresher<BrewStage, BrewStageAccessor> brewStageRefresher;
+    private final Refresher<BrewStage, BrewStageAccessor> brewStageRefresher;
 
     public MixtureRefresher(Refresher<Equipment, EquipmentAccessor> equipmentRefresher, Refresher<BrewStage, BrewStageAccessor> brewStageRefresher, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
         this.equipmentRefresher = equipmentRefresher;

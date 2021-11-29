@@ -11,7 +11,7 @@ import io.company.brewcraft.service.InvoiceStatusAccessor;
 public class InvoiceStatusRefresher implements Refresher<InvoiceStatus, InvoiceStatusAccessor> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceStatusRefresher.class);
 
-    private AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> refresher;
+    private final AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> refresher;
 
     public InvoiceStatusRefresher(AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> refresher) {
         this.refresher = refresher;

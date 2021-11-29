@@ -7,7 +7,7 @@ import io.company.brewcraft.service.BrewTaskAccessor;
 
 public class BrewTaskRefresher implements Refresher<BrewTask, BrewTaskAccessor> {
 
-    private AccessorRefresher<Long, BrewTaskAccessor, BrewTask> refresher;
+    private final AccessorRefresher<Long, BrewTaskAccessor, BrewTask> refresher;
 
     public BrewTaskRefresher(AccessorRefresher<Long, BrewTaskAccessor, BrewTask> refresher) {
         this.refresher = refresher;

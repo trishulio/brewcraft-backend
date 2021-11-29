@@ -12,7 +12,7 @@ import io.company.brewcraft.repository.Refresher;
 
 public class UserRoleBindingRefresher implements Refresher<UserRoleBinding, UserRoleBindingAccessor> {
 
-    private Refresher<UserRole, UserRoleAccessor> userRoleRefresher;
+    private final Refresher<UserRole, UserRoleAccessor> userRoleRefresher;
 
     public UserRoleBindingRefresher(Refresher<UserRole, UserRoleAccessor> userRoleRefresher) {
         this.userRoleRefresher = userRoleRefresher;

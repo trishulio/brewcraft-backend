@@ -12,7 +12,7 @@ import io.company.brewcraft.service.MaterialAccessor;
 public class MaterialRefresher implements Refresher<Material, MaterialAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MaterialRefresher.class);
 
-    private AccessorRefresher<Long, MaterialAccessor, Material> refresher;
+    private final AccessorRefresher<Long, MaterialAccessor, Material> refresher;
 
     @Autowired
     public MaterialRefresher(AccessorRefresher<Long, MaterialAccessor, Material> refresher) {

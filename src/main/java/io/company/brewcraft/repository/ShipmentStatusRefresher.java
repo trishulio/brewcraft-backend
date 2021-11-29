@@ -11,7 +11,7 @@ import io.company.brewcraft.service.ShipmentStatusAccessor;
 public class ShipmentStatusRefresher implements Refresher<ShipmentStatus, ShipmentStatusAccessor> {
     private static final Logger log = LoggerFactory.getLogger(ShipmentStatusRefresher.class);
 
-    private AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher;
+    private final AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher;
 
     public ShipmentStatusRefresher(AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher) {
         this.refresher = refresher;
