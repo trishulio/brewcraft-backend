@@ -62,7 +62,8 @@ public class MixtureRecordingController extends BaseController {
         Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()
-                .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording)).collect(Collectors.toList());
+                                                                             .map(mixtureRecording -> mixtureRecordingMapper.toDto(mixtureRecording))
+                                                                             .collect(Collectors.toList());
 
         PageDto<MixtureRecordingDto> dto = new PageDto<>(mixtureRecordingList, mixtureRecordingPage.getTotalPages(), mixtureRecordingPage.getTotalElements());
 
@@ -91,12 +92,12 @@ public class MixtureRecordingController extends BaseController {
                                      .map(addedMixtureRecording -> mixtureRecordingMapper.toDto(addedMixtureRecording))
                                      .collect(Collectors.toList());
     }
-    
+
     @PutMapping("/{mixtureRecordingId}")
     public MixtureRecordingDto putMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
         MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         mixtureRecording.setId(mixtureRecordingId);
-        
+
         MixtureRecording putMixtureRecording = mixtureRecordingService.putMixtureRecordings(List.of(mixtureRecording)).get(0);
 
         return mixtureRecordingMapper.toDto(putMixtureRecording);
@@ -107,7 +108,7 @@ public class MixtureRecordingController extends BaseController {
         List<UpdateMixtureRecording> mixtureRecordings = updateMixtureRecordingDtos.stream()
                                                                                    .map(updateMixtureRecordingDto -> mixtureRecordingMapper.fromDto(updateMixtureRecordingDto))
                                                                                    .collect(Collectors.toList());
-        
+
         List<MixtureRecording> putMixtureRecordings = mixtureRecordingService.putMixtureRecordings(mixtureRecordings);
 
         return putMixtureRecordings.stream()
@@ -119,7 +120,7 @@ public class MixtureRecordingController extends BaseController {
     public MixtureRecordingDto patchMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
         UpdateMixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         mixtureRecording.setId(mixtureRecordingId);
-        
+
         MixtureRecording patchedMixtureRecording = mixtureRecordingService.patchMixtureRecordings(List.of(mixtureRecording)).get(0);
 
         return mixtureRecordingMapper.toDto(patchedMixtureRecording);
@@ -129,7 +130,7 @@ public class MixtureRecordingController extends BaseController {
     public void deleteMixtureRecordings(@RequestParam("ids") Set<Long> mixtureRecordingIds) {
         mixtureRecordingService.deleteMixtureRecordings(mixtureRecordingIds);
     }
-    
+
     @DeleteMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
     public void deleteSku(@PathVariable Long mixtureRecordingId) {
         mixtureRecordingService.deleteMixtureRecordings(Set.of(mixtureRecordingId));

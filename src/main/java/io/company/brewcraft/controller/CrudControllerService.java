@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.CrudService;
-import io.company.brewcraft.service.UpdatableEntity;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.BaseMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -19,7 +19,7 @@ public class CrudControllerService<
     ID,
     Entity extends UpdateEntity,
     AddEntity,
-    UpdateEntity extends UpdatableEntity<ID>,
+    UpdateEntity extends Identified<ID>,
     EntityDto extends BaseDto,
     AddDto extends BaseDto,
     UpdateDto extends BaseDto

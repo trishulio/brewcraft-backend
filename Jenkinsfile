@@ -64,7 +64,7 @@ pipeline {
                             string(name: 'HOST_URL', value: '172.17.0.1'),
                             string(name: 'JACOCO_SOURCE_HTML_DIR', value: 'target/site/jacoco'),
                             string(name: 'PITEST_SOURCE_HTML_DIR', value: 'target/pit-reports'),
-                            string(name: 'JACOCO_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/jacoco'), 
+                            string(name: 'JACOCO_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/jacoco'),
                             string(name: 'PITEST_TARGET_HTML_DIR', value: '/home/mrishab/brewcraft/code/html/pit-reports'),
                             booleanParam(name: 'CODE_COVERAGE', value: true),
                             booleanParam(name: 'MUTATION_COVERAGE', value: true)

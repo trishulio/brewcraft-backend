@@ -64,9 +64,11 @@ public class ControllerExceptionHandler {
     public ErrorResponse methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
         log.debug("Method argument not valid", e);
 
-        String fieldErrors = e.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+        String fieldErrors = e.getBindingResult()
+                              .getFieldErrors()
+                              .stream()
+                              .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage())
+                              .collect(Collectors.joining(", "));
 
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), fieldErrors, request.getRequestURI());
 

@@ -10,6 +10,6 @@ public interface EnhancedMixtureRepository {
     void refresh(Collection<Mixture> mixtures);
 
     void refreshAccessors(Collection<? extends MixtureAccessor> accessors);
-    
+
     void refreshParentMixturesAccessors(Collection<? extends ParentMixturesAccessor> accessors);
 }

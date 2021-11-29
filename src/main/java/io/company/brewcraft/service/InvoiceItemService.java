@@ -12,7 +12,6 @@ import io.company.brewcraft.model.UpdateInvoiceItem;
 public class InvoiceItemService extends BaseService implements UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> {
     private static final Logger log = LoggerFactory.getLogger(InvoiceItemService.class);
 
-
     private final UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService;
 
     public InvoiceItemService(UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService) {

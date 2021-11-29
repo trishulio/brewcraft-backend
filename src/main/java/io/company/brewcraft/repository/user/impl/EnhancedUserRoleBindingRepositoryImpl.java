@@ -7,7 +7,6 @@ import io.company.brewcraft.repository.user.EnhancedUserRoleBindingRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 
 public class EnhancedUserRoleBindingRepositoryImpl implements EnhancedUserRoleBindingRepository {
-
     private UserRoleRepository userRoleRepo;
 
     public EnhancedUserRoleBindingRepositoryImpl(UserRoleRepository userRoleRepo) {

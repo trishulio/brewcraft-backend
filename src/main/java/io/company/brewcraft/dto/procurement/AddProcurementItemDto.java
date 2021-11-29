@@ -1,86 +1,35 @@
 package io.company.brewcraft.dto.procurement;
 
-import io.company.brewcraft.dto.AddInvoiceItemDto;
-import io.company.brewcraft.dto.AddMaterialLotDto;
 import io.company.brewcraft.dto.BaseDto;
-import io.company.brewcraft.dto.MoneyDto;
-import io.company.brewcraft.dto.QuantityDto;
-import io.company.brewcraft.dto.TaxDto;
 
 public class AddProcurementItemDto extends BaseDto {
-    private AddMaterialLotDto lot;
-    private AddInvoiceItemDto invoiceItem;
+    private AddProcurementMaterialLotDto materialLot;
+    private AddProcurementInvoiceItemDto invoiceItem;
 
     public AddProcurementItemDto() {
-        this.lot = new AddMaterialLotDto();
-        this.invoiceItem = new AddInvoiceItemDto();
+        super();
     }
 
-    public AddProcurementItemDto(String description, String lotNumber, QuantityDto quantity, MoneyDto price, TaxDto tax, Long materialId, Long storageId) {
+    public AddProcurementItemDto(AddProcurementMaterialLotDto materialLot, AddProcurementInvoiceItemDto invoiceItem) {
         this();
-        setDescription(description);
-        setLotNumber(lotNumber);
-        setQuantity(quantity);
-        setPrice(price);
-        setTax(tax);
-        setMaterialId(materialId);
-        setStorageId(storageId);
+        setMaterialLot(materialLot);
+        setInvoiceItem(invoiceItem);
     }
 
-    public String getDescription() {
-        return this.invoiceItem.getDescription();
+    public AddProcurementMaterialLotDto getMaterialLot() {
+        return materialLot;
     }
 
-    public void setDescription(String description) {
-        this.invoiceItem.setDescription(description);
+    public void setMaterialLot(AddProcurementMaterialLotDto materialLot) {
+        this.materialLot = materialLot;
     }
 
-    public String getLotNumber() {
-        return this.lot.getLotNumber();
+    public AddProcurementInvoiceItemDto getInvoiceItem() {
+        return invoiceItem;
     }
 
-    public void setLotNumber(String lotNumber) {
-        this.lot.setLotNumber(lotNumber);
+    public void setInvoiceItem(AddProcurementInvoiceItemDto invoiceItem) {
+        this.invoiceItem = invoiceItem;
     }
 
-    public QuantityDto getQuantity() {
-        return this.lot.getQuantity();
-    }
-
-    public void setQuantity(QuantityDto quantity) {
-        this.lot.setQuantity(quantity);
-        this.invoiceItem.setQuantity(quantity);
-    }
-
-    public MoneyDto getPrice() {
-        return this.invoiceItem.getPrice();
-    }
-
-    public void setPrice(MoneyDto price) {
-        this.invoiceItem.setPrice(price);
-    }
-
-    public TaxDto getTax() {
-        return this.invoiceItem.getTax();
-    }
-
-    public void setTax(TaxDto tax) {
-        this.invoiceItem.setTax(tax);
-    }
-
-    public Long getMaterialId() {
-        return this.invoiceItem.getMaterialId();
-    }
-
-    public void setMaterialId(Long materialId) {
-        this.invoiceItem.setMaterialId(materialId);
-    }
-
-    public Long getStorageId() {
-        return this.lot.getStorageId();
-    }
-
-    public void setStorageId(Long storageId) {
-        this.lot.setStorageId(storageId);
-    }
 }

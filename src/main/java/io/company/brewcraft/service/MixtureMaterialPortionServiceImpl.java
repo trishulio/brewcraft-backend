@@ -36,9 +36,9 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
     private static final Logger log = LoggerFactory.getLogger(MixtureMaterialPortionServiceImpl.class);
 
     private final RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService;
-    
+
     private final UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService;
-    
+
     public MixtureMaterialPortionServiceImpl(RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService, UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService, StockLotService stockLotService) {
         super(stockLotService);
         this.repoService = repoService;
@@ -70,10 +70,10 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         if (materialPortions == null) {
             return null;
         }
-        
+
         List<Long> lotIds = materialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
-        
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
+
         materialPortions.forEach(materialPortion -> {
             Validator.assertion(new BigDecimal(materialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
         });
@@ -102,18 +102,18 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         if (putMaterialPortions == null) {
             return null;
         }
-        
+
         List<Long> lotIds = putMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
-        
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
+
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(putMaterialPortions);
         Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
-          
+
         putMaterialPortions.forEach(putMaterialPortion -> {
             Validator.assertion(new BigDecimal(putMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
-            
+
             boolean isNewMaterialPortion = putMaterialPortion.getId() == null || !idToExistingEntity.containsKey(putMaterialPortion.getId());
-            
+
             if (isNewMaterialPortion) {
                 Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), putMaterialPortion.getQuantity());
 
@@ -122,7 +122,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
                 }
             } else {
                 MixtureMaterialPortion existing = idToExistingEntity.get(putMaterialPortion.getId());
-                
+
                 boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
 
                 //If put is on the same lot, we only need to check if the difference in quantity is available
@@ -139,7 +139,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         });
 
         final List<MixtureMaterialPortion> updated = this.updateService.getPutEntities(existingEntities, putMaterialPortions);
-            
+
         return this.repoService.saveAll(updated);
     }
 
@@ -148,10 +148,10 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         if (patchMaterialPortions == null) {
             return null;
         }
-        
+
         List<Long> lotIds = patchMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");  
-      
+        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
+
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(patchMaterialPortions);
         Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
 
@@ -161,18 +161,17 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
 
             throw new EntityNotFoundException(String.format("Cannot find material portion with Ids: %s", nonExistingIds));
         }
-        
+
         patchMaterialPortions.forEach(patchMaterialPortion -> {
             if (patchMaterialPortion.getQuantity() != null) {
                 Validator.assertion(new BigDecimal(patchMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
             }
-            
+
             MixtureMaterialPortion existing = idToExistingEntity.get(patchMaterialPortion.getId());
-            
+
             boolean isPatchOnSameLot = patchMaterialPortion.getMaterialLot() == null || patchMaterialPortion.getMaterialLot().getId() == null
                     || patchMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
-            
-        
+
             boolean isQuantityCheckRequired = (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) || !isPatchOnSameLot;
 
             if (isQuantityCheckRequired) {

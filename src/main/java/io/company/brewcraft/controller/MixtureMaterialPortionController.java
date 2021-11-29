@@ -63,7 +63,8 @@ public class MixtureMaterialPortionController extends BaseController {
         Page<MixtureMaterialPortion> materialPortionPage = materialPortionService.getMaterialPortions(ids, mixtureIds, materialLotIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureMaterialPortionDto> materialPortionList = materialPortionPage.stream()
-                .map(materialPortion -> materialPortionMapper.toDto(materialPortion)).collect(Collectors.toList());
+                                                                                 .map(materialPortion -> materialPortionMapper.toDto(materialPortion))
+                                                                                 .collect(Collectors.toList());
 
         PageDto<MixtureMaterialPortionDto> dto = new PageDto<>(materialPortionList, materialPortionPage.getTotalPages(), materialPortionPage.getTotalElements());
 
@@ -97,12 +98,12 @@ public class MixtureMaterialPortionController extends BaseController {
     public MixtureMaterialPortionDto putMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);
-        
+
         MixtureMaterialPortion putMaterialPortion = materialPortionService.putMaterialPortions(List.of(materialPortion)).get(0);
 
         return materialPortionMapper.toDto(putMaterialPortion);
     }
-    
+
     @PutMapping("")
     public List<MixtureMaterialPortionDto> putMaterialPortions(@Valid @RequestBody List<UpdateMixtureMaterialPortionDto> updateMaterialPortionDtos) {
         List<UpdateMixtureMaterialPortion> materialPortions = updateMaterialPortionDtos.stream()
@@ -110,23 +111,23 @@ public class MixtureMaterialPortionController extends BaseController {
                                                                                        .collect(Collectors.toList());
 
             List<MixtureMaterialPortion> putMaterialPortions = materialPortionService.putMaterialPortions(materialPortions);
-            
+
             return putMaterialPortions.stream()
                                       .map(putMaterialPortion -> materialPortionMapper.toDto(putMaterialPortion))
                                       .collect(Collectors.toList());
-        
+
     }
 
     @PatchMapping("/{materialPortionId}")
     public MixtureMaterialPortionDto patchMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);
-        
+
         MixtureMaterialPortion patchedMaterialPortion = materialPortionService.patchMaterialPortions(List.of(materialPortion)).get(0);
 
         return materialPortionMapper.toDto(patchedMaterialPortion);
     }
-    
+
     @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     public void deleteMaterialPortion(@RequestParam("ids") Set<Long> materialPortionIds) {
         materialPortionService.deleteMaterialPortions(materialPortionIds);

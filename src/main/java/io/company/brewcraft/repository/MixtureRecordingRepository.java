@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import io.company.brewcraft.model.MixtureRecording;
 
 public interface MixtureRecordingRepository extends JpaRepository<MixtureRecording, Long>, JpaSpecificationExecutor<MixtureRecording>, EnhancedMixtureRecordingRepository, ExtendedRepository<Long> {
- 
+
     @Override
     @Query("select count(i) > 0 from MIXTURE_RECORDING i where i.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);
-    
+
     @Override
     @Modifying
     @Query("delete from MIXTURE_RECORDING i where i.id in (:ids)")
     int deleteByIds(Iterable<Long> ids);
-    
+
 }

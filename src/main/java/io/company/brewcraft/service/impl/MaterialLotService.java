@@ -14,7 +14,6 @@ import io.company.brewcraft.service.UpdateService;
 public class MaterialLotService extends BaseService implements UpdateService<Long, MaterialLot, BaseMaterialLot<?>, UpdateMaterialLot<?>> {
     private static final Logger log = LoggerFactory.getLogger(MaterialLotService.class);
 
-
     private final UpdateService<Long, MaterialLot, BaseMaterialLot<?>, UpdateMaterialLot<?>> updateService;
 
     public MaterialLotService(UpdateService<Long, MaterialLot, BaseMaterialLot<?>, UpdateMaterialLot<?>> updateService) {

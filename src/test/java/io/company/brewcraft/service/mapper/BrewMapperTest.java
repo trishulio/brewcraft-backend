@@ -1,9 +1,8 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ public class BrewMapperTest {
         parentBrew.addChildBrew(brew);
         Brew expectedBrew = new Brew(null, "testName", "testDesc", "2", new Product(3L), parentBrew, null, null, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), null, null, null);
 
-        org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals(expectedBrew, brew);
+        assertEquals(expectedBrew, brew);
     }
 
     @Test

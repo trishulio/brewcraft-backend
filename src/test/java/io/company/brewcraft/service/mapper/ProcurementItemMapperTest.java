@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,16 +16,24 @@ import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.procurement.AddProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
+import io.company.brewcraft.dto.procurement.AddProcurementMaterialLotDto;
+import io.company.brewcraft.dto.procurement.ProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemIdDto;
+import io.company.brewcraft.dto.procurement.ProcurementMaterialLotDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementItemDto;
+import io.company.brewcraft.dto.procurement.UpdateProcurementMaterialLotDto;
+import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
+import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.model.procurement.ProcurementItem;
-import io.company.brewcraft.model.procurement.ProcurementItemId;
 import io.company.brewcraft.service.mapper.procurement.ProcurementItemMapper;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -39,42 +48,60 @@ public class ProcurementItemMapperTest {
 
     @Test
     public void testToDto_ReturnsNull_WhenEntityIsNull() {
-        assertNull(mapper.toDto((ProcurementItem) null));
+        assertNull(mapper.toDto(null));
     }
 
     @Test
-    public void testToDto_ReturnsDtoWithAllValues_WhenEntityIsNotNull() {
+    public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
         ProcurementItem procurementItem = new ProcurementItem(
-            new ProcurementItemId(1L, 2L),
-            "DESCRIPTION",
-            "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-            new Storage(1L), // storage
-            Money.parse("CAD 10"), // price
-            new Tax(Money.parse("CAD 20")), // tax
-            new Material(1L), // material
-            LocalDateTime.of(1999, 1, 1, 0, 0), // createdAt
-            LocalDateTime.of(2000, 1, 1, 0, 0), // lastUpdated
-            1,
-            10
+            new MaterialLot(
+                1L,
+                "LOT_NUMBER",
+                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                new InvoiceItem(10L),
+                new Storage(100L),
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                1
+            ),
+            new InvoiceItem(
+                2L,
+                "desc2",
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
+                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Material(7L),
+                LocalDateTime.of(2002, 1, 1, 0, 0),
+                LocalDateTime.of(2003, 1, 1, 0, 0),
+                1
+            )
         );
 
         ProcurementItemDto dto = mapper.toDto(procurementItem);
 
         ProcurementItemDto expected = new ProcurementItemDto(
             new ProcurementItemIdDto(1L, 2L),
-            "DESCRIPTION", // description
-            "LOT_NUMBER", // lotNumber
-            new QuantityDto("kg", new BigDecimal("10")), // quantity
-            new MoneyDto("CAD", new BigDecimal("10.00")), // price
-            new TaxDto(new MoneyDto("CAD", new BigDecimal("20.00"))), // tax
-            new MoneyDto("CAD", new BigDecimal("100.00")), // amount
-            new MaterialDto(1L), // material
-            new StorageDto(1L), // storage
-            LocalDateTime.of(1999, 1, 1, 0, 0), // createdAt
-            LocalDateTime.of(2000, 1, 1, 0, 0), // lastUpdated
-            1, // invoiceItemVersion
-            10 // version
+            new ProcurementMaterialLotDto(
+                1L,
+                "LOT_NUMBER",
+                new QuantityDto("kg", new BigDecimal("10")),
+                new StorageDto(100L),
+                LocalDateTime.of(2000, 1, 1, 0, 0),
+                LocalDateTime.of(2001, 1, 1, 0, 0),
+                1
+            ),
+            new ProcurementInvoiceItemDto(
+                2L,
+                "desc2",
+                new QuantityDto("KG", new BigDecimal("100")),
+                new MoneyDto("CAD", new BigDecimal("200.00")),
+                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
+                new MoneyDto("CAD", new BigDecimal("20000.00")),
+                new MaterialDto(7L),
+                LocalDateTime.of(2002, 1, 1, 0, 0),
+                LocalDateTime.of(2003, 1, 1, 0, 0),
+                1
+            )
         );
 
         assertEquals(expected, dto);
@@ -82,36 +109,50 @@ public class ProcurementItemMapperTest {
 
     @Test
     public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(mapper.fromDto((AddProcurementItemDto) null));
+        assertNull(mapper.fromAddDto(null));
     }
 
     @Test
     public void testFromAddDto_ReturnsEntity_WhenDtoIsNotNull() {
         AddProcurementItemDto dto = new AddProcurementItemDto(
-            "DESCRIPTION", // description
-            "LOT_NUMBER", // lotNumber
-            new QuantityDto("kg", new BigDecimal("10")), // quantity
-            new MoneyDto("CAD", new BigDecimal("20")), // price
-            new TaxDto(new MoneyDto("CAD", new BigDecimal("5"))), // tax
-            1L, // materialId
-            2L // storageId
+            new AddProcurementMaterialLotDto(
+                "LOT_NUMBER",
+                new QuantityDto("kg", new BigDecimal("10")),
+                100L
+            ),
+            new AddProcurementInvoiceItemDto(
+                "desc2",
+                new QuantityDto("KG", new BigDecimal("100")),
+                new MoneyDto("CAD", new BigDecimal("200.00")),
+                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
+                7L
+            )
         );
 
-        ProcurementItem procurementItem = mapper.fromDto(dto);
+        ProcurementItem procurementItem = mapper.fromAddDto(dto);
 
         ProcurementItem expected = new ProcurementItem(
-            null,
-            "DESCRIPTION",
-            "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-            new Storage(2L), // storage
-            Money.parse("CAD 20"), // price
-            new Tax(Money.parse("CAD 5")), // tax
-            new Material(1L), // material
-            null, // createdAt
-            null, // lastUpdated
-            null, // invoiceItemVersion
-            null // version
+            new MaterialLot(
+                null,
+                "LOT_NUMBER",
+                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                null,
+                new Storage(100L),
+                null,
+                null,
+                null
+            ),
+            new InvoiceItem(
+                null,
+                "desc2",
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
+                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Material(7L),
+                null,
+                null,
+                null
+            )
         );
 
         assertEquals(expected, procurementItem);
@@ -119,39 +160,54 @@ public class ProcurementItemMapperTest {
 
     @Test
     public void testFromUpdateDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(mapper.fromDto((UpdateProcurementItemDto) null));
+        assertNull(mapper.fromUpdateDto(null));
     }
 
     @Test
-    public void testUpdateAddDto_ReturnsEntity_WhenDtoIsNotNull() {
+    public void testFromUpdateDto_ReturnsEntity_WhenDtoIsNotNull() {
         UpdateProcurementItemDto dto = new UpdateProcurementItemDto(
-            new ProcurementItemIdDto(1L, 2L),
-            "DESCRIPTION", // description
-            "LOT_NUMBER", // lotNumber
-            new QuantityDto("kg", new BigDecimal("10")), // quantity
-            new MoneyDto("CAD", new BigDecimal("20")), // price
-            new TaxDto(new MoneyDto("CAD", new BigDecimal("5"))), // tax
-            1L, // materialId
-            2L, // storageId
-            1, // invoiceItemVersion
-            10 // version
+            new UpdateProcurementMaterialLotDto(
+                1L,
+                "LOT_NUMBER",
+                new QuantityDto("kg", new BigDecimal("10")),
+                100L,
+                1
+            ),
+            new UpdateProcurementInvoiceItemDto(
+                2L,
+                "desc2",
+                new QuantityDto("KG", new BigDecimal("100")),
+                new MoneyDto("CAD", new BigDecimal("200.00")),
+                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
+                7L,
+                1
+            )
         );
 
-        ProcurementItem procurementItem = mapper.fromDto(dto);
+        ProcurementItem procurementItem = mapper.fromUpdateDto(dto);
 
         ProcurementItem expected = new ProcurementItem(
-            new ProcurementItemId(1L, 2L),
-            "DESCRIPTION",
-            "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
-            new Storage(2L), // storage
-            Money.parse("CAD 20"), // price
-            new Tax(Money.parse("CAD 5")), // tax
-            new Material(1L), // material
-            null, // createdAt
-            null, // lastUpdated
-            1, // invoiceItemVersion
-            10 // version
+            new MaterialLot(
+                1L,
+                "LOT_NUMBER",
+                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                null,
+                new Storage(100L),
+                null,
+                null,
+                1
+            ),
+            new InvoiceItem(
+                2L,
+                "desc2",
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
+                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Material(7L),
+                null,
+                null,
+                1
+            )
         );
 
         assertEquals(expected, procurementItem);

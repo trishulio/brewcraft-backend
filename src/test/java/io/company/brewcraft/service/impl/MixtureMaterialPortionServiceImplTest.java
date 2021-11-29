@@ -36,9 +36,9 @@ public class MixtureMaterialPortionServiceImplTest {
     private StockLotService stockLotService;
 
     private RepoService<Long, MixtureMaterialPortion, MixtureMaterialPortionAccessor> repoService;
-    
+
     private UpdateService<Long, MixtureMaterialPortion, BaseMixtureMaterialPortion, UpdateMixtureMaterialPortion> updateService;
-    
+
     @BeforeEach
     public void init() {
         this.updateService = mock(UpdateService.class);
@@ -177,7 +177,7 @@ public class MixtureMaterialPortionServiceImplTest {
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), materialPortion.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), materialPortion.getLastUpdated());
         assertEquals(1, materialPortion.getVersion());
-        
+
         verify(this.repoService, times(1)).saveAll(List.of(materialPortion));
     }
 

@@ -111,7 +111,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
             if (mixturePortions == null) {
                 this.mixturePortions.clear();
             } else {
-                this.mixturePortions.stream().filter(mixturePortion -> !mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::removeMixturePortion); 
+                this.mixturePortions.stream().filter(mixturePortion -> !mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::removeMixturePortion);
             }
         }
 

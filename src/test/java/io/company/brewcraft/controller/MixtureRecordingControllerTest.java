@@ -132,7 +132,6 @@ public class MixtureRecordingControllerTest {
         MixtureRecording mixtureRecording = new MixtureRecording(1L, new Mixture(2L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
         MixtureRecording patchedMixtureRecording = new MixtureRecording(1L, new Mixture(2L), new Measure(1L), new BigDecimal("100"), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
-
         doReturn(List.of(patchedMixtureRecording)).when(mixtureRecordingService).patchMixtureRecordings(List.of(mixtureRecording));
 
         MixtureRecordingDto mixtureRecordingDto = mixtureRecordingController.patchMixtureRecording(updateMixtureRecordingDto, 1L);

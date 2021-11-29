@@ -14,7 +14,7 @@ public class EnhancedMixtureRecordingRepositoryImpl implements EnhancedMixtureRe
     private MeasureRepository measureRepository;
 
     private MixtureRepository mixtureRepository;
-    
+
     private AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher;
 
     public EnhancedMixtureRecordingRepositoryImpl(MeasureRepository measureRepository, MixtureRepository mixtureRepository, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher) {
@@ -28,7 +28,7 @@ public class EnhancedMixtureRecordingRepositoryImpl implements EnhancedMixtureRe
         this.measureRepository.refreshAccessors(mixtureRecordings);
         this.mixtureRepository.refreshAccessors(mixtureRecordings);
     }
-    
+
     @Override
     public void refreshAccessors(Collection<? extends MixtureRecordingAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);

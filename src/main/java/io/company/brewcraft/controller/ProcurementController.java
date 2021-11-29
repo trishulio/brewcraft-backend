@@ -32,13 +32,12 @@ import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementDto;
-import io.company.brewcraft.model.InvoiceItem;
-import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.procurement.BaseProcurement;
+import io.company.brewcraft.model.procurement.BaseProcurementItem;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementId;
-import io.company.brewcraft.model.procurement.ProcurementItem;
 import io.company.brewcraft.model.procurement.UpdateProcurement;
+import io.company.brewcraft.model.procurement.UpdateProcurementItem;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.mapper.procurement.ProcurementIdMapper;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
@@ -53,8 +52,8 @@ public class ProcurementController extends BaseController {
     private CrudControllerService<
         ProcurementId,
         Procurement,
-        BaseProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
-        UpdateProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
+        BaseProcurement<? extends BaseProcurementItem>,
+        UpdateProcurement<? extends UpdateProcurementItem>,
         ProcurementDto,
         AddProcurementDto,
         UpdateProcurementDto
@@ -69,8 +68,8 @@ public class ProcurementController extends BaseController {
             CrudControllerService<
             ProcurementId,
             Procurement,
-            BaseProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
-            UpdateProcurement<InvoiceItem, MaterialLot, ProcurementItem>,
+            BaseProcurement<? extends BaseProcurementItem>,
+            UpdateProcurement<? extends UpdateProcurementItem>,
             ProcurementDto,
             AddProcurementDto,
             UpdateProcurementDto
@@ -160,9 +159,9 @@ public class ProcurementController extends BaseController {
         return this.controller.getAll(procurements, attributes);
     }
 
-    @GetMapping("/{shipmentId}/{invoiceId}")
-    public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
-        ProcurementId id = new ProcurementId(shipmentId, invoiceId);
+    @GetMapping("/{purchaseOrderId}/{shipmentId}/{invoiceId}")
+    public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        ProcurementId id = new ProcurementId(shipmentId, invoiceId, purchaseOrderId);
         return this.controller.get(id, attributes);
     }
 
