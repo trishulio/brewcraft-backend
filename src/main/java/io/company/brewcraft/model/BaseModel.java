@@ -5,7 +5,7 @@ import java.util.Set;
 import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
-public abstract class BaseModel implements Cloneable {
+public abstract class BaseModel {
 
     protected static ReflectionManipulator util;
     protected static JsonMapper jsonMapper;
@@ -67,11 +67,16 @@ public abstract class BaseModel implements Cloneable {
     }
 
     @Override
+    public int hashCode() {
+        return util.hashCode(this);
+    }
+
+    @Override
     public String toString() {
         return jsonMapper.writeString(this);
     }
 
     public static <T extends BaseModel> T fromString(String str, Class<T> clazz) {
-        return (T) jsonMapper.readString(str, clazz);
+        return jsonMapper.readString(str, clazz);
     }
 }

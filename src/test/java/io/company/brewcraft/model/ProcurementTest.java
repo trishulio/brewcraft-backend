@@ -108,15 +108,15 @@ public class ProcurementTest {
 
         assertEquals(List.of(new ProcurementItem()), procurement.getProcurementItems());
     }
-    
+
     @Test
     public void testGetProcurementItemsCount() {
         procurement.setProcurementItems(null);
         assertEquals(0, procurement.getProcurementItemsCount());
-        
+
         procurement.setProcurementItems(List.of());
         assertEquals(0, procurement.getProcurementItemsCount());
-        
+
         procurement.setProcurementItems(List.of(new ProcurementItem()));
         assertEquals(1, procurement.getProcurementItemsCount());
     }

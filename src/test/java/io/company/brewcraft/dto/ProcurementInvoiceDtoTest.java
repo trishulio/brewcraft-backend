@@ -135,7 +135,7 @@ public class ProcurementInvoiceDtoTest {
         invoice.setInvoiceStatus(new InvoiceStatusDto(99L));
         assertEquals(new InvoiceStatusDto(99L), invoice.getInvoiceStatus());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(invoice.getVersion());

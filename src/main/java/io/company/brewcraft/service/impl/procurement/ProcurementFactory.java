@@ -24,7 +24,7 @@ public class ProcurementFactory {
             Invoice invoice = null;
             List<ProcurementItem> procurementItems = null;
             PurchaseOrder purchaseOrder = null;
-            
+
             if (shipment.getLotCount() > 0) {
                 procurementItems = shipment.getLots().stream().map(s -> procurementItemFactory.buildFromLot(s)).collect(Collectors.toList());
             }
@@ -33,7 +33,7 @@ public class ProcurementFactory {
             if (invoice != null) {
                 purchaseOrder = invoice.getPurchaseOrder();
             }
-    
+
             procurement = new Procurement(shipment, invoice, purchaseOrder, procurementItems);
         }
 

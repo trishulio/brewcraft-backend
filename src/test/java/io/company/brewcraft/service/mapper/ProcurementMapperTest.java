@@ -165,7 +165,7 @@ public class ProcurementMapperTest {
         );
         assertEquals(expected, dto);
     }
-    
+
     @Test
     public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
         assertNull(mapper.fromAddDto(null));

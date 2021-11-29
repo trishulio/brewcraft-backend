@@ -154,7 +154,7 @@ public class InvoiceDtoTest {
         invoice.setInvoiceItems(List.of(new InvoiceItemDto()));
         assertEquals(List.of(new InvoiceItemDto()), invoice.getInvoiceItems());
     }
-    
+
     @Test
     public void testAccessVersion() {
         assertNull(invoice.getVersion());
