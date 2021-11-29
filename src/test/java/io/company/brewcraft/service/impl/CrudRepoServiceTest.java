@@ -68,7 +68,7 @@ public class CrudRepoServiceTest {
     }
 
     @Test
-    public void getAll_BuildsAPageRequestAndReturnsPageFromJpaRepository() {
+    public void testGetAll_BuildsAPageRequestAndReturnsPageFromJpaRepository() {
         final Page<DummyCrudEntity> mPage = new PageImpl<>(List.of(new DummyCrudEntity(1L)));
 
         final Specification<DummyCrudEntity> mSpec = mock(Specification.class);
@@ -79,6 +79,16 @@ public class CrudRepoServiceTest {
 
         final Page<DummyCrudEntity> expected = new PageImpl<>(List.of(new DummyCrudEntity(1L)));
         assertEquals(expected, page);
+    }
+    
+    @Test
+    public void testGetAll_ReturnsListOfItemsWithMatchingSpec() {
+        final Specification<DummyCrudEntity> mSpec = mock(Specification.class);
+        doReturn(List.of(new DummyCrudEntity(1L))).when(this.mRepo).findAll(mSpec);
+
+        final List<DummyCrudEntity> entities = this.service.getAll(mSpec);
+
+        assertEquals(List.of(new DummyCrudEntity(1L)), entities);
     }
 
     @Test
