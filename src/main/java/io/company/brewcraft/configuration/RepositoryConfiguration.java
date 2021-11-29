@@ -450,108 +450,108 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<Brew, BrewAccessor> brewRefreshser(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
-        return new BrewRefresher(productRefresher, parentBrewRefresher, brewAccessorRefresher);
+    public Refresher<Brew, BrewAccessor> brewRefreshser(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
+        return new BrewRefresher(productRefresher, parentBrewAccessorRefresher, brewAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewStage, BrewStageAccessor> brewStageRefreshser(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> refresher) {
-        return new BrewStageRefresher(brewTaskRefresher, brewStageStatusRefresher, brewRefresher, refresher);
+    public Refresher<BrewStage, BrewStageAccessor> brewStageRefreshser(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> brewStageAccessorRefresher) {
+        return new BrewStageRefresher(brewTaskRefresher, brewStageStatusRefresher, brewRefresher, brewStageAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefreshser(AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresher) {
-        return new BrewStageStatusRefresher(refresher);
+    public Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefreshser(AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> brewStageStatusAccessorRefresher) {
+        return new BrewStageStatusRefresher(brewStageStatusAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewTask, BrewTaskAccessor> brewTaskRefreshser(AccessorRefresher<Long, BrewTaskAccessor, BrewTask> refresher) {
-        return new BrewTaskRefresher(refresher);
+    public Refresher<BrewTask, BrewTaskAccessor> brewTaskRefreshser(AccessorRefresher<Long, BrewTaskAccessor, BrewTask> brewTaskAccessorRefresher) {
+        return new BrewTaskRefresher(brewTaskAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Equipment, EquipmentAccessor> equipmentRefreshser(AccessorRefresher<Long, EquipmentAccessor, Equipment> refresher) {
-        return new EquipmentRefresher(refresher);
+    public Refresher<Equipment, EquipmentAccessor> equipmentRefreshser(AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher) {
+        return new EquipmentRefresher(equipmentAccessorRefresher);
     }
 
     @Bean
-    public Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> finishedGoodMaterialPortionRefresher(Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> refresher) {
-        return new FinishedGoodMaterialPortionRefresher(materialLotRefresher, refresher);
+    public Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> finishedGoodMaterialPortionRefresher(Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> materialPortionAccessorRefresher) {
+        return new FinishedGoodMaterialPortionRefresher(materialLotRefresher, materialPortionAccessorRefresher);
     }
 
     @Bean
-    public Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> finishedGoodMixturePortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> refresher) {
-        return new FinishedGoodMixturePortionRefresher(mixtureRefresher, refresher);
+    public Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> finishedGoodMixturePortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> mixturePortionAccessorRefresher) {
+        return new FinishedGoodMixturePortionRefresher(mixtureRefresher, mixturePortionAccessorRefresher);
     }
 
     @Bean
-    public Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
-        return new FinishedGoodRefresher(refresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher);
+    public Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodAccessorRefresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
+        return new FinishedGoodRefresher(finishedGoodAccessorRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher);
     }
 
     @Bean
-    public Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher(Refresher<Material, MaterialAccessor> materialRefresher, AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> refresher) {
-        return new InvoiceItemRefresher(materialRefresher, refresher);
+    public Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher(Refresher<Material, MaterialAccessor> materialRefresher, AccessorRefresher<Long, InvoiceItemAccessor, InvoiceItem> invoiceItemAccessorRefresher) {
+        return new InvoiceItemRefresher(materialRefresher, invoiceItemAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Invoice, InvoiceAccessor> invoiceRefresher(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher, Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher, Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher) {
-        return new InvoiceRefresher(refresher, invoiceItemRefresher, invoiceStatusRefresher, poRefresher);
+    public Refresher<Invoice, InvoiceAccessor> invoiceRefresher(AccessorRefresher<Long, InvoiceAccessor, Invoice> invoiceAccessorRefresher, Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher, Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher, Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher) {
+        return new InvoiceRefresher(invoiceAccessorRefresher, invoiceItemRefresher, invoiceStatusRefresher, poRefresher);
     }
 
     @Bean
-    public Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher(AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> refresher) {
-        return new InvoiceStatusRefresher(refresher);
+    public Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher(AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusAccessorRefresher) {
+        return new InvoiceStatusRefresher(invoiceStatusAccessorRefresher);
     }
 
     @Bean
-    public Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher(Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher, Refresher<Storage, StorageAccessor> storageRefresher, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> refresher) {
-        return new MaterialLotRefresher(itemRefresher, storageRefresher, refresher);
+    public Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher(Refresher<InvoiceItem, InvoiceItemAccessor> itemRefresher, Refresher<Storage, StorageAccessor> storageRefresher, AccessorRefresher<Long, MaterialLotAccessor, MaterialLot> materialLotAccessorRefresher) {
+        return new MaterialLotRefresher(itemRefresher, storageRefresher, materialLotAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Material, MaterialAccessor> materialRefresher(AccessorRefresher<Long, MaterialAccessor, Material> refresher) {
-        return new MaterialRefresher(refresher);
+    public Refresher<Material, MaterialAccessor> materialRefresher(AccessorRefresher<Long, MaterialAccessor, Material> materialAccessorRefresher) {
+        return new MaterialRefresher(materialAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Measure, MeasureAccessor> measureRefresher(AccessorRefresher<Long, MeasureAccessor, Measure> refresher) {
-        return new MeasureRefresher(refresher);
+    public Refresher<Measure, MeasureAccessor> measureRefresher(AccessorRefresher<Long, MeasureAccessor, Measure> measureAccessorRefresher) {
+        return new MeasureRefresher(measureAccessorRefresher);
     }
 
     @Bean
-    public Refresher<MixtureMaterialPortion, MixtureMaterialPortionAccessor> mixtureMaterialPortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> refresher) {
-        return new MixtureMaterialPortionRefresher(mixtureRefresher, materialLotRefresher, refresher);
+    public Refresher<MixtureMaterialPortion, MixtureMaterialPortionAccessor> mixtureMaterialPortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, MixtureMaterialPortionAccessor, MixtureMaterialPortion> materialPortionAccessorRefresher) {
+        return new MixtureMaterialPortionRefresher(mixtureRefresher, materialLotRefresher, materialPortionAccessorRefresher);
     }
 
     @Bean
-    public Refresher<MixtureRecording, MixtureRecordingAccessor> mixtureRecordingRefresher(Refresher<Measure, MeasureAccessor> measureRefresher, Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> refresher) {
-        return new MixtureRecordingRefresher(measureRefresher, mixtureRefresher, refresher);
+    public Refresher<MixtureRecording, MixtureRecordingAccessor> mixtureRecordingRefresher(Refresher<Measure, MeasureAccessor> measureRefresher, Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> mixtureRecordingAccessorRefresher) {
+        return new MixtureRecordingRefresher(measureRefresher, mixtureRefresher, mixtureRecordingAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Mixture, MixtureAccessor> mixtureRefresher(Refresher<Equipment, EquipmentAccessor> equipmentRefresher, Refresher<BrewStage, BrewStageAccessor> brewStageRefresher, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureRefresher) {
-        return new MixtureRefresher(equipmentRefresher, brewStageRefresher, mixtureAccessorRefresher, parentMixtureRefresher);
+    public Refresher<Mixture, MixtureAccessor> mixtureRefresher(Refresher<Equipment, EquipmentAccessor> equipmentRefresher, Refresher<BrewStage, BrewStageAccessor> brewStageRefresher, AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher, CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixtureAccessorRefresher) {
+        return new MixtureRefresher(equipmentRefresher, brewStageRefresher, mixtureAccessorRefresher, parentMixtureAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Product, ProductAccessor> productRefresher(AccessorRefresher<Long, ProductAccessor, Product> refresher) {
-        return new ProductRefresher(refresher);
+    public Refresher<Product, ProductAccessor> productRefresher(AccessorRefresher<Long, ProductAccessor, Product> productAccessorRefresher) {
+        return new ProductRefresher(productAccessorRefresher);
     }
 
     @Bean
-    public Refresher<PurchaseOrder, PurchaseOrderAccessor> purchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, Refresher<Supplier, SupplierAccessor> supplierRefresher) {
-        return new PurchaseOrderRefresher(refresher, supplierRefresher);
+    public Refresher<PurchaseOrder, PurchaseOrderAccessor> purchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> purchaseOrderAccessorRefresher, Refresher<Supplier, SupplierAccessor> supplierRefresher) {
+        return new PurchaseOrderRefresher(purchaseOrderAccessorRefresher, supplierRefresher);
     }
 
     @Bean
-    public Refresher<Shipment, ShipmentAccessor> shipmentRefresher(AccessorRefresher<Long, ShipmentAccessor, Shipment> refresher, Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher, Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher) {
-        return new ShipmentRefresher(refresher, shipmentStatusRefresher, materialLotRefresher);
+    public Refresher<Shipment, ShipmentAccessor> shipmentRefresher(AccessorRefresher<Long, ShipmentAccessor, Shipment> shipmentAccessorRefresher, Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher, Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher) {
+        return new ShipmentRefresher(shipmentAccessorRefresher, shipmentStatusRefresher, materialLotRefresher);
     }
 
     @Bean
-    public Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher(AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> refresher) {
-        return new ShipmentStatusRefresher(refresher);
+    public Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher(AccessorRefresher<Long, ShipmentStatusAccessor, ShipmentStatus> shipmentStatusAccessorRefresher) {
+        return new ShipmentStatusRefresher(shipmentStatusAccessorRefresher);
     }
 
     @Bean
@@ -560,23 +560,23 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<Sku, SkuAccessor> skuRefresher(Refresher<Product, ProductAccessor> productRefresher, Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher, AccessorRefresher<Long, SkuAccessor, Sku> refresher) {
-        return new SkuRefresher(productRefresher, skuMaterialRefresher, refresher);
+    public Refresher<Sku, SkuAccessor> skuRefresher(Refresher<Product, ProductAccessor> productRefresher, Refresher<SkuMaterial, SkuMaterialAccessor> skuMaterialRefresher, AccessorRefresher<Long, SkuAccessor, Sku> skuAccessorRefresher) {
+        return new SkuRefresher(productRefresher, skuMaterialRefresher, skuAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Storage, StorageAccessor> storageRefresher(AccessorRefresher<Long, StorageAccessor, Storage> refresher) {
-        return new StorageRefresher(refresher);
+    public Refresher<Storage, StorageAccessor> storageRefresher(AccessorRefresher<Long, StorageAccessor, Storage> storageAccessorRefresher) {
+        return new StorageRefresher(storageAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Supplier, SupplierAccessor> supplierRefresher(AccessorRefresher<Long, SupplierAccessor, Supplier> refresher) {
-        return new SupplierRefresher(refresher);
+    public Refresher<Supplier, SupplierAccessor> supplierRefresher(AccessorRefresher<Long, SupplierAccessor, Supplier> supplierAccessorRefresher) {
+        return new SupplierRefresher(supplierAccessorRefresher);
     }
 
     @Bean
-    public Refresher<User, UserAccessor> userRefresher(AccessorRefresher<Long, UserAccessor, User> refresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, @Lazy Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
-        return new UserRefresher(refresher, statusRefresher, salutationRefresher, roleBindingRefresher);
+    public Refresher<User, UserAccessor> userRefresher(AccessorRefresher<Long, UserAccessor, User> userAccessorRefresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, @Lazy Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
+        return new UserRefresher(userAccessorRefresher, statusRefresher, salutationRefresher, roleBindingRefresher);
     }
 
     @Bean
@@ -585,17 +585,17 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<UserRole, UserRoleAccessor> userRoleRefresher(AccessorRefresher<Long, UserRoleAccessor, UserRole> refresher) {
-        return new UserRoleRefresher(refresher);
+    public Refresher<UserRole, UserRoleAccessor> userRoleRefresher(AccessorRefresher<Long, UserRoleAccessor, UserRole> userRoleAccessorRefresher) {
+        return new UserRoleRefresher(userRoleAccessorRefresher);
     }
 
     @Bean
-    public Refresher<UserSalutation, UserSalutationAccessor> userSalutationRefresher(AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> refresher) {
-        return new UserSalutationRefresher(refresher);
+    public Refresher<UserSalutation, UserSalutationAccessor> userSalutationRefresher(AccessorRefresher<Long, UserSalutationAccessor, UserSalutation> userSalutationAccessorRefresher) {
+        return new UserSalutationRefresher(userSalutationAccessorRefresher);
     }
 
     @Bean
-    public Refresher<UserStatus, UserStatusAccessor> userStatusRefresher(AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher) {
-        return new UserStatusRefresher(refresher);
+    public Refresher<UserStatus, UserStatusAccessor> userStatusRefresher(AccessorRefresher<Long, UserStatusAccessor, UserStatus> userStatusAccessorRefresher) {
+        return new UserStatusRefresher(userStatusAccessorRefresher);
     }
 }
