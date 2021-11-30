@@ -13,7 +13,7 @@ import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 
-public class MixtureRefresher implements IMixtureRefresher<Mixture, MixtureAccessor, ParentMixturesAccessor> {
+public class MixtureRefresher implements Refresher<Mixture, MixtureAccessor>, SelfParentRefresher<ParentMixturesAccessor> {
     private static final Logger log = LoggerFactory.getLogger(MixtureRefresher.class);
 
     private final AccessorRefresher<Long, MixtureAccessor, Mixture> mixtureAccessorRefresher;
@@ -33,13 +33,13 @@ public class MixtureRefresher implements IMixtureRefresher<Mixture, MixtureAcces
 
     @Override
     public void refresh(Collection<Mixture> mixtures) {
-        this.refreshParentMixturesAccessors(mixtures);
+        this.refreshParentAccessors(mixtures);
         this.equipmentRefresher.refreshAccessors(mixtures);
         this.brewStageRefresher.refreshAccessors(mixtures);
     }
 
     @Override
-    public void refreshParentMixturesAccessors(Collection<? extends ParentMixturesAccessor> accessors) {
+    public void refreshParentAccessors(Collection<? extends ParentMixturesAccessor> accessors) {
         this.parentMixtureRefresher.refreshAccessors(accessors);
     }
 

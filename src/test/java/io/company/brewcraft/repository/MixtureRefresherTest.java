@@ -10,17 +10,13 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Mixture;
-import io.company.brewcraft.repository.AccessorRefresher;
-import io.company.brewcraft.repository.CollectionAccessorRefresher;
-import io.company.brewcraft.repository.MixtureRefresher;
-import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 
 public class MixtureRefresherTest {
-    private IMixtureRefresher<Mixture, MixtureAccessor, ParentMixturesAccessor> mixtureRefresher;
+    private MixtureRefresher mixtureRefresher;
 
     private Refresher<Equipment, EquipmentAccessor> equipmentRefresher;
 
@@ -53,7 +49,7 @@ public class MixtureRefresherTest {
 
         verify(equipmentRefresher, times(1)).refreshAccessors(mixtures);
         verify(brewStageRefresherMock, times(1)).refreshAccessors(mixtures);
-        verify(mixtureRefresher, times(1)).refreshParentMixturesAccessors(mixtures);
+        verify(mixtureRefresher, times(1)).refreshParentAccessors(mixtures);
     }
 
     @Test
