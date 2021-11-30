@@ -156,7 +156,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                                               .in(new String[] { PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
                                                               .build();
         final Map<PurchaseOrderNumberSupplierIdKey, PurchaseOrder> orderNumberToEntity = this.repoService.getAll(spec).stream()
-                                                                                            .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
+                                                                                                                      .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
 
         List<PurchaseOrder> pOs = updates.stream()
                                          .filter(update -> update != null)
