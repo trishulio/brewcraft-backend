@@ -26,7 +26,6 @@ public class InvoiceRefresher implements Refresher<Invoice, InvoiceAccessor> {
     private final Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher;
     private final Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher;
 
-    @Autowired
     public InvoiceRefresher(AccessorRefresher<Long, InvoiceAccessor, Invoice> refresher, Refresher<InvoiceItem, InvoiceItemAccessor> invoiceItemRefresher, Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher, Refresher<PurchaseOrder, PurchaseOrderAccessor> poRefresher) {
         this.refresher = refresher;
         this.invoiceItemRefresher = invoiceItemRefresher;

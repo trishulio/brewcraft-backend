@@ -450,27 +450,27 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<Brew, BrewAccessor> brewRefreshser(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
+    public Refresher<Brew, BrewAccessor> brewRefresher(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
         return new BrewRefresher(productRefresher, parentBrewAccessorRefresher, brewAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewStage, BrewStageAccessor> brewStageRefreshser(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> brewStageAccessorRefresher) {
+    public Refresher<BrewStage, BrewStageAccessor> brewStageRefresher(Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher, Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher, Refresher<Brew, BrewAccessor> brewRefresher, AccessorRefresher<Long, BrewStageAccessor, BrewStage> brewStageAccessorRefresher) {
         return new BrewStageRefresher(brewTaskRefresher, brewStageStatusRefresher, brewRefresher, brewStageAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefreshser(AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> brewStageStatusAccessorRefresher) {
+    public Refresher<BrewStageStatus, BrewStageStatusAccessor> brewStageStatusRefresher(AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> brewStageStatusAccessorRefresher) {
         return new BrewStageStatusRefresher(brewStageStatusAccessorRefresher);
     }
 
     @Bean
-    public Refresher<BrewTask, BrewTaskAccessor> brewTaskRefreshser(AccessorRefresher<Long, BrewTaskAccessor, BrewTask> brewTaskAccessorRefresher) {
+    public Refresher<BrewTask, BrewTaskAccessor> brewTaskRefresher(AccessorRefresher<Long, BrewTaskAccessor, BrewTask> brewTaskAccessorRefresher) {
         return new BrewTaskRefresher(brewTaskAccessorRefresher);
     }
 
     @Bean
-    public Refresher<Equipment, EquipmentAccessor> equipmentRefreshser(AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher) {
+    public Refresher<Equipment, EquipmentAccessor> equipmentRefresher(AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher) {
         return new EquipmentRefresher(equipmentAccessorRefresher);
     }
 

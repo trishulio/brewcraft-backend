@@ -23,7 +23,6 @@ public class ShipmentRefresher implements Refresher<Shipment, ShipmentAccessor> 
     private final Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher;
     private final Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher;
 
-    @Autowired
     public ShipmentRefresher(AccessorRefresher<Long, ShipmentAccessor, Shipment> refresher, Refresher<ShipmentStatus, ShipmentStatusAccessor> shipmentStatusRefresher, Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher) {
         this.refresher = refresher;
         this.shipmentStatusRefresher = shipmentStatusRefresher;

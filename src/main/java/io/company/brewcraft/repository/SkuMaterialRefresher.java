@@ -16,7 +16,6 @@ public class SkuMaterialRefresher implements Refresher<SkuMaterial, SkuMaterialA
 
     private final Refresher<Material, MaterialAccessor> materialRefresher;
 
-    @Autowired
     public SkuMaterialRefresher(Refresher<Material, MaterialAccessor> materialRefresher) {
         this.materialRefresher = materialRefresher;
     }

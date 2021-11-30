@@ -14,7 +14,6 @@ public class MaterialRefresher implements Refresher<Material, MaterialAccessor> 
 
     private final AccessorRefresher<Long, MaterialAccessor, Material> refresher;
 
-    @Autowired
     public MaterialRefresher(AccessorRefresher<Long, MaterialAccessor, Material> refresher) {
         this.refresher = refresher;
     }
@@ -26,6 +25,6 @@ public class MaterialRefresher implements Refresher<Material, MaterialAccessor> 
 
     @Override
     public void refresh(Collection<Material> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 }

@@ -24,6 +24,6 @@ public class EquipmentRefresher implements Refresher<Equipment, EquipmentAccesso
 
     @Override
     public void refresh(Collection<Equipment> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 }

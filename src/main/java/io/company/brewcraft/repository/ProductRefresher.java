@@ -14,7 +14,6 @@ public class ProductRefresher implements Refresher<Product, ProductAccessor> {
 
     private final AccessorRefresher<Long, ProductAccessor, Product> refresher;
 
-    @Autowired
     public ProductRefresher(AccessorRefresher<Long, ProductAccessor, Product> refresher) {
         this.refresher = refresher;
     }
@@ -26,6 +25,6 @@ public class ProductRefresher implements Refresher<Product, ProductAccessor> {
 
     @Override
     public void refresh(Collection<Product> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 }

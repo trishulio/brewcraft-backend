@@ -20,7 +20,6 @@ public class BrewStageStatusRefresher implements Refresher<BrewStageStatus, Brew
 
     @Override
     public void refresh(Collection<BrewStageStatus> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
-
 }

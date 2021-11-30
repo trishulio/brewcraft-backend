@@ -21,7 +21,6 @@ public class BrewRefresher implements IBrewRefresher<Brew, BrewAccessor, ParentB
 
     private final Refresher<Product, ProductAccessor> productRefresher;
 
-    @Autowired
     public BrewRefresher(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
         this.productRefresher = productRefresher;
         this.parentBrewRefresher = parentBrewRefresher;

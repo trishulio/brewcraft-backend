@@ -34,11 +34,14 @@ public class BrewRefresherTest {
         parentBrewAccessorMock = mock(AccessorRefresher.class);
         brewAccessorMock = mock(AccessorRefresher.class);
 
-        brewRefresher = spy(new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock));
+        brewRefresher = new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock);
     }
 
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
+        //Spy on brewRefresher as it makes a call to itself
+        brewRefresher = spy(new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock));
+
         List<Brew> brews = List.of(new Brew(1L));
 
         brewRefresher.refresh(brews);

@@ -24,7 +24,7 @@ public class InvoiceStatusRefresher implements Refresher<InvoiceStatus, InvoiceS
 
     @Override
     public void refresh(Collection<InvoiceStatus> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 
 }

@@ -28,7 +28,6 @@ public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGo
 
     private final Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher;
 
-    @Autowired
     public FinishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
         this.refresher = refresher;
         this.skuRefresher = skuRefresher;

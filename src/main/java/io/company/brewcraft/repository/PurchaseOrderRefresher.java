@@ -18,7 +18,6 @@ public class PurchaseOrderRefresher implements Refresher<PurchaseOrder, Purchase
 
     private final Refresher<Supplier, SupplierAccessor> supplierRefresher;
 
-    @Autowired
     public PurchaseOrderRefresher(AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> refresher, Refresher<Supplier, SupplierAccessor> supplierRefresher) {
         this.refresher = refresher;
         this.supplierRefresher = supplierRefresher;

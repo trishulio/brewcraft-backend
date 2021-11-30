@@ -20,6 +20,6 @@ public class BrewTaskRefresher implements Refresher<BrewTask, BrewTaskAccessor> 
 
     @Override
     public void refresh(Collection<BrewTask> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 }

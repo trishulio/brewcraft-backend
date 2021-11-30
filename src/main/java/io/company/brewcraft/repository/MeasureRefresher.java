@@ -20,7 +20,7 @@ public class MeasureRefresher implements Refresher<Measure, MeasureAccessor> {
 
     @Override
     public void refresh(Collection<Measure> entities) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 
 }
