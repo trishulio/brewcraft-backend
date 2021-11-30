@@ -44,7 +44,6 @@ public class EnhancedMixtureRepositoryImpl implements EnhancedMixtureRepository 
     }
 
     @Override
-
     public void refreshAccessors(Collection<? extends MixtureAccessor> accessors) {
         this.mixtureRefresher.refreshAccessors(accessors);
     }

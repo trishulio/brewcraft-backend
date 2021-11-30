@@ -2,7 +2,6 @@ package io.company.brewcraft.service.mapper.procurement;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.procurement.AddProcurementPurchaseOrderDto;
@@ -20,20 +19,16 @@ public interface ProcurementPurchaseOrderMapper extends BaseMapper<PurchaseOrder
     ProcurementPurchaseOrderDto toDto(PurchaseOrder e);
 
     @Override
-    @Mappings({
-        @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
-    })
+    @Mapping(target = PurchaseOrder.ATTR_ID, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_VERSION, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     PurchaseOrder fromAddDto(AddProcurementPurchaseOrderDto dto);
 
     @Override
-    @Mappings({
-        @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
-    })
+    @Mapping(target = PurchaseOrder.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = PurchaseOrder.ATTR_SUPPLIER, source = "supplierId")
     PurchaseOrder fromUpdateDto(UpdateProcurementPurchaseOrderDto dto);
 }

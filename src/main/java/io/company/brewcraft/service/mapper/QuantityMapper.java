@@ -7,7 +7,6 @@ import javax.measure.Unit;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.QuantityDto;
@@ -19,7 +18,7 @@ public abstract class QuantityMapper {
 
     public static final QuantityMapper INSTANCE = Mappers.getMapper(QuantityMapper.class);
 
-    @Mappings({ @Mapping(source = "unit.symbol", target = "symbol") })
+    @Mapping(source = "unit.symbol", target = "symbol")
     public abstract QuantityDto toDto(Quantity<?> quantity);
 
     public abstract QuantityEntity toEntity(Quantity<?> quantity);

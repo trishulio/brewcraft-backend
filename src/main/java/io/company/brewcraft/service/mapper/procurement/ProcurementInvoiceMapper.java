@@ -2,7 +2,6 @@ package io.company.brewcraft.service.mapper.procurement;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
@@ -28,23 +27,20 @@ public interface ProcurementInvoiceMapper extends BaseMapper<Invoice, Procuremen
     ProcurementInvoiceDto toDto(Invoice invoice);
 
     @Override
-    @Mappings({
-        @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId"),
-        @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true),
-        @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true),
-    })    Invoice fromUpdateDto(UpdateProcurementInvoiceDto dto);
+    @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true)
+    @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true)
+    Invoice fromUpdateDto(UpdateProcurementInvoiceDto dto);
 
     @Override
-    @Mappings({
-        @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId"),
-        @Mapping(target = Invoice.ATTR_ID, ignore = true),
-        @Mapping(target = Invoice.ATTR_VERSION, ignore = true),
-        @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true),
-        @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true),
-    })
+    @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
+    @Mapping(target = Invoice.ATTR_ID, ignore = true)
+    @Mapping(target = Invoice.ATTR_VERSION, ignore = true)
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true)
+    @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true)
     Invoice fromAddDto(AddProcurementInvoiceDto dto);
 }

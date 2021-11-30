@@ -6,7 +6,6 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
@@ -22,45 +21,35 @@ public interface MaterialMapper {
 
     MaterialMapper INSTANCE = Mappers.getMapper(MaterialMapper.class);
 
-    @Mappings({
-        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
-        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
-    })
+    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
     Material fromDto(MaterialDto dto);
 
-    @Mappings({
-        @Mapping(target = "category.id", source = "categoryId"),
-        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
-        @Mapping(target = Material.ATTR_ID, ignore = true),
-        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Material.ATTR_VERSION, ignore = true)
-    })
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mapping(target = Material.ATTR_ID, ignore = true)
+    @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Material.ATTR_VERSION, ignore = true)
     Material fromDto(AddMaterialDto dto);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    @Mappings({
-        @Mapping(target = "category.id", source = "categoryId"),
-        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit"),
-        @Mapping(target = Material.ATTR_ID, ignore = true),
-        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
-    })
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
+    @Mapping(target = Material.ATTR_ID, ignore = true)
+    @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
     Material fromDto(UpdateMaterialDto dto);
 
-    @Mappings({
-        @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit.symbol"),
-        @Mapping(target = "category", ignore = true)
-    })
+    @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit.symbol")
+    @Mapping(target = "category", ignore = true)
     MaterialDto toDto(Material material);
 
-    @Mappings({
-        @Mapping(target = Material.ATTR_ID),
-        @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Material.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Material.ATTR_VERSION, ignore = true)
-    })
+    @Mapping(target = Material.ATTR_ID)
+    @Mapping(target = Material.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Material.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Material.ATTR_VERSION, ignore = true)
     Material fromDto(Long id);
 
     @BeforeMapping
