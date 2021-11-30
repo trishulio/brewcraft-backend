@@ -35,7 +35,6 @@ public class SequentialMigrationManager implements MigrationManager {
 
     @Override
     public void migrate(String tenantId) {
-        // TODO: The call to exist and add should be replaced with PUT method.
         if (!tenantReg.exists(tenantId)) {
             log.info("Registering new tenantId: {}", tenantId);
             tenantReg.add(tenantId);
@@ -57,8 +56,6 @@ public class SequentialMigrationManager implements MigrationManager {
             migrate(id);
         }));
 
-        // TODO: The count includes the migration of the application schema. Makes interpretting logs misleading
-        // Modify it to be explicit.
         log.info("{} tenants migrated successfully", tasks.getResults().size());
         if (tasks.getErrors().size() > 0) {
             log.error("Failed to migrate {} tenants", tasks.getErrors().size());
