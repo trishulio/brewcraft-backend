@@ -5,7 +5,6 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddProductDto;
@@ -24,21 +23,17 @@ public interface ProductMapper {
 
     Product fromDto(Long id);
 
-    @Mappings({
-        @Mapping(target = "category.id", source = "categoryId"),
-        @Mapping(target = Product.ATTR_ID, ignore = true),
-        @Mapping(target = Product.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Product.ATTR_CREATED_AT, ignore = true),
-        @Mapping(target = Product.ATTR_VERSION, ignore = true)
-    })
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = Product.ATTR_ID, ignore = true)
+    @Mapping(target = Product.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Product.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Product.ATTR_VERSION, ignore = true)
     Product fromDto(AddProductDto dto);
 
-    @Mappings({
-        @Mapping(target = "category.id", source = "categoryId"),
-        @Mapping(target = Product.ATTR_ID, ignore = true),
-        @Mapping(target = Product.ATTR_LAST_UPDATED, ignore = true),
-        @Mapping(target = Product.ATTR_CREATED_AT, ignore = true),
-    })
+    @Mapping(target = "category.id", source = "categoryId")
+    @Mapping(target = Product.ATTR_ID, ignore = true)
+    @Mapping(target = Product.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Product.ATTR_CREATED_AT, ignore = true)
     Product fromDto(UpdateProductDto dto);
 
     ProductDto toDto(Product product);
