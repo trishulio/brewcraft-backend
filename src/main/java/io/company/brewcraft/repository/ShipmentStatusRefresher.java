@@ -24,6 +24,6 @@ public class ShipmentStatusRefresher implements Refresher<ShipmentStatus, Shipme
 
     @Override
     public void refresh(Collection<ShipmentStatus> entities) {
-        // TODO
+        // NOTE: not needed at this time
     }
 }

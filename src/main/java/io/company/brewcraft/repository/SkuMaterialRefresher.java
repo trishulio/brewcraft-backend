@@ -27,7 +27,6 @@ public class SkuMaterialRefresher implements Refresher<SkuMaterial, SkuMaterialA
 
     @Override
     public void refreshAccessors(Collection<? extends SkuMaterialAccessor> accessors) {
-        // TODO
-
+        // NOTE: not needed at this time
     }
 }

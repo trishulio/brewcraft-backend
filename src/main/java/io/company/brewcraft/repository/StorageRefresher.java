@@ -24,6 +24,6 @@ public class StorageRefresher implements Refresher<Storage, StorageAccessor> {
 
     @Override
     public void refresh(Collection<Storage> entities) {
-        // TODO
+        // NOTE: not needed at this time
     }
 }

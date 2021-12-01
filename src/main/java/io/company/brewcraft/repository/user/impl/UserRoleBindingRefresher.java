@@ -29,6 +29,6 @@ public class UserRoleBindingRefresher implements Refresher<UserRoleBinding, User
 
     @Override
     public void refreshAccessors(Collection<? extends UserRoleBindingAccessor> accessors) {
-        // TODO
+        // NOTE: Not needed at this time
     }
 }
