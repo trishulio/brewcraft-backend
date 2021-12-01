@@ -2,10 +2,12 @@ package io.company.brewcraft.service;
 
 import java.util.List;
 
-public interface SkuMaterialAccessor<T> {
+import io.company.brewcraft.model.SkuMaterial;
+
+public interface SkuMaterialAccessor {
     final String ATTR_SKU_MATERIALS = "materials";
 
-    List<T> getMaterials();
+    List<SkuMaterial> getMaterials();
 
-    void setMaterials(List<T> materials);
+    void setMaterials(List<SkuMaterial> materials);
 }
