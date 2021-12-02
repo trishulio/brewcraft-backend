@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.repository.BrewRepository;
+import io.company.brewcraft.repository.Refresher;
+import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewService;
 
 public class BrewServiceImplTest {
@@ -26,9 +28,12 @@ public class BrewServiceImplTest {
 
     private BrewRepository brewRepositoryMock;
 
+    private Refresher<Brew, BrewAccessor> brewRefresherMock;
+
     @BeforeEach
     public void init() {
         brewRepositoryMock = mock(BrewRepository.class);
+        brewRefresherMock = mock(Refresher.class);
         doAnswer(i -> i.getArgument(0, Brew.class)).when(brewRepositoryMock).saveAndFlush(any(Brew.class));
         doAnswer(i -> {
             Collection<Brew> coll = i.getArgument(0, Collection.class);
@@ -37,9 +42,9 @@ public class BrewServiceImplTest {
                 s.setParentBrew(new Brew(2L));
             });
             return null;
-        }).when(brewRepositoryMock).refresh(anyCollection());
+        }).when(brewRefresherMock).refresh(anyCollection());
 
-        brewService = new BrewServiceImpl(brewRepositoryMock);
+        brewService = new BrewServiceImpl(brewRepositoryMock, brewRefresherMock);
     }
 
     @Test
@@ -90,7 +95,7 @@ public class BrewServiceImplTest {
         assertEquals(1, addedBrew.getVersion());
 
         verify(brewRepositoryMock, times(1)).saveAndFlush(addedBrew);
-        verify(brewRepositoryMock, times(1)).refresh(List.of(addedBrew));
+        verify(brewRefresherMock, times(1)).refresh(List.of(addedBrew));
     }
 
     @Test
@@ -124,7 +129,7 @@ public class BrewServiceImplTest {
         assertEquals(1, brew.getVersion());
 
         verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-        verify(brewRepositoryMock, times(1)).refresh(anyList());
+        verify(brewRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -154,7 +159,7 @@ public class BrewServiceImplTest {
         assertEquals(1, brew.getVersion());
 
         verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-        verify(brewRepositoryMock, times(1)).refresh(anyList());
+        verify(brewRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test
@@ -200,7 +205,7 @@ public class BrewServiceImplTest {
         assertEquals(1, brew.getVersion());
 
         verify(brewRepositoryMock, times(1)).saveAndFlush(brew);
-        verify(brewRepositoryMock, times(1)).refresh(anyList());
+        verify(brewRefresherMock, times(1)).refresh(anyList());
     }
 
     @Test

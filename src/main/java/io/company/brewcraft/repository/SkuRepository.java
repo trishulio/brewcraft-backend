@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.Sku;
 
 @Repository
-public interface SkuRepository extends JpaRepository<Sku, Long>, JpaSpecificationExecutor<Sku>, EnhancedSkuRepository, ExtendedRepository<Long> {
+public interface SkuRepository extends JpaRepository<Sku, Long>, JpaSpecificationExecutor<Sku>, ExtendedRepository<Long> {
     @Override
     @Query("select count(i) > 0 from SKU i where i.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);

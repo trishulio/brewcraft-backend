@@ -60,7 +60,8 @@ public class SkuServiceImpl implements SkuService {
         final List<Sku> entities = this.updateService.getAddEntities(skus);
 
         for (int i = 0; i < skus.size(); i++) {
-            final List<SkuMaterial> materials = this.skuMaterialService.getAddEntities((List<BaseSkuMaterial<?>>) skus.get(i).getMaterials());
+            final List<? extends BaseSkuMaterial<?>> skuMaterials = skus.get(i).getMaterials();
+            final List<SkuMaterial> materials = this.skuMaterialService.getAddEntities((List<BaseSkuMaterial<?>>) skuMaterials);
             entities.get(i).setMaterials(materials);
         }
 

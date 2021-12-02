@@ -15,6 +15,7 @@ import javax.persistence.criteria.Selection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.repository.ColumnSpecAccumulator;
 import io.company.brewcraft.service.CriteriaSpec;
 
 public class ColumnSpecAccumulatorTest {

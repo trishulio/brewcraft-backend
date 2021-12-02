@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.InvoiceStatus;
 
 @Repository
-public interface InvoiceStatusRepository extends JpaRepository<InvoiceStatus, Long>, JpaSpecificationExecutor<InvoiceStatus>, EnhancedInvoiceStatusRepository {
+public interface InvoiceStatusRepository extends JpaRepository<InvoiceStatus, Long>, JpaSpecificationExecutor<InvoiceStatus> {
 }

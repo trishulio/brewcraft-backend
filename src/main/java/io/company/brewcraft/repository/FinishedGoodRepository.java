@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.FinishedGood;
 
 @Repository
-public interface FinishedGoodRepository extends JpaRepository<FinishedGood, Long>, JpaSpecificationExecutor<FinishedGood>, EnhancedFinishedGoodRepository, ExtendedRepository<Long> {
+public interface FinishedGoodRepository extends JpaRepository<FinishedGood, Long>, JpaSpecificationExecutor<FinishedGood>, ExtendedRepository<Long> {
     @Override
     @Query("select count(i) > 0 from finished_good i where i.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);

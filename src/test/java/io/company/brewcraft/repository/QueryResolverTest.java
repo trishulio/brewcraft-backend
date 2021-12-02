@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 
+import io.company.brewcraft.repository.QueryResolver;
 import io.company.brewcraft.repository.AggregationRepositoryTest.TestEntity;
 import io.company.brewcraft.service.GroupByClauseBuilder;
 import io.company.brewcraft.service.SelectClauseBuilder;

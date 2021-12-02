@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.user.UserRoleBinding;
 
-public interface UserRoleBindingRepository extends JpaRepository<UserRoleBinding, Long>, JpaSpecificationExecutor<UserRoleBinding>, EnhancedUserRoleBindingRepository {
+public interface UserRoleBindingRepository extends JpaRepository<UserRoleBinding, Long>, JpaSpecificationExecutor<UserRoleBinding> {
 }

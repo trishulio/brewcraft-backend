@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.Brew;
 
-public interface BrewRepository extends JpaRepository<Brew, Long>, JpaSpecificationExecutor<Brew>, EnhancedBrewRepository {
+public interface BrewRepository extends JpaRepository<Brew, Long>, JpaSpecificationExecutor<Brew> {
 
 }

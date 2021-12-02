@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.user.User;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>, EnhancedUserRepository {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 }

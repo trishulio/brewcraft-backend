@@ -18,6 +18,8 @@ import javax.persistence.criteria.JoinType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.repository.CriteriaJoinAnnotationProcessor;
+import io.company.brewcraft.repository.CriteriaJoinProcessor;
 import io.company.brewcraft.service.CriteriaJoin;
 
 public class CriteriaJoinAnnotationProcessorTest {

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.Measure;
 
-public interface MeasureRepository extends JpaRepository<Measure, Long>, JpaSpecificationExecutor<Measure>, EnhancedMeasureRepository {
+public interface MeasureRepository extends JpaRepository<Measure, Long>, JpaSpecificationExecutor<Measure> {
 
 }

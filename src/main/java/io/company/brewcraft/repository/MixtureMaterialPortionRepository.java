@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.MixtureMaterialPortion;
 
 @Repository
-public interface MixtureMaterialPortionRepository extends JpaRepository<MixtureMaterialPortion, Long>, JpaSpecificationExecutor<MixtureMaterialPortion>, EnhancedMixtureMaterialPortionRepository, ExtendedRepository<Long> {
+public interface MixtureMaterialPortionRepository extends JpaRepository<MixtureMaterialPortion, Long>, JpaSpecificationExecutor<MixtureMaterialPortion>, ExtendedRepository<Long> {
 
     @Override
     @Query("select count(i) > 0 from MIXTURE_MATERIAL_PORTION i where i.id in (:ids)")

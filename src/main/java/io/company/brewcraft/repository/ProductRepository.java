@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import io.company.brewcraft.model.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> , EnhancedProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
   @Query("update PRODUCT p set p.deletedAt=CURRENT_TIMESTAMP where p.id in (:ids)")
   @Modifying

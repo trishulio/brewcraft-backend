@@ -17,6 +17,7 @@ import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.repository.EquipmentRepositoryGetAllEquipmentSpecification;
 
 @SuppressWarnings("unchecked")
 public class EquipmentRepositoryGetAllEquipmentSpecificationTest {

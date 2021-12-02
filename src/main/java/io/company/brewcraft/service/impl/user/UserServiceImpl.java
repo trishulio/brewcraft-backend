@@ -17,7 +17,9 @@ import io.company.brewcraft.model.user.BaseUser;
 import io.company.brewcraft.model.user.UpdateUser;
 import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserStatus;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.security.session.ContextHolder;
@@ -32,11 +34,13 @@ public class UserServiceImpl extends BaseService implements UserService {
 
     private final UserRepository userRepo;
     private final IdpUserRepository idpRepo;
+    private final Refresher<User, UserAccessor> userRefresher;
     private final ContextHolder contextHolder;
 
-    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo, ContextHolder contextHolder) {
+    public UserServiceImpl(final UserRepository userRepo, final IdpUserRepository idpRepo, Refresher<User, UserAccessor> userRefresher, ContextHolder contextHolder) {
         this.userRepo = userRepo;
         this.idpRepo = idpRepo;
+        this.userRefresher = userRefresher;
         this.contextHolder = contextHolder;
     }
 
@@ -77,7 +81,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 
         User user = new User();
         user.override(addition, getPropertyNames(BaseUser.class));
-        userRepo.refresh(List.of(user));
+        userRefresher.refresh(List.of(user));
 
         User addedUser = userRepo.saveAndFlush(user);
 
@@ -101,7 +105,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 
         User temp = new User(userId);
         temp.override(update, getPropertyNames(userClz));
-        userRepo.refresh(List.of(temp));
+        userRefresher.refresh(List.of(temp));
 
         existing.override(temp, getPropertyNames(userClz));
 
@@ -120,7 +124,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         User temp = new User(userId);
         temp.override(existing);
         temp.outerJoin(patch, getPropertyNames(UpdateUser.class));
-        userRepo.refresh(List.of(temp));
+        userRefresher.refresh(List.of(temp));
 
         existing.override(temp);
 

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import io.company.brewcraft.model.user.UserStatus;
 
-public interface UserStatusRepository extends JpaRepository<UserStatus, Long>, JpaSpecificationExecutor<UserStatus>, EnhancedUserStatusRepository{
+public interface UserStatusRepository extends JpaRepository<UserStatus, Long>, JpaSpecificationExecutor<UserStatus> {
 }

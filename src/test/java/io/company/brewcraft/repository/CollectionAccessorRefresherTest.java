@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.company.brewcraft.model.Identified;
+import io.company.brewcraft.repository.CollectionAccessorRefresher;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class CollectionAccessorRefresherTest {

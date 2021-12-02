@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import io.company.brewcraft.model.ShipmentStatus;
 
-public interface ShipmentStatusRepository extends JpaRepository<ShipmentStatus, Long>, EnhancedShipmentStatusRepository {
+public interface ShipmentStatusRepository extends JpaRepository<ShipmentStatus, Long> {
     @Query("select s from shipment_status s where s.name in (:names)")
     List<ShipmentStatus> findByNames(@Param("names") Iterable<String> names);
 

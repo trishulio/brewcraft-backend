@@ -23,6 +23,7 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateMixture;
 import io.company.brewcraft.repository.MixtureRepository;
+import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
@@ -32,8 +33,11 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
     private MixtureRepository mixtureRepository;
 
-    public MixtureServiceImpl(MixtureRepository mixtureRepository) {
+    private Refresher<Mixture, MixtureAccessor> mixtureRefresher;
+
+    public MixtureServiceImpl(MixtureRepository mixtureRepository, Refresher<Mixture, MixtureAccessor> mixtureRefresher) {
         this.mixtureRepository = mixtureRepository;
+        this.mixtureRefresher = mixtureRefresher;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
     @Override
     public Mixture addMixture(Mixture mixture) {
-        mixtureRepository.refresh(List.of(mixture));
+        mixtureRefresher.refresh(List.of(mixture));
 
         Mixture addedMixture = mixtureRepository.saveAndFlush(mixture);
 
@@ -76,7 +80,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
 
     @Override
     public Mixture putMixture(Long mixtureId, Mixture putMixture) {
-        mixtureRepository.refresh(List.of(putMixture));
+        mixtureRefresher.refresh(List.of(putMixture));
 
         Mixture existingMixture = getMixture(mixtureId);
 
@@ -95,7 +99,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
     public Mixture patchMixture(Long mixtureId, Mixture patchMixture) {
         Mixture existingMixture = Optional.ofNullable(getMixture(mixtureId)).orElseThrow(() -> new EntityNotFoundException("Mixture", mixtureId.toString()));
 
-        mixtureRepository.refresh(List.of(patchMixture));
+        mixtureRefresher.refresh(List.of(patchMixture));
 
         existingMixture.optimisticLockCheck(patchMixture);
 
