@@ -62,5 +62,4 @@ public class DataAutoConfigurationTest {
 
         config.transactionTemplate(dataSourceManagerMock);
     }
-
 }

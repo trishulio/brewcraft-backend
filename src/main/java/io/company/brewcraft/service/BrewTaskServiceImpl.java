@@ -36,5 +36,4 @@ public class BrewTaskServiceImpl implements BrewTaskService {
     public BrewTask getTask(Long id) {
         return brewTaskRepository.findById(id).orElse(null);
     }
-
 }

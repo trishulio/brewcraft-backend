@@ -135,5 +135,4 @@ public class AddUserDto extends BaseDto {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
 }

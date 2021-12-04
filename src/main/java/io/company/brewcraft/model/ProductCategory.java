@@ -202,5 +202,4 @@ public class ProductCategory extends BaseEntity {
 
         return ids;
     }
-
 }

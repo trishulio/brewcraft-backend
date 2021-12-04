@@ -57,5 +57,4 @@ public class AddMixtureRecordingDtoTest {
         addMixtureRecordingDto.setRecordedAt(LocalDateTime.of(2019, 1, 2, 3, 4));
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addMixtureRecordingDto.getRecordedAt());
     }
-
 }

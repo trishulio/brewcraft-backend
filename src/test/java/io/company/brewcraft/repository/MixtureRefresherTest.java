@@ -59,5 +59,4 @@ public class MixtureRefresherTest {
 
         verify(mixtureAccessorMock, times(1)).refreshAccessors(accessors);
     }
-
 }

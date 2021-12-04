@@ -243,5 +243,4 @@ public class BrewStage extends BaseEntity implements UpdateBrewStage, Audited, I
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

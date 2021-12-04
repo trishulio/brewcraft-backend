@@ -40,5 +40,4 @@ public class ProductMeasureValueServiceImpl extends BaseService implements Produ
 
         return updatedProductMeasureValues;
     }
-
 }

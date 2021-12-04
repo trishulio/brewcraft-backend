@@ -31,5 +31,4 @@ public class AddProcurementItemDto extends BaseDto {
     public void setInvoiceItem(AddProcurementInvoiceItemDto invoiceItem) {
         this.invoiceItem = invoiceItem;
     }
-
 }

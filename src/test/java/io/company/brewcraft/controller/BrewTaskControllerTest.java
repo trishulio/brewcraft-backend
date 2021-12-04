@@ -42,5 +42,4 @@ public class BrewTaskControllerTest {
         assertEquals(1, dto.getTotalPages());
         assertEquals(List.of(new BrewTaskDto(1L, "MASH"), new BrewTaskDto(2L, "BOIL")), dto.getContent());
     }
-
 }

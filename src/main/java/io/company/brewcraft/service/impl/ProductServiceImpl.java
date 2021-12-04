@@ -187,5 +187,4 @@ public class ProductServiceImpl extends BaseService implements ProductService {
             }
         }
     }
-
 }

@@ -58,5 +58,4 @@ public class MixtureRecordingMapperTest {
 
         assertEquals(expectedMixtureRecordingDto, dto);
     }
-
 }

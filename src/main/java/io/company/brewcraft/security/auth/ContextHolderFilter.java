@@ -43,5 +43,4 @@ public class ContextHolderFilter implements Filter {
         }
         this.ctxHolder.setContext(principalCtx);
     }
-
 }

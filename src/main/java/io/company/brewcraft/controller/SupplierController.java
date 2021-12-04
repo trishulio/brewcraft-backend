@@ -100,5 +100,4 @@ public class SupplierController extends BaseController {
     public void deleteSupplier(@PathVariable Long supplierId) {
         supplierService.deleteSupplier(supplierId);
     }
-
 }

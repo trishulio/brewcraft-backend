@@ -212,5 +212,4 @@ public class MixtureControllerTest {
 
        verify(mixtureService, times(1)).deleteMixture(1L);
    }
-
 }

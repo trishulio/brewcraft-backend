@@ -111,5 +111,4 @@ public class BrewDtoTest {
         brewDto.setVersion(version);
         assertEquals(version, brewDto.getVersion());
     }
-
 }

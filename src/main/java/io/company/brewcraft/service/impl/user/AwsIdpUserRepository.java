@@ -83,5 +83,4 @@ public class AwsIdpUserRepository implements IdpUserRepository {
             throw e;
         }
     }
-
 }

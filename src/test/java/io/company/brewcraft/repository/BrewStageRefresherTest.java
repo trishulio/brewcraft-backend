@@ -56,5 +56,4 @@ public class BrewStageRefresherTest {
 
         verify(refresherMock, times(1)).refreshAccessors(accessors);
     }
-
 }

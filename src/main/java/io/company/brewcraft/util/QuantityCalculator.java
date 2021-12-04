@@ -28,5 +28,4 @@ public class QuantityCalculator {
             throw new RuntimeException("Unsupported quantity type");
         }
     }
-
 }

@@ -61,5 +61,4 @@ public class AddMixtureRecordingDto extends BaseDto {
     public void setRecordedAt(LocalDateTime recordedAt) {
         this.recordedAt = recordedAt;
     }
-
 }

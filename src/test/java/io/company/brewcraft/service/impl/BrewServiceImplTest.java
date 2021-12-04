@@ -244,5 +244,4 @@ public class BrewServiceImplTest {
 
         verify(brewRepositoryMock, times(1)).deleteById(1L);
     }
-
 }

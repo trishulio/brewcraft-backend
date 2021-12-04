@@ -44,5 +44,4 @@ public class UpdateProcurementDto extends BaseDto {
     public void setProcurementItems(List<UpdateProcurementItemDto> procurementItems) {
         this.procurementItems = procurementItems;
     }
-
 }

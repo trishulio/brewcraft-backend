@@ -261,5 +261,4 @@ public class MaterialControllerTest {
 
        verify(materialService, times(1)).deleteMaterial(1L);
    }
-
 }

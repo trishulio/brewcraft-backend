@@ -25,5 +25,4 @@ public class CycleAvoidingMappingContext {
     public void storeMappedInstance(Object source, @MappingTarget Object target) {
         knownInstances.put(source, target);
     }
-
 }

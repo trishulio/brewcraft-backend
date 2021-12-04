@@ -166,5 +166,4 @@ public class MixtureRecordingServiceImplTest {
 
         verify(repoService, times(1)).delete(Set.of(1L, 2L));
     }
-
 }

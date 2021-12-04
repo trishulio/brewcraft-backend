@@ -72,5 +72,4 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     public boolean supplierExists(Long supplierId) {
         return supplierRepository.existsById(supplierId);
     }
-
 }

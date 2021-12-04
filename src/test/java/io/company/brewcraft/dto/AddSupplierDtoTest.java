@@ -48,5 +48,4 @@ public class AddSupplierDtoTest {
         addSupplierDto.setAddress(address);
         assertSame(address, addSupplierDto.getAddress());
     }
-
 }

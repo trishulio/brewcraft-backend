@@ -31,5 +31,4 @@ public class FinishedGoodMixturePortionRefresher implements Refresher<FinishedGo
     public void refreshAccessors(Collection<? extends FinishedGoodMixturePortionAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-
 }

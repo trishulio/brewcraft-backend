@@ -32,5 +32,4 @@ public class SkuMaterialRefresherTest {
 
         verify(materialRefresher, times(1)).refreshAccessors(skuMaterials);
     }
-
 }

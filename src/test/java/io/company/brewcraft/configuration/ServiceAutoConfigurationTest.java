@@ -349,5 +349,4 @@ public class ServiceAutoConfigurationTest {
 
         assertTrue(service instanceof FinishedGoodInventoryServiceImpl);
     }
-
 }

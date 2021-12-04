@@ -83,5 +83,4 @@ public class AddMaterialDto extends BaseDto {
     public void setImageSrc(String imageSrc) {
         this.imageSrc = imageSrc;
     }
-
 }

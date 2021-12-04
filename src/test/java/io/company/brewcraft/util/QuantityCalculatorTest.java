@@ -52,5 +52,4 @@ public class QuantityCalculatorTest {
 
         assertThrows(RuntimeException.class, () -> QuantityCalculator.subtract(q1, q2));
     }
-
 }

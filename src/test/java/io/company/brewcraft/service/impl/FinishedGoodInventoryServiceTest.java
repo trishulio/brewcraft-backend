@@ -60,5 +60,4 @@ public class FinishedGoodInventoryServiceTest {
        assertEquals(finishedGoodInventoryEntity.getSku(), actualFinishedGoodInventory.getSku());
        assertEquals(finishedGoodInventoryEntity.getQuantity(), actualFinishedGoodInventory.getQuantity());
    }
-
 }

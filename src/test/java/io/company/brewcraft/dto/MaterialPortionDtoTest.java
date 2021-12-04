@@ -65,5 +65,4 @@ public class MaterialPortionDtoTest {
         materialPortionBaseDto.setVersion(version);
         assertEquals(version, materialPortionBaseDto.getVersion());
     }
-
 }

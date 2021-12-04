@@ -39,5 +39,4 @@ public class MigrationAutoConfiguration {
     public MigrationRegister migrationReg(TenantDataSourceManager dsMgr, @Value("${app.config.data.migration.path.tenant}") String dbScriptPathTenant, @Value("${app.config.data.migration.path.admin}") String dbScriptPathAdmin) {
         return new FlywayMigrationRegister(dsMgr, dbScriptPathTenant, dbScriptPathAdmin);
     }
-
 }

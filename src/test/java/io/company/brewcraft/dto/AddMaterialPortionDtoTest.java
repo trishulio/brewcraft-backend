@@ -48,5 +48,4 @@ public class AddMaterialPortionDtoTest {
         addMaterialPortionDto.setAddedAt(LocalDateTime.of(2019, 1, 2, 3, 4));
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addMaterialPortionDto.getAddedAt());
     }
-
 }

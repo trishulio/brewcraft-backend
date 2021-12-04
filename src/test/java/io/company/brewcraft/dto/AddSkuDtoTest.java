@@ -57,5 +57,4 @@ public class AddSkuDtoTest {
         addSkuDto.setQuantity(new QuantityDto("hl", BigDecimal.valueOf(100.0)));
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), addSkuDto.getQuantity());
     }
-
 }

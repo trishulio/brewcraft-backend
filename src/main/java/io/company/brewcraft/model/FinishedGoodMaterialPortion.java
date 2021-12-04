@@ -45,5 +45,4 @@ public class FinishedGoodMaterialPortion extends MaterialPortion implements Upda
     public void setFinishedGood(FinishedGood finishedGood) {
         this.finishedGood = finishedGood;
     }
-
 }

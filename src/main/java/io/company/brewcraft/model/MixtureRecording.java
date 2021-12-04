@@ -159,5 +159,4 @@ public class MixtureRecording extends BaseEntity implements UpdateMixtureRecordi
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

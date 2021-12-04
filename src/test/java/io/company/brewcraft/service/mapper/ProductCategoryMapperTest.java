@@ -59,5 +59,4 @@ public class ProductCategoryMapperTest {
 
         assertEquals(expected, category);
     }
-
 }

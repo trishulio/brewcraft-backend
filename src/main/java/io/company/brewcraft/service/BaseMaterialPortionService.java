@@ -62,5 +62,4 @@ public class BaseMaterialPortionService extends BaseService {
 
         return result;
     }
-
 }

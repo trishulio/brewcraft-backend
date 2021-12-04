@@ -31,5 +31,4 @@ public class ProcurementRefresher implements Refresher<Procurement, ProcurementA
     public void refreshAccessors(Collection<? extends ProcurementAccessor> accessors) {
         this.accessorRefresher.refreshAccessors(accessors);
     }
-
 }

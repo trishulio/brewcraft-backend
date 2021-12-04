@@ -52,5 +52,4 @@ public class MixtureMaterialPortionRefresherTest {
 
         verify(refresherMock, times(1)).refreshAccessors(accessors);
     }
-
 }

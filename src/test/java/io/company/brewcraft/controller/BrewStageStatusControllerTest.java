@@ -42,5 +42,4 @@ public class BrewStageStatusControllerTest {
         assertEquals(1, dto.getTotalPages());
         assertEquals(List.of(new BrewStageStatusDto(1L, "IN-PROGRESS"), new BrewStageStatusDto(2L, "COMPLETE")), dto.getContent());
     }
-
 }

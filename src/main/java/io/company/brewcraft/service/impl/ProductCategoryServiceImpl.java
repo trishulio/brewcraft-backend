@@ -87,5 +87,4 @@ public class ProductCategoryServiceImpl extends BaseService implements ProductCa
     public boolean categoryExists(Long categoryId) {
         return productCategoryRepository.existsById(categoryId);
     }
-
 }

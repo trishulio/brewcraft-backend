@@ -92,5 +92,4 @@ public class SkuDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

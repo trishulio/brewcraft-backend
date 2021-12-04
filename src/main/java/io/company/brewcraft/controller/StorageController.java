@@ -104,5 +104,4 @@ public class StorageController extends BaseController {
     public void deleteStorage(@PathVariable Long storageId) {
         storageService.deleteStorage(storageId);
     }
-
 }

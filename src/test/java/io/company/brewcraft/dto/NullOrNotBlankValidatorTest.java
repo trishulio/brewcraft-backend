@@ -44,5 +44,4 @@ public class NullOrNotBlankValidatorTest {
         boolean actual = validator.isValid("      ", mockContext);
         assertFalse(actual);
     }
-
 }

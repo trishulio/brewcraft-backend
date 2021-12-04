@@ -22,5 +22,4 @@ public class SupplierRefresher implements Refresher<Supplier, SupplierAccessor> 
     public void refreshAccessors(Collection<? extends SupplierAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-
 }

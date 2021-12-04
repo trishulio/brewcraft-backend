@@ -242,5 +242,4 @@ public class BrewControllerTest {
 
        verify(brewService, times(1)).deleteBrew(1L);
    }
-
 }

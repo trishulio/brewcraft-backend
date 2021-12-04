@@ -55,5 +55,4 @@ public class MeasureControllerTest {
        assertEquals(1, dto.getTotalPages());
        assertEquals(List.of(new MeasureDto(1L, "abv", 1), new MeasureDto(2L, "ibu", 1)), dto.getContent());
    }
-
 }

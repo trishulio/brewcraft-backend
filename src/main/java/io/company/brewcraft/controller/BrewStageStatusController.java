@@ -54,5 +54,4 @@ public class BrewStageStatusController extends BaseController {
 
         return dto;
     }
-
 }

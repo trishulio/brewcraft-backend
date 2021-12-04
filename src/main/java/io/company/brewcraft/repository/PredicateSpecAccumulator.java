@@ -51,5 +51,4 @@ public class PredicateSpecAccumulator {
 
         return predicates;
     }
-
 }

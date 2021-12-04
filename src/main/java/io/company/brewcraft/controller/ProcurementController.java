@@ -159,7 +159,7 @@ public class ProcurementController extends BaseController {
         return this.controller.getAll(procurements, attributes);
     }
 
-    @GetMapping("/{purchaseOrderId}/{shipmentId}/{invoiceId}")
+    @GetMapping("/{shipmentId}/{invoiceId}")
     public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         ProcurementId id = new ProcurementId(shipmentId, invoiceId);
         return this.controller.get(id, attributes);

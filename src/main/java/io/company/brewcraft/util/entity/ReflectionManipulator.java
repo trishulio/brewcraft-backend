@@ -128,7 +128,6 @@ public class ReflectionManipulator {
                     setter.invoke(o1, value);
                 }
             }
-
         } catch (final IntrospectionException e) {
             final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
             this.handleException(msg, e);

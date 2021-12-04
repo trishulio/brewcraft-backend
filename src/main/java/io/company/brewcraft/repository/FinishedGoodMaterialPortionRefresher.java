@@ -31,5 +31,4 @@ public class FinishedGoodMaterialPortionRefresher implements Refresher<FinishedG
     public void refreshAccessors(Collection<? extends FinishedGoodMaterialPortionAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-
 }

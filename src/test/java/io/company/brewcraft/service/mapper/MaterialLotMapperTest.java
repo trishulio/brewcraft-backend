@@ -60,5 +60,4 @@ public class MaterialLotMapperTest {
         assertNull(this.mapper.fromUpdateDto((UpdateMaterialLotDto) null));
         assertNull(this.mapper.fromAddDto((AddMaterialLotDto) null));
     }
-
 }

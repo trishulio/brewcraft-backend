@@ -43,5 +43,4 @@ public class MixtureRecordingRefresherTest {
         verify(measureRefresherMock, times(1)).refreshAccessors(mixtureRecordings);
         verify(mixtureRefresher, times(1)).refreshAccessors(mixtureRecordings);
     }
-
 }

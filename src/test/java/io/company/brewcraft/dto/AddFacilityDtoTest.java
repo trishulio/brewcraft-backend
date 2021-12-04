@@ -77,5 +77,4 @@ public class AddFacilityDtoTest {
         addFacilityDto.setStorages(storages);
         assertSame(storages, addFacilityDto.getStorages());
     }
-
 }

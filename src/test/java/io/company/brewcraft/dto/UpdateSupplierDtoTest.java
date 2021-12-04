@@ -57,5 +57,4 @@ public class UpdateSupplierDtoTest {
         updateSupplierDto.setVersion(version);
         assertSame(version, updateSupplierDto.getVersion());
     }
-
 }

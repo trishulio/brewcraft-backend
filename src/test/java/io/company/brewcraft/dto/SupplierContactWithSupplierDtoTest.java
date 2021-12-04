@@ -80,5 +80,4 @@ public class SupplierContactWithSupplierDtoTest {
         supplierContactWithSupplierDto.setSupplier(supplier);
         assertSame(supplier, supplierContactWithSupplierDto.getSupplier());
     }
-
 }

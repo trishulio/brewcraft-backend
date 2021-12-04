@@ -47,5 +47,4 @@ public class AddMaterialPortionDto extends BaseDto {
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
-
 }

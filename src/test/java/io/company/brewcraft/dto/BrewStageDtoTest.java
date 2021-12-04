@@ -82,5 +82,4 @@ public class BrewStageDtoTest {
         brewStageDto.setVersion(version);
         assertEquals(version, brewStageDto.getVersion());
     }
-
 }

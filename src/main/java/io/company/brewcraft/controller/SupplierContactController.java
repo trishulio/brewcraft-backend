@@ -107,5 +107,4 @@ public class SupplierContactController extends BaseController {
     public void deleteContact(@PathVariable Long contactId) {
         supplierContactService.deleteContact(contactId);
     }
-
 }

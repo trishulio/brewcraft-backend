@@ -18,5 +18,4 @@ public class AverageSpec<T extends Number> extends BaseModel implements Criteria
     public Expression<Double> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         return cb.avg(this.spec.getExpression(root, cq, cb));
     }
-
 }

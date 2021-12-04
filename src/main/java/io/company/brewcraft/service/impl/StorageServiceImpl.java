@@ -82,5 +82,4 @@ public class StorageServiceImpl extends BaseService implements StorageService {
     public boolean storageExists(Long storageId) {
         return storageRepository.existsById(storageId);
     }
-
 }

@@ -73,5 +73,4 @@ public class UpdateMixtureMaterialPortionDtoTest {
         updateMixtureMaterialPortionDto.setVersion(1);
         assertEquals(1, updateMixtureMaterialPortionDto.getVersion());
     }
-
 }

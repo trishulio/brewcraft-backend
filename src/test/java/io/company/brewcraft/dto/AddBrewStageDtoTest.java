@@ -64,5 +64,4 @@ public class AddBrewStageDtoTest {
         addBrewStageDto.setEndedAt(endedAt);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewStageDto.getEndedAt());
     }
-
 }

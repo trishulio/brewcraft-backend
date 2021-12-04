@@ -38,5 +38,4 @@ public class AddStorageDto extends BaseDto {
     public void setType(StorageType type) {
         this.type = type;
     }
-
 }

@@ -56,5 +56,4 @@ public class UpdateMaterialPortionDtoTest {
         updateMaterialPortionBaseDto.setVersion(1);
         assertEquals(1, updateMaterialPortionBaseDto.getVersion());
     }
-
 }

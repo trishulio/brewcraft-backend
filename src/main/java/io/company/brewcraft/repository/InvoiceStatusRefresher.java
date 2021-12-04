@@ -26,5 +26,4 @@ public class InvoiceStatusRefresher implements Refresher<InvoiceStatus, InvoiceS
     public void refresh(Collection<InvoiceStatus> entities) {
         // NOTE: Not needed at this time
     }
-
 }

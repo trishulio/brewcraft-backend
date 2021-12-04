@@ -44,7 +44,6 @@ public class AggregationServiceTest {
         public String[] getPath() {
             return path;
         }
-
     }
 
     private AggregationService service;

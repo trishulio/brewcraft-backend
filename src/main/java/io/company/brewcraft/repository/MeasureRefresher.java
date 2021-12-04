@@ -22,5 +22,4 @@ public class MeasureRefresher implements Refresher<Measure, MeasureAccessor> {
     public void refresh(Collection<Measure> entities) {
         // NOTE: Not needed at this time
     }
-
 }

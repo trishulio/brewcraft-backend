@@ -111,5 +111,4 @@ public class FinishedGoodMapperTest {
 
         assertEquals(expectedDto, dto);
     }
-
 }

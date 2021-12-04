@@ -66,5 +66,4 @@ public class MaterialMapperTest {
         assertEquals(subcategory1.getId(), materialDto.getCategory().getId());
         assertEquals(subcategory2.getId(), materialDto.getSubcategory().getId());
     }
-
  }

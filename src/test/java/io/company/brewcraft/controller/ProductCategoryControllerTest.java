@@ -180,5 +180,4 @@ public class ProductCategoryControllerTest {
 
        verify(productCategoryService, times(1)).deleteCategory(1L);
    }
-
 }

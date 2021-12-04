@@ -35,5 +35,4 @@ public class StockLotServiceImplTest {
 
         assertEquals(List.of(new StockLot(1L), new StockLot(2L)), stockLots);
     }
-
 }

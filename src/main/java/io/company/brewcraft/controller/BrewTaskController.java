@@ -54,5 +54,4 @@ public class BrewTaskController extends BaseController {
 
         return dto;
     }
-
 }

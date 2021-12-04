@@ -84,5 +84,4 @@ public class UpdateMixtureRecordingDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

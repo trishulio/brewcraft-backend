@@ -76,5 +76,4 @@ public class AddressDtoTest {
         addressDto.setPostalCode("postalCode");
         assertSame("postalCode", addressDto.getPostalCode());
     }
-
 }

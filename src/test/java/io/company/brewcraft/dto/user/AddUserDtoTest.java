@@ -116,5 +116,4 @@ public class AddUserDtoTest {
         dto.setRoleIds(List.of(20L));
         assertEquals(List.of(20L), dto.getRoleIds());
     }
-
 }
