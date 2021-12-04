@@ -26,7 +26,6 @@ import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
 import io.company.brewcraft.dto.procurement.AddProcurementMaterialLotDto;
-import io.company.brewcraft.dto.procurement.AddProcurementPurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.AddProcurementShipmentDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
@@ -42,7 +41,6 @@ import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementItemDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementMaterialLotDto;
-import io.company.brewcraft.dto.procurement.UpdateProcurementPurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementShipmentDto;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Invoice;
@@ -57,7 +55,6 @@ import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.model.procurement.Procurement;
-import io.company.brewcraft.model.procurement.ProcurementItem;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
@@ -87,14 +84,21 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 LocalDateTime.of(2002, 1, 1, 0, 0), // createdAt
                 LocalDateTime.of(2003, 1, 1, 0, 0), // lastUpdated
-                null,
+                List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
                 1 // version
             ),
             new Invoice(
                 2L,
                 "ABCDE-12345",
                 "desc1",
-                new PurchaseOrder(1L),
+                new PurchaseOrder(
+                    3L,
+                    "ORDER_1",
+                    new Supplier(1L),
+                    LocalDateTime.of(2000, 1, 1, 0, 0),
+                    LocalDateTime.of(2001, 1, 1, 0, 0),
+                    1
+                ),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
                 LocalDateTime.of(2000, 1, 1, 12, 0),
                 LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -102,29 +106,25 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2002, 1, 1, 12, 0),
                 LocalDateTime.of(2003, 1, 1, 12, 0),
                 new InvoiceStatus(99L),
-                null,
+                List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                 1
-            ),
-            new PurchaseOrder(
-                3L,
-                "ORDER_1",
-                new Supplier(1L),
-                LocalDateTime.of(2000, 1, 1, 0, 0),
-                LocalDateTime.of(2001, 1, 1, 0, 0),
-                1
-            ),
-            List.of(new ProcurementItem(
-                new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-                new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
-            ))
+            )
         ));
 
         ProcurementDto expected = new ProcurementDto(
-            new ProcurementIdDto(1L, 2L, 3L),
+            new ProcurementIdDto(1L, 2L),
             new ProcurementInvoiceDto(
                 2L,
                 "ABCDE-12345",
                 "desc1",
+                new ProcurementPurchaseOrderDto(
+                    3L,
+                    "ORDER_1",
+                    new SupplierDto(1L),
+                    LocalDateTime.of(2000, 1, 1, 0, 0),
+                    LocalDateTime.of(2001, 1, 1, 0, 0),
+                    1
+                ),
                 new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
                 new MoneyDto("CAD", new BigDecimal("20.00")),
                 new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))),
@@ -145,14 +145,6 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0),
                 LocalDateTime.of(2002, 1, 1, 0, 0),
                 LocalDateTime.of(2003, 1, 1, 0, 0),
-                1
-            ),
-            new ProcurementPurchaseOrderDto(
-                3L,
-                "ORDER_1",
-                new SupplierDto(1L),
-                LocalDateTime.of(2000, 1, 1, 0, 0),
-                LocalDateTime.of(2001, 1, 1, 0, 0),
                 1
             ),
             List.of(
@@ -176,6 +168,7 @@ public class ProcurementMapperTest {
         AddProcurementDto dto = new AddProcurementDto(
             new AddProcurementInvoiceDto(
                 "ABCDE-12345",
+                1L,
                 "desc1",
                 new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -189,10 +182,6 @@ public class ProcurementMapperTest {
                 1L,
                 LocalDateTime.of(2000, 1, 1, 0, 0),
                 LocalDateTime.of(2001, 1, 1, 0, 0)
-            ),
-            new AddProcurementPurchaseOrderDto(
-                "ORDER_1",
-                1L
             ),
             List.of(
                 new AddProcurementItemDto(
@@ -214,14 +203,14 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 null,
                 null,
-                null,
+                List.of(new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, null)),
                 null // version
             ),
             new Invoice(
                 null,
                 "ABCDE-12345",
                 "desc1",
-                null,
+                new PurchaseOrder(1L),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
                 LocalDateTime.of(2000, 1, 1, 12, 0),
                 LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -229,21 +218,9 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                null,
+                List.of(new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)),
                 null
-            ),
-            new PurchaseOrder(
-                null,
-                "ORDER_1",
-                new Supplier(1L),
-                null,
-                null,
-                null
-            ),
-            List.of(new ProcurementItem(
-                new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, null),
-                new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)
-            ))
+            )
         );
         assertEquals(expected, procurement);
     }
@@ -259,6 +236,7 @@ public class ProcurementMapperTest {
             new UpdateProcurementInvoiceDto(
                 2L,
                 "ABCDE-12345",
+                1L,
                 "desc1",
                 new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -274,12 +252,6 @@ public class ProcurementMapperTest {
                 1L,
                 LocalDateTime.of(2000, 1, 1, 0, 0),
                 LocalDateTime.of(2001, 1, 1, 0, 0),
-                1
-            ),
-            new UpdateProcurementPurchaseOrderDto(
-                3L,
-                "ORDER_1",
-                1L,
                 1
             ),
             List.of(
@@ -302,14 +274,14 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 null,
                 null,
-                null,
+                List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, 1)),
                 1 // version
             ),
             new Invoice(
                 2L,
                 "ABCDE-12345",
                 "desc1",
-                null,
+                new PurchaseOrder(1L),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
                 LocalDateTime.of(2000, 1, 1, 12, 0),
                 LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -317,21 +289,9 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                null,
+                List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)),
                 1
-            ),
-            new PurchaseOrder(
-                3L,
-                "ORDER_1",
-                new Supplier(1L),
-                null,
-                null,
-                1
-            ),
-            List.of(new ProcurementItem(
-                new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, 1),
-                new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)
-            ))
+            )
         );
         assertEquals(expected, procurement);
     }

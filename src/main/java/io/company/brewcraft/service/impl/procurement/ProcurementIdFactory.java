@@ -1,7 +1,6 @@
 package io.company.brewcraft.service.impl.procurement;
 
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.procurement.ProcurementId;
 
@@ -11,10 +10,10 @@ public class ProcurementIdFactory {
     protected ProcurementIdFactory() {
     }
 
-    public ProcurementId build(Shipment shipment, Invoice invoice, PurchaseOrder purchaseOrder) {
+    public ProcurementId build(Shipment shipment, Invoice invoice) {
         ProcurementId id = null;
 
-        if (shipment != null || invoice != null || purchaseOrder != null) {
+        if (shipment != null || invoice != null) {
             id = new ProcurementId();
         }
 
@@ -24,10 +23,6 @@ public class ProcurementIdFactory {
 
         if (invoice != null) {
             id.setInvoiceId(invoice.getId());
-        }
-
-        if (purchaseOrder != null) {
-            id.setPurchaseOrderId(purchaseOrder.getId());
         }
 
         return id;

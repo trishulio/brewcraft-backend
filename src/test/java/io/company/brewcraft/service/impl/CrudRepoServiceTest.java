@@ -83,7 +83,7 @@ public class CrudRepoServiceTest {
         final Page<DummyCrudEntity> expected = new PageImpl<>(List.of(new DummyCrudEntity(1L)));
         assertEquals(expected, page);
     }
-    
+
     @Test
     public void testGetAll_ReturnsListOfItemsWithMatchingSpec() {
         final Specification<DummyCrudEntity> mSpec = mock(Specification.class);

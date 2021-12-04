@@ -37,6 +37,9 @@ import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.procurement.Procurement;
+import io.company.brewcraft.model.procurement.ProcurementAccessor;
+import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
@@ -84,6 +87,8 @@ import io.company.brewcraft.repository.MixtureRecordingRefresher;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.repository.MixtureRepository;
+import io.company.brewcraft.repository.ProcurementRefresher;
+import io.company.brewcraft.repository.ProcurementRepository;
 import io.company.brewcraft.repository.ProductRefresher;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRefresher;
@@ -195,6 +200,16 @@ public class RepositoryConfiguration {
             MaterialLot.class,
             accessor -> accessor.getMaterialLot(),
             (accessor, lot) -> accessor.setMaterialLot(lot),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<ProcurementId, ProcurementAccessor, Procurement> procurementAccessorRefresher(ProcurementRepository repo) {
+        return new AccessorRefresher<>(
+            Procurement.class,
+            accessor -> accessor.getProcurement(),
+            (accessor, procurement) -> accessor.setProcurement(procurement),
             ids -> repo.findAllById(ids)
         );
     }
@@ -502,6 +517,11 @@ public class RepositoryConfiguration {
     @Bean
     public Refresher<InvoiceStatus, InvoiceStatusAccessor> invoiceStatusRefresher(AccessorRefresher<Long, InvoiceStatusAccessor, InvoiceStatus> invoiceStatusAccessorRefresher) {
         return new InvoiceStatusRefresher(invoiceStatusAccessorRefresher);
+    }
+
+    @Bean
+    public Refresher<Procurement, ProcurementAccessor> procurementRefresher(AccessorRefresher<ProcurementId, ProcurementAccessor, Procurement>  accessorRefresher, InvoiceRefresher invoiceRefresher, ShipmentRefresher shipmentRefresher) {
+        return new ProcurementRefresher(accessorRefresher, invoiceRefresher, shipmentRefresher);
     }
 
     @Bean

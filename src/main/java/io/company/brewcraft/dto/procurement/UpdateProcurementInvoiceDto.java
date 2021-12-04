@@ -10,6 +10,7 @@ import io.company.brewcraft.dto.FreightDto;
 public class UpdateProcurementInvoiceDto extends BaseDto {
     private Long id;
     private String invoiceNumber;
+    private Long purchaseOrderId;
     private String description;
     private FreightDto freight;
     private LocalDateTime generatedOn;
@@ -28,9 +29,10 @@ public class UpdateProcurementInvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public UpdateProcurementInvoiceDto(Long id, String invoiceNumber, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, Integer version) {
+    public UpdateProcurementInvoiceDto(Long id, String invoiceNumber, Long purchaseOrderId, String description, FreightDto freight, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, Long invoiceStatusId, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
+        setPurchaseOrderId(purchaseOrderId);
         setDescription(description);
         setFreight(freight);
         setGeneratedOn(generatedOn);
@@ -54,6 +56,14 @@ public class UpdateProcurementInvoiceDto extends BaseDto {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Long getPurchaseOrderId() {
+        return purchaseOrderId;
+    }
+
+    public void setPurchaseOrderId(Long purchaseOrderId) {
+        this.purchaseOrderId = purchaseOrderId;
     }
 
     public String getDescription() {

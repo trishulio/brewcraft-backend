@@ -13,7 +13,6 @@ import io.company.brewcraft.dto.procurement.ProcurementIdDto;
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemDto;
 import io.company.brewcraft.dto.procurement.ProcurementItemIdDto;
-import io.company.brewcraft.dto.procurement.ProcurementPurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.ProcurementShipmentDto;
 
 public class ProcurementDtoTest {
@@ -29,38 +28,35 @@ public class ProcurementDtoTest {
         assertNull(dto.getId());
         assertNull(dto.getInvoice());
         assertNull(dto.getShipment());
-        assertNull(dto.getPurchaseOrder());
     }
 
     @Test
     public void testIdArgConstructor() {
-        dto = new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L));
+        dto = new ProcurementDto(new ProcurementIdDto(1L, 10L));
 
-        assertEquals(new ProcurementIdDto(1L, 10L, 100L), dto.getId());
+        assertEquals(new ProcurementIdDto(1L, 10L), dto.getId());
     }
 
     @Test
     public void testAllArgConstructor() {
         dto = new ProcurementDto(
-            new ProcurementIdDto(1L, 10L, 100L),
+            new ProcurementIdDto(1L, 10L),
             new ProcurementInvoiceDto(1L),
             new ProcurementShipmentDto(10L),
-            new ProcurementPurchaseOrderDto(100L),
             List.of(new ProcurementItemDto(new ProcurementItemIdDto(2L, 20L)))
         );
 
-        assertEquals(new ProcurementIdDto(1L, 10L, 100L), dto.getId());
+        assertEquals(new ProcurementIdDto(1L, 10L), dto.getId());
         assertEquals(new ProcurementInvoiceDto(1L), dto.getInvoice());
         assertEquals(new ProcurementShipmentDto(10L), dto.getShipment());
-        assertEquals(new ProcurementPurchaseOrderDto(100L), dto.getPurchaseOrder());
         assertEquals(List.of(new ProcurementItemDto(new ProcurementItemIdDto(2L, 20L))), dto.getProcurementItems());
     }
 
     @Test
     public void testAccessId() {
-        dto.setId(new ProcurementIdDto(1L, 10L, 100L));
+        dto.setId(new ProcurementIdDto(1L, 10L));
 
-        assertEquals(new ProcurementIdDto(1L, 10L, 100L), dto.getId());
+        assertEquals(new ProcurementIdDto(1L, 10L), dto.getId());
     }
 
     @Test
@@ -75,13 +71,6 @@ public class ProcurementDtoTest {
         dto.setShipment(new ProcurementShipmentDto());
 
         assertEquals(new ProcurementShipmentDto(), dto.getShipment());
-    }
-
-    @Test
-    public void testAccessPurchaseOrder() {
-        dto.setPurchaseOrder(new ProcurementPurchaseOrderDto());
-
-        assertEquals(new ProcurementPurchaseOrderDto(), dto.getPurchaseOrder());
     }
 
     @Test

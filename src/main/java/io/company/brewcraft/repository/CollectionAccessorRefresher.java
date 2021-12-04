@@ -48,7 +48,7 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
 
             final List<V> collectionEntities = entityRetriever.apply(allCollectionEntitiesIds);
 
-            if(collectionEntities.size() != allCollectionEntitiesIds.size()) {
+            if (collectionEntities.size() != allCollectionEntitiesIds.size()) {
                 List<?> existingCollectionEntitiesIds = collectionEntities.stream().map(entity -> entity.getId()).collect(Collectors.toList());
                 throw new EntityNotFoundException(String.format("Cannot find all %ss in Id-Set: %s. Only found the ones with Ids: %s", this.clazz.getSimpleName(), allCollectionEntitiesIds, existingCollectionEntitiesIds));
              }

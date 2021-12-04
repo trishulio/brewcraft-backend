@@ -45,11 +45,11 @@ public class ProcurementControllerTest {
 
     @Test
     public void testGet_ReturnsSingleProcurementFromCrudController() {
-        doReturn(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L))).when(mCrudController).get(new ProcurementId(1L, 10L, 100L), Set.of(""));
+        doReturn(new ProcurementDto(new ProcurementIdDto(1L, 10L))).when(mCrudController).get(new ProcurementId(1L, 10L), Set.of(""));
 
-        ProcurementDto dto = controller.get(1L, 10L, 100L, Set.of(""));
+        ProcurementDto dto = controller.get(1L, 10L, Set.of(""));
 
-        ProcurementDto expected = new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L));
+        ProcurementDto expected = new ProcurementDto(new ProcurementIdDto(1L, 10L));
         assertEquals(expected, dto);
     }
 
@@ -58,12 +58,12 @@ public class ProcurementControllerTest {
         doAnswer(inv -> {
             List<AddProcurementDto> addDtos = inv.getArgument(0, List.class);
             assertEquals(List.of(new AddProcurementDto()), addDtos);
-            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         }).when(mCrudController).add(anyList());
 
         List<ProcurementDto> dtos = controller.add(List.of(new AddProcurementDto()));
 
-        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         assertEquals(expected, dtos);
     }
 
@@ -72,12 +72,12 @@ public class ProcurementControllerTest {
         doAnswer(inv -> {
             List<UpdateProcurementDto> updateDtos = inv.getArgument(0, List.class);
             assertEquals(List.of(new UpdateProcurementDto()), updateDtos);
-            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         }).when(mCrudController).put(anyList());
 
         List<ProcurementDto> dtos = controller.put(List.of(new UpdateProcurementDto()));
 
-        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         assertEquals(expected, dtos);
     }
 
@@ -86,12 +86,12 @@ public class ProcurementControllerTest {
         doAnswer(inv -> {
             List<UpdateProcurementDto> updateDtos = inv.getArgument(0, List.class);
             assertEquals(List.of(new UpdateProcurementDto()), updateDtos);
-            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+            return List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         }).when(mCrudController).patch(anyList());
 
         List<ProcurementDto> dtos = controller.patch(List.of(new UpdateProcurementDto()));
 
-        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L, 100L)));
+        List<ProcurementDto> expected = List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L)));
         assertEquals(expected, dtos);
     }
 
@@ -100,9 +100,9 @@ public class ProcurementControllerTest {
         ArgumentCaptor<Set<ProcurementId>> captor = ArgumentCaptor.forClass(Set.class);
         doReturn(3).when(mCrudController).delete(captor.capture());
 
-        int count = controller.delete(Set.of(new ProcurementIdDto(1L, 1L, 1L), new ProcurementIdDto(2L, 2L, 2L), new ProcurementIdDto(3L, 3L, 3L)));
+        int count = controller.delete(Set.of(new ProcurementIdDto(1L, 1L), new ProcurementIdDto(2L, 2L), new ProcurementIdDto(3L, 3L)));
 
         assertEquals(3, count);
-        assertThat(captor.getValue()).hasSameElementsAs(Set.of(new ProcurementId(1L, 1L, 1L), new ProcurementId(2L, 2L, 2L), new ProcurementId(3L, 3L, 3L)));
+        assertThat(captor.getValue()).hasSameElementsAs(Set.of(new ProcurementId(1L, 1L), new ProcurementId(2L, 2L), new ProcurementId(3L, 3L)));
     }
 }

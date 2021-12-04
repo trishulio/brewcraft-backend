@@ -133,6 +133,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         return this.repoService.saveAll(updated);
     }
 
+    @Deprecated
     public List<PurchaseOrder> putBySupplierAndOrderNumber(List<BasePurchaseOrder> updates) {
         if (updates == null) {
             return null;
@@ -180,6 +181,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
     }
 }
 
+@Deprecated
 class PurchaseOrderNumberSupplierIdKey extends BaseModel {
     private String orderNumber;
     private Long supplierId;

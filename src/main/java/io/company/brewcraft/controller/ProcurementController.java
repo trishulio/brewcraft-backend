@@ -85,7 +85,7 @@ public class ProcurementController extends BaseController {
         @RequestParam(required = false, name = "shipment_ids") Set<Long> shipmentIds,
         @RequestParam(required = false, name = "shipment_exclude_ids") Set<Long> shipmentExcludeIds,
         @RequestParam(required = false, name = "shipment_numbers") Set<String> shipmentNumbers,
-        @RequestParam(required = false, name = "descriptions") Set<String> descriptions,
+        @RequestParam(required = false, name = "shipment_descriptions") Set<String> shipmentDescriptions,
         @RequestParam(required = false, name = "shipment_status_ids") Set<Long> shipmentStatusIds,
         @RequestParam(required = false, name = "delivery_due_date_from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deliveryDueDateFrom,
         @RequestParam(required = false, name = "delivery_due_date_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deliveryDueDateTo,
@@ -123,7 +123,7 @@ public class ProcurementController extends BaseController {
             shipmentIds,
             shipmentExcludeIds,
             shipmentNumbers,
-            descriptions,
+            shipmentDescriptions,
             shipmentStatusIds,
             deliveryDueDateFrom,
             deliveryDueDateTo,
@@ -160,8 +160,8 @@ public class ProcurementController extends BaseController {
     }
 
     @GetMapping("/{purchaseOrderId}/{shipmentId}/{invoiceId}")
-    public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @PathVariable(required = true, name = "purchaseOrderId") Long purchaseOrderId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
-        ProcurementId id = new ProcurementId(shipmentId, invoiceId, purchaseOrderId);
+    public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        ProcurementId id = new ProcurementId(shipmentId, invoiceId);
         return this.controller.get(id, attributes);
     }
 

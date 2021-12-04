@@ -50,6 +50,9 @@ import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.model.UpdateSku;
 import io.company.brewcraft.model.UpdateSkuMaterial;
+import io.company.brewcraft.model.procurement.Procurement;
+import io.company.brewcraft.model.procurement.ProcurementAccessor;
+import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.repository.AggregationRepository;
@@ -69,6 +72,7 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.repository.MixtureMaterialPortionRepository;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRepository;
+import io.company.brewcraft.repository.ProcurementRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRepository;
@@ -154,8 +158,6 @@ import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.impl.procurement.ProcurementFactory;
-import io.company.brewcraft.service.impl.procurement.ProcurementItemFactory;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -330,21 +332,10 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ProcurementItemFactory.class)
-    public ProcurementItemFactory procurementItemFactory() {
-        return new ProcurementItemFactory();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ProcurementFactory.class)
-    public ProcurementFactory procurementFactory(ProcurementItemFactory procurementItemFactory) {
-        return new ProcurementFactory(procurementItemFactory);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(ProcurementService.class)
-    public ProcurementService procurementService(InvoiceService invoiceService, PurchaseOrderService purchaseOrderService, ShipmentService shipmentService, TransactionService transactionService, ProcurementFactory procurementFactory, ProcurementItemFactory procurementItemFactory) {
-        return new ProcurementService(invoiceService, purchaseOrderService, shipmentService, transactionService, procurementFactory, procurementItemFactory);
+    public ProcurementService procurementService(InvoiceService invoiceService, ShipmentService shipmentService, ProcurementRepository procurementRepo, Refresher<Procurement, ProcurementAccessor> procurementRefresher) {
+        final RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService = new CrudRepoService<>(procurementRepo, procurementRefresher);
+        return new ProcurementService(invoiceService, shipmentService, repoService);
     }
 
     @Bean

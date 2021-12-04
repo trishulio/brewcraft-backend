@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -17,21 +15,25 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
-import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.model.InvoiceItem;
+import io.company.brewcraft.model.InvoiceStatus;
+import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
+import io.company.brewcraft.model.ShipmentStatus;
+import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
-import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.model.procurement.BaseProcurement;
 import io.company.brewcraft.model.procurement.BaseProcurementItem;
@@ -41,11 +43,11 @@ import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.procurement.ProcurementIdCollection;
 import io.company.brewcraft.model.procurement.UpdateProcurement;
 import io.company.brewcraft.model.procurement.UpdateProcurementItem;
+import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.InvoiceService;
-import io.company.brewcraft.service.PurchaseOrderService;
-import io.company.brewcraft.service.TransactionService;
+import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.impl.ShipmentService;
 
 @Transactional
@@ -53,19 +55,13 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     private static final Logger log = LoggerFactory.getLogger(ProcurementService.class);
 
     private final InvoiceService invoiceService;
-    private final PurchaseOrderService purchaseOrderService;
     private final ShipmentService shipmentService;
-    private final TransactionService transactionService;
-    private final ProcurementFactory procurementFactory;
-    private final ProcurementItemFactory procurementItemFactory;
+    private final RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService;
 
-    public ProcurementService(final InvoiceService invoiceService, final PurchaseOrderService poService, final ShipmentService shipmentService, final TransactionService transactionService, final ProcurementFactory procurementFactory, ProcurementItemFactory procurementItemFactory) {
+    public ProcurementService(final InvoiceService invoiceService, final ShipmentService shipmentService, RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService) {
         this.invoiceService = invoiceService;
-        this.purchaseOrderService = poService;
         this.shipmentService = shipmentService;
-        this.transactionService = transactionService;
-        this.procurementFactory = procurementFactory;
-        this.procurementItemFactory = procurementItemFactory;
+        this.repoService = repoService;
     }
 
     public Page<Procurement> getAll(
@@ -73,7 +69,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         Set<Long> shipmentIds,
         Set<Long> shipmentExcludeIds,
         Set<String> shipmentNumbers,
-        Set<String> descriptions,
+        Set<String> shipmentDescriptions,
         Set<Long> shipmentStatusIds,
         LocalDateTime deliveryDueDateFrom,
         LocalDateTime deliveryDueDateTo,
@@ -105,203 +101,155 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         int page,
         int size
     ) {
-        Page<Shipment> shipments = this.shipmentService.getShipments(
-            // shipment filters
-            shipmentIds,
-            shipmentExcludeIds,
-            shipmentNumbers,
-            descriptions,
-            shipmentStatusIds,
-            deliveryDueDateFrom,
-            deliveryDueDateTo,
-            deliveredDateFrom,
-            deliveredDateTo,
-            // invoice filters
-            invoiceIds,
-            invoiceExcludeIds,
-            invoiceNumbers,
-            invoiceDescriptions,
-            invoiceItemDescriptions,
-            generatedOnFrom,
-            generatedOnTo,
-            receivedOnFrom,
-            receivedOnTo,
-            paymentDueDateFrom,
-            paymentDueDateTo,
-            purchaseOrderIds,
-            materialIds,
-            amtFrom,
-            amtTo,
-            freightAmtFrom,
-            freightAmtTo,
-            invoiceStatusIds,
-            supplierIds,
-            // misc
-            sort,
-            orderAscending,
-            page,
-            size
-        );
 
-        List<Procurement> procurements = shipments.stream().map(shipment -> procurementFactory.buildFromShipment(shipment)).collect(Collectors.toList());
+        Specification<Procurement> spec = WhereClauseBuilder.builder()
+                                                            // shipment filters
+                                                            .in(new String[] { Procurement.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentIds)
+                                                            .not().in(new String[] { Procurement.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentExcludeIds)
+                                                            .in(new String[] {Procurement.FIELD_SHIPMENT, Shipment.FIELD_SHIPMENT_NUMBER }, shipmentNumbers)
+                                                            .in(new String[] {Procurement.FIELD_SHIPMENT, Shipment.FIELD_DESCRIPTION }, shipmentDescriptions)
+                                                            .in(new String[] {Procurement.FIELD_SHIPMENT, Shipment.FIELD_SHIPMENT_STATUS, ShipmentStatus.FIELD_ID}, shipmentStatusIds)
+                                                            .between(new String[] {Procurement.FIELD_SHIPMENT, Shipment.FIELD_DELIVERY_DUE_DATE }, deliveryDueDateFrom, deliveryDueDateTo)
+                                                            .between(new String[] {Procurement.FIELD_SHIPMENT, Shipment.FIELD_DELIVERED_DATE }, deliveredDateFrom, deliveredDateTo)
+                                                            // invoice filters
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_ID}, invoiceIds)
+                                                            .not().in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_ID}, invoiceExcludeIds)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_INVOICE_NUMBER}, invoiceNumbers)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_DESCRITION}, invoiceDescriptions)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_ITEMS}, new String[] {InvoiceItem.FIELD_DESCRIPTION}, invoiceItemDescriptions)
+                                                            .between(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_GENERATED_ON}, generatedOnFrom, generatedOnTo)
+                                                            .between(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_RECEIVED_ON}, receivedOnFrom, receivedOnTo)
+                                                            .between(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_PAYMENT_DUE_DATE}, paymentDueDateFrom, paymentDueDateTo)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID}, purchaseOrderIds)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_ITEMS}, new String[] {InvoiceItem.FIELD_MATERIAL}, materialIds)
+                                                            .between(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
+                                                            .between(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID}, invoiceStatusIds)
+                                                            .in(new String[] {Procurement.FIELD_INVOICE, Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID}, supplierIds)
+                                                            .build();
 
-        return new PageImpl<>(procurements, shipments.getPageable(), shipments.getTotalElements());
+        return repoService.getAll(spec, sort, orderAscending, page, size);
     }
 
     @Override
     public boolean exists(Set<ProcurementId> ids) {
-        ProcurementIdCollection idCollection = new ProcurementIdCollection(ids);
-        return purchaseOrderService.exists(idCollection.getPurchaseOrderIds()) &&
-               invoiceService.exists(idCollection.getInvoiceIds()) &&
-               shipmentService.exists(idCollection.getShipmentIds());
+        return this.repoService.exists(ids);
     }
 
     @Override
     public boolean exist(ProcurementId id) {
-        return purchaseOrderService.exist(id.getPurchaseOrderId()) &&
-               invoiceService.exist(id.getInvoiceId()) &&
-               shipmentService.exist(id.getShipmentId());
+        return this.repoService.exists(id);
     }
 
     @Override
     public int delete(Set<ProcurementId> ids) {
         ProcurementIdCollection idCollection = new ProcurementIdCollection(ids);
+        int shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
+        int invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
+        int procurementsCount = repoService.delete(ids);
 
-        // Note: Purchase Orders are not deleted but only shipments and Invoices are deleted.
-        // Because ProcurementService assumes/enforces 1-1 relationship between and Invoice
-        // and a Shipment. But a 1-many relationship between a PurchaseOrder and Invoice is
-        // protected.
-        int shipmentCount = shipmentService.delete(idCollection.getShipmentIds());
-        int invoiceCount = invoiceService.delete(idCollection.getInvoiceIds());
+        log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
-        if (shipmentCount != invoiceCount) {
-            this.transactionService.setRollbackOnly();
-            shipmentCount = 0;
-        }
-
-        return shipmentCount;
+        return procurementsCount;
     }
 
     @Override
     public int delete(ProcurementId id) {
-        int sCount = shipmentService.delete(id.getShipmentId());
-        int iCount = invoiceService.delete(id.getInvoiceId());
+        int shipmentsCount = shipmentService.delete(id.getShipmentId());
+        int invoicesCount = invoiceService.delete(id.getInvoiceId());
+        int procurementsCount = repoService.delete(id);
 
-        if (sCount != iCount) {
-            this.transactionService.setRollbackOnly();
-            sCount = 0;
-        }
+        log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
-        return sCount;
+        return procurementsCount;
     }
 
     @Override
     public Procurement get(ProcurementId id) {
-        Shipment shipment = shipmentService.get(id.getShipmentId());
-
-        return procurementFactory.buildFromShipmentIfIdMatches(id, shipment);
+        return repoService.get(id);
     }
 
     @Override
     public List<Procurement> getByIds(Collection<? extends Identified<ProcurementId>> idProviders) {
-        List<ProcurementId> procurementIds = idProviders.stream()
-                                                        .map(provider -> provider.getId())
-                                                        .collect(Collectors.toList());
-
-        Collection<? extends Identified<Long>> shipmentIdProviders = procurementIds.stream()
-                                                                                   .map(id -> (Identified<Long>) () -> id.getShipmentId())
-                                                                                   .collect(Collectors.toList());
-
-        Map<Long, Shipment> idToShipment = shipmentService.getByIds(shipmentIdProviders).stream().collect(Collectors.toMap(
-            shipment -> shipment.getId(),
-            Function.identity()
-        ));
-
-        return procurementIds.stream()
-                             .map(id -> procurementFactory.buildFromShipmentIfIdMatches(id, idToShipment.get(id.getShipmentId())))
-                             .filter(p -> p != null)
-                             .collect(Collectors.toList());
+        return repoService.getByIds(idProviders);
     }
 
     @Override
     public List<Procurement> getByAccessorIds(Collection<? extends ProcurementAccessor> accessors) {
-        Collection<Identified<ProcurementId>> idProviders = accessors.stream().map(accessor -> accessor.getProcurement()).collect(Collectors.toList());
-
-        return getByIds(idProviders);
+        return repoService.getByAccessorIds(accessors, accessor -> accessor.getProcurement());
     }
 
     @Override
     public List<Procurement> add(List<BaseProcurement<? extends BaseProcurementItem>> additions) {
-        List<BasePurchaseOrder> bPos = new ArrayList<>(additions.size());
         List<BaseInvoice<? extends BaseInvoiceItem<?>>> bInvoices = new ArrayList<>(additions.size());
         List<BaseShipment<? extends BaseMaterialLot<?>>> bShipments = new ArrayList<>(additions.size());
         additions.stream()
-                .filter(p -> p != null)
-                .forEach(addition -> {
-                    bPos.add(addition.getPurchaseOrder());
-                    bInvoices.add(addition.getInvoice());
-                    bShipments.add(addition.getShipment());
-                });
-
-        Iterator<PurchaseOrder> purchaseOrders = purchaseOrderService.putBySupplierAndOrderNumber(bPos).iterator();
-        bInvoices.forEach(bInvoice -> bInvoice.setPurchaseOrder(purchaseOrders.next()));
+                 .filter(p -> p != null)
+                 .forEach(addition -> {
+                     bInvoices.add(addition.getInvoice());
+                     bShipments.add(addition.getShipment());
+                 });
 
         Iterator<Invoice> invoices = invoiceService.add(bInvoices).iterator();
-        bShipments.forEach(bShipment -> bShipment.setInvoiceItemsFromInvoice(invoices.next()));
+        List<Procurement> procurements = shipmentService.add(bShipments)
+                                                        .stream()
+                                                        .map(shipment -> {
+                                                            Invoice invoice = invoices.next();
+                                                            shipment.setInvoiceItemsFromInvoice(invoice);
+                                                            return new Procurement(shipment, invoice);
+                                                        })
+                                                        .collect(Collectors.toList());
 
-        return shipmentService.add(bShipments)
-                              .stream()
-                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                              .collect(Collectors.toList());
+        return repoService.saveAll(procurements);
     }
 
     @Override
     public List<Procurement> put(List<UpdateProcurement<? extends UpdateProcurementItem>> updates) {
-        List<UpdatePurchaseOrder> uPos = new ArrayList<>(updates.size());
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-                .filter(p -> p != null)
-                .forEach(update -> {
-                    uPos.add(update.getPurchaseOrder());
-                    uInvoices.add(update.getInvoice());
-                    uShipments.add(update.getShipment());
-                });
-
-        Iterator<PurchaseOrder> purchaseOrders = purchaseOrderService.put(uPos).iterator();
-        uInvoices.forEach(bInvoice -> bInvoice.setPurchaseOrder(purchaseOrders.next()));
+               .filter(p -> p != null)
+               .forEach(update -> {
+                   uInvoices.add(update.getInvoice());
+                   uShipments.add(update.getShipment());
+               });
 
         Iterator<Invoice> invoices = invoiceService.put(uInvoices).iterator();
-        uShipments.forEach(bShipment -> bShipment.setInvoiceItemsFromInvoice(invoices.next()));
 
-        return shipmentService.put(uShipments)
-                              .stream()
-                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                              .collect(Collectors.toList());
+        // TODO: Think if refactoring Procurements to override the invoice and shipment objects and merge them makes sense?
+        List<Procurement> procurements = shipmentService.put(uShipments)
+                                                        .stream()
+                                                        .map(shipment -> {
+                                                            Invoice invoice = invoices.next();
+                                                            shipment.setInvoiceItemsFromInvoice(invoice);
+                                                            return new Procurement(shipment, invoice);
+                                                        })
+                                                        .collect(Collectors.toList());
+
+        return repoService.saveAll(procurements);
     }
 
     @Override
     public List<Procurement> patch(List<UpdateProcurement<? extends UpdateProcurementItem>> updates) {
-        List<UpdatePurchaseOrder> uPos = new ArrayList<>(updates.size());
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-                .filter(p -> p != null)
-                .forEach(update -> {
-                    uPos.add(update.getPurchaseOrder());
-                    uInvoices.add(update.getInvoice());
-                    uShipments.add(update.getShipment());
-                });
-
-        Iterator<PurchaseOrder> purchaseOrders = purchaseOrderService.patch(uPos).iterator();
-        uInvoices.forEach(uInvoice -> uInvoice.setPurchaseOrder(purchaseOrders.next()));
+               .filter(p -> p != null)
+               .forEach(update -> {
+                   uInvoices.add(update.getInvoice());
+                   uShipments.add(update.getShipment());
+               });
 
         Iterator<Invoice> invoices = invoiceService.patch(uInvoices).iterator();
-        uShipments.forEach(uShipment -> uShipment.setInvoiceItemsFromInvoice(invoices.next()));
+        List<Procurement> procurements = shipmentService.patch(uShipments)
+                                                        .stream()
+                                                        .map(shipment -> {
+                                                            Invoice invoice = invoices.next();
+                                                            shipment.setInvoiceItemsFromInvoice(invoice);
+                                                            return new Procurement(shipment, invoice);
+                                                        })
+                                                        .collect(Collectors.toList());
 
-        return shipmentService.patch(uShipments)
-                              .stream()
-                              .map(shipment -> procurementFactory.buildFromShipment(shipment))
-                              .collect(Collectors.toList());
+        return repoService.saveAll(procurements);
     }
 }

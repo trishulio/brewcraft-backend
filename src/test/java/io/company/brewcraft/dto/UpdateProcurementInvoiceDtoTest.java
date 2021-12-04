@@ -24,6 +24,7 @@ public class UpdateProcurementInvoiceDtoTest {
         invoice = new UpdateProcurementInvoiceDto(
             1L,
             "ABCDE-12345",
+            2L,
             "desc1",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -35,6 +36,7 @@ public class UpdateProcurementInvoiceDtoTest {
 
         assertEquals(1L, invoice.getId());
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
+        assertEquals(2L, invoice.getPurchaseOrderId());
         assertEquals("desc1", invoice.getDescription());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
@@ -62,6 +64,13 @@ public class UpdateProcurementInvoiceDtoTest {
         assertNull(invoice.getDescription());
         invoice.setDescription("desc1");
         assertEquals("desc1", invoice.getDescription());
+    }
+
+    @Test
+    public void testAccessPurchaseOrderId() {
+        assertNull(invoice.getPurchaseOrderId());
+        invoice.setPurchaseOrderId(1L);
+        assertEquals(1L, invoice.getPurchaseOrderId());
     }
 
     @Test

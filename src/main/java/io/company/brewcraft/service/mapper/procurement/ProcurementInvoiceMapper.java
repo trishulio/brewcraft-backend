@@ -19,7 +19,7 @@ import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.service.mapper.TaxMapper;
 
-@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, ProcurementInvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, PurchaseOrderMapper.class })
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, ProcurementInvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, ProcurementPurchaseOrderMapper.class, PurchaseOrderMapper.class })
 public interface ProcurementInvoiceMapper extends BaseMapper<Invoice, ProcurementInvoiceDto, AddProcurementInvoiceDto, UpdateProcurementInvoiceDto> {
     ProcurementInvoiceMapper INSTANCE = Mappers.getMapper(ProcurementInvoiceMapper.class);
 
@@ -28,7 +28,7 @@ public interface ProcurementInvoiceMapper extends BaseMapper<Invoice, Procuremen
 
     @Override
     @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
-    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true)
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId")
     @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true)
@@ -36,9 +36,9 @@ public interface ProcurementInvoiceMapper extends BaseMapper<Invoice, Procuremen
 
     @Override
     @Mapping(target = Invoice.ATTR_INVOICE_STATUS, source = "invoiceStatusId")
+    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, source = "purchaseOrderId")
     @Mapping(target = Invoice.ATTR_ID, ignore = true)
     @Mapping(target = Invoice.ATTR_VERSION, ignore = true)
-    @Mapping(target = Invoice.ATTR_PURCHASE_ORDER, ignore = true)
     @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = Invoice.ATTR_INVOICE_ITEMS, ignore = true)

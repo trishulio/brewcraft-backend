@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
+import io.company.brewcraft.dto.procurement.ProcurementPurchaseOrderDto;
 
 public class ProcurementInvoiceDtoTest {
     ProcurementInvoiceDto invoice;
@@ -25,6 +26,7 @@ public class ProcurementInvoiceDtoTest {
             1L,
             "ABCDE-12345",
             "desc1",
+            new ProcurementPurchaseOrderDto(1L),
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
             new MoneyDto("CAD", new BigDecimal("10")),
             new TaxDto(),
@@ -40,6 +42,7 @@ public class ProcurementInvoiceDtoTest {
         assertEquals(1L, invoice.getId());
         assertEquals("ABCDE-12345", invoice.getInvoiceNumber());
         assertEquals("desc1", invoice.getDescription());
+        assertEquals(new ProcurementPurchaseOrderDto(1L), invoice.getPurchaseOrder());
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
         assertEquals(new MoneyDto("CAD", new BigDecimal("10")), invoice.getAmount());
         assertEquals(new TaxDto(), invoice.getTax());
@@ -71,6 +74,13 @@ public class ProcurementInvoiceDtoTest {
         assertNull(invoice.getDescription());
         invoice.setDescription("desc1");
         assertEquals("desc1", invoice.getDescription());
+    }
+
+    @Test
+    public void testAccessPurchaseOrder() {
+        assertNull(invoice.getPurchaseOrder());
+        invoice.setPurchaseOrder(new ProcurementPurchaseOrderDto(1L));
+        assertEquals(new ProcurementPurchaseOrderDto(1L), invoice.getPurchaseOrder());
     }
 
     @Test

@@ -179,7 +179,7 @@ public class ProductServiceImpl extends BaseService implements ProductService {
 
             for (int i = 0; i < product.getTargetMeasures().size(); i++) {
                 ProductMeasureValue measure = product.getTargetMeasures().get(i);
-                if(measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getId())) {
+                if (measure.getMeasure() == null || !measureMap.containsKey(measure.getMeasure().getId())) {
                     throw new IllegalArgumentException("Invalid target measure: " + measure.getMeasure().getId());
                 } else {
                     product.getTargetMeasures().get(i).setMeasure(measureMap.get(measure.getMeasure().getId()));

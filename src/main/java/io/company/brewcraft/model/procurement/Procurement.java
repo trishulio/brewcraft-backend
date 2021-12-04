@@ -1,7 +1,14 @@
 package io.company.brewcraft.model.procurement;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,147 +16,144 @@ import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
-import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.service.impl.procurement.ProcurementIdFactory;
+import io.company.brewcraft.service.impl.procurement.ProcurementItemFactory;
 
+@Entity(name = "procurement")
+@Table
 public class Procurement extends BaseEntity implements UpdateProcurement<ProcurementItem> {
+    private static final long serialVersionUID = 1L;
+
+    public static final String FIELD_SHIPMENT = "shipment";
+    public static final String FIELD_INVOICE = "invoice";
+
     private static final ProcurementIdFactory idFactory = ProcurementIdFactory.INSTANCE;
 
-    private PurchaseOrder purchaseOrder;
-    private Invoice invoice;
-    private Shipment shipment;
+    @EmbeddedId
+    private ProcurementId id;
 
-    private List<ProcurementItem> procurementItems;
+    @MapsId(ProcurementId.FIELD_INVOICE_ID)
+    @ManyToOne
+    @JoinColumn(name = ProcurementId.FIELD_INVOICE_ID, referencedColumnName = "id")
+    private Invoice invoice;
+
+    @MapsId(ProcurementId.FIELD_SHIPMENT_ID)
+    @ManyToOne
+    @JoinColumn(name = ProcurementId.FIELD_SHIPMENT_ID, referencedColumnName = "id")
+    private Shipment shipment;
 
     public Procurement() {
         super();
-        setShipment(null);
-        setInvoice(null);
-        setPurchaseOrder(null);
     }
 
     public Procurement(ProcurementId id) {
-        super();
+        this();
         this.shipment = new Shipment(id.getShipmentId());
         this.invoice = new Invoice(id.getInvoiceId());
-        this.purchaseOrder = new PurchaseOrder(id.getPurchaseOrderId());
     }
 
-    public Procurement(Shipment shipment, Invoice invoice, PurchaseOrder purchaseOrder, List<ProcurementItem> procurementItems) {
+    public Procurement(Shipment shipment, Invoice invoice) {
         super();
         setShipment(shipment);
         setInvoice(invoice);
-        setPurchaseOrder(purchaseOrder);
-        setProcurementItems(procurementItems);
+    }
+    
+    @PrePersist
+    private void setId() {
+        this.id = new ProcurementId(null, null);
+        if (this.shipment != null) {
+            this.id.setShipmentId(this.shipment.getId());
+        }
+
+        if (this.invoice != null) {
+            this.id.setInvoiceId(this.invoice.getId());
+        }
     }
 
     @Override
     public ProcurementId getId() {
-        return idFactory.build(shipment, invoice, purchaseOrder);
-    }
-
-    @Override
-    public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    @Override
-    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        if (purchaseOrder != null) {
-            this.purchaseOrder = purchaseOrder.deepClone();
-        } else {
-            this.purchaseOrder = new PurchaseOrder();
-        }
+        return idFactory.build(shipment, invoice);
     }
 
     @Override
     public Invoice getInvoice() {
-        Invoice invoice = null;
-        if (this.invoice != null) {
-            invoice = this.invoice.deepClone();
-        }
-
-        List<InvoiceItem> invoiceItems = null;
-        if (this.procurementItems != null) {
-            invoiceItems = this.procurementItems.stream().map(ProcurementItem::getInvoiceItem).collect(Collectors.toList());
-        }
-
-        if (invoice == null && invoiceItems != null) {
-            invoice = new Invoice();
-        }
-
-        if (invoice != null) {
-            invoice.setInvoiceItems(invoiceItems);
-        }
-
-        return invoice;
+        return this.invoice;
     }
 
     @Override
     public void setInvoice(Invoice invoice) {
-        if (invoice != null) {
-            this.invoice = invoice.deepClone();
-            this.invoice.setInvoiceItems(null);
-            this.invoice.setPurchaseOrder(null);
-        } else {
-            this.invoice = new Invoice();
-        }
+        this.invoice = invoice;
     }
 
     @Override
     public Shipment getShipment() {
-        Shipment shipment = null;
-        if (this.shipment != null) {
-            shipment = this.shipment.deepClone();
-        }
-
-        List<MaterialLot> lots = null;
-        if (this.procurementItems != null) {
-            lots = this.procurementItems.stream().map(ProcurementItem::getMaterialLot).collect(Collectors.toList());
-        }
-
-        if (shipment == null && lots != null) {
-            shipment = new Shipment();
-            shipment.setLots(lots);
-        }
-
-        if (shipment != null) {
-            shipment.setLots(lots);
-        }
-
-        return shipment;
+        return this.shipment;
     }
 
     @Override
     public void setShipment(Shipment shipment) {
-        if (shipment != null) {
-            this.shipment = shipment.deepClone();
-            this.shipment.setLots(null);
-        } else {
-            this.shipment = new Shipment();
-        }
+        this.shipment = shipment;
     }
 
     @Override
     public List<ProcurementItem> getProcurementItems() {
-        return procurementItems;
+        List<InvoiceItem> invoiceItems = null;
+        List<MaterialLot> lots = null;
+
+        if (invoice != null) {
+            invoiceItems = invoice.getInvoiceItems();
+        }
+
+        if (shipment != null) {
+            lots = shipment.getLots();
+        }
+
+        return ProcurementItemFactory.INSTANCE.buildFromLotsAndItems(lots, invoiceItems);
     }
 
     @Override
     public void setProcurementItems(List<ProcurementItem> procurementItems) {
-        this.procurementItems = procurementItems;
+        if (procurementItems == null) {
+            if (this.invoice != null) {
+                this.invoice.setInvoiceItems(null);
+            }
 
+            if (this.shipment != null) {
+                this.shipment.setLots(null);
+            }
+        } else {
+            if (this.invoice == null) {
+                this.invoice = new Invoice();
+            }
+
+            if (this.shipment == null) {
+                this.shipment = new Shipment();
+            }
+
+            procurementItems.forEach(procurementItem -> {
+                InvoiceItem invoiceItem = procurementItem.getInvoiceItem();
+                MaterialLot lot = procurementItem.getMaterialLot();
+
+                this.invoice.addItem(invoiceItem);
+                this.shipment.addLot(lot);
+            });
+        }
     }
 
     @JsonIgnore
     public int getProcurementItemsCount() {
-        int count = 0;
+        int invoiceItemCount = 0;
+        int lotsCount = 0;
 
-        if (this.procurementItems != null) {
-            count = this.procurementItems.size();
+        if (invoice != null) {
+            invoiceItemCount = this.invoice.getItemCount();
         }
 
-        return count;
+        if (shipment != null) {
+            lotsCount = this.shipment.getLotCount();
+        }
+
+        return Math.max(invoiceItemCount, lotsCount);
     }
 }

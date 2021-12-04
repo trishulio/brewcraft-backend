@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
-import io.company.brewcraft.dto.procurement.AddProcurementPurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.AddProcurementShipmentDto;
 
 public class AddProcurementDtoTest {
@@ -26,7 +25,6 @@ public class AddProcurementDtoTest {
     public void testNoArgConstructor() {
         assertNull(dto.getInvoice());
         assertNull(dto.getShipment());
-        assertNull(dto.getPurchaseOrder());
         assertNull(dto.getProcurementItems());
     }
 
@@ -35,13 +33,11 @@ public class AddProcurementDtoTest {
         dto = new AddProcurementDto(
             new AddProcurementInvoiceDto(),
             new AddProcurementShipmentDto(),
-            new AddProcurementPurchaseOrderDto(),
             List.of(new AddProcurementItemDto())
         );
 
         assertEquals(new AddProcurementInvoiceDto(), dto.getInvoice());
         assertEquals(new AddProcurementShipmentDto(), dto.getShipment());
-        assertEquals(new AddProcurementPurchaseOrderDto(), dto.getPurchaseOrder());
         assertEquals(List.of(new AddProcurementItemDto()), dto.getProcurementItems());
     }
 
@@ -57,13 +53,6 @@ public class AddProcurementDtoTest {
         dto.setShipment(new AddProcurementShipmentDto());
 
         assertEquals(new AddProcurementShipmentDto(), dto.getShipment());
-    }
-
-    @Test
-    public void testAccessPurchaseOrder() {
-        dto.setPurchaseOrder(new AddProcurementPurchaseOrderDto());
-
-        assertEquals(new AddProcurementPurchaseOrderDto(), dto.getPurchaseOrder());
     }
 
     @Test

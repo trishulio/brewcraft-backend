@@ -29,6 +29,8 @@ import io.company.brewcraft.repository.MixtureRecordingRefresher;
 import io.company.brewcraft.repository.MixtureRecordingRepository;
 import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.repository.MixtureRepository;
+import io.company.brewcraft.repository.ProcurementRefresher;
+import io.company.brewcraft.repository.ProcurementRepository;
 import io.company.brewcraft.repository.ProductCategoryRepository;
 import io.company.brewcraft.repository.ProductRepository;
 import io.company.brewcraft.repository.PurchaseOrderRefresher;
@@ -65,12 +67,10 @@ import io.company.brewcraft.service.MixtureServiceImpl;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductMeasureValueService;
 import io.company.brewcraft.service.ProductService;
-import io.company.brewcraft.service.PurchaseOrderService;
 import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
-import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
@@ -83,8 +83,6 @@ import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
-import io.company.brewcraft.service.impl.procurement.ProcurementFactory;
-import io.company.brewcraft.service.impl.procurement.ProcurementItemFactory;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.user.UserService;
@@ -256,13 +254,11 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testProcurementService_ReturnsInstanceOfProcurementService() {
         final InvoiceService invoiceServiceMock = mock(InvoiceService.class);
-        final PurchaseOrderService purchaseOrderServiceMock = mock(PurchaseOrderService.class);
         final ShipmentService shipmentServiceMock = mock(ShipmentService.class);
-        final TransactionService transactionServiceMock = mock(TransactionService.class);
-        final ProcurementFactory procurementFactoryMock = mock(ProcurementFactory.class);
-        final ProcurementItemFactory procurementItemFactoryMock = mock(ProcurementItemFactory.class);
+        final ProcurementRepository procurementRepo = mock(ProcurementRepository.class);
+        final ProcurementRefresher procurementRefresher = mock(ProcurementRefresher.class);
 
-        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, purchaseOrderServiceMock, shipmentServiceMock, transactionServiceMock, procurementFactoryMock, procurementItemFactoryMock);
+        final ProcurementService service = this.serviceAutoConfiguration.procurementService(invoiceServiceMock, shipmentServiceMock, procurementRepo, procurementRefresher);
 
         assertTrue(service instanceof ProcurementService);
     }

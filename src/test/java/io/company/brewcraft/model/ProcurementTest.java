@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.procurement.ProcurementItem;
+import io.company.brewcraft.model.procurement.ProcurementItemId;
 
 public class ProcurementTest {
     private Procurement procurement;
@@ -22,70 +23,54 @@ public class ProcurementTest {
 
     @Test
     public void testNoArgConstructor() {
-        assertEquals(new ProcurementId(), procurement.getId());
-        assertEquals(new Invoice(), procurement.getInvoice());
-        assertEquals(new Shipment(), procurement.getShipment());
-        assertEquals(new PurchaseOrder(), procurement.getPurchaseOrder());
+        assertNull(procurement.getId());
+        assertNull(procurement.getInvoice());
+        assertNull(procurement.getShipment());
         assertNull(procurement.getProcurementItems());
     }
 
     @Test
-    public void testIdArgConstructor() {
-        procurement = new Procurement(new ProcurementId(1L, 10L, 100L));
+    public void testArgConstructor_Id() {
+        procurement = new Procurement(new ProcurementId(1L, 10L));
 
-        assertEquals(new ProcurementId(1L, 10L, 100L), procurement.getId());
-        assertEquals(1L, procurement.getShipment().getId());
-        assertEquals(10L, procurement.getInvoice().getId());
-        assertEquals(100L, procurement.getPurchaseOrder().getId());
+        assertEquals(new ProcurementId(1L, 10L), procurement.getId());
+        assertEquals(new Shipment(1L), procurement.getShipment());
+        assertEquals(new Invoice(10L), procurement.getInvoice());
     }
 
     @Test
-    public void testShipmentArgConstructor() {
-        procurement = new Procurement(new Shipment(1L), new Invoice(10L), new PurchaseOrder(100L), List.of(new ProcurementItem()));
+    public void testArgConstructor_ShipmentInvoice() {
+        procurement = new Procurement(new Shipment(1L), new Invoice(10L));
 
-        Shipment shipment = new Shipment(1L);
-        shipment.setLots(List.of());
-        Invoice invoice = new Invoice(10L);
-        invoice.setInvoiceItems(List.of());
-
-        assertEquals(shipment, procurement.getShipment());
-        assertEquals(invoice, procurement.getInvoice());
-        assertEquals(new PurchaseOrder(100L), procurement.getPurchaseOrder());
-        assertEquals(List.of(new ProcurementItem()), procurement.getProcurementItems());
+        assertEquals(new Shipment(1L), procurement.getShipment());
+        assertEquals(new Invoice(10L), procurement.getInvoice());
     }
 
     @Test
     public void testAccessId_ReturnsNull_WhenAllPropertiesAreNull() {
-        procurement.setPurchaseOrder(null);
         procurement.setInvoice(null);
         procurement.setShipment(null);
 
+        assertNull(procurement.getId());
+    }
+
+    @Test
+    public void testAccessId_ReturnsNonNullId_WhenChildrenAreNotNull() {
+        procurement.setShipment(new Shipment(1L));
+        procurement.setInvoice(new Invoice(10L));
+        assertEquals(new ProcurementId(1L, 10L), procurement.getId());
+
+        procurement.setShipment(new Shipment(1L));
+        procurement.setInvoice(null);
+        assertEquals(new ProcurementId(1L, null), procurement.getId());
+
+        procurement.setShipment(null);
+        procurement.setInvoice(new Invoice(10L));
+        assertEquals(new ProcurementId(null, 10L), procurement.getId());
+
+        procurement.setShipment(new Shipment());
+        procurement.setInvoice(new Invoice());
         assertEquals(new ProcurementId(), procurement.getId());
-    }
-
-    @Test
-    public void testAccessId_ReturnsEmptyId_WhenNonNullChildrenWhenNullIds() {
-        procurement.setShipment(new Shipment(1L));
-        procurement.setInvoice(new Invoice(10L));
-        procurement.setPurchaseOrder(new PurchaseOrder(100L));
-
-        assertEquals(new ProcurementId(1L, 10L, 100L), procurement.getId());
-    }
-
-    @Test
-    public void testAccessId_ReturnsNonEmptyId_WhenChildrenHaveNonNullId() {
-        procurement.setShipment(new Shipment(1L));
-        procurement.setInvoice(new Invoice(10L));
-        procurement.setPurchaseOrder(new PurchaseOrder(100L));
-
-        assertEquals(new ProcurementId(1L, 10L, 100L), procurement.getId());
-    }
-
-    @Test
-    public void testAccessPurchaseOrder() {
-        procurement.setPurchaseOrder(new PurchaseOrder(100L));
-
-        assertEquals(new PurchaseOrder(100L), procurement.getPurchaseOrder());
     }
 
     @Test
@@ -104,9 +89,11 @@ public class ProcurementTest {
 
     @Test
     public void testAccessProcurementItems() {
-        procurement.setProcurementItems(List.of(new ProcurementItem()));
+        procurement.setProcurementItems(List.of(
+            new ProcurementItem(new ProcurementItemId(1L, 10L))
+        ));
 
-        assertEquals(List.of(new ProcurementItem()), procurement.getProcurementItems());
+        assertEquals(List.of(new ProcurementItem(new ProcurementItemId(1L, 10L))), procurement.getProcurementItems());
     }
 
     @Test
@@ -118,6 +105,9 @@ public class ProcurementTest {
         assertEquals(0, procurement.getProcurementItemsCount());
 
         procurement.setProcurementItems(List.of(new ProcurementItem()));
+        assertEquals(0, procurement.getProcurementItemsCount()); // it's zero because empty procurementItem means no invoiceItem and lot is being added.
+
+        procurement.setProcurementItems(List.of(new ProcurementItem(new ProcurementItemId(1L, 10L))));
         assertEquals(1, procurement.getProcurementItemsCount());
     }
 }
