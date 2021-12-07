@@ -74,6 +74,13 @@ public class ProcurementTest {
     }
 
     @Test
+    public void testSetId_CreatedNewShipmentAndInvoice_WhenTheyAreNull() {
+        procurement.setId(new ProcurementId(1L, 10L));
+
+        assertEquals(new Procurement(new ProcurementId(1L, 10L)), procurement);
+    }
+
+    @Test
     public void testAccessInvoice() {
         procurement.setInvoice(new Invoice(10L));
 
@@ -94,6 +101,22 @@ public class ProcurementTest {
         ));
 
         assertEquals(List.of(new ProcurementItem(new ProcurementItemId(1L, 10L))), procurement.getProcurementItems());
+    }
+
+    @Test
+    public void testAccessProcurementItems_AddsItemsToInvoiceAndShipment() {
+        procurement.setInvoice(new Invoice(1L));
+        procurement.setShipment(new Shipment(2L));
+
+        procurement.setProcurementItems(List.of(
+            new ProcurementItem(new ProcurementItemId(20L, 10L))
+        ));
+
+        Invoice expectedInvoice = new Invoice(1L);
+        expectedInvoice.addItem(new InvoiceItem(10L));
+        Shipment expectedShipment = new Shipment(2L);
+        expectedShipment.addLot(new MaterialLot(20L));
+        assertEquals(new Procurement(expectedShipment, expectedInvoice), procurement);
     }
 
     @Test

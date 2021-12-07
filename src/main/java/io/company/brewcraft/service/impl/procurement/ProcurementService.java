@@ -232,7 +232,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                                                             if (procurement == null) {
                                                                 procurement = new Procurement(shipment, invoice);
                                                             }
-                                                            
+
                                                             return procurement;
                                                         })
                                                         .collect(Collectors.toList());

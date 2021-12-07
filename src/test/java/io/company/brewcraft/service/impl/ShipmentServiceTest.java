@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseShipment;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.ShipmentAccessor;
@@ -104,6 +106,35 @@ public class ShipmentServiceTest {
        final Shipment invoice = this.service.get(1L);
 
        assertEquals(new Shipment(1L), invoice);
+   }
+
+   @Test
+   public void testGetByIds_CallsRepoService() {
+       ArgumentCaptor<List<? extends Identified<Long>>> captor = ArgumentCaptor.forClass(List.class);
+
+       doReturn(List.of(new Shipment(1L))).when(mRepoService).getByIds(captor.capture());
+
+       assertEquals(List.of(new Shipment(1L)), service.getByIds(List.of(() -> 1L)));
+       assertEquals(1L, captor.getValue().get(0).getId());
+   }
+
+   @Test
+   public void testGetByAccessorIds_CallsRepoService() {
+       ArgumentCaptor<Function<ShipmentAccessor, Shipment>> captor = ArgumentCaptor.forClass(Function.class);
+
+       List<? extends ShipmentAccessor> accessors = List.of(new ShipmentAccessor() {
+            @Override
+            public void setShipment(Shipment Shipment) {}
+            @Override
+            public Shipment getShipment() {
+                return new Shipment(1L);
+            }
+        });
+
+       doReturn(List.of(new Shipment(1L))).when(mRepoService).getByAccessorIds(eq(accessors), captor.capture());
+
+       assertEquals(List.of(new Shipment(1L)), service.getByAccessorIds(accessors));
+       assertEquals(new Shipment(1L), captor.getValue().apply(accessors.get(0)));
    }
 
    @Test

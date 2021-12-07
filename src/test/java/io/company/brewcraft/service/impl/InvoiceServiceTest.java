@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.model.BaseInvoiceItem;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -95,6 +97,35 @@ public class InvoiceServiceTest {
        final Invoice invoice = this.service.get(1L);
 
        assertEquals(new Invoice(1L), invoice);
+   }
+
+   @Test
+   public void testGetByIds_CallsRepoService() {
+       ArgumentCaptor<List<? extends Identified<Long>>> captor = ArgumentCaptor.forClass(List.class);
+
+       doReturn(List.of(new Invoice(1L))).when(mRepoService).getByIds(captor.capture());
+
+       assertEquals(List.of(new Invoice(1L)), service.getByIds(List.of(() -> 1L)));
+       assertEquals(1L, captor.getValue().get(0).getId());
+   }
+
+   @Test
+   public void testGetByAccessorIds_CallsRepoService() {
+       ArgumentCaptor<Function<InvoiceAccessor, Invoice>> captor = ArgumentCaptor.forClass(Function.class);
+
+       List<? extends InvoiceAccessor> accessors = List.of(new InvoiceAccessor() {
+            @Override
+            public void setInvoice(Invoice invoice) {}
+            @Override
+            public Invoice getInvoice() {
+                return new Invoice(1L);
+            }
+        });
+
+       doReturn(List.of(new Invoice(1L))).when(mRepoService).getByAccessorIds(eq(accessors), captor.capture());
+
+       assertEquals(List.of(new Invoice(1L)), service.getByAccessorIds(accessors));
+       assertEquals(new Invoice(1L), captor.getValue().apply(accessors.get(0)));
    }
 
    @Test

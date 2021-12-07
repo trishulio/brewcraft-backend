@@ -5,13 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.PageImpl;
 
+import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementDto;
 import io.company.brewcraft.dto.procurement.ProcurementIdDto;
@@ -22,11 +27,13 @@ import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.model.procurement.UpdateProcurement;
 import io.company.brewcraft.model.procurement.UpdateProcurementItem;
+import io.company.brewcraft.service.impl.procurement.ProcurementService;
 
 public class ProcurementControllerTest {
 
     private ProcurementController controller;
 
+    private ProcurementService mService;
     private CrudControllerService<
         ProcurementId,
         Procurement,
@@ -39,8 +46,87 @@ public class ProcurementControllerTest {
 
     @BeforeEach
     public void init() {
+        mService = mock(ProcurementService.class);
         mCrudController = mock(CrudControllerService.class);
-        controller = new ProcurementController(mCrudController, null);
+        controller = new ProcurementController(mCrudController, mService);
+    }
+
+    @Test
+    public void testGetAll_ReturnsPageFromServiceAndConvertsWithCrudController() {
+        doReturn(new PageImpl<>(List.of(new Procurement(new ProcurementId(1L, 10L))))).when(mService).getAll(
+            Set.of(1L), // shipmentIds
+            Set.of(2L), // shipmentExcludeIds
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
+            Set.of("SHIPMENT_DESCRIPTION"), // shipmentDescriptions
+            Set.of(3L), //shipmentStatusIds
+            LocalDateTime.of(2000, 1, 1, 0, 0), // deliveryDueDateFrom
+            LocalDateTime.of(2001, 1, 1, 0, 0), // deliveryDueDateTo
+            LocalDateTime.of(2000, 1, 1, 0, 0), // deliveredDueDateFrom
+            LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDueDateTo
+            Set.of(10L), // invoiceIds
+            Set.of(2L), // invoiceExcludeIds
+            Set.of("Invoice Number"), // invoiceNumbers
+            Set.of("invoice description"), // invoiceDescriptions
+            Set.of("item description"), // itemDescriptions
+            LocalDateTime.of(1999, 1, 1, 12, 0), // generatedOnFrom
+            LocalDateTime.of(2000, 1, 1, 12, 0), // generatedOnTo
+            LocalDateTime.of(2001, 1, 1, 12, 0), // receivedOnFrom
+            LocalDateTime.of(2002, 1, 1, 12, 0), // receivedOnTo
+            LocalDateTime.of(2003, 1, 1, 12, 0), // paymentDueDateFrom
+            LocalDateTime.of(2004, 1, 1, 12, 0), // paymentDueDateTo
+            Set.of(3L), // purchaseOrderIds
+            Set.of(4L), // materialIds
+            new BigDecimal("1"), // amtFrom
+            new BigDecimal("2"), // amtTo
+            new BigDecimal("3"), // freightAmtFrom
+            new BigDecimal("4"), // freightAmtTo
+            Set.of(99L), // invoiceStatusIds
+            Set.of(4L), // supplierIds
+            new TreeSet<>(List.of("id")), // sort
+            true, // order_asc
+            1, // page
+            10 // size
+        );
+
+        doReturn(new PageDto<>(List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L))), 1, 1)).when(mCrudController).getAll(new PageImpl<>(List.of(new Procurement(new ProcurementId(1L, 10L)))), Set.of("attr"));
+
+        PageDto<ProcurementDto> procurements = controller.getAll(
+            Set.of(1L), // shipmentIds
+            Set.of(2L), // shipmentExcludeIds
+            Set.of("SHIPMENT_NUMBER"), // shipmentNumbers
+            Set.of("SHIPMENT_DESCRIPTION"), // shipmentDescriptions
+            Set.of(3L), //shipmentStatusIds
+            LocalDateTime.of(2000, 1, 1, 0, 0), // deliveryDueDateFrom
+            LocalDateTime.of(2001, 1, 1, 0, 0), // deliveryDueDateTo
+            LocalDateTime.of(2000, 1, 1, 0, 0), // deliveredDueDateFrom
+            LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDueDateTo
+            Set.of(10L), // invoiceIds
+            Set.of(2L), // invoiceExcludeIds
+            Set.of("Invoice Number"), // invoiceNumbers
+            Set.of("invoice description"), // invoiceDescriptions
+            Set.of("item description"), // itemDescriptions
+            LocalDateTime.of(1999, 1, 1, 12, 0), // generatedOnFrom
+            LocalDateTime.of(2000, 1, 1, 12, 0), // generatedOnTo
+            LocalDateTime.of(2001, 1, 1, 12, 0), // receivedOnFrom
+            LocalDateTime.of(2002, 1, 1, 12, 0), // receivedOnTo
+            LocalDateTime.of(2003, 1, 1, 12, 0), // paymentDueDateFrom
+            LocalDateTime.of(2004, 1, 1, 12, 0), // paymentDueDateTo
+            Set.of(3L), // purchaseOrderIds
+            Set.of(4L), // materialIds
+            new BigDecimal("1"), // amtFrom
+            new BigDecimal("2"), // amtTo
+            new BigDecimal("3"), // freightAmtFrom
+            new BigDecimal("4"), // freightAmtTo
+            Set.of(99L), // invoiceStatusIds
+            Set.of(4L), // supplierIds
+            new TreeSet<>(List.of("id")), // sort
+            true, // order_asc
+            1, // page
+            10, // size
+            Set.of("attr")
+        );
+
+        assertEquals(new PageDto<>(List.of(new ProcurementDto(new ProcurementIdDto(1L, 10L))), 1, 1), procurements);
     }
 
     @Test

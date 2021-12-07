@@ -31,6 +31,7 @@ import io.company.brewcraft.model.procurement.UpdateProcurement;
 import io.company.brewcraft.model.procurement.UpdateProcurementItem;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 
 public class ProcurementServiceTest {
@@ -222,7 +223,7 @@ public class ProcurementServiceTest {
     }
 
     @Test
-    public void testPut_ReturnsProcurementsAfterPutingPurchaseOrdersInvoicesAndShipments_WhenInvoicesAndPurchaseOrdersAreNotNull() {
+    public void testPut_ReturnsProcurementsAfterPutingInvoicesAndShipmentsProcurements_WhenEntitiesAreNotNull() {
         doAnswer(inv -> {
             List<Invoice> invoices = inv.getArgument(0, List.class);
             invoices.get(0).setId(2L);
@@ -234,6 +235,8 @@ public class ProcurementServiceTest {
             shipments.get(0).setId(1L);
             return shipments;
         }).when(mShipmentService).put(anyList());
+
+        doReturn(List.of()).when(mRepoService).getByIds(anyList());
 
         List<UpdateProcurement<? extends UpdateProcurementItem>> updates = new ArrayList<>() {
             private static final long serialVersionUID = 1L;
@@ -247,6 +250,33 @@ public class ProcurementServiceTest {
         assertEquals(expected, procurements);
 
         verify(mRepoService, times(1)).saveAll(procurements);
+        verify(mRepoService, times(1)).getByIds(updates);
+    }
+
+    @Test
+    public void testPut_ReturnsExistingPurchaseOrders_WhenTheyArePresent() {
+        doAnswer(inv -> {
+            List<Invoice> invoices = inv.getArgument(0, List.class);
+            invoices.get(0).setId(2L);
+            return invoices;
+        }).when(mInvoiceService).put(anyList());
+
+        doAnswer(inv -> {
+            List<Shipment> shipments = inv.getArgument(0, List.class);
+            shipments.get(0).setId(1L);
+            return shipments;
+        }).when(mShipmentService).put(anyList());
+
+        List<Procurement> existingProcurements = List.of(new Procurement(new ProcurementId(1L, 2L)));
+        doReturn(existingProcurements).when(mRepoService).getByIds(anyList());
+
+        List<UpdateProcurement<? extends UpdateProcurementItem>> updates = List.of(new Procurement(new Shipment(), new Invoice()));
+        List<Procurement> procurements = service.put(updates);
+
+        assertSame(existingProcurements.get(0), procurements.get(0));
+
+        verify(mRepoService, times(1)).saveAll(procurements);
+        verify(mRepoService, times(1)).getByIds(updates);
     }
 
     @Test
@@ -263,6 +293,8 @@ public class ProcurementServiceTest {
             return shipments;
         }).when(mShipmentService).patch(anyList());
 
+        doReturn(List.of(new Procurement(new ProcurementId(1L, 2L)))).when(mRepoService).getByIds(anyList());
+
         List<UpdateProcurement<? extends UpdateProcurementItem>> updates = new ArrayList<>() {
             private static final long serialVersionUID = 1L;
         {
@@ -275,5 +307,25 @@ public class ProcurementServiceTest {
         assertEquals(expected, procurements);
 
         verify(mRepoService, times(1)).saveAll(procurements);
+    }
+
+    @Test
+    public void testPatch_ThrowsEntityNotFoundException_WhenExistingProcurementDoesNotExist() {
+        doAnswer(inv -> {
+            List<Invoice> invoices = inv.getArgument(0, List.class);
+            invoices.get(0).setId(2L);
+            return invoices;
+        }).when(mInvoiceService).patch(anyList());
+
+        doAnswer(inv -> {
+            List<Shipment> shipments = inv.getArgument(0, List.class);
+            shipments.get(0).setId(1L);
+            return shipments;
+        }).when(mShipmentService).patch(anyList());
+
+        doReturn(List.of()).when(mRepoService).getByIds(anyList());
+
+        List<UpdateProcurement<? extends UpdateProcurementItem>> updates = List.of(new Procurement(new Shipment(), new Invoice()));
+        assertThrows(EntityNotFoundException.class, () -> service.patch(updates));
     }
 }

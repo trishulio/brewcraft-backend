@@ -186,30 +186,11 @@ class PurchaseOrderNumberSupplierIdKey extends BaseModel {
     private String orderNumber;
     private Long supplierId;
 
-    public <P extends BasePurchaseOrder> PurchaseOrderNumberSupplierIdKey(P purchaseOrder) {
-        this(purchaseOrder.getOrderNumber(), purchaseOrder.getSupplier());
-    }
-
-    public PurchaseOrderNumberSupplierIdKey(String orderNumber, Supplier supplier) {
-        setOrderNumber(orderNumber);
+    public  <P extends BasePurchaseOrder> PurchaseOrderNumberSupplierIdKey(P purchaseOrder) {
+        this.orderNumber = purchaseOrder.getOrderNumber();
+        Supplier supplier = purchaseOrder.getSupplier();
         if (supplier != null) {
-            setSupplierId(supplier.getId());
+            this.supplierId = supplier.getId();
         }
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
     }
 }
