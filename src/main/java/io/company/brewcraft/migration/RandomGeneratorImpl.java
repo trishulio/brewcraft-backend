@@ -22,5 +22,4 @@ public class RandomGeneratorImpl implements RandomGenerator {
 
         return new String(password);
     }
-
 }

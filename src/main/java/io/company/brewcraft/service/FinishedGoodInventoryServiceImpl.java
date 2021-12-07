@@ -34,5 +34,4 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
 
         return finishedGoodInventory;
     }
-
 }

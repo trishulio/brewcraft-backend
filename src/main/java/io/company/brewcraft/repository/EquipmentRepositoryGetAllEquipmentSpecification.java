@@ -66,5 +66,4 @@ public class EquipmentRepositoryGetAllEquipmentSpecification implements Specific
     public boolean equals(Object o) {
         return ReflectionManipulator.INSTANCE.equals(this, o);
     }
-
 }

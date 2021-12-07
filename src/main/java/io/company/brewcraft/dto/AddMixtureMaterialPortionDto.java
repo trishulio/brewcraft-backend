@@ -59,5 +59,4 @@ public class AddMixtureMaterialPortionDto extends BaseDto {
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
-
 }

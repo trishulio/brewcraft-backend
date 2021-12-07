@@ -52,5 +52,4 @@ public class MeasureController extends BaseController {
 
         return dto;
     }
-
 }

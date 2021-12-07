@@ -49,5 +49,4 @@ public class GetSupplierContactsDtoTest {
         getSupplierContactsDto.setTotalPages(totalPages);
         assertSame(totalPages, getSupplierContactsDto.getTotalPages());
     }
-
 }

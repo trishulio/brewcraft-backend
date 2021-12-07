@@ -63,5 +63,4 @@ public class UpdateMixtureDtoTest {
         updateMixtureDto.setVersion(1);
         assertEquals(1, updateMixtureDto.getVersion());
     }
-
 }

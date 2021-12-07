@@ -320,5 +320,4 @@ public class MixtureMaterialPortionServiceImplTest {
 
         verify(repoService, times(1)).delete(Set.of(1L, 2L));
     }
-
 }

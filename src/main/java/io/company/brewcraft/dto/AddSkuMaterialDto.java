@@ -38,5 +38,4 @@ public class AddSkuMaterialDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-
 }

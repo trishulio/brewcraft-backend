@@ -18,6 +18,7 @@ import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.TaxDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
+import io.company.brewcraft.dto.procurement.ProcurementPurchaseOrderDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceDto;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Invoice;
@@ -62,6 +63,7 @@ public class ProcurementInvoiceMapperTest {
             12345L,
             "ABCDE-12345",
             "desc1",
+            new ProcurementPurchaseOrderDto(1L),
             new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
             new MoneyDto("CAD", new BigDecimal("20.00")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))),
@@ -87,6 +89,7 @@ public class ProcurementInvoiceMapperTest {
         UpdateProcurementInvoiceDto dto = new UpdateProcurementInvoiceDto(
             1L,
             "ABCDE-12345",
+            2L,
             "desc1",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -102,7 +105,7 @@ public class ProcurementInvoiceMapperTest {
             1L,
             "ABCDE-12345",
             "desc1",
-            null,
+            new PurchaseOrder(2L),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -126,6 +129,7 @@ public class ProcurementInvoiceMapperTest {
     public void testFromDto_ReturnsProcurementInvoiceWithAddProperties_WhenAddProcurementInvoiceDtoIsNotNull() {
         AddProcurementInvoiceDto dto = new AddProcurementInvoiceDto(
             "ABCDE-12345",
+            1L,
             "desc1",
             new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
@@ -140,7 +144,7 @@ public class ProcurementInvoiceMapperTest {
             null,
             "ABCDE-12345",
             "desc1",
-            null,
+            new PurchaseOrder(1l),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),

@@ -40,5 +40,4 @@ public class AddStorageDtoTest {
         addStorageDto.setType(type);
         assertSame(type, addStorageDto.getType());
     }
-
 }

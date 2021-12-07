@@ -26,7 +26,6 @@ public class MixtureRefresherTest {
 
     private CollectionAccessorRefresher<Long, ParentMixturesAccessor, Mixture> parentMixturesAccessorMock;
 
-
     @SuppressWarnings("unchecked")
     @BeforeEach
     public void init() {
@@ -60,5 +59,4 @@ public class MixtureRefresherTest {
 
         verify(mixtureAccessorMock, times(1)).refreshAccessors(accessors);
     }
-
 }

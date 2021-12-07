@@ -94,5 +94,4 @@ public class AddBrewDto extends BaseDto {
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
     }
-
 }

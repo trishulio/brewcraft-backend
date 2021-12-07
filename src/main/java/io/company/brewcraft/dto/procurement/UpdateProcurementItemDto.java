@@ -31,5 +31,4 @@ public class UpdateProcurementItemDto extends BaseDto {
     public void setMaterialLot(UpdateProcurementMaterialLotDto materialLot) {
         this.materialLot = materialLot;
     }
-
 }

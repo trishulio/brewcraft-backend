@@ -11,7 +11,6 @@ public class ProcurementDto extends BaseDto {
     private ProcurementIdDto id;
     private ProcurementInvoiceDto invoice;
     private ProcurementShipmentDto shipment;
-    private ProcurementPurchaseOrderDto purchaseOrder;
     private List<ProcurementItemDto> procurementItems;
 
     public ProcurementDto() {
@@ -23,11 +22,10 @@ public class ProcurementDto extends BaseDto {
         setId(id);
     }
 
-    public ProcurementDto(ProcurementIdDto id, ProcurementInvoiceDto invoice, ProcurementShipmentDto shipment, ProcurementPurchaseOrderDto purchaseOrder, List<ProcurementItemDto> procurementItems) {
+    public ProcurementDto(ProcurementIdDto id, ProcurementInvoiceDto invoice, ProcurementShipmentDto shipment, List<ProcurementItemDto> procurementItems) {
         this(id);
         setInvoice(invoice);
         setShipment(shipment);
-        setPurchaseOrder(purchaseOrder);
         setProcurementItems(procurementItems);
     }
 
@@ -53,14 +51,6 @@ public class ProcurementDto extends BaseDto {
 
     public void setInvoice(ProcurementInvoiceDto invoice) {
         this.invoice = invoice;
-    }
-
-    public ProcurementPurchaseOrderDto getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(ProcurementPurchaseOrderDto purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
     }
 
     public List<ProcurementItemDto> getProcurementItems() {

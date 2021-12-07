@@ -72,5 +72,4 @@ public class FacilityServiceImpl extends BaseService implements FacilityService 
     public boolean facilityExists(Long facilityId) {
         return facilityRepository.existsById(facilityId);
     }
-
 }

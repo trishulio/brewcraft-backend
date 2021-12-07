@@ -113,5 +113,4 @@ public class ProductCategoryController extends BaseController {
     public void deleteCategory(@PathVariable Long categoryId) {
         productCategoryService.deleteCategory(categoryId);
     }
-
 }

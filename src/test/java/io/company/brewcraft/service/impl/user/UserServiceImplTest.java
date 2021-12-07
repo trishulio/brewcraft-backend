@@ -45,7 +45,6 @@ public class UserServiceImplTest {
     private PrincipalContext principalContext;
     private Refresher<User, UserAccessor> userRefresher;
 
-
     private UserServiceImpl service;
 
     @BeforeEach

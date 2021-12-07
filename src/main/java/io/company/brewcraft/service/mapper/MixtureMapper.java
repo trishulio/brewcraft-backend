@@ -50,5 +50,4 @@ public interface MixtureMapper {
             mixtureDto.setParentMixtureIds(mixture.getParentMixtures().stream().map(parentMixture -> parentMixture.getId()).collect(Collectors.toSet()));
         }
     }
-
 }

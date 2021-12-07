@@ -6,7 +6,7 @@ import io.company.brewcraft.model.procurement.ProcurementItemId;
 
 public class ProcurementItemIdFactory {
     public static final ProcurementItemIdFactory INSTANCE = new ProcurementItemIdFactory();
-    
+
     protected ProcurementItemIdFactory() { }
 
     public ProcurementItemId build(MaterialLot materialLot, InvoiceItem invoiceItem) {

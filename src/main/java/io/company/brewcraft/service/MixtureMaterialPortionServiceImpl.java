@@ -205,5 +205,4 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
     public boolean materialPortionExists(Long materialPortionId) {
         return this.repoService.exists(materialPortionId);
     }
-
 }

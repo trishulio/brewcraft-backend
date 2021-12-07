@@ -72,5 +72,4 @@ public class MixtureDtoTest {
         mixtureDto.setVersion(version);
         assertEquals(version, mixtureDto.getVersion());
     }
-
 }

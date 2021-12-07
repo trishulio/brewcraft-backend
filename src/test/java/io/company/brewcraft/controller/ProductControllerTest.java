@@ -312,5 +312,4 @@ public class ProductControllerTest {
 
        verify(productService, times(1)).deleteProduct(1L);
    }
-
 }

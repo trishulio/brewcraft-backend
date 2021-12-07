@@ -1,7 +1,7 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.beans.PropertyDescriptor;
@@ -41,8 +41,8 @@ public class BaseModelTest {
 
     @BeforeEach
     public void init() {
-        util = mock(ReflectionManipulator.class);
-        jsonMapper = mock(JsonMapper.class);
+        util = spy(ReflectionManipulator.INSTANCE);
+        jsonMapper = spy(JsonMapper.INSTANCE);
 
         model = new TestBaseModel(0, util, jsonMapper);
         other = new TestBaseModel(12345, util, jsonMapper);
@@ -99,5 +99,12 @@ public class BaseModelTest {
         String str = model.toString();
 
         assertEquals("{\"key\": \"value\"}", str);
+    }
+
+    @Test
+    public void testHashCode_DelegatesCallToReflectionUtil() {
+        doReturn(100).when(util).hashCode(model);
+
+        assertEquals(100, model.hashCode());
     }
 }

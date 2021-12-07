@@ -58,5 +58,4 @@ public class SkuMaterialMapperTest {
 
         assertEquals(new SkuMaterialDto(1L, new MaterialDto(2L), new QuantityDto("hl", BigDecimal.valueOf(100)), 1), dto);
     }
-
 }

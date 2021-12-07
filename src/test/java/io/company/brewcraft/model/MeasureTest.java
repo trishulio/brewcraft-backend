@@ -49,5 +49,4 @@ public class MeasureTest {
         final String json = "{\"id\":1,\"name\":\"abv\",\"createdAt\":\"2018-01-02T03:04:00\",\"lastUpdated\":\"2019-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, measure.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
-
 }

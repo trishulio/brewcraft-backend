@@ -11,5 +11,4 @@ public class EntityNotFoundExceptionTest {
         EntityNotFoundException exception = new EntityNotFoundException("EntityTest", "idTest");
         assertEquals("EntityTest not found with id: idTest", exception.getMessage());
     }
-
 }

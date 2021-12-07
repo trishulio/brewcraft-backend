@@ -69,5 +69,4 @@ public class BrewStageMapperTest {
 
         assertEquals(new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), dto);
     }
-
 }

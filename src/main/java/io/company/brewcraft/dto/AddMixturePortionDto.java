@@ -35,5 +35,4 @@ public class AddMixturePortionDto extends BaseDto {
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
     }
-
 }

@@ -83,5 +83,4 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
     public boolean equipmentExists(Long equipmentId) {
         return equipmentRepository.existsById(equipmentId);
     }
-
 }

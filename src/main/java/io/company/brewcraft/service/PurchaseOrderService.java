@@ -2,8 +2,10 @@ package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
+import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.PurchaseOrder;
@@ -128,5 +131,85 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         final List<PurchaseOrder> updated = this.updateService.getPatchEntities(existing, patches);
 
         return this.repoService.saveAll(updated);
+    }
+
+    @Deprecated
+    public List<PurchaseOrder> putBySupplierAndOrderNumber(List<BasePurchaseOrder> updates) {
+        if (updates == null) {
+            return null;
+        }
+
+        Set<Long> supplierIds = updates.stream()
+                                       .filter(update -> update != null)
+                                       .map(update -> update.getSupplier())
+                                       .filter(supplier -> supplier != null)
+                                       .map(supplier -> supplier.getId())
+                                       .filter(id -> id != null)
+                                       .collect(Collectors.toSet());
+        Set<String> orderNumbers = updates.stream()
+                                          .filter(update -> update != null)
+                                          .map(update -> update.getOrderNumber())
+                                          .filter(orderNumber -> orderNumber != null)
+                                          .collect(Collectors.toSet());
+
+        Specification<PurchaseOrder> spec = WhereClauseBuilder.builder()
+                                                              .in(PurchaseOrder.FIELD_ORDER_NUMBER, orderNumbers)
+                                                              .in(new String[] { PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)
+                                                              .build();
+        final Map<PurchaseOrderNumberSupplierIdKey, PurchaseOrder> orderNumberToEntity = this.repoService.getAll(spec).stream()
+                                                                                                                      .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
+
+        List<PurchaseOrder> pOs = updates.stream()
+                                         .filter(update -> update != null)
+                                         .map(update -> {
+                                            PurchaseOrder purchaseOrder = new PurchaseOrder();
+                                            Class<? super PurchaseOrder> clz = BasePurchaseOrder.class;
+                                            PurchaseOrder existing = orderNumberToEntity.get(new PurchaseOrderNumberSupplierIdKey(update));
+                                            if (existing != null) {
+                                                // Note: RISK. OptimisticLockCheck cannot be performed because the UPDATE object is
+                                                // not expected to have a version. Solution: Remove this method altogether.
+                                                purchaseOrder.setId(existing.getId());
+                                                purchaseOrder.setVersion(existing.getVersion());
+                                                clz = UpdatePurchaseOrder.class;
+                                            }
+                                            purchaseOrder.override(update, getPropertyNames(clz, Set.of(PurchaseOrder.ATTR_ID, PurchaseOrder.ATTR_VERSION)));
+                                            return purchaseOrder;
+                                         })
+                                         .collect(Collectors.toList());
+
+        return this.repoService.saveAll(pOs);
+    }
+}
+
+@Deprecated
+class PurchaseOrderNumberSupplierIdKey extends BaseModel {
+    private String orderNumber;
+    private Long supplierId;
+
+    public <P extends BasePurchaseOrder> PurchaseOrderNumberSupplierIdKey(P purchaseOrder) {
+        this(purchaseOrder.getOrderNumber(), purchaseOrder.getSupplier());
+    }
+
+    public PurchaseOrderNumberSupplierIdKey(String orderNumber, Supplier supplier) {
+        setOrderNumber(orderNumber);
+        if (supplier != null) {
+            setSupplierId(supplier.getId());
+        }
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 }

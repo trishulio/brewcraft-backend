@@ -70,5 +70,4 @@ public class BrewMapperTest {
 
         assertEquals(new BrewDto(1L, "testName", "testDesc", "2", new ProductDto(), 2L, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1), dto);
     }
-
 }

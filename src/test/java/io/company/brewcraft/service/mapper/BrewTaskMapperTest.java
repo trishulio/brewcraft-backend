@@ -54,5 +54,4 @@ public class BrewTaskMapperTest {
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
         assertNull(brewTaskMapper.toDto(null));
     }
-
 }

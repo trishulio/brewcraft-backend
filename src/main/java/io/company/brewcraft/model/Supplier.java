@@ -176,5 +176,4 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Audited {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

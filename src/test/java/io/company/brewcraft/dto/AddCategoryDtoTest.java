@@ -38,5 +38,4 @@ public class AddCategoryDtoTest {
         addCategoryDto.setName(name);
         assertSame(name, addCategoryDto.getName());
     }
-
 }

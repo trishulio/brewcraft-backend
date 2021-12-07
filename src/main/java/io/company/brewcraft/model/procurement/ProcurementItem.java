@@ -1,11 +1,11 @@
 package io.company.brewcraft.model.procurement;
 
-import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.service.impl.procurement.ProcurementItemIdFactory;
 
-public class ProcurementItem extends BaseEntity implements UpdateProcurementItem {
+public class ProcurementItem extends BaseModel implements UpdateProcurementItem {
     private static final ProcurementItemIdFactory idFactory = ProcurementItemIdFactory.INSTANCE;
     private InvoiceItem invoiceItem;
     private MaterialLot materialLot;

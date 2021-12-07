@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Invoice;
-import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.procurement.ProcurementId;
 import io.company.brewcraft.service.impl.procurement.ProcurementIdFactory;
@@ -22,43 +21,43 @@ public class ProcurementIdFactoryTest {
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsNullId_WhenAllArgsAreNull() {
-        ProcurementId id = factory.build(null, null, null);
+        ProcurementId id = factory.build(null, null);
 
         assertNull(id);
     }
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsEmptyId_WhenArgsHaveNullId() {
-        ProcurementId id = factory.build(new Shipment(), new Invoice(), new PurchaseOrder());
+        ProcurementId id = factory.build(new Shipment(), new Invoice());
 
         assertEquals(new ProcurementId(), id);
     }
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsIdWithAllValues_WhenNoArgIsNull() {
-        ProcurementId id = factory.build(new Shipment(1L), new Invoice(10L), new PurchaseOrder(100L));
+        ProcurementId id = factory.build(new Shipment(1L), new Invoice(10L));
 
-        assertEquals(new ProcurementId(1L, 10L, 100L), id);
+        assertEquals(new ProcurementId(1L, 10L), id);
     }
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsIdWithNullShipmentId_WhenShipmentIsNull() {
-        ProcurementId id = factory.build(null, new Invoice(10L), new PurchaseOrder(100L));
+        ProcurementId id = factory.build(null, new Invoice(10L));
 
-        assertEquals(new ProcurementId(null, 10L, 100L), id);
+        assertEquals(new ProcurementId(null, 10L), id);
     }
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsIdWithInvoice_WhenInvoiceIsNull() {
-        ProcurementId id = factory.build(new Shipment(1L), null, new PurchaseOrder(100L));
+        ProcurementId id = factory.build(new Shipment(1L), null);
 
-        assertEquals(new ProcurementId(1L, null, 100L), id);
+        assertEquals(new ProcurementId(1L, null), id);
     }
 
     @Test
     public void testBuild_ShipmentInvoicePurchaseOrder_ReturnsIdWithPurchaseOrder_WhenPurchaseOrderIsNull() {
-        ProcurementId id = factory.build(new Shipment(1L), new Invoice(10L), null);
+        ProcurementId id = factory.build(new Shipment(1L), new Invoice(10L));
 
-        assertEquals(new ProcurementId(1L, 10L, null), id);
+        assertEquals(new ProcurementId(1L, 10L), id);
     }
 }

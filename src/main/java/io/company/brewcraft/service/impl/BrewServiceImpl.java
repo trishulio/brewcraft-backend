@@ -118,5 +118,4 @@ public class BrewServiceImpl extends BaseService implements BrewService {
     public boolean brewExists(Long brewId) {
         return brewRepository.existsById(brewId);
     }
-
 }

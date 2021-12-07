@@ -73,5 +73,4 @@ public class UpdateBrewStageDtoTest {
         updateBrewStageDto.setVersion(version);
         assertEquals(version, updateBrewStageDto.getVersion());
     }
-
 }

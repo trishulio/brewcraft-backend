@@ -74,5 +74,4 @@ public class SupplierWithoutContactsDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

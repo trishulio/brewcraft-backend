@@ -336,5 +336,4 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

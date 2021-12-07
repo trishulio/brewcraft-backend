@@ -27,5 +27,4 @@ public class InMemoryKvStore<K, V> implements KvStore<K, V> {
     public void set(K key, V value) {
         this.data.put(key, value);
     }
-
 }

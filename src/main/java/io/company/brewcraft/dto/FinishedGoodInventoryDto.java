@@ -34,5 +34,4 @@ public class FinishedGoodInventoryDto extends BaseDto {
     public void setQuantity(Long quantity) {
         this.quantity = new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(quantity));
     }
-
 }

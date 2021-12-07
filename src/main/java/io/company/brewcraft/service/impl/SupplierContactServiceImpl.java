@@ -88,5 +88,4 @@ public class SupplierContactServiceImpl extends BaseService implements SupplierC
     public void deleteContact(Long contactId) {
         supplierContactRepository.deleteById(contactId);
     }
-
 }

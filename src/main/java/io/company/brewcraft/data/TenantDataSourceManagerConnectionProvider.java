@@ -41,5 +41,4 @@ public class TenantDataSourceManagerConnectionProvider implements ConnectionProv
     public boolean supportsAggressiveRelease() {
         return false;
     }
-
 }

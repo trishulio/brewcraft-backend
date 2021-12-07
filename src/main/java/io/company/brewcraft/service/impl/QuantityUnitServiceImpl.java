@@ -26,5 +26,4 @@ public class QuantityUnitServiceImpl implements QuantityUnitService {
 
         return quantityUnitMapper.fromEntity(unit);
     }
-
 }

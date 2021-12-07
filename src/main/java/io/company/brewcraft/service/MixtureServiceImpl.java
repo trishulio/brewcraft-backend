@@ -117,5 +117,4 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
     public boolean mixtureExists(Long mixtureId) {
         return mixtureRepository.existsById(mixtureId);
     }
-
 }

@@ -30,7 +30,7 @@ public class BaseMaterialPortionService extends BaseService {
 
         Map<Long, Boolean> quantityCheckResult = this.areQuantitiesAvailable(Map.of(stockLotId, quantity));
 
-        if(quantityCheckResult.get(stockLotId) == true) {
+        if (quantityCheckResult.get(stockLotId) == true) {
             result = true;
         }
 
@@ -62,5 +62,4 @@ public class BaseMaterialPortionService extends BaseService {
 
         return result;
     }
-
 }

@@ -54,5 +54,4 @@ public class AddSupplierDto extends BaseDto {
     public void setAddress(AddressDto address) {
         this.address = address;
     }
-
 }

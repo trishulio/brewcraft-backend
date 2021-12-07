@@ -86,5 +86,4 @@ public class FacilityEquipmentDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

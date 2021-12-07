@@ -57,5 +57,4 @@ public class SkuRefresherTest {
 
         verify(skuAccessorMock, times(1)).refreshAccessors(accessors);
     }
-
 }

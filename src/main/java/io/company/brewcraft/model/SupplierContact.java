@@ -185,5 +185,4 @@ public class SupplierContact extends BaseEntity implements UpdateSupplierContact
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

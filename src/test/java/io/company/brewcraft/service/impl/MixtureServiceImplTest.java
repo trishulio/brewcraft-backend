@@ -228,5 +228,4 @@ public class MixtureServiceImplTest {
 
         verify(mixtureRepositoryMock, times(1)).deleteById(1L);
     }
-
 }

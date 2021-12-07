@@ -87,5 +87,4 @@ public class MaterialCategoryServiceImpl extends BaseService implements Material
     public boolean categoryExists(Long categoryId) {
         return materialCategoryRepository.existsById(categoryId);
     }
-
 }

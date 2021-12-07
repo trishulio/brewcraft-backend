@@ -216,5 +216,4 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
 
         return ids;
     }
-
 }

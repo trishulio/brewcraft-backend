@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +63,10 @@ public class ReflectionManipulator {
 
     public boolean equals(Object o, Object that) {
         return EqualsBuilder.reflectionEquals(o, that);
+    }
+
+    public int hashCode(Object o) {
+        return HashCodeBuilder.reflectionHashCode(o, false);
     }
 
     public static final ReflectionManipulator INSTANCE = new ReflectionManipulator();
@@ -123,7 +128,6 @@ public class ReflectionManipulator {
                     setter.invoke(o1, value);
                 }
             }
-
         } catch (final IntrospectionException e) {
             final String msg = String.format("Failed to introspect object because: %s", e.getMessage());
             this.handleException(msg, e);

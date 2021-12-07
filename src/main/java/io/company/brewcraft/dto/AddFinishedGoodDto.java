@@ -50,5 +50,4 @@ public class AddFinishedGoodDto extends BaseDto {
     public void setMaterialPortions(List<AddMaterialPortionDto> materialPortions) {
         this.materialPortions = materialPortions;
     }
-
 }

@@ -63,5 +63,4 @@ public class SkuMapperTest {
 
         assertEquals(new SkuDto(1L, "testName", "testDescription", new ProductDto(2L), List.of(new SkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1), dto);
     }
-
 }

@@ -44,5 +44,4 @@ public class MixtureMaterialPortion extends MaterialPortion implements UpdateMix
     public void setMixture(Mixture mixture) {
         this.mixture = mixture;
     }
-
 }

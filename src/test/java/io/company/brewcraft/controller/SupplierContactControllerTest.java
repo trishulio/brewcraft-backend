@@ -278,5 +278,4 @@ public class SupplierContactControllerTest {
 
          verify(supplierContactServiceMock, times(1)).deleteContact(2L);
     }
-
 }

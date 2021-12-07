@@ -110,5 +110,4 @@ public class EquipmentController extends BaseController {
     public void deleteEquipment(@PathVariable Long equipmentId) {
         equipmentService.deleteEquipment(equipmentId);
     }
-
 }

@@ -54,5 +54,4 @@ public class SupplierWithoutContactsDtoTest {
         supplierWithoutContactsDto.setVersion(version);
         assertSame(version, supplierWithoutContactsDto.getVersion());
     }
-
 }

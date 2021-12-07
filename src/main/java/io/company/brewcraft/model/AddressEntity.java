@@ -115,5 +115,4 @@ public class AddressEntity extends BaseEntity {
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-
 }

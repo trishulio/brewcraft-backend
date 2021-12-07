@@ -12,6 +12,7 @@ public class ProcurementInvoiceDto extends BaseDto {
     private Long id;
     private String invoiceNumber;
     private String description;
+    private ProcurementPurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private MoneyDto amount;
     private TaxDto tax;
@@ -31,10 +32,11 @@ public class ProcurementInvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
+    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, ProcurementPurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
+        setPurchaseOrder(purchaseOrder);
         setFreight(freight);
         setAmount(amount);
         setTax(tax);
@@ -69,6 +71,14 @@ public class ProcurementInvoiceDto extends BaseDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ProcurementPurchaseOrderDto getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(ProcurementPurchaseOrderDto purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
 
     public FreightDto getFreight() {

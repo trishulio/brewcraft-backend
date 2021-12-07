@@ -25,11 +25,10 @@ public class ProcurementIdTest {
 
     @Test
     public void testAllArgConstructor() {
-        id = new ProcurementId(1L, 10L, 100L);
+        id = new ProcurementId(1L, 10L);
 
         assertEquals(1L, id.getShipmentId());
         assertEquals(10L, id.getInvoiceId());
-        assertEquals(100L, id.getPurchaseOrderId());
     }
 
     @Test
@@ -42,11 +41,5 @@ public class ProcurementIdTest {
     public void testAccessShipmentId() {
         id.setShipmentId(10L);
         assertEquals(10L, id.getShipmentId());
-    }
-
-    @Test
-    public void testAccessPurchaseOrderId() {
-        id.setPurchaseOrderId(100L);
-        assertEquals(100L, id.getPurchaseOrderId());
     }
 }

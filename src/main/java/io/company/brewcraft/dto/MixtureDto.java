@@ -82,5 +82,4 @@ public class MixtureDto extends BaseDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

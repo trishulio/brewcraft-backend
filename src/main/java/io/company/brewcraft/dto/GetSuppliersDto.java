@@ -43,5 +43,4 @@ public class GetSuppliersDto {
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
-
 }

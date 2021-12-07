@@ -113,5 +113,4 @@ public class MaterialCategoryController extends BaseController {
     public void deleteCategory(@PathVariable Long categoryId) {
         materialCategoryService.deleteCategory(categoryId);
     }
-
 }

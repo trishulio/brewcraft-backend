@@ -63,5 +63,4 @@ public class BrewRefresherTest {
 
         verify(brewAccessorMock, times(1)).refreshAccessors(accessors);
     }
-
 }

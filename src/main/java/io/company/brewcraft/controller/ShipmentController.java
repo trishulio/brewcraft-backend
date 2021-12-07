@@ -179,5 +179,4 @@ public class ShipmentController extends BaseController {
     public List<ShipmentDto> addShipment(@RequestBody @Valid @NotNull List<AddShipmentDto> addDtos) {
         return this.controller.add(addDtos);
     }
-
 }

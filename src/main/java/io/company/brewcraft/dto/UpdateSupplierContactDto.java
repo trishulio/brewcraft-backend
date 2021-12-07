@@ -80,5 +80,4 @@ public class UpdateSupplierContactDto {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

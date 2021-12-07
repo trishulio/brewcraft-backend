@@ -38,5 +38,4 @@ public class AddSkuMaterialDtoTest {
         addSkuMaterialDto.setQuantity(new QuantityDto("hl", BigDecimal.valueOf(100.0)));
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), addSkuMaterialDto.getQuantity());
     }
-
 }

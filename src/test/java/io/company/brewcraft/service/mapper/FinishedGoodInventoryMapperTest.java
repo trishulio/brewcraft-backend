@@ -26,5 +26,4 @@ public class FinishedGoodInventoryMapperTest {
 
         assertEquals(new FinishedGoodInventoryDto(new SkuDto(2L), 50L), dto);
     }
-
 }

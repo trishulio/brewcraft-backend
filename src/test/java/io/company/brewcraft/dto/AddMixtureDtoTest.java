@@ -55,5 +55,4 @@ public class AddMixtureDtoTest {
         addMixtureDto.setBrewStageId(4L);
         assertEquals(4L, addMixtureDto.getBrewStageId());
     }
-
 }

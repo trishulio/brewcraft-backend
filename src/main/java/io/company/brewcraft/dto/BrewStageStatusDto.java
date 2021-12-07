@@ -36,5 +36,4 @@ public class BrewStageStatusDto extends BaseDto {
     public void setName(String name) {
         this.name = name;
     }
-
 }

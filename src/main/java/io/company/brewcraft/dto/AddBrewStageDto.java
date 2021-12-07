@@ -71,5 +71,4 @@ public class AddBrewStageDto extends BaseDto {
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
     }
-
 }

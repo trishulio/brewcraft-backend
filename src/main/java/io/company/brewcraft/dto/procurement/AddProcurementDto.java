@@ -7,18 +7,16 @@ import io.company.brewcraft.dto.BaseDto;
 public class AddProcurementDto extends BaseDto {
     private AddProcurementInvoiceDto invoice;
     private AddProcurementShipmentDto shipment;
-    private AddProcurementPurchaseOrderDto purchaseOrder;
     private List<AddProcurementItemDto> procurementItems;
 
     public AddProcurementDto() {
         super();
     }
 
-    public AddProcurementDto(AddProcurementInvoiceDto invoice, AddProcurementShipmentDto shipment, AddProcurementPurchaseOrderDto purchaseOrder, List<AddProcurementItemDto> procurementItems) {
+    public AddProcurementDto(AddProcurementInvoiceDto invoice, AddProcurementShipmentDto shipment, List<AddProcurementItemDto> procurementItems) {
         this();
         setInvoice(invoice);
         setShipment(shipment);
-        setPurchaseOrder(purchaseOrder);
         setProcurementItems(procurementItems);
     }
 
@@ -36,14 +34,6 @@ public class AddProcurementDto extends BaseDto {
 
     public void setShipment(AddProcurementShipmentDto shipment) {
         this.shipment = shipment;
-    }
-
-    public AddProcurementPurchaseOrderDto getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(AddProcurementPurchaseOrderDto purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
     }
 
     public List<AddProcurementItemDto> getProcurementItems() {

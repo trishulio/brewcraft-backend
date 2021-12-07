@@ -89,5 +89,4 @@ public class ProductMapperTest {
         assertEquals(subcategory1.getId(), productDto.getType().getId());
         assertEquals(subcategory2.getId(), productDto.getStyle().getId());
     }
-
  }

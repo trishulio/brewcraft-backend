@@ -254,19 +254,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         return count;
     }
 
-    @JsonIgnore
-    public Invoice getFirstInvoice() {
-        Invoice invoice = null;
-        if (this.getLotCount() > 0) {
-            InvoiceItem invoiceItem = this.lots.get(0).getInvoiceItem();
-            if (invoiceItem != null) {
-                invoice = invoiceItem.getInvoice();
-            }
-        }
-
-        return invoice;
-    }
-
     @Override
     @JsonIgnore
     public void setInvoiceItemsFromInvoice(Invoice invoice) {

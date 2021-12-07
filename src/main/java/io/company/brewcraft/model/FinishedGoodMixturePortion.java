@@ -45,5 +45,4 @@ public class FinishedGoodMixturePortion extends MixturePortion implements Update
     public void setFinishedGood(FinishedGood finishedGood) {
         this.finishedGood = finishedGood;
     }
-
 }
