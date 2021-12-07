@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
@@ -22,6 +23,7 @@ import io.company.brewcraft.service.SkuService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
+@Transactional
 public class SkuServiceImpl implements SkuService {
 
     private final RepoService<Long, Sku, SkuAccessor> repoService;
