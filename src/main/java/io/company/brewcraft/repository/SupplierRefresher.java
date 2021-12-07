@@ -15,7 +15,7 @@ public class SupplierRefresher implements Refresher<Supplier, SupplierAccessor> 
 
     @Override
     public void refresh(Collection<Supplier> purchaseOrders) {
-        // TODO: Supplier entity doesn't use accessor refresher yet.
+        // Note: Supplier entity doesn't use accessor refresher yet.
     }
 
     @Override

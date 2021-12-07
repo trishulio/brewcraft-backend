@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -48,7 +50,7 @@ import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.RepoService;
-import io.company.brewcraft.service.UpdateService;
+import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.impl.ShipmentService;
 
 @Transactional
@@ -58,7 +60,6 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     private final InvoiceService invoiceService;
     private final ShipmentService shipmentService;
     private final RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService;
-    private UpdateService<ProcurementId, Procurement, BaseProcurement<? extends BaseProcurementItem>, UpdateProcurement<? extends UpdateProcurementItem>> updateService;
 
     public ProcurementService(final InvoiceService invoiceService, final ShipmentService shipmentService, RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService) {
         this.invoiceService = invoiceService;
@@ -145,10 +146,11 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
     @Override
     public int delete(Set<ProcurementId> ids) {
+        int procurementsCount = repoService.delete(ids);
+
         ProcurementIdCollection idCollection = new ProcurementIdCollection(ids);
         int shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
         int invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
-        int procurementsCount = repoService.delete(ids);
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
@@ -157,9 +159,9 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
     @Override
     public int delete(ProcurementId id) {
+        int procurementsCount = repoService.delete(id);
         int shipmentsCount = shipmentService.delete(id.getShipmentId());
         int invoicesCount = invoiceService.delete(id.getInvoiceId());
-        int procurementsCount = repoService.delete(id);
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
@@ -218,17 +220,23 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
         Iterator<Invoice> invoices = invoiceService.put(uInvoices).iterator();
 
-        // TODO: Think if refactoring Procurements to override the invoice and shipment objects and merge them makes sense?
+        Map<ProcurementId, Procurement> idToExisting = repoService.getByIds(updates).stream().collect(Collectors.toMap(p -> p.getId(), Function.identity()));
         List<Procurement> procurements = shipmentService.put(uShipments)
                                                         .stream()
                                                         .map(shipment -> {
                                                             Invoice invoice = invoices.next();
                                                             shipment.setInvoiceItemsFromInvoice(invoice);
-                                                            return new Procurement(shipment, invoice);
+
+                                                            ProcurementId id = ProcurementIdFactory.INSTANCE.build(shipment, invoice);
+                                                            Procurement procurement = idToExisting.get(id);
+                                                            if (procurement == null) {
+                                                                procurement = new Procurement(shipment, invoice);
+                                                            }
+                                                            
+                                                            return procurement;
                                                         })
                                                         .collect(Collectors.toList());
-        
-        List<Procurement> existing = repoService.getByIds(procurements);
+
 
         return repoService.saveAll(procurements);
     }
@@ -245,12 +253,21 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                });
 
         Iterator<Invoice> invoices = invoiceService.patch(uInvoices).iterator();
+
+        Map<ProcurementId, Procurement> idToExisting = repoService.getByIds(updates).stream().collect(Collectors.toMap(p -> p.getId(), Function.identity()));
         List<Procurement> procurements = shipmentService.patch(uShipments)
                                                         .stream()
                                                         .map(shipment -> {
                                                             Invoice invoice = invoices.next();
+                                                            ProcurementId id = ProcurementIdFactory.INSTANCE.build(shipment, invoice);
+                                                            Procurement procurement = idToExisting.get(id);
+                                                            if (procurement == null) {
+                                                                throw new EntityNotFoundException("Procurement", id);
+                                                            }
+
                                                             shipment.setInvoiceItemsFromInvoice(invoice);
-                                                            return new Procurement(shipment, invoice);
+
+                                                            return procurement;
                                                         })
                                                         .collect(Collectors.toList());
 

@@ -1,6 +1,6 @@
 package io.company.brewcraft.model.procurement;
 
-import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.model.Identified;
 
-public interface UpdateProcurement<UPI extends UpdateProcurementItem> extends BaseProcurement<UPI>, CrudEntity<ProcurementId> {
+public interface UpdateProcurement<UPI extends UpdateProcurementItem> extends BaseProcurement<UPI>, Identified<ProcurementId> {
 }
