@@ -9,10 +9,7 @@ import io.company.brewcraft.model.BaseEntity;
 public class ProcurementId extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    public static final String FIELD_SHIPMENT_ID = "shipment_id";
-    public static final String FIELD_INVOICE_ID = "invoice_id";
-
-    @Column(name = "Shipment_id")
+    @Column(name = "shipment_id")
     private Long shipmentId;
 
     @Column(name = "invoice_id")

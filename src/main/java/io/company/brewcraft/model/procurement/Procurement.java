@@ -33,14 +33,14 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
     @EmbeddedId
     private ProcurementId id;
 
-    @MapsId(ProcurementId.FIELD_INVOICE_ID)
+    @MapsId("invoice_id")
     @ManyToOne
-    @JoinColumn(name = ProcurementId.FIELD_INVOICE_ID, referencedColumnName = "id")
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoice;
 
-    @MapsId(ProcurementId.FIELD_SHIPMENT_ID)
+    @MapsId("shipment_id")
     @ManyToOne
-    @JoinColumn(name = ProcurementId.FIELD_SHIPMENT_ID, referencedColumnName = "id")
+    @JoinColumn(name = "shipment_id", referencedColumnName = "id")
     private Shipment shipment;
 
     public Procurement() {
