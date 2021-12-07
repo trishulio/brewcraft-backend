@@ -177,7 +177,6 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

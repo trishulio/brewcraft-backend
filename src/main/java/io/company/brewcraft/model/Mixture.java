@@ -340,7 +340,6 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

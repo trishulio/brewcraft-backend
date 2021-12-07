@@ -207,7 +207,6 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

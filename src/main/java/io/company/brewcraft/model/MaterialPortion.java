@@ -153,7 +153,6 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

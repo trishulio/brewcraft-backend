@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.BasePurchaseOrder;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.UpdatePurchaseOrder;
@@ -74,6 +76,35 @@ public class PurchaseOrderServiceTest {
         final PurchaseOrder purchaseOrder = this.service.get(1L);
 
         assertEquals(new PurchaseOrder(1L), purchaseOrder);
+    }
+
+    @Test
+    public void testGetByIds_CallsRepoService() {
+        ArgumentCaptor<List<? extends Identified<Long>>> captor = ArgumentCaptor.forClass(List.class);
+
+        doReturn(List.of(new PurchaseOrder(1L))).when(mRepoService).getByIds(captor.capture());
+
+        assertEquals(List.of(new PurchaseOrder(1L)), service.getByIds(List.of(() -> 1L)));
+        assertEquals(1L, captor.getValue().get(0).getId());
+    }
+
+    @Test
+    public void testGetByAccessorIds_CallsRepoService() {
+        ArgumentCaptor<Function<PurchaseOrderAccessor, PurchaseOrder>> captor = ArgumentCaptor.forClass(Function.class);
+
+        List<? extends PurchaseOrderAccessor> accessors = List.of(new PurchaseOrderAccessor() {
+             @Override
+             public void setPurchaseOrder(PurchaseOrder PurchaseOrder) {}
+             @Override
+             public PurchaseOrder getPurchaseOrder() {
+                 return new PurchaseOrder(1L);
+             }
+         });
+
+        doReturn(List.of(new PurchaseOrder(1L))).when(mRepoService).getByAccessorIds(eq(accessors), captor.capture());
+
+        assertEquals(List.of(new PurchaseOrder(1L)), service.getByAccessorIds(accessors));
+        assertEquals(new PurchaseOrder(1L), captor.getValue().apply(accessors.get(0)));
     }
 
     @Test

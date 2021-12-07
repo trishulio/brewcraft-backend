@@ -196,7 +196,6 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

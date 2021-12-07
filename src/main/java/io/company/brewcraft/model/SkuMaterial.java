@@ -147,7 +147,6 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

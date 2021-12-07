@@ -123,7 +123,6 @@ public class PurchaseOrder extends BaseEntity implements BasePurchaseOrder, Upda
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

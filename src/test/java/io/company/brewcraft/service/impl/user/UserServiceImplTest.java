@@ -299,8 +299,8 @@ public class UserServiceImplTest {
         existing.setVersion(1);
         doReturn(Optional.of(existing)).when(mUserRepo).findById(1L);
 
-        UpdateUser<? extends UpdateUserRole> user = new User(1L);
-        user.setVersion(2); // Different from existing
+        UpdateUser<? extends UpdateUserRole> user = new User();
+        ((User) user).setVersion(2); // Different from existing
 
         assertThrows(OptimisticLockException.class, () -> service.putUser(1L, user));
     }

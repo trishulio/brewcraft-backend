@@ -183,7 +183,6 @@ public class Material extends BaseEntity implements UpdateMaterial, Audited, Ide
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

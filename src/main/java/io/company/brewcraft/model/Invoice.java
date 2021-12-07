@@ -314,7 +314,6 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

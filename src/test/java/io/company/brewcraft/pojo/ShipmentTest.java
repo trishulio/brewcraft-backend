@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Shipment;
@@ -232,5 +233,41 @@ public class ShipmentTest {
         shipment.setLots(List.of(new MaterialLot()));
 
         assertEquals(1, shipment.getLotCount());
+    }
+
+    @Test
+    public void testSetInvoiceItemsFromInvoice_ThrowsError_WhenInvoiceItemCountDoesNotMeetLotCount() {
+        Invoice invoice = new Invoice();
+        invoice.addItem(new InvoiceItem(1L));
+
+        assertThrows(IllegalStateException.class, () -> shipment.setInvoiceItemsFromInvoice(invoice));
+    }
+
+    @Test
+    public void testSetInvoiceItemsFromInvoice_DoesNothing_WhenInvoiceIsNull() {
+        shipment.setInvoiceItemsFromInvoice(null);
+
+        assertEquals(new Shipment(), shipment);
+    }
+
+    @Test
+    public void testSetInvoiceItemsFromInvoice_SetsInvoiceItemOnLots_WhenSameNumberOfItemsArePresent() {
+        Invoice invoice = new Invoice();
+        invoice.addItem(new InvoiceItem(10L));
+        invoice.addItem(new InvoiceItem(20L));
+
+        shipment.addLot(new MaterialLot(1L));
+        shipment.addLot(new MaterialLot(2L));
+
+        shipment.setInvoiceItemsFromInvoice(invoice);
+
+        Shipment expected = new Shipment();
+        MaterialLot materialLot1 = new MaterialLot(1L);
+        MaterialLot materialLot2 = new MaterialLot(2L);
+        materialLot1.setInvoiceItem(invoice.getInvoiceItems().get(0));
+        materialLot2.setInvoiceItem(invoice.getInvoiceItems().get(1));
+        expected.setLots(List.of(materialLot1, materialLot2));
+
+        assertEquals(expected, shipment);
     }
 }

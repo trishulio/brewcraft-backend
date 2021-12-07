@@ -65,7 +65,7 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
                 }
             }
             item.override(update, this.getPropertyNames(itemCls, this.excludeProps));
-            item.setId(update.getId()); // TODO: During creation, this ID is ignored.
+            item.setId(update.getId()); // Note: During creation, this ID is ignored.
             return item;
         }).collect(Collectors.toList());
 

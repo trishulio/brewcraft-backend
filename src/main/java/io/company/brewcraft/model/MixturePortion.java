@@ -150,7 +150,6 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

@@ -48,9 +48,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
     }
 
     public Procurement(ProcurementId id) {
-        this();
-        this.shipment = new Shipment(id.getShipmentId());
-        this.invoice = new Invoice(id.getInvoiceId());
+        setId(id);
     }
 
     public Procurement(Shipment shipment, Invoice invoice) {
@@ -58,22 +56,32 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
         setShipment(shipment);
         setInvoice(invoice);
     }
-    
+
     @PrePersist
     private void setId() {
-        this.id = new ProcurementId(null, null);
-        if (this.shipment != null) {
-            this.id.setShipmentId(this.shipment.getId());
-        }
-
-        if (this.invoice != null) {
-            this.id.setInvoiceId(this.invoice.getId());
-        }
+        this.id = idFactory.build(this.shipment, this.invoice);
     }
 
     @Override
     public ProcurementId getId() {
         return idFactory.build(shipment, invoice);
+    }
+
+    public void setId(ProcurementId id) {
+        if (this.shipment == null) {
+            this.shipment = new Shipment();
+        }
+        if (this.invoice == null) {
+            this.invoice = new Invoice();
+        }
+
+        if (id == null) {
+            this.shipment.setId(null);
+            this.invoice.setId(null);
+        } else {
+            this.shipment.setId(id.getShipmentId());
+            this.invoice.setId(id.getInvoiceId());
+        }
     }
 
     @Override

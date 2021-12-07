@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.AddMaterialLotDto;
 import io.company.brewcraft.dto.AddShipmentDto;
 import io.company.brewcraft.dto.InvoiceItemDto;
 import io.company.brewcraft.dto.MaterialLotDto;
@@ -35,9 +36,42 @@ public class ShipmentMapperTest {
     public void init() {
         this.mapper = ShipmentMapper.INSTANCE;
     }
+    @Test
+    public void testFromAddDto_ReturnsPojo_WhenDtoIsNotNull() {
+        final AddShipmentDto dto = new AddShipmentDto(
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            100L,
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            List.of(new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 3L))
+        );
+
+        final Shipment shipment = this.mapper.fromAddDto(dto);
+
+        final Shipment expected = new Shipment(
+            null,
+            "SHIPMENT_1",
+            "DESCRIPTION_1",
+            new ShipmentStatus(100L),
+            LocalDateTime.of(1999, 1, 1, 12, 0),
+            LocalDateTime.of(2000, 1, 1, 12, 0),
+            null,
+            null,
+            List.of(new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), null, null, null)),
+            null
+        );
+
+        assertEquals(expected, shipment);
+    }
 
     @Test
-    public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
+    public void testFromAddDto_ReturnsNull_WhenDtoIsNull() {
+        assertNull(this.mapper.fromAddDto(null));
+    }
+
+    @Test
+    public void testFromUpdateDto_ReturnsPojo_WhenDtoIsNotNull() {
         final UpdateShipmentDto dto = new UpdateShipmentDto(
             1L,
             "SHIPMENT_1",
@@ -68,9 +102,8 @@ public class ShipmentMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenDtoIsNull() {
-        assertNull(this.mapper.fromUpdateDto((UpdateShipmentDto) null));
-        assertNull(this.mapper.fromAddDto((AddShipmentDto) null));
+    public void testFromUpdateDto_ReturnsNull_WhenDtoIsNull() {
+        assertNull(this.mapper.fromUpdateDto(null));
     }
 
     @Test

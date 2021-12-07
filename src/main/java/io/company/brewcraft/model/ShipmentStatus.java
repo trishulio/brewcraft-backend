@@ -103,7 +103,6 @@ public class ShipmentStatus extends BaseEntity implements BaseShipmentStatus, Up
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

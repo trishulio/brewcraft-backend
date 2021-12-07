@@ -155,7 +155,6 @@ public class MixtureRecording extends BaseEntity implements UpdateMixtureRecordi
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

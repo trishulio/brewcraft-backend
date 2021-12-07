@@ -248,7 +248,6 @@ public class Facility extends BaseModel implements UpdateFacility, Audited {
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

@@ -51,7 +51,6 @@ public class DummyCrudEntity extends BaseEntity implements CrudEntity<Long>, Bas
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }
