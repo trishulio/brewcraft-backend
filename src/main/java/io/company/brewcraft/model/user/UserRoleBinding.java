@@ -136,7 +136,6 @@ public class UserRoleBinding extends BaseEntity implements Audited, UserRoleAcce
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

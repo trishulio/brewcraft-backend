@@ -239,7 +239,6 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

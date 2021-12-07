@@ -228,7 +228,6 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

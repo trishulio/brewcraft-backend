@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import io.company.brewcraft.model.Versioned;
+import io.company.brewcraft.model.VersionAccessor;
 
-public interface UpdateStorage extends BaseStorage, Versioned {
+public interface UpdateStorage extends BaseStorage, VersionAccessor {
 }

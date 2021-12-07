@@ -103,7 +103,6 @@ public class InvoiceStatus extends BaseModel implements UpdateInvoiceStatus, Aud
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

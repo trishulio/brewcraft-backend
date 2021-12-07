@@ -205,7 +205,6 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

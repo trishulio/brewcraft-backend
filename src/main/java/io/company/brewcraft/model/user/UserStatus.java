@@ -106,7 +106,6 @@ public class UserStatus extends BaseEntity implements BaseUserStatus, UpdateUser
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

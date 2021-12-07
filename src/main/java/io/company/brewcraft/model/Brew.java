@@ -323,6 +323,7 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
@@ -332,7 +333,6 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

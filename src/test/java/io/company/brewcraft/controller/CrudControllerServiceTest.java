@@ -138,7 +138,6 @@ class Pojo extends BaseEntity implements UpdatePojo {
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

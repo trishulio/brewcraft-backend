@@ -239,7 +239,6 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
         return this.version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

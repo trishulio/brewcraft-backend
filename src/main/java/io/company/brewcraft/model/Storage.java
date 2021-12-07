@@ -137,7 +137,6 @@ public class Storage extends BaseEntity implements BaseStorage, Audited, UpdateS
         return version;
     }
 
-    @Override
     public void setVersion(Integer version) {
         this.version = version;
     }

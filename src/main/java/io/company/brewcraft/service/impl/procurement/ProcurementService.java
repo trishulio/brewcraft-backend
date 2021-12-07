@@ -48,6 +48,7 @@ import io.company.brewcraft.service.BaseService;
 import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.RepoService;
+import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.impl.ShipmentService;
 
 @Transactional
@@ -57,6 +58,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     private final InvoiceService invoiceService;
     private final ShipmentService shipmentService;
     private final RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService;
+    private UpdateService<ProcurementId, Procurement, BaseProcurement<? extends BaseProcurementItem>, UpdateProcurement<? extends UpdateProcurementItem>> updateService;
 
     public ProcurementService(final InvoiceService invoiceService, final ShipmentService shipmentService, RepoService<ProcurementId, Procurement, ProcurementAccessor> repoService) {
         this.invoiceService = invoiceService;
@@ -225,6 +227,8 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                                                             return new Procurement(shipment, invoice);
                                                         })
                                                         .collect(Collectors.toList());
+        
+        List<Procurement> existing = repoService.getByIds(procurements);
 
         return repoService.saveAll(procurements);
     }
