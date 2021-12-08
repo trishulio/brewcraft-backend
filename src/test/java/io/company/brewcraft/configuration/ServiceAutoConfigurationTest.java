@@ -39,6 +39,8 @@ import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.ShipmentRefresher;
 import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.repository.user.UserRoleRepository;
+import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
@@ -71,6 +73,8 @@ import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.UserRoleService;
+import io.company.brewcraft.service.UserSalutationService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
@@ -237,6 +241,22 @@ public class ServiceAutoConfigurationTest {
         final ProductMeasureValueService service = this.serviceAutoConfiguration.productMeasureValueService();
 
         assertTrue(service instanceof ProductMeasureValueServiceImpl);
+    }
+
+    @Test
+    public void testUserRoleService_ReturnsInstanceOfUserRoleService() {
+        final UserRoleRepository userRoleRepositoryMock = mock(UserRoleRepository.class);
+        final UserRoleService service = this.serviceAutoConfiguration.userRoleService(userRoleRepositoryMock);
+
+        assertTrue(service instanceof UserRoleService);
+    }
+
+    @Test
+    public void testUserSalutationService_ReturnsInstanceOfUserSalutationService() {
+        final UserSalutationRepository measureRepositoryMock = mock(UserSalutationRepository.class);
+        final UserSalutationService service = this.serviceAutoConfiguration.userSalutationService(measureRepositoryMock);
+
+        assertTrue(service instanceof UserSalutationService);
     }
 
     @Test

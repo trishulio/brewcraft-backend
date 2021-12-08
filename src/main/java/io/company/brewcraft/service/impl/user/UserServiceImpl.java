@@ -103,11 +103,12 @@ public class UserServiceImpl extends BaseService implements UserService {
         existing.optimisticLockCheck(update);
         Class<? super User> userClz = UpdateUser.class;
 
-        User temp = new User(userId);
+        User temp = new User();
         temp.override(update, getPropertyNames(userClz));
         userRefresher.refresh(List.of(temp));
 
         existing.override(temp, getPropertyNames(userClz));
+        existing.setId(userId);
 
         User updated = userRepo.saveAndFlush(existing);
 
@@ -121,12 +122,13 @@ public class UserServiceImpl extends BaseService implements UserService {
         User existing = userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         existing.optimisticLockCheck(patch);
 
-        User temp = new User(userId);
+        User temp = new User();
         temp.override(existing);
         temp.outerJoin(patch, getPropertyNames(UpdateUser.class));
         userRefresher.refresh(List.of(temp));
 
         existing.override(temp);
+        existing.setId(userId);
 
         return userRepo.saveAndFlush(existing);
     }
