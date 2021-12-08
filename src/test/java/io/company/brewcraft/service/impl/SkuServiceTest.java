@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,6 +15,9 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
@@ -195,5 +199,22 @@ public class SkuServiceTest {
        doReturn(List.of(new Sku(1L), new Sku(2L))).when(this.mRepoService).getByIds(updates);
 
        assertThrows(EntityNotFoundException.class, () -> this.skuService.patchSkus(updates), "Cannot find skus with Ids: [3, 4]");
+   }
+
+   @Test
+   public void testSkuService_classIsTransactional() throws Exception {
+       Transactional transactional = skuService.getClass().getAnnotation(Transactional.class);
+
+       assertNotNull(transactional);
+       assertEquals(transactional.isolation(), Isolation.DEFAULT);
+       assertEquals(transactional.propagation(), Propagation.REQUIRED);
+   }
+
+   @Test
+   public void testSkuService_methodsAreNotTransactional() throws Exception {
+       Method[] methods = skuService.getClass().getMethods();
+       for(Method method : methods) {
+           assertFalse(method.isAnnotationPresent(Transactional.class));
+       }
    }
 }
