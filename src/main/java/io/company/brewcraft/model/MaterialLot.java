@@ -56,10 +56,10 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit"))
     })
     @AssociationOverrides({
-        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol"))
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
 
