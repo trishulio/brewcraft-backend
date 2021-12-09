@@ -1,30 +1,23 @@
 package io.company.brewcraft.model;
 
-import javax.measure.Unit;
+public interface BaseMaterial extends BaseQuantityUnitAccessor {
+    String getName();
 
-public interface BaseMaterial {
+    void setName(String name);
 
-    public String getName();
+    String getDescription();
 
-    public void setName(String name);
+    void setDescription(String description);
 
-    public String getDescription();
+    MaterialCategory getCategory();
 
-    public void setDescription(String description);
+    void setCategory(MaterialCategory category);
 
-    public MaterialCategory getCategory();
+    String getUPC();
 
-    public void setCategory(MaterialCategory category);
+    void setUPC(String upc);
 
-    public String getUPC();
+    String getImageSrc();
 
-    public void setUPC(String upc);
-
-    public Unit<?> getBaseQuantityUnit();
-
-    public void setBaseQuantityUnit(Unit<?> baseQuantityUnit);
-
-    public String getImageSrc();
-
-    public void setImageSrc(String imageSrc);
+    void setImageSrc(String imageSrc);
 }

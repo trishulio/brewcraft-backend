@@ -1,14 +1,21 @@
 package io.company.brewcraft.util;
 
 import javax.measure.Quantity;
+import javax.measure.Unit;
 import javax.measure.quantity.AmountOfSubstance;
 import javax.measure.quantity.Mass;
 import javax.measure.quantity.Volume;
 
+import io.company.brewcraft.model.BaseQuantityUnitAccessor;
+import tec.uom.se.quantity.Quantities;
+
 public class QuantityCalculator {
+    public static final QuantityCalculator INSTANCE = new QuantityCalculator();
+
+    private QuantityCalculator() {};
 
     @SuppressWarnings("unchecked")
-    public static Quantity<?> subtract(Quantity<?> q1, Quantity<?> q2) {
+    public Quantity<?> subtract(Quantity<?> q1, Quantity<?> q2) {
         if (SupportedUnits.DEFAULT_MASS.isCompatible(q1.getUnit())) {
             Quantity<Mass> mass1 = (Quantity<Mass>) q1;
             Quantity<Mass> mass2 = (Quantity<Mass>) q2;
@@ -27,5 +34,45 @@ public class QuantityCalculator {
         } else {
             throw new RuntimeException("Unsupported quantity type");
         }
+    }
+
+    public Quantity<?> toSystemQuantityValueWithDisplayUnit(Quantity<?> quantityWithDisplayUnit) {
+        Quantity<?> systemUnitValueWithDisplayUnit = null;
+
+        if (quantityWithDisplayUnit != null) {
+            Unit<?> displayUnit = quantityWithDisplayUnit.getUnit();
+            Number valueInSystemUnit = quantityWithDisplayUnit.toSystemUnit().getValue();
+
+            systemUnitValueWithDisplayUnit = Quantities.getQuantity(valueInSystemUnit, displayUnit);
+        }
+
+        return systemUnitValueWithDisplayUnit;
+    }
+
+    public <T extends Quantity<T>> Quantity<T> fromSystemQuantityValueWithDisplayUnit(Quantity<T> quantityWithDisplayUnit) {
+        Quantity<T> qtyInDisplayUnit = null;
+
+        if (quantityWithDisplayUnit != null) {
+            Unit<T> displayUnit = quantityWithDisplayUnit.getUnit();
+
+            Number valueInSystemUnit = quantityWithDisplayUnit.getValue();
+            Quantity<T> qtyInSystemUnit = Quantities.getQuantity(valueInSystemUnit, displayUnit.getSystemUnit());
+
+            Number valueInDisplayUnit = qtyInSystemUnit.to(displayUnit).getValue();
+
+            qtyInDisplayUnit = Quantities.getQuantity(valueInDisplayUnit, displayUnit);
+        }
+
+        return qtyInDisplayUnit;
+    }
+
+    public boolean isCompatibleQtyForUnitAccessor(Quantity<?> quantity, BaseQuantityUnitAccessor unitAccessor) {
+        boolean isCompatible = true;
+
+        if (unitAccessor != null && unitAccessor.getBaseQuantityUnit() != null && quantity != null) {
+            isCompatible = unitAccessor.getBaseQuantityUnit().isCompatible(quantity.getUnit());
+        }
+
+        return isCompatible;
     }
 }

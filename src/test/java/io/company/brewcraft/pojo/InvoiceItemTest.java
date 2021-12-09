@@ -15,8 +15,10 @@ import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
 public class InvoiceItemTest {
 
@@ -108,6 +110,15 @@ public class InvoiceItemTest {
     }
 
     @Test
+    public void testSetQuantity_ThrowsException_WhenMaterialHasIncompatibleUnit() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+        invoiceItem.setMaterial(material);
+
+        assertThrows(IncompatibleQuantityUnitException.class, () -> invoiceItem.setQuantity(Quantities.getQuantity("10 kg")));
+    }
+
+    @Test
     public void testAccessPrice() {
         assertNull(invoiceItem.getPrice());
         invoiceItem.setPrice(Money.parse("CAD 1"));
@@ -126,6 +137,15 @@ public class InvoiceItemTest {
         assertNull(invoiceItem.getMaterial());
         invoiceItem.setMaterial(new Material(1L));
         assertEquals(new Material(1L), invoiceItem.getMaterial());
+    }
+
+    @Test
+    public void testSetMaterial_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
+        invoiceItem.setQuantity(Quantities.getQuantity("10 kg"));
+
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+        assertThrows(IncompatibleQuantityUnitException.class, () -> invoiceItem.setMaterial(material));
     }
 
     @Test

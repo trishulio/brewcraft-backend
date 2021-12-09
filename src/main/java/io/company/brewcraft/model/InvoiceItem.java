@@ -29,8 +29,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity(name = "invoice_item")
 @Table
@@ -59,10 +61,10 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value_kg"))
     })
     @AssociationOverrides({
-        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol"))
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
 
@@ -153,11 +155,16 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        IncompatibleQuantityUnitException.validate(quantity, material);
+
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
@@ -188,6 +195,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Override
     public void setMaterial(Material material) {
+        IncompatibleQuantityUnitException.validate(getQuantity(), material);
         this.material = material;
     }
 

@@ -28,7 +28,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity(name = "material_lot")
 @Table
@@ -126,12 +128,17 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
+        IncompatibleQuantityUnitException.validate(quantity, getMaterial(this.invoiceItem));
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
+
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
@@ -164,6 +171,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public void setInvoiceItem(InvoiceItem invoiceItem) {
+        IncompatibleQuantityUnitException.validate(getQuantity(), getMaterial(invoiceItem));
         this.invoiceItem = invoiceItem;
     }
 
@@ -204,5 +212,14 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    private Material getMaterial(InvoiceItem invoiceItem) {
+        Material material = null;
+        if (invoiceItem != null) {
+            material = invoiceItem.getMaterial();
+        }
+
+        return material;
     }
 }

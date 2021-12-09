@@ -237,7 +237,6 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                                                         })
                                                         .collect(Collectors.toList());
 
-
         return repoService.saveAll(procurements);
     }
 

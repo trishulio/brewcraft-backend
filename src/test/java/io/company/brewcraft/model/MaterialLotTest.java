@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -66,6 +66,26 @@ public class MaterialLotTest {
     }
 
     @Test
+    public void testSetQuantity_ThrowsException_WhenQuantityUnitIsIncompatible() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        lot.setInvoiceItem(invoiceItem);
+        assertThrows(IncompatibleQuantityUnitException.class, () -> lot.setQuantity(Quantities.getQuantity("10 kg")));
+    }
+
+    @Test
+    public void testSetQuantity_DoesNotThrowException_WhenMaterialIsNull() {
+        InvoiceItem invoiceItem = new InvoiceItem();
+        lot.setInvoiceItem(invoiceItem);
+
+        lot.setQuantity(Quantities.getQuantity("10 kg"));
+        assertEquals(Quantities.getQuantity("10 kg"), lot.getQuantity());
+    }
+
+    @Test
     public void testAccessQuantityOverloadedEntity() {
         assertNull(this.lot.getQuantity());
         this.lot.setQuantity(new QuantityEntity(new UnitEntity("kg"), new BigDecimal("10.00")));
@@ -114,6 +134,30 @@ public class MaterialLotTest {
         assertNull(this.lot.getInvoiceItem());
         this.lot.setInvoiceItem(new InvoiceItem(1L));
         assertEquals(new InvoiceItem(1L), this.lot.getInvoiceItem());
+    }
+
+    @Test
+    public void testSetInvoiceItem_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        lot.setQuantity(Quantities.getQuantity("10 kg"));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> lot.setInvoiceItem(invoiceItem));
+    }
+
+    @Test
+    public void testSetInvoiceItem_DoesNotThrowException_WhenMaterialUnitIsIncompatibleWithQuantity() {
+        InvoiceItem invoiceItem = new InvoiceItem();
+
+        lot.setQuantity(Quantities.getQuantity("10 kg"));
+
+        lot.setInvoiceItem(invoiceItem);
+
+        assertEquals(invoiceItem, lot.getInvoiceItem());
+        assertEquals(Quantities.getQuantity("10 kg"), lot.getQuantity());
     }
 
     @Test
