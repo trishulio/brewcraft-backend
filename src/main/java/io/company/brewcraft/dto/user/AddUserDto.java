@@ -30,10 +30,8 @@ public class AddUserDto extends BaseDto {
     @NotNull
     private Long statusId;
 
-    @NotNull
     private Long salutationId;
 
-    @NotBlank
     private String phoneNumber;
 
     private List<Long> roleIds;

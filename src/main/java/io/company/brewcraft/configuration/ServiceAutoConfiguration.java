@@ -86,6 +86,8 @@ import io.company.brewcraft.repository.SupplierContactRepository;
 import io.company.brewcraft.repository.SupplierRepository;
 import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
+import io.company.brewcraft.repository.user.UserRoleRepository;
+import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewAccessor;
@@ -140,6 +142,8 @@ import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.UpdateService;
+import io.company.brewcraft.service.UserRoleService;
+import io.company.brewcraft.service.UserSalutationService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
@@ -317,6 +321,20 @@ public class ServiceAutoConfiguration {
     public ProductMeasureValueService productMeasureValueService() {
         final ProductMeasureValueService productMeasureValueService = new ProductMeasureValueServiceImpl();
         return productMeasureValueService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserRoleService.class)
+    public UserRoleService userRoleService(UserRoleRepository userRoleRepository) {
+        final UserRoleService userRoleService = new UserRoleService(userRoleRepository);
+        return userRoleService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserSalutationService.class)
+    public UserSalutationService userSalutationService(UserSalutationRepository userSalutationRepository) {
+        final UserSalutationService userSalutationService = new UserSalutationService(userSalutationRepository);
+        return userSalutationService;
     }
 
     @Bean
