@@ -24,6 +24,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -136,7 +137,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
-        IncompatibleQuantityUnitException.validate(quantity, getMaterial(this.invoiceItem));
+        BaseQuantityUnitAccessor.validateUnit(getMaterial(), quantity);
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
 
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
@@ -171,7 +172,12 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public void setInvoiceItem(InvoiceItem invoiceItem) {
-        IncompatibleQuantityUnitException.validate(getQuantity(), getMaterial(invoiceItem));
+        Material material = null;
+        if (invoiceItem != null) {
+            material = invoiceItem.getMaterial();
+        }
+        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
+
         this.invoiceItem = invoiceItem;
     }
 
@@ -214,10 +220,11 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         this.version = version;
     }
 
-    private Material getMaterial(InvoiceItem invoiceItem) {
+    @JsonIgnore
+    public Material getMaterial() {
         Material material = null;
-        if (invoiceItem != null) {
-            material = invoiceItem.getMaterial();
+        if (this.invoiceItem != null) {
+            material = this.invoiceItem.getMaterial();
         }
 
         return material;

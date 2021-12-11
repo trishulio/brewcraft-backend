@@ -162,7 +162,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
-        IncompatibleQuantityUnitException.validate(quantity, material);
+        BaseQuantityUnitAccessor.validateUnit(material, quantity);
 
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
@@ -195,7 +195,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Override
     public void setMaterial(Material material) {
-        IncompatibleQuantityUnitException.validate(getQuantity(), material);
+        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
         this.material = material;
     }
 

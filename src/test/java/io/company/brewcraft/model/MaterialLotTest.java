@@ -189,6 +189,29 @@ public class MaterialLotTest {
     }
 
     @Test
+    public void testGetMaterial_ReturnsNull_WhenInvoiceItemIsNull() {
+        this.lot.setInvoiceItem(null);
+
+        assertNull(this.lot.getMaterial());
+    }
+
+    @Test
+    public void testGetMaterial_ReturnsNull_WhenInvoiceItemHasNullMaterial() {
+        this.lot.setInvoiceItem(new InvoiceItem(1L));
+
+        assertNull(this.lot.getMaterial());
+    }
+
+    @Test
+    public void testGetMaterial_ReturnsMaterial_WhenInvoiceItemHasNonNullMaterial() {
+        InvoiceItem invoiceItem = new InvoiceItem(1L);
+        invoiceItem.setMaterial(new Material(1L));
+        this.lot.setInvoiceItem(invoiceItem);
+
+        assertEquals(new Material(1L), this.lot.getMaterial());
+    }
+
+    @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         this.lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 

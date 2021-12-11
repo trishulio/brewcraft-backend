@@ -269,8 +269,8 @@ public abstract class Lot extends BaseEntity {
     private String lotNumber;
 
     @Embedded
-    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "qty_value")) })
-    @AssociationOverrides({ @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol")) })
+    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit")) })
+    @AssociationOverrides({ @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

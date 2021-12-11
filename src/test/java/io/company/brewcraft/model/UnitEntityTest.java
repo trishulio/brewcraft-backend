@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,13 @@ public class UnitEntityTest {
         assertNull(unit.getName());
         unit.setName("Kilogram");
         assertEquals("Kilogram", unit.getName());
+    }
+
+    @Test
+    public void testGetSetBaseUnitEntity() {
+        assertNull(unit.getBaseUnitEntity());
+        unit.setBaseUnitEntity(new UnitEntity("kg", "Kilogram"));
+        assertEquals(new UnitEntity("kg", "Kilogram"), unit.getBaseUnitEntity());
     }
 
     @Test
