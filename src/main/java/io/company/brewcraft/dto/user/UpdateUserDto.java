@@ -3,6 +3,7 @@ package io.company.brewcraft.dto.user;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.NullOrNotBlank;
@@ -27,6 +28,7 @@ public class UpdateUserDto extends BaseDto {
 
     private String imageUrl;
 
+    @Size(min = 1)
     private List<Long> roleIds;
 
     @NotNull

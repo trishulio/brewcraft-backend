@@ -204,11 +204,11 @@ public class UserServiceImplTest {
 
         User expected = new User(
             1L,
-            null, // user-name update will make it out of sync from cognito.
+            "USER_NAME",
             "DISPLAY_NAME",
             "FIRST_NAME",
             "LAST_NAME",
-            "EMAIL",
+            null, //email update should be ignored as it will cause out of sync issue with cognito
             "PHONE_NUMBER",
             "IMAGE_URL",
             new UserStatus(1L),
@@ -250,11 +250,11 @@ public class UserServiceImplTest {
 
         User expected = new User(
             1L,
-            null, // user-name update will make it out of sync from cognito.
+            "USER_NAME",
             null,
             "FIRST_NAME",
             "LAST_NAME",
-            "EMAIL",
+            null, //email update should be ignored as it will cause out of sync issue with cognito
             null,
             null,
             new UserStatus(1L),
@@ -332,7 +332,7 @@ public class UserServiceImplTest {
             "DISPLAY_NAME_NEW",
             null,
             "LAST_NAME_NEW",
-            null,
+            "EMAIL_NEW",
             "PHONE_NUMBER_NEW",
             null,
             null,
@@ -347,11 +347,11 @@ public class UserServiceImplTest {
 
         User expected = new User(
             1L,
-            "USER_NAME",
+            "USER_NAME_NEW",
             "DISPLAY_NAME_NEW",
             "FIRST_NAME",
             "LAST_NAME_NEW",
-            "EMAIL",
+            "EMAIL", //email update should be ignored as it will cause out of sync issue with cognito
             "PHONE_NUMBER_NEW",
             "IMAGE_URL",
             new UserStatus(1L),

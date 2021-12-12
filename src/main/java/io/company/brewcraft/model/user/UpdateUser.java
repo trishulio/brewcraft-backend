@@ -17,10 +17,6 @@ public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Lo
 
     void setLastName(String lastName);
 
-    String getEmail();
-
-    void setEmail(String email);
-
     String getImageUrl();
 
     void setImageUrl(String imageUrl);
@@ -32,4 +28,8 @@ public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Lo
     List<R> getRoles();
 
     void setRoles(List<R> roles);
+
+    String getUserName();
+
+    void setUserName(String userName);
 }
