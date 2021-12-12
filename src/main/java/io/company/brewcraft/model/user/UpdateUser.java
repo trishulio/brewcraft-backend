@@ -5,6 +5,10 @@ import java.util.List;
 import io.company.brewcraft.service.UpdatableEntity;
 
 public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Long>, UserStatusAccessor, UserSalutationAccessor {
+    String getUserName();
+
+    void setUserName(String userName);
+
     String getDisplayName();
 
     void setDisplayName(String displayName);
@@ -28,8 +32,4 @@ public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Lo
     List<R> getRoles();
 
     void setRoles(List<R> roles);
-
-    String getUserName();
-
-    void setUserName(String userName);
 }
