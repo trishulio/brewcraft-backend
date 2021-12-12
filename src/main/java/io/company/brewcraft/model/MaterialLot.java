@@ -24,11 +24,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity(name = "material_lot")
 @Table
@@ -54,10 +57,10 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "value", column = @Column(name = "qty_value"))
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit"))
     })
     @AssociationOverrides({
-        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "qty_unit_symbol", referencedColumnName = "symbol"))
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
 
@@ -126,12 +129,17 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
+        BaseQuantityUnitAccessor.validateUnit(getMaterial(), quantity);
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
+
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
@@ -164,6 +172,12 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     @Override
     public void setInvoiceItem(InvoiceItem invoiceItem) {
+        Material material = null;
+        if (invoiceItem != null) {
+            material = invoiceItem.getMaterial();
+        }
+        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
+
         this.invoiceItem = invoiceItem;
     }
 
@@ -204,5 +218,15 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @JsonIgnore
+    public Material getMaterial() {
+        Material material = null;
+        if (this.invoiceItem != null) {
+            material = this.invoiceItem.getMaterial();
+        }
+
+        return material;
     }
 }

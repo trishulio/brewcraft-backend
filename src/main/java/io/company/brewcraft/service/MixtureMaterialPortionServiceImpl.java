@@ -126,7 +126,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
                 boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
 
                 //If put is on the same lot, we only need to check if the difference in quantity is available
-                Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.subtract(putMaterialPortion.getQuantity(), existing.getQuantity()) : putMaterialPortion.getQuantity();
+                Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.INSTANCE.subtract(putMaterialPortion.getQuantity(), existing.getQuantity()) : putMaterialPortion.getQuantity();
 
                 if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
                     Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), quantityToCheck);
@@ -178,7 +178,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
                 Long lotIdToCheck = isPatchOnSameLot ? existing.getMaterialLot().getId() : patchMaterialPortion.getMaterialLot().getId();
 
                 //If patch is on the same lot, we only need to check if the difference in quantity is available
-                Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.subtract(patchMaterialPortion.getQuantity(), existing.getQuantity()) :
+                Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.INSTANCE.subtract(patchMaterialPortion.getQuantity(), existing.getQuantity()) :
                     patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existing.getQuantity();
 
                 if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {

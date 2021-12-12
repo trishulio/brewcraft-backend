@@ -2,8 +2,12 @@ package io.company.brewcraft.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity(name = "qty_unit")
@@ -18,6 +22,11 @@ public class UnitEntity extends BaseEntity {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "base_unit_symbol", referencedColumnName = "symbol")
+    @JsonBackReference
+    private UnitEntity baseUnitEntity;
 
     public UnitEntity() {
         this(null, null);
@@ -47,4 +56,13 @@ public class UnitEntity extends BaseEntity {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
+    public UnitEntity getBaseUnitEntity() {
+        return baseUnitEntity;
+    }
+
+    public void setBaseUnitEntity(UnitEntity baseUnitEntity) {
+        this.baseUnitEntity = baseUnitEntity;
+    }
+
 }

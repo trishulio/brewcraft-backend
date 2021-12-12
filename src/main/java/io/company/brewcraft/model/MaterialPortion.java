@@ -21,13 +21,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity(name = "MATERIAL_PORTION")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -49,10 +51,10 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "value", column = @Column(name = "quantity_value"))
+        @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit"))
     })
     @AssociationOverrides({
-        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol"))
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol"))
     })
     private QuantityEntity quantity;
 
@@ -105,16 +107,27 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
 
     @Override
     public void setMaterialLot(MaterialLot materialLot) {
+        Material material = null;
+        if (materialLot != null) {
+            material = materialLot.getMaterial();
+        }
+        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
+
         this.materialLot = materialLot;
     }
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        BaseQuantityUnitAccessor.validateUnit(getMaterial(), quantity);
+
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
@@ -155,5 +168,15 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @JsonIgnore
+    public Material getMaterial() {
+        Material material = null;
+        if (this.materialLot != null) {
+            material = this.materialLot.getMaterial();
+        }
+
+        return material;
     }
 }

@@ -1,6 +1,8 @@
 package io.company.brewcraft.model;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
 public class MaterialPortionTest {
 
@@ -54,15 +58,69 @@ public class MaterialPortionTest {
 
     @Test
     public void testGetSetMaterialLot() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.KILOGRAM);
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        MaterialLot materialLot = new MaterialLot();
+        materialLot.setInvoiceItem(invoiceItem);
+
+        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+
         materialPortion.setMaterialLot(new MaterialLot(2L));
 
         assertEquals(new MaterialLot(2L), materialPortion.getMaterialLot());
     }
 
     @Test
+    public void testGetSetMaterialLot_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        MaterialLot materialLot = new MaterialLot();
+        materialLot.setInvoiceItem(invoiceItem);
+
+        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+
+        assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setMaterialLot(materialLot));
+    }
+
+    @Test
     public void testGetSetQuantity() {
-        materialPortion.setQuantity(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM));
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), materialPortion.getQuantity());
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.KILOGRAM);
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        MaterialLot materialLot = new MaterialLot();
+        materialLot.setInvoiceItem(invoiceItem);
+
+        materialPortion.setMaterialLot(materialLot);
+        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+
+        assertEquals(Quantities.getQuantity("10 kg"), materialPortion.getQuantity());
+    }
+
+    @Test
+    public void testGetSetQuantity_ThrowsException_WhenQuantityUnitDoesNotMatchLotQuantity() {
+        Material material = new Material();
+        material.setBaseQuantityUnit(Units.LITRE);
+
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(material);
+
+        MaterialLot materialLot = new MaterialLot();
+        materialLot.setInvoiceItem(invoiceItem);
+
+        materialPortion.setMaterialLot(materialLot);
+
+        assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setQuantity(Quantities.getQuantity("10 kg")));
     }
 
     @Test
@@ -90,6 +148,26 @@ public class MaterialPortionTest {
         Integer version = 1;
         materialPortion.setVersion(version);
         assertEquals(version, materialPortion.getVersion());
+    }
+
+    @Test
+    public void testGetSetMaterial() {
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setMaterial(new Material(1L));
+
+        MaterialLot materialLot = new MaterialLot();
+        materialLot.setInvoiceItem(invoiceItem);
+
+        materialPortion.setMaterialLot(materialLot);
+
+        assertEquals(new Material(1L), materialPortion.getMaterial());
+    }
+
+    @Test
+    public void testGetSetMaterial_ReturnsNull_WhenMaterialLotIsNull() {
+        materialPortion.setMaterialLot(null);
+
+        assertNull(materialPortion.getMaterial());
     }
 
     @Test

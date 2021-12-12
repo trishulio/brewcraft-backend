@@ -51,7 +51,7 @@ public class BaseMaterialPortionService extends BaseService {
 
                 Quantity<?> availableQuantity = stockLot.getQuantity();
 
-                BigDecimal remainingQuantityValue = new BigDecimal(QuantityCalculator.subtract(availableQuantity, requestedQuantity).getValue().toString());
+                BigDecimal remainingQuantityValue = new BigDecimal(QuantityCalculator.INSTANCE.subtract(availableQuantity, requestedQuantity).getValue().toString());
 
                 //Requested quantity is only available if remaining quantity is >= 0
                 if (remainingQuantityValue.compareTo(BigDecimal.ZERO) == 0 || remainingQuantityValue.compareTo(BigDecimal.ZERO) > 0) {
