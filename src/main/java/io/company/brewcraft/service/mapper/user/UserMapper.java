@@ -26,7 +26,6 @@ public interface UserMapper {
     User fromDto(AddUserDto addUserDto);
 
     @Mapping(target = "roleBindings", ignore = true)
-    @Mapping(target = User.ATTR_USER_NAME, ignore = true)
     @Mapping(target = User.ATTR_ID, ignore = true)
     @Mapping(target = User.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = User.ATTR_CREATED_AT, ignore = true)

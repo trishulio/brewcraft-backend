@@ -20,6 +20,7 @@ public class UpdateUserDtoTest {
     @Test
     public void testAllArgConstructor_SetsAllFields() {
         dto = new UpdateUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -31,6 +32,7 @@ public class UpdateUserDtoTest {
             1
         );
 
+        assertEquals("userName", dto.getUserName());
         assertEquals("displayName", dto.getDisplayName());
         assertEquals("firstName", dto.getFirstName());
         assertEquals("lastName", dto.getLastName());

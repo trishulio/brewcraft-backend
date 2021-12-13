@@ -75,6 +75,7 @@ public class UserMapperTest {
     @Test
     public void testFromDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
         UpdateUserDto dto =  new UpdateUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -90,7 +91,7 @@ public class UserMapperTest {
 
         User expected = new User(
             null,
-            null,
+            "userName",
             "displayName",
             "firstName",
             "lastName",

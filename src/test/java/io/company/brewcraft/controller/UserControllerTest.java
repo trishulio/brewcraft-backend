@@ -258,6 +258,7 @@ public class UserControllerTest {
     public void testPutUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(UpdateUser.class));
         UpdateUserDto updateDto = new UpdateUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -273,7 +274,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             null,
-            null,
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -295,6 +296,7 @@ public class UserControllerTest {
     public void testPatchUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
         doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).patchUser(eq(1L), any(UpdateUser.class));
         UpdateUserDto updateDto = new UpdateUserDto(
+            "userName",
             "displayName",
             "firstName",
             "lastName",
@@ -310,7 +312,7 @@ public class UserControllerTest {
 
         UserDto expected = new UserDto(
             null,
-            null,
+            "userName",
             "displayName",
             "firstName",
             "lastName",

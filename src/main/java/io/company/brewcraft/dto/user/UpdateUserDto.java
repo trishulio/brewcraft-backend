@@ -3,11 +3,15 @@ package io.company.brewcraft.dto.user;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.NullOrNotBlank;
 
 public class UpdateUserDto extends BaseDto {
+
+    @NullOrNotBlank
+    private String userName;
 
     @NullOrNotBlank
     private String displayName;
@@ -27,6 +31,7 @@ public class UpdateUserDto extends BaseDto {
 
     private String imageUrl;
 
+    @Size(min = 1)
     private List<Long> roleIds;
 
     @NotNull
@@ -35,7 +40,8 @@ public class UpdateUserDto extends BaseDto {
     public UpdateUserDto() {
     }
 
-    public UpdateUserDto(String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
+    public UpdateUserDto(String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
+        setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
         setLastName(lastName);
@@ -45,6 +51,14 @@ public class UpdateUserDto extends BaseDto {
         setRoleIds(roleIds);
         setImageUrl(imageUrl);
         setVersion(version);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDisplayName() {
