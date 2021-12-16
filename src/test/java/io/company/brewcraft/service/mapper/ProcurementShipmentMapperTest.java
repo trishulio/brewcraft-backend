@@ -55,7 +55,7 @@ public class ProcurementShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            null,
+            List.of(),
             1
         );
 
@@ -88,7 +88,7 @@ public class ProcurementShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            null,
+            List.of(),
             null
         );
 

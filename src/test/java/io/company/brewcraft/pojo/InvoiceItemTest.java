@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -57,35 +56,6 @@ public class InvoiceItemTest {
 
         invoiceItem.setInvoice(invoice);
         assertEquals(invoice, invoiceItem.getInvoice());
-    }
-
-    @Test
-    public void testSetInvoice_RemovesItselfFromTheSourceinvoiceItemsAndSetsNewListOnTarget_WhenTargetinvoiceItemsAreNull() {
-        Invoice source = new Invoice();
-        source.setInvoiceItems(List.of(invoiceItem));
-
-        Invoice target = new Invoice();
-        invoiceItem.setInvoice(target);
-
-        assertEquals(List.of(), source.getInvoiceItems());
-        assertEquals(List.of(invoiceItem), target.getInvoiceItems());
-    }
-
-    @Test
-    public void testSetInvoice_RemovesItemFromInvoiceAndAddsToExistingTargetInvoiceItemList_WhenTargetinvoiceItemsAreNotNull() {
-        Invoice source = new Invoice();
-        source.setInvoiceItems(List.of(invoiceItem));
-
-        Invoice target = new Invoice();
-        target.setInvoiceItems(List.of(new InvoiceItem()));
-
-        invoiceItem.setInvoice(target);
-
-        assertEquals(List.of(), source.getInvoiceItems());
-
-        Invoice expectedTarget = new Invoice();
-        expectedTarget.setInvoiceItems(List.of(new InvoiceItem(), new InvoiceItem()));
-        assertEquals(expectedTarget, target);
     }
 
     @Test
