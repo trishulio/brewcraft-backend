@@ -114,18 +114,21 @@ public class ShipmentTest {
 
     @Test
     public void testAccessLots() {
-        assertNull(this.shipment.getLots());
+        assertEquals(List.of(), this.shipment.getLots());
         this.shipment.setLots(List.of(new MaterialLot(1L)));
 
-        final MaterialLot expected = new MaterialLot(1L);
-        expected.setShipment(new Shipment());
-        assertEquals(List.of(expected), this.shipment.getLots());
+        final MaterialLot expectedLot = new MaterialLot(1L);
+        Shipment expectedShipment = new Shipment();
+        expectedShipment.addLot(expectedLot);
+
+
+        assertEquals(List.of(expectedLot), this.shipment.getLots());
     }
 
     @Test
     public void testAccessLots_ReturnsNull_WhenSetNull() {
         this.shipment.setLots(null);
-        assertNull(this.shipment.getLots());
+        assertEquals(List.of(), this.shipment.getLots());
     }
 
     @Test
@@ -137,7 +140,7 @@ public class ShipmentTest {
 
     @Test
     public void testAddLot_CreatesNewLotList_WhenLotIsNotNull() {
-        assertNull(this.shipment.getLots());
+        assertEquals(List.of(), this.shipment.getLots());
 
         final MaterialLot lot = new MaterialLot(1L);
         assertNull(lot.getShipment());
@@ -165,7 +168,7 @@ public class ShipmentTest {
     }
 
     @Test
-    public void testAddLot_AddsLotOnlyOnce_WhenMultipleAdditionsArePerformed() {
+    public void testAddLot_AddsDuplicates_WhenMultipleAdditionsArePerformed() {
         final MaterialLot lot = new MaterialLot(1L);
         assertNull(lot.getShipment());
 
@@ -173,14 +176,14 @@ public class ShipmentTest {
         this.shipment.addLot(lot);
         this.shipment.addLot(lot);
 
-        assertEquals(List.of(lot), this.shipment.getLots());
+        assertEquals(List.of(lot, lot, lot), this.shipment.getLots());
         assertEquals(this.shipment, lot.getShipment());
     }
 
     @Test
     public void testAddLot_DoesNothing_WhenLotIsNull() {
         shipment.addLot(null);
-        assertNull(shipment.getLots());
+        assertEquals(List.of(), shipment.getLots());
     }
 
     @Test

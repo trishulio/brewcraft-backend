@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CrudEntity;
-import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
@@ -142,15 +141,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Override
     public void setInvoice(Invoice invoice) {
-        if (this.invoice != null) {
-            this.invoice.removeItem(this);
-        }
-
         this.invoice = invoice;
-
-        if (this.invoice != null) {
-            this.invoice.addItem(this);
-        }
     }
 
     @Override

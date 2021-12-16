@@ -78,6 +78,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     private Integer version;
 
     public Shipment() {
+        this.setLots(null);
     }
 
     public Shipment(Long id) {
@@ -197,7 +198,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         }
 
         if (lots == null) {
-            this.lots = null;
+            this.lots.clear();
         } else {
             lots.stream().collect(Collectors.toList()).forEach(this::addLot);
         }
@@ -212,13 +213,16 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
             this.lots = new ArrayList<>();
         }
 
-        if (lot.getShipment() != this) {
+        Shipment prevShipment = lot.getShipment();
+        if (prevShipment != this) {
+            if (prevShipment != null) {
+                prevShipment.removeLot(lot);
+            }
+
             lot.setShipment(this);
         }
 
-        if (!this.lots.contains(lot)) {
-            this.lots.add(lot);
-        }
+        this.lots.add(lot);
     }
 
     public boolean removeLot(MaterialLot lot) {

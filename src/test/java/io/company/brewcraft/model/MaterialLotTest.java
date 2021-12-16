@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,35 +97,6 @@ public class MaterialLotTest {
 
         this.lot.setShipment(shipment);
         assertEquals(shipment, this.lot.getShipment());
-    }
-
-    @Test
-    public void testSetShipment_RemovesItselfFromTheSourceMaterialLotsAndSetsNewListOnTarget_WhenTargetMaterialLotsAreNull() {
-        final Shipment source = new Shipment();
-        source.setLots(List.of(this.lot));
-
-        final Shipment target = new Shipment();
-        this.lot.setShipment(target);
-
-        assertEquals(List.of(), source.getLots());
-        assertEquals(List.of(this.lot), target.getLots());
-    }
-
-    @Test
-    public void testSetShipment_RemovesItemFromShipmentAndAddsToExistingTargetMaterialLotList_WhenTargetMaterialLotsAreNotNull() {
-        final Shipment source = new Shipment();
-        source.setLots(List.of(this.lot));
-
-        final Shipment target = new Shipment();
-        target.setLots(List.of(new MaterialLot()));
-
-        this.lot.setShipment(target);
-
-        assertEquals(List.of(), source.getLots());
-
-        final Shipment expectedTarget = new Shipment();
-        expectedTarget.setLots(List.of(new MaterialLot(), new MaterialLot()));
-        assertEquals(expectedTarget, target);
     }
 
     @Test

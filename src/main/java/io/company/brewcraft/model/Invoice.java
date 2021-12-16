@@ -115,6 +115,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     public Invoice() {
         super();
+        setInvoiceItems(null);
     }
 
     public Invoice(Long id) {
@@ -257,7 +258,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         }
 
         if (invoiceItems == null) {
-            this.invoiceItems = null;
+            this.invoiceItems.clear();
         } else {
             invoiceItems.stream().collect(Collectors.toList()).forEach(this::addItem);
         }
@@ -272,13 +273,16 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
             this.invoiceItems = new ArrayList<>();
         }
 
-        if (invoiceItem.getInvoice() != this) {
+        Invoice prevInvoice = invoiceItem.getInvoice();
+        if (prevInvoice != this) {
+            if (prevInvoice != null) {
+                prevInvoice.removeItem(invoiceItem);
+            }
+
             invoiceItem.setInvoice(this);
         }
 
-        if (!this.invoiceItems.contains(invoiceItem)) {
-            this.invoiceItems.add(invoiceItem);
-        }
+        this.invoiceItems.add(invoiceItem);
 
         setAmount();
     }
