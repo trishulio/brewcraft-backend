@@ -12,7 +12,7 @@ public class QuantityEntity extends BaseEntity {
     public static final String FIELD_UNIT = "unit";
     public static final String FIELD_VALUE = "value";
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "unit_symbol", referencedColumnName = "symbol")
     private UnitEntity unit;
 
