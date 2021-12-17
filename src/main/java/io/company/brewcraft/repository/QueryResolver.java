@@ -1,5 +1,6 @@
 package io.company.brewcraft.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+
+import com.google.common.collect.Lists;
 
 import io.company.brewcraft.service.GroupByClauseBuilder;
 import io.company.brewcraft.service.SelectClauseBuilder;
@@ -37,13 +40,22 @@ public class QueryResolver {
 
         cq.where(spec.toPredicate(root, cq, cb));
 
-        List<Selection<?>> selectAttrs = selector.getSelectClause(root, cq, cb);
-        cq.multiselect(selectAttrs);
-
+        List<Expression<?>> groupByAttrs;
         if (grouper != null) {
-            List<Expression<?>> groupByAttrs = grouper.getGroupByClause(root, cq, cb);
-            cq.groupBy(groupByAttrs);
+            groupByAttrs = grouper.getGroupByClause(root, cq, cb);
+        } else {
+            groupByAttrs = new ArrayList<>(0);
         }
+
+        List<Selection<?>> selectAttrs = Lists.newArrayList(groupByAttrs);
+
+        if (selector != null) {
+            List<Selection<?>> additionalSelectAttrs = selector.getSelectClause(root, cq, cb);
+            selectAttrs.addAll(additionalSelectAttrs);
+        }
+
+        cq.multiselect(selectAttrs);
+        cq.groupBy(groupByAttrs);
 
         if (pageable != null) {
             List<Order> orders = QueryUtils.toOrders(pageable.getSort(), root, cb);

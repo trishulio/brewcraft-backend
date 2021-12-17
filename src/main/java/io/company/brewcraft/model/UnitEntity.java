@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class UnitEntity extends BaseEntity {
     public static final String FIELD_SYMBOL = "symbol";
     public static final String FIELD_NAME = "name";
+    public static final String FIELD_BASE_UNIT_ENTITY = "baseUnitEntity";
 
     @Id
     @Column(name = "symbol", unique = true, updatable = false, length = 4)
@@ -29,16 +30,21 @@ public class UnitEntity extends BaseEntity {
     private UnitEntity baseUnitEntity;
 
     public UnitEntity() {
-        this(null, null);
+        this(null, null, null);
     }
 
     public UnitEntity(String symbol) {
-        this(symbol, null);
+        this(symbol, null, null);
     }
 
     public UnitEntity(String symbol, String name) {
+        this(symbol, name, null);
+    }
+
+    public UnitEntity(String symbol, String name, UnitEntity baseUnitEntity) {
         setName(name);
         setSymbol(symbol);
+        setBaseUnitEntity(baseUnitEntity);
     }
 
     public String getName() {

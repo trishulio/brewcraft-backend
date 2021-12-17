@@ -68,9 +68,11 @@ public class LotAggregationService {
          */
         if (ArrayUtils.contains(groupBy, ProcurementLot.AggregationField.ID)) {
             ProcurementLot.AggregationField[] fields = ProcurementLot.AggregationField.values();
-            groupBy = ArrayUtils.remove(fields, fields.length - 1);
+            groupBy = ArrayUtils.remove(fields, ArrayUtils.indexOf(fields, ProcurementLot.AggregationField.QUANTITY_VALUE));
+
         } else if (ArrayUtils.contains(groupBy, ProcurementLot.AggregationField.MATERIAL)) {
             groupBy = ArrayUtils.addAll(groupBy, ProcurementLot.AggregationField.MATERIAL_NAME, ProcurementLot.AggregationField.QUANTITY_UNIT);
+
         } else {
             groupBy = ArrayUtils.addAll(groupBy, ProcurementLot.AggregationField.QUANTITY_UNIT);
         }
@@ -121,9 +123,11 @@ public class LotAggregationService {
          */
         if (ArrayUtils.contains(groupBy, StockLot.AggregationField.ID)) {
             StockLot.AggregationField[] fields = StockLot.AggregationField.values();
-            groupBy = ArrayUtils.remove(fields, fields.length - 1);
+            groupBy = ArrayUtils.remove(fields, ArrayUtils.indexOf(fields, StockLot.AggregationField.QUANTITY_VALUE));
+
         } else if (ArrayUtils.contains(groupBy, StockLot.AggregationField.MATERIAL)) {
             groupBy = ArrayUtils.addAll(groupBy, StockLot.AggregationField.MATERIAL_NAME, StockLot.AggregationField.QUANTITY_UNIT);
+
         } else {
             groupBy = ArrayUtils.addAll(groupBy, StockLot.AggregationField.QUANTITY_UNIT);
         }

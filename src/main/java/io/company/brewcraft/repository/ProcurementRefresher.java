@@ -10,7 +10,7 @@ import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementAccessor;
 import io.company.brewcraft.model.procurement.ProcurementId;
 
-public class ProcurementRefresher implements Refresher<Procurement, ProcurementAccessor>{
+public class ProcurementRefresher implements Refresher<Procurement, ProcurementAccessor> {
     private AccessorRefresher<ProcurementId, ProcurementAccessor, Procurement> accessorRefresher;
     private Refresher<Invoice, InvoiceAccessor> invoiceRefresher;
     private Refresher<Shipment, ShipmentAccessor> shipmentRefresher;

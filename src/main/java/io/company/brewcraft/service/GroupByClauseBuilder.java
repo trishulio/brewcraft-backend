@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.repository.ColumnSpecAccumulator;
 
-public class GroupByClauseBuilder extends BaseModel{
+public class GroupByClauseBuilder extends BaseModel {
     private ColumnSpecAccumulator accumulator;
 
     public GroupByClauseBuilder() {

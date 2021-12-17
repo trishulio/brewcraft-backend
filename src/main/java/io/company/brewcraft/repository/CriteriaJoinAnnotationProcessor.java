@@ -23,7 +23,7 @@ import io.company.brewcraft.service.CriteriaJoin;
 public class CriteriaJoinAnnotationProcessor implements CriteriaJoinProcessor {
     private static final Logger log = LoggerFactory.getLogger(CriteriaJoinAnnotationProcessor.class);
 
-    public static Set<Class<?>> nonBasicEntityQualifiers = ImmutableSet.of(JoinColumn.class, ManyToMany.class, ManyToOne.class, OneToMany.class, Embedded.class);
+    public static final Set<Class<?>> NON_BASIC_ENTITY_QUALIFIERS = ImmutableSet.of(JoinColumn.class, ManyToMany.class, ManyToOne.class, OneToMany.class, Embedded.class);
 
     @Override
     public <X, Y> From<X, Y> apply(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
@@ -53,7 +53,7 @@ public class CriteriaJoinAnnotationProcessor implements CriteriaJoinProcessor {
         Annotation[] annotations = field.getAnnotations();
         for (int i = 0; i < annotations.length && !isNotBasicEntity; i++) {
             Class<?> type = annotations[i].annotationType();
-            isNotBasicEntity = nonBasicEntityQualifiers.contains(type);
+            isNotBasicEntity = NON_BASIC_ENTITY_QUALIFIERS.contains(type);
         }
 
         return isNotBasicEntity;

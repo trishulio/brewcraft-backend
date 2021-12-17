@@ -46,14 +46,11 @@ public class RootUtil {
             }
         }
 
-        Path<X> path = j.get(paths[0]);
-        j = cjProcessor.apply(j, j.getJavaType(), paths[0]);
-
-        for (int i = 1; i < paths.length; i++) {
-            path = path.get(paths[i]);
+        int i;
+        for (i = 0; i < paths.length - 1; i++) {
             j = cjProcessor.apply(j, j.getJavaType(), paths[i]);
         }
 
-        return path;
+        return j.get(paths[i]);
     }
 }

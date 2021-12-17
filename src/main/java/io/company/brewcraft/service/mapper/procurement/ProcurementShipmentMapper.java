@@ -15,7 +15,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.service.mapper.ShipmentStatusMapper;
 
 @Mapper(uses = {MaterialLotMapper.class, ShipmentStatusMapper.class, InvoiceMapper.class, ShipmentStatusMapper.class, QuantityMapper.class})
-public interface ProcurementShipmentMapper   extends BaseMapper<Shipment, ProcurementShipmentDto, AddProcurementShipmentDto, UpdateProcurementShipmentDto>{
+public interface ProcurementShipmentMapper   extends BaseMapper<Shipment, ProcurementShipmentDto, AddProcurementShipmentDto, UpdateProcurementShipmentDto> {
     ProcurementShipmentMapper  INSTANCE = Mappers.getMapper(ProcurementShipmentMapper .class);
 
     @Override

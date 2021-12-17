@@ -28,7 +28,7 @@ public class GroupByColumnSpecTest {
     @Test
     public void testGetExpression_GetsPathWithJoin() {
         Path<?> mPath = mock(Path.class);
-        doReturn(mPath).when(mRootUtil).getPath(mRoot, new String[] {"JOIN_1", "JOIN_2"}, new String[] {"PATH_1", "PATH_2"});
+        doReturn(mPath).when(mRootUtil).getPathWithJoin(mRoot, new String[] {"JOIN_1", "JOIN_2"}, new String[] {"PATH_1", "PATH_2"});
 
         Expression<?> expression = column.getExpression(mRoot, null, null);
 

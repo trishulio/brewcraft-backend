@@ -2,7 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-public class MaterialLotDto extends BaseDto{
+public class MaterialLotDto extends BaseDto {
     private Long id;
     private String lotNumber;
     private QuantityDto qty;

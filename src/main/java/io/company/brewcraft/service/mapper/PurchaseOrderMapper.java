@@ -10,7 +10,7 @@ import io.company.brewcraft.dto.UpdatePurchaseOrderDto;
 import io.company.brewcraft.model.PurchaseOrder;
 
 @Mapper(uses = { SupplierMapper.class })
-public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder, PurchaseOrderDto, AddPurchaseOrderDto, UpdatePurchaseOrderDto>{
+public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder, PurchaseOrderDto, AddPurchaseOrderDto, UpdatePurchaseOrderDto> {
     PurchaseOrderMapper INSTANCE = Mappers.getMapper(PurchaseOrderMapper.class);
 
     @Mapping(target = PurchaseOrder.ATTR_ID)

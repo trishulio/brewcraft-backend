@@ -35,6 +35,6 @@ public class GroupByColumnSpec<T> extends BaseModel implements CriteriaSpec<T> {
 
     @Override
     public Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return this.rootUtil.getPath(root, joins, paths);
+        return this.rootUtil.getPathWithJoin(root, joins, paths);
     }
 }
