@@ -154,21 +154,22 @@ public class InvoiceTest {
 
     @Test
     public void testAccessItems() {
-        assertNull(this.invoice.getInvoiceItems());
+        assertEquals(List.of(), this.invoice.getInvoiceItems());
         final InvoiceItem invoiceItem = new InvoiceItem(2L);
         this.invoice.setInvoiceItems(List.of(invoiceItem));
 
-        final InvoiceItem expected = new InvoiceItem(2L);
-        expected.setInvoice(new Invoice());
+        final InvoiceItem expectedInvoiceItem = new InvoiceItem(2L);
+        final Invoice expectedInvoice = new Invoice();
+        expectedInvoice.addItem(expectedInvoiceItem);
 
-        assertEquals(List.of(expected), this.invoice.getInvoiceItems());
+        assertEquals(List.of(expectedInvoiceItem), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, invoiceItem.getInvoice());
     }
 
     @Test
-    public void testAccessItems_SetsNull_WhenInputIsNull() {
+    public void testAccessItems_SetsEmptyList_WhenInputIsNull() {
         this.invoice.setInvoiceItems(null);
-        assertNull(this.invoice.getInvoiceItems());
+        assertEquals(List.of(), invoice.getInvoiceItems());
     }
 
     @Test
@@ -226,7 +227,7 @@ public class InvoiceTest {
 
     @Test
     public void testAddItem_CreatesNewItemList_WhenItemIsNotNull() {
-        assertNull(this.invoice.getInvoiceItems());
+        assertEquals(List.of(), invoice.getInvoiceItems());
 
         final InvoiceItem invoiceItem = new InvoiceItem(1L);
         assertNull(invoiceItem.getInvoice());
@@ -254,7 +255,7 @@ public class InvoiceTest {
     }
 
     @Test
-    public void testAddItem_AddsItemOnlyOnce_WhenMultipleAdditionsArePerformed() {
+    public void testAddItem_AddsDuplicateItems_WhenMultipleAdditionsArePerformed() {
         final InvoiceItem invoiceItem = new InvoiceItem(1L);
         assertNull(invoiceItem.getInvoice());
 
@@ -262,14 +263,14 @@ public class InvoiceTest {
         this.invoice.addItem(invoiceItem);
         this.invoice.addItem(invoiceItem);
 
-        assertEquals(List.of(invoiceItem), this.invoice.getInvoiceItems());
+        assertEquals(List.of(invoiceItem, invoiceItem, invoiceItem), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, invoiceItem.getInvoice());
     }
 
     @Test
     public void testAddItem_DoesNothing_WhenItemIsNull() {
         invoice.addItem(null);
-        assertNull(invoice.getInvoiceItems());
+        assertEquals(List.of(), invoice.getInvoiceItems());
     }
 
     @Test
