@@ -122,7 +122,7 @@ public class QuantityUnitMapperTest {
 
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
-        assertNull(mapper.toDto(null));
+        assertNull(mapper.toDto((Unit<?>)null));
     }
 
     @Test
