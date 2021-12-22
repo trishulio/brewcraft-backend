@@ -1,6 +1,6 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +47,7 @@ public class MixtureServiceImpl extends BaseService implements MixtureService {
         Specification<Mixture> spec = WhereClauseBuilder
                 .builder()
                 .in(Mixture.FIELD_ID, ids)
-                .in(Mixture.FIELD_PARENT_MIXTURES, new String[] {Mixture.FIELD_ID}, parentMixtureIds)
+                .in(new String[] {Mixture.FIELD_PARENT_MIXTURES, Mixture.FIELD_ID}, parentMixtureIds)
                 .in(new String[] {Mixture.FIELD_EQUIPMENT, Equipment.FIELD_ID}, equipmentIds)
                 .in(new String[] {Mixture.FIELD_BREW_STAGE, Brew.FIELD_ID}, brewStageIds)
                 .in(new String[] {Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID}, brewIds)

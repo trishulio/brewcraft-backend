@@ -25,6 +25,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.service.CriteriaJoin;
+
 @Entity(name = "BREW")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<Long> {
@@ -61,11 +63,13 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
 
     @OneToMany(mappedBy = "parentBrew")
     @JsonIgnore
+    @CriteriaJoin
     private List<Brew> childBrews;
 
     @OneToMany(mappedBy="brew", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("startedAt ASC")
     @JsonIgnore
+    @CriteriaJoin
     private List<BrewStage> brewStages;
 
     @Column(name = "started_at")

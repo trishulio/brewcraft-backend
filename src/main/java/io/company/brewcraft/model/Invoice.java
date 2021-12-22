@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.mapper.MoneyMapper;
@@ -108,6 +109,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<InvoiceItem> invoiceItems;
 
     @Version

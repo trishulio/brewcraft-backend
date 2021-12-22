@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.dto.UpdateFacility;
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity
 @Table(name="FACILITY")
@@ -56,10 +57,12 @@ public class Facility extends BaseModel implements UpdateFacility, Audited {
 
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @CriteriaJoin
     private List<Equipment> equipment;
 
     @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @CriteriaJoin
     private List<Storage> storages;
 
     @CreationTimestamp

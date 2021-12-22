@@ -64,9 +64,9 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
                                             .in(FinishedGood.FIELD_ID, ids)
                                             .not().in(FinishedGood.FIELD_ID, excludeIds)
                                             .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
-                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
-                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
-                                            .in(FinishedGood.FIELD_MIXTURE_PORTIONS, new String[] { MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
+                                            .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
+                                            .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
+                                            .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
                                             .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);

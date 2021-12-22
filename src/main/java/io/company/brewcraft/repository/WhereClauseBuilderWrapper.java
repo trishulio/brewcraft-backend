@@ -21,73 +21,26 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
     }
 
     @Override
-    public WhereClauseBuilder isNull(String join, String path) {
-        this.delegate.isNull(new String[] { join }, new String[] { path });
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder isNull(String join, String[] paths) {
-        this.delegate.isNull(new String[] { join }, paths);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder isNull(String[] joins, String path) {
-        this.delegate.isNull(joins, new String[] { path });
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder isNull(String[] joins, String[] paths) {
-        this.delegate.isNull(joins, paths);
-        return this;
-    }
-
-    @Override
     public WhereClauseBuilder isNull(String path) {
-        this.delegate.isNull(null, new String[] { path });
+        this.delegate.isNull(new String[] { path });
         return this;
     }
 
     @Override
     public WhereClauseBuilder isNull(String[] paths) {
-        return isNull((String[]) null, paths);
+        this.delegate.isNull(paths);
+        return this;
     }
 
     @Override
     public WhereClauseBuilder in(String[] paths, Collection<?> collection) {
-        this.delegate.in((String[]) null, paths, collection);
+        this.delegate.in(paths, collection);
         return this;
     }
 
     @Override
     public WhereClauseBuilder in(String path, Collection<?> collection) {
-        this.delegate.in(null, new String[] { path }, collection);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder in(String[] joins, String[] paths, Collection<?> collection) {
-        this.delegate.in(joins, paths, collection);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder in(String join, String path, Collection<?> collection) {
-        this.delegate.in(new String[] { join }, new String[] { path }, collection);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder in(String join, String[] paths, Collection<?> collection) {
-        this.delegate.in(new String[] { join }, paths, collection);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder in(String[] joins, String path, Collection<?> collection) {
-        this.delegate.in(joins, new String[] { path }, collection);
+        this.delegate.in(new String[] { path }, collection);
         return this;
     }
 
@@ -99,73 +52,25 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
 
     @Override
     public WhereClauseBuilder like(String[] paths, Set<String> queries) {
-        this.delegate.like(null, paths, queries);
+        this.delegate.like(paths, queries);
         return this;
     }
 
     @Override
     public WhereClauseBuilder like(String path, Set<String> queries) {
-        this.delegate.like(null, new String[] { path }, queries);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder like(String[] joins, String[] paths, Set<String> queries) {
-        this.delegate.like(joins, paths, queries);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder like(String join, String path, Set<String> queries) {
-        this.delegate.like(new String[] { join }, new String[] { path }, queries);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder like(String join, String[] paths, Set<String> queries) {
-        this.delegate.like(new String[] { join }, paths, queries);
-        return this;
-    }
-
-    @Override
-    public WhereClauseBuilder like(String[] joins, String path, Set<String> queries) {
-        this.delegate.like(joins, new String[] { path }, queries);
+        this.delegate.like(new String[] { path }, queries);
         return this;
     }
 
     @Override
     public <C extends Comparable<C>> WhereClauseBuilder between(String[] paths, C start, C end) {
-        this.delegate.between(null, paths, start, end);
+        this.delegate.between(paths, start, end);
         return this;
     }
 
     @Override
     public <C extends Comparable<C>> WhereClauseBuilder between(String path, C start, C end) {
-        this.delegate.between(null, new String[] { path }, start, end);
-        return this;
-    }
-
-    @Override
-    public <C extends Comparable<C>> WhereClauseBuilder between(String[] joins, String path, C start, C end) {
-        this.delegate.between(joins, new String[] { path }, start, end);
-        return this;
-    }
-
-    @Override
-    public <C extends Comparable<C>> WhereClauseBuilder between(String join, String[] paths, C start, C end) {
-        this.delegate.between(new String[] { join }, paths, start, end);
-        return this;
-    }
-
-    @Override
-    public <C extends Comparable<C>> WhereClauseBuilder between(String[] joins, String[] paths, C start, C end) {
-        this.delegate.between(joins, paths, start, end);
-        return this;
-    }
-
-    @Override
-    public <C extends Comparable<C>> WhereClauseBuilder between(String join, String path, C start, C end) {
-        this.delegate.between(new String[] { join }, new String[] { path }, start, end);
+        this.delegate.between(new String[] { path }, start, end);
         return this;
     }
 

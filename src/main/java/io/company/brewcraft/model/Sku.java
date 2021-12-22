@@ -29,6 +29,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
@@ -54,6 +55,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
 
     @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<SkuMaterial> materials;
 
     @Embedded

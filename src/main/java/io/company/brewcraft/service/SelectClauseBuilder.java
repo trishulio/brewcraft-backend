@@ -31,7 +31,7 @@ public class SelectClauseBuilder extends BaseModel {
 
     public SelectClauseBuilder select(String... paths) {
         if (paths != null) {
-            select(new SelectColumnSpec<>(paths));
+            select(new ColumnSpec<>(paths));
         }
 
         return this;

@@ -36,7 +36,10 @@ public class AggregationService {
         final SelectClauseBuilder selector = new SelectClauseBuilder();
         final GroupByClauseBuilder grouper = new GroupByClauseBuilder();
 
-        Arrays.stream(groupBy).forEach(col -> grouper.groupBy(col));
+        Arrays.stream(groupBy).forEach(col -> {
+            selector.select(col);
+            grouper.groupBy(col);
+        });
 
         selector.select(aggrFn.getAggregation(aggrField));
 

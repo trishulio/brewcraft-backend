@@ -13,22 +13,22 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.repository.RootUtil;
 
-public class SelectColumnSpecTest {
+public class ColumnSpecTest {
     private Root<?> mRoot;
     private RootUtil mRootUtil;
 
-    private SelectColumnSpec<String> column;
+    private ColumnSpec<String> column;
 
     @BeforeEach
     public void init() {
         mRootUtil = mock(RootUtil.class);
-        column = new SelectColumnSpec<>(mRootUtil, new String[] {"JOIN_1", "JOIN_2"}, new String[] {"PATH_1", "PATH_2"});
+        column = new ColumnSpec<>(mRootUtil, new String[] {"PATH_1", "PATH_2"});
     }
 
     @Test
     public void testGetExpression_GetsPathWithJoin() {
         Path<?> mPath = mock(Path.class);
-        doReturn(mPath).when(mRootUtil).getPathWithJoin(mRoot, new String[] {"JOIN_1", "JOIN_2"}, new String[] {"PATH_1", "PATH_2"});
+        doReturn(mPath).when(mRootUtil).getPath(mRoot, new String[] {"PATH_1", "PATH_2"});
 
         Expression<?> expression = column.getExpression(mRoot, null, null);
 

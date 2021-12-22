@@ -24,9 +24,9 @@ public class AggregationFieldTest {
 
     @Test
     public void testMaterialName_GetPath_ReturnsMaterialNameField() {
-        String[] path = AggregationField.MATERIAL_NAME.getPath();
+       String[] path = AggregationField.MATERIAL_NAME.getPath();
 
-        assertArrayEquals(new String[] { Lot.FIELD_MATERIAL, Material.FIELD_NAME }, path);
+       assertArrayEquals(new String[] { Lot.FIELD_MATERIAL, Material.FIELD_NAME }, path);
     }
 
     @Test

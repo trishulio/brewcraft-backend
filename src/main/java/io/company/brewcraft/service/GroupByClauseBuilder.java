@@ -31,7 +31,7 @@ public class GroupByClauseBuilder extends BaseModel {
 
     public GroupByClauseBuilder groupBy(String... paths) {
         if (paths != null) {
-            groupBy(new SelectColumnSpec<>(paths));
+            groupBy(new ColumnSpec<>(paths));
         }
 
         return this;

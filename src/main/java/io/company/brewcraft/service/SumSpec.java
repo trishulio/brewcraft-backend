@@ -11,11 +11,11 @@ public class SumSpec<T extends Number> extends BaseModel implements CriteriaSpec
     private CriteriaSpec<T> path;
 
     public SumSpec(PathProvider provider) {
-        this(null, provider.getPath());
+        this(provider.getPath());
     }
 
-    public SumSpec(String[] joins, String[] paths) {
-        this(new SelectColumnSpec<>(joins, paths));
+    public SumSpec(String[] paths) {
+        this(new ColumnSpec<>(paths));
     }
 
     public SumSpec(CriteriaSpec<T> path) {

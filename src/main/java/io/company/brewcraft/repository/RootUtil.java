@@ -8,30 +8,15 @@ import org.slf4j.LoggerFactory;
 
 public class RootUtil {
     private static final Logger log = LoggerFactory.getLogger(RootUtil.class);
-    public static RootUtil INSTANCE = new RootUtil();
+    public static RootUtil INSTANCE = new RootUtil(CriteriaJoinProcessor.CRITERIA_JOINER);
 
     private CriteriaJoinProcessor cjAnnotationProcessor;
-    private CriteriaJoinProcessor cjIgnorer;
 
-    protected RootUtil() {
-        this(CriteriaJoinProcessor.ANNOTATION_PROCESSOR, CriteriaJoinProcessor.JOIN_IGNORER);
-    }
-
-    protected RootUtil(CriteriaJoinProcessor cjAnnotationProcessor, CriteriaJoinProcessor cjIgnorer) {
+    protected RootUtil(CriteriaJoinProcessor cjAnnotationProcessor) {
         this.cjAnnotationProcessor = cjAnnotationProcessor;
-        this.cjIgnorer = cjIgnorer;
     }
 
-    public <X, Y> Path<X> getPath(From<?, ?> root, String[] joins, String[] paths) {
-        return get(root, joins, paths, this.cjIgnorer);
-    }
-
-    public <X, Y> Path<X> getPathWithJoin(From<?, ?> root, String[] joins, String[] paths) {
-        return get(root, joins, paths, this.cjAnnotationProcessor);
-    }
-
-    // Note: Private method is a code-smell. It signals that a new class be created.
-    private <X, Y> Path<X> get(From<?, ?> root, String[] joins, String[] paths, CriteriaJoinProcessor cjProcessor) {
+    public <X, Y> Path<X> getPath(From<?, ?> root, String[] paths) {
         if (paths == null || paths.length <= 0) {
             String msg = String.format("No field names provided: %s", paths == null ? null : paths.toString());
             log.error(msg);
@@ -40,15 +25,10 @@ public class RootUtil {
 
         @SuppressWarnings("unchecked")
         From<X, Y> j = (From<X, Y>) root;
-        if (joins != null) {
-            for (int i = 0; i < joins.length; i++) {
-                j = j.join(joins[i]);
-            }
-        }
 
         int i;
         for (i = 0; i < paths.length - 1; i++) {
-            j = cjProcessor.apply(j, j.getJavaType(), paths[i]);
+            j = cjAnnotationProcessor.apply(j, j.getJavaType(), paths[i]);
         }
 
         return j.get(paths[i]);

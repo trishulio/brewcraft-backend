@@ -14,7 +14,7 @@ import io.company.brewcraft.service.BetweenSpec;
 import io.company.brewcraft.service.InSpec;
 import io.company.brewcraft.service.IsNullSpec;
 import io.company.brewcraft.service.LikeSpec;
-import io.company.brewcraft.service.SelectColumnSpec;
+import io.company.brewcraft.service.ColumnSpec;
 
 public class WhereClauseBuilderDelegate {
     private static final Logger log = LoggerFactory.getLogger(WhereClauseBuilderDelegate.class);
@@ -29,27 +29,27 @@ public class WhereClauseBuilderDelegate {
         this.accumulator.setIsNot(true);
     }
 
-    public void isNull(String[] joins, String[] paths) {
-        CriteriaSpec<Boolean> spec = new IsNullSpec(new SelectColumnSpec<>(joins, paths));
+    public void isNull(String[] paths) {
+        CriteriaSpec<Boolean> spec = new IsNullSpec(new ColumnSpec<>(paths));
         accumulator.add(spec);
 
         accumulator.setIsNot(false);
     }
 
-    public void in(String[] joins, String[] paths, Collection<?> collection) {
+    public void in(String[] paths, Collection<?> collection) {
         if (collection != null) {
-            CriteriaSpec<Boolean> spec = new InSpec<>(new SelectColumnSpec<>(joins, paths), collection);
+            CriteriaSpec<Boolean> spec = new InSpec<>(new ColumnSpec<>(paths), collection);
             accumulator.add(spec);
         }
 
         accumulator.setIsNot(false);
     }
 
-    public void like(String[] joins, String[] paths, Set<String> queries) {
+    public void like(String[] paths, Set<String> queries) {
         if (queries != null) {
             for (String text : queries) {
                 if (text != null) {
-                    CriteriaSpec<Boolean> spec = new LikeSpec(new SelectColumnSpec<>(joins, paths), text);
+                    CriteriaSpec<Boolean> spec = new LikeSpec(new ColumnSpec<>(paths), text);
                     accumulator.add(spec);
                 }
             }
@@ -58,11 +58,11 @@ public class WhereClauseBuilderDelegate {
         accumulator.setIsNot(false);
     }
 
-    public <C extends Comparable<C>> void between(String[] joins, String[] paths, C start, C end) {
+    public <C extends Comparable<C>> void between(String[] paths, C start, C end) {
         // Note: Null checks for start and end reduces the redundant clause for a true
         // literal. It only sort-of improves the Query performance but its not required.
         if (start != null || end != null) {
-            CriteriaSpec<Boolean> spec = new BetweenSpec<>(new SelectColumnSpec<>(joins, paths), start, end);
+            CriteriaSpec<Boolean> spec = new BetweenSpec<>(new ColumnSpec<>(paths), start, end);
             accumulator.add(spec);
         }
 

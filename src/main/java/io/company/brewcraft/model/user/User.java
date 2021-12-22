@@ -30,6 +30,7 @@ import org.hibernate.validator.constraints.URL;
 
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity
 @Table(name = "_user")
@@ -67,6 +68,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<UserRoleBinding> roleBindings;
 
     @Column(name = "image_url")
