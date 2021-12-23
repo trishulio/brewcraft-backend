@@ -92,11 +92,11 @@ public class MaterialDto extends BaseDto {
         this.subcategory = subcategory;
     }
 
-    public String getUPC() {
+    public String getUpc() {
         return upc;
     }
 
-    public void setUPC(String upc) {
+    public void setUpc(String upc) {
         this.upc = upc;
     }
 

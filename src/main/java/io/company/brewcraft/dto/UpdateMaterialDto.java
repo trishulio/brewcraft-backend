@@ -61,11 +61,11 @@ public class UpdateMaterialDto extends BaseDto {
         this.categoryId = category;
     }
 
-    public String getUPC() {
+    public String getUpc() {
         return upc;
     }
 
-    public void setUPC(String upc) {
+    public void setUpc(String upc) {
         this.upc = upc;
     }
 

@@ -122,11 +122,21 @@ public class QuantityUnitMapperTest {
 
     @Test
     public void testToDto_ReturnsNull_WhenPojoIsNull() {
-        assertNull(mapper.toDto(null));
+        assertNull(mapper.toDto((Unit<?>)null));
     }
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
         assertEquals(new UnitDto("kg"), mapper.toDto(Units.KILOGRAM));
+    }
+
+    @Test
+    public void testToDto_ReturnsNull_WhenEntityIsNull() {
+        assertNull(mapper.toDto((UnitEntity)null));
+    }
+
+    @Test
+    public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
+        assertEquals(new UnitDto("kg"), mapper.toDto(new UnitEntity("kg")));
     }
 }
