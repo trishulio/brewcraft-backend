@@ -24,10 +24,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.dto.UpdateMaterialCategory;
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity(name = "MATERIAL_CATEGORY")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class MaterialCategory extends BaseEntity implements UpdateMaterialCategory<MaterialCategory>, Audited, Identified<Long>{
+public class MaterialCategory extends BaseEntity implements UpdateMaterialCategory<MaterialCategory>, Audited, Identified<Long> {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PARENT_CATEGORY = "parentCategory";
@@ -46,6 +47,7 @@ public class MaterialCategory extends BaseEntity implements UpdateMaterialCatego
 
     @OneToMany(mappedBy = "parentCategory")
     @JsonIgnore
+    @CriteriaJoin
     private Set<MaterialCategory> subcategories;
 
     @CreationTimestamp

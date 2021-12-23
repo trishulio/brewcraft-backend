@@ -10,7 +10,7 @@ import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.service.mapper.BaseMapper;
 
 @Mapper(uses = { ProcurementIdMapper.class, ProcurementItemMapper.class, ProcurementInvoiceMapper.class, ProcurementShipmentMapper.class })
-public interface ProcurementMapper extends BaseMapper<Procurement, ProcurementDto, AddProcurementDto, UpdateProcurementDto>{
+public interface ProcurementMapper extends BaseMapper<Procurement, ProcurementDto, AddProcurementDto, UpdateProcurementDto> {
     ProcurementMapper INSTANCE = Mappers.getMapper(ProcurementMapper.class);
 
     @Override

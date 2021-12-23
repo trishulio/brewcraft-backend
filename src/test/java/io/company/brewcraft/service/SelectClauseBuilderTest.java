@@ -29,8 +29,8 @@ public class SelectClauseBuilderTest {
     }
 
     @Test
-    public void testSelect_PathProvider_AddsASelectColumnSpecWithPath_WhenProviderIsNotNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+    public void testSelect_PathProvider_AddsAColumnSpecWithPath_WhenProviderIsNotNull() {
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         PathProvider mProvider = mock(PathProvider.class);
@@ -38,12 +38,12 @@ public class SelectClauseBuilderTest {
 
         selector.select(mProvider);
 
-        assertEquals(new SelectColumnSpec<>(new String[] {"PATH_1", "PATH_2"}), captor.getValue());
+        assertEquals(new ColumnSpec<>(new String[] {"PATH_1", "PATH_2"}), captor.getValue());
     }
 
     @Test
     public void testSelect_PathProvider_DoesNothign_WhenProviderIsNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         selector.select((PathProvider) null);
@@ -52,18 +52,18 @@ public class SelectClauseBuilderTest {
     }
 
     @Test
-    public void testSelect_StringArray_AddsASelectColumnSpecWithPath_WhenProviderIsNotNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+    public void testSelect_StringArray_AddsAColumnSpecWithPath_WhenProviderIsNotNull() {
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         selector.select(new String[] {"PATH_1", "PATH_2"});
 
-        assertEquals(new SelectColumnSpec<>(new String[] {"PATH_1", "PATH_2"}), captor.getValue());
+        assertEquals(new ColumnSpec<>(new String[] {"PATH_1", "PATH_2"}), captor.getValue());
     }
 
     @Test
     public void testSelect_StringArray_DoesNothing_WhenStringArrayIsNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         selector.select((String[]) null);
@@ -73,7 +73,7 @@ public class SelectClauseBuilderTest {
 
     @Test
     public void testSelect_CriteriaSpec_AddsTheSpec_WhenSpecIsNotNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         CriteriaSpec<?> mSpec = mock(CriteriaSpec.class);
@@ -84,7 +84,7 @@ public class SelectClauseBuilderTest {
 
     @Test
     public void testSelect_CriteriaSpec_DoesNothing_WhenSpecIsNull() {
-        ArgumentCaptor<SelectColumnSpec<?>> captor = ArgumentCaptor.forClass(SelectColumnSpec.class);
+        ArgumentCaptor<ColumnSpec<?>> captor = ArgumentCaptor.forClass(ColumnSpec.class);
         doNothing().when(mAccumulator).add(captor.capture());
 
         selector.select((CriteriaSpec<?>) null);

@@ -1,16 +1,10 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-import javax.persistence.Basic;
-import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
@@ -18,8 +12,6 @@ import javax.persistence.criteria.JoinType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.repository.CriteriaJoinAnnotationProcessor;
-import io.company.brewcraft.repository.CriteriaJoinProcessor;
 import io.company.brewcraft.service.CriteriaJoin;
 
 public class CriteriaJoinAnnotationProcessorTest {
@@ -36,20 +28,8 @@ public class CriteriaJoinAnnotationProcessorTest {
         @JoinColumn
         @CriteriaJoin
         private Child difault;
-        @ManyToMany
-        private Child manyToMany;
-        @ManyToOne
-        private Child manyToOne;
-        @OneToMany
-        private Child oneToMany;
-        @Embedded
-        private Child embedded;
-        @JoinColumn
-        private Child joinColumn;
-        @Basic
-        private Child basic;
-        @CriteriaJoin
-        private Child throwError;
+
+        private Child get;
     }
 
     class Child {
@@ -96,9 +76,9 @@ public class CriteriaJoinAnnotationProcessorTest {
     }
 
     @Test
-    public void testApply_PerformsALeftJoin_WhenAnnotationValueIsNotProvided() {
+    public void testApply_PerformsAInnerJoin_WhenAnnotationValueIsNotProvided() {
         Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("difault", JoinType.LEFT);
+        doReturn(mJoin).when(mEntity).join("difault", JoinType.INNER);
 
         From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "difault");
 
@@ -106,64 +86,12 @@ public class CriteriaJoinAnnotationProcessorTest {
     }
 
     @Test
-    public void testApply_PerformsADefaultJoin_WhenCriteriaJoinAnnotationIsMissingOnManyToManyEntity() {
+    public void testApply_PerformsAInnerJoinOperation_WhenAnnotationIsMissing() {
         Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("manyToMany", CriteriaJoin.DEFAULT_JOIN_TYPE);
+        doReturn(mJoin).when(mEntity).join("get", JoinType.INNER);
 
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "manyToMany");
+        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "get");
 
         assertEquals(mJoin, join);
-    }
-
-    @Test
-    public void testApply_PerformsADefaultJoin_WhenCriteriaJoinAnnotationIsMissingOnOneToManyEntity() {
-        Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("oneToMany", CriteriaJoin.DEFAULT_JOIN_TYPE);
-
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "oneToMany");
-
-        assertEquals(mJoin, join);
-    }
-
-    @Test
-    public void testApply_PerformsADefaultJoin_WhenCriteriaJoinAnnotationIsMissingOnManyToOneEntity() {
-        Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("manyToOne", CriteriaJoin.DEFAULT_JOIN_TYPE);
-
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "manyToOne");
-
-        assertEquals(mJoin, join);
-    }
-
-    @Test
-    public void testApply_PerformsADefaultJoin_WhenCriteriaJoinAnnotationIsMissingOnEmbeddedEntity() {
-        Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("embedded", CriteriaJoin.DEFAULT_JOIN_TYPE);
-
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "embedded");
-
-        assertEquals(mJoin, join);
-    }
-
-    @Test
-    public void testApply_PerformsADefaultJoin_WhenCriteriaJoinAnnotationIsMissingOnJoinColumnEntity() {
-        Join<?, ?> mJoin = mock(Join.class);
-        doReturn(mJoin).when(mEntity).join("joinColumn", CriteriaJoin.DEFAULT_JOIN_TYPE);
-
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "joinColumn");
-
-        assertEquals(mJoin, join);
-    }
-
-    @Test
-    public void testApply_DoesntPerformJoin_WhenEntityIsBasic() {
-        From<?, ?> join = this.cjProcessor.apply(mEntity, Entity.class, "basic");
-
-        assertEquals(mEntity, join);
-    }
-
-    @Test
-    public void testApply_ThrowsException_WhenCriteriaJoinIsPerformedOnBasicEntity() {
-        assertThrows(IllegalAccessError.class, () -> this.cjProcessor.apply(mEntity, Entity.class, "throwError"));
     }
 }

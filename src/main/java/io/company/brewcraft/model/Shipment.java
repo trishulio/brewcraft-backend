@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
 
 @Entity(name = "shipment")
@@ -64,6 +65,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
 
     @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<MaterialLot> lots;
 
     @CreationTimestamp

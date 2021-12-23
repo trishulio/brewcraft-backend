@@ -24,6 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateFinishedGood;
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
 
 @Entity(name = "finished_good")
@@ -45,10 +46,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
     @OneToMany(mappedBy = "finishedGood", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<FinishedGoodMixturePortion> mixturePortions;
 
     @OneToMany(mappedBy = "finishedGood", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @CriteriaJoin
     private List<FinishedGoodMaterialPortion> materialPortions;
 
     @CreationTimestamp

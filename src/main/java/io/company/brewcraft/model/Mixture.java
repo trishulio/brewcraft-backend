@@ -32,6 +32,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 
 @Entity(name = "MIXTURE")
@@ -55,6 +56,7 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
         joinColumns = { @JoinColumn(name = "mixture_id") },
         inverseJoinColumns = { @JoinColumn(name = "parent_mixture_id") }
     )
+    @CriteriaJoin
     private List<Mixture> parentMixtures;
 
     @Embedded
@@ -69,10 +71,12 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
 
     @OneToMany(mappedBy = "mixture", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
+    @CriteriaJoin
     private List<MixtureMaterialPortion> materialPortions;
 
     @OneToMany(mappedBy = "mixture", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
+    @CriteriaJoin
     private List<MixtureRecording> recordedMeasures;
 
     @ManyToOne()

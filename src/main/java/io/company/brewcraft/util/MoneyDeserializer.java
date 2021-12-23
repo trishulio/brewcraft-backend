@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.service.mapper.CurrencyMapper;
 
-public class MoneyDeserializer extends JsonDeserializer<Money>{
+public class MoneyDeserializer extends JsonDeserializer<Money> {
 
     @Override
     public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {

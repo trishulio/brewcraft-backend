@@ -29,7 +29,7 @@ import io.company.brewcraft.service.RepoService;
 
 public class CrudRepoServiceTest {
     // Hack to mock instance of type Long parameterized Identified interface
-    interface LongIdentified extends Identified<Long>{}
+    interface LongIdentified extends Identified<Long> {}
 
     private DummyCrudEntityRepository mRepo;
     private Refresher<DummyCrudEntity, DummyCrudEntityAccessor> mRefresher;

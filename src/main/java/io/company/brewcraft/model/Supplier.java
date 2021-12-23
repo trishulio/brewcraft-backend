@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.dto.UpdateSupplier;
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity
 @Table(name = "SUPPLIER")
@@ -43,6 +44,7 @@ public class Supplier extends BaseEntity implements UpdateSupplier, Audited {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @CriteriaJoin
     private List<SupplierContact> contacts;
 
     @JoinColumn(name = "address_id")

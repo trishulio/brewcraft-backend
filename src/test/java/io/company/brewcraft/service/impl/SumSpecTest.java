@@ -13,8 +13,8 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.service.ColumnSpec;
 import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.SelectColumnSpec;
 import io.company.brewcraft.service.SumSpec;
 
 public class SumSpecTest {
@@ -51,15 +51,15 @@ public class SumSpecTest {
     public void testConstructor_PathProvider_AddsSelectColumnWithPathFromProvider() {
         spec = new SumSpec<>(() -> new String[] { "PATH_1", "PATH_2" });
 
-        SumSpec<Number> expected = new SumSpec<>(new SelectColumnSpec<>(new String[] { "PATH_1", "PATH_2" }));
+        SumSpec<Number> expected = new SumSpec<>(new ColumnSpec<>(new String[] { "PATH_1", "PATH_2" }));
         assertEquals(expected, spec);
     }
 
     @Test
-    public void testConstructor_StringString_AddsSelectColumnWithPathValues() {
-        spec = new SumSpec<>(new String[] { "JOIN_1", "JOIN_2" }, new String[] { "PATH_1", "PATH_2" });
+    public void testConstructor_String_AddsSelectColumnWithPathValues() {
+        spec = new SumSpec<>(new String[] { "PATH_1", "PATH_2" });
 
-        SumSpec<Number> expected = new SumSpec<>(new SelectColumnSpec<>(new String[] { "JOIN_1", "JOIN_2" }, new String[] { "PATH_1", "PATH_2" }));
+        SumSpec<Number> expected = new SumSpec<>(new ColumnSpec<>(new String[] { "PATH_1", "PATH_2" }));
         assertEquals(expected, spec);
     }
 }

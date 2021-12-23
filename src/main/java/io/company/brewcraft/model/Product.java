@@ -20,6 +20,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.CriteriaJoin;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -48,6 +50,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @CriteriaJoin
     private List<ProductMeasureValue> targetMeasures;
 
     @Column(name = "image_source")

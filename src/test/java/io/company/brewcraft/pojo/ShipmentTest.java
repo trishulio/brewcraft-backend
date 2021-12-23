@@ -121,7 +121,6 @@ public class ShipmentTest {
         Shipment expectedShipment = new Shipment();
         expectedShipment.addLot(expectedLot);
 
-
         assertEquals(List.of(expectedLot), this.shipment.getLots());
     }
 

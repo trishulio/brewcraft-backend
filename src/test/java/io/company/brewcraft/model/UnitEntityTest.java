@@ -19,10 +19,29 @@ public class UnitEntityTest {
     }
 
     @Test
-    public void testAllArgsConstructor() {
-        unit = new UnitEntity("KG", "Kilogram");
-        assertEquals("KG", unit.getSymbol());
+    public void testArgConstructor_String() {
+        unit = new UnitEntity("kg");
+
+        assertEquals("kg", unit.getSymbol());
+        assertNull(unit.getName());
+        assertNull(unit.getBaseUnitEntity());
+    }
+
+    @Test
+    public void testArgConstructor_StringString() {
+        unit = new UnitEntity("kg", "Kilogram");
+
+        assertEquals("kg", unit.getSymbol());
         assertEquals("Kilogram", unit.getName());
+        assertNull(unit.getBaseUnitEntity());
+    }
+
+    @Test
+    public void testAllArgsConstructor() {
+        unit = new UnitEntity("g", "gram", new UnitEntity("kg"));
+        assertEquals("g", unit.getSymbol());
+        assertEquals("gram", unit.getName());
+        assertEquals(new UnitEntity("kg"), unit.getBaseUnitEntity());
     }
 
     @Test

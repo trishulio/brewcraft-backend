@@ -20,6 +20,8 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import io.company.brewcraft.service.CriteriaJoin;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -45,6 +47,7 @@ public class ProductCategory extends BaseEntity {
 
     @OneToMany(mappedBy = "parentCategory")
     @JsonIgnore
+    @CriteriaJoin
     private Set<ProductCategory> subcategories;
 
     @CreationTimestamp

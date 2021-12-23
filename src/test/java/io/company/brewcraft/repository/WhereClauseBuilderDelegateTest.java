@@ -1,10 +1,7 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,14 +18,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.repository.PredicateSpecAccumulator;
-import io.company.brewcraft.repository.WhereClauseBuilderDelegate;
 import io.company.brewcraft.service.BetweenSpec;
+import io.company.brewcraft.service.ColumnSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.InSpec;
 import io.company.brewcraft.service.IsNullSpec;
 import io.company.brewcraft.service.LikeSpec;
-import io.company.brewcraft.service.SelectColumnSpec;
 
 public class WhereClauseBuilderDelegateTest {
 
@@ -48,9 +43,9 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testIsNull_AddsInNullSpecAndResetNotFlag() {
-        builder.isNull(new String[] { "join1" }, new String[] { "layer-1" });
+        builder.isNull(new String[] { "layer-1" });
 
-        CriteriaSpec<Boolean> expected = new IsNullSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }));
+        CriteriaSpec<Boolean> expected = new IsNullSpec(new ColumnSpec(new String[] { "layer-1" }));
         assertEquals(expected, captor.getValue());
 
         verify(mAccumulator).setIsNot(false);
@@ -58,9 +53,9 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testIn_AddsInSpecAndResetNotFlag_WhenCollectionIsNotNull() {
-        builder.in(new String[] { "join1" }, new String[] { "layer-1" }, List.of("V1", "V2"));
+        builder.in(new String[] { "layer-1" }, List.of("V1", "V2"));
 
-        CriteriaSpec<Boolean> expected = new InSpec<>(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), List.of("V1", "V2"));
+        CriteriaSpec<Boolean> expected = new InSpec<>(new ColumnSpec<>(new String[] { "layer-1" }), List.of("V1", "V2"));
         assertEquals(expected, captor.getValue());
 
         verify(mAccumulator).setIsNot(false);
@@ -68,7 +63,7 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testIn_AddsNothingAndResetNotFlag_WhenCollectionIsNull() {
-        builder.in(new String[] { "join1" }, new String[] { "layer-1" }, null);
+        builder.in(new String[] { "layer-1" }, null);
 
         assertEquals(List.of(), captor.getAllValues());
 
@@ -77,11 +72,11 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testLike_AddsLikeSpecAndResetFlag_WhenCollectionIsNotNull() {
-        builder.like(new String[] { "join1" }, new String[] { "layer-1" }, Set.of("V1", "V2"));
+        builder.like(new String[] { "layer-1" }, Set.of("V1", "V2"));
 
         List<CriteriaSpec<Boolean>> expected = List.of(
-            new LikeSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V1"),
-            new LikeSpec(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), "V2")
+            new LikeSpec(new ColumnSpec<>(new String[] { "layer-1" }), "V1"),
+            new LikeSpec(new ColumnSpec<>(new String[] { "layer-1" }), "V2")
         );
 
         Assertions.assertThat(expected).hasSameElementsAs(captor.getAllValues());
@@ -91,7 +86,7 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testLike_AddsNothingAndResetFlag_WhenCollectionIsNull() {
-        builder.like(new String[] { "join1" }, new String[] { "layer-1" }, null);
+        builder.like(new String[] { "layer-1" }, null);
 
         assertEquals(List.of(), captor.getAllValues());
 
@@ -100,9 +95,9 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testBetween_AddsBetweenSpecAndResetFlag_WhenStartAndEndAreNotNull() {
-        builder.between(new String[] { "join1" }, new String[] { "layer-1" }, LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
+        builder.between(new String[] { "layer-1" }, LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
 
-        CriteriaSpec<Boolean> expected = new BetweenSpec<>(new SelectColumnSpec<>(new String[] { "join1" }, new String[] { "layer-1" }), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
+        CriteriaSpec<Boolean> expected = new BetweenSpec<>(new ColumnSpec<>(new String[] { "layer-1" }), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1));
 
         assertEquals(expected, captor.getValue());
 
@@ -111,7 +106,7 @@ public class WhereClauseBuilderDelegateTest {
 
     @Test
     public void testBetween_AddsNothingAndResetFlag_WhenStartAndEndAreNull() {
-        builder.between(new String[] { "join1" }, new String[] { "layer-1" }, null, null);
+        builder.between(new String[] { "layer-1" }, null, null);
 
         assertEquals(List.of(), captor.getAllValues());
 

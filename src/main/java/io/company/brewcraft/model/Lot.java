@@ -24,7 +24,7 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 public abstract class Lot extends BaseEntity {
     public enum AggregationField implements PathProvider {
         // Note: Do not change the order. It will require cascading changes be made in other places like the AllArgJpaConstructor
-        ID(FIELD_ID),
+        ID (FIELD_ID),
         LOT_NUMBER (FIELD_LOT_NUMBER),
         MATERIAL (FIELD_MATERIAL),
         MATERIAL_NAME (FIELD_MATERIAL, Material.FIELD_NAME),
@@ -55,6 +55,7 @@ public abstract class Lot extends BaseEntity {
     public static final String FIELD_STORAGE = "storage";
 
     public Lot() {
+        super();
     }
 
     public Lot(Long id) {

@@ -11,30 +11,24 @@ import org.slf4j.LoggerFactory;
 import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.repository.RootUtil;
 
-public class SelectColumnSpec<T> extends BaseModel implements CriteriaSpec<T> {
-    private static final Logger log = LoggerFactory.getLogger(SelectColumnSpec.class);
+public class ColumnSpec<T> extends BaseModel implements CriteriaSpec<T> {
+    private static final Logger log = LoggerFactory.getLogger(ColumnSpec.class);
 
     private RootUtil rootUtil;
 
     private String[] paths;
-    private String[] joins;
 
-    protected SelectColumnSpec(RootUtil rootUtil, String[] joins, String[] paths) {
+    protected ColumnSpec(RootUtil rootUtil, String[] paths) {
         this.rootUtil = rootUtil;
-        this.joins = joins;
         this.paths = paths;
     }
 
-    public SelectColumnSpec(String[] joins, String[] paths) {
-        this(RootUtil.INSTANCE, joins, paths);
-    }
-
-    public SelectColumnSpec(String[] paths) {
-        this(null, paths);
+    public ColumnSpec(String[] paths) {
+        this(RootUtil.INSTANCE, paths);
     }
 
     @Override
     public Expression<T> getExpression(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-        return this.rootUtil.getPathWithJoin(root, joins, paths);
+        return this.rootUtil.getPath(root, paths);
     }
 }
