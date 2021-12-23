@@ -2,12 +2,18 @@ package io.company.brewcraft.dto.procurement;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import io.company.brewcraft.dto.BaseDto;
 
 public class UpdateProcurementDto extends BaseDto {
+    @NotNull
     private UpdateProcurementInvoiceDto invoice;
+
+    @NotNull
     private UpdateProcurementShipmentDto shipment;
 
+    @NotNull
     private List<UpdateProcurementItemDto> procurementItems;
 
     public UpdateProcurementDto() {
