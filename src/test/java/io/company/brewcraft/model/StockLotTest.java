@@ -104,7 +104,7 @@ public class StockLotTest {
 
     @Test
     public void testMaterialInvoiceItemQuantityConstructo() {
-        this.lot = new StockLot(new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot(new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals(new Material(1L), this.lot.getMaterial());
         assertEquals(new InvoiceItem(1L), this.lot.getInvoiceItem());
@@ -158,7 +158,7 @@ public class StockLotTest {
 
     @Test
     public void testLotMaterialInvoiceItemQtyConstructor() {
-        this.lot = new StockLot("LOT_1", new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot("LOT_1", new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals("LOT_1", this.lot.getLotNumber());
         assertEquals(new Material(1L), this.lot.getMaterial());
@@ -179,7 +179,7 @@ public class StockLotTest {
     @Test
     public void testShipmentMaterialInvoiceItemQtyConstructor() {
         final Shipment shipment = new Shipment(1L);
-        this.lot = new StockLot(shipment, new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot(shipment, new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals(shipment, this.lot.getShipment());
         assertEquals(new Material(1L), this.lot.getMaterial());
@@ -198,7 +198,7 @@ public class StockLotTest {
 
     @Test
     public void testStorageMaterialInvoiceItemQtyConstructor() {
-        this.lot = new StockLot(new Storage(1L), new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot(new Storage(1L), new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals(new Storage(1L), this.lot.getStorage());
         assertEquals(new Material(1L), this.lot.getMaterial());
@@ -220,7 +220,7 @@ public class StockLotTest {
     @Test
     public void testLotShipmentMaterialInvoiceItemQtyConstructor() {
         final Shipment shipment = new Shipment(1L);
-        this.lot = new StockLot("LOT_1", shipment, new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot("LOT_1", shipment, new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals("LOT_1", this.lot.getLotNumber());
         assertEquals(shipment, this.lot.getShipment());
@@ -255,7 +255,7 @@ public class StockLotTest {
     @Test
     public void testLotShipmentStorageMaterialInvoiceItemQtyConstructor() {
         final Shipment shipment = new Shipment(1L);
-        this.lot = new StockLot("LOT_1", shipment, new Storage(1L), new Material(1L), new InvoiceItem(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
+        this.lot = new StockLot("LOT_1", shipment, new Storage(1L), new InvoiceItem(1L), new Material(1L), "UNUSED_MATERIAL_NAME", new UnitEntity("kg", "Kilogram"), new BigDecimal("10"));
 
         assertEquals("LOT_1", this.lot.getLotNumber());
         assertEquals(shipment, this.lot.getShipment());

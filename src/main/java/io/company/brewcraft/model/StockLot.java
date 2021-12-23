@@ -51,8 +51,8 @@ public class StockLot extends Lot {
         super(material, materialName, unit, value);
     }
 
-    public StockLot(Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(material, invoiceItem, materialName, unit, value);
+    public StockLot(InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(invoiceItem, material, materialName, unit, value);
     }
 
     public StockLot(Storage storage, UnitEntity unit, BigDecimal value) {
@@ -71,24 +71,24 @@ public class StockLot extends Lot {
         super(lotNumber, material, materialName, unit, value);
     }
 
-    public StockLot(String lotNumber, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, material, invoiceItem, materialName, unit, value);
+    public StockLot(String lotNumber, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, invoiceItem, material, materialName, unit, value);
     }
 
     public StockLot(Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         super(shipment, material, materialName, unit, value);
     }
 
-    public StockLot(Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(shipment, material, invoiceItem, materialName, unit, value);
+    public StockLot(Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(shipment, invoiceItem, material, materialName, unit, value);
     }
 
     public StockLot(Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         super(storage, material, materialName, unit, value);
     }
 
-    public StockLot(Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(storage, material, invoiceItem, materialName, unit, value);
+    public StockLot(Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(storage, invoiceItem, material, materialName, unit, value);
     }
 
     public StockLot(String lotNumber, Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
@@ -99,8 +99,8 @@ public class StockLot extends Lot {
         super(lotNumber, shipment, invoiceItem, unit, value);
     }
 
-    public StockLot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, material, invoiceItem, materialName, unit, value);
+    public StockLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, invoiceItem, material, materialName, unit, value);
     }
 
     public StockLot(String lotNumber, Shipment shipment, Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
@@ -111,7 +111,7 @@ public class StockLot extends Lot {
         super(lotNumber, shipment, storage, invoiceItem, unit, value);
     }
 
-    public StockLot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, storage, material, invoiceItem, materialName, unit, value);
+    public StockLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
+        super(lotNumber, shipment, storage, invoiceItem, material, materialName, unit, value);
     }
 }
