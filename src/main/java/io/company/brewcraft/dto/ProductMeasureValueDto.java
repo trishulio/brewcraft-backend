@@ -2,9 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductMeasureValueDto extends BaseDto {
 
     private Long id;

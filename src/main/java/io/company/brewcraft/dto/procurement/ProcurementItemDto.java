@@ -1,10 +1,8 @@
 package io.company.brewcraft.dto.procurement;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.company.brewcraft.dto.BaseDto;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcurementItemDto extends BaseDto {
     private ProcurementItemIdDto id;
     private ProcurementInvoiceItemDto invoiceItem;

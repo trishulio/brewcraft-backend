@@ -3,9 +3,7 @@ package io.company.brewcraft.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MixtureRecordingDto extends BaseDto {
 
     private Long id;
