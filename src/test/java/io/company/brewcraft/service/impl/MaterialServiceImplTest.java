@@ -77,7 +77,7 @@ public class MaterialServiceImplTest {
         assertSame(materialEntity.getName(), actualMaterial.getName());
         assertSame(materialEntity.getDescription(), actualMaterial.getDescription());
         assertSame(materialEntity.getCategory().getId(), actualMaterial.getCategory().getId());
-        assertSame(materialEntity.getUPC(), actualMaterial.getUPC());
+        assertSame(materialEntity.getUpc(), actualMaterial.getUpc());
         assertSame(materialEntity.getBaseQuantityUnit().getSymbol(), actualMaterial.getBaseQuantityUnit().getSymbol());
         assertSame(materialEntity.getImageSrc(), actualMaterial.getImageSrc());
         assertSame(materialEntity.getLastUpdated(), actualMaterial.getLastUpdated());
@@ -99,7 +99,7 @@ public class MaterialServiceImplTest {
         assertEquals(expectedMaterialEntity.get().getName(), returnedMaterial.getName());
         assertEquals(expectedMaterialEntity.get().getDescription(), returnedMaterial.getDescription());
         assertEquals(expectedMaterialEntity.get().getCategory().getId(), returnedMaterial.getCategory().getId());
-        assertEquals(expectedMaterialEntity.get().getUPC(), returnedMaterial.getUPC());
+        assertEquals(expectedMaterialEntity.get().getUpc(), returnedMaterial.getUpc());
         assertEquals(expectedMaterialEntity.get().getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(expectedMaterialEntity.get().getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(expectedMaterialEntity.get().getLastUpdated(), returnedMaterial.getLastUpdated());
@@ -124,7 +124,7 @@ public class MaterialServiceImplTest {
         assertEquals(material.getName(), persistedMaterialCaptor.getValue().getName());
         assertEquals(material.getDescription(), persistedMaterialCaptor.getValue().getDescription());
         assertEquals(material.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
-        assertEquals(material.getUPC(), persistedMaterialCaptor.getValue().getUPC());
+        assertEquals(material.getUpc(), persistedMaterialCaptor.getValue().getUpc());
         assertEquals(material.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
         assertEquals(material.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         assertEquals(material.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
@@ -136,7 +136,7 @@ public class MaterialServiceImplTest {
         assertEquals(newMaterial.getName(), returnedMaterial.getName());
         assertEquals(newMaterial.getDescription(), returnedMaterial.getDescription());
         assertEquals(newMaterial.getCategory().getId(), returnedMaterial.getCategory().getId());
-        assertEquals(newMaterial.getUPC(), returnedMaterial.getUPC());
+        assertEquals(newMaterial.getUpc(), returnedMaterial.getUpc());
         assertEquals(newMaterial.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(newMaterial.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(newMaterial.getLastUpdated(), returnedMaterial.getLastUpdated());
@@ -161,7 +161,7 @@ public class MaterialServiceImplTest {
         assertEquals(putMaterial.getName(), persistedMaterialCaptor.getValue().getName());
         assertEquals(putMaterial.getDescription(), persistedMaterialCaptor.getValue().getDescription());
         assertEquals(putMaterial.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
-        assertEquals(putMaterial.getUPC(), persistedMaterialCaptor.getValue().getUPC());
+        assertEquals(putMaterial.getUpc(), persistedMaterialCaptor.getValue().getUpc());
         assertEquals(putMaterial.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
         assertEquals(putMaterial.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         //assertEquals(null, persistedMaterialCaptor.getValue().getLastUpdated());
@@ -173,7 +173,7 @@ public class MaterialServiceImplTest {
         assertEquals(materialEntity.getName(), returnedMaterial.getName());
         assertEquals(materialEntity.getDescription(), returnedMaterial.getDescription());
         assertEquals(materialEntity.getCategory().getId(), returnedMaterial.getCategory().getId());
-        assertEquals(materialEntity.getUPC(), returnedMaterial.getUPC());
+        assertEquals(materialEntity.getUpc(), returnedMaterial.getUpc());
         assertEquals(materialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(materialEntity.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(materialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());
@@ -201,7 +201,7 @@ public class MaterialServiceImplTest {
         assertEquals(patchedMaterial.getName(), persistedMaterialCaptor.getValue().getName());
         assertEquals(existingMaterialEntity.getDescription(), persistedMaterialCaptor.getValue().getDescription());
         assertEquals(existingMaterialEntity.getCategory().getId(), persistedMaterialCaptor.getValue().getCategory().getId());
-        assertEquals(existingMaterialEntity.getUPC(), persistedMaterialCaptor.getValue().getUPC());
+        assertEquals(existingMaterialEntity.getUpc(), persistedMaterialCaptor.getValue().getUpc());
         assertEquals(existingMaterialEntity.getBaseQuantityUnit().getSymbol(), persistedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
         assertEquals(existingMaterialEntity.getImageSrc(), persistedMaterialCaptor.getValue().getImageSrc());
         assertEquals(existingMaterialEntity.getLastUpdated(), persistedMaterialCaptor.getValue().getLastUpdated());
@@ -213,7 +213,7 @@ public class MaterialServiceImplTest {
         assertEquals(persistedMaterialEntity.getName(), returnedMaterial.getName());
         assertEquals(persistedMaterialEntity.getDescription(), returnedMaterial.getDescription());
         assertEquals(persistedMaterialEntity.getCategory().getId(), returnedMaterial.getCategory().getId());
-        assertEquals(persistedMaterialEntity.getUPC(), returnedMaterial.getUPC());
+        assertEquals(persistedMaterialEntity.getUpc(), returnedMaterial.getUpc());
         assertEquals(persistedMaterialEntity.getBaseQuantityUnit().getSymbol(), returnedMaterial.getBaseQuantityUnit().getSymbol());
         assertEquals(persistedMaterialEntity.getImageSrc(), returnedMaterial.getImageSrc());
         assertEquals(persistedMaterialEntity.getLastUpdated(), returnedMaterial.getLastUpdated());

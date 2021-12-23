@@ -87,7 +87,7 @@ public class MaterialControllerTest {
        assertEquals(material.getCategory().getParentCategory().getName(), materialDto.getMaterialClass().getName());
        assertEquals(null, materialDto.getMaterialClass().getParentCategoryId());
 
-       assertEquals(material.getUPC(), materialDto.getUPC());
+       assertEquals(material.getUpc(), materialDto.getUpc());
        assertEquals(material.getBaseQuantityUnit().getSymbol(), materialDto.getBaseQuantityUnit());
        assertEquals(material.getImageSrc(), materialDto.getImageSrc());
        assertEquals(material.getVersion(), materialDto.getVersion());
@@ -115,7 +115,7 @@ public class MaterialControllerTest {
        assertEquals(material.getCategory().getParentCategory().getName(), materialDto.getMaterialClass().getName());
        assertEquals(null, materialDto.getMaterialClass().getParentCategoryId());
 
-       assertEquals(material.getUPC(), materialDto.getUPC());
+       assertEquals(material.getUpc(), materialDto.getUpc());
        assertEquals(material.getBaseQuantityUnit().getSymbol(), materialDto.getBaseQuantityUnit());
        assertEquals(material.getImageSrc(), materialDto.getImageSrc());
        assertEquals(material.getVersion(), materialDto.getVersion());
@@ -146,7 +146,7 @@ public class MaterialControllerTest {
        assertEquals(addMaterialDto.getName(), addedMaterialCaptor.getValue().getName());
        assertEquals(addMaterialDto.getDescription(), addedMaterialCaptor.getValue().getDescription());
        assertEquals(addMaterialDto.getCategoryId(), addedMaterialCaptor.getValue().getCategory().getId());
-       assertEquals(addMaterialDto.getUPC(), addedMaterialCaptor.getValue().getUPC());
+       assertEquals(addMaterialDto.getUpc(), addedMaterialCaptor.getValue().getUpc());
        assertEquals(addMaterialDto.getBaseQuantityUnit(), addedMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
        assertEquals(addMaterialDto.getImageSrc(), addedMaterialCaptor.getValue().getImageSrc());
 
@@ -163,7 +163,7 @@ public class MaterialControllerTest {
        assertEquals(material.getCategory().getParentCategory().getName(), materialDto.getMaterialClass().getName());
        assertEquals(null, materialDto.getMaterialClass().getParentCategoryId());
 
-       assertEquals(material.getUPC(), materialDto.getUPC());
+       assertEquals(material.getUpc(), materialDto.getUpc());
        assertEquals(material.getBaseQuantityUnit().getSymbol(), materialDto.getBaseQuantityUnit());
        assertEquals(material.getImageSrc(), materialDto.getImageSrc());
        assertEquals(material.getVersion(), materialDto.getVersion());
@@ -188,7 +188,7 @@ public class MaterialControllerTest {
        assertEquals(updateMaterialDto.getName(), putMaterialCaptor.getValue().getName());
        assertEquals(updateMaterialDto.getDescription(), putMaterialCaptor.getValue().getDescription());
        assertEquals(updateMaterialDto.getCategoryId(), putMaterialCaptor.getValue().getCategory().getId());
-       assertEquals(updateMaterialDto.getUPC(), putMaterialCaptor.getValue().getUPC());
+       assertEquals(updateMaterialDto.getUpc(), putMaterialCaptor.getValue().getUpc());
        assertEquals(updateMaterialDto.getBaseQuantityUnit(), putMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
        assertEquals(updateMaterialDto.getImageSrc(), putMaterialCaptor.getValue().getImageSrc());
        assertEquals(updateMaterialDto.getVersion(), putMaterialCaptor.getValue().getVersion());
@@ -206,7 +206,7 @@ public class MaterialControllerTest {
        assertEquals(material.getCategory().getParentCategory().getName(), materialDto.getMaterialClass().getName());
        assertEquals(null, materialDto.getMaterialClass().getParentCategoryId());
 
-       assertEquals(material.getUPC(), materialDto.getUPC());
+       assertEquals(material.getUpc(), materialDto.getUpc());
        assertEquals(material.getBaseQuantityUnit().getSymbol(), materialDto.getBaseQuantityUnit());
        assertEquals(material.getImageSrc(), materialDto.getImageSrc());
        assertEquals(material.getVersion(), materialDto.getVersion());
@@ -231,7 +231,7 @@ public class MaterialControllerTest {
        assertEquals(updateMaterialDto.getName(), patchMaterialCaptor.getValue().getName());
        assertEquals(updateMaterialDto.getDescription(), patchMaterialCaptor.getValue().getDescription());
        assertEquals(updateMaterialDto.getCategoryId(), patchMaterialCaptor.getValue().getCategory().getId());
-       assertEquals(updateMaterialDto.getUPC(), patchMaterialCaptor.getValue().getUPC());
+       assertEquals(updateMaterialDto.getUpc(), patchMaterialCaptor.getValue().getUpc());
        assertEquals(updateMaterialDto.getBaseQuantityUnit(), patchMaterialCaptor.getValue().getBaseQuantityUnit().getSymbol());
        assertEquals(updateMaterialDto.getImageSrc(), patchMaterialCaptor.getValue().getImageSrc());
        assertEquals(updateMaterialDto.getVersion(), patchMaterialCaptor.getValue().getVersion());
@@ -249,7 +249,7 @@ public class MaterialControllerTest {
        assertEquals(material.getCategory().getParentCategory().getName(), materialDto.getMaterialClass().getName());
        assertEquals(null, materialDto.getMaterialClass().getParentCategoryId());
 
-       assertEquals(material.getUPC(), materialDto.getUPC());
+       assertEquals(material.getUpc(), materialDto.getUpc());
        assertEquals(material.getBaseQuantityUnit().getSymbol(), materialDto.getBaseQuantityUnit());
        assertEquals(material.getImageSrc(), materialDto.getImageSrc());
        assertEquals(material.getVersion(), materialDto.getVersion());

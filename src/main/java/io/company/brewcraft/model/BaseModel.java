@@ -37,7 +37,7 @@ public abstract class BaseModel {
     }
 
     public void outerJoin(Object other, Set<String> include) {
-        util.copy(this, other, pd -> include.stream().anyMatch(pd.getName()::equalsIgnoreCase) && pd.getReadMethod().invoke(other) != null);
+        util.copy(this, other, pd -> include.contains(pd.getName()) && pd.getReadMethod().invoke(other) != null);
     }
 
     public void copyToNullFields(Object existingEntity) {
@@ -49,7 +49,7 @@ public abstract class BaseModel {
     }
 
     public void override(Object other, Set<String> include) {
-        util.copy(this, other, pd -> include.stream().anyMatch(pd.getName()::equalsIgnoreCase));
+        util.copy(this, other, pd -> include.contains(pd.getName()));
     }
 
     public <T extends BaseModel> T deepClone() {

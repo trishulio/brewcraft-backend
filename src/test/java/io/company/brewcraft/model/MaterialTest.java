@@ -42,7 +42,7 @@ public class MaterialTest {
         assertSame(name, materialEntity.getName());
         assertSame(description, materialEntity.getDescription());
         assertSame(category, materialEntity.getCategory());
-        assertSame(upc, materialEntity.getUPC());
+        assertSame(upc, materialEntity.getUpc());
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
         assertSame(imageSrc, materialEntity.getImageSrc());
         assertSame(created, materialEntity.getCreatedAt());
@@ -79,10 +79,10 @@ public class MaterialTest {
     }
 
     @Test
-    public void testGetSetUPC() {
+    public void testGetSetUpc() {
         String upc = "testUpc";
-        materialEntity.setUPC(upc);
-        assertSame(upc, materialEntity.getUPC());
+        materialEntity.setUpc(upc);
+        assertSame(upc, materialEntity.getUpc());
     }
 
     @Test
