@@ -8,13 +8,12 @@ import javax.persistence.criteria.From;
 import io.company.brewcraft.model.BaseModel;
 
 public class LocalCachedCriteriaJoinProcessor implements CriteriaJoinProcessor {
-    public static final Integer EXPECTED_MAX_SEARCH_LAYERS = 20;
     private ThreadLocal<Map<Key<?, ?>, From<?, ?>>> cacheHolder;
 
     private CriteriaJoinProcessor cjProcessor;
 
     public LocalCachedCriteriaJoinProcessor(CriteriaJoinProcessor cjProcessor) {
-        this.cacheHolder = ThreadLocal.withInitial(() -> new HashMap<>(EXPECTED_MAX_SEARCH_LAYERS));
+        this.cacheHolder = ThreadLocal.withInitial(() -> new HashMap<>());
         this.cjProcessor = cjProcessor;
     }
 
