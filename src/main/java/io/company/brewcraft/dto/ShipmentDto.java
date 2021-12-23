@@ -3,9 +3,7 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShipmentDto extends BaseDto {
     private Long id;
     private String shipmentNumber;

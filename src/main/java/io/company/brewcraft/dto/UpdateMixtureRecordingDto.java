@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateMixtureRecordingDto extends BaseDto {
 
     private Long id;

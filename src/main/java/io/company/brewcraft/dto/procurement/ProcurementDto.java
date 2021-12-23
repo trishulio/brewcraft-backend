@@ -2,11 +2,9 @@ package io.company.brewcraft.dto.procurement;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.company.brewcraft.dto.BaseDto;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcurementDto extends BaseDto {
     private ProcurementIdDto id;
     private ProcurementInvoiceDto invoice;
