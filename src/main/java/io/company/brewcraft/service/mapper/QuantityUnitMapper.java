@@ -84,6 +84,15 @@ public abstract class QuantityUnitMapper {
         return dto;
     }
 
+    public UnitDto toDto(UnitEntity unit) {
+        UnitDto dto = null;
+        if (unit != null) {
+            dto = new UnitDto(unit.getSymbol());
+        }
+
+        return dto;
+    }
+
     private Map<String, Unit<?>> getAllUnits() {
         try {
             Field[] fields = SupportedUnits.class.getFields();

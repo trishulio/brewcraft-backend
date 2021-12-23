@@ -1,20 +1,32 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 
 import javax.measure.Unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.UnitEntity;
+import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.repository.QuantityUnitRepository;
 import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.util.SupportedUnits;
@@ -30,6 +42,22 @@ public class QuantityUnitServiceImplTest {
         quantityUnitRepositoryMock = mock(QuantityUnitRepository.class);
 
         quantityUnitService = new  QuantityUnitServiceImpl(quantityUnitRepositoryMock);
+    }
+
+    @Test
+    public void testGetRoles_returnsRoles() throws Exception {
+        Page<UnitEntity> expectedUnitsPage = new PageImpl<>(List.of(new UnitEntity("kg", "kg")));
+
+        final ArgumentCaptor<Specification<UnitEntity>> specificationCaptor = ArgumentCaptor.forClass(Specification.class);
+
+        when(quantityUnitRepositoryMock.findAll(specificationCaptor.capture(), eq(PageRequest.of(0, 100, Sort.by(Direction.ASC, new String[] {"id"}))))).thenReturn(expectedUnitsPage);
+
+        Page<UnitEntity> actualUnitsPage = quantityUnitService.getUnits(null, new TreeSet<>(List.of("id")), true, 0, 100);
+
+        assertEquals(List.of(new UnitEntity("kg", "kg")), actualUnitsPage.getContent());
+
+        // TODO: Pending testing for the specification
+        // specificationCaptor.getValue();
     }
 
     @Test

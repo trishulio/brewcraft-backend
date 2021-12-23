@@ -2,9 +2,7 @@ package io.company.brewcraft.dto;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MoneyDto extends BaseDto {
     public static final String ATTR_CURRENCY = "currency";
     public static final String ATTR_AMOUNT = "amount";

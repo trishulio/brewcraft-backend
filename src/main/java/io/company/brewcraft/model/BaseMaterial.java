@@ -13,9 +13,9 @@ public interface BaseMaterial extends BaseQuantityUnitAccessor {
 
     void setCategory(MaterialCategory category);
 
-    String getUPC();
+    String getUpc();
 
-    void setUPC(String upc);
+    void setUpc(String upc);
 
     String getImageSrc();
 

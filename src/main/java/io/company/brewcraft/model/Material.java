@@ -80,7 +80,7 @@ public class Material extends BaseEntity implements UpdateMaterial, Audited, Ide
         setName(name);
         setDescription(description);
         setCategory(category);
-        setUPC(upc);
+        setUpc(upc);
         setBaseQuantityUnit(baseQuantityUnit);
         setImageSrc(imageSrc);
         setCreatedAt(createdAt);
@@ -129,12 +129,12 @@ public class Material extends BaseEntity implements UpdateMaterial, Audited, Ide
     }
 
     @Override
-    public String getUPC() {
+    public String getUpc() {
         return upc;
     }
 
     @Override
-    public void setUPC(String upc) {
+    public void setUpc(String upc) {
         this.upc = upc;
     }
 

@@ -1,8 +1,6 @@
 package io.company.brewcraft.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UnitDto extends BaseDto {
     public static final String ATTR_SYMBOL = "symbol";
 

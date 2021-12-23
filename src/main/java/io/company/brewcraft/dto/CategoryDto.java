@@ -1,12 +1,10 @@
 package io.company.brewcraft.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class CategoryDto extends BaseDto {
 
     private Long id;
 
-    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Long parentCategoryId;
 
     private String name;

@@ -11,6 +11,6 @@ import io.company.brewcraft.model.UnitEntity;
 
 @Repository
 @Transactional
-public interface QuantityUnitRepository extends JpaRepository<UnitEntity, Long>, JpaSpecificationExecutor<UnitEntity> {
+public interface QuantityUnitRepository extends JpaRepository<UnitEntity, String>, JpaSpecificationExecutor<UnitEntity> {
     Optional<UnitEntity> findBySymbol(String symbol);
 }
