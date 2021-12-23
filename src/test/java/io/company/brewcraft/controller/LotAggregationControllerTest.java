@@ -17,11 +17,11 @@ import org.springframework.data.domain.PageImpl;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProcurementLotDto;
 import io.company.brewcraft.dto.StockLotDto;
-import io.company.brewcraft.model.Lot;
 import io.company.brewcraft.model.ProcurementLot;
 import io.company.brewcraft.model.StockLot;
 import io.company.brewcraft.service.AggregationFunction;
 import io.company.brewcraft.service.LotAggregationService;
+import io.company.brewcraft.service.ProcurementLotAggregationFieldCollection;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class LotAggregationControllerTest {
@@ -50,7 +50,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
-            new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
+            ProcurementLotAggregationFieldCollection.ID.getFields(), // groupBy
             new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
@@ -69,7 +69,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
-            new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
+            ProcurementLotAggregationFieldCollection.ID, // groupBy
             new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
@@ -101,7 +101,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
-            new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
+            ProcurementLotAggregationFieldCollection.ID.getFields(), // groupBy
             new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page
@@ -120,7 +120,7 @@ public class LotAggregationControllerTest {
             LocalDateTime.of(2000, 1, 1, 1, 1), // deliveredDateFrom
             LocalDateTime.of(2001, 1, 1, 1, 1), // deliveredDateTo
             AggregationFunction.SUM, // aggrFn
-            new Lot.AggregationField[] { Lot.AggregationField.MATERIAL }, // groupBy
+            ProcurementLotAggregationFieldCollection.ID, // groupBy
             new TreeSet<>(List.of("id")), // sort
             true, // orderAscending
             1, // page

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -54,28 +53,6 @@ public class LotAggregationService {
                                                                        .between(new String[] { ProcurementLot.FIELD_SHIPMENT, Shipment.FIELD_DELIVERED_DATE }, deliveredDateFrom, deliveredDateTo)
                                                                        .build();
 
-        /***
-         * Since the select and the group_by clause are made to always be the same, to
-         * get all the properties of a lot, the client needs to specify all column_names
-         * like group_by=ID,MATERIAL,QUANTITY,SHIPMENT,STORAGE otherwise all those
-         * attributes would be null by default. But when group_by clause contains the
-         * attribute ID, it is guaranteed that all individual tuples will be returned
-         * without any aggregation on them because IDs are unique. This means, we can do
-         * one better. When group_by=ID is present in the request, the service adds all
-         * the remaining fields to the select and group_by clause. This makes it
-         * convenient for the client to get all the results and not have to specify an
-         * entire list of attributes.
-         */
-        if (ArrayUtils.contains(groupBy, ProcurementLot.AggregationField.ID)) {
-            ProcurementLot.AggregationField[] fields = ProcurementLot.AggregationField.values();
-            groupBy = ArrayUtils.remove(fields, ArrayUtils.indexOf(fields, ProcurementLot.AggregationField.QUANTITY_VALUE));
-
-        } else if (ArrayUtils.contains(groupBy, ProcurementLot.AggregationField.MATERIAL)) {
-            groupBy = ArrayUtils.addAll(groupBy, ProcurementLot.AggregationField.MATERIAL_NAME, ProcurementLot.AggregationField.QUANTITY_UNIT);
-
-        } else {
-            groupBy = ArrayUtils.addAll(groupBy, ProcurementLot.AggregationField.QUANTITY_UNIT);
-        }
         return this.aggrService.getAggregation(ProcurementLot.class, spec, aggrFn, ProcurementLot.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
     }
 
@@ -108,29 +85,6 @@ public class LotAggregationService {
                                                                  .in(new String[] { StockLot.FIELD_SHIPMENT, Shipment.FIELD_SHIPMENT_NUMBER }, shipmentNumbers)
                                                                  .between(new String[] { StockLot.FIELD_SHIPMENT, Shipment.FIELD_DELIVERED_DATE }, deliveredDateFrom, deliveredDateTo)
                                                                  .build();
-
-        /***
-         * Since the select and the group_by clause are made to always be the same, to
-         * get all the properties of a lot, the client needs to specify all column_names
-         * like group_by=ID,MATERIAL,QUANTITY,SHIPMENT,STORAGE otherwise all those
-         * attributes would be null by default. But when group_by clause contains the
-         * attribute ID, it is guaranteed that all individual tuples will be returned
-         * without any aggregation on them because IDs are unique. This means, we can do
-         * one better. When group_by=ID is present in the request, the service adds all
-         * the remaining fields to the select and group_by clause. This makes it
-         * convenient for the client to get all the results and not have to specify an
-         * entire list of attributes.
-         */
-        if (ArrayUtils.contains(groupBy, StockLot.AggregationField.ID)) {
-            StockLot.AggregationField[] fields = StockLot.AggregationField.values();
-            groupBy = ArrayUtils.remove(fields, ArrayUtils.indexOf(fields, StockLot.AggregationField.QUANTITY_VALUE));
-
-        } else if (ArrayUtils.contains(groupBy, StockLot.AggregationField.MATERIAL)) {
-            groupBy = ArrayUtils.addAll(groupBy, StockLot.AggregationField.MATERIAL_NAME, StockLot.AggregationField.QUANTITY_UNIT);
-
-        } else {
-            groupBy = ArrayUtils.addAll(groupBy, StockLot.AggregationField.QUANTITY_UNIT);
-        }
 
         return this.aggrService.getAggregation(StockLot.class, spec, aggrFn, StockLot.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
     }
