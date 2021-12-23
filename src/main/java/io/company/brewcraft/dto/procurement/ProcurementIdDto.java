@@ -1,9 +1,14 @@
 package io.company.brewcraft.dto.procurement;
 
+import javax.validation.constraints.NotNull;
+
 import io.company.brewcraft.dto.BaseDto;
 
 public class ProcurementIdDto extends BaseDto {
+    @NotNull
     private Long shipmentId;
+
+    @NotNull
     private Long invoiceId;
 
     public ProcurementIdDto() {
