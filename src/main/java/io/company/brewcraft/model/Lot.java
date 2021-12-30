@@ -23,7 +23,6 @@ import io.company.brewcraft.service.mapper.QuantityMapper;
 @MappedSuperclass
 public abstract class Lot extends BaseEntity {
     public enum AggregationField implements PathProvider {
-        // Note: Do not change the order. It will require cascading changes be made in other places like the AllArgJpaConstructor
         ID (FIELD_ID),
         LOT_NUMBER (FIELD_LOT_NUMBER),
         MATERIAL (FIELD_MATERIAL),
@@ -111,7 +110,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.
@@ -147,7 +146,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Material material, InvoiceItem invoiceitem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, InvoiceItem invoiceitem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.
@@ -168,7 +167,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.
@@ -189,7 +188,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.
@@ -218,7 +217,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.
@@ -250,7 +249,7 @@ public abstract class Lot extends BaseEntity {
         this.setQuantity(unit, value);
     }
 
-    public Lot(String lotNumber, Shipment shipment, Storage storage, Material material, InvoiceItem invoiceItem, String materialName, UnitEntity unit, BigDecimal value) {
+    public Lot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
         /**
          * MaterialName is an unused field. It's included in the constructor since it's
          * required by JPA for doing sort by Material Name field. Do not remove it.

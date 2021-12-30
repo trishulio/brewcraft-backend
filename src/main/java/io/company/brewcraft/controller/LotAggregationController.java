@@ -19,6 +19,8 @@ import io.company.brewcraft.model.ProcurementLot;
 import io.company.brewcraft.model.StockLot;
 import io.company.brewcraft.service.AggregationFunction;
 import io.company.brewcraft.service.LotAggregationService;
+import io.company.brewcraft.service.ProcurementLotAggregationFieldCollection;
+import io.company.brewcraft.service.StockLotAggregationFieldCollection;
 import io.company.brewcraft.service.mapper.ProcurementLotMapper;
 import io.company.brewcraft.service.mapper.StockLotMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -47,8 +49,8 @@ public class LotAggregationController extends BaseController {
         @RequestParam(name = "delivered_date_from", required = false) LocalDateTime deliveredDateFrom,
         @RequestParam(name = "delivered_date_to", required = false) LocalDateTime deliveredDateTo,
         @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
-        @RequestParam(name = "group_by", defaultValue = "ID") ProcurementLot.AggregationField[] groupBy,
-        @RequestParam(name = BaseController.PROPNAME_SORT_BY, defaultValue = "") SortedSet<String> sort,
+        @RequestParam(name = "group_by", defaultValue = "ID") ProcurementLotAggregationFieldCollection groupBy,
+        @RequestParam(name = BaseController.PROPNAME_SORT_BY, defaultValue = "material.name") SortedSet<String> sort,
         @RequestParam(name = BaseController.PROPNAME_ORDER_ASC, defaultValue = BaseController.VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = BaseController.PROPNAME_PAGE_INDEX, defaultValue = BaseController.VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = BaseController.PROPNAME_PAGE_SIZE, defaultValue = BaseController.VALUE_DEFAULT_PAGE_SIZE) int size,
@@ -66,7 +68,7 @@ public class LotAggregationController extends BaseController {
             deliveredDateFrom,
             deliveredDateTo,
             aggrFn,
-            groupBy,
+            groupBy.getFields(),
             sort,
             orderAscending,
             page,
@@ -91,8 +93,8 @@ public class LotAggregationController extends BaseController {
         @RequestParam(name = "delivered_date_from", required = false) LocalDateTime deliveredDateFrom,
         @RequestParam(name = "delivered_date_to", required = false) LocalDateTime deliveredDateTo,
         @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
-        @RequestParam(name = "group_by", defaultValue = "ID") StockLot.AggregationField[] groupBy,
-        @RequestParam(name = BaseController.PROPNAME_SORT_BY, defaultValue = "") SortedSet<String> sort,
+        @RequestParam(name = "group_by", defaultValue = "ID") StockLotAggregationFieldCollection groupBy,
+        @RequestParam(name = BaseController.PROPNAME_SORT_BY, defaultValue = "material.name") SortedSet<String> sort,
         @RequestParam(name = BaseController.PROPNAME_ORDER_ASC, defaultValue = BaseController.VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = BaseController.PROPNAME_PAGE_INDEX, defaultValue = BaseController.VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = BaseController.PROPNAME_PAGE_SIZE, defaultValue = BaseController.VALUE_DEFAULT_PAGE_SIZE) int size,
@@ -110,7 +112,7 @@ public class LotAggregationController extends BaseController {
             deliveredDateFrom,
             deliveredDateTo,
             aggrFn,
-            groupBy,
+            groupBy.getFields(),
             sort,
             orderAscending,
             page,
