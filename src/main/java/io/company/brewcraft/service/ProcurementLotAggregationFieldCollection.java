@@ -3,6 +3,10 @@ package io.company.brewcraft.service;
 import io.company.brewcraft.model.Lot.AggregationField;
 
 public enum ProcurementLotAggregationFieldCollection {
+    /**
+     * The order of the values should match the ProcurementLot constructors
+     */
+
     ID(AggregationField.ID, AggregationField.LOT_NUMBER, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.INVOICE_ITEM, AggregationField.SHIPMENT, AggregationField.STORAGE, AggregationField.QUANTITY_UNIT),
 
     LOT_NUMBER(AggregationField.LOT_NUMBER, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT),
