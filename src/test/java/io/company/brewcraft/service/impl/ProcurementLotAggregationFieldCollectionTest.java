@@ -30,6 +30,13 @@ public class ProcurementLotAggregationFieldCollectionTest {
     }
 
     @Test
+    public void testGetFields_LOT_NUMBER_AND_INVOICE_ITEM_ReturnsAllAggregationFieldsExceptQuantityValue() {
+        AggregationField[] fields = { AggregationField.LOT_NUMBER, AggregationField.INVOICE_ITEM, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT };
+
+        assertArrayEquals(fields, ProcurementLotAggregationFieldCollection.LOT_NUMBER_AND_INVOICE_ITEM.getFields());
+    }
+
+    @Test
     public void testGetFields_SHIPMENT_ReturnsAllAggregationFieldsExceptQuantityValue() {
         AggregationField[] fields = { AggregationField.SHIPMENT, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT };
 

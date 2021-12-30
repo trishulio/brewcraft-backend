@@ -13,6 +13,8 @@ public enum StockLotAggregationFieldCollection {
 
     INVOICE_ITEM(AggregationField.INVOICE_ITEM, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT),
 
+    LOT_NUMBER_AND_INVOICE_ITEM(AggregationField.LOT_NUMBER, AggregationField.INVOICE_ITEM, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT),
+
     SHIPMENT(AggregationField.SHIPMENT, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT),
 
     STORAGE(AggregationField.STORAGE, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT);
