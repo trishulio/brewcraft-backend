@@ -50,7 +50,7 @@ public class BrewControllerTest {
        doReturn(1000L).when(mPage).getTotalElements();
        doReturn(mPage).when(brewService).getBrews(
            Set.of(1L),
-           Set.of(2L),
+           Set.of("a123"),
            Set.of("test"),
            Set.of(3L),
            Set.of(4L),
@@ -67,7 +67,7 @@ public class BrewControllerTest {
 
        PageDto<BrewDto> dto = brewController.getBrews(
                Set.of(1L),
-               Set.of(2L),
+               Set.of("a123"),
                Set.of("test"),
                Set.of(3L),
                Set.of(4L),

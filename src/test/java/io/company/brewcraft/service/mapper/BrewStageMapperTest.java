@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.AddBrewStageDto;
+import io.company.brewcraft.dto.BrewDto;
 import io.company.brewcraft.dto.BrewStageDto;
 import io.company.brewcraft.dto.BrewStageStatusDto;
 import io.company.brewcraft.dto.BrewTaskDto;
@@ -30,7 +31,7 @@ public class BrewStageMapperTest {
 
     @Test
     public void testFromDto_ReturnsEntity() {
-        BrewStageDto dto = new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        BrewStageDto dto = new BrewStageDto(1L, new BrewDto(2L), new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         BrewStage brewStage = brewStageMapper.fromDto(dto);
 
@@ -67,6 +68,6 @@ public class BrewStageMapperTest {
 
         BrewStageDto dto = brewStageMapper.toDto(brewStage);
 
-        assertEquals(new BrewStageDto(1L, 2L, new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), dto);
+        assertEquals(new BrewStageDto(1L, new BrewDto(2L), new BrewStageStatusDto(3L), new BrewTaskDto(4L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), dto);
     }
 }

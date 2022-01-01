@@ -19,7 +19,7 @@ public class BrewStageDtoTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
-        Long brewId = 2L;
+        BrewDto brewId = new BrewDto(2L);
         BrewStageStatusDto status = new BrewStageStatusDto(3L);
         BrewTaskDto task = new BrewTaskDto(4L);
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -29,7 +29,7 @@ public class BrewStageDtoTest {
         BrewStageDto brewStageDto = new BrewStageDto(id, brewId, status, task, startedAt, endedAt, version);
 
         assertEquals(1L, brewStageDto.getId());
-        assertEquals(2L, brewStageDto.getBrewId());
+        assertEquals(new BrewDto(2L), brewStageDto.getBrew());
         assertEquals(new BrewStageStatusDto(3L), brewStageDto.getStatus());
         assertEquals(new BrewTaskDto(4L), brewStageDto.getTask());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brewStageDto.getStartedAt());
@@ -45,9 +45,9 @@ public class BrewStageDtoTest {
     }
 
     @Test
-    public void testGetSetBrewId() {
-        brewStageDto.setBrewId(2L);
-        assertEquals(2L, brewStageDto.getBrewId());
+    public void testGetSetBrew() {
+        brewStageDto.setBrew(new BrewDto(2L));
+        assertEquals(new BrewDto(2L), brewStageDto.getBrew());
     }
 
     @Test

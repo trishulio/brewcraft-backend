@@ -17,7 +17,25 @@ public class BrewDtoTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testIdConstructor() {
+        Long id = 1L;
+
+        BrewDto brewDto = new BrewDto(id);
+
+        assertEquals(1L, brewDto.getId());
+        assertNull(brewDto.getName());
+        assertNull(brewDto.getDescription());
+        assertNull(brewDto.getBatchId());
+        assertNull(brewDto.getProduct());
+        assertNull(brewDto.getParentBrewId());
+        assertNull(brewDto.getStartedAt());
+        assertNull(brewDto.getEndedAt());
+        assertNull(brewDto.getCreatedAt());
+        assertNull(brewDto.getVersion());
+    }
+
+    @Test
+    public void testAllArgsConstructor() {
         Long id = 1L;
         String name = "testName";
         String description = "testDesc";
