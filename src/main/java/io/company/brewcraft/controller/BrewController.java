@@ -54,7 +54,7 @@ public class BrewController extends BaseController {
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<BrewDto> getBrews(
             @RequestParam(required = false) Set<Long> ids,
-            @RequestParam(required = false, name = "batch_ids") Set<Long> batchIds,
+            @RequestParam(required = false, name = "batch_ids") Set<String> batchIds,
             @RequestParam(required = false, name = "names") Set<String> names,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
             @RequestParam(required = false, name = "stage_task_ids") Set<Long> stageTaskIds,

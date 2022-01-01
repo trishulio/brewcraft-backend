@@ -17,7 +17,6 @@ public interface BrewStageMapper {
 
     BrewStage fromDto(Long id);
 
-    @Mapping(target = "brew", source = "brewId")
     BrewStage fromDto(BrewStageDto dto);
 
     @Mapping(target = Brew.ATTR_ID, ignore = true)
@@ -37,7 +36,6 @@ public interface BrewStageMapper {
     @Mapping(target = "brew", source = "brewId")
     BrewStage fromDto(UpdateBrewStageDto dto);
 
-    @Mapping(target = "brewId", source = "brew.id")
     BrewStageDto toDto(BrewStage brew);
 
 }
