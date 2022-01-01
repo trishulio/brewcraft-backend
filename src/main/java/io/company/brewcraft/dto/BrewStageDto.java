@@ -6,7 +6,7 @@ public class BrewStageDto extends BaseDto {
 
     private Long id;
 
-    private Long brewId;
+    private BrewDto brew;
 
     private BrewStageStatusDto status;
 
@@ -27,10 +27,10 @@ public class BrewStageDto extends BaseDto {
         this.id = id;
     }
 
-    public BrewStageDto(Long id, Long brewId, BrewStageStatusDto status, BrewTaskDto task, LocalDateTime startedAt,
+    public BrewStageDto(Long id, BrewDto brew, BrewStageStatusDto status, BrewTaskDto task, LocalDateTime startedAt,
             LocalDateTime endedAt, Integer version) {
         this(id);
-        this.brewId = brewId;
+        this.brew = brew;
         this.status = status;
         this.task = task;
         this.startedAt = startedAt;
@@ -46,12 +46,12 @@ public class BrewStageDto extends BaseDto {
         this.id = id;
     }
 
-    public Long getBrewId() {
-        return brewId;
+    public BrewDto getBrew() {
+        return brew;
     }
 
-    public void setBrewId(Long brewId) {
-        this.brewId = brewId;
+    public void setBrew(BrewDto brew) {
+        this.brew = brew;
     }
 
     public BrewStageStatusDto getStatus() {

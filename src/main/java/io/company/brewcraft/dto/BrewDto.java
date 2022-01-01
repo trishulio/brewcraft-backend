@@ -28,10 +28,14 @@ public class BrewDto extends BaseDto {
         super();
     }
 
+    public BrewDto(Long id) {
+        this();
+        this.id = id;
+    }
+
     public BrewDto(Long id, String name, String description, String batchId, ProductDto productDto, Long parentBrewId,
             LocalDateTime startedAt, LocalDateTime endedAt, LocalDateTime createdAt, Integer version) {
-        super();
-        this.id = id;
+        this(id);
         this.name = name;
         this.description = description;
         this.batchId = batchId;

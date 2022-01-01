@@ -42,7 +42,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
     }
 
     @Override
-    public Page<Brew> getBrews(Set<Long> ids, Set<Long> batchIds, Set<String> names, Set<Long> productIds,
+    public Page<Brew> getBrews(Set<Long> ids, Set<String> batchIds, Set<String> names, Set<Long> productIds,
             Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,
             LocalDateTime endedAtFrom, LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
 

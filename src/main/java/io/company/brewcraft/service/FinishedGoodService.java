@@ -25,6 +25,7 @@ import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixturePortion;
+import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
@@ -54,6 +55,8 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
             Set<Long> mixtureIds,
             Set<Long> brewStageIds,
             Set<Long> brewIds,
+            Set<String> brewBatchIds,
+            Set<Long> productIds,
             SortedSet<String> sort,
             boolean orderAscending,
             int page,
@@ -67,6 +70,8 @@ public class FinishedGoodService extends BaseService implements CrudService<Long
                                             .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
                                             .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
                                             .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
+                                            .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_BATCH_ID }, brewBatchIds)
+                                            .in(new String[] { FinishedGood.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_PRODUCT, Product.FIELD_ID }, productIds)
                                             .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);
