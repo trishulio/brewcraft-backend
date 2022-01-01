@@ -5,7 +5,6 @@ import static org.junit.Assert.assertArrayEquals;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Lot.AggregationField;
-import io.company.brewcraft.service.ProcurementLotAggregationFieldCollection;
 import io.company.brewcraft.service.StockLotAggregationFieldCollection;
 
 public class StockLotAggregationFieldCollectionTest {
@@ -14,6 +13,13 @@ public class StockLotAggregationFieldCollectionTest {
         AggregationField[] fields = { AggregationField.ID, AggregationField.LOT_NUMBER, AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.INVOICE_ITEM, AggregationField.SHIPMENT, AggregationField.STORAGE, AggregationField.QUANTITY_UNIT };
 
         assertArrayEquals(fields, StockLotAggregationFieldCollection.ID.getFields());
+    }
+
+    @Test
+    public void testGetFields_MATERIAL_ReturnsAllAggregationFieldsExceptQuantityValue() {
+        AggregationField[] fields = { AggregationField.MATERIAL, AggregationField.MATERIAL_NAME, AggregationField.QUANTITY_UNIT };
+
+        assertArrayEquals(fields, StockLotAggregationFieldCollection.MATERIAL.getFields());
     }
 
     @Test
