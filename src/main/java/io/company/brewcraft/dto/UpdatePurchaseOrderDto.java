@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-
 public class UpdatePurchaseOrderDto extends BaseDto {
     private Long id;
     private String orderNumber;

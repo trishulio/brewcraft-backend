@@ -70,7 +70,7 @@ public class SkuMaterialTest {
     public void testSetMaterial_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
         Material material = new Material(3L);
         material.setBaseQuantityUnit(Units.LITRE);
-        
+
         skuMaterial.setQuantity(Quantities.getQuantity("10 kg"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setMaterial(material));
     }
@@ -80,13 +80,13 @@ public class SkuMaterialTest {
         skuMaterial.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), skuMaterial.getQuantity());
     }
-    
+
     @Test
     public void testSetQuantity_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
         Material material = new Material(3L);
         material.setBaseQuantityUnit(Units.KILOGRAM);
         skuMaterial.setMaterial(material);
-        
+
         assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setQuantity(Quantities.getQuantity("10 l")));
     }
 

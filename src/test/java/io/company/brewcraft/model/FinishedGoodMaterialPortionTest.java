@@ -60,7 +60,7 @@ public class FinishedGoodMaterialPortionTest {
         materialPortion.setMaterialLot(new MaterialLot(3L));
         assertEquals(new MaterialLot(3L), materialPortion.getMaterialLot());
     }
-    
+
     @Test
     public void testSetMaterialLot_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
         MaterialLot materialLot = new MaterialLot(2L);

@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 public class InvoiceDto extends BaseDto {
     private Long id;
     private String invoiceNumber;

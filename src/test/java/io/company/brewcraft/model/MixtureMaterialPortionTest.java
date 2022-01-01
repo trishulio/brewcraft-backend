@@ -62,7 +62,7 @@ public class MixtureMaterialPortionTest {
 
         assertEquals(new MaterialLot(2L), mixtureMaterialPortion.getMaterialLot());
     }
-    
+
     @Test
     public void testSetMaterialLot_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
         MaterialLot materialLot = new MaterialLot(2L);

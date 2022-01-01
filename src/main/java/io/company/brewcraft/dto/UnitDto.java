@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-
 public class UnitDto extends BaseDto {
     public static final String ATTR_SYMBOL = "symbol";
 

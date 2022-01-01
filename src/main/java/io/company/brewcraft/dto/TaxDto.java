@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-
 public class TaxDto extends BaseDto {
     private MoneyDto amount;
 

@@ -35,7 +35,7 @@ public class IncompatibleQuantityUnitException extends IllegalArgumentException 
             throw new IncompatibleQuantityUnitException(error);
         }
     }
-    
+
     public static void validateCompatibleQuantities(Quantity<?> quantity1, Quantity<?> quantity2) {
         if (!QuantityCalculator.INSTANCE.areCompatibleQuantities(quantity1, quantity2)) {
             Unit<?> unit1 = null;
@@ -48,7 +48,7 @@ public class IncompatibleQuantityUnitException extends IllegalArgumentException 
             }
 
             String error = String.format("Quantity with units %s and %s are not compatible", unit1, unit2);
-         
+
             throw new IncompatibleQuantityUnitException(error);
         }
     }

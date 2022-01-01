@@ -2,7 +2,6 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
-
 public class InvoiceStatusDto extends BaseDto {
     private Long id;
     private String name;

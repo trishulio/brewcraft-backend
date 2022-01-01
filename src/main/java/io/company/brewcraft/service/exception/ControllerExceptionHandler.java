@@ -117,5 +117,5 @@ public class ControllerExceptionHandler {
         ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
 
         return message;
-    }    
+    }
 }

@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto.procurement;
 
-
 import io.company.brewcraft.dto.BaseDto;
 
 public class ProcurementItemDto extends BaseDto {

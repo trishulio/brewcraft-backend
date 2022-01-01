@@ -170,14 +170,14 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
     public void setVersion(Integer version) {
         this.version = version;
     }
-    
+
     @JsonIgnore
     public Quantity<?> getMixtureQuantity() {
         Quantity<?> quantity = null;
         if (mixture != null) {
             quantity = this.mixture.getQuantity();
         }
-        
+
         return quantity;
     }
 }

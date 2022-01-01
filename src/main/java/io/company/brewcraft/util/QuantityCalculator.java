@@ -75,7 +75,7 @@ public class QuantityCalculator {
 
         return isCompatible;
     }
-    
+
     public boolean areCompatibleQuantities(Quantity<?> quantity1, Quantity<?> quantity2) {
         boolean areCompatible = true;
 
@@ -85,11 +85,11 @@ public class QuantityCalculator {
         if (quantity1 != null) {
             unit1 = quantity1.getUnit();
         }
-        
+
         if (quantity2 != null) {
             unit2 = quantity2.getUnit();
         }
-        
+
         if (unit1 != null && unit2 != null) {
             areCompatible = unit1.isCompatible(unit2);
         }

@@ -34,7 +34,7 @@ public class IncompatibleQuantityUnitExceptionTest {
 
         assertEquals("Message", ex.getMessage());
     }
-    
+
     @Test
     public void testValidateUnit_ThrowsException_WhenUnitsAreIncompatible() {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
@@ -50,7 +50,7 @@ public class IncompatibleQuantityUnitExceptionTest {
 
         IncompatibleQuantityUnitException.validateUnit(accessor, Quantities.getQuantity("10 kg"));
     }
-    
+
     @Test
     public void testValidateCompatibleQuantities_ThrowsException_WhenUnitsAreIncompatible() {
         assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 l"), Quantities.getQuantity("10 kg")));
