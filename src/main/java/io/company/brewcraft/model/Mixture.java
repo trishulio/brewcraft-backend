@@ -34,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity(name = "MIXTURE")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
@@ -60,9 +61,9 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
     private List<Mixture> parentMixtures;
 
     @Embedded
-    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "quantity_value")) })
+    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit")) })
     @AssociationOverrides({
-            @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol")) })
+            @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
 
     @ManyToOne()
@@ -177,11 +178,14 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 

@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity
 @Table(name = "sku_material")
@@ -48,9 +49,9 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
     private Material material;
 
     @Embedded
-    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "quantity_value")) })
+    @AttributeOverrides({ @AttributeOverride(name = "value", column = @Column(name = "qty_value_in_sys_unit")) })
     @AssociationOverrides({
-            @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "quantity_unit", referencedColumnName = "symbol")) })
+            @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
 
     @CreationTimestamp
@@ -114,11 +115,14 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
 
     @Override
     public Quantity<?> getQuantity() {
-        return QuantityMapper.INSTANCE.fromEntity(this.quantity);
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
