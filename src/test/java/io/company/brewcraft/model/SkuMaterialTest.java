@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
+import tec.uom.se.unit.Units;
 
 public class SkuMaterialTest {
 
@@ -64,9 +67,27 @@ public class SkuMaterialTest {
     }
 
     @Test
+    public void testSetMaterial_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
+        Material material = new Material(3L);
+        material.setBaseQuantityUnit(Units.LITRE);
+        
+        skuMaterial.setQuantity(Quantities.getQuantity("10 kg"));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setMaterial(material));
+    }
+
+    @Test
     public void testGetSeQuantity() {
         skuMaterial.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), skuMaterial.getQuantity());
+    }
+    
+    @Test
+    public void testSetQuantity_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
+        Material material = new Material(3L);
+        material.setBaseQuantityUnit(Units.KILOGRAM);
+        skuMaterial.setMaterial(material);
+        
+        assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setQuantity(Quantities.getQuantity("10 l")));
     }
 
     @Test

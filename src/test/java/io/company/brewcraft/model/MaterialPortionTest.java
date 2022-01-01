@@ -1,6 +1,5 @@
 package io.company.brewcraft.model;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -76,14 +75,8 @@ public class MaterialPortionTest {
 
     @Test
     public void testGetSetMaterialLot_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
-        Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
-
-        InvoiceItem invoiceItem = new InvoiceItem();
-        invoiceItem.setMaterial(material);
-
         MaterialLot materialLot = new MaterialLot();
-        materialLot.setInvoiceItem(invoiceItem);
+        materialLot.setQuantity(Quantities.getQuantity("10 l"));
 
         materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
 
@@ -109,18 +102,11 @@ public class MaterialPortionTest {
 
     @Test
     public void testGetSetQuantity_ThrowsException_WhenQuantityUnitDoesNotMatchLotQuantity() {
-        Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
-
-        InvoiceItem invoiceItem = new InvoiceItem();
-        invoiceItem.setMaterial(material);
-
         MaterialLot materialLot = new MaterialLot();
-        materialLot.setInvoiceItem(invoiceItem);
+        materialLot.setQuantity(Quantities.getQuantity("10 kg"));
 
         materialPortion.setMaterialLot(materialLot);
-
-        assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setQuantity(Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setQuantity(Quantities.getQuantity("10 l")));
     }
 
     @Test
@@ -148,26 +134,6 @@ public class MaterialPortionTest {
         Integer version = 1;
         materialPortion.setVersion(version);
         assertEquals(version, materialPortion.getVersion());
-    }
-
-    @Test
-    public void testGetSetMaterial() {
-        InvoiceItem invoiceItem = new InvoiceItem();
-        invoiceItem.setMaterial(new Material(1L));
-
-        MaterialLot materialLot = new MaterialLot();
-        materialLot.setInvoiceItem(invoiceItem);
-
-        materialPortion.setMaterialLot(materialLot);
-
-        assertEquals(new Material(1L), materialPortion.getMaterial());
-    }
-
-    @Test
-    public void testGetSetMaterial_ReturnsNull_WhenMaterialLotIsNull() {
-        materialPortion.setMaterialLot(null);
-
-        assertNull(materialPortion.getMaterial());
     }
 
     @Test

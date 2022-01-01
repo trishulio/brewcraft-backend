@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
@@ -136,7 +137,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
-        BaseQuantityUnitAccessor.validateUnit(getMaterial(), quantity);
+        IncompatibleQuantityUnitException.validateUnit(getMaterial(), quantity);
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
 
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
@@ -167,7 +168,7 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         if (invoiceItem != null) {
             material = invoiceItem.getMaterial();
         }
-        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
+        IncompatibleQuantityUnitException.validateUnit(material, getQuantity());
 
         this.invoiceItem = invoiceItem;
     }
