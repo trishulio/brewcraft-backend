@@ -2,6 +2,7 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,14 +23,16 @@ public class FinishedGoodDtoTest {
         SkuDto sku = new SkuDto(2L);
         List<MixturePortionDto> mixturePortions = List.of(new MixturePortionDto(5L));
         List<MaterialPortionDto> materialPortions = List.of(new MaterialPortionDto(6L));
+        LocalDateTime packagedOn = LocalDateTime.of(1995, 1, 1, 1, 1);
         int version = 1;
 
-        FinishedGoodDto finishedGood = new FinishedGoodDto(id, sku, mixturePortions, materialPortions, version);
+        FinishedGoodDto finishedGood = new FinishedGoodDto(id, sku, mixturePortions, materialPortions, packagedOn, version);
 
         assertEquals(1L, finishedGood.getId());
         assertEquals(new SkuDto(2L), finishedGood.getSku());
         assertEquals(List.of(new MixturePortionDto(5L)), finishedGood.getMixturePortions());
         assertEquals(List.of(new MaterialPortionDto(6L)), finishedGood.getMaterialPortions());
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
         assertEquals(1, finishedGood.getVersion());
     }
 
@@ -55,6 +58,12 @@ public class FinishedGoodDtoTest {
     public void testGetSetMaterialPortions() {
         finishedGood.setMaterialPortions(List.of(new MaterialPortionDto(6L)));
         assertEquals(List.of(new MaterialPortionDto(6L)), finishedGood.getMaterialPortions());
+    }
+
+    @Test
+    public void testGetSetPackagedOn() {
+        finishedGood.setPackagedOn(LocalDateTime.of(1995, 1, 1, 1, 1));
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
     }
 
     @Test

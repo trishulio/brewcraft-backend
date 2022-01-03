@@ -23,12 +23,14 @@ public class AddFinishedGoodDtoTest {
         Long skuId = 2L;
         List<AddMixturePortionDto> mixturePortions = List.of(new AddMixturePortionDto(5L, new QuantityDto("hl", BigDecimal.valueOf(100.0))));
         List<AddMaterialPortionDto> materialPortions = List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4)));
+        LocalDateTime packagedOn = LocalDateTime.of(1995, 1, 1, 1, 1);
 
-        AddFinishedGoodDto finishedGood = new AddFinishedGoodDto(skuId, mixturePortions, materialPortions);
+        AddFinishedGoodDto finishedGood = new AddFinishedGoodDto(skuId, mixturePortions, materialPortions, packagedOn);
 
         assertEquals(2L, finishedGood.getSkuId());
         assertEquals(List.of(new AddMixturePortionDto(5L, new QuantityDto("hl", BigDecimal.valueOf(100.0)))), finishedGood.getMixturePortions());
         assertEquals(List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4))), finishedGood.getMaterialPortions());
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
     }
 
     @Test
@@ -47,5 +49,11 @@ public class AddFinishedGoodDtoTest {
     public void testGetSetMaterialPortions() {
         finishedGood.setMaterialPortions(List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4))));
         assertEquals(List.of(new AddMaterialPortionDto(6L, new QuantityDto("hl", BigDecimal.valueOf(100.0)), LocalDateTime.of(2019, 1, 2, 3, 4))), finishedGood.getMaterialPortions());
+    }
+
+    @Test
+    public void testGetSetPackagedOn() {
+        finishedGood.setPackagedOn(LocalDateTime.of(1995, 1, 1, 1, 1));
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
     }
 }

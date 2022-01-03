@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,8 @@ public class UpdateFinishedGoodDto extends BaseDto {
 
     private List<UpdateMaterialPortionDto> materialPortions;
 
+    private LocalDateTime packagedOn;
+
     @NotNull
     private Integer version;
 
@@ -20,11 +23,12 @@ public class UpdateFinishedGoodDto extends BaseDto {
     }
 
     public UpdateFinishedGoodDto(Long skuId, List<UpdateMixturePortionDto> mixturePortions,
-            List<UpdateMaterialPortionDto> materialPortions, Integer version) {
+            List<UpdateMaterialPortionDto> materialPortions, LocalDateTime packagedOn, Integer version) {
         this();
         this.skuId = skuId;
         this.mixturePortions = mixturePortions;
         this.materialPortions = materialPortions;
+        this.packagedOn = packagedOn;
         this.version = version;
     }
 
@@ -50,6 +54,14 @@ public class UpdateFinishedGoodDto extends BaseDto {
 
     public void setMaterialPortions(List<UpdateMaterialPortionDto> materialPortions) {
         this.materialPortions = materialPortions;
+    }
+
+    public LocalDateTime getPackagedOn() {
+        return this.packagedOn;
+    }
+
+    public void setPackagedOn(LocalDateTime packagedOn) {
+        this.packagedOn = packagedOn;
     }
 
     public Integer getVersion() {

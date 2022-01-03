@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FinishedGoodDto extends BaseDto {
@@ -11,6 +12,8 @@ public class FinishedGoodDto extends BaseDto {
     private List<MixturePortionDto> mixturePortions;
 
     private List<MaterialPortionDto> materialPortions;
+
+    private LocalDateTime packagedOn;
 
     private Integer version;
 
@@ -24,11 +27,12 @@ public class FinishedGoodDto extends BaseDto {
     }
 
     public FinishedGoodDto(Long id, SkuDto sku, List<MixturePortionDto> mixturePortions,
-            List<MaterialPortionDto> materialPortions, Integer version) {
+            List<MaterialPortionDto> materialPortions, LocalDateTime packagedOn, Integer version) {
         this(id);
         this.sku = sku;
         this.mixturePortions = mixturePortions;
         this.materialPortions = materialPortions;
+        this.packagedOn = packagedOn;
         this.version = version;
     }
 
@@ -62,6 +66,14 @@ public class FinishedGoodDto extends BaseDto {
 
     public void setMaterialPortions(List<MaterialPortionDto> materialPortions) {
         this.materialPortions = materialPortions;
+    }
+
+    public LocalDateTime getPackagedOn() {
+        return this.packagedOn;
+    }
+
+    public void setPackagedOn(LocalDateTime packagedOn) {
+        this.packagedOn = packagedOn;
     }
 
     public Integer getVersion() {
