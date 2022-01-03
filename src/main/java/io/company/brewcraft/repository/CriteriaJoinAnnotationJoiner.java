@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.service.CriteriaJoin;
 
-public class CriteriaJoinAnnotationProcessor implements CriteriaJoinProcessor {
-    private static final Logger log = LoggerFactory.getLogger(CriteriaJoinAnnotationProcessor.class);
+public class CriteriaJoinAnnotationJoiner implements JpaJoiner {
+    private static final Logger log = LoggerFactory.getLogger(CriteriaJoinAnnotationJoiner.class);
 
     @Override
     public <X, Y> From<X, Y> apply(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.service.CriteriaJoin;
 
-public class CriteriaJoinAnnotationProcessorTest {
+public class CriteriaJoinAnnotationJoinerTest {
     class Entity {
         @JoinColumn
         @CriteriaJoin(type = JoinType.LEFT)
@@ -35,14 +35,14 @@ public class CriteriaJoinAnnotationProcessorTest {
     class Child {
     }
 
-    private CriteriaJoinProcessor cjProcessor;
+    private JpaJoiner cjProcessor;
 
     private From<?, Entity> mEntity;
 
     @BeforeEach
     public void init() {
         mEntity = mock(From.class);
-        this.cjProcessor = new CriteriaJoinAnnotationProcessor();
+        this.cjProcessor = new CriteriaJoinAnnotationJoiner();
     }
 
     @Test

@@ -7,12 +7,12 @@ import javax.persistence.criteria.From;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class LocalCachedCriteriaJoinProcessor implements CriteriaJoinProcessor {
+public class LocalCachedJpaJoiner implements JpaJoiner {
     private ThreadLocal<Map<Key<?, ?>, From<?, ?>>> cacheHolder;
 
-    private CriteriaJoinProcessor cjProcessor;
+    private JpaJoiner cjProcessor;
 
-    public LocalCachedCriteriaJoinProcessor(CriteriaJoinProcessor cjProcessor) {
+    public LocalCachedJpaJoiner(JpaJoiner cjProcessor) {
         this.cacheHolder = ThreadLocal.withInitial(() -> new HashMap<>());
         this.cjProcessor = cjProcessor;
     }

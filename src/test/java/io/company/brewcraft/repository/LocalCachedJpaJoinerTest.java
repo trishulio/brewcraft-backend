@@ -12,7 +12,7 @@ import javax.persistence.criteria.From;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LocalCachedCriteriaJoinProcessorTest {
+public class LocalCachedJpaJoinerTest {
     class Entity {
     }
 
@@ -22,13 +22,13 @@ public class LocalCachedCriteriaJoinProcessorTest {
     private From<Object, Entity> mRoot;
     private From<Child, Entity> mChild;
 
-    private CriteriaJoinProcessor joiner;
-    private CriteriaJoinProcessor mDelegate;
+    private JpaJoiner joiner;
+    private JpaJoiner mDelegate;
 
     @BeforeEach
     public void init() {
-        mDelegate = mock(CriteriaJoinAnnotationProcessor.class);
-        joiner = new LocalCachedCriteriaJoinProcessor(mDelegate);
+        mDelegate = mock(CriteriaJoinAnnotationJoiner.class);
+        joiner = new LocalCachedJpaJoiner(mDelegate);
 
         mRoot = mock(From.class);
         mChild = mock(From.class);

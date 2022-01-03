@@ -39,11 +39,11 @@ public class RootUtilTest {
     Path<?> mPath3;
 
     private RootUtil rootUtil;
-    private CriteriaJoinProcessor mCjAnnotationProcessor;
+    private JpaJoiner mCjAnnotationProcessor;
 
     @BeforeEach
     public void init() {
-        mCjAnnotationProcessor = mock(CriteriaJoinAnnotationProcessor.class);
+        mCjAnnotationProcessor = mock(CriteriaJoinAnnotationJoiner.class);
         rootUtil = new RootUtil(mCjAnnotationProcessor);
 
         mPath0 = mock(From.class);

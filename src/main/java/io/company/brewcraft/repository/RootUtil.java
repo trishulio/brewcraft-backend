@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 
 public class RootUtil {
     private static final Logger log = LoggerFactory.getLogger(RootUtil.class);
-    public static RootUtil INSTANCE = new RootUtil(CriteriaJoinProcessor.CRITERIA_JOINER);
+    public static RootUtil INSTANCE = new RootUtil(JpaJoiner.JPA_JOINER);
 
-    private CriteriaJoinProcessor cjAnnotationProcessor;
+    private JpaJoiner cjAnnotationProcessor;
 
-    protected RootUtil(CriteriaJoinProcessor cjAnnotationProcessor) {
+    protected RootUtil(JpaJoiner cjAnnotationProcessor) {
         this.cjAnnotationProcessor = cjAnnotationProcessor;
     }
 
