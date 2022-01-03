@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 public class MixtureRecordingDto extends BaseDto {
 
     private Long id;

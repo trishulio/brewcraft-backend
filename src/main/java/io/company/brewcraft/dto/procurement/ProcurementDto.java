@@ -2,7 +2,6 @@ package io.company.brewcraft.dto.procurement;
 
 import java.util.List;
 
-
 import io.company.brewcraft.dto.BaseDto;
 
 public class ProcurementDto extends BaseDto {

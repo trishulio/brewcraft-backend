@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-
 public class MeasureDto extends BaseDto {
 
     private Long id;

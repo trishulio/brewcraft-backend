@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
@@ -62,9 +64,27 @@ public class MixtureMaterialPortionTest {
     }
 
     @Test
+    public void testSetMaterialLot_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
+        MaterialLot materialLot = new MaterialLot(2L);
+        materialLot.setQuantity(Quantities.getQuantity("10 l"));
+
+        mixtureMaterialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> mixtureMaterialPortion.setMaterialLot(materialLot));
+    }
+
+    @Test
     public void testGetSetQuantity() {
         mixtureMaterialPortion.setQuantity(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM));
         assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), mixtureMaterialPortion.getQuantity());
+    }
+
+    @Test
+    public void testSetQuantity_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
+        MaterialLot materialLot = new MaterialLot(2L);
+        materialLot.setQuantity(Quantities.getQuantity("10 kg"));
+        mixtureMaterialPortion.setMaterialLot(materialLot);
+
+        assertThrows(IncompatibleQuantityUnitException.class, () -> mixtureMaterialPortion.setQuantity(Quantities.getQuantity("10 l")));
     }
 
     @Test

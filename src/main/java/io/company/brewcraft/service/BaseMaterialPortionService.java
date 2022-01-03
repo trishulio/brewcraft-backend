@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.company.brewcraft.model.StockLot;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.QuantityCalculator;
-import io.company.brewcraft.util.validator.Validator;
 
 @Transactional
 public class BaseMaterialPortionService extends BaseService {
@@ -47,7 +47,7 @@ public class BaseMaterialPortionService extends BaseService {
             stockLots.forEach(stockLot -> {
                 Quantity<?> requestedQuantity = lotIdToQuantity.get(stockLot.getId());
 
-                Validator.assertion(requestedQuantity.getUnit().isCompatible(stockLot.getQuantity().getUnit()), RuntimeException.class, "Requested quantity unit is incompatible with material lot unit");
+                IncompatibleQuantityUnitException.validateCompatibleQuantities(requestedQuantity, stockLot.getQuantity());
 
                 Quantity<?> availableQuantity = stockLot.getQuantity();
 

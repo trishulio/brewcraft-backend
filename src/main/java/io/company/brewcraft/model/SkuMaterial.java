@@ -26,6 +26,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
@@ -110,6 +111,8 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
 
     @Override
     public void setMaterial(Material material) {
+        IncompatibleQuantityUnitException.validateUnit(material, getQuantity());
+
         this.material = material;
     }
 
@@ -122,6 +125,8 @@ public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, A
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        IncompatibleQuantityUnitException.validateUnit(material, quantity);
+
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }

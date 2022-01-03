@@ -6,5 +6,4 @@ public interface QuantityAccessor {
     Quantity<?> getQuantity();
 
     void setQuantity(Quantity<?> quantity);
-
 }

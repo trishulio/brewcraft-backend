@@ -32,6 +32,14 @@ public class ControllerExceptionHandler {
         return message;
     }
 
+    @ExceptionHandler(value = { IncompatibleQuantityUnitException.class })
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse incompatibleQuantityUnitException(IncompatibleQuantityUnitException e, HttpServletRequest request) {
+        ErrorResponse message = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI());
+
+        return message;
+    }
+
     @ExceptionHandler(value = { DataIntegrityViolationException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse constraintViolationException(DataIntegrityViolationException e, HttpServletRequest request) {

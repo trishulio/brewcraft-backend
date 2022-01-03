@@ -1,6 +1,5 @@
 package io.company.brewcraft.dto;
 
-
 public class AddPurchaseOrderDto extends BaseDto {
     private String orderNumber;
     private Long supplierId;

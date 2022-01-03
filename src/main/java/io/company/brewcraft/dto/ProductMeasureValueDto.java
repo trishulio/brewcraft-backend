@@ -2,7 +2,6 @@ package io.company.brewcraft.dto;
 
 import java.math.BigDecimal;
 
-
 public class ProductMeasureValueDto extends BaseDto {
 
     private Long id;

@@ -24,7 +24,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
@@ -103,6 +106,13 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
 
     @Override
     public void setMixture(Mixture mixture) {
+        Quantity<?> mixtureQty = null;
+        if (mixture != null) {
+            mixtureQty = mixture.getQuantity();
+        }
+
+        IncompatibleQuantityUnitException.validateCompatibleQuantities(mixtureQty, getQuantity());
+
         this.mixture = mixture;
     }
 
@@ -115,6 +125,8 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
+        IncompatibleQuantityUnitException.validateCompatibleQuantities(getMixtureQuantity(), quantity);
+
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
@@ -157,5 +169,15 @@ public class MixturePortion extends BaseEntity implements UpdateMixturePortion, 
     @Override
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @JsonIgnore
+    public Quantity<?> getMixtureQuantity() {
+        Quantity<?> quantity = null;
+        if (mixture != null) {
+            quantity = this.mixture.getQuantity();
+        }
+
+        return quantity;
     }
 }

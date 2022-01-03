@@ -127,4 +127,21 @@ public class QuantityCalculatorTest {
 
         assertFalse(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 kg"), accessor));
     }
+
+    @Test
+    public void testAreCompatibleQuantities_ReturnsTrue_WhenQuantitiesHaveCompatibleUnits() {
+        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), Quantities.getQuantity("10 g")));
+    }
+
+    @Test
+    public void testAreCompatibleQuantities_ReturnsTrue_WhenAtleastOneQuantityIsNull() {
+        assertTrue(calc.areCompatibleQuantities(null, Quantities.getQuantity("10 g")));
+        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), null));
+        assertTrue(calc.areCompatibleQuantities(null, null));
+    }
+
+    @Test
+    public void testAreCompatibleQuantities_ReturnsFalse_WhenQuantitiesHaveIncompatibleUnits() {
+        assertFalse(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), Quantities.getQuantity("10 l")));
+    }
 }

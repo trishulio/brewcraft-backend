@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
@@ -107,11 +108,11 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
 
     @Override
     public void setMaterialLot(MaterialLot materialLot) {
-        Material material = null;
+        Quantity<?> lotQty = null;
         if (materialLot != null) {
-            material = materialLot.getMaterial();
+            lotQty = materialLot.getQuantity();
         }
-        BaseQuantityUnitAccessor.validateUnit(material, getQuantity());
+        IncompatibleQuantityUnitException.validateCompatibleQuantities(lotQty, getQuantity());
 
         this.materialLot = materialLot;
     }
@@ -125,7 +126,7 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
 
     @Override
     public void setQuantity(Quantity<?> quantity) {
-        BaseQuantityUnitAccessor.validateUnit(getMaterial(), quantity);
+        IncompatibleQuantityUnitException.validateCompatibleQuantities(getLotQuantity(), quantity);
 
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
@@ -171,12 +172,12 @@ public class MaterialPortion extends BaseEntity implements UpdateMaterialPortion
     }
 
     @JsonIgnore
-    public Material getMaterial() {
-        Material material = null;
+    public Quantity<?> getLotQuantity() {
+        Quantity<?> lotQty = null;
         if (this.materialLot != null) {
-            material = this.materialLot.getMaterial();
+            lotQty = materialLot.getQuantity();
         }
 
-        return material;
+        return lotQty;
     }
 }
