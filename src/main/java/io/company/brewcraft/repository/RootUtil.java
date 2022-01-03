@@ -10,10 +10,10 @@ public class RootUtil {
     private static final Logger log = LoggerFactory.getLogger(RootUtil.class);
     public static RootUtil INSTANCE = new RootUtil(JpaJoiner.JPA_JOINER);
 
-    private JpaJoiner cjAnnotationProcessor;
+    private JpaJoiner jpaJoiner;
 
-    protected RootUtil(JpaJoiner cjAnnotationProcessor) {
-        this.cjAnnotationProcessor = cjAnnotationProcessor;
+    protected RootUtil(JpaJoiner jpaJoiner) {
+        this.jpaJoiner = jpaJoiner;
     }
 
     public <X, Y> Path<X> getPath(From<?, ?> root, String[] paths) {
@@ -28,9 +28,9 @@ public class RootUtil {
 
         int i;
         for (i = 0; i < paths.length - 1; i++) {
-            j = cjAnnotationProcessor.apply(j, j.getJavaType(), paths[i]);
+            j = jpaJoiner.join(j, j.getJavaType(), paths[i]);
         }
 
-        return j.get(paths[i]);
+        return jpaJoiner.get(j, j.getJavaType(), paths[i]);
     }
 }

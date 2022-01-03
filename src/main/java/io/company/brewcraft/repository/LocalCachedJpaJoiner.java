@@ -1,43 +1,38 @@
 package io.company.brewcraft.repository;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.criteria.From;
+import javax.persistence.criteria.Path;
 
 import io.company.brewcraft.model.BaseModel;
 
 public class LocalCachedJpaJoiner implements JpaJoiner {
-    private ThreadLocal<Map<Key<?, ?>, From<?, ?>>> cacheHolder;
-
+    private LocalJpaJoinerCache cache;
     private JpaJoiner cjProcessor;
 
-    public LocalCachedJpaJoiner(JpaJoiner cjProcessor) {
-        this.cacheHolder = ThreadLocal.withInitial(() -> new HashMap<>());
+    public LocalCachedJpaJoiner(LocalJpaJoinerCache cache, JpaJoiner cjProcessor) {
+        this.cache = cache;
         this.cjProcessor = cjProcessor;
     }
 
     @Override
-    public <X, Y> From<X, Y> apply(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
-        Map<Key<?, ?>, From<?, ?>> cache = cacheHolder.get();
-
+    public <X, Y> From<X, Y> join(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
         Key<X, Y> key = new Key<>(join, clazz, fieldName);
 
-        if (!cache.containsKey(key)) {
-            join = this.cjProcessor.apply(join, clazz, fieldName);
-            cache.put(key, join);
-        } else {
-            join = (From<X, Y>) cache.get(key);
-        }
+        return (From<X, Y>) this.cache.get(key, () -> (Path<X>) this.cjProcessor.join(join, clazz, fieldName));
+    }
 
-        return join;
+    @Override
+    public <X, Y> Path<X> get(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
+        Key<X, Y> key = new Key<>(join, clazz, fieldName);
+
+        return this.cache.get(key, () -> this.cjProcessor.get(join, clazz, fieldName));
     }
 }
 
 class Key<X, Y> extends BaseModel {
     private From<X, Y> join;
-    Class<? extends Y> clazz;
-    String fieldName;
+    private Class<? extends Y> clazz;
+    private String fieldName;
 
     public Key(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
         this.join = join;

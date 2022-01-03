@@ -1,16 +1,18 @@
 package io.company.brewcraft.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 import javax.persistence.criteria.From;
+import javax.persistence.criteria.Path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 public class LocalCachedJpaJoinerTest {
     class Entity {
@@ -24,69 +26,46 @@ public class LocalCachedJpaJoinerTest {
 
     private JpaJoiner joiner;
     private JpaJoiner mDelegate;
+    private LocalJpaJoinerCache mCache;
 
     @BeforeEach
     public void init() {
+        mCache = mock(LocalJpaJoinerCache.class);
         mDelegate = mock(CriteriaJoinAnnotationJoiner.class);
-        joiner = new LocalCachedJpaJoiner(mDelegate);
-
-        mRoot = mock(From.class);
-        mChild = mock(From.class);
+        joiner = new LocalCachedJpaJoiner(mCache, mDelegate);
     }
 
     @Test
-    public void testApply_ReturnsNewJoin_WhenCacheIsMissing() {
-        doReturn(mChild).when(mDelegate).apply(mRoot, Entity.class, "child");
+    public void testJoin_ReturnsFromCache_AndPassesSupplierWithCallToDelegate() {
+        ArgumentCaptor<Supplier<Path<Entity>>> captor = ArgumentCaptor.forClass(Supplier.class);
 
-        From<Object, Entity> join = joiner.apply(mRoot, Entity.class, "child");
+        From<Object, Entity> mFrom = mock(From.class);
+        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, Entity.class, "fieldName")), captor.capture());
 
-        assertEquals(mChild, join);
-        verify(mDelegate, times(1)).apply(any(), any(), any());
+        From<Object, Entity> from = joiner.join(mRoot, Entity.class, "fieldName");
+        assertEquals(mFrom, from);
+
+        From<Object, Entity> mPath = mock(From.class);
+        doReturn(mPath).when(mDelegate).join(mRoot, Entity.class, "fieldName");
+
+        Path<Entity> path = captor.getValue().get();
+        assertEquals(mPath, path);
     }
 
     @Test
-    public void testApply_ReturnsCachedJoin_WhenCacheIsPresent() {
-        doReturn(mChild).when(mDelegate).apply(mRoot, Entity.class, "child");
+    public void testGet_ReturnsFromCache_AndPassesSupplierWithCallToDelegate() {
+        ArgumentCaptor<Supplier<Path<Entity>>> captor = ArgumentCaptor.forClass(Supplier.class);
 
-        joiner.apply(mRoot, Entity.class, "child");
-        joiner.apply(mRoot, Entity.class, "child");
-        From<Object, Entity> join = joiner.apply(mRoot, Entity.class, "child");
+        From<Object, Entity> mFrom = mock(From.class);
+        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, Entity.class, "fieldName")), captor.capture());
 
-        assertEquals(mChild, join);
-        verify(mDelegate, times(1)).apply(any(), any(), any());
-    }
+        Path<Object> from = joiner.get(mRoot, Entity.class, "fieldName");
+        assertEquals(mFrom, from);
 
-    @Test
-    public void testApply_ReturnsCachedJoinFromLocalThread() throws InterruptedException, ExecutionException {
-        doReturn(mChild).when(mDelegate).apply(mRoot, Entity.class, "child");
+        From<Object, Entity> mPath = mock(From.class);
+        doReturn(mPath).when(mDelegate).get(mRoot, Entity.class, "fieldName");
 
-        CompletableFuture<From<Object, Entity>> op1 = CompletableFuture.supplyAsync(() -> joiner.apply(mRoot, Entity.class, "child"));
-        CompletableFuture<From<Object, Entity>> op2 = CompletableFuture.supplyAsync(() -> joiner.apply(mRoot, Entity.class, "child"));
-
-        op1.thenAccept(join -> assertEquals(mChild, join));
-        op2.thenAccept(join -> assertEquals(mChild, join));
-
-        CompletableFuture.allOf(op1, op2)
-                         .thenRun(() -> verify(mDelegate, times(2)).apply(any(), any(), any()))
-                         .get();
-    }
-
-    @Test
-    public void testApply_ReturnsCachedJoinFromLocalThread_Multithreaded() throws InterruptedException {
-        doReturn(mChild).when(mDelegate).apply(mRoot, Entity.class, "child");
-
-        new Thread(() ->{
-            From<Object, Entity> join = joiner.apply(mRoot, Entity.class, "child");
-            assertEquals(mChild, join);
-        }).start();
-
-        new Thread(() -> {
-            From<Object, Entity> join = joiner.apply(mRoot, Entity.class, "child");
-            assertEquals(mChild, join);
-        }).start();
-
-        Thread.sleep(1000);
-
-        verify(mDelegate, times(2)).apply(any(), any(), any());
+        Path<Entity> path = captor.getValue().get();
+        assertEquals(mPath, path);
     }
 }
