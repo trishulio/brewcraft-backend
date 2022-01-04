@@ -12,13 +12,13 @@ import javax.persistence.criteria.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LocalJpaJoinerCacheTest {
+public class JpaJoinerLocalCacheTest {
 
-    private LocalJpaJoinerCache cache;
+    private JpaJoinerLocalCache cache;
 
     @BeforeEach
     public void init() {
-        this.cache = new LocalJpaJoinerCache();
+        this.cache = new JpaJoinerLocalCache();
     }
 
     @Test

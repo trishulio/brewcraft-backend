@@ -5,11 +5,11 @@ import javax.persistence.criteria.Path;
 
 import io.company.brewcraft.model.BaseModel;
 
-public class LocalCachedJpaJoiner implements JpaJoiner {
-    private LocalJpaJoinerCache cache;
+public class JpaJoinerCachingProxy implements JpaJoiner {
+    private JpaJoinerLocalCache cache;
     private JpaJoiner cjProcessor;
 
-    public LocalCachedJpaJoiner(LocalJpaJoinerCache cache, JpaJoiner cjProcessor) {
+    public JpaJoinerCachingProxy(JpaJoinerLocalCache cache, JpaJoiner cjProcessor) {
         this.cache = cache;
         this.cjProcessor = cjProcessor;
     }
