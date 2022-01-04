@@ -40,13 +40,13 @@ public class JpaJoinerCachingProxyTest {
         ArgumentCaptor<Supplier<Path<Entity>>> captor = ArgumentCaptor.forClass(Supplier.class);
 
         From<Object, Entity> mFrom = mock(From.class);
-        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, Entity.class, "fieldName")), captor.capture());
+        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, "fieldName")), captor.capture());
 
-        From<Object, Entity> from = joiner.join(mRoot, Entity.class, "fieldName");
+        From<Object, Entity> from = joiner.join(mRoot, "fieldName");
         assertEquals(mFrom, from);
 
         From<Object, Entity> mPath = mock(From.class);
-        doReturn(mPath).when(mDelegate).join(mRoot, Entity.class, "fieldName");
+        doReturn(mPath).when(mDelegate).join(mRoot, "fieldName");
 
         Path<Entity> path = captor.getValue().get();
         assertEquals(mPath, path);
@@ -57,13 +57,13 @@ public class JpaJoinerCachingProxyTest {
         ArgumentCaptor<Supplier<Path<Entity>>> captor = ArgumentCaptor.forClass(Supplier.class);
 
         From<Object, Entity> mFrom = mock(From.class);
-        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, Entity.class, "fieldName")), captor.capture());
+        doReturn(mFrom).when(mCache).get(eq(new Key(mRoot, "fieldName")), captor.capture());
 
-        Path<Object> from = joiner.get(mRoot, Entity.class, "fieldName");
+        Path<Object> from = joiner.get(mRoot, "fieldName");
         assertEquals(mFrom, from);
 
         From<Object, Entity> mPath = mock(From.class);
-        doReturn(mPath).when(mDelegate).get(mRoot, Entity.class, "fieldName");
+        doReturn(mPath).when(mDelegate).get(mRoot, "fieldName");
 
         Path<Entity> path = captor.getValue().get();
         assertEquals(mPath, path);

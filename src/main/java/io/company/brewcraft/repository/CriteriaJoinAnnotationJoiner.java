@@ -26,8 +26,8 @@ public class CriteriaJoinAnnotationJoiner implements JpaJoiner {
     public static Set<Class<?>> COMPOUND_ENTITY_ANNOTATIONS = ImmutableSet.of(OneToMany.class, ManyToOne.class, Embedded.class, JoinColumn.class, CriteriaJoin.class);
 
     @Override
-    public <X, Y> From<X, Y> join(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
-        Field field = FieldUtils.getAllFieldsList(clazz).stream().filter(f -> f.getName().equals(fieldName)).findFirst().orElseThrow();
+    public <X, Y> From<X, Y> join(From<X, Y> join, String fieldName) {
+        Field field = FieldUtils.getAllFieldsList(join.getJavaType()).stream().filter(f -> f.getName().equals(fieldName)).findFirst().orElseThrow();
         CriteriaJoin cj = field.getAnnotation(CriteriaJoin.class);
         JoinType jt = JoinType.INNER;
         if (cj != null && cj.type() != null) {
@@ -38,14 +38,14 @@ public class CriteriaJoinAnnotationJoiner implements JpaJoiner {
     }
 
     @Override
-    public <X, Y> Path<X> get(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
+    public <X, Y> Path<X> get(From<X, Y> join, String fieldName) {
         Path<X> attribute = null;
-        Field field = FieldUtils.getAllFieldsList(clazz).stream().filter(f -> f.getName().equals(fieldName)).findFirst().orElseThrow();
+        Field field = FieldUtils.getAllFieldsList(join.getJavaType()).stream().filter(f -> f.getName().equals(fieldName)).findFirst().orElseThrow();
 
         if (isBasicField(field)) {
             attribute = join.get(fieldName);
         } else {
-            attribute = (Path<X>) this.join(join, clazz, fieldName);
+            attribute = (Path<X>) this.join(join, fieldName);
         }
 
         return attribute;

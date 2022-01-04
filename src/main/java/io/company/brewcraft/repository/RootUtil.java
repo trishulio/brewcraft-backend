@@ -28,9 +28,9 @@ public class RootUtil {
 
         int i;
         for (i = 0; i < paths.length - 1; i++) {
-            j = jpaJoiner.join(j, j.getJavaType(), paths[i]);
+            j = jpaJoiner.join(j, paths[i]);
         }
 
-        return jpaJoiner.get(j, j.getJavaType(), paths[i]);
+        return jpaJoiner.get(j, paths[i]);
     }
 }

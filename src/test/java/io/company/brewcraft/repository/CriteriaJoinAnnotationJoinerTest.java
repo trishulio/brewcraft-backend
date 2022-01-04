@@ -55,6 +55,8 @@ public class CriteriaJoinAnnotationJoinerTest {
     @BeforeEach
     public void init() {
         mEntity = mock(From.class);
+        doReturn(Entity.class).when(mEntity).getJavaType();
+
         this.cjProcessor = new CriteriaJoinAnnotationJoiner();
     }
 
@@ -63,7 +65,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("left", JoinType.LEFT);
 
-        From<?, ?> join = this.cjProcessor.join(mEntity, Entity.class, "left");
+        From<?, ?> join = this.cjProcessor.join(mEntity, "left");
 
         assertEquals(mJoin, join);
     }
@@ -73,7 +75,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("right", JoinType.RIGHT);
 
-        From<?, ?> join = this.cjProcessor.join(mEntity, Entity.class, "right");
+        From<?, ?> join = this.cjProcessor.join(mEntity, "right");
 
         assertEquals(mJoin, join);
     }
@@ -83,7 +85,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("inner", JoinType.INNER);
 
-        From<?, ?> join = this.cjProcessor.join(mEntity, Entity.class, "inner");
+        From<?, ?> join = this.cjProcessor.join(mEntity, "inner");
 
         assertEquals(mJoin, join);
     }
@@ -93,7 +95,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("difault", JoinType.INNER);
 
-        From<?, ?> join = this.cjProcessor.join(mEntity, Entity.class, "difault");
+        From<?, ?> join = this.cjProcessor.join(mEntity, "difault");
 
         assertEquals(mJoin, join);
     }
@@ -103,7 +105,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("get", JoinType.INNER);
 
-        From<?, ?> join = this.cjProcessor.join(mEntity, Entity.class, "get");
+        From<?, ?> join = this.cjProcessor.join(mEntity, "get");
 
         assertEquals(mJoin, join);
     }
@@ -113,7 +115,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("manyToOne", JoinType.INNER);
 
-        Path<?> join = this.cjProcessor.get(mEntity,  Entity.class, "manyToOne");
+        Path<?> join = this.cjProcessor.get(mEntity, "manyToOne");
         assertEquals(mJoin, join);
     }
 
@@ -122,7 +124,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("oneToMany", JoinType.INNER);
 
-        Path<?> join = this.cjProcessor.get(mEntity,  Entity.class, "oneToMany");
+        Path<?> join = this.cjProcessor.get(mEntity, "oneToMany");
         assertEquals(mJoin, join);
     }
 
@@ -131,7 +133,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("embedded", JoinType.INNER);
 
-        Path<?> join = this.cjProcessor.get(mEntity,  Entity.class, "embedded");
+        Path<?> join = this.cjProcessor.get(mEntity, "embedded");
         assertEquals(mJoin, join);
     }
 
@@ -140,7 +142,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Join<?, ?> mJoin = mock(Join.class);
         doReturn(mJoin).when(mEntity).join("joinColumn", JoinType.INNER);
 
-        Path<?> join = this.cjProcessor.get(mEntity,  Entity.class, "joinColumn");
+        Path<?> join = this.cjProcessor.get(mEntity, "joinColumn");
         assertEquals(mJoin, join);
     }
 
@@ -149,7 +151,7 @@ public class CriteriaJoinAnnotationJoinerTest {
         Path<?> mJoin = mock(Path.class);
         doReturn(mJoin).when(mEntity).get("get");
 
-        Path<?> join = this.cjProcessor.get(mEntity,  Entity.class, "get");
+        Path<?> join = this.cjProcessor.get(mEntity, "get");
         assertEquals(mJoin, join);
     }
 }

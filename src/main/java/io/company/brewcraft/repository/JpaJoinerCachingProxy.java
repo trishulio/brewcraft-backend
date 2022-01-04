@@ -15,28 +15,26 @@ public class JpaJoinerCachingProxy implements JpaJoiner {
     }
 
     @Override
-    public <X, Y> From<X, Y> join(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
-        Key<X, Y> key = new Key<>(join, clazz, fieldName);
+    public <X, Y> From<X, Y> join(From<X, Y> join, String fieldName) {
+        Key<X, Y> key = new Key<>(join, fieldName);
 
-        return (From<X, Y>) this.cache.get(key, () -> (Path<X>) this.cjProcessor.join(join, clazz, fieldName));
+        return (From<X, Y>) this.cache.get(key, () -> (Path<X>) this.cjProcessor.join(join, fieldName));
     }
 
     @Override
-    public <X, Y> Path<X> get(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
-        Key<X, Y> key = new Key<>(join, clazz, fieldName);
+    public <X, Y> Path<X> get(From<X, Y> join, String fieldName) {
+        Key<X, Y> key = new Key<>(join, fieldName);
 
-        return this.cache.get(key, () -> this.cjProcessor.get(join, clazz, fieldName));
+        return this.cache.get(key, () -> this.cjProcessor.get(join, fieldName));
     }
 }
 
 class Key<X, Y> extends BaseModel {
     private From<X, Y> join;
-    private Class<? extends Y> clazz;
     private String fieldName;
 
-    public Key(From<X, Y> join, Class<? extends Y> clazz, String fieldName) {
+    public Key(From<X, Y> join, String fieldName) {
         this.join = join;
-        this.clazz = clazz;
         this.fieldName = fieldName;
     }
 }
