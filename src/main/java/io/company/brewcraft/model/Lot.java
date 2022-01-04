@@ -275,6 +275,7 @@ public abstract class Lot extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
+    @CriteriaJoin(type = JoinType.LEFT)
     private Material material;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -283,6 +284,7 @@ public abstract class Lot extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_item_id", referencedColumnName = "id")
+    @CriteriaJoin(type = JoinType.LEFT)
     private InvoiceItem invoiceItem;
 
     @ManyToOne(fetch = FetchType.LAZY)

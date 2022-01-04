@@ -39,12 +39,12 @@ public class RootUtilTest {
     Path<?> mPath3;
 
     private RootUtil rootUtil;
-    private CriteriaJoinProcessor mCjAnnotationProcessor;
+    private JpaJoiner mJpaJoiner;
 
     @BeforeEach
     public void init() {
-        mCjAnnotationProcessor = mock(CriteriaJoinAnnotationProcessor.class);
-        rootUtil = new RootUtil(mCjAnnotationProcessor);
+        mJpaJoiner = mock(CriteriaJoinAnnotationJoiner.class);
+        rootUtil = new RootUtil(mJpaJoiner);
 
         mPath0 = mock(From.class);
         mPath1 = mock(From.class);
@@ -52,23 +52,20 @@ public class RootUtilTest {
         mPath3 = mock(From.class);
 
         mRoot = mock(From.class);
-        doReturn(Layer0.class).when(mRoot).getJavaType();
+        doReturn(mPath0).when(mJpaJoiner).get(mRoot, "get");
         doReturn(mPath0).when(mRoot).get("get");
 
         mLayer1 = mock(From.class);
-        doReturn(Layer1.class).when(mLayer1).getJavaType();
-        doReturn(mLayer1).when(mCjAnnotationProcessor).apply(mRoot, Layer0.class, "layer1");
-        doReturn(mPath1).when(mLayer1).get("get");
+        doReturn(mLayer1).when(mJpaJoiner).join(mRoot, "layer1");
+        doReturn(mPath1).when(mJpaJoiner).get(mLayer1, "get");
 
         mLayer2 = mock(From.class);
-        doReturn(Layer2.class).when(mLayer2).getJavaType();
-        doReturn(mLayer2).when(mCjAnnotationProcessor).apply(mLayer1, Layer1.class, "layer2");
-        doReturn(mPath2).when(mLayer2).get("get");
+        doReturn(mLayer2).when(mJpaJoiner).join(mLayer1, "layer2");
+        doReturn(mPath2).when(mJpaJoiner).get(mLayer2, "get");
 
         mLayer3 = mock(From.class);
-        doReturn(Layer3.class).when(mLayer3).getJavaType();
-        doReturn(mLayer3).when(mCjAnnotationProcessor).apply(mLayer2, Layer2.class, "layer3");
-        doReturn(mPath3).when(mLayer3).get("get");
+        doReturn(mLayer3).when(mJpaJoiner).join(mLayer2, "layer3");
+        doReturn(mPath3).when(mJpaJoiner).get(mLayer3, "get");
     }
 
     @Test

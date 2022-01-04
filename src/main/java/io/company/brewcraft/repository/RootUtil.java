@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 
 public class RootUtil {
     private static final Logger log = LoggerFactory.getLogger(RootUtil.class);
-    public static RootUtil INSTANCE = new RootUtil(CriteriaJoinProcessor.CRITERIA_JOINER);
+    public static RootUtil INSTANCE = new RootUtil(JpaJoiner.JPA_JOINER);
 
-    private CriteriaJoinProcessor cjAnnotationProcessor;
+    private JpaJoiner jpaJoiner;
 
-    protected RootUtil(CriteriaJoinProcessor cjAnnotationProcessor) {
-        this.cjAnnotationProcessor = cjAnnotationProcessor;
+    protected RootUtil(JpaJoiner jpaJoiner) {
+        this.jpaJoiner = jpaJoiner;
     }
 
     public <X, Y> Path<X> getPath(From<?, ?> root, String[] paths) {
@@ -28,9 +28,9 @@ public class RootUtil {
 
         int i;
         for (i = 0; i < paths.length - 1; i++) {
-            j = cjAnnotationProcessor.apply(j, j.getJavaType(), paths[i]);
+            j = jpaJoiner.join(j, paths[i]);
         }
 
-        return j.get(paths[i]);
+        return jpaJoiner.get(j, paths[i]);
     }
 }
