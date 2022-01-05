@@ -6,6 +6,7 @@ public interface BaseFinishedGood<T extends BaseFinishedGoodMixturePortion<? ext
     final String ATTR_SKU = "sku";
     final String ATTR_MATERIAL_PORTIONS = "materialPortions";
     final String ATTR_MIXTURE_PORTIONS = "mixturePortions";
+    final String ATTR_PACKAGED_ON = "packagedOn";
 
     LocalDateTime getPackagedOn();
 

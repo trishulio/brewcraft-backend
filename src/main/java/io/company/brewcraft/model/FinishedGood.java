@@ -34,6 +34,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     public static final String FIELD_SKU = "sku";
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
     public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
+    public static final String FIELD_PACKAGED_ON = "packagedOn";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "finished_good_generator")
