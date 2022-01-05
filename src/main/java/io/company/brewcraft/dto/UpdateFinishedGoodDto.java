@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateFinishedGoodDto extends BaseDto {
 
+    private Long id;
+
     private Long skuId;
 
     private List<UpdateMixturePortionDto> mixturePortions;
@@ -22,14 +24,23 @@ public class UpdateFinishedGoodDto extends BaseDto {
         super();
     }
 
-    public UpdateFinishedGoodDto(Long skuId, List<UpdateMixturePortionDto> mixturePortions,
+    public UpdateFinishedGoodDto(Long id, Long skuId, List<UpdateMixturePortionDto> mixturePortions,
             List<UpdateMaterialPortionDto> materialPortions, LocalDateTime packagedOn, Integer version) {
         this();
+        this.id = id;
         this.skuId = skuId;
         this.mixturePortions = mixturePortions;
         this.materialPortions = materialPortions;
         this.packagedOn = packagedOn;
         this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getSkuId() {

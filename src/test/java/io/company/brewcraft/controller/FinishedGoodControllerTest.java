@@ -184,6 +184,7 @@ public class FinishedGoodControllerTest {
        doAnswer(i -> i.getArgument(0)).when(this.mService).put(anyList());
 
        final UpdateFinishedGoodDto payload = new UpdateFinishedGoodDto(
+               null,
                5L,
                List.of(new UpdateMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
                List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
@@ -202,10 +203,35 @@ public class FinishedGoodControllerTest {
    }
 
    @Test
+   public void testUpdateFinishedGoods_ReturnsListOfFinishedGoodDtosAfterUpdatingItToService() {
+       doAnswer(i -> i.getArgument(0)).when(this.mService).put(anyList());
+
+       final List<UpdateFinishedGoodDto> payload = List.of(new UpdateFinishedGoodDto(
+               1L,
+               5L,
+               List.of(new UpdateMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
+               List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+               LocalDateTime.of(1995, 1, 1, 1, 1),
+               1
+       ));
+
+       final List<FinishedGoodDto> finishedGoods = this.controller.updateFinishedGoods(payload);
+
+       assertEquals(1, finishedGoods.size());
+       assertEquals(1L, finishedGoods.get(0).getId());
+       assertEquals(new SkuDto(5L), finishedGoods.get(0).getSku());
+       assertEquals(List.of(new MixturePortionDto(null, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGoods.get(0).getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(null, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGoods.get(0).getMaterialPortions());
+       assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGoods.get(0).getPackagedOn());
+       assertEquals(1, finishedGoods.get(0).getVersion());
+   }
+
+   @Test
    public void testPatchFinishedGood_ReturnsFinishedGoodDtoAfterPatchingItToService() {
        doAnswer(i -> i.getArgument(0)).when(this.mService).patch(anyList());
 
        final UpdateFinishedGoodDto payload = new UpdateFinishedGoodDto(
+               null,
                5L,
                List.of(new UpdateMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
                List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),

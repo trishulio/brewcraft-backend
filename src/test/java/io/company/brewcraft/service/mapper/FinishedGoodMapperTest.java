@@ -68,6 +68,7 @@ public class FinishedGoodMapperTest {
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
         UpdateFinishedGoodDto dto = new UpdateFinishedGoodDto(
+            1L,
             5L,
             List.of(new UpdateMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
             List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
@@ -78,7 +79,7 @@ public class FinishedGoodMapperTest {
         FinishedGood finishedGood = finishedGoodMapper.fromDto(dto);
 
         FinishedGood expectedFinishedGood = new FinishedGood(
-            null,
+            1L,
             new Sku(5L),
             List.of(new FinishedGoodMixturePortion(null, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGood(10L), null, null, null, 1)),
             List.of(new FinishedGoodMaterialPortion(null, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGood(10L), LocalDateTime.of(1999, 1, 1, 1, 1), null, null, 1)),

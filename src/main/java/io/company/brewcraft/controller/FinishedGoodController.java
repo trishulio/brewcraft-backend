@@ -35,6 +35,8 @@ import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
+import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.service.FinishedGoodService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.FinishedGoodMapper;
@@ -129,6 +131,19 @@ public class FinishedGoodController extends BaseController {
         final FinishedGoodDto dto = mapper.toDto(finishedGood);
 
         return dto;
+    }
+
+    @PutMapping("")
+    public List<FinishedGoodDto> updateFinishedGoods(@Valid @NotNull @RequestBody List<UpdateFinishedGoodDto> updateFinishedGoodDtos) {
+        final List<UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> finishedGoods = updateFinishedGoodDtos.stream()
+                                                                                                                                                                            .map(updateFinishedGoodDto -> mapper.fromDto(updateFinishedGoodDto))
+                                                                                                                                                                            .collect(Collectors.toList());
+
+        final List<FinishedGood> putFinishedGoods = this.finishedGoodService.put(finishedGoods);
+
+        return putFinishedGoods.stream()
+                               .map(putFinishedGood -> mapper.toDto(putFinishedGood))
+                               .collect(Collectors.toList());
     }
 
     @PatchMapping("/{finishedGoodId}")
