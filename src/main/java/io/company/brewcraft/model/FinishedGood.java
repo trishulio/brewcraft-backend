@@ -34,6 +34,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     public static final String FIELD_SKU = "sku";
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
     public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
+    public static final String FIELD_PACKAGED_ON = "packagedOn";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "finished_good_generator")
@@ -54,6 +55,8 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @CriteriaJoin
     private List<FinishedGoodMaterialPortion> materialPortions;
 
+    private LocalDateTime packagedOn;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -73,11 +76,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
         setId(id);
     }
 
-    public FinishedGood(Long id, Sku sku, List<FinishedGoodMixturePortion> mixturePortions, List<FinishedGoodMaterialPortion> materialPortions, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public FinishedGood(Long id, Sku sku, List<FinishedGoodMixturePortion> mixturePortions, List<FinishedGoodMaterialPortion> materialPortions, LocalDateTime packagedOn, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setSku(sku);
         setMixturePortions(mixturePortions);
         setMaterialPortions(materialPortions);
+        setPackagedOn(packagedOn);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -215,6 +219,16 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
         }
 
         return removed;
+    }
+
+    @Override
+    public LocalDateTime getPackagedOn() {
+        return this.packagedOn;
+    }
+
+    @Override
+    public void setPackagedOn(LocalDateTime packagedOn) {
+        this.packagedOn = packagedOn;
     }
 
     @Override

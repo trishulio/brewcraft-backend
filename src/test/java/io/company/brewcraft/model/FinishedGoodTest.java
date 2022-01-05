@@ -26,11 +26,12 @@ public class FinishedGoodTest {
         Sku sku = new Sku(2L);
         List<FinishedGoodMixturePortion> mixturePortions = List.of(new FinishedGoodMixturePortion(5L));
         List<FinishedGoodMaterialPortion> materialPortions = List.of(new FinishedGoodMaterialPortion(6L));
+        LocalDateTime packagedOn = LocalDateTime.of(1995, 1, 1, 1, 1);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        FinishedGood finishedGood = new FinishedGood(id, sku, mixturePortions, materialPortions, created, lastUpdated, version);
+        FinishedGood finishedGood = new FinishedGood(id, sku, mixturePortions, materialPortions, packagedOn, created, lastUpdated, version);
 
         assertEquals(1L, finishedGood.getId());
         assertEquals(new Sku(2L), finishedGood.getSku());
@@ -43,6 +44,7 @@ public class FinishedGoodTest {
         expectedMaterialPortion.setFinishedGood(finishedGood);
         assertEquals(List.of(expectedMaterialPortion), finishedGood.getMaterialPortions());
 
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), finishedGood.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), finishedGood.getLastUpdated());
         assertEquals(1, finishedGood.getVersion());
@@ -79,6 +81,12 @@ public class FinishedGoodTest {
     }
 
     @Test
+    public void testGetSetPackagedOn() {
+        finishedGood.setPackagedOn(LocalDateTime.of(1995, 1, 1, 1, 1));
+        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
+    }
+
+    @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         finishedGood.setCreatedAt(created);
@@ -105,13 +113,14 @@ public class FinishedGoodTest {
         Sku sku = new Sku(2L);
         List<FinishedGoodMixturePortion> mixturePortions = List.of(new FinishedGoodMixturePortion(5L));
         List<FinishedGoodMaterialPortion> materialPortions = List.of(new FinishedGoodMaterialPortion(6L));
+        LocalDateTime packagedOn = LocalDateTime.of(1995, 1, 1, 1, 1);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        FinishedGood finishedGood = new FinishedGood(id, sku, mixturePortions, materialPortions, created, lastUpdated, version);
+        FinishedGood finishedGood = new FinishedGood(id, sku, mixturePortions, materialPortions, packagedOn, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"sku\":{\"id\":2,\"name\":null,\"description\":null,\"product\":null,\"materials\":null,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"mixturePortions\":[{\"id\":5,\"mixture\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"materialPortions\":[{\"id\":6,\"materialLot\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"sku\":{\"id\":2,\"name\":null,\"description\":null,\"product\":null,\"materials\":null,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"mixturePortions\":[{\"id\":5,\"mixture\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"materialPortions\":[{\"id\":6,\"materialLot\":null,\"quantity\":null,\"addedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"packagedOn\":\"1995-01-01T01:01:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, finishedGood.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

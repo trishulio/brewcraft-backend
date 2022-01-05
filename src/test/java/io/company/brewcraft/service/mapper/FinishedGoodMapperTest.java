@@ -45,7 +45,8 @@ public class FinishedGoodMapperTest {
         AddFinishedGoodDto dto = new AddFinishedGoodDto(
             5L,
             List.of(new AddMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)))),
-            List.of(new AddMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1)))
+            List.of(new AddMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1))),
+            LocalDateTime.of(1995, 1, 1, 1, 1)
         );
 
         FinishedGood finishedGood = finishedGoodMapper.fromDto(dto);
@@ -55,6 +56,7 @@ public class FinishedGoodMapperTest {
             new Sku(5L),
             List.of(new FinishedGoodMixturePortion(null, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGood(10L), null, null, null, null)),
             List.of(new FinishedGoodMaterialPortion(null, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGood(10L), LocalDateTime.of(1999, 1, 1, 1, 1), null, null, null)),
+            LocalDateTime.of(1995, 1, 1, 1, 1),
             null,
             null,
             null
@@ -66,19 +68,22 @@ public class FinishedGoodMapperTest {
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
         UpdateFinishedGoodDto dto = new UpdateFinishedGoodDto(
+            1L,
             5L,
             List.of(new UpdateMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
             List.of(new UpdateMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+            LocalDateTime.of(1995, 1, 1, 1, 1),
             1
         );
 
         FinishedGood finishedGood = finishedGoodMapper.fromDto(dto);
 
         FinishedGood expectedFinishedGood = new FinishedGood(
-            null,
+            1L,
             new Sku(5L),
             List.of(new FinishedGoodMixturePortion(null, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGood(10L), null, null, null, 1)),
             List.of(new FinishedGoodMaterialPortion(null, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGood(10L), LocalDateTime.of(1999, 1, 1, 1, 1), null, null, 1)),
+            LocalDateTime.of(1995, 1, 1, 1, 1),
             null,
             null,
             1
@@ -94,6 +99,7 @@ public class FinishedGoodMapperTest {
             new Sku(5L),
             List.of(new FinishedGoodMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGood(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
             List.of(new FinishedGoodMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGood(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+            LocalDateTime.of(1995, 1, 1, 1, 1),
             LocalDateTime.of(2019, 1, 2, 3, 4),
             LocalDateTime.of(2020, 1, 2, 3, 4),
             1
@@ -106,6 +112,7 @@ public class FinishedGoodMapperTest {
             new SkuDto(5L),
             List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
             List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+            LocalDateTime.of(1995, 1, 1, 1, 1),
             1
         );
 
