@@ -55,6 +55,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @CriteriaJoin
     private List<FinishedGoodMaterialPortion> materialPortions;
 
+    @Column(name = "packaged_on")
     private LocalDateTime packagedOn;
 
     @CreationTimestamp
