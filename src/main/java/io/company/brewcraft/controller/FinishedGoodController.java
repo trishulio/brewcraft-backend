@@ -44,7 +44,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/finished-goods", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/finished-goods")
 public class FinishedGoodController extends BaseController {
     private static FinishedGoodMapper mapper = FinishedGoodMapper.INSTANCE;
 
