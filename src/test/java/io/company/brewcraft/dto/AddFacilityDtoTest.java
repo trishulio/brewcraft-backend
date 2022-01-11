@@ -23,17 +23,13 @@ public class AddFacilityDtoTest {
         AddressDto address = new AddressDto();
         String phoneNumber = "6045555555";
         String faxNumber = "6045555555";
-        List<FacilityEquipmentDto> equipment = new ArrayList<FacilityEquipmentDto>();
-        List<FacilityStorageDto> storages = new ArrayList<FacilityStorageDto>();
 
-        AddFacilityDto addFacilityDto = new AddFacilityDto(name, address, phoneNumber, faxNumber, equipment, storages);
+        AddFacilityDto addFacilityDto = new AddFacilityDto(name, address, phoneNumber, faxNumber);
 
         assertSame(name, addFacilityDto.getName());
         assertSame(address, addFacilityDto.getAddress());
         assertSame(phoneNumber, addFacilityDto.getPhoneNumber());
         assertSame(faxNumber, addFacilityDto.getFaxNumber());
-        assertSame(equipment, addFacilityDto.getEquipment());
-        assertSame(storages, addFacilityDto.getStorages());
     }
 
     @Test
@@ -62,19 +58,5 @@ public class AddFacilityDtoTest {
         String faxNumber = "6045555555";
         addFacilityDto.setFaxNumber(faxNumber);
         assertSame(faxNumber, addFacilityDto.getFaxNumber());
-    }
-
-    @Test
-    public void testGetSetEquipment() {
-        List<FacilityEquipmentDto> equipment = new ArrayList<FacilityEquipmentDto>();
-        addFacilityDto.setEquipment(equipment);
-        assertSame(equipment, addFacilityDto.getEquipment());
-    }
-
-    @Test
-    public void testGetSetStorages() {
-        List<FacilityStorageDto> storages = new ArrayList<FacilityStorageDto>();
-        addFacilityDto.setStorages(storages);
-        assertSame(storages, addFacilityDto.getStorages());
     }
 }
