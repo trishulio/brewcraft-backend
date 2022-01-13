@@ -111,7 +111,7 @@ public class ProcurementShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
 

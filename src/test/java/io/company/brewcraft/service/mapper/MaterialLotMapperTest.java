@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class MaterialLotMapperTest {
 
     @Test
     public void toDto_ReturnsDtoFromMaterialLot_WhenMaterialLotIsNotNull() {
-        final MaterialLot lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        final MaterialLot lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         final MaterialLotDto dto = this.mapper.toDto(lot);
 
@@ -51,7 +52,7 @@ public class MaterialLotMapperTest {
 
         final MaterialLot lot = this.mapper.fromUpdateDto(dto);
 
-        final MaterialLot expected = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, 1);
+        final MaterialLot expected = new MaterialLot(1L, null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, 1);
         assertEquals(expected, lot);
     }
 

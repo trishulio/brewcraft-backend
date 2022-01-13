@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -108,6 +109,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     private InvoiceStatus invoiceStatus;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy(value = InvoiceItem.FIELD_INDEX + " ASC")
     @JsonManagedReference
     @CriteriaJoin
     private List<InvoiceItem> invoiceItems;
@@ -276,14 +278,12 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         }
 
         Invoice prevInvoice = invoiceItem.getInvoice();
-        if (prevInvoice != this) {
-            if (prevInvoice != null) {
-                prevInvoice.removeItem(invoiceItem);
-            }
-
-            invoiceItem.setInvoice(this);
+        if (prevInvoice != null && prevInvoice != this) {
+            prevInvoice.removeItem(invoiceItem);
         }
 
+        invoiceItem.setInvoice(this);
+        invoiceItem.setIndex(this.invoiceItems.size());
         this.invoiceItems.add(invoiceItem);
 
         setAmount();

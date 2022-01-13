@@ -65,6 +65,7 @@ public class InvoiceTest {
         assertEquals(1, this.invoice.getInvoiceItems().size());
         final InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setInvoice(this.invoice);
+        invoiceItem.setIndex(0);
         assertEquals(invoiceItem, this.invoice.getInvoiceItems().iterator().next());
     }
 
@@ -235,6 +236,7 @@ public class InvoiceTest {
         this.invoice.addItem(invoiceItem);
 
         assertEquals(List.of(invoiceItem), this.invoice.getInvoiceItems());
+        assertEquals(0, invoiceItem.getIndex());
         assertEquals(this.invoice, invoiceItem.getInvoice());
     }
 
@@ -251,6 +253,7 @@ public class InvoiceTest {
 
         assertEquals(List.of(existing, invoiceItem), this.invoice.getInvoiceItems());
         assertEquals(this.invoice, existing.getInvoice());
+        assertEquals(1, invoiceItem.getIndex());
         assertEquals(this.invoice, invoiceItem.getInvoice());
     }
 
@@ -264,6 +267,9 @@ public class InvoiceTest {
         this.invoice.addItem(invoiceItem);
 
         assertEquals(List.of(invoiceItem, invoiceItem, invoiceItem), this.invoice.getInvoiceItems());
+        assertEquals(2, invoice.getInvoiceItems().get(0).getIndex());
+        assertEquals(2, invoice.getInvoiceItems().get(1).getIndex());
+        assertEquals(2, invoice.getInvoiceItems().get(2).getIndex());
         assertEquals(this.invoice, invoiceItem.getInvoice());
     }
 

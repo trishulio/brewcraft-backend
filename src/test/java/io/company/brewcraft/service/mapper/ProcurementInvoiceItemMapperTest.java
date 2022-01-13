@@ -43,6 +43,7 @@ public class ProcurementInvoiceItemMapperTest {
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
         InvoiceItem invoiceItem = new InvoiceItem(
             2L,
+            0,
             "desc2",
             Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("200")),
@@ -92,6 +93,7 @@ public class ProcurementInvoiceItemMapperTest {
 
         InvoiceItem expected = new InvoiceItem(
             2L,
+            null,
             "desc2",
             Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
@@ -123,6 +125,7 @@ public class ProcurementInvoiceItemMapperTest {
         InvoiceItem invoiceItem = mapper.fromAddDto(dto);
 
         InvoiceItem expected = new InvoiceItem(
+            null,
             null,
             "desc2",
             Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),

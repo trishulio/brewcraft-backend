@@ -17,6 +17,7 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
     InvoiceItemDto toDto(InvoiceItem invoiceItem);
 
     @Mapping(target = InvoiceItem.ATTR_ID)
+    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_VERSION, ignore = true)
@@ -29,10 +30,12 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
     InvoiceItem fromDto(Long id);
 
     @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
+    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
     InvoiceItem fromDto(InvoiceItemDto dto);
 
     @Override
     @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
+    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId")
     @Mapping(target = InvoiceItem.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_LAST_UPDATED, ignore = true)
@@ -40,6 +43,7 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
 
     @Override
     @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
+    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_MATERIAL, source = "materialId")
     @Mapping(target = InvoiceItem.ATTR_ID, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_VERSION, ignore = true)

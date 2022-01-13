@@ -14,6 +14,16 @@ public interface MaterialLotMapper extends BaseMapper<MaterialLot, MaterialLotDt
 
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
 
+    @Mapping(target = MaterialLot.ATTR_ID)
+    @Mapping(target = MaterialLot.ATTR_INDEX, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_VERSION, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_QUANTITY, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_STORAGE, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_LOT_NUMBER, ignore = true)
     MaterialLot fromDto(Long id);
 
     @Override
@@ -22,6 +32,7 @@ public interface MaterialLotMapper extends BaseMapper<MaterialLot, MaterialLotDt
     @Override
     @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_INDEX, ignore = true)
     @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true)
     @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, source = "invoiceItemId")
     @Mapping(target = MaterialLot.ATTR_STORAGE, source = "storageId")
@@ -30,6 +41,7 @@ public interface MaterialLotMapper extends BaseMapper<MaterialLot, MaterialLotDt
     @Override
     @Mapping(target = MaterialLot.ATTR_ID, ignore = true)
     @Mapping(target = MaterialLot.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = MaterialLot.ATTR_INDEX, ignore = true)
     @Mapping(target = MaterialLot.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = MaterialLot.ATTR_SHIPMENT, ignore = true)
     @Mapping(target = MaterialLot.ATTR_INVOICE_ITEM, source = "invoiceItemId")

@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class InvoiceItemMapperTest {
     public void testToDto_ReturnsInvoiceItemDto_WhenInvoiceItemIsNotNull() {
         InvoiceItem invoiceItem = new InvoiceItem(
             2L,
+            0,
             "desc2",
             Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),

@@ -39,6 +39,7 @@ import io.company.brewcraft.util.QuantityCalculator;
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
+    public static final String FIELD_INDEX = "index";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_INVOICE = "invoice";
     public static final String FIELD_QUANTITY = "quantity";
@@ -50,6 +51,9 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_item_generator")
     @SequenceGenerator(name = "invoice_item_generator", sequenceName = "invoice_item_sequence", allocationSize = 1)
     private Long id;
+
+    @Column(name = "idx", nullable = false)
+    private Integer index;
 
     @Column(name = "description", nullable = true)
     private String description;
@@ -103,8 +107,9 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
         this.setId(id);
     }
 
-    public InvoiceItem(Long id, String description, Quantity<?> quantity, Money price, Tax tax, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public InvoiceItem(Long id, Integer index, String description, Quantity<?> quantity, Money price, Tax tax, Material material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        this.setIndex(index);
         this.setDescription(description);
         this.setQuantity(quantity);
         this.setPrice(price);
@@ -123,6 +128,16 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Integer getIndex() {
+        return index;
+    }
+
+    @Override
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
     @Override

@@ -39,6 +39,7 @@ public class ProcurementMaterialLotMapperTest {
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
         ProcurementMaterialLotDto dto = mapper.toDto(new MaterialLot(
             1L,
+            0,
             "LOT_NUMBER",
             Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
             new InvoiceItem(10L),
@@ -77,6 +78,7 @@ public class ProcurementMaterialLotMapperTest {
 
         MaterialLot expected = new MaterialLot(
             1L,
+            null,
             "LOT_NUMBER",
             Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
             null,
@@ -103,6 +105,7 @@ public class ProcurementMaterialLotMapperTest {
 
         MaterialLot expected = new MaterialLot(
             null, // id
+            null,
             "LOT_NUMBER",
             Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
             null,

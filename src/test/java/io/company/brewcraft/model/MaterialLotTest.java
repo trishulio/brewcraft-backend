@@ -31,7 +31,7 @@ public class MaterialLotTest {
 
     @Test
     public void testAllArgConstructor() {
-        this.lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
         assertEquals(1L, this.lot.getId());
         assertEquals("LOT_1", this.lot.getLotNumber());
@@ -183,9 +183,9 @@ public class MaterialLotTest {
 
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
-        this.lot = new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
-        final String json = "{\"id\":1,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"invoiceItem\":{\"id\":200,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"1999-01-01T00:00:00\",\"lastUpdated\":\"2000-01-01T00:00:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"index\":0,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"invoiceItem\":{\"id\":200,\"index\":null,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"1999-01-01T00:00:00\",\"lastUpdated\":\"2000-01-01T00:00:00\",\"version\":1}";
         JSONAssert.assertEquals(json, this.lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
