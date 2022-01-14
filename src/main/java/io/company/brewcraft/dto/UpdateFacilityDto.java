@@ -15,10 +15,6 @@ public class UpdateFacilityDto extends BaseDto {
 
     private String faxNumber;
 
-    private List<FacilityEquipmentDto> equipment;
-
-    private List<FacilityStorageDto> storages;
-
     @NotNull
     private Integer version;
 
@@ -26,14 +22,12 @@ public class UpdateFacilityDto extends BaseDto {
         super();
     }
 
-    public UpdateFacilityDto(String name, AddressDto address, String phoneNumber, String faxNumber, List<FacilityEquipmentDto> equipment, List<FacilityStorageDto> storages, Integer version) {
+    public UpdateFacilityDto(String name, AddressDto address, String phoneNumber, String faxNumber, Integer version) {
         super();
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.faxNumber = faxNumber;
-        this.equipment = equipment;
-        this.storages = storages;
         this.version = version;
     }
 
@@ -67,22 +61,6 @@ public class UpdateFacilityDto extends BaseDto {
 
     public void setFaxNumber(String faxNumber) {
         this.faxNumber = faxNumber;
-    }
-
-    public List<FacilityEquipmentDto> getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(List<FacilityEquipmentDto> equipment) {
-        this.equipment = equipment;
-    }
-
-    public List<FacilityStorageDto> getStorages() {
-        return storages;
-    }
-
-    public void setStorages(List<FacilityStorageDto> storages) {
-        this.storages = storages;
     }
 
     public Integer getVersion() {

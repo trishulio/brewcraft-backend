@@ -55,12 +55,12 @@ public class Facility extends BaseModel implements UpdateFacility, Audited {
     @Column(name = "fax_number")
     private String faxNumber;
 
-    @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="facility")
     @JsonIgnore
     @CriteriaJoin
     private List<Equipment> equipment;
 
-    @OneToMany(mappedBy="facility", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="facility")
     @JsonIgnore
     @CriteriaJoin
     private List<Storage> storages;
