@@ -100,7 +100,13 @@ public class ProcurementTest {
             new ProcurementItem(new ProcurementItemId(1L, 10L))
         ));
 
-        assertEquals(List.of(new ProcurementItem(new ProcurementItemId(1L, 10L))), procurement.getProcurementItems());
+        MaterialLot expectedMaterialLot = new MaterialLot(1L);
+        expectedMaterialLot.setIndex(0);
+        InvoiceItem expectedInvoiceItem = new InvoiceItem(10L);
+        expectedInvoiceItem.setIndex(0);
+
+        List<ProcurementItem> expectedProcurementItems = List.of(new ProcurementItem(expectedMaterialLot, expectedInvoiceItem));
+        assertEquals(expectedProcurementItems, procurement.getProcurementItems());
     }
 
     @Test

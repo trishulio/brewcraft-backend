@@ -84,7 +84,7 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 LocalDateTime.of(2002, 1, 1, 0, 0), // createdAt
                 LocalDateTime.of(2003, 1, 1, 0, 0), // lastUpdated
-                List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+                List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
                 1 // version
             ),
             new Invoice(
@@ -106,7 +106,7 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2002, 1, 1, 12, 0),
                 LocalDateTime.of(2003, 1, 1, 12, 0),
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                 1
             )
         ));
@@ -203,7 +203,7 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 null,
                 null,
-                List.of(new MaterialLot(null, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, null)),
+                List.of(new MaterialLot(null, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, null)),
                 null // version
             ),
             new Invoice(
@@ -218,7 +218,7 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(null, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)),
+                List.of(new InvoiceItem(null, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)),
                 null
             )
         );
@@ -274,7 +274,7 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2001, 1, 1, 0, 0), // deliveredDate
                 null,
                 null,
-                List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, 1)),
+                List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), null, new Storage(3L), null, null, 1)),
                 1 // version
             ),
             new Invoice(
@@ -289,7 +289,7 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(1L, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)),
+                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)),
                 1
             )
         );

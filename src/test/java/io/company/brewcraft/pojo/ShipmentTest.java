@@ -30,7 +30,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        final List<MaterialLot> lots = List.of(new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        final List<MaterialLot> lots = List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         this.shipment = new Shipment(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",

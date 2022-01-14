@@ -56,6 +56,7 @@ public class ProcurementItemMapperTest {
         ProcurementItem procurementItem = new ProcurementItem(
             new MaterialLot(
                 1L,
+                0,
                 "LOT_NUMBER",
                 Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
                 new InvoiceItem(10L),
@@ -66,6 +67,7 @@ public class ProcurementItemMapperTest {
             ),
             new InvoiceItem(
                 2L,
+                0,
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
@@ -134,6 +136,7 @@ public class ProcurementItemMapperTest {
         ProcurementItem expected = new ProcurementItem(
             new MaterialLot(
                 null,
+                null,
                 "LOT_NUMBER",
                 Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
                 null,
@@ -143,6 +146,7 @@ public class ProcurementItemMapperTest {
                 null
             ),
             new InvoiceItem(
+                null,
                 null,
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
@@ -189,6 +193,7 @@ public class ProcurementItemMapperTest {
         ProcurementItem expected = new ProcurementItem(
             new MaterialLot(
                 1L,
+                null,
                 "LOT_NUMBER",
                 Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
                 null,
@@ -199,6 +204,7 @@ public class ProcurementItemMapperTest {
             ),
             new InvoiceItem(
                 2L,
+                null,
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),

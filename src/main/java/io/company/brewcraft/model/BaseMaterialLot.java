@@ -4,15 +4,20 @@ import io.company.brewcraft.service.InvoiceItemAccessor;
 import io.company.brewcraft.service.StorageAccessor;
 
 public interface BaseMaterialLot<T extends BaseShipment<? extends BaseMaterialLot<T>>> extends InvoiceItemAccessor, StorageAccessor, QuantityAccessor {
+    final String ATTR_INDEX = "index";
     final String ATTR_LOT_NUMBER = "lotNumber";
     final String ATTR_QUANTITY = "quantity";
     final String ATTR_SHIPMENT = "shipment";
 
-    public String getLotNumber();
+    Integer getIndex();
 
-    public void setLotNumber(String lotNumber);
+    void setIndex(Integer index);
 
-    public T getShipment();
+    String getLotNumber();
 
-    public void setShipment(T shipment);
+    void setLotNumber(String lotNumber);
+
+    T getShipment();
+
+    void setShipment(T shipment);
 }

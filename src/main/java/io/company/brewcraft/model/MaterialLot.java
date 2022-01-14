@@ -38,6 +38,7 @@ import io.company.brewcraft.util.QuantityCalculator;
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipment>, BaseMaterialLot<Shipment>, Audited, CrudEntity<Long> {
     public static final String FIELD_ID = "id";
+    public static final String FIELD_INDEX = "index";
     public static final String FIELD_LOT_NUMBER = "lotNumber";
     public static final String FIELD_QTY = "quantity";
     public static final String FIELD_SHIPMENT = "shipment";
@@ -51,6 +52,9 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "material_lot_generator")
     @SequenceGenerator(name = "material_lot_generator", sequenceName = "material_lot_sequence", allocationSize = 1)
     private Long id;
+
+    @Column(name = "idx", nullable = false)
+    private Integer index;
 
     @Column(name = "lot_number")
     private String lotNumber;
@@ -96,8 +100,9 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         this.setId(id);
     }
 
-    public MaterialLot(Long id, String lotNumber, Quantity<?> qty, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public MaterialLot(Long id, Integer index, String lotNumber, Quantity<?> qty, InvoiceItem item, Storage storage, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
+        this.setIndex(index);
         this.setLotNumber(lotNumber);
         this.setQuantity(qty);
         this.setInvoiceItem(item);
@@ -115,6 +120,16 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Integer getIndex() {
+        return index;
+    }
+
+    @Override
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
     @Override

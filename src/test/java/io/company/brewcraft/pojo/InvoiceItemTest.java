@@ -31,6 +31,7 @@ public class InvoiceItemTest {
     @Test
     public void testAllArgsConstructor_SetsValues() {
         InvoiceItem invoiceItem = new InvoiceItem(2L,
+                0,
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("5")),

@@ -1,7 +1,8 @@
 package io.company.brewcraft.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,8 +39,8 @@ public class MaterialLotServiceTest {
         );
 
         final List<UpdateMaterialLot<?>> lotUpdates = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new MaterialLot(2L, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new MaterialLot(2L, 1, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
         );
 
         doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPutEntities(existingLots, lotUpdates);
@@ -47,8 +48,8 @@ public class MaterialLotServiceTest {
         final List<MaterialLot> updatedLots = this.service.getPutEntities(existingLots, lotUpdates);
 
         final List<UpdateMaterialLot<?>> expected = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new MaterialLot(2L, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new MaterialLot(2L, 1, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
         );
 
         assertEquals(expected, updatedLots);
@@ -62,8 +63,8 @@ public class MaterialLotServiceTest {
         );
 
         final List<UpdateMaterialLot<?>> lotUpdates = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new MaterialLot(2L, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new MaterialLot(2L, 1, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
         );
 
         doAnswer(inv -> inv.getArgument(1, List.class)).when(this.mUpdateService).getPatchEntities(existingLots, lotUpdates);
@@ -71,8 +72,8 @@ public class MaterialLotServiceTest {
         final List<MaterialLot> updatedLots = this.service.getPatchEntities(existingLots, lotUpdates);
 
         final List<UpdateMaterialLot<?>> expected = List.of(
-            new MaterialLot(1L, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-            new MaterialLot(2L, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
+            new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
+            new MaterialLot(2L, 1, "LOT_2", Quantities.getQuantity(new BigDecimal("20"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(6L), LocalDateTime.of(2999, 1, 1, 12, 0, 0), LocalDateTime.of(3000, 1, 1, 12, 0, 0), 1)
         );
 
         assertEquals(expected, updatedLots);
