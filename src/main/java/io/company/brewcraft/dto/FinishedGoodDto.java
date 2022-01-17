@@ -13,6 +13,10 @@ public class FinishedGoodDto extends BaseDto {
 
     private List<MaterialPortionDto> materialPortions;
 
+    private Long parentFinishedGoodId;
+
+    private List<FinishedGoodDto> childFinishedGoods;
+
     private LocalDateTime packagedOn;
 
     private Integer version;
@@ -26,12 +30,14 @@ public class FinishedGoodDto extends BaseDto {
         this.id = id;
     }
 
-    public FinishedGoodDto(Long id, SkuDto sku, List<MixturePortionDto> mixturePortions,
-            List<MaterialPortionDto> materialPortions, LocalDateTime packagedOn, Integer version) {
+    public FinishedGoodDto(Long id, SkuDto sku, List<MixturePortionDto> mixturePortions, List<MaterialPortionDto> materialPortions,
+            Long parentFinishedGoodId, List<FinishedGoodDto> childFinishedGoods, LocalDateTime packagedOn, Integer version) {
         this(id);
         this.sku = sku;
         this.mixturePortions = mixturePortions;
         this.materialPortions = materialPortions;
+        this.parentFinishedGoodId = parentFinishedGoodId;
+        this.childFinishedGoods = childFinishedGoods;
         this.packagedOn = packagedOn;
         this.version = version;
     }
@@ -66,6 +72,22 @@ public class FinishedGoodDto extends BaseDto {
 
     public void setMaterialPortions(List<MaterialPortionDto> materialPortions) {
         this.materialPortions = materialPortions;
+    }
+
+    public Long getParentFinishedGoodId() {
+        return parentFinishedGoodId;
+    }
+
+    public void setParentFinishedGoodId(Long parentFinishedGoodId) {
+        this.parentFinishedGoodId = parentFinishedGoodId;
+    }
+
+    public List<FinishedGoodDto> getChildFinishedGoods() {
+        return childFinishedGoods;
+    }
+
+    public void setChildFinishedGoods(List<FinishedGoodDto> childFinishedGoods) {
+        this.childFinishedGoods = childFinishedGoods;
     }
 
     public LocalDateTime getPackagedOn() {

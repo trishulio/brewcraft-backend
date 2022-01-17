@@ -119,6 +119,7 @@ import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
+import io.company.brewcraft.service.ChildFinishedGoodsAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.FinishedGoodAccessor;
 import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
@@ -455,6 +456,16 @@ public class RepositoryConfiguration {
     }
 
     @Bean
+    public CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsAccessorRefresher(FinishedGoodRepository repo) {
+        return new CollectionAccessorRefresher<>(
+            FinishedGood.class,
+            accessor -> accessor.getChildFinishedGoods(),
+            (accessor, childFinishedGoods) -> accessor.setChildFinishedGoods(new ArrayList<FinishedGood>(childFinishedGoods)),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
     public AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> mixtureRecordingAccessorRefresher(MixtureRecordingRepository repo) {
         return new AccessorRefresher<>(
                 MixtureRecording.class,
@@ -500,8 +511,8 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodAccessorRefresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
-        return new FinishedGoodRefresher(finishedGoodAccessorRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher);
+    public Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodAccessorRefresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher, CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsAccessor) {
+        return new FinishedGoodRefresher(finishedGoodAccessorRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher, childFinishedGoodsAccessor);
     }
 
     @Bean
