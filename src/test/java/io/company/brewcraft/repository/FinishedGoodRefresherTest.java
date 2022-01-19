@@ -93,12 +93,4 @@ public class FinishedGoodRefresherTest {
         verify(this.mRefresher, times(1)).refreshAccessors(accessors);
     }
 
-    @Test
-    public void testRefreshChildFinishedGoodsAccessors_DelegatesTheCallToAccessorRefresher() {
-        final Collection<? extends ChildFinishedGoodsAccessor> accessors = List.of(mock(ChildFinishedGoodsAccessor.class), mock(ChildFinishedGoodsAccessor.class));
-
-        this.finishedGoodRefresher.refreshChildFinishedGoodsAccessors(accessors);
-
-        verify(this.childFinishedGoodsRefresher, times(1)).refreshAccessors(accessors);
-    }
 }
