@@ -11,11 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
-import io.company.brewcraft.repository.AccessorRefresher;
-import io.company.brewcraft.repository.FinishedGoodMaterialPortionRefresher;
-import io.company.brewcraft.repository.FinishedGoodMixturePortionRefresher;
-import io.company.brewcraft.repository.FinishedGoodRefresher;
-import io.company.brewcraft.repository.SkuRefresher;
+import io.company.brewcraft.service.ChildFinishedGoodsAccessor;
 import io.company.brewcraft.service.FinishedGoodAccessor;
 
 public class FinishedGoodRefresherTest {
@@ -25,8 +21,13 @@ public class FinishedGoodRefresherTest {
     private AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> mRefresher;
 
     private FinishedGoodMixturePortionRefresher fgMixturePortionRefresher;
+
     private FinishedGoodMaterialPortionRefresher fgMaterialPortionRefresher;
+
     private SkuRefresher skuRefresher;
+
+    private CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsRefresher;
+
 
     @BeforeEach
     public void init() {
@@ -34,8 +35,9 @@ public class FinishedGoodRefresherTest {
         this.skuRefresher = mock(SkuRefresher.class);
         this.fgMixturePortionRefresher = mock(FinishedGoodMixturePortionRefresher.class);
         this.mRefresher = mock(AccessorRefresher.class);
+        this.childFinishedGoodsRefresher = mock(CollectionAccessorRefresher.class);
 
-        this.finishedGoodRefresher = new FinishedGoodRefresher(mRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher);
+        this.finishedGoodRefresher = new FinishedGoodRefresher(mRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher, childFinishedGoodsRefresher);
     }
 
     @Test
@@ -59,18 +61,27 @@ public class FinishedGoodRefresherTest {
             new FinishedGoodMaterialPortion(400L)
         );
 
+        final List<FinishedGood> childFinishedGoods = List.of(
+                new FinishedGood(5L),
+                new FinishedGood(6L),
+                new FinishedGood(7L),
+                new FinishedGood(8L)
+        );
+
         finishedGoods.get(0).setMixturePortions(List.of(mixturePortions.get(0), mixturePortions.get(1)));
         finishedGoods.get(0).setMaterialPortions(List.of(materialPortions.get(0), materialPortions.get(1)));
+        finishedGoods.get(0).setChildFinishedGoods(List.of(childFinishedGoods.get(0), childFinishedGoods.get(1)));
 
         finishedGoods.get(1).setMixturePortions(List.of(mixturePortions.get(2), mixturePortions.get(3)));
         finishedGoods.get(1).setMaterialPortions(List.of(materialPortions.get(2), materialPortions.get(3)));
+        finishedGoods.get(1).setChildFinishedGoods(List.of(childFinishedGoods.get(2), childFinishedGoods.get(3)));
 
         this.finishedGoodRefresher.refresh(finishedGoods);
 
         verify(this.skuRefresher, times(1)).refreshAccessors(finishedGoods);
-
         verify(this.fgMaterialPortionRefresher, times(1)).refresh(materialPortions);
         verify(this.fgMixturePortionRefresher, times(1)).refresh(mixturePortions);
+        verify(this.childFinishedGoodsRefresher, times(1)).refreshAccessors(finishedGoods);
     }
 
     @Test
@@ -81,4 +92,5 @@ public class FinishedGoodRefresherTest {
 
         verify(this.mRefresher, times(1)).refreshAccessors(accessors);
     }
+
 }

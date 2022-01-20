@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
+import io.company.brewcraft.service.ChildFinishedGoodsAccessor;
 import io.company.brewcraft.service.FinishedGoodAccessor;
 import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
 import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
@@ -28,11 +28,14 @@ public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGo
 
     private final Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher;
 
-    public FinishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher) {
+    private final CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsRefresher;
+
+    public FinishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> refresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher, CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsRefresher) {
         this.refresher = refresher;
         this.skuRefresher = skuRefresher;
         this.fgMixturePortionRefresher = fgMixturePortionRefresher;
         this.fgMaterialPortionRefresher = fgMaterialPortionRefresher;
+        this.childFinishedGoodsRefresher = childFinishedGoodsRefresher;
     }
 
     @Override
@@ -44,10 +47,13 @@ public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGo
 
         final List<FinishedGoodMaterialPortion> materialPortions = finishedGoods.stream().filter(i -> i.getMaterialPortions() != null).flatMap(i -> i.getMaterialPortions().stream()).collect(Collectors.toList());
         this.fgMaterialPortionRefresher.refresh(materialPortions);
+
+        this.childFinishedGoodsRefresher.refreshAccessors(finishedGoods);
     }
 
     @Override
     public void refreshAccessors(Collection<? extends FinishedGoodAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
+
 }

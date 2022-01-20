@@ -21,6 +21,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateFinishedGood;
@@ -34,6 +35,8 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     public static final String FIELD_SKU = "sku";
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
     public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
+    public static final String FIELD_PARENT_FINISHED_GOOD = "parentFinishedGood";
+    public static final String FIELD_CHILD_FINISHED_GOODS = "childFinishedGoods";
     public static final String FIELD_PACKAGED_ON = "packagedOn";
 
     @Id
@@ -54,6 +57,16 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @JsonManagedReference
     @CriteriaJoin
     private List<FinishedGoodMaterialPortion> materialPortions;
+
+    @ManyToOne()
+    @JsonManagedReference
+    @JoinColumn(name = "parent_finished_good_id", referencedColumnName = "id")
+    private FinishedGood parentFinishedGood;
+
+    @OneToMany(mappedBy = "parentFinishedGood", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @CriteriaJoin
+    private List<FinishedGood> childFinishedGoods;
 
     @Column(name = "packaged_on")
     private LocalDateTime packagedOn;
@@ -77,11 +90,13 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
         setId(id);
     }
 
-    public FinishedGood(Long id, Sku sku, List<FinishedGoodMixturePortion> mixturePortions, List<FinishedGoodMaterialPortion> materialPortions, LocalDateTime packagedOn, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public FinishedGood(Long id, Sku sku, List<FinishedGoodMixturePortion> mixturePortions, List<FinishedGoodMaterialPortion> materialPortions, FinishedGood parentFinishedGood, List<FinishedGood> childFinishedGoods, LocalDateTime packagedOn, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setSku(sku);
         setMixturePortions(mixturePortions);
         setMaterialPortions(materialPortions);
+        setParentFinishedGood(parentFinishedGood);
+        setChildFinishedGoods(childFinishedGoods);
         setPackagedOn(packagedOn);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
@@ -217,6 +232,77 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
 
         if (removed) {
             materialPortion.setFinishedGood(null);
+        }
+
+        return removed;
+    }
+
+    @Override
+    public FinishedGood getParentFinishedGood() {
+        return parentFinishedGood;
+    }
+
+    @Override
+    public void setParentFinishedGood(FinishedGood finishedGood) {
+        this.parentFinishedGood = finishedGood;
+
+        if (finishedGood != null) {
+            finishedGood.addChildFinishedGood(this);
+        }
+    }
+
+    @Override
+    public List<FinishedGood> getChildFinishedGoods() {
+        return childFinishedGoods;
+    }
+
+    @Override
+    public void setChildFinishedGoods(List<FinishedGood> childFinishedGoods) {
+        if (this.childFinishedGoods != null) {
+            if (childFinishedGoods == null) {
+                this.childFinishedGoods.clear();
+            } else {
+                this.childFinishedGoods.stream().filter(childFinishedGood -> !childFinishedGoods.contains(childFinishedGood)).collect(Collectors.toList()).forEach(this::removeChildFinishedGood);
+            }
+        }
+
+        if (childFinishedGoods != null) {
+            if (this.childFinishedGoods == null) {
+                this.childFinishedGoods = new ArrayList<>();
+                childFinishedGoods.stream().collect(Collectors.toList()).forEach(this::addChildFinishedGood);
+            } else {
+                childFinishedGoods.stream().filter(childFinishedGood -> !this.childFinishedGoods.contains(childFinishedGood)).collect(Collectors.toList()).forEach(this::addChildFinishedGood);
+            }
+        }
+    }
+
+    public void addChildFinishedGood(FinishedGood finishedGood) {
+        if (finishedGood == null) {
+            return;
+        }
+
+        if (this.childFinishedGoods == null) {
+            this.childFinishedGoods = new ArrayList<>();
+        }
+
+        if (finishedGood.getParentFinishedGood() != this) {
+            finishedGood.setParentFinishedGood(this);
+        }
+
+        if (!this.childFinishedGoods.contains(finishedGood)) {
+            this.childFinishedGoods.add(finishedGood);
+        }
+    }
+
+    public boolean removeChildFinishedGood(FinishedGood finishedGood) {
+        if (finishedGood == null || this.childFinishedGoods == null) {
+            return false;
+        }
+
+        boolean removed = this.childFinishedGoods.remove(finishedGood);
+
+        if (removed) {
+            finishedGood.setParentFinishedGood(null);
         }
 
         return removed;
