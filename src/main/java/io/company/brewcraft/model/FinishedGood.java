@@ -58,7 +58,7 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
     @CriteriaJoin
     private List<FinishedGoodMaterialPortion> materialPortions;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JsonManagedReference
     @JoinColumn(name = "parent_finished_good_id", referencedColumnName = "id")
     private FinishedGood parentFinishedGood;
@@ -251,10 +251,12 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
         }
     }
 
+    @Override
     public List<FinishedGood> getChildFinishedGoods() {
         return childFinishedGoods;
     }
 
+    @Override
     public void setChildFinishedGoods(List<FinishedGood> childFinishedGoods) {
         if (this.childFinishedGoods != null) {
             if (childFinishedGoods == null) {
