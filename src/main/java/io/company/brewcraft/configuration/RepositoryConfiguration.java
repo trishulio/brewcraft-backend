@@ -14,9 +14,10 @@ import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Equipment;
-import io.company.brewcraft.model.FinishedGood;
-import io.company.brewcraft.model.FinishedGoodMaterialPortion;
-import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.model.FinishedGoodLot;
+import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
+import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
+import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -63,12 +64,14 @@ import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.CollectionAccessorRefresher;
 import io.company.brewcraft.repository.EquipmentRefresher;
 import io.company.brewcraft.repository.EquipmentRepository;
-import io.company.brewcraft.repository.FinishedGoodMaterialPortionRefresher;
-import io.company.brewcraft.repository.FinishedGoodMaterialPortionRepository;
-import io.company.brewcraft.repository.FinishedGoodMixturePortionRefresher;
-import io.company.brewcraft.repository.FinishedGoodMixturePortionRepository;
-import io.company.brewcraft.repository.FinishedGoodRefresher;
-import io.company.brewcraft.repository.FinishedGoodRepository;
+import io.company.brewcraft.repository.FinishedGoodLotFinishedGoodLotPortionRefresher;
+import io.company.brewcraft.repository.FinishedGoodLotFinishedGoodLotPortionRepository;
+import io.company.brewcraft.repository.FinishedGoodLotMaterialPortionRefresher;
+import io.company.brewcraft.repository.FinishedGoodLotMaterialPortionRepository;
+import io.company.brewcraft.repository.FinishedGoodLotMixturePortionRefresher;
+import io.company.brewcraft.repository.FinishedGoodLotMixturePortionRepository;
+import io.company.brewcraft.repository.FinishedGoodLotRefresher;
+import io.company.brewcraft.repository.FinishedGoodLotRepository;
 import io.company.brewcraft.repository.InvoiceItemRefresher;
 import io.company.brewcraft.repository.InvoiceItemRepository;
 import io.company.brewcraft.repository.InvoiceRefresher;
@@ -121,9 +124,10 @@ import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
 import io.company.brewcraft.service.ChildFinishedGoodsAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
-import io.company.brewcraft.service.FinishedGoodAccessor;
-import io.company.brewcraft.service.FinishedGoodMaterialPortionAccessor;
-import io.company.brewcraft.service.FinishedGoodMixturePortionAccessor;
+import io.company.brewcraft.service.FinishedGoodLotAccessor;
+import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionAccessor;
+import io.company.brewcraft.service.FinishedGoodLotMaterialPortionAccessor;
+import io.company.brewcraft.service.FinishedGoodLotMixturePortionAccessor;
 import io.company.brewcraft.service.InvoiceItemAccessor;
 import io.company.brewcraft.service.InvoiceStatusAccessor;
 import io.company.brewcraft.service.MaterialAccessor;
@@ -426,19 +430,19 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodAccessorRefresher(FinishedGoodRepository repo) {
+    public AccessorRefresher<Long, FinishedGoodLotAccessor, FinishedGoodLot> finishedGoodAccessorRefresher(FinishedGoodLotRepository repo) {
         return new AccessorRefresher<>(
-            FinishedGood.class,
-            accessor -> accessor.getFinishedGood(),
-            (accessor, finishedGood) -> accessor.setFinishedGood(finishedGood),
+            FinishedGoodLot.class,
+            accessor -> accessor.getFinishedGoodLot(),
+            (accessor, finishedGood) -> accessor.setFinishedGoodLot(finishedGood),
             ids -> repo.findAllById(ids)
         );
     }
 
     @Bean
-    public AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> finishedGoodMaterialPortionAccessorRefresher(FinishedGoodMaterialPortionRepository repo) {
+    public AccessorRefresher<Long, FinishedGoodLotMaterialPortionAccessor, FinishedGoodLotMaterialPortion> finishedGoodMaterialPortionAccessorRefresher(FinishedGoodLotMaterialPortionRepository repo) {
         return new AccessorRefresher<>(
-            FinishedGoodMaterialPortion.class,
+            FinishedGoodLotMaterialPortion.class,
             accessor -> accessor.getMaterialPortion(),
             (accessor, finishedGoodMaterialPortion) -> accessor.setMaterialPortion(finishedGoodMaterialPortion),
             ids -> repo.findAllById(ids)
@@ -446,9 +450,9 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> finishedGoodMixturePortionAccessorRefresher(FinishedGoodMixturePortionRepository repo) {
+    public AccessorRefresher<Long, FinishedGoodLotMixturePortionAccessor, FinishedGoodLotMixturePortion> finishedGoodMixturePortionAccessorRefresher(FinishedGoodLotMixturePortionRepository repo) {
         return new AccessorRefresher<>(
-            FinishedGoodMixturePortion.class,
+            FinishedGoodLotMixturePortion.class,
             accessor -> accessor.getMixturePortion(),
             (accessor, finishedGoodMixturePortion) -> accessor.setMixturePortion(finishedGoodMixturePortion),
             ids -> repo.findAllById(ids)
@@ -456,11 +460,11 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsAccessorRefresher(FinishedGoodRepository repo) {
-        return new CollectionAccessorRefresher<>(
-            FinishedGood.class,
-            accessor -> accessor.getChildFinishedGoods(),
-            (accessor, childFinishedGoods) -> accessor.setChildFinishedGoods(new ArrayList<FinishedGood>(childFinishedGoods)),
+    public AccessorRefresher<Long, FinishedGoodLotFinishedGoodLotPortionAccessor, FinishedGoodLotFinishedGoodLotPortion> finishedGoodFinishedGoodLotPortionAccessorRefresher(FinishedGoodLotFinishedGoodLotPortionRepository repo) {
+        return new AccessorRefresher<>(
+                FinishedGoodLotFinishedGoodLotPortion.class,
+            accessor -> accessor.getFinishedGoodLotPortion(),
+            (accessor, finishedGoodMixturePortion) -> accessor.setFinishedGoodLotPortion(finishedGoodMixturePortion),
             ids -> repo.findAllById(ids)
         );
     }
@@ -501,18 +505,23 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> finishedGoodMaterialPortionRefresher(Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, FinishedGoodMaterialPortionAccessor, FinishedGoodMaterialPortion> materialPortionAccessorRefresher) {
-        return new FinishedGoodMaterialPortionRefresher(materialLotRefresher, materialPortionAccessorRefresher);
+    public Refresher<FinishedGoodLotMaterialPortion, FinishedGoodLotMaterialPortionAccessor> finishedGoodLotMaterialPortionRefresher(Refresher<MaterialLot, MaterialLotAccessor> materialLotRefresher, AccessorRefresher<Long, FinishedGoodLotMaterialPortionAccessor, FinishedGoodLotMaterialPortion> materialPortionAccessorRefresher) {
+        return new FinishedGoodLotMaterialPortionRefresher(materialLotRefresher, materialPortionAccessorRefresher);
     }
 
     @Bean
-    public Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> finishedGoodMixturePortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, FinishedGoodMixturePortionAccessor, FinishedGoodMixturePortion> mixturePortionAccessorRefresher) {
-        return new FinishedGoodMixturePortionRefresher(mixtureRefresher, mixturePortionAccessorRefresher);
+    public Refresher<FinishedGoodLotMixturePortion, FinishedGoodLotMixturePortionAccessor> finishedGoodLotMixturePortionRefresher(Refresher<Mixture, MixtureAccessor> mixtureRefresher, AccessorRefresher<Long, FinishedGoodLotMixturePortionAccessor, FinishedGoodLotMixturePortion> mixturePortionAccessorRefresher) {
+        return new FinishedGoodLotMixturePortionRefresher(mixtureRefresher, mixturePortionAccessorRefresher);
     }
 
     @Bean
-    public Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher(AccessorRefresher<Long, FinishedGoodAccessor, FinishedGood> finishedGoodAccessorRefresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodMixturePortion, FinishedGoodMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodMaterialPortion, FinishedGoodMaterialPortionAccessor> fgMaterialPortionRefresher, CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsAccessor) {
-        return new FinishedGoodRefresher(finishedGoodAccessorRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher, childFinishedGoodsAccessor);
+    public Refresher<FinishedGoodLotFinishedGoodLotPortion, FinishedGoodLotFinishedGoodLotPortionAccessor> finishedGoodLotFinishedGoodLotPortionRefresher(@Lazy Refresher<FinishedGoodLot, FinishedGoodLotAccessor> finishedGoodLotRefresher, AccessorRefresher<Long, FinishedGoodLotFinishedGoodLotPortionAccessor, FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortionAccessorRefresher) {
+        return new FinishedGoodLotFinishedGoodLotPortionRefresher(finishedGoodLotRefresher, finishedGoodLotPortionAccessorRefresher);
+    }
+
+    @Bean
+    public Refresher<FinishedGoodLot, FinishedGoodLotAccessor> finishedGoodLotRefresher(AccessorRefresher<Long, FinishedGoodLotAccessor, FinishedGoodLot> finishedGoodAccessorRefresher, Refresher<Sku, SkuAccessor> skuRefresher, Refresher<FinishedGoodLotMixturePortion, FinishedGoodLotMixturePortionAccessor> fgMixturePortionRefresher, Refresher<FinishedGoodLotMaterialPortion, FinishedGoodLotMaterialPortionAccessor> fgMaterialPortionRefresher, Refresher<FinishedGoodLotFinishedGoodLotPortion, FinishedGoodLotFinishedGoodLotPortionAccessor> fgLotFgPortionRefresher) {
+        return new FinishedGoodLotRefresher(finishedGoodAccessorRefresher, skuRefresher, fgMixturePortionRefresher, fgMaterialPortionRefresher, fgLotFgPortionRefresher);
     }
 
     @Bean

@@ -2,25 +2,25 @@ package io.company.brewcraft.dto;
 
 import javax.validation.constraints.NotNull;
 
-public class UpdateMixturePortionDto extends BaseDto {
+public class UpdateFinishedGoodLotPortionDto extends BaseDto {
 
     private Long id;
 
-    private Long mixtureId;
+    private Long finishedGoodLotId;
 
     private QuantityDto quantity;
 
     @NotNull
     private Integer version;
 
-    public UpdateMixturePortionDto() {
+    public UpdateFinishedGoodLotPortionDto() {
         super();
     }
 
-    public UpdateMixturePortionDto(Long id, Long mixtureId, QuantityDto quantity, Integer version) {
+    public UpdateFinishedGoodLotPortionDto(Long id, Long finishedGoodLotId, QuantityDto quantity, Integer version) {
         this();
         this.id = id;
-        this.mixtureId = mixtureId;
+        this.finishedGoodLotId = finishedGoodLotId;
         this.quantity = quantity;
         this.version = version;
     }
@@ -33,12 +33,12 @@ public class UpdateMixturePortionDto extends BaseDto {
         this.id = id;
     }
 
-    public Long getMixtureId() {
-        return mixtureId;
+    public Long getFinishedGoodLotId() {
+        return finishedGoodLotId;
     }
 
-    public void setMixtureId(Long mixtureId) {
-        this.mixtureId = mixtureId;
+    public void setFinishedGoodLotId(Long mixtureId) {
+        this.finishedGoodLotId = mixtureId;
     }
 
     public QuantityDto getQuantity() {

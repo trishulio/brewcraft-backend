@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.model.FinishedGood;
+import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodInventory;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
@@ -27,7 +27,7 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
 
     public Page<FinishedGoodInventory> getAll(Set<Long> skuIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<FinishedGoodInventory> spec = WhereClauseBuilder.builder()
-                                                                        .in(new String[] { FinishedGood.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                                                        .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
                                                                         .build();
 
         Page<FinishedGoodInventory> finishedGoodInventory = finishedGoodInventoryRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
