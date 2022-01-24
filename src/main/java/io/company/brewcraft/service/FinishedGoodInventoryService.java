@@ -9,6 +9,6 @@ import io.company.brewcraft.model.FinishedGoodInventory;
 
 public interface FinishedGoodInventoryService {
 
-    Page<FinishedGoodInventory> getAll(Set<Long> skuIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    Page<FinishedGoodInventory> getAll(Set<Long> skuIds, AggregationFunction aggrFn, FinishedGoodInventory.AggregationField[] groupBy, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
 }

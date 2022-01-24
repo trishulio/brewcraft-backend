@@ -65,7 +65,6 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
-import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.FinishedGoodLotRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
@@ -473,8 +472,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(FinishedGoodInventoryService.class)
-    public FinishedGoodInventoryService finishedGoodInventoryService(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {
-        final FinishedGoodInventoryService finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(finishedGoodInventoryRepository);
+    public FinishedGoodInventoryService finishedGoodInventoryService(AggregationService aggrService) {
+        final FinishedGoodInventoryService finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(aggrService);
         return finishedGoodInventoryService;
     }
 }

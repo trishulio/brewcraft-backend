@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.company.brewcraft.dto.FinishedGoodInventoryDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.model.FinishedGoodInventory;
+import io.company.brewcraft.service.AggregationFunction;
+import io.company.brewcraft.service.FinishedGoodInventoryAggregationFieldCollection;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
+import io.company.brewcraft.service.ProcurementLotAggregationFieldCollection;
 import io.company.brewcraft.service.mapper.FinishedGoodInventoryMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -36,14 +39,16 @@ public class FinishedGoodInventoryController extends BaseController {
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<FinishedGoodInventoryDto> getFinishedGoodInventory(
         @RequestParam(required = false, name = "sku_ids") Set<Long> skuIds,
-        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
+        @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
+        @RequestParam(name = "group_by", defaultValue = "ID") FinishedGoodInventoryAggregationFieldCollection groupBy,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = "sku.name") SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<FinishedGoodInventory> finishedGoods = this.finishedGoodInventoryService.getAll(
-            skuIds, page, size, sort, orderAscending
+            skuIds, aggrFn, groupBy.getFields(), page, size, sort, orderAscending
         );
 
         return this.response(finishedGoods, attributes);

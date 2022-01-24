@@ -1,7 +1,5 @@
 package io.company.brewcraft.service;
 
-import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
-
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -13,25 +11,24 @@ import org.springframework.data.jpa.domain.Specification;
 import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodInventory;
 import io.company.brewcraft.model.Sku;
-import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 
 public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventoryService {
     private static final Logger log = LoggerFactory.getLogger(FinishedGoodInventoryServiceImpl.class);
 
-    private FinishedGoodInventoryRepository finishedGoodInventoryRepository;
+    private AggregationService aggrService;
 
-    public FinishedGoodInventoryServiceImpl(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {
-        this.finishedGoodInventoryRepository = finishedGoodInventoryRepository;
+    public FinishedGoodInventoryServiceImpl(AggregationService aggrService) {
+        this.aggrService = aggrService;
     }
 
-    public Page<FinishedGoodInventory> getAll(Set<Long> skuIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
+    @Override
+    public Page<FinishedGoodInventory> getAll(Set<Long> skuIds, AggregationFunction aggrFn, FinishedGoodInventory.AggregationField[] groupBy,
+            int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<FinishedGoodInventory> spec = WhereClauseBuilder.builder()
-                                                                        .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
-                                                                        .build();
+                                                                      .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                                                      .build();
 
-        Page<FinishedGoodInventory> finishedGoodInventory = finishedGoodInventoryRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
-
-        return finishedGoodInventory;
+        return this.aggrService.getAggregation(FinishedGoodInventory.class, spec, aggrFn, FinishedGoodInventory.AggregationField.QUANTITY, groupBy, sort, orderAscending, page, size);
     }
 }
