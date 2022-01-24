@@ -15,7 +15,6 @@ public interface FinishedGoodLotFinishedGoodLotPortionMapper {
 
     FinishedGoodLotFinishedGoodLotPortionMapper INSTANCE = Mappers.getMapper(FinishedGoodLotFinishedGoodLotPortionMapper.class);
 
-    @Mapping(target = "finishedGoodLotId", source = "finishedGoodLot.id")
     FinishedGoodLotPortionDto toDto(FinishedGoodLotFinishedGoodLotPortion finishedGoodLotFinishedGoodLotPortion);
 
     @Mapping(target = FinishedGoodLotPortion.ATTR_ID, ignore = true)

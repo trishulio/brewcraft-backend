@@ -34,8 +34,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
+import io.company.brewcraft.util.SupportedUnits;
 
 @Entity(name = "finished_good_lot")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
@@ -281,6 +283,11 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
             return;
         }
 
+        FinishedGoodLot portionLot = finishedGoodLotPortion.getFinishedGoodLot();
+        if (portionLot != null && portionLot.getId() != null && portionLot.getId() == this.getId() ) {
+            throw new IllegalArgumentException("Self referencing error: Cannot add a finishedGoodLotPortion to the same FinishedGoodLot.");
+        }
+
         if (this.finishedGoodLotPortions == null) {
             this.finishedGoodLotPortions = new ArrayList<>();
         }
@@ -319,7 +326,7 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
-        //IncompatibleQuantityUnitException.validateUnit();
+        IncompatibleQuantityUnitException.validateExpectedUnit(quantity, SupportedUnits.EACH);
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
 
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);

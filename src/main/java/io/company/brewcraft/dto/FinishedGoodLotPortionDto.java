@@ -6,7 +6,7 @@ public class FinishedGoodLotPortionDto extends BaseDto {
 
     private Long id;
 
-    private Long finishedGoodLotId;
+    private FinishedGoodLotDto finishedGoodLot;
 
     private QuantityDto quantity;
 
@@ -21,9 +21,9 @@ public class FinishedGoodLotPortionDto extends BaseDto {
         this.id = id;
     }
 
-    public FinishedGoodLotPortionDto(Long id, Long finishedGoodLotId, QuantityDto quantity, Integer version) {
+    public FinishedGoodLotPortionDto(Long id, FinishedGoodLotDto finishedGoodLot, QuantityDto quantity, Integer version) {
         this(id);
-        this.finishedGoodLotId = finishedGoodLotId;
+        this.finishedGoodLot = finishedGoodLot;
         this.quantity = quantity;
         this.version = version;
     }
@@ -36,12 +36,12 @@ public class FinishedGoodLotPortionDto extends BaseDto {
         this.id = id;
     }
 
-    public Long getFinishedGoodLotId() {
-        return finishedGoodLotId;
+    public FinishedGoodLotDto getFinishedGoodLot() {
+        return finishedGoodLot;
     }
 
-    public void setFinishedGoodLotId(Long finishedGoodLotId) {
-        this.finishedGoodLotId = finishedGoodLotId;
+    public void setFinishedGoodLot(FinishedGoodLotDto finishedGoodLot) {
+        this.finishedGoodLot = finishedGoodLot;
     }
 
     public QuantityDto getQuantity() {
