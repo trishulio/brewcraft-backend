@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.BaseQuantityUnitAccessor;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
@@ -59,5 +60,15 @@ public class IncompatibleQuantityUnitExceptionTest {
     @Test
     public void testValidateCompatibleQuantities_DoesNothing_WhenUnitsAreNotIncompatible() {
         IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 g"), Quantities.getQuantity("10 kg"));
+    }
+
+    @Test
+    public void testValidateExpectedUnit_ThrowsException_WhenUnitIsUnexpected() {
+        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
+    }
+
+    @Test
+    public void testValidateExpectedUnit_DoesNothing_WhenUnitIsExpected() {
+        IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.KILOGRAM));
     }
 }

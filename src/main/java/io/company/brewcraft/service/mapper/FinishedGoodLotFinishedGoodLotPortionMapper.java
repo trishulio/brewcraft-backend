@@ -7,6 +7,7 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.AddFinishedGoodLotPortionDto;
 import io.company.brewcraft.dto.FinishedGoodLotPortionDto;
 import io.company.brewcraft.dto.UpdateFinishedGoodLotPortionDto;
+import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotPortion;
 
@@ -15,18 +16,20 @@ public interface FinishedGoodLotFinishedGoodLotPortionMapper {
 
     FinishedGoodLotFinishedGoodLotPortionMapper INSTANCE = Mappers.getMapper(FinishedGoodLotFinishedGoodLotPortionMapper.class);
 
+    FinishedGoodLot fromDto(Long id);
+
     FinishedGoodLotPortionDto toDto(FinishedGoodLotFinishedGoodLotPortion finishedGoodLotFinishedGoodLotPortion);
 
     @Mapping(target = FinishedGoodLotPortion.ATTR_ID, ignore = true)
     @Mapping(target = FinishedGoodLotPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = FinishedGoodLotPortion.ATTR_LAST_UPDATED, ignore = true)
     @Mapping(target = FinishedGoodLotPortion.ATTR_VERSION, ignore = true)
-    @Mapping(target = "finishedGoodLot.id", source = "finishedGoodLotId")
+    @Mapping(target = "finishedGoodLot", source = "finishedGoodLotId")
     FinishedGoodLotFinishedGoodLotPortion fromDto(AddFinishedGoodLotPortionDto dto);
 
     @Mapping(target = FinishedGoodLotPortion.ATTR_CREATED_AT, ignore = true)
     @Mapping(target = FinishedGoodLotPortion.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = "finishedGoodLot.id", source = "finishedGoodLotId")
+    @Mapping(target = "finishedGoodLot", source = "finishedGoodLotId")
     FinishedGoodLotFinishedGoodLotPortion fromDto(UpdateFinishedGoodLotPortionDto dto);
 
 }
