@@ -56,7 +56,7 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
     @SequenceGenerator(name = "finished_good_lot_generator", sequenceName = "finished_good_lot_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
     private Sku sku;
 
@@ -326,7 +326,7 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
     @Override
     @JsonSetter
     public void setQuantity(Quantity<?> quantity) {
-        IncompatibleQuantityUnitException.validateExpectedUnit(quantity, SupportedUnits.EACH);
+        IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.EACH, quantity);
         quantity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(quantity);
 
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);

@@ -1,16 +1,18 @@
 package io.company.brewcraft.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.criteria.JoinType;
 
 import org.hibernate.annotations.Immutable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.PathProvider;
 
 @Entity(name = "finished_good_inventory")
@@ -42,10 +44,12 @@ public class FinishedGoodInventory extends BaseEntity {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
+    @CriteriaJoin(type = JoinType.LEFT)
     private Sku sku;
 
+    @Column(name = "qty_used_in_sys_unit")
     private Long quantity;
 
     public FinishedGoodInventory() {

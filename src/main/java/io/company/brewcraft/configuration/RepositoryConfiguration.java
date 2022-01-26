@@ -462,7 +462,7 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, FinishedGoodLotFinishedGoodLotPortionAccessor, FinishedGoodLotFinishedGoodLotPortion> finishedGoodFinishedGoodLotPortionAccessorRefresher(FinishedGoodLotFinishedGoodLotPortionRepository repo) {
         return new AccessorRefresher<>(
-                FinishedGoodLotFinishedGoodLotPortion.class,
+            FinishedGoodLotFinishedGoodLotPortion.class,
             accessor -> accessor.getFinishedGoodLotPortion(),
             (accessor, finishedGoodMixturePortion) -> accessor.setFinishedGoodLotPortion(finishedGoodMixturePortion),
             ids -> repo.findAllById(ids)
