@@ -24,6 +24,6 @@ public class FinishedGoodInventoryMapperTest {
         FinishedGoodInventory finishedGoodInventory = new FinishedGoodInventory(1L, new Sku(2L), 50L);
         FinishedGoodInventoryDto dto = finishedGoodInventoryMapper.toDto(finishedGoodInventory);
 
-        assertEquals(new FinishedGoodInventoryDto(new SkuDto(2L), 50L), dto);
+        assertEquals(new FinishedGoodInventoryDto(1L, new SkuDto(2L), 50L), dto);
     }
 }

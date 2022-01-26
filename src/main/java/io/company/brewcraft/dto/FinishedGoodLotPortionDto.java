@@ -1,7 +1,5 @@
 package io.company.brewcraft.dto;
 
-import java.time.LocalDateTime;
-
 public class FinishedGoodLotPortionDto extends BaseDto {
 
     private Long id;

@@ -17,13 +17,13 @@ import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
-public class FinishedGoodMixturePortionTest {
+public class FinishedGoodLotMixturePortionTest {
 
-    private FinishedGoodMixturePortion mixturePortion;
+    private FinishedGoodLotMixturePortion mixturePortion;
 
     @BeforeEach
     public void init() {
-        mixturePortion = new FinishedGoodMixturePortion();
+        mixturePortion = new FinishedGoodLotMixturePortion();
     }
 
     @Test
@@ -31,18 +31,18 @@ public class FinishedGoodMixturePortionTest {
         Long id = 1L;
         Mixture mixture = new Mixture(2L);
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.GRAM);
-        FinishedGood finishedGood = new FinishedGood(3L);
+        FinishedGoodLot finishedGood = new FinishedGoodLot(3L);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        FinishedGoodMixturePortion mixturePortion = new FinishedGoodMixturePortion(id, mixture, quantity, finishedGood, addedAt, created, lastUpdated, version);
+        FinishedGoodLotMixturePortion mixturePortion = new FinishedGoodLotMixturePortion(id, mixture, quantity, finishedGood, addedAt, created, lastUpdated, version);
 
         assertEquals(1L, mixturePortion.getId());
         assertEquals(new Mixture(2L), mixturePortion.getMixture());
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.GRAM), mixturePortion.getQuantity());
-        assertEquals(new FinishedGood(3L), mixturePortion.getFinishedGood());
+        assertEquals(new FinishedGoodLot(3L), mixturePortion.getFinishedGoodLot());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixturePortion.getAddedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), mixturePortion.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), mixturePortion.getLastUpdated());
@@ -87,8 +87,8 @@ public class FinishedGoodMixturePortionTest {
 
     @Test
     public void testGetSetFinishedGood() {
-        mixturePortion.setFinishedGood(new FinishedGood(5L));
-        assertEquals(new FinishedGood(5L), mixturePortion.getFinishedGood());
+        mixturePortion.setFinishedGoodLot(new FinishedGoodLot(5L));
+        assertEquals(new FinishedGoodLot(5L), mixturePortion.getFinishedGoodLot());
     }
 
     @Test
@@ -124,13 +124,13 @@ public class FinishedGoodMixturePortionTest {
         Long id = 1L;
         Mixture mixture = new Mixture(2L);
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.GRAM);
-        FinishedGood finishedGood = new FinishedGood(3L);
+        FinishedGoodLot finishedGood = new FinishedGoodLot(3L);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        FinishedGoodMixturePortion mixturePortion = new FinishedGoodMixturePortion(id, mixture, quantity, finishedGood, addedAt, created, lastUpdated, version);
+        FinishedGoodLotMixturePortion mixturePortion = new FinishedGoodLotMixturePortion(id, mixture, quantity, finishedGood, addedAt, created, lastUpdated, version);
 
         final String json = "{\"id\":1,\"mixture\":{\"id\":2,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"g\",\"value\":100},\"addedAt\":\"2018-01-02T03:04:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, mixturePortion.toString(), JSONCompareMode.NON_EXTENSIBLE);
