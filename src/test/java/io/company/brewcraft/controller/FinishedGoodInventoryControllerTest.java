@@ -18,6 +18,8 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.SkuDto;
 import io.company.brewcraft.model.FinishedGoodInventory;
 import io.company.brewcraft.model.Sku;
+import io.company.brewcraft.service.AggregationFunction;
+import io.company.brewcraft.service.FinishedGoodInventoryAggregationFieldCollection;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
 import io.company.brewcraft.util.SupportedUnits;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -51,6 +53,8 @@ public class FinishedGoodInventoryControllerTest {
        doReturn(1000L).when(mPage).getTotalElements();
        doReturn(mPage).when(this.finishedGoodInventoryService).getAll(
            Set.of(1L),
+           AggregationFunction.SUM,
+           FinishedGoodInventoryAggregationFieldCollection.ID.getFields(),
            1,
            10,
            new TreeSet<>(List.of("id")),
@@ -59,6 +63,8 @@ public class FinishedGoodInventoryControllerTest {
 
        PageDto<FinishedGoodInventoryDto> dto = this.finishedGoodInventoryController.getFinishedGoodInventory(
            Set.of(1L),
+           AggregationFunction.SUM,
+           FinishedGoodInventoryAggregationFieldCollection.ID,
            new TreeSet<>(List.of("id")),
            true,
            1,

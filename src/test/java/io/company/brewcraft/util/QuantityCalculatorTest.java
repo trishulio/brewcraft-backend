@@ -144,4 +144,14 @@ public class QuantityCalculatorTest {
     public void testAreCompatibleQuantities_ReturnsFalse_WhenQuantitiesHaveIncompatibleUnits() {
         assertFalse(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), Quantities.getQuantity("10 l")));
     }
+
+    @Test
+    public void testIsExpectedUnit_ReturnsTrue_WhenUnitIsExpected() {
+        assertTrue(calc.isExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.KILOGRAM)));
+    }
+
+    @Test
+    public void testIsExpectedUnit_ReturnsFalse_WhenUnitIsNotExpected() {
+        assertFalse(calc.isExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
+    }
 }

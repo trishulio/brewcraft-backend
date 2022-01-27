@@ -20,13 +20,21 @@ public class FinishedGoodInventoryDtoTest {
 
     @Test
     public void testConstructor() {
+        Long id = 1L;
         SkuDto skuDto = new SkuDto(1L);
         Long quantity = 50L;
 
-        FinishedGoodInventoryDto finishedGoodInventoryDto = new FinishedGoodInventoryDto(skuDto, quantity);
+        FinishedGoodInventoryDto finishedGoodInventoryDto = new FinishedGoodInventoryDto(id, skuDto, quantity);
 
+        assertEquals(1L, finishedGoodInventoryDto.getId());
         assertEquals(new SkuDto(1L), finishedGoodInventoryDto.getSku());
         assertEquals(new QuantityDto(SupportedUnits.EACH.getSymbol(), new BigDecimal(50L)), finishedGoodInventoryDto.getQuantity());
+    }
+
+    @Test
+    public void testGetSetId() {
+        finishedGoodInventoryDto.setId(1L);
+        assertEquals(1L, finishedGoodInventoryDto.getId());
     }
 
     @Test

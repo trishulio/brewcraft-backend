@@ -7,6 +7,7 @@ import javax.measure.quantity.Mass;
 import javax.measure.quantity.Volume;
 
 import io.company.brewcraft.model.BaseQuantityUnitAccessor;
+import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import tec.uom.se.quantity.Quantities;
 
 public class QuantityCalculator {
@@ -95,5 +96,16 @@ public class QuantityCalculator {
         }
 
         return areCompatible;
+    }
+
+    public boolean isExpectedUnit(Unit<?> expectedUnit, Quantity<?> quantity) {
+        boolean isExpectedUnit = false;
+
+        Unit<?> quantityUnit = quantity != null ? quantity.getUnit() : null;
+        if (quantityUnit == expectedUnit) {
+            isExpectedUnit = true;
+        }
+
+        return isExpectedUnit;
     }
 }

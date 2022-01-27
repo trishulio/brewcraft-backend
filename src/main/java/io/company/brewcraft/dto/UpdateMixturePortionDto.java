@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 
 public class UpdateMixturePortionDto extends BaseDto {
 
+    private Long id;
+
     private Long mixtureId;
 
     private QuantityDto quantity;
@@ -15,11 +17,20 @@ public class UpdateMixturePortionDto extends BaseDto {
         super();
     }
 
-    public UpdateMixturePortionDto(Long mixtureId, QuantityDto quantity, Integer version) {
+    public UpdateMixturePortionDto(Long id, Long mixtureId, QuantityDto quantity, Integer version) {
         this();
+        this.id = id;
         this.mixtureId = mixtureId;
         this.quantity = quantity;
         this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getMixtureId() {

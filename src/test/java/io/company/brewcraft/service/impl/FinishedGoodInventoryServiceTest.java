@@ -1,63 +1,69 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.model.FinishedGoodInventory;
-import io.company.brewcraft.model.Sku;
-import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
+import io.company.brewcraft.service.AggregationFunction;
+import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
 import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
 
 public class FinishedGoodInventoryServiceTest {
    private FinishedGoodInventoryService finishedGoodInventoryService;
 
-   private FinishedGoodInventoryRepository finishedGoodInventoryRepository;
+   private AggregationService mAggrService;
 
    @BeforeEach
    public void init() {
-       this.finishedGoodInventoryRepository = mock(FinishedGoodInventoryRepository.class);
+       this.mAggrService = mock(AggregationService.class);
 
-       this.finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(this.finishedGoodInventoryRepository);
+       this.finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(this.mAggrService);
    }
 
    @Test
    public void testGetSkus_ReturnsEntitiesFromRepoService_WithCustomSpec() {
-       FinishedGoodInventory finishedGoodInventoryEntity = new FinishedGoodInventory(1L, new Sku(2L), 50L);
+       ArgumentCaptor<Specification<FinishedGoodInventory>> captor = ArgumentCaptor.forClass(Specification.class);
 
-       List<FinishedGoodInventory> finishedGoodInventoryEntities = Arrays.asList(finishedGoodInventoryEntity);
+       doReturn(new PageImpl<>(List.of(new FinishedGoodInventory(1L)))).when(mAggrService).getAggregation(
+           eq(FinishedGoodInventory.class),
+           captor.capture(),
+           eq(AggregationFunction.SUM),
+           eq(FinishedGoodInventory.AggregationField.QUANTITY),
+           eq(new FinishedGoodInventory.AggregationField[] { FinishedGoodInventory.AggregationField.ID }),
+           eq(new TreeSet<>(List.of("id"))),
+           eq(true),
+           eq(1),
+           eq(10)
+       );
 
-       Page<FinishedGoodInventory> expectedPage = new PageImpl<>(finishedGoodInventoryEntities);
+       Page<FinishedGoodInventory> page = this.finishedGoodInventoryService.getAll(
+           Set.of(1L), // ski_ids
+           AggregationFunction.SUM, // aggrFn
+           new FinishedGoodInventory.AggregationField[] { FinishedGoodInventory.AggregationField.ID }, // groupBy
+           1, // page
+           10, // size
+           new TreeSet<>(List.of("id")), // sort
+           true // orderAscending
+       );
 
-       ArgumentCaptor<Pageable> pageableArgument = ArgumentCaptor.forClass(Pageable.class);
+       Page<FinishedGoodInventory> expected = new PageImpl<>(List.of(new FinishedGoodInventory(1L)));
 
-       when(finishedGoodInventoryRepository.findAll(ArgumentMatchers.<Specification<FinishedGoodInventory>>any(), pageableArgument.capture())).thenReturn(expectedPage);
+       assertEquals(expected, page);
 
-       Page<FinishedGoodInventory> actualPage = finishedGoodInventoryService.getAll(null, 0, 100, new TreeSet<>(List.of("id")), true);
-
-       assertEquals(0, pageableArgument.getValue().getPageNumber());
-       assertEquals(100, pageableArgument.getValue().getPageSize());
-       assertEquals(true, pageableArgument.getValue().getSort().get().findFirst().get().isAscending());
-       assertEquals("id", pageableArgument.getValue().getSort().get().findFirst().get().getProperty());
-       assertEquals(1, actualPage.getNumberOfElements());
-
-       FinishedGoodInventory actualFinishedGoodInventory = actualPage.get().findFirst().get();
-
-       assertEquals(finishedGoodInventoryEntity.getId(), actualFinishedGoodInventory.getId());
-       assertEquals(finishedGoodInventoryEntity.getSku(), actualFinishedGoodInventory.getSku());
-       assertEquals(finishedGoodInventoryEntity.getQuantity(), actualFinishedGoodInventory.getQuantity());
+       captor.getValue();
+       // TODO: Validate the specification.
    }
 }

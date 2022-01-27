@@ -19,13 +19,15 @@ public class UpdateMaterialPortionDtoTest {
 
     @Test
     public void testConstructor() {
+        Long id = 1L;
         Long materialLotId = 2L;
         QuantityDto quantityDto = new QuantityDto("kg", new BigDecimal("100"));
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
 
-        UpdateMaterialPortionDto updateMaterialPortionBaseDto = new UpdateMaterialPortionDto(materialLotId, quantityDto, addedAt, version);
+        UpdateMaterialPortionDto updateMaterialPortionBaseDto = new UpdateMaterialPortionDto(id, materialLotId, quantityDto, addedAt, version);
 
+        assertEquals(1L, updateMaterialPortionBaseDto.getId());
         assertEquals(2L, updateMaterialPortionBaseDto.getMaterialLotId());
         assertEquals(new QuantityDto("kg", new BigDecimal("100")), updateMaterialPortionBaseDto.getQuantity());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), updateMaterialPortionBaseDto.getAddedAt());
@@ -33,9 +35,14 @@ public class UpdateMaterialPortionDtoTest {
     }
 
     @Test
+    public void testGetSetId() {
+        updateMaterialPortionBaseDto.setId(1L);
+        assertEquals(1L, updateMaterialPortionBaseDto.getId());
+    }
+
+    @Test
     public void testGetSetMaterialLotId() {
         updateMaterialPortionBaseDto.setMaterialLotId(3L);
-
         assertEquals(3L, updateMaterialPortionBaseDto.getMaterialLotId());
     }
 

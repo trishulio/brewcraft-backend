@@ -76,7 +76,7 @@ public class SkuMaterialTest {
     }
 
     @Test
-    public void testGetSeQuantity() {
+    public void testGetSetQuantity() {
         skuMaterial.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), skuMaterial.getQuantity());
     }

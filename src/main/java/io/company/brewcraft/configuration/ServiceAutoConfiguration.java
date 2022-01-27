@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.dto.BaseInvoice;
-import io.company.brewcraft.dto.UpdateFinishedGood;
+import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
-import io.company.brewcraft.model.BaseFinishedGood;
-import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
-import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
+import io.company.brewcraft.model.BaseFinishedGoodLot;
+import io.company.brewcraft.model.BaseFinishedGoodLotFinishedGoodLotPortion;
+import io.company.brewcraft.model.BaseFinishedGoodLotMaterialPortion;
+import io.company.brewcraft.model.BaseFinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseMixtureMaterialPortion;
@@ -24,9 +25,10 @@ import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
-import io.company.brewcraft.model.FinishedGood;
-import io.company.brewcraft.model.FinishedGoodMaterialPortion;
-import io.company.brewcraft.model.FinishedGoodMixturePortion;
+import io.company.brewcraft.model.FinishedGoodLot;
+import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
+import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
+import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -40,8 +42,9 @@ import io.company.brewcraft.model.ShipmentAccessor;
 import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
-import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
-import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
+import io.company.brewcraft.model.UpdateFinishedGoodLotFinishedGoodLotPortion;
+import io.company.brewcraft.model.UpdateFinishedGoodLotMaterialPortion;
+import io.company.brewcraft.model.UpdateFinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
@@ -62,8 +65,7 @@ import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.EquipmentRepository;
 import io.company.brewcraft.repository.FacilityRepository;
-import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
-import io.company.brewcraft.repository.FinishedGoodRepository;
+import io.company.brewcraft.repository.FinishedGoodLotRepository;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
 import io.company.brewcraft.repository.MaterialCategoryRepository;
@@ -101,12 +103,13 @@ import io.company.brewcraft.service.BrewTaskServiceImpl;
 import io.company.brewcraft.service.CrudRepoService;
 import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.FacilityService;
-import io.company.brewcraft.service.FinishedGoodAccessor;
+import io.company.brewcraft.service.FinishedGoodLotAccessor;
+import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionService;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
 import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
-import io.company.brewcraft.service.FinishedGoodMaterialPortionService;
-import io.company.brewcraft.service.FinishedGoodMixturePortionService;
-import io.company.brewcraft.service.FinishedGoodService;
+import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
+import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
+import io.company.brewcraft.service.FinishedGoodLotService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
@@ -441,30 +444,36 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    public FinishedGoodMaterialPortionService finishedGoodMaterialPortionService(UtilityProvider utilProvider) {
-        final UpdateService<Long, FinishedGoodMaterialPortion, BaseFinishedGoodMaterialPortion<?>, UpdateFinishedGoodMaterialPortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMaterialPortion.class, UpdateFinishedGoodMaterialPortion.class, FinishedGoodMaterialPortion.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
-        return new FinishedGoodMaterialPortionService(updateService);
+    public FinishedGoodLotMaterialPortionService finishedGoodMaterialPortionService(UtilityProvider utilProvider) {
+        final UpdateService<Long, FinishedGoodLotMaterialPortion, BaseFinishedGoodLotMaterialPortion<?>, UpdateFinishedGoodLotMaterialPortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotMaterialPortion.class, UpdateFinishedGoodLotMaterialPortion.class, FinishedGoodLotMaterialPortion.class, Set.of(BaseFinishedGoodLotMaterialPortion.ATTR_FINISHED_GOOD_LOT));
+        return new FinishedGoodLotMaterialPortionService(updateService);
     }
 
     @Bean
-    public FinishedGoodMixturePortionService finishedGoodMixturePortionService(UtilityProvider utilProvider) {
-        final UpdateService<Long, FinishedGoodMixturePortion, BaseFinishedGoodMixturePortion<?>, UpdateFinishedGoodMixturePortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodMixturePortion.class, UpdateFinishedGoodMixturePortion.class, FinishedGoodMixturePortion.class, Set.of(BaseFinishedGoodMixturePortion.ATTR_FINISHED_GOOD));
-        return new FinishedGoodMixturePortionService(updateService);
+    public FinishedGoodLotMixturePortionService finishedGoodMixturePortionService(UtilityProvider utilProvider) {
+        final UpdateService<Long, FinishedGoodLotMixturePortion, BaseFinishedGoodLotMixturePortion<?>, UpdateFinishedGoodLotMixturePortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotMixturePortion.class, UpdateFinishedGoodLotMixturePortion.class, FinishedGoodLotMixturePortion.class, Set.of(BaseFinishedGoodLotMixturePortion.ATTR_FINISHED_GOOD_LOT));
+        return new FinishedGoodLotMixturePortionService(updateService);
     }
 
     @Bean
-    @ConditionalOnMissingBean(FinishedGoodService.class)
-    public FinishedGoodService finishedGoodService(UtilityProvider utilProvider, FinishedGoodMixturePortionService fgMixturePortionService, FinishedGoodMaterialPortionService fgMaterialPortionService, final FinishedGoodRepository finishedGoodRepository, Refresher<FinishedGood, FinishedGoodAccessor> finishedGoodRefresher) {
-        final UpdateService<Long, FinishedGood, BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>, UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGood.class, UpdateFinishedGood.class, FinishedGood.class, Set.of(BaseFinishedGoodMaterialPortion.ATTR_FINISHED_GOOD));
+    public FinishedGoodLotFinishedGoodLotPortionService finishedGoodLotFinishedGoodLotPortionService(UtilityProvider utilProvider) {
+        final UpdateService<Long, FinishedGoodLotFinishedGoodLotPortion, BaseFinishedGoodLotFinishedGoodLotPortion, UpdateFinishedGoodLotFinishedGoodLotPortion> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotFinishedGoodLotPortion.class, UpdateFinishedGoodLotFinishedGoodLotPortion.class, FinishedGoodLotFinishedGoodLotPortion.class, Set.of(BaseFinishedGoodLotFinishedGoodLotPortion.ATTR_FINISHED_GOOD_LOT_TARGET));
+        return new FinishedGoodLotFinishedGoodLotPortionService(updateService);
+    }
 
-        final RepoService<Long, FinishedGood, FinishedGoodAccessor> repoService = new CrudRepoService<>(finishedGoodRepository, finishedGoodRefresher);
-        return new FinishedGoodService(updateService, fgMixturePortionService, fgMaterialPortionService, repoService);
+    @Bean
+    @ConditionalOnMissingBean(FinishedGoodLotService.class)
+    public FinishedGoodLotService finishedGoodService(UtilityProvider utilProvider, FinishedGoodLotMixturePortionService fgMixturePortionService, FinishedGoodLotMaterialPortionService fgMaterialPortionService, FinishedGoodLotFinishedGoodLotPortionService fgLotFinishedGoodPortionService, final FinishedGoodLotRepository finishedGoodRepository, Refresher<FinishedGoodLot, FinishedGoodLotAccessor> finishedGoodRefresher) {
+        final UpdateService<Long, FinishedGoodLot, BaseFinishedGoodLot<? extends BaseFinishedGoodLotMixturePortion<?>, ? extends BaseFinishedGoodLotMaterialPortion<?>>, UpdateFinishedGoodLot<? extends UpdateFinishedGoodLotMixturePortion<?>, ? extends UpdateFinishedGoodLotMaterialPortion<?>>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLot.class, UpdateFinishedGoodLot.class, FinishedGoodLot.class, Set.of(BaseFinishedGoodLotMaterialPortion.ATTR_FINISHED_GOOD_LOT));
+
+        final RepoService<Long, FinishedGoodLot, FinishedGoodLotAccessor> repoService = new CrudRepoService<>(finishedGoodRepository, finishedGoodRefresher);
+        return new FinishedGoodLotService(updateService, fgMixturePortionService, fgMaterialPortionService, fgLotFinishedGoodPortionService, repoService);
     }
 
     @Bean
     @ConditionalOnMissingBean(FinishedGoodInventoryService.class)
-    public FinishedGoodInventoryService finishedGoodInventoryService(FinishedGoodInventoryRepository finishedGoodInventoryRepository) {
-        final FinishedGoodInventoryService finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(finishedGoodInventoryRepository);
+    public FinishedGoodInventoryService finishedGoodInventoryService(AggregationService aggrService) {
+        final FinishedGoodInventoryService finishedGoodInventoryService = new FinishedGoodInventoryServiceImpl(aggrService);
         return finishedGoodInventoryService;
     }
 }
