@@ -38,8 +38,8 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
     public Page<FinishedGoodInventoryAggregation> getAllAggregation(Set<Long> skuIds, AggregationFunction aggrFn, FinishedGoodInventoryAggregation.AggregationField[] groupBy,
             int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<FinishedGoodInventoryAggregation> spec = WhereClauseBuilder.builder()
-                                                                      .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
-                                                                      .build();
+                                                                                 .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                                                                 .build();
 
         return this.aggrService.getAggregation(FinishedGoodInventoryAggregation.class, spec, aggrFn, FinishedGoodInventoryAggregation.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);
     }
@@ -59,17 +59,16 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
             int page,
             int size
          ) {
-        final Specification<FinishedGoodInventory> spec = WhereClauseBuilder
-                                            .builder()
-                                            .in(FinishedGoodInventory.FIELD_ID, ids)
-                                            .not().in(FinishedGoodInventory.FIELD_ID, excludeIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_SKU, Sku.FIELD_ID }, skuIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_BATCH_ID }, brewBatchIds)
-                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_PRODUCT, Product.FIELD_ID }, productIds)
-                                            .build();
+        final Specification<FinishedGoodInventory> spec = WhereClauseBuilder.builder()
+                                                                            .in(FinishedGoodInventory.FIELD_ID, ids)
+                                                                            .not().in(FinishedGoodInventory.FIELD_ID, excludeIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_ID }, brewIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_BATCH_ID }, brewBatchIds)
+                                                                            .in(new String[] { FinishedGoodInventory.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_BREW, Brew.FIELD_PRODUCT, Product.FIELD_ID }, productIds)
+                                                                            .build();
 
         return finishedGoodInventoryRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));
     }
