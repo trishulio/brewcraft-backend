@@ -1,10 +1,11 @@
 package io.company.brewcraft.model;
 
-import javax.persistence.Column;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.measure.Quantity;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.criteria.JoinType;
 
@@ -13,90 +14,65 @@ import org.hibernate.annotations.Immutable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.CriteriaJoin;
-import io.company.brewcraft.service.PathProvider;
 
 @Entity(name = "finished_good_inventory")
-@Table
+@Table(name = "finished_good_inventory")
 @Immutable
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class FinishedGoodInventory extends BaseEntity {
-    public enum AggregationField implements PathProvider {
-        ID (FIELD_ID),
-        SKU (FIELD_SKU),
-        QUANTITY (FIELD_QUANTITY);
+public class FinishedGoodInventory extends BaseFinishedGoodInventory {
 
-        private final String[] path;
+    public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
+    public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
+    public static final String FIELD_FINISHED_GOOD_LOT_PORTIONS = "finishedGoodLotPortions";
 
-        private AggregationField(String... path) {
-            this.path = path;
-        }
-
-        @Override
-        public String[] getPath() {
-            return this.path;
-        }
-    }
-
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SKU = "sku";
-    public static final String FIELD_QUANTITY = "quantity";
-
-    @Id
-    private Long id;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "sku_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "finishedGoodLot")
     @CriteriaJoin(type = JoinType.LEFT)
-    private Sku sku;
+    private List<FinishedGoodLotMixturePortion> mixturePortions;
 
-    @Column(name = "qty_used_in_sys_unit")
-    private Long quantity;
+    @OneToMany(mappedBy = "finishedGoodLot")
+    @CriteriaJoin(type = JoinType.LEFT)
+    private List<FinishedGoodLotMaterialPortion> materialPortions;
+
+    @OneToMany(mappedBy = "finishedGoodLotTarget")
+    @CriteriaJoin(type = JoinType.LEFT)
+    private List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions;
 
     public FinishedGoodInventory() {
         super();
     }
 
     public FinishedGoodInventory(Long id) {
-        this();
-        this.id = id;
+        super(id);
     }
 
-    public FinishedGoodInventory(Long id, Sku sku, Long quantity) {
-        this(id);
-        this.sku = sku;
-        this.quantity = quantity;
+    public FinishedGoodInventory(Long id, Sku sku, List<FinishedGoodLotMixturePortion> mixturePortions, List<FinishedGoodLotMaterialPortion> materialPortions, List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions, Quantity<?> quantity, LocalDateTime packagedOn) {
+        super(id, sku, quantity, packagedOn);
+        this.mixturePortions = mixturePortions;
+        this.materialPortions = materialPortions;
+        this.finishedGoodLotPortions = finishedGoodLotPortions;
     }
 
-    public FinishedGoodInventory(Sku sku) {
-        this.sku = sku;
+    public List<FinishedGoodLotMixturePortion> getMixturePortions() {
+        return mixturePortions;
     }
 
-    public FinishedGoodInventory(Sku sku, Long quantity) {
-        this.sku = sku;
-        this.quantity = quantity;
+    public void setMixturePortions(List<FinishedGoodLotMixturePortion> mixturePortions) {
+        this.mixturePortions = mixturePortions;
     }
 
-    public Long getId() {
-        return id;
+    public List<FinishedGoodLotFinishedGoodLotPortion> getFinishedGoodLotPortions() {
+        return finishedGoodLotPortions;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFinishedGoodLotPortions(List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions) {
+        this.finishedGoodLotPortions = finishedGoodLotPortions;
     }
 
-    public Sku getSku() {
-        return sku;
+    public List<FinishedGoodLotMaterialPortion> getMaterialPortions() {
+        return materialPortions;
     }
 
-    public void setSku(Sku sku) {
-        this.sku = sku;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
+    public void setMaterialPortions(List<FinishedGoodLotMaterialPortion> materialPortions) {
+        this.materialPortions = materialPortions;
     }
 }

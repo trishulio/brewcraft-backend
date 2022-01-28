@@ -16,6 +16,7 @@ import io.company.brewcraft.repository.BrewStageRefresher;
 import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
+import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
 import io.company.brewcraft.repository.FinishedGoodLotRefresher;
 import io.company.brewcraft.repository.FinishedGoodLotRepository;
 import io.company.brewcraft.repository.InvoiceRefresher;
@@ -366,8 +367,9 @@ public class ServiceAutoConfigurationTest {
     @Test
     public void testFinishedGoodInventoryervice_ReturnsInstanceOfFinishedGoodInventoryService() {
         final AggregationService mAggrService = mock(AggregationService.class);
+        final FinishedGoodInventoryRepository mFinishedGoodInventoryRepo = mock(FinishedGoodInventoryRepository.class);
 
-        final FinishedGoodInventoryService service = this.serviceAutoConfiguration.finishedGoodInventoryService(mAggrService);
+        final FinishedGoodInventoryService service = this.serviceAutoConfiguration.finishedGoodInventoryService(mAggrService, mFinishedGoodInventoryRepo);
 
         assertTrue(service instanceof FinishedGoodInventoryServiceImpl);
     }
