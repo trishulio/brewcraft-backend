@@ -34,7 +34,7 @@ public class FinishedGoodInventory extends BaseFinishedGoodInventory {
     private List<FinishedGoodLotMaterialPortion> materialPortions;
 
     @OneToMany(mappedBy = "finishedGoodLotTarget")
-    @CriteriaJoin(type = JoinType.LEFT)
+    @CriteriaJoin
     private List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions;
 
     public FinishedGoodInventory() {
