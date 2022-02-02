@@ -40,7 +40,7 @@ public class FinishedGoodInventoryController extends BaseController {
         this.finishedGoodInventoryService = finishedGoodInventoryService;
     }
 
-    @GetMapping(value = "/stock", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/stock/quantity", consumes = MediaType.ALL_VALUE)
     public PageDto<FinishedGoodInventoryAggregationDto> getAllAggregation(
         @RequestParam(required = false, name = "sku_ids") Set<Long> skuIds,
         @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
