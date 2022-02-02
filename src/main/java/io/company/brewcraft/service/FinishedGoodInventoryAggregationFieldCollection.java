@@ -1,14 +1,14 @@
 package io.company.brewcraft.service;
 
-import io.company.brewcraft.model.FinishedGoodInventory.AggregationField;
+import io.company.brewcraft.model.FinishedGoodInventoryAggregation.AggregationField;
 
 public enum FinishedGoodInventoryAggregationFieldCollection {
     /**
      * The order of the values should match the FinishedGoodInventory constructors
      */
-    ID(AggregationField.ID, AggregationField.SKU),
+    ID(AggregationField.ID, AggregationField.SKU, AggregationField.PACKAGED_ON, AggregationField.QUANTITY_UNIT),
 
-    SKU(AggregationField.SKU);
+    SKU(AggregationField.SKU, AggregationField.QUANTITY_UNIT);
 
     private AggregationField[] fields;
 
