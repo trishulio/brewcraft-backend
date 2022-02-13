@@ -38,12 +38,12 @@ public class AddUserDto extends BaseDto {
     @NotEmpty
     private List<Long> roleIds;
 
-    private String imageUrl;
+    private String imageSrc;
 
     public AddUserDto() {
     }
 
-    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageUrl, List<Long> roleIds) {
+    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageSrc, List<Long> roleIds) {
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -52,7 +52,7 @@ public class AddUserDto extends BaseDto {
         setStatusId(statusId);
         setSalutationId(salutationId);
         setPhoneNumber(phoneNumber);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setRoleIds(roleIds);
     }
 
@@ -128,11 +128,11 @@ public class AddUserDto extends BaseDto {
         this.roleIds = roleIds;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageSrc() {
+        return imageSrc;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }

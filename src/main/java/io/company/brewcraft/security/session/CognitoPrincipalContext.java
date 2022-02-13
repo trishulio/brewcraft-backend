@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import io.company.brewcraft.model.IaasAuthorizationCredentials;
+
 public class CognitoPrincipalContext implements PrincipalContext {
     public static final String CLAIM_GROUPS = "cognito:groups";
     public static final String CLAIM_USERNAME = "username";
@@ -13,9 +15,13 @@ public class CognitoPrincipalContext implements PrincipalContext {
     public static final String ATTRIBUTE_EMAIL_VERIFIED = "email_verified";
 
     private Jwt jwt;
+    private IaasAuthorizationCredentials iaasToken;
 
-    public CognitoPrincipalContext(Jwt jwt) {
+    public CognitoPrincipalContext(Jwt jwt, String iaasToken) {
         this.jwt = jwt;
+        if (iaasToken != null) {
+            this.iaasToken = new IaasAuthorizationCredentials(iaasToken);
+        }
     }
 
     @Override
@@ -37,5 +43,10 @@ public class CognitoPrincipalContext implements PrincipalContext {
     @Override
     public List<String> getRoles() {
         return Arrays.asList(this.jwt.getClaimAsString(CLAIM_SCOPE).split(" "));
+    }
+    
+    @Override
+    public IaasAuthorizationCredentials getIaasToken() {
+        return this.iaasToken;
     }
 }

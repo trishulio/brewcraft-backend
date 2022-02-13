@@ -41,7 +41,7 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageUrl",
+            "imageSrc",
             List.of(10L)
         );
 
@@ -55,7 +55,7 @@ public class UserMapperTest {
             "lastName",
             "email",
             "phoneNumber",
-            "imageUrl",
+            "imageSrc",
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),
@@ -82,7 +82,7 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageUrl",
+            "imageSrc",
             List.of(10L),
             1
         );
@@ -97,7 +97,7 @@ public class UserMapperTest {
             "lastName",
             null,
             "phoneNumber",
-            "imageUrl",
+            "imageSrc",
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),

@@ -27,6 +27,7 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.dto.UpdateProductDto;
 import io.company.brewcraft.model.Product;
+import io.company.brewcraft.service.ProductDtoDecorator;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.ProductMapper;
@@ -38,12 +39,13 @@ import io.company.brewcraft.util.validator.Validator;
 public class ProductController extends BaseController {
 
     private ProductService productService;
-
     private ProductMapper productMapper = ProductMapper.INSTANCE;
+    private ProductDtoDecorator decorator;
 
-    public ProductController(ProductService productService, AttributeFilter filter) {
+    public ProductController(ProductService productService, AttributeFilter filter, ProductDtoDecorator decorator) {
         super(filter);
         this.productService = productService;
+        this.decorator = decorator;
     }
 
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
@@ -63,8 +65,9 @@ public class ProductController extends BaseController {
                                                     .map(product -> productMapper.toDto(product))
                                                     .collect(Collectors.toList());
 
+        this.decorator.decorate(productsList);
         PageDto<ProductDto> dto = new PageDto<ProductDto>(productsList, productsPage.getTotalPages(), productsPage.getTotalElements());
-
+        
         return dto;
     }
 
@@ -74,7 +77,11 @@ public class ProductController extends BaseController {
 
         Validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
 
-        return productMapper.toDto(product);
+        ProductDto dto = productMapper.toDto(product);
+        
+        this.decorator.decorate(List.of(dto));
+        
+        return dto;
     }
 
     @PostMapping("")
@@ -84,7 +91,10 @@ public class ProductController extends BaseController {
 
         Product addedProduct = productService.addProduct(product, addProductDto.getCategoryId());
 
-        return productMapper.toDto(addedProduct);
+        ProductDto dto = productMapper.toDto(addedProduct);
+        this.decorator.decorate(List.of(dto));
+        
+        return dto;
     }
 
     @PutMapping("/{productId}")
@@ -93,7 +103,10 @@ public class ProductController extends BaseController {
 
         Product putProduct = productService.putProduct(productId, product, updateProductDto.getCategoryId());
 
-        return productMapper.toDto(putProduct);
+        ProductDto dto = productMapper.toDto(putProduct);
+        this.decorator.decorate(List.of(dto));
+
+        return dto;
     }
 
     @PatchMapping("/{productId}")
@@ -102,7 +115,10 @@ public class ProductController extends BaseController {
 
         Product patchedProduct = productService.patchProduct(productId, product, updateProductDto.getCategoryId());
 
-        return productMapper.toDto(patchedProduct);
+        ProductDto dto = productMapper.toDto(patchedProduct);
+        this.decorator.decorate(List.of(dto));
+        
+        return dto;
     }
 
     @DeleteMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)

@@ -43,7 +43,7 @@ public class UserTest {
         assertEquals("LAST_NAME", user.getLastName());
         assertEquals("EMAIL", user.getEmail());
         assertEquals("PHONE_NUMBER", user.getPhoneNumber());
-        assertEquals("IMAGE_URL", user.getImageUrl());
+        assertEquals("IMAGE_URL", user.getImageSrc());
         assertEquals(new UserStatus(1L), user.getStatus());
         assertEquals(new UserSalutation(2L), user.getSalutation());
         assertEquals(List.of(new UserRole(3L)), user.getRoles());
@@ -95,10 +95,10 @@ public class UserTest {
     }
 
     @Test
-    public void testAccessImageUrl() {
-        assertNull(user.getImageUrl());
-        user.setImageUrl("imageUrl");
-        assertEquals("imageUrl", user.getImageUrl());
+    public void testAccessImageSrc() {
+        assertNull(user.getImageSrc());
+        user.setImageSrc("imageSrc");
+        assertEquals("imageSrc", user.getImageSrc());
     }
 
     @Test

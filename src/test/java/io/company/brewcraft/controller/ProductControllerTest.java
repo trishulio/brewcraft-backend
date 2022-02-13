@@ -1,7 +1,8 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasureValue;
+import io.company.brewcraft.service.ProductDtoDecorator;
 import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -33,14 +35,16 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 public class ProductControllerTest {
 
    private ProductController productController;
+   private ProductDtoDecorator decorator;
 
    private ProductService productService;
 
    @BeforeEach
    public void init() {
        productService = mock(ProductService.class);
+       decorator = mock(ProductDtoDecorator.class);
 
-       productController = new ProductController(productService, new AttributeFilter());
+       productController = new ProductController(productService, new AttributeFilter(), decorator);
    }
 
    @Test

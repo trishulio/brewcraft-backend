@@ -12,6 +12,7 @@ import io.company.brewcraft.dto.TenantDto;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.repository.TenantRepository;
+import io.company.brewcraft.service.TenantIaasService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -21,14 +22,15 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     private static final Logger log = LoggerFactory.getLogger(TenantManagementServiceImpl.class);
 
     private TenantRepository tenantRepository;
-
     private MigrationManager migrationManager;
+    private TenantIaasService iaasService;
 
     private TenantMapper tenantMapper;
 
-    public TenantManagementServiceImpl(TenantRepository tenantRepository, MigrationManager migrationManager, TenantMapper tenantMapper) {
+    public TenantManagementServiceImpl(TenantRepository tenantRepository, MigrationManager migrationManager, TenantIaasService iaasService, TenantMapper tenantMapper) {
         this.tenantRepository = tenantRepository;
         this.migrationManager = migrationManager;
+        this.iaasService = iaasService;
         this.tenantMapper = tenantMapper;
     }
 
@@ -54,6 +56,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
 
         try {
             migrationManager.migrate(tenantId);
+//            iaasService.put(List.of(tenant));
         } catch (Exception e) {
             tenantRepository.deleteById(tenant.getId());
             throw new EntityNotFoundException(null, null);
@@ -68,7 +71,8 @@ public class TenantManagementServiceImpl implements TenantManagementService {
         tenantToUpdate.setName(tenantDto.getName());
         tenantToUpdate.setUrl(tenantDto.getUrl());
 
-        tenantRepository.save(tenantToUpdate);
+        Tenant tenant = tenantRepository.save(tenantToUpdate);
+//        iaasService.put(List.of(tenant));
     }
 
     @Override
@@ -77,5 +81,6 @@ public class TenantManagementServiceImpl implements TenantManagementService {
 
 //        TODO
 //        migrationManager.demigrate()
+//        iaasService.delete(List.of(new Tenant(id)));
     }
 }

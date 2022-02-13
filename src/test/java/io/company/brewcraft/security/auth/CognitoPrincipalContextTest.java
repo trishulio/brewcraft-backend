@@ -1,7 +1,9 @@
 package io.company.brewcraft.security.auth;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +16,7 @@ import io.company.brewcraft.security.session.CognitoPrincipalContext;
 import io.company.brewcraft.security.session.PrincipalContext;
 
 public class CognitoPrincipalContextTest {
+    static final String IAAS_TOKEN = "IAAS_TOKEN";
 
     private PrincipalContext ctx;
     private Jwt mJwt;
@@ -21,7 +24,7 @@ public class CognitoPrincipalContextTest {
     @BeforeEach
     public void init() {
         mJwt = mock(Jwt.class);
-        ctx = new CognitoPrincipalContext(mJwt);
+        ctx = new CognitoPrincipalContext(mJwt, IAAS_TOKEN);
     }
 
     @Test

@@ -21,7 +21,7 @@ public class UserDto extends BaseDto {
 
     private String phoneNumber;
 
-    private String imageUrl;
+    private String imageSrc;
 
     private UserStatusDto status;
 
@@ -43,7 +43,7 @@ public class UserDto extends BaseDto {
         setId(id);
     }
 
-    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageSrc, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -51,7 +51,7 @@ public class UserDto extends BaseDto {
         setLastName(lastName);
         setEmail(email);
         setPhoneNumber(phoneNumber);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setStatus(status);
         setSalutation(salutation);
         setRoles(roles);
@@ -141,12 +141,12 @@ public class UserDto extends BaseDto {
         this.roles = roles;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageSrc() {
+        return imageSrc;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     public LocalDateTime getCreatedAt() {

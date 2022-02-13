@@ -105,7 +105,7 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testTenantManagementService_returnsInstanceOfTenantManagementServiceImpl() {
-        final TenantManagementService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null);
+        final TenantManagementService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null, null);
         assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
     }
 

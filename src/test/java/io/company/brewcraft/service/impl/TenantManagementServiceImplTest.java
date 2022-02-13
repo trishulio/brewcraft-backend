@@ -23,6 +23,7 @@ import io.company.brewcraft.dto.TenantDto;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.repository.TenantRepository;
+import io.company.brewcraft.service.TenantIaasService;
 import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.TenantMapper;
@@ -36,13 +37,16 @@ public class TenantManagementServiceImplTest {
     private MigrationManager migrationManagerMock;
 
     private TenantMapper tenantMapperMock;
+    
+    private TenantIaasService iaasServiceMock;
 
     @BeforeEach
     public void init() {
         tenantRepositoryMock = mock(TenantRepository.class);
         migrationManagerMock = mock(MigrationManager.class);
         tenantMapperMock = mock(TenantMapper.class);
-        tenantManagementService = new TenantManagementServiceImpl(tenantRepositoryMock, migrationManagerMock, tenantMapperMock);
+        iaasServiceMock = mock(TenantIaasService.class);
+        tenantManagementService = new TenantManagementServiceImpl(tenantRepositoryMock, migrationManagerMock, iaasServiceMock, tenantMapperMock);
     }
 
     @Test

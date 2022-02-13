@@ -1,14 +1,14 @@
 package io.company.brewcraft.model;
 
-public class IaasAuthorizationCredentials {
+public class IaasAuthorizationCredentials extends BaseModel {
+    private String token;
 
-    private CognitoIdToken idToken;
-    
-    public CognitoIdToken getIdToken() {
-        return this.idToken;
+    public IaasAuthorizationCredentials(String token) {
+        this.token = token;
     }
-    
-    public void setIdToken(CognitoIdToken idToken) {
-        this.idToken = idToken;
+
+    @Override
+    public String toString() {
+        return this.token;
     }
 }

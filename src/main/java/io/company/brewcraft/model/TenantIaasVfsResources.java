@@ -1,74 +1,52 @@
 package io.company.brewcraft.model;
 
-public class TenantIaasVfsResources extends BaseEntity implements UpdateTenantIaasVfsResources {
-    private TenantObjectStore objectStore;
-    private TenantIaasRole role;
-    
-    public TenantIaasVfsResources(TenantObjectStore objectStore, TenantIaasRole role) {
-        setObjectStore(objectStore);
-        setRole(role);
-    }
-    
-    public TenantIaasVfsResourcesId getId() {
-        
+public class TenantIaasVfsResources {
+    private IaasObjectStore objectStore;
+    private IaasRole role;
+    private IaasPolicy policy;
+    private IaasRolePolicyAttachment rolePolicyAttachment;
+
+    public TenantIaasVfsResources() {
     }
 
-    public TenantObjectStore getObjectStore() {
+    public TenantIaasVfsResources(IaasObjectStore objectStore, IaasPolicy policy, IaasRole role, IaasRolePolicyAttachment rolePolicyAttachment) {
+        this();
+        setObjectStore(objectStore);
+        setRole(role);
+        setPolicy(policy);
+        setRolePolicyAttachment(rolePolicyAttachment);
+    }
+
+    public IaasObjectStore getObjectStore() {
         return objectStore;
     }
 
-    public void setObjectStore(TenantObjectStore objectStore) {
+    public void setObjectStore(IaasObjectStore objectStore) {
         this.objectStore = objectStore;
     }
 
-    public TenantIaasRole getRole() {
+    public IaasRole getRole() {
         return role;
     }
 
-    public void setRole(TenantIaasRole role) {
+    public void setRole(IaasRole role) {
         this.role = role;
     }
 
-    @Override
-    public TenantIaasRole getTenantRole() {
-        // TODO Auto-generated method stub
-        return null;
+    public IaasPolicy getPolicy() {
+        return policy;
     }
 
-    @Override
-    public void setTenantRole(TenantIaasRole tenantRole) {
-        // TODO Auto-generated method stub
-        
+    public void setPolicy(IaasPolicy policy) {
+        this.policy = policy;
     }
 
-    @Override
-    public TenantObjectStore getTenantObjectStoreAccesor() {
-        // TODO Auto-generated method stub
-        return null;
+    public IaasRolePolicyAttachment getRolePolicyAttachment() {
+        return rolePolicyAttachment;
     }
 
-    @Override
-    public void setTenantObjectStore(TenantObjectStore tenantObjectStore) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setId(TenantIaasVfsResourcesId id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public TenantIaasVfsResourcesId getId() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Integer getVersion() {
-        // TODO Auto-generated method stub
-        return null;
+    public void setRolePolicyAttachment(IaasRolePolicyAttachment rolePolicyAttachment) {
+        this.rolePolicyAttachment = rolePolicyAttachment;
     }
 
 }

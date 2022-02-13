@@ -28,7 +28,7 @@ public class AddUserDtoTest {
             1L,
             2L,
             "phoneNumber",
-            "imageUrl",
+            "imageSrc",
             List.of(10L)
         );
 
@@ -40,7 +40,7 @@ public class AddUserDtoTest {
         assertEquals(1L, dto.getStatusId());
         assertEquals(2L, dto.getSalutationId());
         assertEquals("phoneNumber", dto.getPhoneNumber());
-        assertEquals("imageUrl", dto.getImageUrl());
+        assertEquals("imageSrc", dto.getImageSrc());
         assertEquals(List.of(10L), dto.getRoleIds());
     }
 
@@ -101,10 +101,10 @@ public class AddUserDtoTest {
     }
 
     @Test
-    public void testAccessImageUrl() {
-        assertNull(dto.getImageUrl());
-        dto.setImageUrl("imageUrl");
-        assertEquals("imageUrl", dto.getImageUrl());
+    public void testAccessImageSrc() {
+        assertNull(dto.getImageSrc());
+        dto.setImageSrc("imageSrc");
+        assertEquals("imageSrc", dto.getImageSrc());
     }
 
     @Test

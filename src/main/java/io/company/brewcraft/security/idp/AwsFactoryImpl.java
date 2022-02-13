@@ -3,9 +3,11 @@ package io.company.brewcraft.security.idp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClientBuilder;
@@ -48,8 +50,31 @@ public class AwsFactoryImpl implements AwsFactory {
         AmazonCognitoIdentity cognitoIdentityClient = AmazonCognitoIdentityClientBuilder.standard().withRegion(region).build();
         return cognitoIdentityClient;
     }
+
+    @Override
+    public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret) {
+        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(s3AccessKey, s3Secret);
+        AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
+        
+        return AmazonS3ClientBuilder.standard()
+                                     .withRegion(region)
+                                     .withCredentials(credsProvider)
+                                     .build();
+    }
     
-    public AmazonIdentityManagement getAwsIamClient(final String region, String iamAccessKey, String iamSecret) {
+    @Override
+    public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret, String sessionToken) {
+        AWSCredentials awsCreds = new BasicSessionCredentials(s3AccessKey, s3Secret, sessionToken);
+        AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(awsCreds);
+        
+        return AmazonS3ClientBuilder.standard()
+                                     .withRegion(region)
+                                     .withCredentials(credsProvider)
+                                     .build();
+    }
+    
+    @Override
+    public AmazonIdentityManagement iamClient(final String region, String iamAccessKey, String iamSecret) {
         BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(iamAccessKey, iamSecret);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
 
@@ -59,15 +84,5 @@ public class AwsFactoryImpl implements AwsFactory {
                                                 .build();
         
         return awsIamClient;
-    }
-    
-    public AmazonS3 getS3Client(String region, String s3AccessKey, String s3Secret) {
-        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(s3AccessKey, s3Secret);
-        AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
-
-        return AmazonS3ClientBuilder.standard()
-                                     .withRegion(region)
-                                     .withCredentials(credsProvider)
-                                     .build();
     }
 }

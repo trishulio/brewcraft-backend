@@ -9,11 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="TENANT")
@@ -38,11 +38,15 @@ public class Tenant extends BaseEntity {
     private LocalDateTime lastUpdated;
 
     public Tenant() {
+        super();
+    }
 
+    public Tenant(UUID id) {
+        setId(id);
     }
 
     public Tenant(UUID id, String name, String url, LocalDateTime createdAt, LocalDateTime lastUpdated) {
-        this.id = id;
+        this(id);
         this.name = name;
         this.url = url;
         this.createdAt = createdAt;

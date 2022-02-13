@@ -73,7 +73,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
     @Column(name = "image_url")
     @URL
-    private String imageUrl;
+    private String imageSrc;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -105,7 +105,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         setId(id);
     }
 
-    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageSrc, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -114,7 +114,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         setEmail(email);
         setPhoneNumber(phoneNumber);
         setStatus(status);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setRoles(roles);
         setSalutation(salutation);
         setCreatedAt(createdAt);
@@ -173,13 +173,13 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageSrc() {
+        return imageSrc;
     }
 
     @Override
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     @Override
