@@ -1,5 +1,6 @@
 package io.company.brewcraft.service;
 
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -24,13 +25,13 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
     }
 
     @Override
-    public List<URL> getTemporaryPublicFilePath(List<URL> filePaths, LocalDateTime expiration) {
+    public List<URL> getTemporaryPublicFilePath(List<URI> filePaths, LocalDateTime expiration) {
         String bucketName = this.objectStoreNameProvider.getObjectStoreName();
         Date expiry = this.dtMapper.toUtilDate(expiration);
 
         List<Supplier<URL>> suppliers = filePaths.stream()
                 .filter(Objects::nonNull)
-                .map(URL::toString)
+                .map(URI::toString)
                 .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(bucketName, filePath, expiry, HttpMethod.GET))
                 .toList();
         

@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import io.company.brewcraft.service.CriteriaJoin;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity(name = "PRODUCT")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
@@ -54,7 +54,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     private List<ProductMeasureValue> targetMeasures;
 
     @Column(name = "image_source")
-    private URL imageSrc;
+    private URI imageSrc;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -80,7 +80,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
-            URL imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
+            URI imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -168,12 +168,12 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     @Override
-    public URL getImageSrc() {
+    public URI getImageSrc() {
         return imageSrc;
     }
 
     @Override
-    public void setImageSrc(URL imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
 

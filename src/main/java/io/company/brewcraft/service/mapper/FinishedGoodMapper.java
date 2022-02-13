@@ -1,11 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import java.util.stream.Collectors;
-
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddFinishedGoodDto;

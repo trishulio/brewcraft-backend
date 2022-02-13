@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,13 +20,13 @@ public class AddProductDto extends BaseDto {
     @Valid
     private List<AddProductMeasureValueDto> targetMeasures;
 
-    private URL imageSrc;
+    private URI imageSrc;
 
     public AddProductDto() {
         super();
     }
 
-    public AddProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures, URL imageSrc) {
+    public AddProductDto(String name, String description, Long categoryId, List<AddProductMeasureValueDto> targetMeasures, URI imageSrc) {
         this();
         this.name = name;
         this.description = description;
@@ -67,11 +67,11 @@ public class AddProductDto extends BaseDto {
         this.targetMeasures = targetMeasures;
     }
 
-    public URL getImageSrc() {
+    public URI getImageSrc() {
         return imageSrc;
     }
 
-    public void setImageSrc(URL imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
 }

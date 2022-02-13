@@ -46,8 +46,13 @@ public class AwsFactoryImpl implements AwsFactory {
     }
 
     @Override
-    public AmazonCognitoIdentity getAwsCognitoIdentityClient(String region) {
-        AmazonCognitoIdentity cognitoIdentityClient = AmazonCognitoIdentityClientBuilder.standard().withRegion(region).build();
+    public AmazonCognitoIdentity getAwsCognitoIdentityClient(String region, String accessKey, String accessSecret) {
+        AWSCredentials creds = new BasicAWSCredentials(accessKey, accessSecret);
+        AWSStaticCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(creds);
+        AmazonCognitoIdentity cognitoIdentityClient = AmazonCognitoIdentityClientBuilder.standard()
+                                                                                        .withCredentials(credsProvider)
+                                                                                        .withRegion(region)
+                                                                                        .build();
         return cognitoIdentityClient;
     }
 

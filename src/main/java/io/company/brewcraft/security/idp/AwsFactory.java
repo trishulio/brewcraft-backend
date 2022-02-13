@@ -11,7 +11,7 @@ public interface AwsFactory {
 
     AWSSecretsManager secretsMgrClient(String region, String url);
     
-    AmazonCognitoIdentity getAwsCognitoIdentityClient(final String region);
+    AmazonCognitoIdentity getAwsCognitoIdentityClient(final String region, final String accessKey, final String accessSecret);
     
     AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret);
     

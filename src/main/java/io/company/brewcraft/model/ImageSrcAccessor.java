@@ -1,9 +1,9 @@
 package io.company.brewcraft.model;
 
-import java.net.URL;
+import java.net.URI;
 
 public interface ImageSrcAccessor {
-    URL getImageSrc();
+    URI getImageSrc();
 
-    void setImageSrc(URL imageSrc);
+    void setImageSrc(URI imageSrc);
 }

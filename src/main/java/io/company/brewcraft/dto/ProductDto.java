@@ -1,6 +1,6 @@
 package io.company.brewcraft.dto;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import io.company.brewcraft.model.ImageSrcAccessor;
@@ -21,7 +21,7 @@ public class ProductDto extends BaseDto implements ImageSrcAccessor {
 
     private List<ProductMeasureValueDto> targetMeasures;
 
-    private URL imageSrc;
+    private URI imageSrc;
 
     private Integer version;
 
@@ -35,7 +35,7 @@ public class ProductDto extends BaseDto implements ImageSrcAccessor {
     }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
-            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, URL imageSrc, Integer version) {
+            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, URI imageSrc, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -103,14 +103,13 @@ public class ProductDto extends BaseDto implements ImageSrcAccessor {
         this.targetMeasures = targetMeasures;
     }
 
-    // TODO: rename other product dto and entities to have it call imageSrc
     @Override
-    public URL getImageSrc() {
+    public URI getImageSrc() {
         return this.imageSrc;
     }
 
     @Override
-    public void setImageSrc(URL imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
     public Integer getVersion() {
