@@ -37,7 +37,7 @@ public class TenantManagementServiceImplTest {
     private MigrationManager migrationManagerMock;
 
     private TenantMapper tenantMapperMock;
-    
+
     private TenantIaasService iaasServiceMock;
 
     @BeforeEach

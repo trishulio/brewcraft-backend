@@ -12,11 +12,11 @@ import io.company.brewcraft.service.CrudEntity;
 
 public class Group extends BaseEntity implements UpdateGroup, CrudEntity<String>, Audited {
     private static final Logger log = LoggerFactory.getLogger(Group.class);
-    
+
     public Group() {
         super();
     }
-    
+
     public Group(String id) {
         this();
         setId(id);

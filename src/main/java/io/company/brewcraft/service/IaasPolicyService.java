@@ -16,9 +16,9 @@ import io.company.brewcraft.model.UpdateIaasPolicy;
 @Transactional
 public class IaasPolicyService extends BaseService implements CrudService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy, IaasPolicyAccessor> {
     private final IaasPolicyIaasRepository iaasRepo;
-    
+
     private UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService;
-    
+
     public IaasPolicyService(UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService, IaasPolicyIaasRepository iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
@@ -44,7 +44,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
     @Override
     public int delete(String id) {
         this.iaasRepo.delete(List.of(id));
-        
+
         return 1;
     }
 
@@ -52,7 +52,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
     public IaasPolicy get(String id) {
         return this.iaasRepo.get(List.of(id)).get(0);
     }
-    
+
     public List<IaasPolicy> getAll(Set<String> ids) {
         return this.iaasRepo.get(ids);
     }
@@ -85,7 +85,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
         }
 
         List<IaasPolicy> policies = this.updateService.getAddEntities(additions);
-        
+
         return iaasRepo.add(policies);
     }
 
@@ -96,7 +96,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
         }
 
         List<IaasPolicy> existing = this.getByIds(updates);
-        
+
         List<IaasPolicy> updated = this.updateService.getPutEntities(existing, updates);
 
         return iaasRepo.add(updated);
@@ -109,7 +109,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
         }
 
         List<IaasPolicy> existing = this.getByIds(updates);
-        
+
         List<IaasPolicy> updated = this.updateService.getPatchEntities(existing, updates);
 
         return iaasRepo.add(updated);

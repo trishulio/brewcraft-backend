@@ -56,11 +56,11 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     public void createUserGroup(Group group) {
         String roleArn = null;
         IaasRole role = group.getIaasRole();
-        
+
         if (role != null) {
             roleArn = role.getIaasResourceName();
         }
-        
+
         this.idpClient.createUserGroup(group.getId(), roleArn);
     }
 

@@ -15,9 +15,9 @@ import io.company.brewcraft.model.UpdateIaasRole;
 @Transactional
 public class IaasRoleService extends BaseService implements CrudService<String, IaasRole, BaseIaasRole, UpdateIaasRole, IaasRoleAccessor> {
     private final IaasRoleIaasRepository iaasRepo;
-    
+
     private UpdateService<String, IaasRole, BaseIaasRole, UpdateIaasRole> updateService;
-    
+
     public IaasRoleService(UpdateService<String, IaasRole, BaseIaasRole, UpdateIaasRole> updateService, IaasRoleIaasRepository iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
@@ -43,7 +43,7 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
     @Override
     public int delete(String id) {
         this.iaasRepo.delete(List.of(id));
-        
+
         return 1;
     }
 
@@ -51,7 +51,7 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
     public IaasRole get(String id) {
         return this.iaasRepo.get(List.of(id)).get(0);
     }
-    
+
     public List<IaasRole> getAll(Set<String> ids) {
         return this.iaasRepo.get(ids);
     }
@@ -84,7 +84,7 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
         }
 
         List<IaasRole> roles = this.updateService.getAddEntities(additions);
-        
+
         return iaasRepo.add(roles);
     }
 
@@ -95,7 +95,7 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
         }
 
         List<IaasRole> existing = this.getByIds(updates);
-        
+
         List<IaasRole> updated = this.updateService.getPutEntities(existing, updates);
 
         return iaasRepo.add(updated);
@@ -108,7 +108,7 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
         }
 
         List<IaasRole> existing = this.getByIds(updates);
-        
+
         List<IaasRole> updated = this.updateService.getPatchEntities(existing, updates);
 
         return iaasRepo.add(updated);

@@ -12,7 +12,7 @@ import io.company.brewcraft.dto.InfrastructureResourceAuthorizationDto;
 public class InfrastructureResourceAuthorizationController {
 
     public InfrastructureResourceAuthorizationDto post(AddInfrastructureResourceAuthorizationDto payload) {
-        
+
         // TODO:
         return null;
     }

@@ -15,15 +15,15 @@ public class IaasRolePolicyAttachmentIaasRepository {
         this.iamClient = iamClient;
         this.executor = executor;
     }
-    
+
     public List<IaasRolePolicyAttachment> get(Collection<IaasRolePolicyAttachmentId> ids) {
         List<Runnable> runnables = ids.stream()
                 .filter(id -> id != null)
                 .map(id -> (Runnable) () -> iamClient.get(id.getPolicyId(), id.getRoleId()))
                 .toList();
-        
+
         this.executor.run(runnables);
-        
+
         return null;
     }
 
@@ -40,13 +40,13 @@ public class IaasRolePolicyAttachmentIaasRepository {
 
         return attachments.stream().toList();
     }
-    
+
     public void delete(Collection<IaasRolePolicyAttachmentId> ids) {
         List<Runnable> runnables = ids.stream()
                 .filter(id -> id != null)
                 .map(id -> (Runnable) () -> iamClient.delete(id.getPolicyId(), id.getRoleId()))
                 .toList();
-        
+
         this.executor.run(runnables);
     }
 }

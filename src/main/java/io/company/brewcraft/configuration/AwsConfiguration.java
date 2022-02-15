@@ -76,7 +76,7 @@ public class AwsConfiguration {
     public AmazonIdentityManagement iamClient(AwsFactory awsFactory, @Value("${aws.iam.region}") String region, @Value("${aws.iam.accessKey}") String iamAccessKey, @Value("${aws.iam.accessSecret}") String iamSecret) {
         return awsFactory.iamClient(region, iamAccessKey, iamSecret);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(AmazonCognitoIdentity.class)
     public AmazonCognitoIdentity cognitoIdentity(AwsFactory awsFactory, @Value("${aws.cognito.region}") String region, @Value("${aws.cognito.accessKey}") final String accessKey, @Value("${aws.cognito.secretKey}") final String accessSecret) {

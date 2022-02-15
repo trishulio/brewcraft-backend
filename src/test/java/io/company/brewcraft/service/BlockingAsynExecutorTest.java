@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 public class BlockingAsynExecutorTest {
 
     private BlockingAsyncExecutor executor;
-    
+
     @BeforeEach
     public void init() {
         this.executor = new BlockingAsyncExecutor();
     }
-    
+
     @Test
     public void testSupply_ReturnsCombinedResultsAfterExecutingAllSuppliersParallely() {
         Supplier<Integer> supplier1 = new Supplier<Integer>() {
@@ -52,7 +52,7 @@ public class BlockingAsynExecutorTest {
         assertEquals(List.of(1, 2), values);
         assertEquals(2, seconds);
     }
-    
+
     @Test
     public void testRun_ExecutesRunnablesParallely() {
         Runnable mock = mock(Runnable.class);

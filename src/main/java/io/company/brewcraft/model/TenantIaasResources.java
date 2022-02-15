@@ -3,7 +3,7 @@ package io.company.brewcraft.model;
 public class TenantIaasResources {
 
     private TenantIaasVfsResources vfsResources;
-    
+
     public TenantIaasResources(TenantIaasVfsResources vfsResources) {
         this.vfsResources = vfsResources;
     }

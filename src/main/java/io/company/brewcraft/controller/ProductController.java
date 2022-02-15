@@ -67,7 +67,7 @@ public class ProductController extends BaseController {
 
         this.decorator.decorate(productsList);
         PageDto<ProductDto> dto = new PageDto<ProductDto>(productsList, productsPage.getTotalPages(), productsPage.getTotalElements());
-        
+
         return dto;
     }
 
@@ -78,9 +78,9 @@ public class ProductController extends BaseController {
         Validator.assertion(product != null, EntityNotFoundException.class, "Product", productId.toString());
 
         ProductDto dto = productMapper.toDto(product);
-        
+
         this.decorator.decorate(List.of(dto));
-        
+
         return dto;
     }
 
@@ -93,7 +93,7 @@ public class ProductController extends BaseController {
 
         ProductDto dto = productMapper.toDto(addedProduct);
         this.decorator.decorate(List.of(dto));
-        
+
         return dto;
     }
 
@@ -117,7 +117,7 @@ public class ProductController extends BaseController {
 
         ProductDto dto = productMapper.toDto(patchedProduct);
         this.decorator.decorate(List.of(dto));
-        
+
         return dto;
     }
 

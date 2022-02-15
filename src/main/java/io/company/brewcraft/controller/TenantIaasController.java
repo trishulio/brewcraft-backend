@@ -19,24 +19,24 @@ import io.company.brewcraft.service.TenantIaasService;
 public class TenantIaasController extends BaseController {
 
     private TenantIaasService service;
-    
+
     @Autowired
     public TenantIaasController(TenantIaasService service) {
         this.service = service;
     }
-    
+
     @GetMapping
     public List<TenantIaasResources> get() {
         return this.service.get(List.of(new Tenant(UUID.fromString("eae07f11-4c9a-4a3b-8b23-9c05d695ab67"))));
     }
-    
+
     @PostMapping
     public void post() {
         this.service.put((List.of(new Tenant(UUID.fromString("eae07f11-4c9a-4a3b-8b23-9c05d695ab67")))));
     }
-    
+
     @DeleteMapping
     public void delete() {
         this.service.delete(List.of(new Tenant(UUID.fromString("eae07f11-4c9a-4a3b-8b23-9c05d695ab67"))));
-    }    
+    }
 }

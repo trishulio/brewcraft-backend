@@ -60,24 +60,24 @@ public class AwsFactoryImpl implements AwsFactory {
     public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret) {
         BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(s3AccessKey, s3Secret);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
-        
+
         return AmazonS3ClientBuilder.standard()
                                      .withRegion(region)
                                      .withCredentials(credsProvider)
                                      .build();
     }
-    
+
     @Override
     public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret, String sessionToken) {
         AWSCredentials awsCreds = new BasicSessionCredentials(s3AccessKey, s3Secret, sessionToken);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(awsCreds);
-        
+
         return AmazonS3ClientBuilder.standard()
                                      .withRegion(region)
                                      .withCredentials(credsProvider)
                                      .build();
     }
-    
+
     @Override
     public AmazonIdentityManagement iamClient(final String region, String iamAccessKey, String iamSecret) {
         BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(iamAccessKey, iamSecret);
@@ -87,7 +87,7 @@ public class AwsFactoryImpl implements AwsFactory {
                                                 .withRegion(region)
                                                 .withCredentials(credsProvider)
                                                 .build();
-        
+
         return awsIamClient;
     }
 }

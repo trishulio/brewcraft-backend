@@ -19,7 +19,7 @@ public class IaasPolicyIaasRepository {
         this.executor = executor;
         this.mapper = mapper;
     }
-    
+
     public List<IaasPolicy> get(Collection<String> ids) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
         for (String id: ids) {
@@ -31,12 +31,12 @@ public class IaasPolicyIaasRepository {
             };
             suppliers.add(supplier);
         }
-        
+
         List<Policy> iamPolicies = this.executor.supply(suppliers);
-        
+
         return this.mapper.fromIamPolicies(iamPolicies);
     }
-    
+
     public List<IaasPolicy> add(Collection<IaasPolicy> policies) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
         for (IaasPolicy iamPolicy: policies) {
@@ -53,10 +53,10 @@ public class IaasPolicyIaasRepository {
 
         return this.mapper.fromIamPolicies(iamPolicies);
     }
-    
+
     public void delete(Collection<String> ids) {
         List<Runnable> runnables = new ArrayList<>();
-        
+
         for (String id: ids) {
             Runnable runnable = new Runnable() {
                 @Override
@@ -66,7 +66,7 @@ public class IaasPolicyIaasRepository {
             };
             runnables.add(runnable);
         }
-        
+
         this.executor.run(runnables);
     }
 }

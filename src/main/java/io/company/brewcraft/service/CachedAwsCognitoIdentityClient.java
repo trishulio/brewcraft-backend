@@ -15,10 +15,9 @@ import io.company.brewcraft.model.BaseModel;
 
 public class CachedAwsCognitoIdentityClient implements AwsCognitoIdentityClient {
     private LoadingCache<GetIdentityPoolsArgs, List<IdentityPoolShortDescription>> getIdentityPools;
-    private LoadingCache<GetIdentityIdArgs, String> getIdentityId;    
+    private LoadingCache<GetIdentityIdArgs, String> getIdentityId;
     private LoadingCache<GetCredentialsForIdentityIdArgs, Credentials> getCredentialsForIdentity;
-    
-    
+
     public CachedAwsCognitoIdentityClient(AwsCognitoIdentityClient cognitoIdClient, long credentialsExpiryDurationSeconds) {
         this.getIdentityPools = CacheBuilder.newBuilder()
                                             .build(new CacheLoader<GetIdentityPoolsArgs, List<IdentityPoolShortDescription>>() {

@@ -8,24 +8,24 @@ import io.company.brewcraft.model.IaasRole;
 
 public class AwsIaasRoleMapper {
     private LocalDateTimeMapper dtMapper;
-    
+
     public AwsIaasRoleMapper(LocalDateTimeMapper dtMapper) {
         this.dtMapper = dtMapper;
     }
 
     public List<IaasRole> fromIamRoles(List<Role> iamRoles) {
         List<IaasRole> policies = null;
-        
+
         if (iamRoles != null) {
             policies = iamRoles.stream().map(this::fromIamRole).toList();
         }
-        
+
         return policies;
     }
-    
+
     public IaasRole fromIamRole(Role iamRole) {
         IaasRole role = null;
-        
+
         if (iamRole != null) {
             role = new IaasRole();
             role.setId(iamRole.getRoleName());
@@ -37,7 +37,7 @@ public class AwsIaasRoleMapper {
             }
             role.setCreatedAt(this.dtMapper.fromUtilDate(iamRole.getCreateDate()));
         }
-        
+
         return role;
     }
 }

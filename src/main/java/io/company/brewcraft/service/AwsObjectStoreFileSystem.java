@@ -17,7 +17,6 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
     private BlockingAsyncExecutor executor;
     private LocalDateTimeMapper dtMapper;
 
-
     public AwsObjectStoreFileSystem(AwsObjectStoreFileClientProvider clientProvider, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper) {
         this.clientProvider = clientProvider;
         this.executor = executor;
@@ -29,13 +28,13 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
         AwsObjectStoreFileSystemClient filesystemClient = clientProvider.getClient();
 
         Date expiry = this.dtMapper.toUtilDate(expiration);
-        
+
         List<Supplier<URL>> suppliers = filePaths.stream()
                 .filter(Objects::nonNull)
                 .map(URI::toString)
                 .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(filePath, expiry, HttpMethod.GET))
                 .toList();
-        
+
         return this.executor.supply(suppliers);
     }
 
@@ -44,13 +43,13 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
         AwsObjectStoreFileSystemClient filesystemClient = clientProvider.getClient();
 
         Date expiry = this.dtMapper.toUtilDate(expiration);
-        
+
         List<Supplier<URL>> suppliers = filePaths.stream()
                 .filter(Objects::nonNull)
                 .map(URI::toString)
                 .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(filePath, expiry, HttpMethod.PUT))
                 .toList();
-        
+
         return this.executor.supply(suppliers);
     }
 }

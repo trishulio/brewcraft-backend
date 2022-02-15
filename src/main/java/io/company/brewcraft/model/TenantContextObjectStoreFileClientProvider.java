@@ -47,7 +47,7 @@ public class TenantContextObjectStoreFileClientProvider implements AwsObjectStor
         IaasAuthorization authorization = authFetcher.fetch();
 
         GetAmazonS3ClientArgs args = new GetAmazonS3ClientArgs(this.region, bucketNameProvider.getObjectStoreName(), authorization.getAccessKey(), authorization.getAccessSecret(), authorization.getSessionToken());
-        
+
         try {
             return this.cache.get(args);
         } catch (ExecutionException e) {

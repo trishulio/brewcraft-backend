@@ -12,7 +12,7 @@ public class IaasRolePolicyAttachmentId extends BaseModel {
         setPolicyId(policyId);
         setRoleId(roleId);
     }
-    
+
     public String getPolicyId() {
         return policyId;
     }
@@ -28,22 +28,22 @@ public class IaasRolePolicyAttachmentId extends BaseModel {
     public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
-    
+
     public static IaasRolePolicyAttachmentId build(IaasRole role, IaasPolicy policy) {
         IaasRolePolicyAttachmentId id = null;
-        
+
         if (role != null || policy != null) {
             id = new IaasRolePolicyAttachmentId();
         }
-        
+
         if (role != null ) {
             id.setRoleId(role.getName());
         }
-        
+
         if (policy != null) {
             id.setPolicyId(policy.getIaasResourceName());
         }
-        
+
         return id;
     }
 }

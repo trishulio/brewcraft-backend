@@ -43,7 +43,7 @@ public class SequentialMigrationManager implements MigrationManager {
 
         // TODO: This is probably not the correct place to create a cognito group.
         // This code needs to move out where IaasRole is created and then cognito group is created.
-        
+
         log.info("Registering idp user group: {}", tenantId);
         idpUserRepo.putUserGroup(new Group(tenantId));
 

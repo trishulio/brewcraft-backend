@@ -2,7 +2,7 @@ package io.company.brewcraft.model;
 
 public interface BaseIaasPolicy {
     String getName();
-    
+
     void setName(String name);
 
     String getDocument();

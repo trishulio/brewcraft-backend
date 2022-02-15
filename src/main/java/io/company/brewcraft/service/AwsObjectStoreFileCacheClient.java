@@ -13,10 +13,10 @@ import com.google.common.cache.LoadingCache;
 import io.company.brewcraft.model.BaseModel;
 
 public class AwsObjectStoreFileCacheClient implements AwsObjectStoreFileSystemClient {
-    public static final Duration EXPIRATION_DURATION_CLEAR_PRESIGNED_URLS = Duration.ofHours(1); // Expires 1 hour after last access 
+    public static final Duration EXPIRATION_DURATION_CLEAR_PRESIGNED_URLS = Duration.ofHours(1); // Expires 1 hour after last access
 
     private LoadingCache<PresignArgs, URL> presign;
-    
+
     public AwsObjectStoreFileCacheClient(AwsObjectStoreFileSystemClient delegate) {
         this.presign = CacheBuilder.newBuilder()
                                    .expireAfterAccess(EXPIRATION_DURATION_CLEAR_PRESIGNED_URLS)

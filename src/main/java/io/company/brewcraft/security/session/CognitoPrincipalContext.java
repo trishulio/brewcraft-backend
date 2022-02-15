@@ -44,7 +44,7 @@ public class CognitoPrincipalContext implements PrincipalContext {
     public List<String> getRoles() {
         return Arrays.asList(this.jwt.getClaimAsString(CLAIM_SCOPE).split(" "));
     }
-    
+
     @Override
     public IaasAuthorizationCredentials getIaasToken() {
         return this.iaasToken;

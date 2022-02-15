@@ -15,12 +15,12 @@ public class AwsObjectStoreFileRemoteClient implements AwsObjectStoreFileSystemC
         this.s3Client = s3Client;
         this.bucketName = bucketName;
     }
-    
+
     @Override
     public URL presign(String fileKey, Date expiration, HttpMethod httpMethod) {
         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(this.bucketName, fileKey, httpMethod)
                                               .withExpiration(expiration);
-        
+
         return s3Client.generatePresignedUrl(request);
     }
 }

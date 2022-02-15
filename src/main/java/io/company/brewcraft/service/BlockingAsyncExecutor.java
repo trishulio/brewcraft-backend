@@ -16,7 +16,7 @@ public class BlockingAsyncExecutor {
         for (int i = 0; i < suppliers.size(); i++) {
             operations[i] = CompletableFuture.supplyAsync(suppliers.get(i));
         }
-        
+
         CompletableFuture<List<R>> resultOperation = CompletableFuture.allOf(operations)
                          .thenApply(__ -> Arrays.stream(operations)
                                                   .map(CompletableFuture::join)
@@ -28,7 +28,6 @@ public class BlockingAsyncExecutor {
             throw new RuntimeException(String.format("Failed to execute tasks because: %s", e.getMessage()), e);
         }
     }
-    
 
     public void run(List<Runnable> runnables) {
         @SuppressWarnings("unchecked")
@@ -36,7 +35,7 @@ public class BlockingAsyncExecutor {
         for (int i = 0; i < runnables.size(); i++) {
             operations[i] = CompletableFuture.runAsync(runnables.get(i));
         }
-        
+
         CompletableFuture<Void> resultOperation = CompletableFuture.allOf(operations);
 
         try {

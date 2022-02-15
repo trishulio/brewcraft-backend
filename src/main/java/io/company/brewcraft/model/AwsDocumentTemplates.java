@@ -34,7 +34,7 @@ public class AwsDocumentTemplates {
             + "        }\n"
             + "    ]\n"
             + "}";
-    
+
     private static final String POLICY_DOC_COGNITO_ID_ASSUME_ROLE = "{\n"
             + "  \"Version\": \"2012-10-17\",\n"
             + "  \"Statement\": [\n"
@@ -62,9 +62,9 @@ public class AwsDocumentTemplates {
     private static final String POLICY_NAME_TENANT_VFS = "t-%s-vfs";
 
     private static final String POLICY_DESCRIPTION_TENANT_VFS = "File storage for tenant: %s";
-    
+
     private String cognitoIdPoolId;
-    
+
     public AwsDocumentTemplates(String cognitoIdPoolId) {
         this.cognitoIdPoolId = cognitoIdPoolId;
     }
@@ -80,7 +80,7 @@ public class AwsDocumentTemplates {
     public String getTenantVfsBucketName(String tenantId) {
         return String.format(BUCKET_NAME_TENANT_VFS, tenantId);
     }
-    
+
     public String getTenantIdFromTenantVfsBucketName(String bucketName) {
         return reverseFormat(BUCKET_NAME_TENANT_VFS, bucketName);
     }
@@ -88,15 +88,15 @@ public class AwsDocumentTemplates {
     public String getTenantIaasRoleName(String tenantId) {
         return String.format(ROLE_NAME_TENANT_IAAS, tenantId);
     }
-    
+
     public String getTenantIdFromTenantIaasRoleName(String roleName) {
-        return reverseFormat(ROLE_NAME_TENANT_IAAS, roleName);        
+        return reverseFormat(ROLE_NAME_TENANT_IAAS, roleName);
     }
 
     public String getTenantVfsPolicyName(String tenantId) {
         return String.format(POLICY_NAME_TENANT_VFS, tenantId);
     }
-    
+
     public String getTenantIdFromTenantVfsPolicyName(String policyName) {
         return reverseFormat(POLICY_NAME_TENANT_VFS, policyName);
     }
@@ -108,23 +108,22 @@ public class AwsDocumentTemplates {
     public String getTenantIaasRoleDescription(String tenantId) {
         return String.format(ROLE_DESCRIPTION_TENANT_VFS, tenantId);
     }
-    
+
     private String reverseFormat(String singlePlaceHolderTemplate, String formatted) {
         String tenantId = null;
         Pattern pattern = Pattern.compile(String.format(singlePlaceHolderTemplate, "(.*)"));
-        
+
         Matcher matcher = pattern.matcher(formatted);
         Optional<MatchResult> matched = matcher.results().findFirst();
 
-        
         if (matched.isPresent()) {
-            tenantId = formatted.substring(matched.get().start(), matched.get().end());            
+            tenantId = formatted.substring(matched.get().start(), matched.get().end());
         }
-        
+
         if (tenantId == null) {
             throw new IllegalArgumentException("The bucketName doesn't follow the VFS tenant-bucket name pattern");
         }
-        
+
         return tenantId;
     }
 }

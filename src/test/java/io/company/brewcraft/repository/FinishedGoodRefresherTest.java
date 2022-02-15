@@ -28,7 +28,6 @@ public class FinishedGoodRefresherTest {
 
     private CollectionAccessorRefresher<Long, ChildFinishedGoodsAccessor, FinishedGood> childFinishedGoodsRefresher;
 
-
     @BeforeEach
     public void init() {
         this.fgMaterialPortionRefresher = mock(FinishedGoodMaterialPortionRefresher.class);

@@ -30,7 +30,7 @@ public class TenantIaasVfsService {
     private IaasRoleService roleService;
     private IaasRolePolicyAttachmentService rolePolicyAttachmentService;
     private IaasObjectStoreService objectStoreService;
-    
+
     public TenantIaasVfsService(AwsArnMapper arnMapper, TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasRoleService roleService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, AwsDocumentTemplates templates) {
         this.arnMapper = arnMapper;
         this.templates = templates;
@@ -40,7 +40,7 @@ public class TenantIaasVfsService {
         this.objectStoreService = objectStoreService;
         this.rolePolicyAttachmentService = rolePolicyAttachmentService;
     }
-        
+
     public List<TenantIaasVfsResources> get(List<Tenant> tenants) {
         // Hack: We are using ARN mapper to generate value for the policy. Ideally, we should fetch the ARN by retrieving a policy object
         // from the Iaas provider. If there is a misconfiguration in the application, the generated ARN might not be accurate. Keep
@@ -64,7 +64,7 @@ public class TenantIaasVfsService {
             roleIds.add(roleName);
             attachmentIds.add(attachmentId);
          });
-        
+
         List<IaasPolicy> policies = this.policyService.getAll(policyIds);
         List<IaasRole> roles = this.roleService.getAll(roleIds);
         List<IaasObjectStore> objectStores = this.objectStoreService.getAll(objectStoreIds);
@@ -78,7 +78,7 @@ public class TenantIaasVfsService {
             String tenantId = this.templates.getTenantIdFromTenantVfsBucketName(objectStore.getName());
             tenantVfsResources.put(tenantId, vfsResources);
         });
-        
+
         policies.forEach(policy -> {
             String tenantId = this.templates.getTenantIdFromTenantVfsPolicyName(policy.getName());
             TenantIaasVfsResources vfsResources = tenantVfsResources.get(tenantId);
@@ -96,26 +96,26 @@ public class TenantIaasVfsService {
         //    TenantIaasVfsResources vfsResources = tenantVfsResources.get(attachment.getTenantId());
         //    vfsResources.setRolePolicyAttachment(attachment);
         // });
-        
+
         return new ArrayList<>(tenantVfsResources.values());
     }
-    
+
     public List<TenantIaasVfsResources> put(List<Tenant> tenants) {
         List<BaseIaasObjectStore> objectStoreAdditions = new ArrayList<>(tenants.size());
         List<BaseIaasPolicy> policieAdditions = new ArrayList<>(tenants.size());
         List<BaseIaasRole> roleAdditions = new ArrayList<>(tenants.size());
-        
+
         tenants.forEach(tenant -> {
             String tenantId = tenant.getId().toString();
-            
+
             BaseIaasObjectStore objectStore = new IaasObjectStore();
             objectStore.setName(this.templates.getTenantVfsBucketName(tenantId));
-            
+
             BaseIaasPolicy policy = new IaasPolicy();
             policy.setDescription(this.templates.getTenantVfsPolicyDescription(tenantId));
             policy.setDocument(this.templates.getTenantBucketPolicyDoc(tenantId));
             policy.setName(this.templates.getTenantVfsPolicyName(tenantId));
-             
+
             BaseIaasRole role = new IaasRole();
             role.setName(this.templates.getTenantIaasRoleName(tenantId));
             role.setDescription(this.templates.getTenantIaasRoleDescription(tenantId));
@@ -129,28 +129,28 @@ public class TenantIaasVfsService {
         List<IaasObjectStore> objectStores = this.objectStoreService.add(objectStoreAdditions);
         List<IaasPolicy> policies = this.policyService.add(policieAdditions);
         List<IaasRole> roles = this.roleService.add(roleAdditions);
-        
+
         Iterator<IaasPolicy> policiesIterator = policies.iterator();
         Iterator<IaasRole> rolesIterator = roles.iterator();
-        
+
         List<BaseIaasRolePolicyAttachment> attachmentAdditions = tenants.stream()
                 .map(tenant -> {
                     BaseIaasRolePolicyAttachment attachment = new IaasRolePolicyAttachment();
                     // Note: This code assumes that the returned policies and roles are in the same order as they were
-                    // created in. If that assumption is violated, this code will attach incorrect policies to the 
+                    // created in. If that assumption is violated, this code will attach incorrect policies to the
                     // roles.
                     attachment.setIaasRole(rolesIterator.next());
                     attachment.setIaasPolicy(policiesIterator.next());
-                    
+
                     return attachment;
                 })
                 .toList();
 
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.add(attachmentAdditions);
-        
+
         return this.mapper.fromComponents(objectStores, policies, roles, attachments);
     }
-    
+
     public void delete(List<Tenant> tenants) {
         // Hack: We are using ARN mapper to generate value for the policy. Ideally, we should fetch the ARN by retrieving a policy object
         // from the Iaas provider. If there is a misconfiguration in the application, the generated ARN might not be accurate. Keep
@@ -174,7 +174,7 @@ public class TenantIaasVfsService {
             roleIds.add(roleName);
             attachmentIds.add(attachmentId);
          });
-        
+
         this.rolePolicyAttachmentService.delete(attachmentIds);
         this.policyService.delete(policyIds);
         this.roleService.delete(roleIds);

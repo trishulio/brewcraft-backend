@@ -17,9 +17,9 @@ import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
 @Transactional
 public class IaasRolePolicyAttachmentService extends BaseService implements CrudService<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment, IaasRolePolicyAttachmentAccessor> {
    private final IaasRolePolicyAttachmentIaasRepository iaasRepo;
-    
+
     private UpdateService<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> updateService;
-    
+
     public IaasRolePolicyAttachmentService(UpdateService<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> updateService, IaasRolePolicyAttachmentIaasRepository iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
@@ -45,7 +45,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     @Override
     public int delete(IaasRolePolicyAttachmentId id) {
         this.iaasRepo.delete(List.of(id));
-        
+
         return 1;
     }
 
@@ -53,7 +53,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     public IaasRolePolicyAttachment get(IaasRolePolicyAttachmentId id) {
         return this.iaasRepo.get(List.of(id)).get(0);
     }
-    
+
     public List<IaasRolePolicyAttachment> getAll(Set<IaasRolePolicyAttachmentId> ids) {
         return this.iaasRepo.get(ids);
     }
@@ -86,7 +86,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
         }
 
         List<IaasRolePolicyAttachment> rolePolicies = this.updateService.getAddEntities(additions);
-        
+
         return iaasRepo.add(rolePolicies);
     }
 
@@ -97,7 +97,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
         }
 
         List<IaasRolePolicyAttachment> existing = this.getByIds(updates);
-        
+
         List<IaasRolePolicyAttachment> updated = this.updateService.getPutEntities(existing, updates);
 
         return iaasRepo.add(updated);
@@ -110,7 +110,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
         }
 
         List<IaasRolePolicyAttachment> existing = this.getByIds(updates);
-        
+
         List<IaasRolePolicyAttachment> updated = this.updateService.getPatchEntities(existing, updates);
 
         return iaasRepo.add(updated);

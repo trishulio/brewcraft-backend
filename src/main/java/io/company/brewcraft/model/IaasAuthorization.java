@@ -9,7 +9,7 @@ import io.company.brewcraft.service.CrudEntity;
 
 public class IaasAuthorization extends BaseEntity implements UpdateIaasAuthorization, CrudEntity<String>, Audited {
     private static final Logger log = LoggerFactory.getLogger(IaasAuthorization.class);
-    
+
     private String accessKey;
     private String accessSecret;
     private String sessionToken;

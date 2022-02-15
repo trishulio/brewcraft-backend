@@ -16,9 +16,9 @@ import io.company.brewcraft.model.UpdateIaasObjectStore;
 @Transactional
 public class IaasObjectStoreService extends BaseService implements CrudService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore, IaasObjectStoreAccessor> {
    private final IaasObjectStoreIaasRepository iaasRepo;
-    
+
     private UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService;
-    
+
     public IaasObjectStoreService(UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService, IaasObjectStoreIaasRepository iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
@@ -44,7 +44,7 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
     @Override
     public int delete(String id) {
         this.iaasRepo.delete(List.of(id));
-        
+
         return 1;
     }
 
@@ -52,7 +52,7 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
     public IaasObjectStore get(String id) {
         return this.iaasRepo.get(List.of(id)).get(0);
     }
-    
+
     public List<IaasObjectStore> getAll(Set<String> ids) {
         return this.iaasRepo.get(ids);
     }
@@ -85,7 +85,7 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
         }
 
         List<IaasObjectStore> objectStores = this.updateService.getAddEntities(additions);
-        
+
         return iaasRepo.add(objectStores);
     }
 
@@ -96,7 +96,7 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
         }
 
         List<IaasObjectStore> existing = this.getByIds(updates);
-        
+
         List<IaasObjectStore> updated = this.updateService.getPutEntities(existing, updates);
 
         return iaasRepo.add(updated);
@@ -109,7 +109,7 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
         }
 
         List<IaasObjectStore> existing = this.getByIds(updates);
-        
+
         List<IaasObjectStore> updated = this.updateService.getPatchEntities(existing, updates);
 
         return iaasRepo.add(updated);
