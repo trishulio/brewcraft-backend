@@ -1,30 +1,34 @@
 package io.company.brewcraft.controller;
 
+import java.net.URI;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.company.brewcraft.model.IaasAuthorization;
-import io.company.brewcraft.model.IaasAuthorizationDto;
-import io.company.brewcraft.service.TenantIaasAuthorizationFetch;
-import io.company.brewcraft.service.mapper.IaasAuthorizationMapper;
+import io.company.brewcraft.service.IaasObjectStoreFileSystem;
 
 @RestController
 @RequestMapping("/api/v1/iaas/auth") // TODO
 public class TenantedIaasAuthorizationFetchController {
-
-    private TenantIaasAuthorizationFetch authFetcher;
+    private IaasObjectStoreFileSystem fileSystem;
 
     @Autowired
-    public TenantedIaasAuthorizationFetchController(TenantIaasAuthorizationFetch authFetcher) {
-        this.authFetcher = authFetcher;
+    public TenantedIaasAuthorizationFetchController(IaasObjectStoreFileSystem fileSystem) {
+        this.fileSystem = fileSystem;
     }
 
     @GetMapping
-    public IaasAuthorizationDto get() {
-        IaasAuthorization authorization = this.authFetcher.fetch();
-
-        return IaasAuthorizationMapper.INSTANCE.toDto(authorization);
+    public List<URL> get(
+        @RequestParam(name = "files") List<URI> files,
+        @RequestParam(name = "expiration") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expiration
+    ) {
+        return this.fileSystem.getTemporaryPublicFileUploadPath(files, expiration);
     }
 }

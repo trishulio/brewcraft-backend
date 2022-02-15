@@ -25,7 +25,7 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
     }
 
     @Override
-    public List<URL> getTemporaryPublicFilePath(List<URI> filePaths, LocalDateTime expiration) {
+    public List<URL> getTemporaryPublicFileDownloadPath(List<URI> filePaths, LocalDateTime expiration) {
         AwsObjectStoreFileSystemClient filesystemClient = clientProvider.getClient();
 
         Date expiry = this.dtMapper.toUtilDate(expiration);
@@ -34,6 +34,21 @@ public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
                 .filter(Objects::nonNull)
                 .map(URI::toString)
                 .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(filePath, expiry, HttpMethod.GET))
+                .toList();
+        
+        return this.executor.supply(suppliers);
+    }
+
+    @Override
+    public List<URL> getTemporaryPublicFileUploadPath(List<URI> filePaths, LocalDateTime expiration) {
+        AwsObjectStoreFileSystemClient filesystemClient = clientProvider.getClient();
+
+        Date expiry = this.dtMapper.toUtilDate(expiration);
+        
+        List<Supplier<URL>> suppliers = filePaths.stream()
+                .filter(Objects::nonNull)
+                .map(URI::toString)
+                .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(filePath, expiry, HttpMethod.PUT))
                 .toList();
         
         return this.executor.supply(suppliers);

@@ -6,5 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IaasObjectStoreFileSystem {
-    List<URL> getTemporaryPublicFilePath(List<URI> filePaths, LocalDateTime expiration);
+    List<URL> getTemporaryPublicFileDownloadPath(List<URI> filePaths, LocalDateTime expiration);
+    List<URL> getTemporaryPublicFileUploadPath(List<URI> filePaths, LocalDateTime expiration);
 }

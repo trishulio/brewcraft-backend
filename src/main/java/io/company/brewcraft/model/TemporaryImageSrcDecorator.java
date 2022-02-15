@@ -28,7 +28,7 @@ public class TemporaryImageSrcDecorator implements EntityDecorator<ImageSrcAcces
         
         LocalDateTime expiration = LocalDateTime.now().plusHours(expiraryDurationInHours);
         
-        Iterator<URI> tempUris = this.fileSystem.getTemporaryPublicFilePath(urls, expiration)
+        Iterator<URI> tempUris = this.fileSystem.getTemporaryPublicFileDownloadPath(urls, expiration)
                                  .stream()
                                  .map(url -> {
                                     try {

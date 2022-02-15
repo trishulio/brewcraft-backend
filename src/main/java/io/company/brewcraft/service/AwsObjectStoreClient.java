@@ -24,8 +24,7 @@ public class AwsObjectStoreClient {
     
     public Bucket add(String bucketName) {
         CreateBucketRequest request = new CreateBucketRequest(bucketName);
-        // TODO: Implement bucket policy to be restricted.
-        
+
         return this.awsClient.createBucket(request);
     }
     
