@@ -68,5 +68,4 @@ public class IaasObjectStore extends BaseEntity implements UpdateIaasObjectStore
         // TODO: Versioning is not implemented due to lack of use-case
         return -1;
     }
-
 }

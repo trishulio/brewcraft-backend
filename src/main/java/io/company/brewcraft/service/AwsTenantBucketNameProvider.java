@@ -37,5 +37,4 @@ public class AwsTenantBucketNameProvider implements ObjectStoreNameProvider {
 
         return objectStoreName;
     }
-
 }

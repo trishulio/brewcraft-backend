@@ -55,5 +55,4 @@ public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGo
     public void refreshAccessors(Collection<? extends FinishedGoodAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-
 }

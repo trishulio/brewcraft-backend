@@ -48,5 +48,4 @@ public class TenantIaasVfsResources {
     public void setRolePolicyAttachment(IaasRolePolicyAttachment rolePolicyAttachment) {
         this.rolePolicyAttachment = rolePolicyAttachment;
     }
-
 }

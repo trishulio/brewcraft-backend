@@ -43,5 +43,4 @@ public class TemporaryImageSrcDecorator implements EntityDecorator<ImageSrcAcces
                 .filter(entity -> entity != null && entity.getImageSrc() != null)
                 .forEach(entity -> entity.setImageSrc(tempUris.next()));
     }
-
 }

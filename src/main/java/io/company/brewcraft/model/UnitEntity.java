@@ -70,5 +70,4 @@ public class UnitEntity extends BaseEntity {
     public void setBaseUnitEntity(UnitEntity baseUnitEntity) {
         this.baseUnitEntity = baseUnitEntity;
     }
-
 }
