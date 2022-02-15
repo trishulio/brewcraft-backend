@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.service.user.Group;
 
 public interface IdpUserRepository {
     void createUser(User user);
@@ -13,13 +14,13 @@ public interface IdpUserRepository {
 
     void removeUserFromGroup(User user, String group);
 
-    void createUserGroup(String group);
+    void createUserGroup(Group group);
 
     void deleteUserGroup(String group);
 
     boolean userGroupExists(String group);
 
-    void putUserGroup(String group);
+    void putUserGroup(Group group);
 
     void createUserInGroup(User user, String group);
 }

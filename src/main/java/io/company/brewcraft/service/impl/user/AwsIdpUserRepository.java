@@ -3,11 +3,13 @@ package io.company.brewcraft.service.impl.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.security.idp.AwsCognitoIdpClient;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
 import io.company.brewcraft.service.IdpUserRepository;
+import io.company.brewcraft.service.user.Group;
 
 public class AwsIdpUserRepository implements IdpUserRepository {
 
@@ -51,8 +53,15 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     }
 
     @Override
-    public void createUserGroup(String group) {
-        this.idpClient.createUserGroup(group);
+    public void createUserGroup(Group group) {
+        String roleArn = null;
+        IaasRole role = group.getIaasRole();
+        
+        if (role != null) {
+            roleArn = role.getIaasResourceName();
+        }
+        
+        this.idpClient.createUserGroup(group.getId(), roleArn);
     }
 
     @Override
@@ -66,8 +75,9 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     }
 
     @Override
-    public void putUserGroup(String group) {
-        if (!this.userGroupExists(group)) {
+    public void putUserGroup(Group group) {
+        String groupId = group.getId();
+        if (!this.userGroupExists(groupId)) {
             this.createUserGroup(group);
         }
     }

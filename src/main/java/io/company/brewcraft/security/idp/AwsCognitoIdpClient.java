@@ -95,8 +95,11 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void createUserGroup(final String group) {
-        final CreateGroupRequest createGroupRequest = new CreateGroupRequest().withUserPoolId(userPoolId).withGroupName(group);
+    public void createUserGroup(final String group, final String roleArn) {
+        final CreateGroupRequest createGroupRequest = new CreateGroupRequest()
+                                                      .withUserPoolId(userPoolId)
+                                                      .withGroupName(group)
+                                                      .withRoleArn(roleArn);
         logger.debug("Attempting to create group {} in cognito user pool {}", group, userPoolId);
         try {
             this.awsIdpProvider.createGroup(createGroupRequest);

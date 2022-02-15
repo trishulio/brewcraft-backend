@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.service.IdpUserRepository;
+import io.company.brewcraft.service.user.Group;
 
 public class SequentialMigrationManager implements MigrationManager {
     private static final Logger log = LoggerFactory.getLogger(SequentialMigrationManager.class);
@@ -40,8 +41,11 @@ public class SequentialMigrationManager implements MigrationManager {
             tenantReg.add(tenantId);
         }
 
+        // TODO: This is probably not the correct place to create a cognito group.
+        // This code needs to move out where IaasRole is created and then cognito group is created.
+        
         log.info("Registering idp user group: {}", tenantId);
-        idpUserRepo.putUserGroup(tenantId);
+        idpUserRepo.putUserGroup(new Group(tenantId));
 
         log.info("Applying migration to tenant: {}", tenantId);
         migrationReg.migrate(tenantId);

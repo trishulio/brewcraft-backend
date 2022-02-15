@@ -14,7 +14,7 @@ public interface IdentityProviderClient {
 
     void removeUserFromGroup(String userName, String group);
 
-    void createUserGroup(String group);
+    void createUserGroup(String group, String roleArn);
 
     void deleteUserGroup(String group);
 
