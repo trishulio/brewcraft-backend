@@ -35,7 +35,7 @@ public abstract class AbstractTenantDsManager implements TenantDataSourceManager
 
     @Override
     public String fqName(String tenantId) {
-        return String.format("%s%s", this.schemaPrefix, tenantId).toLowerCase();
+        return String.format("%s%s", this.schemaPrefix, tenantId.replace("-", "_")).toLowerCase();
     }
 
     @Override

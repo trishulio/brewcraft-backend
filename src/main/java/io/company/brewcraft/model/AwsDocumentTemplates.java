@@ -30,7 +30,7 @@ public class AwsDocumentTemplates {
             + "                \"s3:DeleteObject\",\n"
             + "                \"s3:GetBucketLocation\"\n"
             + "            ],\n"
-            + "            \"Resource\": \"arn:aws:s3:::%s\"\n"
+            + "            \"Resource\": \"arn:aws:s3:::%s/*\"\n"
             + "        }\n"
             + "    ]\n"
             + "}";

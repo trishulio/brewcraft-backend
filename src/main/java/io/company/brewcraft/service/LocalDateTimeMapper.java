@@ -2,16 +2,13 @@ package io.company.brewcraft.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Date;
 
 public class LocalDateTimeMapper {
     private ZoneId zoneId;
-    private ZoneOffset offset;
 
     public LocalDateTimeMapper(ZoneId zoneId) {
         this.zoneId = zoneId;
-        this.offset = ZoneOffset.of(this.zoneId.getId());
     }
 
     public LocalDateTime fromUtilDate(Date date) {
@@ -28,7 +25,7 @@ public class LocalDateTimeMapper {
         Date date = null;
 
         if (dt != null) {
-            date = Date.from(dt.toInstant(this.offset));
+            date = Date.from(dt.atZone(this.zoneId).toInstant());
         }
 
         return date;

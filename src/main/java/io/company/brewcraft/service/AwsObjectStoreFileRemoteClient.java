@@ -7,22 +7,20 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
-import io.company.brewcraft.model.AmazonS3Provider;
-
 public class AwsObjectStoreFileRemoteClient implements AwsObjectStoreFileSystemClient {
-    private AmazonS3Provider remoteClientProvider;
+    private AmazonS3 s3Client;
+    private String bucketName;
 
-    public AwsObjectStoreFileRemoteClient(AmazonS3Provider remoteClientProvider) {
-        this.remoteClientProvider = remoteClientProvider;
+    public AwsObjectStoreFileRemoteClient(AmazonS3 s3Client, String bucketName) {
+        this.s3Client = s3Client;
+        this.bucketName = bucketName;
     }
     
     @Override
-    public URL presign(String bucketName, String fileKey, Date expiration, HttpMethod httpMethod) {
-        AmazonS3 s3Client = this.remoteClientProvider.getAmazonS3Client();
-
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucketName, fileKey, httpMethod)
+    public URL presign(String fileKey, Date expiration, HttpMethod httpMethod) {
+        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(this.bucketName, fileKey, httpMethod)
                                               .withExpiration(expiration);
-
+        
         return s3Client.generatePresignedUrl(request);
     }
 }

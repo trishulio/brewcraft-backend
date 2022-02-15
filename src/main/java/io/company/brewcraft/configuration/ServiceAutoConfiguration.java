@@ -15,8 +15,8 @@ import io.company.brewcraft.dto.UpdateFinishedGood;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
-import io.company.brewcraft.model.AmazonS3Provider;
 import io.company.brewcraft.model.AwsDocumentTemplates;
+import io.company.brewcraft.model.AwsObjectStoreFileClientProvider;
 import io.company.brewcraft.model.BaseFinishedGood;
 import io.company.brewcraft.model.BaseFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodMixturePortion;
@@ -34,7 +34,6 @@ import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
-import io.company.brewcraft.model.ContextualTenantS3ClientProvider;
 import io.company.brewcraft.model.FinishedGood;
 import io.company.brewcraft.model.FinishedGoodMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodMixturePortion;
@@ -57,6 +56,7 @@ import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.TemporaryImageSrcDecorator;
+import io.company.brewcraft.model.TenantContextObjectStoreFileClientProvider;
 import io.company.brewcraft.model.UpdateFinishedGoodMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodMixturePortion;
 import io.company.brewcraft.model.UpdateIaasObjectStore;
@@ -123,10 +123,7 @@ import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsIdentityCredentialsMapper;
 import io.company.brewcraft.service.AwsObjectStoreClient;
-import io.company.brewcraft.service.AwsObjectStoreFileCacheClient;
-import io.company.brewcraft.service.AwsObjectStoreFileRemoteClient;
 import io.company.brewcraft.service.AwsObjectStoreFileSystem;
-import io.company.brewcraft.service.AwsObjectStoreFileSystemClient;
 import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
 import io.company.brewcraft.service.AwsTenantBucketNameProvider;
 import io.company.brewcraft.service.BlockingAsyncExecutor;
@@ -364,15 +361,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IaasObjectStoreFileSystem.class)
-    public IaasObjectStoreFileSystem iaasObjectStoreFilesystem(AwsObjectStoreFileSystemClient fileSystemClient, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper, ObjectStoreNameProvider objectStoreNameProvider) {
-        return new AwsObjectStoreFileSystem(fileSystemClient, executor, dtMapper, objectStoreNameProvider);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(AwsObjectStoreFileSystemClient.class)
-    public AwsObjectStoreFileSystemClient awsObjectStoreFileSystemClient(AmazonS3Provider amazonS3Provider) {
-        AwsObjectStoreFileSystemClient remoteClient = new AwsObjectStoreFileRemoteClient(amazonS3Provider);
-        return new AwsObjectStoreFileCacheClient(remoteClient);
+    public IaasObjectStoreFileSystem iaasObjectStoreFilesystem(AwsObjectStoreFileClientProvider fileClientProvider, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper) {
+        return new AwsObjectStoreFileSystem(fileClientProvider, executor, dtMapper);
     }
 
     @Bean
@@ -382,9 +372,9 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AmazonS3Provider.class)
-    public AmazonS3Provider amazonS3Provider(@Value("${aws.s3.region}") String region, TenantIaasAuthorizationFetch authFetcher, AwsFactory awsFactory) {
-        return new ContextualTenantS3ClientProvider(region, authFetcher, awsFactory);
+    @ConditionalOnMissingBean(AwsObjectStoreFileClientProvider.class)
+    public AwsObjectStoreFileClientProvider amazonS3Provider(@Value("${aws.s3.region}") String region, ObjectStoreNameProvider objectStoreNameProvider, TenantIaasAuthorizationFetch authFetcher, AwsFactory awsFactory) {
+        return new TenantContextObjectStoreFileClientProvider(region, objectStoreNameProvider, authFetcher, awsFactory);
     }
 
     @Bean
@@ -401,10 +391,10 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AwsCognitoIdentityClient.class)
-    public AwsCognitoIdentityClient cognitoIdentityClient(AmazonCognitoIdentity cognitoIdentity) {
+    public AwsCognitoIdentityClient cognitoIdentityClient(AmazonCognitoIdentity cognitoIdentity, @Value("${app.iaas.credentials.expiry.duration}") long credentialsExpiryDurationSeconds) {
         AwsCognitoIdentityClient cognitoIdentityClient = new AwsCognitoIdentitySdkWrapper(cognitoIdentity);
 
-        return new CachedAwsCognitoIdentityClient(cognitoIdentityClient);
+        return new CachedAwsCognitoIdentityClient(cognitoIdentityClient, credentialsExpiryDurationSeconds);
     }
 
     @Bean

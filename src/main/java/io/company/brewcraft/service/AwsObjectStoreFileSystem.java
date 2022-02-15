@@ -10,29 +10,30 @@ import java.util.function.Supplier;
 
 import com.amazonaws.HttpMethod;
 
+import io.company.brewcraft.model.AwsObjectStoreFileClientProvider;
+
 public class AwsObjectStoreFileSystem implements IaasObjectStoreFileSystem {
-    private AwsObjectStoreFileSystemClient filesystemClient;
+    private AwsObjectStoreFileClientProvider clientProvider;
     private BlockingAsyncExecutor executor;
     private LocalDateTimeMapper dtMapper;
-    private ObjectStoreNameProvider objectStoreNameProvider;
 
 
-    public AwsObjectStoreFileSystem(AwsObjectStoreFileSystemClient filesystemClient, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper, ObjectStoreNameProvider objectStoreNameProvider) {
-        this.filesystemClient = filesystemClient;
+    public AwsObjectStoreFileSystem(AwsObjectStoreFileClientProvider clientProvider, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper) {
+        this.clientProvider = clientProvider;
         this.executor = executor;
         this.dtMapper = dtMapper;
-        this.objectStoreNameProvider = objectStoreNameProvider;
     }
 
     @Override
     public List<URL> getTemporaryPublicFilePath(List<URI> filePaths, LocalDateTime expiration) {
-        String bucketName = this.objectStoreNameProvider.getObjectStoreName();
-        Date expiry = this.dtMapper.toUtilDate(expiration);
+        AwsObjectStoreFileSystemClient filesystemClient = clientProvider.getClient();
 
+        Date expiry = this.dtMapper.toUtilDate(expiration);
+        
         List<Supplier<URL>> suppliers = filePaths.stream()
                 .filter(Objects::nonNull)
                 .map(URI::toString)
-                .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(bucketName, filePath, expiry, HttpMethod.GET))
+                .map(filePath -> (Supplier<URL>) () -> filesystemClient.presign(filePath, expiry, HttpMethod.GET))
                 .toList();
         
         return this.executor.supply(suppliers);

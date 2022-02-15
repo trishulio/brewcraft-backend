@@ -23,6 +23,7 @@ public class TemporaryImageSrcDecorator implements EntityDecorator<ImageSrcAcces
         List<URI> urls = entities.stream()
                                 .filter(Objects::nonNull)
                                 .map(ImageSrcAccessor::getImageSrc)
+                                .filter(Objects::nonNull)
                                 .toList();
         
         LocalDateTime expiration = LocalDateTime.now().plusHours(expiraryDurationInHours);
@@ -38,7 +39,9 @@ public class TemporaryImageSrcDecorator implements EntityDecorator<ImageSrcAcces
                                 })
                                  .iterator();
         
-        entities.forEach(entity -> entity.setImageSrc(tempUris.next()));
+        entities.stream()
+                .filter(entity -> entity != null && entity.getImageSrc() != null)
+                .forEach(entity -> entity.setImageSrc(tempUris.next()));
     }
 
 }

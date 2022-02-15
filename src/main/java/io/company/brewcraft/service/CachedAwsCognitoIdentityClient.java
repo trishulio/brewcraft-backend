@@ -14,15 +14,12 @@ import com.google.common.cache.LoadingCache;
 import io.company.brewcraft.model.BaseModel;
 
 public class CachedAwsCognitoIdentityClient implements AwsCognitoIdentityClient {
-    private static final int HOURS_GET_ID_CACHE_EXPIRATION = 1;
-    private static final int HOURS_GET_CREDENTIALS_EXPIRATION = -10; // TODO: see the token expiration duration and put the correct value here
-    
     private LoadingCache<GetIdentityPoolsArgs, List<IdentityPoolShortDescription>> getIdentityPools;
     private LoadingCache<GetIdentityIdArgs, String> getIdentityId;    
     private LoadingCache<GetCredentialsForIdentityIdArgs, Credentials> getCredentialsForIdentity;
     
     
-    public CachedAwsCognitoIdentityClient(AwsCognitoIdentityClient cognitoIdClient) {
+    public CachedAwsCognitoIdentityClient(AwsCognitoIdentityClient cognitoIdClient, long credentialsExpiryDurationSeconds) {
         this.getIdentityPools = CacheBuilder.newBuilder()
                                             .build(new CacheLoader<GetIdentityPoolsArgs, List<IdentityPoolShortDescription>>() {
                                               @Override
@@ -32,7 +29,6 @@ public class CachedAwsCognitoIdentityClient implements AwsCognitoIdentityClient 
                                             });
 
         this.getIdentityId = CacheBuilder.newBuilder()
-                                      .expireAfterAccess(Duration.ofHours(HOURS_GET_ID_CACHE_EXPIRATION))
                                       .build(new CacheLoader<GetIdentityIdArgs, String>() {
                                         @Override
                                         public String load(GetIdentityIdArgs key) throws Exception {
@@ -41,7 +37,7 @@ public class CachedAwsCognitoIdentityClient implements AwsCognitoIdentityClient 
                                       });
 
         this.getCredentialsForIdentity = CacheBuilder.newBuilder()
-                                      .expireAfterAccess(Duration.ofHours(HOURS_GET_CREDENTIALS_EXPIRATION))
+                                      .expireAfterWrite(Duration.ofSeconds(credentialsExpiryDurationSeconds))
                                       .build(new CacheLoader<GetCredentialsForIdentityIdArgs, Credentials>() {
                                         @Override
                                         public Credentials load(GetCredentialsForIdentityIdArgs key) throws Exception {

@@ -6,5 +6,5 @@ import java.util.Date;
 import com.amazonaws.HttpMethod;
 
 public interface AwsObjectStoreFileSystemClient {
-    URL presign(String bucketName, String fileKey, Date expiration, HttpMethod httpMethod);
+    URL presign(String fileKey, Date expiration, HttpMethod httpMethod);
 }
