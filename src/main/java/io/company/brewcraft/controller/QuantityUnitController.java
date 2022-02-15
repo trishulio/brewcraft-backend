@@ -46,7 +46,7 @@ public class QuantityUnitController extends BaseController {
 
         List<UnitDto> userRoles = unitsPage.stream()
                                            .map(unit -> quantityUnitMapper.toDto(unit))
-                                           .collect(Collectors.toList());
+                                           .toList();
 
         PageDto<UnitDto> dto = new PageDto<UnitDto>(userRoles, unitsPage.getTotalPages(), unitsPage.getTotalElements());
 

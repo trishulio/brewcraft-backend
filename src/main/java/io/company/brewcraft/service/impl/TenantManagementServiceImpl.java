@@ -36,7 +36,7 @@ public class TenantManagementServiceImpl implements TenantManagementService {
 
     @Override
     public List<TenantDto> getTenants() {
-        return tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).collect(Collectors.toList());
+        return tenantRepository.findAll().stream().map(tenant -> tenantMapper.tenantToTenantDto(tenant)).toList();
     }
 
     @Override

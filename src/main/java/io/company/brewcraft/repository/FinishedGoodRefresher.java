@@ -42,10 +42,10 @@ public class FinishedGoodRefresher implements Refresher<FinishedGood, FinishedGo
     public void refresh(Collection<FinishedGood> finishedGoods) {
         this.skuRefresher.refreshAccessors(finishedGoods);
 
-        final List<FinishedGoodMixturePortion> mixturePortions = finishedGoods.stream().filter(i -> i.getMixturePortions() != null).flatMap(i -> i.getMixturePortions().stream()).collect(Collectors.toList());
+        final List<FinishedGoodMixturePortion> mixturePortions = finishedGoods.stream().filter(i -> i.getMixturePortions() != null).flatMap(i -> i.getMixturePortions().stream()).toList();
         this.fgMixturePortionRefresher.refresh(mixturePortions);
 
-        final List<FinishedGoodMaterialPortion> materialPortions = finishedGoods.stream().filter(i -> i.getMaterialPortions() != null).flatMap(i -> i.getMaterialPortions().stream()).collect(Collectors.toList());
+        final List<FinishedGoodMaterialPortion> materialPortions = finishedGoods.stream().filter(i -> i.getMaterialPortions() != null).flatMap(i -> i.getMaterialPortions().stream()).toList();
         this.fgMaterialPortionRefresher.refresh(materialPortions);
 
         this.childFinishedGoodsRefresher.refreshAccessors(finishedGoods);

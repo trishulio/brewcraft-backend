@@ -40,7 +40,7 @@ public class UserRefresher implements Refresher<User, UserAccessor> {
         this.statusRefresher.refreshAccessors(users);
         this.salutationRefresher.refreshAccessors(users);
 
-        List<UserRoleBinding> bindings = users.stream().filter(u -> u != null && u.getRoleBindings() != null && u.getRoleBindings().size() > 0).flatMap(u -> u.getRoleBindings().stream()).collect(Collectors.toList());
+        List<UserRoleBinding> bindings = users.stream().filter(u -> u != null && u.getRoleBindings() != null && u.getRoleBindings().size() > 0).flatMap(u -> u.getRoleBindings().stream()).toList();
         this.roleBindingRefresher.refresh(bindings);
     }
 

@@ -42,7 +42,7 @@ public class CrudControllerService<
     }
 
     public PageDto<EntityDto> getAll(Page<Entity> entities, Set<String> attributes) {
-        final List<EntityDto> content = entities.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
+        final List<EntityDto> content = entities.stream().map(i -> mapper.toDto(i)).toList();
         content.forEach(invoice -> this.filter(invoice, attributes));
 
         final PageDto<EntityDto> dto = new PageDto<>();
@@ -63,24 +63,24 @@ public class CrudControllerService<
     }
 
     public List<EntityDto> add(List<AddDto> addDtos) {
-        List<AddEntity> additions = (List<AddEntity>) addDtos.stream().map(dto -> mapper.fromAddDto(dto)).collect(Collectors.toList());
+        List<AddEntity> additions = (List<AddEntity>) addDtos.stream().map(dto -> mapper.fromAddDto(dto)).toList();
         List<Entity> added = this.service.add(additions);
 
-        return added.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        return added.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
     public List<EntityDto> put(List<UpdateDto> updateDtos) {
-        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
+        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).toList();
         List<Entity> updated = this.service.put(updates);
 
-        return updated.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        return updated.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
     public List<EntityDto> patch(List<UpdateDto> updateDtos) {
-        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
+        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).toList();
         List<Entity> patched = this.service.patch(updates);
 
-        return patched.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        return patched.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
     public int delete(Set<ID> ids) {

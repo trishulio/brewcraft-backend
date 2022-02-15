@@ -49,7 +49,7 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
             final List<V> collectionEntities = entityRetriever.apply(allCollectionEntitiesIds);
 
             if (collectionEntities.size() != allCollectionEntitiesIds.size()) {
-                List<?> existingCollectionEntitiesIds = collectionEntities.stream().map(entity -> entity.getId()).collect(Collectors.toList());
+                List<?> existingCollectionEntitiesIds = collectionEntities.stream().map(entity -> entity.getId()).toList();
                 throw new EntityNotFoundException(String.format("Cannot find all %ss in Id-Set: %s. Only found the ones with Ids: %s", this.clazz.getSimpleName(), allCollectionEntitiesIds, existingCollectionEntitiesIds));
              }
 
@@ -59,7 +59,7 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
                 A entity = entry.getKey();
                 final Set<I> collectionIds = entry.getValue();
 
-                final Collection<V> refreshedCollectionEntities = collectionIds.stream().map(idToCollectionEntity::get).collect(Collectors.toList());
+                final Collection<V> refreshedCollectionEntities = collectionIds.stream().map(idToCollectionEntity::get).toList();
                 setter.accept(entity, refreshedCollectionEntities);
             }
         }

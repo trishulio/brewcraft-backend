@@ -35,7 +35,7 @@ public class TenantIaasVfsResourceMapper {
                                                                      )
                                                                  )
                                                                  .limit(objectStoreCount)
-                                                                 .collect(Collectors.toList());
+                                                                 .toList();
          return resources;
     }
 }

@@ -68,7 +68,7 @@ public class MixtureController extends BaseController {
                 brewBatchIds, stageStatusIds, stageTaskIds, productIds, page, size, sort, orderAscending);
 
         List<MixtureDto> mixtureList = mixturePage.stream().map(mixture -> mixtureMapper.toDto(mixture))
-                .collect(Collectors.toList());
+                .toList();
 
         PageDto<MixtureDto> dto = new PageDto<>(mixtureList, mixturePage.getTotalPages(),
                 mixturePage.getTotalElements());

@@ -54,7 +54,7 @@ public class FacilityController extends BaseController {
     ) {
         Page<Facility> facilitiesPage = facilityService.getAllFacilities(page, size, sort, orderAscending);
 
-        List<FacilityDto> facilitiesList = facilitiesPage.stream().map(facility -> facilityMapper.toDto(facility)).collect(Collectors.toList());
+        List<FacilityDto> facilitiesList = facilitiesPage.stream().map(facility -> facilityMapper.toDto(facility)).toList();
 
         PageDto<FacilityDto> dto = new PageDto<FacilityDto>(facilitiesList, facilitiesPage.getTotalPages(), facilitiesPage.getTotalElements());
         return dto;

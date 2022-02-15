@@ -50,7 +50,7 @@ public class FinishedGoodInventoryController extends BaseController {
     }
 
     private PageDto<FinishedGoodInventoryDto> response(Page<FinishedGoodInventory> finishedGoods, Set<String> attributes) {
-        final List<FinishedGoodInventoryDto> content = finishedGoods.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
+        final List<FinishedGoodInventoryDto> content = finishedGoods.stream().map(i -> mapper.toDto(i)).toList();
         content.forEach(finishedGood -> this.filter(finishedGood, attributes));
 
         final PageDto<FinishedGoodInventoryDto> dto = new PageDto<>();

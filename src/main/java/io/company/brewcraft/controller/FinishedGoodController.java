@@ -112,12 +112,12 @@ public class FinishedGoodController extends BaseController {
     public List<FinishedGoodDto> addFinishedGood(@Valid @NotNull @RequestBody List<AddFinishedGoodDto> payloads) {
         final List<BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>> additions = payloads.stream()
                                                                                                                                                     .map(addition -> mapper.fromDto(addition))
-                                                                                                                                                    .collect(Collectors.toList());
+                                                                                                                                                    .toList();
         final List<FinishedGood> added = this.finishedGoodService.add(additions);
 
         final List<FinishedGoodDto> dtos = added.stream()
                                                 .map(finishedGood -> mapper.toDto(finishedGood))
-                                                .collect(Collectors.toList());
+                                                .toList();
 
         return dtos;
     }
@@ -137,13 +137,13 @@ public class FinishedGoodController extends BaseController {
     public List<FinishedGoodDto> updateFinishedGoods(@Valid @NotNull @RequestBody List<UpdateFinishedGoodDto> updateFinishedGoodDtos) {
         final List<UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> finishedGoods = updateFinishedGoodDtos.stream()
                                                                                                                                                                             .map(updateFinishedGoodDto -> mapper.fromDto(updateFinishedGoodDto))
-                                                                                                                                                                            .collect(Collectors.toList());
+                                                                                                                                                                            .toList();
 
         final List<FinishedGood> putFinishedGoods = this.finishedGoodService.put(finishedGoods);
 
         return putFinishedGoods.stream()
                                .map(putFinishedGood -> mapper.toDto(putFinishedGood))
-                               .collect(Collectors.toList());
+                               .toList();
     }
 
     @PatchMapping("/{finishedGoodId}")
@@ -158,7 +158,7 @@ public class FinishedGoodController extends BaseController {
     }
 
     private PageDto<FinishedGoodDto> response(Page<FinishedGood> finishedGoods, Set<String> attributes) {
-        final List<FinishedGoodDto> content = finishedGoods.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
+        final List<FinishedGoodDto> content = finishedGoods.stream().map(i -> mapper.toDto(i)).toList();
         content.forEach(finishedGood -> this.filter(finishedGood, attributes));
 
         final PageDto<FinishedGoodDto> dto = new PageDto<>();

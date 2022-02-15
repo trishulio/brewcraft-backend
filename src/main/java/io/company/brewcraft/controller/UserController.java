@@ -68,7 +68,7 @@ public class UserController extends BaseController {
         List<UserDto> userList = userPage
                                  .stream()
                                  .map(UserMapper.INSTANCE::toDto)
-                                 .collect(Collectors.toList());
+                                 .toList();
         return new PageDto<>(userList, userPage.getTotalPages(), userPage.getTotalElements());
     }
 

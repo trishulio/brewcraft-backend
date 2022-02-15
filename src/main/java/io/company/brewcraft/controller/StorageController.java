@@ -54,7 +54,7 @@ public class StorageController extends BaseController {
     ) {
         Page<Storage> storagePage = storageService.getAllStorages(page, size, sort, orderAscending);
 
-        List<StorageDto> storageList = storagePage.stream().map(storage -> storageMapper.toDto(storage)).collect(Collectors.toList());
+        List<StorageDto> storageList = storagePage.stream().map(storage -> storageMapper.toDto(storage)).toList();
 
         PageDto<StorageDto> dto = new PageDto<StorageDto>(storageList, storagePage.getTotalPages(), storagePage.getTotalElements());
 

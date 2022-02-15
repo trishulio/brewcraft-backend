@@ -63,7 +63,7 @@ public class SkuController extends BaseController {
 
         List<SkuDto> skuList = skuPage.stream()
                                       .map(sku -> skuMapper.toDto(sku))
-                                      .collect(Collectors.toList());
+                                      .toList();
 
         PageDto<SkuDto> dto = new PageDto<>(skuList, skuPage.getTotalPages(), skuPage.getTotalElements());
 

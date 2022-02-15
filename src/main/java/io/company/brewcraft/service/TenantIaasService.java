@@ -34,6 +34,6 @@ public class TenantIaasService {
     private List<TenantIaasResources> map(List<TenantIaasVfsResources> vfsResources) {
         return vfsResources.stream()
                             .map(vfsResource -> new TenantIaasResources(vfsResource))
-                            .collect(Collectors.toList());    
+                            .toList();    
     }
 }

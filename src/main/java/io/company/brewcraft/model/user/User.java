@@ -264,7 +264,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
         return this.roleBindings.stream()
                                 .map(binding -> binding.getRole())
-                                .collect(Collectors.toList());
+                                .toList();
     }
 
     /**

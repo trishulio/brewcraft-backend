@@ -52,7 +52,7 @@ public class SupplierController extends BaseController {
     ) {
         Page<Supplier> suppliers = supplierService.getSuppliers(page, size, sort, orderAscending);
 
-        List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.toDto(supplier)).collect(Collectors.toList());
+        List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.toDto(supplier)).toList();
 
         return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());
     }

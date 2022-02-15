@@ -63,7 +63,7 @@ public class ProductController extends BaseController {
 
         List<ProductDto> productsList = productsPage.stream()
                                                     .map(product -> productMapper.toDto(product))
-                                                    .collect(Collectors.toList());
+                                                    .toList();
 
         this.decorator.decorate(productsList);
         PageDto<ProductDto> dto = new PageDto<ProductDto>(productsList, productsPage.getTotalPages(), productsPage.getTotalElements());

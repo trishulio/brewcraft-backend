@@ -134,16 +134,16 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
             if (mixturePortions == null) {
                 this.mixturePortions.clear();
             } else {
-                this.mixturePortions.stream().filter(mixturePortion -> !mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::removeMixturePortion);
+                this.mixturePortions.stream().filter(mixturePortion -> !mixturePortions.contains(mixturePortion)).toList().forEach(this::removeMixturePortion);
             }
         }
 
         if (mixturePortions != null) {
             if (this.mixturePortions == null) {
                 this.mixturePortions = new ArrayList<>();
-                mixturePortions.stream().collect(Collectors.toList()).forEach(this::addMixturePortion);
+                mixturePortions.stream().toList().forEach(this::addMixturePortion);
             } else {
-                mixturePortions.stream().filter(mixturePortion -> !this.mixturePortions.contains(mixturePortion)).collect(Collectors.toList()).forEach(this::addMixturePortion);
+                mixturePortions.stream().filter(mixturePortion -> !this.mixturePortions.contains(mixturePortion)).toList().forEach(this::addMixturePortion);
             }
         }
     }
@@ -191,16 +191,16 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
             if (materialPortions == null) {
                 this.materialPortions.clear();
             } else {
-                this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+                this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).toList().forEach(this::removeMaterialPortion);
             }
         }
 
         if (materialPortions != null) {
             if (this.materialPortions == null) {
                 this.materialPortions = new ArrayList<>();
-                materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
+                materialPortions.stream().toList().forEach(this::addMaterialPortion);
             } else {
-                materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);
+                materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).toList().forEach(this::addMaterialPortion);
             }
         }
     }
@@ -262,16 +262,16 @@ public class FinishedGood extends BaseEntity implements UpdateFinishedGood<Finis
             if (childFinishedGoods == null) {
                 this.childFinishedGoods.clear();
             } else {
-                this.childFinishedGoods.stream().filter(childFinishedGood -> !childFinishedGoods.contains(childFinishedGood)).collect(Collectors.toList()).forEach(this::removeChildFinishedGood);
+                this.childFinishedGoods.stream().filter(childFinishedGood -> !childFinishedGoods.contains(childFinishedGood)).toList().forEach(this::removeChildFinishedGood);
             }
         }
 
         if (childFinishedGoods != null) {
             if (this.childFinishedGoods == null) {
                 this.childFinishedGoods = new ArrayList<>();
-                childFinishedGoods.stream().collect(Collectors.toList()).forEach(this::addChildFinishedGood);
+                childFinishedGoods.stream().toList().forEach(this::addChildFinishedGood);
             } else {
-                childFinishedGoods.stream().filter(childFinishedGood -> !this.childFinishedGoods.contains(childFinishedGood)).collect(Collectors.toList()).forEach(this::addChildFinishedGood);
+                childFinishedGoods.stream().filter(childFinishedGood -> !this.childFinishedGoods.contains(childFinishedGood)).toList().forEach(this::addChildFinishedGood);
             }
         }
     }

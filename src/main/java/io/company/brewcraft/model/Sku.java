@@ -147,16 +147,16 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
             if (materials == null) {
                 this.materials.clear();
             } else {
-                this.materials.stream().filter(material -> !materials.contains(material)).collect(Collectors.toList()).forEach(this::removeMaterial);
+                this.materials.stream().filter(material -> !materials.contains(material)).toList().forEach(this::removeMaterial);
             }
         }
 
         if (materials != null) {
             if (this.materials == null) {
                 this.materials = new ArrayList<>();
-                materials.stream().collect(Collectors.toList()).forEach(this::addMaterial);
+                materials.stream().toList().forEach(this::addMaterial);
             } else {
-                materials.stream().filter(material -> !this.materials.contains(material)).collect(Collectors.toList()).forEach(this::addMaterial);
+                materials.stream().filter(material -> !this.materials.contains(material)).toList().forEach(this::addMaterial);
             }
         }
     }

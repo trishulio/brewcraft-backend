@@ -64,7 +64,7 @@ public class MixtureMaterialPortionController extends BaseController {
 
         List<MixtureMaterialPortionDto> materialPortionList = materialPortionPage.stream()
                                                                                  .map(materialPortion -> materialPortionMapper.toDto(materialPortion))
-                                                                                 .collect(Collectors.toList());
+                                                                                 .toList();
 
         PageDto<MixtureMaterialPortionDto> dto = new PageDto<>(materialPortionList, materialPortionPage.getTotalPages(), materialPortionPage.getTotalElements());
 
@@ -85,13 +85,13 @@ public class MixtureMaterialPortionController extends BaseController {
     public List<MixtureMaterialPortionDto> addMMaterialPortions(@Valid @RequestBody List<AddMixtureMaterialPortionDto> addMaterialPortionDtos) {
         List<BaseMixtureMaterialPortion> materialPortions = addMaterialPortionDtos.stream()
                                                                                   .map(dto -> materialPortionMapper.fromDto(dto))
-                                                                                  .collect(Collectors.toList());
+                                                                                  .toList();
 
         List<MixtureMaterialPortion> addedMaterialPortions = materialPortionService.addMaterialPortions(materialPortions);
 
         return addedMaterialPortions.stream()
                                     .map(addedMaterialPortion -> materialPortionMapper.toDto(addedMaterialPortion))
-                                    .collect(Collectors.toList());
+                                    .toList();
     }
 
     @PutMapping("/{materialPortionId}")
@@ -108,13 +108,13 @@ public class MixtureMaterialPortionController extends BaseController {
     public List<MixtureMaterialPortionDto> putMaterialPortions(@Valid @RequestBody List<UpdateMixtureMaterialPortionDto> updateMaterialPortionDtos) {
         List<UpdateMixtureMaterialPortion> materialPortions = updateMaterialPortionDtos.stream()
                                                                                        .map(updateMaterialPortionDto -> materialPortionMapper.fromDto(updateMaterialPortionDto))
-                                                                                       .collect(Collectors.toList());
+                                                                                       .toList();
 
             List<MixtureMaterialPortion> putMaterialPortions = materialPortionService.putMaterialPortions(materialPortions);
 
             return putMaterialPortions.stream()
                                       .map(putMaterialPortion -> materialPortionMapper.toDto(putMaterialPortion))
-                                      .collect(Collectors.toList());
+                                      .toList();
 
     }
 

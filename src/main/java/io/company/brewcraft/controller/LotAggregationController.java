@@ -75,7 +75,7 @@ public class LotAggregationController extends BaseController {
             size
         );
 
-        final List<ProcurementLotDto> contentDto = inventory.stream().map(i -> ProcurementLotMapper.INSTANCE.toDto(i)).collect(Collectors.toList());
+        final List<ProcurementLotDto> contentDto = inventory.stream().map(i -> ProcurementLotMapper.INSTANCE.toDto(i)).toList();
 
         return new PageDto<>(contentDto, inventory.getTotalPages(), inventory.getTotalElements());
     }
@@ -119,7 +119,7 @@ public class LotAggregationController extends BaseController {
             size
         );
 
-        final List<StockLotDto> contentDto = inventory.stream().map(i -> StockLotMapper.INSTANCE.toDto(i)).collect(Collectors.toList());
+        final List<StockLotDto> contentDto = inventory.stream().map(i -> StockLotMapper.INSTANCE.toDto(i)).toList();
 
         return new PageDto<>(contentDto, inventory.getTotalPages(), inventory.getTotalElements());
     }

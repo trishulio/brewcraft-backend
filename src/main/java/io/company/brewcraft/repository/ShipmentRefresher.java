@@ -32,7 +32,7 @@ public class ShipmentRefresher implements Refresher<Shipment, ShipmentAccessor> 
     @Override
     public void refresh(Collection<Shipment> shipments) {
         this.shipmentStatusRefresher.refreshAccessors(shipments);
-        final List<MaterialLot> lots = shipments == null ? null : shipments.stream().filter(s -> s != null && s.getLotCount() > 0).flatMap(s -> s.getLots().stream()).collect(Collectors.toList());
+        final List<MaterialLot> lots = shipments == null ? null : shipments.stream().filter(s -> s != null && s.getLotCount() > 0).flatMap(s -> s.getLots().stream()).toList();
         this.materialLotRefresher.refresh(lots);
     }
 

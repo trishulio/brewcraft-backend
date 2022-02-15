@@ -62,7 +62,7 @@ public class EquipmentController extends BaseController {
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()
                                                         .map(equipment -> equipmentMapper.toDto(equipment))
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         PageDto<EquipmentDto> dto = new PageDto<EquipmentDto>(equipmentList, equipmentPage.getTotalPages(), equipmentPage.getTotalElements());
 

@@ -144,7 +144,7 @@ public class TenantIaasVfsService {
                     
                     return attachment;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.add(attachmentAdditions);
         

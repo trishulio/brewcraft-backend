@@ -43,7 +43,7 @@ public class Validator {
         if (!pass) {
             try {
                 Class<?>[] argClasses = new Class[args.length];
-                argClasses = Arrays.stream(args).map(arg -> arg.getClass()).collect(Collectors.toList()).toArray(argClasses);
+                argClasses = Arrays.stream(args).map(arg -> arg.getClass()).toList().toArray(argClasses);
 
                 Constructor<? extends RuntimeException> constructor = clazz.getDeclaredConstructor(argClasses);
                 RuntimeException e = constructor.newInstance(args);

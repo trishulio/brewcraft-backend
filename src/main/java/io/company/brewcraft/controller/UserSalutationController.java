@@ -46,7 +46,7 @@ public class UserSalutationController extends BaseController {
 
         List<UserSalutationDto> userSalutations = userSalutationPage.stream()
                                                                     .map(salutation -> userSalutationMapper.toDto(salutation))
-                                                                    .collect(Collectors.toList());
+                                                                    .toList();
 
         PageDto<UserSalutationDto> dto = new PageDto<UserSalutationDto>(userSalutations, userSalutationPage.getTotalPages(),
                 userSalutationPage.getTotalElements());

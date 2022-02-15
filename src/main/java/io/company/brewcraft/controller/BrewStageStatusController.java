@@ -48,7 +48,7 @@ public class BrewStageStatusController extends BaseController {
 
         List<BrewStageStatusDto> brewStageStatusList = brewStageStatusPage.stream()
                                                                           .map(brewStageStatus -> brewStageStatusMapper.toDto(brewStageStatus))
-                                                                          .collect(Collectors.toList());
+                                                                          .toList();
 
         PageDto<BrewStageStatusDto> dto = new PageDto<>(brewStageStatusList, brewStageStatusPage.getTotalPages(), brewStageStatusPage.getTotalElements());
 

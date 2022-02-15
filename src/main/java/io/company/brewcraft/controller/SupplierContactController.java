@@ -57,7 +57,7 @@ public class SupplierContactController extends BaseController {
     ) {
         Page<SupplierContact> supplierContacts = supplierContactService.getSupplierContacts(ids, supplierIds, page, size, sort, orderAscending);
 
-        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).collect(Collectors.toList());
+        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).toList();
 
         return new GetSupplierContactsDto(supplierContactDtos, supplierContacts.getTotalElements(), supplierContacts.getTotalPages());
     }

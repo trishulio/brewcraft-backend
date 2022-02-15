@@ -175,7 +175,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                             purchaseOrder.override(update, getPropertyNames(clz, Set.of(PurchaseOrder.ATTR_ID, PurchaseOrder.ATTR_VERSION)));
                                             return purchaseOrder;
                                          })
-                                         .collect(Collectors.toList());
+                                         .toList();
 
         return this.repoService.saveAll(pOs);
     }

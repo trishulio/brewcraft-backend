@@ -62,7 +62,7 @@ public class ProductCategoryController extends BaseController {
 
         List<CategoryDto> productCategoriesList = categoriesPage.stream()
                                                                 .map(productCategory -> productCategoryMapper.toDto(productCategory))
-                                                                .collect(Collectors.toList());
+                                                                .toList();
 
         PageDto<CategoryDto> dto = new PageDto<CategoryDto>(productCategoriesList, categoriesPage.getTotalPages(), categoriesPage.getTotalElements());
 

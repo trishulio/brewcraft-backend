@@ -29,7 +29,7 @@ public class ColumnSpecAccumulator extends BaseModel {
         @SuppressWarnings("unchecked")
         List<T> columns = this.aggregations.stream()
                                            .map(spec -> (T) spec.getExpression(root, cq, cb))
-                                           .collect(Collectors.toList());
+                                           .toList();
         return columns;
     }
 }

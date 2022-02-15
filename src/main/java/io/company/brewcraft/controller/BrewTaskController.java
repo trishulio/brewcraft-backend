@@ -48,7 +48,7 @@ public class BrewTaskController extends BaseController {
 
         List<BrewTaskDto> brewTaskList = brewTaskPage.stream()
                                                      .map(brewTask -> brewTaskMapper.toDto(brewTask))
-                                                     .collect(Collectors.toList());
+                                                     .toList();
 
         PageDto<BrewTaskDto> dto = new PageDto<>(brewTaskList, brewTaskPage.getTotalPages(), brewTaskPage.getTotalElements());
 

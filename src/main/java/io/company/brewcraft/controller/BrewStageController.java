@@ -66,7 +66,7 @@ public class BrewStageController extends BaseController {
 
         List<BrewStageDto> brewStageList = brewStagePage.stream()
                                                         .map(brewStage -> brewStageMapper.toDto(brewStage))
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         PageDto<BrewStageDto> dto = new PageDto<>(brewStageList, brewStagePage.getTotalPages(), brewStagePage.getTotalElements());
 
@@ -87,13 +87,13 @@ public class BrewStageController extends BaseController {
     public List<BrewStageDto> addBrewStages(@Valid @RequestBody List<AddBrewStageDto> addBrewStageDtos) {
         List<BrewStage> brewStages = addBrewStageDtos.stream()
                                                      .map(addBrewStageDto -> brewStageMapper.fromDto(addBrewStageDto))
-                                                     .collect(Collectors.toList());
+                                                     .toList();
 
         List<BrewStage> addedBrewStages = brewStageService.addBrewStages(brewStages);
 
         return addedBrewStages.stream()
                               .map(addedBrewStage -> brewStageMapper.toDto(addedBrewStage))
-                              .collect(Collectors.toList());
+                              .toList();
     }
 
     @PutMapping("/{stageId}")

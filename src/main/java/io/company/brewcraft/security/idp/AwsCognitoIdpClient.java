@@ -36,7 +36,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
 
     @Override
     public void createUser(final String userName, final Map<String, String> userAttr) {
-        final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
+        final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).toList();
         final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withDesiredDeliveryMediums(DeliveryMediumType.EMAIL).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
         try {
@@ -51,7 +51,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
 
     @Override
     public void updateUser(final String userName, final Map<String, String> userAttr) {
-        final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).collect(Collectors.toList());
+        final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).toList();
         final AdminUpdateUserAttributesRequest adminUpdateUserRequest = new AdminUpdateUserAttributesRequest().withUserPoolId(userPoolId).withUsername(userName).withUserAttributes(attributeTypes);
         logger.debug("Attempting to update user {} in cognito user pool {} ", userName, userPoolId);
         this.awsIdpProvider.adminUpdateUserAttributes(adminUpdateUserRequest);

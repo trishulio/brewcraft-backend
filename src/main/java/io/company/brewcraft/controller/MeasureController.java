@@ -45,7 +45,7 @@ public class MeasureController extends BaseController {
         Page<Measure> measuresPage = measureService.getMeasures(ids, page, size, sort, orderAscending);
 
         List<MeasureDto> measureList = measuresPage.stream().map(measure -> measureMapper.toDto(measure))
-                .collect(Collectors.toList());
+                .toList();
 
         PageDto<MeasureDto> dto = new PageDto<MeasureDto>(measureList, measuresPage.getTotalPages(),
                 measuresPage.getTotalElements());

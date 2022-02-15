@@ -202,7 +202,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                                                             shipment.setInvoiceItemsFromInvoice(invoice);
                                                             return new Procurement(shipment, invoice);
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }
@@ -235,7 +235,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
                                                             return procurement;
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }
@@ -268,7 +268,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
                                                             return procurement;
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }

@@ -46,7 +46,7 @@ public class UserRoleController extends BaseController {
 
         List<UserRoleDto> userRoles = userRolePage.stream()
                                                   .map(role -> userRoleMapper.toDto(role))
-                                                  .collect(Collectors.toList());
+                                                  .toList();
 
         PageDto<UserRoleDto> dto = new PageDto<UserRoleDto>(userRoles, userRolePage.getTotalPages(), userRolePage.getTotalElements());
 

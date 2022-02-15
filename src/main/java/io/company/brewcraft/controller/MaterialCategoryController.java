@@ -62,7 +62,7 @@ public class MaterialCategoryController extends BaseController {
 
         List<CategoryDto> materialCategoriesList = materialCategoriesPage.stream()
                                                                          .map(materialCategory -> materialCategoryMapper.toDto(materialCategory))
-                                                                         .collect(Collectors.toList());
+                                                                         .toList();
 
         PageDto<CategoryDto> dto = new PageDto<CategoryDto>(materialCategoriesList, materialCategoriesPage.getTotalPages(), materialCategoriesPage.getTotalElements());
 

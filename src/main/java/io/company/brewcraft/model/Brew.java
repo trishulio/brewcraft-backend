@@ -189,16 +189,16 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
             if (childBrews == null) {
                 this.childBrews.clear();
             } else {
-                this.childBrews.stream().filter(childBrew -> !childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::removeChildBrew);
+                this.childBrews.stream().filter(childBrew -> !childBrews.contains(childBrew)).toList().forEach(this::removeChildBrew);
             }
         }
 
         if (childBrews != null) {
             if (this.childBrews == null) {
                 this.childBrews = new ArrayList<>();
-                childBrews.stream().collect(Collectors.toList()).forEach(this::addChildBrew);
+                childBrews.stream().toList().forEach(this::addChildBrew);
             } else {
-                childBrews.stream().filter(childBrew -> !this.childBrews.contains(childBrew)).collect(Collectors.toList()).forEach(this::addChildBrew);
+                childBrews.stream().filter(childBrew -> !this.childBrews.contains(childBrew)).toList().forEach(this::addChildBrew);
             }
         }
     }
@@ -246,16 +246,16 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
             if (brewStages == null) {
                 this.brewStages.clear();
             } else {
-                this.brewStages.stream().filter(brewStage -> !brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::removeBrewStage);
+                this.brewStages.stream().filter(brewStage -> !brewStages.contains(brewStage)).toList().forEach(this::removeBrewStage);
             }
         }
 
         if (brewStages != null) {
             if (this.brewStages == null) {
                 this.brewStages = new ArrayList<>();
-                brewStages.stream().collect(Collectors.toList()).forEach(this::addBrewStage);
+                brewStages.stream().toList().forEach(this::addBrewStage);
             } else {
-                brewStages.stream().filter(brewStage -> !this.brewStages.contains(brewStage)).collect(Collectors.toList()).forEach(this::addBrewStage);
+                brewStages.stream().filter(brewStage -> !this.brewStages.contains(brewStage)).toList().forEach(this::addBrewStage);
             }
         }
     }
