@@ -19,6 +19,7 @@ public class UpdateSkuDtoTest {
 
     @Test
     public void testConstructor() {
+        String number = "1101094";
         String name = "testName";
         String description = "testDescription";
         Long productId = 2L;
@@ -26,7 +27,7 @@ public class UpdateSkuDtoTest {
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
         Integer version = 1;
 
-        UpdateSkuDto updateSkuDto = new UpdateSkuDto(name, description, productId, materials, quantity, version);
+        UpdateSkuDto updateSkuDto = new UpdateSkuDto(number, name, description, productId, materials, quantity, version);
 
         assertEquals("testName", updateSkuDto.getName());
         assertEquals("testDescription", updateSkuDto.getDescription());
@@ -34,6 +35,12 @@ public class UpdateSkuDtoTest {
         assertEquals(List.of(new UpdateSkuMaterialDto(3L)), updateSkuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), updateSkuDto.getQuantity());
         assertEquals(1, updateSkuDto.getVersion());
+    }
+
+    @Test
+    public void testGetSetNumber() {
+        updateSkuDto.setNumber("1101094");
+        assertEquals("1101094", updateSkuDto.getNumber());
     }
 
     @Test

@@ -20,6 +20,7 @@ public class SkuDtoTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
+        String number = "1101094";
         String name = "testName";
         String description = "testDescription";
         ProductDto product = new ProductDto(2L);
@@ -27,7 +28,7 @@ public class SkuDtoTest {
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
         int version = 1;
 
-        SkuDto skuDto = new SkuDto(id, name, description, product, materials, quantity, version);
+        SkuDto skuDto = new SkuDto(id, number, name, description, product, materials, quantity, version);
 
         assertEquals(1L, skuDto.getId());
         assertEquals("testName", skuDto.getName());
@@ -36,6 +37,12 @@ public class SkuDtoTest {
         assertEquals(List.of(new SkuMaterialDto(3L)), skuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), skuDto.getQuantity());
         assertEquals(1, skuDto.getVersion());
+    }
+
+    @Test
+    public void testGetSetNumber() {
+        skuDto.setNumber("1101094");
+        assertEquals("1101094", skuDto.getNumber());
     }
 
     @Test
