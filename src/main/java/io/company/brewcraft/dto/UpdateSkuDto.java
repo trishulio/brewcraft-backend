@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 public class UpdateSkuDto extends BaseDto {
 
     @NullOrNotBlank
+    private String number;
+
+    @NullOrNotBlank
     private String name;
 
     private String description;
@@ -24,14 +27,23 @@ public class UpdateSkuDto extends BaseDto {
         super();
     }
 
-    public UpdateSkuDto(String name, String description, Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    public UpdateSkuDto(String number, String name, String description, Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Integer version) {
         super();
+        this.number = number;
         this.name = name;
         this.description = description;
         this.productId = productId;
         this.materials = materials;
         this.quantity = quantity;
         this.version = version;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getName() {

@@ -6,6 +6,10 @@ import io.company.brewcraft.service.SkuMaterialAccessor;
 public interface BaseSku<T extends BaseSkuMaterial<? extends BaseSku<T>>> extends ProductAccessor, QuantityAccessor, SkuMaterialAccessor {
     final String ATTR_MATERIALS = "materials";
 
+    String getNumber();
+
+    void setNumber(String number);
+
     String getName();
 
     void setName(String name);

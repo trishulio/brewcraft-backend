@@ -35,32 +35,33 @@ public class SkuMapperTest {
 
     @Test
     public void testFromAddDto_ReturnsEntity() {
-        AddSkuDto dto = new AddSkuDto("testName", "testDescription", 2L, List.of(new AddSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)));
+
+        AddSkuDto dto = new AddSkuDto("1101094", "testName", "testDescription", 2L, List.of(new AddSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)));
 
         Sku sku = skuMapper.fromDto(dto);
 
-        Sku expectedSku = new Sku(null, "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(null, null, new Material(3L), null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, null);
+        Sku expectedSku = new Sku(null, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(null, null, new Material(3L), null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, null);
 
         assertEquals(expectedSku, sku);
     }
 
     @Test
     public void testFromUpdateDto_ReturnsEntity() {
-        UpdateSkuDto dto = new UpdateSkuDto("testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
+        UpdateSkuDto dto = new UpdateSkuDto("1101094", "testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
 
         Sku sku = skuMapper.fromDto(dto);
 
-        Sku expectedSku = new Sku(null, "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(3L, null, null, null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, 1);
+        Sku expectedSku = new Sku(null, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(3L, null, null, null, null, null, null)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), null, null, 1);
 
         assertEquals(expectedSku, sku);
     }
 
     @Test
     public void testToDto_ReturnsDto() {
-        Sku sku = new Sku(1L, "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(3L)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+        Sku sku = new Sku(1L, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(3L)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
         SkuDto dto = skuMapper.toDto(sku);
 
-        assertEquals(new SkuDto(1L, "testName", "testDescription", new ProductDto(2L), List.of(new SkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1), dto);
+        assertEquals(new SkuDto(1L, "1101094", "testName", "testDescription", new ProductDto(2L), List.of(new SkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1), dto);
     }
 }
