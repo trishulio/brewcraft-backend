@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import io.company.brewcraft.service.IaasObjectStoreFileSystem;
 
 @RestController
-@RequestMapping("/api/v1/iaas/auth") // TODO
-public class TenantedIaasAuthorizationFetchController {
+@RequestMapping("/api/v1/iaas/vfs")
+public class IaasObjectStoreFileSystemController {
     private IaasObjectStoreFileSystem fileSystem;
 
     @Autowired
-    public TenantedIaasAuthorizationFetchController(IaasObjectStoreFileSystem fileSystem) {
+    public IaasObjectStoreFileSystemController(IaasObjectStoreFileSystem fileSystem) {
         this.fileSystem = fileSystem;
     }
 
-    @GetMapping
+    @GetMapping("/uploads/urls")
     public List<URL> get(
         @RequestParam(name = "files") List<URI> files,
         @RequestParam(name = "expiration") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expiration

@@ -69,7 +69,8 @@ public class AwsDocumentTemplates {
         this.cognitoIdPoolId = cognitoIdPoolId;
     }
 
-    public String getTenantBucketPolicyDoc(String bucketName) {
+    public String getTenantBucketPolicyDoc(String tenantId) {
+        String bucketName = getTenantVfsBucketName(tenantId);
         return String.format(POLICY_DOC_TENANT_BUCKET, bucketName);
     }
 

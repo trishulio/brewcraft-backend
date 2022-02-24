@@ -1,11 +1,12 @@
 package io.company.brewcraft.dto;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
-import io.company.brewcraft.model.ImageSrcAccessor;
+import io.company.brewcraft.model.DecoratedImageUrlAccessor;
 
-public class ProductDto extends BaseDto implements ImageSrcAccessor {
+public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
 
     private Long id;
 
@@ -23,6 +24,8 @@ public class ProductDto extends BaseDto implements ImageSrcAccessor {
 
     private URI imageSrc;
 
+    private URL imageUrl;
+    
     private Integer version;
 
     public ProductDto() {
@@ -103,15 +106,23 @@ public class ProductDto extends BaseDto implements ImageSrcAccessor {
         this.targetMeasures = targetMeasures;
     }
 
-    @Override
     public URI getImageSrc() {
         return this.imageSrc;
     }
 
-    @Override
     public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
+    
+    public URL getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(URL imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Integer getVersion() {
         return version;
     }
