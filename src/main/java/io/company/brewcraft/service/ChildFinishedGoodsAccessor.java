@@ -2,12 +2,12 @@ package io.company.brewcraft.service;
 
 import java.util.List;
 
-import io.company.brewcraft.model.FinishedGood;
+import io.company.brewcraft.model.FinishedGoodLot;
 
 public interface ChildFinishedGoodsAccessor {
     final String ATTR_CHILD_FINISHED_GOODS = "childFinishedGoods";
 
-    List<FinishedGood> getChildFinishedGoods();
+    List<FinishedGoodLot> getChildFinishedGoods();
 
-    void setChildFinishedGoods(List<FinishedGood> childFinishedGoods);
+    void setChildFinishedGoods(List<FinishedGoodLot> childFinishedGoods);
 }

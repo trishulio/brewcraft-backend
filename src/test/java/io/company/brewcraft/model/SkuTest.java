@@ -28,6 +28,7 @@ public class SkuTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
+        String number = "1101094";
         String name = "testName";
         String description = "testDescription";
         Product product = new Product(2L);
@@ -37,7 +38,7 @@ public class SkuTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, name, description, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, number, name, description, product, materials, quantity, created, lastUpdated, version);
 
         assertEquals(1L, sku.getId());
         assertEquals("testName", sku.getName());
@@ -57,6 +58,12 @@ public class SkuTest {
     public void testGetSetId() {
         sku.setId(1L);
         assertEquals(1L, sku.getId());
+    }
+
+    @Test
+    public void testGetSetNumber() {
+        sku.setNumber("1101094");
+        assertEquals("1101094", sku.getNumber());
     }
 
     @Test
@@ -116,6 +123,7 @@ public class SkuTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
+        String number = "1101094";
         String name = "testName";
         String description = "testDescription";
         Product product = new Product(2L);
@@ -125,9 +133,9 @@ public class SkuTest {
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, name, description, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, number, name, description, product, materials, quantity, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"number\":\"1101094\",\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, sku.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

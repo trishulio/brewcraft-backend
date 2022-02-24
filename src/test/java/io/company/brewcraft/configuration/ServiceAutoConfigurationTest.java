@@ -17,8 +17,8 @@ import io.company.brewcraft.repository.BrewStageRepository;
 import io.company.brewcraft.repository.BrewStageStatusRepository;
 import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.FinishedGoodInventoryRepository;
-import io.company.brewcraft.repository.FinishedGoodRefresher;
-import io.company.brewcraft.repository.FinishedGoodRepository;
+import io.company.brewcraft.repository.FinishedGoodLotRefresher;
+import io.company.brewcraft.repository.FinishedGoodLotRepository;
 import io.company.brewcraft.repository.InvoiceRefresher;
 import io.company.brewcraft.repository.InvoiceRepository;
 import io.company.brewcraft.repository.InvoiceStatusRepository;
@@ -52,8 +52,9 @@ import io.company.brewcraft.service.BrewTaskServiceImpl;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
 import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
-import io.company.brewcraft.service.FinishedGoodMaterialPortionService;
-import io.company.brewcraft.service.FinishedGoodMixturePortionService;
+import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionService;
+import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
+import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
 import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
@@ -352,20 +353,23 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testFinishedGoodService_ReturnsInstanceOfFinishedGoodervice() {
-        final FinishedGoodRepository mFinishedGoodRepo = mock(FinishedGoodRepository.class);
-        final FinishedGoodRefresher mFinishedGoodRefresher = mock(FinishedGoodRefresher.class);
-        final FinishedGoodMaterialPortionService mFgMaterialPortionService = mock(FinishedGoodMaterialPortionService.class);
-        final FinishedGoodMixturePortionService mFgMixturePortionService = mock(FinishedGoodMixturePortionService.class);
+        final FinishedGoodLotRepository mFinishedGoodRepo = mock(FinishedGoodLotRepository.class);
+        final FinishedGoodLotRefresher mFinishedGoodRefresher = mock(FinishedGoodLotRefresher.class);
+        final FinishedGoodLotMaterialPortionService mFgMaterialPortionService = mock(FinishedGoodLotMaterialPortionService.class);
+        final FinishedGoodLotMixturePortionService mFgMixturePortionService = mock(FinishedGoodLotMixturePortionService.class);
+        final FinishedGoodLotFinishedGoodLotPortionService mFgLotFgLotPortionService = mock(FinishedGoodLotFinishedGoodLotPortionService.class);
 
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
 
-        this.serviceAutoConfiguration.finishedGoodService(mUtilProvider, mFgMixturePortionService, mFgMaterialPortionService, mFinishedGoodRepo, mFinishedGoodRefresher);
+        this.serviceAutoConfiguration.finishedGoodService(mUtilProvider, mFgMixturePortionService, mFgMaterialPortionService, mFgLotFgLotPortionService, mFinishedGoodRepo, mFinishedGoodRefresher);
     }
 
     @Test
     public void testFinishedGoodInventoryervice_ReturnsInstanceOfFinishedGoodInventoryService() {
-        final FinishedGoodInventoryRepository repository = mock(FinishedGoodInventoryRepository.class);
-        final FinishedGoodInventoryService service = this.serviceAutoConfiguration.finishedGoodInventoryService(repository);
+        final AggregationService mAggrService = mock(AggregationService.class);
+        final FinishedGoodInventoryRepository mFinishedGoodInventoryRepo = mock(FinishedGoodInventoryRepository.class);
+
+        final FinishedGoodInventoryService service = this.serviceAutoConfiguration.finishedGoodInventoryService(mAggrService, mFinishedGoodInventoryRepo);
 
         assertTrue(service instanceof FinishedGoodInventoryServiceImpl);
     }

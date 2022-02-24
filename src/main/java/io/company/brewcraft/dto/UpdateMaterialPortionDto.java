@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class UpdateMaterialPortionDto extends BaseDto {
 
+    private Long id;
+
     private Long materialLotId;
 
     private QuantityDto quantity;
@@ -16,12 +18,21 @@ public class UpdateMaterialPortionDto extends BaseDto {
         super();
     }
 
-    public UpdateMaterialPortionDto(Long materialLotId, QuantityDto quantity, LocalDateTime addedAt, Integer version) {
+    public UpdateMaterialPortionDto(Long id, Long materialLotId, QuantityDto quantity, LocalDateTime addedAt, Integer version) {
         this();
+        this.id = id;
         this.materialLotId = materialLotId;
         this.quantity = quantity;
         this.addedAt = addedAt;
         this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getMaterialLotId() {

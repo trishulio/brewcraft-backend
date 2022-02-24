@@ -6,6 +6,8 @@ public class SkuDto extends BaseDto {
 
     private Long id;
 
+    private String number;
+
     private String name;
 
     private String description;
@@ -27,8 +29,9 @@ public class SkuDto extends BaseDto {
         this.id = id;
     }
 
-    public SkuDto(Long id, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    public SkuDto(Long id, String number, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
         this(id);
+        this.number = number;
         this.name = name;
         this.description = description;
         this.product = product;
@@ -43,6 +46,14 @@ public class SkuDto extends BaseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getName() {

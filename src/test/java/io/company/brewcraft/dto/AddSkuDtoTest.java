@@ -19,19 +19,27 @@ public class AddSkuDtoTest {
 
     @Test
     public void testConstructor() {
+        String number = "1101094";
         String name = "testName";
         String description = "testDescription";
         Long productId = 2L;
         List<AddSkuMaterialDto> materials = List.of(new AddSkuMaterialDto(3L));
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
 
-        AddSkuDto addSkuDto = new AddSkuDto(name, description, productId, materials, quantity);
+        AddSkuDto addSkuDto = new AddSkuDto(number, name, description, productId, materials, quantity);
 
+        assertEquals("1101094", addSkuDto.getNumber());
         assertEquals("testName", addSkuDto.getName());
         assertEquals("testDescription", addSkuDto.getDescription());
         assertEquals(2L, addSkuDto.getProductId());
         assertEquals(List.of(new AddSkuMaterialDto(3L)), addSkuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), addSkuDto.getQuantity());
+    }
+
+    @Test
+    public void testGetSetNumber() {
+        addSkuDto.setNumber("1101094");
+        assertEquals("1101094", addSkuDto.getNumber());
     }
 
     @Test

@@ -1,61 +1,78 @@
 package io.company.brewcraft.model;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.measure.Quantity;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.criteria.JoinType;
 
 import org.hibernate.annotations.Immutable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import io.company.brewcraft.service.CriteriaJoin;
+
 @Entity(name = "finished_good_inventory")
-@Table
+@Table(name = "finished_good_inventory")
 @Immutable
-public class FinishedGoodInventory extends BaseEntity {
-    public static final String FIELD_SKU = "sku";
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
+public class FinishedGoodInventory extends BaseFinishedGoodInventory {
 
-    @Id
-    Long id;
+    public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
+    public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
+    public static final String FIELD_FINISHED_GOOD_LOT_PORTIONS = "finishedGoodLotPortions";
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "sku_id", referencedColumnName = "id")
-    private Sku sku;
+    @OneToMany(mappedBy = "finishedGoodLot")
+    @CriteriaJoin(type = JoinType.LEFT)
+    private List<FinishedGoodLotMixturePortion> mixturePortions;
 
-    private Long quantity;
+    @OneToMany(mappedBy = "finishedGoodLot")
+    @CriteriaJoin(type = JoinType.LEFT)
+    private List<FinishedGoodLotMaterialPortion> materialPortions;
+
+    @OneToMany(mappedBy = "finishedGoodLotTarget")
+    @CriteriaJoin
+    private List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions;
 
     public FinishedGoodInventory() {
         super();
     }
 
-    public FinishedGoodInventory(Long id, Sku sku, Long quantity) {
-        this();
-        this.id = id;
-        this.sku = sku;
-        this.quantity = quantity;
+    public FinishedGoodInventory(Long id) {
+        super(id);
     }
 
-    public Long getId() {
-        return id;
+    public FinishedGoodInventory(Long id, Sku sku, List<FinishedGoodLotMixturePortion> mixturePortions, List<FinishedGoodLotMaterialPortion> materialPortions, List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions, Quantity<?> quantity, LocalDateTime packagedOn) {
+        super(id, sku, quantity, packagedOn);
+        this.mixturePortions = mixturePortions;
+        this.materialPortions = materialPortions;
+        this.finishedGoodLotPortions = finishedGoodLotPortions;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<FinishedGoodLotMixturePortion> getMixturePortions() {
+        return mixturePortions;
     }
 
-    public Sku getSku() {
-        return sku;
+    public void setMixturePortions(List<FinishedGoodLotMixturePortion> mixturePortions) {
+        this.mixturePortions = mixturePortions;
     }
 
-    public void setSku(Sku sku) {
-        this.sku = sku;
+    public List<FinishedGoodLotFinishedGoodLotPortion> getFinishedGoodLotPortions() {
+        return finishedGoodLotPortions;
     }
 
-    public Long getQuantity() {
-        return quantity;
+    public void setFinishedGoodLotPortions(List<FinishedGoodLotFinishedGoodLotPortion> finishedGoodLotPortions) {
+        this.finishedGoodLotPortions = finishedGoodLotPortions;
     }
 
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
+    public List<FinishedGoodLotMaterialPortion> getMaterialPortions() {
+        return materialPortions;
+    }
+
+    public void setMaterialPortions(List<FinishedGoodLotMaterialPortion> materialPortions) {
+        this.materialPortions = materialPortions;
     }
 }

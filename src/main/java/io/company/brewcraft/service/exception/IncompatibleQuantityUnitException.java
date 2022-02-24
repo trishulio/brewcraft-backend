@@ -52,4 +52,14 @@ public class IncompatibleQuantityUnitException extends IllegalArgumentException 
             throw new IncompatibleQuantityUnitException(error);
         }
     }
+
+    public static void validateExpectedUnit(Unit<?> expectedUnit, Quantity<?> quantity) {
+        if (!QuantityCalculator.INSTANCE.isExpectedUnit(expectedUnit, quantity)) {
+            Unit<?> quantityUnit = quantity != null ? quantity.getUnit() : null;
+            String error = String.format("Quantity Unit: %s does not match expected unit: %s", quantityUnit, expectedUnit);
+
+            throw new IncompatibleQuantityUnitException(error);
+        }
+    }
+
 }
