@@ -63,21 +63,21 @@ public class CrudControllerService<
     }
 
     public List<EntityDto> add(List<AddDto> addDtos) {
-        List<AddEntity> additions = (List<AddEntity>) addDtos.stream().map(dto -> mapper.fromAddDto(dto)).toList();
+        List<AddEntity> additions = (List<AddEntity>) addDtos.stream().map(dto -> mapper.fromAddDto(dto)).collect(Collectors.toList());
         List<Entity> added = this.service.add(additions);
 
         return added.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
     public List<EntityDto> put(List<UpdateDto> updateDtos) {
-        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).toList();
+        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
         List<Entity> updated = this.service.put(updates);
 
         return updated.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
     public List<EntityDto> patch(List<UpdateDto> updateDtos) {
-        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).toList();
+        List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
         List<Entity> patched = this.service.patch(updates);
 
         return patched.stream().map(entity -> mapper.toDto(entity)).toList();

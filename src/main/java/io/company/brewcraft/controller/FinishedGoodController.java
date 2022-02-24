@@ -112,7 +112,7 @@ public class FinishedGoodController extends BaseController {
     public List<FinishedGoodDto> addFinishedGood(@Valid @NotNull @RequestBody List<AddFinishedGoodDto> payloads) {
         final List<BaseFinishedGood<? extends BaseFinishedGoodMixturePortion<?>, ? extends BaseFinishedGoodMaterialPortion<?>>> additions = payloads.stream()
                                                                                                                                                     .map(addition -> mapper.fromDto(addition))
-                                                                                                                                                    .toList();
+                                                                                                                                                    .collect(Collectors.toList());
         final List<FinishedGood> added = this.finishedGoodService.add(additions);
 
         final List<FinishedGoodDto> dtos = added.stream()
@@ -137,7 +137,7 @@ public class FinishedGoodController extends BaseController {
     public List<FinishedGoodDto> updateFinishedGoods(@Valid @NotNull @RequestBody List<UpdateFinishedGoodDto> updateFinishedGoodDtos) {
         final List<UpdateFinishedGood<? extends UpdateFinishedGoodMixturePortion<?>, ? extends UpdateFinishedGoodMaterialPortion<?>>> finishedGoods = updateFinishedGoodDtos.stream()
                                                                                                                                                                             .map(updateFinishedGoodDto -> mapper.fromDto(updateFinishedGoodDto))
-                                                                                                                                                                            .toList();
+                                                                                                                                                                            .collect(Collectors.toList());
 
         final List<FinishedGood> putFinishedGoods = this.finishedGoodService.put(finishedGoods);
 

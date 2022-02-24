@@ -84,7 +84,7 @@ public class MixtureRecordingController extends BaseController {
     public List<MixtureRecordingDto> addMixtureRecordings(@Valid @RequestBody List<AddMixtureRecordingDto> addMixtureRecordingDtos) {
         List<BaseMixtureRecording> mixtureRecordings = addMixtureRecordingDtos.stream()
                                                                               .map(addMixtureRecordingDto -> mixtureRecordingMapper.fromDto(addMixtureRecordingDto))
-                                                                              .toList();
+                                                                              .collect(Collectors.toList());
 
         List<MixtureRecording> addedMixtureRecordings = mixtureRecordingService.addMixtureRecordings(mixtureRecordings);
 
@@ -107,7 +107,7 @@ public class MixtureRecordingController extends BaseController {
     public List<MixtureRecordingDto> putMixtureRecordings(@Valid @RequestBody List<UpdateMixtureRecordingDto> updateMixtureRecordingDtos) {
         List<UpdateMixtureRecording> mixtureRecordings = updateMixtureRecordingDtos.stream()
                                                                                    .map(updateMixtureRecordingDto -> mixtureRecordingMapper.fromDto(updateMixtureRecordingDto))
-                                                                                   .toList();
+                                                                                   .collect(Collectors.toList());
 
         List<MixtureRecording> putMixtureRecordings = mixtureRecordingService.putMixtureRecordings(mixtureRecordings);
 

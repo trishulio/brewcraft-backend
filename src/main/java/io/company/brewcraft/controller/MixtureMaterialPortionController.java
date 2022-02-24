@@ -85,7 +85,7 @@ public class MixtureMaterialPortionController extends BaseController {
     public List<MixtureMaterialPortionDto> addMMaterialPortions(@Valid @RequestBody List<AddMixtureMaterialPortionDto> addMaterialPortionDtos) {
         List<BaseMixtureMaterialPortion> materialPortions = addMaterialPortionDtos.stream()
                                                                                   .map(dto -> materialPortionMapper.fromDto(dto))
-                                                                                  .toList();
+                                                                                  .collect(Collectors.toList());
 
         List<MixtureMaterialPortion> addedMaterialPortions = materialPortionService.addMaterialPortions(materialPortions);
 
@@ -108,7 +108,7 @@ public class MixtureMaterialPortionController extends BaseController {
     public List<MixtureMaterialPortionDto> putMaterialPortions(@Valid @RequestBody List<UpdateMixtureMaterialPortionDto> updateMaterialPortionDtos) {
         List<UpdateMixtureMaterialPortion> materialPortions = updateMaterialPortionDtos.stream()
                                                                                        .map(updateMaterialPortionDto -> materialPortionMapper.fromDto(updateMaterialPortionDto))
-                                                                                       .toList();
+                                                                                       .collect(Collectors.toList());
 
             List<MixtureMaterialPortion> putMaterialPortions = materialPortionService.putMaterialPortions(materialPortions);
 
