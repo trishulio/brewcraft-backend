@@ -14,7 +14,6 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 
 import io.company.brewcraft.security.idp.AwsCognitoIdpClient;
 import io.company.brewcraft.security.idp.AwsFactory;
-import io.company.brewcraft.security.idp.AwsFactoryImpl;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
@@ -31,7 +30,7 @@ public class AwsConfiguration {
     @Bean
     @ConditionalOnMissingBean(AwsFactory.class)
     public AwsFactory awsFactory() {
-        return new AwsFactoryImpl();
+        return new AwsFactory();
     }
 
     @Bean
