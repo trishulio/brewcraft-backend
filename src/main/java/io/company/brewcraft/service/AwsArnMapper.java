@@ -7,23 +7,23 @@ public class AwsArnMapper {
 
     private String accountId;
     private String partition;
-    private String region;
+    private String iamRegion;
 
-    public AwsArnMapper(String accountId, String partition, String region) {
+    public AwsArnMapper(String accountId, String partition, String iamRegion) {
         this.accountId = accountId;
         this.partition = partition;
-        this.region = region;
+        this.iamRegion = iamRegion;
     }
 
     public String getPolicyArn(String policyName) {
-        return getServiceArn(AWS_SERVICE_IAM_POLICY, policyName);
+        return getServiceArn(AWS_SERVICE_IAM_POLICY, policyName, this.iamRegion);
     }
 
-    private String getServiceArn(String serviceName, String resourceName) {
+    private String getServiceArn(String serviceName, String resourceName, String region) {
         String arn = Arn.builder()
                         .withAccountId(this.accountId)
                         .withPartition(this.partition)
-                        .withRegion(this.region)
+                        .withRegion(region)
                         .withService(serviceName)
                         .withResource(resourceName)
                         .build()

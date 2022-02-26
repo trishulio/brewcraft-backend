@@ -265,8 +265,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AwsArnMapper.class)
-    public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition, @Value("${aws.deployment.region}") String region) {
-        return new AwsArnMapper(accountId, partition, region);
+    public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition, @Value("${aws.iam.region}") String iamRegion) {
+        return new AwsArnMapper(accountId, partition, iamRegion);
     }
 
     @Bean
