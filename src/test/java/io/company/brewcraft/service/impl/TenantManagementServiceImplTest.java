@@ -28,7 +28,7 @@ import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.TenantMapper;
 
-public class TenantManagementServiceImplTest {
+public class TenantManagementServiceTest {
 
     private TenantManagementService tenantManagementService;
 
@@ -46,7 +46,7 @@ public class TenantManagementServiceImplTest {
         migrationManagerMock = mock(MigrationManager.class);
         tenantMapperMock = mock(TenantMapper.class);
         iaasServiceMock = mock(TenantIaasService.class);
-        tenantManagementService = new TenantManagementServiceImpl(tenantRepositoryMock, migrationManagerMock, iaasServiceMock, tenantMapperMock);
+        tenantManagementService = new TenantManagementService(tenantRepositoryMock, migrationManagerMock, iaasServiceMock, tenantMapperMock);
     }
 
     @Test

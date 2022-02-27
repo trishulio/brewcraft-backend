@@ -87,7 +87,7 @@ import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
 import io.company.brewcraft.service.user.UserService;
@@ -105,9 +105,9 @@ public class ServiceAutoConfigurationTest {
     }
 
     @Test
-    public void testTenantManagementService_returnsInstanceOfTenantManagementServiceImpl() {
+    public void testTenantManagementService_returnsInstanceOfTenantManagementService() {
         final TenantManagementService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null, null);
-        assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
+        assertTrue(tenantManagementService instanceof TenantManagementService);
     }
 
     @Test

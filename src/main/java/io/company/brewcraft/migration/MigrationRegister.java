@@ -1,10 +1,12 @@
 package io.company.brewcraft.migration;
 
+import io.company.brewcraft.model.Tenant;
+
 public interface MigrationRegister {
 
-    void migrate();
+    void migrateAdmin();
 
-    void migrate(String tenantId);
+    void migrate(Tenant tenant);
 
-    boolean isMigrated(String tenantId);
+    boolean isMigrated(Tenant tenant);
 }

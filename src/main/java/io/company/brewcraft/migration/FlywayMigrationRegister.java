@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.model.Tenant;
 
 public class FlywayMigrationRegister implements MigrationRegister {
     private static final Logger log = LoggerFactory.getLogger(FlywayMigrationRegister.class);
@@ -31,7 +32,8 @@ public class FlywayMigrationRegister implements MigrationRegister {
     }
 
     @Override
-    public void migrate(String tenantId) {
+    public void migrate(Tenant tenant) {
+        String tenantId = tenant.getId().toString();
         try {
             Flyway fw = provider.config()
                                 .locations(dbScriptPathTenant)
@@ -50,7 +52,8 @@ public class FlywayMigrationRegister implements MigrationRegister {
     }
 
     @Override
-    public boolean isMigrated(String tenantId) {
+    public boolean isMigrated(Tenant tenant) {
+        String tenantId = tenant.getId().toString();        
         try {
             Flyway fw = provider.config()
                                 .locations(dbScriptPathTenant)
@@ -67,7 +70,7 @@ public class FlywayMigrationRegister implements MigrationRegister {
     }
 
     @Override
-    public void migrate() {
+    public void migrateAdmin() {
         try {
             Flyway fw = provider.config()
                                 .locations(dbScriptPathAdmin)

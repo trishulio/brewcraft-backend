@@ -2,6 +2,7 @@ package io.company.brewcraft.configuration;
 
 import java.time.ZoneId;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,6 +34,7 @@ import io.company.brewcraft.model.BasePurchaseOrder;
 import io.company.brewcraft.model.BaseShipment;
 import io.company.brewcraft.model.BaseSku;
 import io.company.brewcraft.model.BaseSkuMaterial;
+import io.company.brewcraft.model.BaseTenant;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.FinishedGoodLot;
@@ -58,6 +60,8 @@ import io.company.brewcraft.model.Sku;
 import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.TemporaryImageSrcDecorator;
+import io.company.brewcraft.model.Tenant;
+import io.company.brewcraft.model.TenantAccessor;
 import io.company.brewcraft.model.TenantContextObjectStoreFileClientProvider;
 import io.company.brewcraft.model.UpdateFinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodLotMaterialPortion;
@@ -74,6 +78,7 @@ import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.model.UpdateSku;
 import io.company.brewcraft.model.UpdateSkuMaterial;
+import io.company.brewcraft.model.UpdateTenant;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementAccessor;
 import io.company.brewcraft.model.procurement.ProcurementId;
@@ -113,6 +118,7 @@ import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.security.idp.AwsFactory;
+import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.AwsArnMapper;
@@ -198,7 +204,6 @@ import io.company.brewcraft.service.TenantIaasAuthorizationFetch;
 import io.company.brewcraft.service.TenantIaasService;
 import io.company.brewcraft.service.TenantIaasVfsResourceMapper;
 import io.company.brewcraft.service.TenantIaasVfsService;
-import io.company.brewcraft.service.TenantManagementService;
 import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.UserRoleService;
@@ -207,6 +212,7 @@ import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
+import io.company.brewcraft.service.impl.IdpTenantIaasRepository;
 import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
 import io.company.brewcraft.service.impl.MaterialLotService;
 import io.company.brewcraft.service.impl.MaterialServiceImpl;
@@ -220,10 +226,9 @@ import io.company.brewcraft.service.impl.SkuServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
-import io.company.brewcraft.service.mapper.TenantMapper;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -245,15 +250,29 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantManagementService.class)
-    public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, IdpUserRepository idpUserRepository, TenantIaasService tenantIaasService) {
-        final TenantManagementService tenantService = new TenantManagementServiceImpl(tenantRepository, migrationManager, tenantIaasService, idpUserRepository, TenantMapper.INSTANCE);
+    public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, TenantIaasService tenantIaasService, UtilityProvider utilProvider) {
+        RepoService<UUID, Tenant, TenantAccessor> repoService = new CrudRepoService<>(tenantRepository, null);
+        UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseTenant.class, UpdateTenant.class, Tenant.class, Set.of(""));
+
+        final TenantManagementService tenantService = new TenantManagementService(
+            repoService,
+            updateService,
+            tenantRepository,
+            migrationManager,
+            tenantIaasService
+        );
         return tenantService;
     }
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasService.class)
-    public TenantIaasService tenantIaasService(TenantIaasVfsService iaasVfsService) {
-        return new TenantIaasService(iaasVfsService);
+    public TenantIaasService tenantIaasService(TenantIaasVfsService iaasVfsService, IdpTenantIaasRepository idpUserRepository) {
+        return new TenantIaasService(iaasVfsService, idpUserRepository);
+    }
+    
+    @Bean
+    public IdpTenantIaasRepository idpUserRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor) {
+        return new IdpTenantIaasRepository(idpClient, executor);
     }
 
     @Bean

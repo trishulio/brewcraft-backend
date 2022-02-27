@@ -2,6 +2,7 @@ package io.company.brewcraft.security.session;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -25,14 +26,18 @@ public class CognitoPrincipalContext implements PrincipalContext {
     }
 
     @Override
-    public String getTenantId() {
+    public UUID getTenantId() {
         List<String> groups = this.jwt.getClaimAsStringList(CLAIM_GROUPS);
         if (groups.size() > 1) {
             String msg = String.format("Each user should only belong to a single cognito group. Instead found %s", groups.size());
             throw new IllegalStateException(msg);
         }
 
-        return groups.get(0);
+        String sTenantId = groups.get(0);
+        
+        UUID tenantId = UUID.fromString(sTenantId);
+
+        return tenantId;
     }
 
     @Override

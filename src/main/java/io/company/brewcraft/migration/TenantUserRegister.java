@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.data.JdbcDialect;
 import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class TenantUserRegister implements TenantRegister {
@@ -29,7 +30,9 @@ public class TenantUserRegister implements TenantRegister {
     }
 
     @Override
-    public void add(String tenantId) {
+    public void add(Tenant tenant) {
+        String tenantId = tenant.getId().toString();
+
         dsMgr.query(conn -> {
             String fqName = dsMgr.fqName(tenantId);
             String password = randomGen.string(LENGTH_PASSWORD);
@@ -44,7 +47,9 @@ public class TenantUserRegister implements TenantRegister {
     }
 
     @Override
-    public void remove(String tenantId) {
+    public void remove(Tenant tenant) {
+        String tenantId = tenant.getId().toString();
+
         dsMgr.query(conn -> {
             String fqName = dsMgr.fqName(tenantId);
             dialect.reassignOwned(conn, fqName, dsMgr.getAdminSchemaName());
@@ -55,7 +60,9 @@ public class TenantUserRegister implements TenantRegister {
     }
 
     @Override
-    public boolean exists(String tenantId) {
+    public boolean exists(Tenant tenant) {
+        String tenantId = tenant.getId().toString();
+
         return dsMgr.query((Connection conn) -> dialect.userExists(conn, dsMgr.fqName(tenantId)));
     }
 }

@@ -16,7 +16,7 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
 
     @Override
     public String resolveCurrentTenantIdentifier() {
-        return contextHolder.getPrincipalContext() != null ? contextHolder.getPrincipalContext().getTenantId() : defaultTenantId;
+        return contextHolder.getPrincipalContext() != null ? contextHolder.getPrincipalContext().getTenantId().toString() : defaultTenantId;
     }
 
     @Override

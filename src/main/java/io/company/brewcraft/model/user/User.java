@@ -21,21 +21,22 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Email;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity
 @Table(name = "_user")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited {
+public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited, IaasUser {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_NAME = "userName";
     public static final String FIELD_DISPLAY_NAME = "displayName";

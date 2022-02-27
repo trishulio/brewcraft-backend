@@ -64,8 +64,8 @@ public class SequentialMigrationManagerTest {
     public void migrateAllImpl_SubmitsSetupAndAllMigrationTasksToTaskSet() {
         SequentialMigrationManager sqMgr = spy((SequentialMigrationManager) mgr);
         doReturn(false).when(mTenantReg).exists(any(String.class));
-        doReturn(false).when(mIdpUserRepo).userGroupExists(any(String.class));
-        doNothing().when(mMigrationReg).migrate();
+        doReturn(false).when(mIdpUserRepo).groupExists(any(String.class));
+        doNothing().when(mMigrationReg).migrateAdmin();
         doNothing().when(mTenantReg).add(startsWith("SUCCESS_"));
         doNothing().when(mIdpUserRepo).putUserGroup(startsWith("SUCCESS_"));
         doThrow(new RuntimeException()).when(mTenantReg).add(startsWith("FAIL_"));
@@ -76,6 +76,6 @@ public class SequentialMigrationManagerTest {
         assertEquals(2, tasks.getErrors().size());
         assertEquals(3, tasks.getResults().size()); // Also contains setup()
 
-        verify(mMigrationReg, times(1)).migrate();
+        verify(mMigrationReg, times(1)).migrateAdmin();
     }
 }

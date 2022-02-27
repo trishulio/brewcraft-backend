@@ -1,38 +1,33 @@
 package io.company.brewcraft.dto;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
-
-public class TenantDto {
-
-    @Null
+public class TenantDto extends BaseDto {
     private UUID id;
-
-    @NotBlank
     private String name;
-
-    @NotBlank
-    private String url;
-
-    @Null
-    private LocalDateTime created;
-
-    @Null
+    private URL url;
+    private Boolean isReady;
+    private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
 
     public TenantDto() {
-
+        super();
     }
 
-    public TenantDto(UUID id, String name, String url, LocalDateTime created, LocalDateTime lastUpdated) {
-        this.id = id;
-        this.name = name;
-        this.url = url;
-        this.created = created;
-        this.lastUpdated = lastUpdated;
+    public TenantDto(UUID id) {
+        this();
+        setId(id);
+    }
+
+    public TenantDto(UUID id, String name, URL url, Boolean isReady, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+        this(id);
+        setName(name);
+        setUrl(url);
+        setIsReady(isReady);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
     }
 
     public UUID getId() {
@@ -51,20 +46,28 @@ public class TenantDto {
         this.name = name;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public Boolean getIsReady() {
+        return isReady;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastUpdated() {

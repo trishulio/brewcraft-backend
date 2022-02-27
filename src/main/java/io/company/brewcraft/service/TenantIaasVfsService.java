@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasObjectStore;
@@ -19,7 +18,7 @@ import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
-import io.company.brewcraft.model.Tenant;
+import io.company.brewcraft.model.IaasTenant;
 import io.company.brewcraft.model.TenantIaasVfsResources;
 
 public class TenantIaasVfsService {
@@ -30,6 +29,8 @@ public class TenantIaasVfsService {
     private IaasRoleService roleService;
     private IaasRolePolicyAttachmentService rolePolicyAttachmentService;
     private IaasObjectStoreService objectStoreService;
+    
+    /// TODO: Take the non-vfs specific resources out of this class
 
     public TenantIaasVfsService(AwsArnMapper arnMapper, TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasRoleService roleService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, AwsDocumentTemplates templates) {
         this.arnMapper = arnMapper;
@@ -41,7 +42,7 @@ public class TenantIaasVfsService {
         this.rolePolicyAttachmentService = rolePolicyAttachmentService;
     }
 
-    public List<TenantIaasVfsResources> get(List<Tenant> tenants) {
+    public List<TenantIaasVfsResources> get(List<? extends IaasTenant> tenants) {
         // Hack: We are using ARN mapper to generate value for the policy. Ideally, we should fetch the ARN by retrieving a policy object
         // from the Iaas provider. If there is a misconfiguration in the application, the generated ARN might not be accurate. Keep
         // an eye-out for this operation to ensure it's not buggy.
@@ -52,7 +53,7 @@ public class TenantIaasVfsService {
 
         tenants
         .stream()
-        .map(tenant -> tenant.getId().toString())
+        .map(tenant -> tenant.getIaasId())
         .forEach(tenantId -> {
             String roleName = this.templates.getTenantIaasRoleName(tenantId);
             String policyArn = this.arnMapper.getPolicyArn(this.templates.getTenantVfsPolicyName(tenantId));
@@ -100,13 +101,13 @@ public class TenantIaasVfsService {
         return new ArrayList<>(tenantVfsResources.values());
     }
 
-    public List<TenantIaasVfsResources> put(List<Tenant> tenants) {
+    public List<TenantIaasVfsResources> put(List<? extends IaasTenant> tenants) {
         List<BaseIaasObjectStore> objectStoreAdditions = new ArrayList<>(tenants.size());
         List<BaseIaasPolicy> policieAdditions = new ArrayList<>(tenants.size());
         List<BaseIaasRole> roleAdditions = new ArrayList<>(tenants.size());
 
         tenants.forEach(tenant -> {
-            String tenantId = tenant.getId().toString();
+            String tenantId = tenant.getIaasId();
 
             BaseIaasObjectStore objectStore = new IaasObjectStore();
             objectStore.setName(this.templates.getTenantVfsBucketName(tenantId));
@@ -151,7 +152,7 @@ public class TenantIaasVfsService {
         return this.mapper.fromComponents(objectStores, policies, roles, attachments);
     }
 
-    public void delete(List<Tenant> tenants) {
+    public void delete(List<? extends IaasTenant> tenants) {
         // Hack: We are using ARN mapper to generate value for the policy. Ideally, we should fetch the ARN by retrieving a policy object
         // from the Iaas provider. If there is a misconfiguration in the application, the generated ARN might not be accurate. Keep
         // an eye-out for this operation to ensure it's not buggy
@@ -162,7 +163,7 @@ public class TenantIaasVfsService {
 
         tenants
         .stream()
-        .map(tenant -> tenant.getId().toString())
+        .map(tenant -> tenant.getIaasId())
         .forEach(tenantId -> {
             String roleName = this.templates.getTenantIaasRoleName(tenantId);
             String policyArn = this.arnMapper.getPolicyArn(this.templates.getTenantVfsPolicyName(tenantId));

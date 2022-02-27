@@ -3,94 +3,56 @@ package io.company.brewcraft.service.impl.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.company.brewcraft.model.IaasRole;
-import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.security.idp.AwsCognitoIdpClient;
+import io.company.brewcraft.model.IaasTenant;
+import io.company.brewcraft.model.IaasTenantUserMembership;
+import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
+import io.company.brewcraft.service.IdpTenantUserMembershipRepository;
 import io.company.brewcraft.service.IdpUserRepository;
-import io.company.brewcraft.service.user.Group;
 
 public class AwsIdpUserRepository implements IdpUserRepository {
-
     private IdentityProviderClient idpClient;
+    private IdpTenantUserMembershipRepository tenantUserRepo;
 
-    public AwsIdpUserRepository(AwsCognitoIdpClient idpClient) {
+    public AwsIdpUserRepository(IdentityProviderClient idpClient, IdpTenantUserMembershipRepository tenantUserRepo) {
         this.idpClient = idpClient;
+        this.tenantUserRepo = tenantUserRepo;
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(IaasUser user) {
         Map<String, String> userAttrs = new HashMap<>();
         userAttrs.put(CognitoPrincipalContext.ATTRIBUTE_EMAIL, user.getEmail());
-        userAttrs.put(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED, "true");
+        userAttrs.put(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED, "true"); // TODO: Do we need to change this?
 
         this.idpClient.createUser(user.getEmail(), userAttrs);
     }
+    
+    @Override
+    public void createUserInTenant(IaasUser user, IaasTenant tenant) {
+        this.createUser(user);
+        
+        IaasTenantUserMembership membership = new IaasTenantUserMembership(user, tenant);
+
+        try {
+            this.tenantUserRepo.add(membership);
+        } catch (Exception e) {
+            this.deleteUser(user.getEmail());
+            throw e;
+        }
+    }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(IaasUser user) {
         Map<String, String> userAttrs = new HashMap<>();
         userAttrs.put(CognitoPrincipalContext.ATTRIBUTE_EMAIL, user.getEmail());
-        // TODO: Optimize for skipping the idpClient call when attributes aren't changed for the user.
 
         this.idpClient.updateUser(user.getEmail(), userAttrs);
     }
-
+    
     @Override
-    public void deleteUser(User user) {
-        this.idpClient.deleteUser(user.getEmail());
-    }
-
-    @Override
-    public void addUserToGroup(User user, String group) {
-        this.idpClient.addUserToGroup(user.getEmail(), group);
-    }
-
-    @Override
-    public void removeUserFromGroup(User user, String group) {
-        this.idpClient.removeUserFromGroup(user.getEmail(), group);
-    }
-
-    @Override
-    public void createUserGroup(Group group) {
-        String roleArn = null;
-        IaasRole role = group.getIaasRole();
-
-        if (role != null) {
-            roleArn = role.getIaasResourceName();
-        }
-
-        this.idpClient.createUserGroup(group.getId(), roleArn);
-    }
-
-    @Override
-    public void deleteUserGroup(String group) {
-        this.idpClient.deleteUserGroup(group);
-    }
-
-    @Override
-    public boolean userGroupExists(String group) {
-        return this.idpClient.userGroupExists(group);
-    }
-
-    @Override
-    public void putUserGroup(Group group) {
-        String groupId = group.getId();
-        if (!this.userGroupExists(groupId)) {
-            this.createUserGroup(group);
-        }
-    }
-
-    @Override
-    public void createUserInGroup(User user, String group) {
-        this.createUser(user);
-
-        try {
-            this.addUserToGroup(user, group);
-        } catch (Exception e) {
-            this.deleteUser(user);
-            throw e;
-        }
+    public void deleteUser(String username) {
+        this.idpClient.deleteUser(username);
     }
 }

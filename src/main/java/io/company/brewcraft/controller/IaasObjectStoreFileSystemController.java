@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.company.brewcraft.service.IaasObjectStoreFileSystem;
 
 @RestController
-@RequestMapping("/api/v1/iaas/vfs")
+@RequestMapping("/api/v1/iaas/filesystem")
 public class IaasObjectStoreFileSystemController {
     private IaasObjectStoreFileSystem fileSystem;
 

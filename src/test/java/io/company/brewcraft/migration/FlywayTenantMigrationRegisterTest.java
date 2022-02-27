@@ -89,7 +89,7 @@ public class FlywayTenantMigrationRegisterTest {
         doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
 
         Flyway mFw = mockFlyway(mFwConfig, "ADMIN_SCHEMA", DB_SCRIPT_PATH_ADMIN, mDs);
-        register.migrate();
+        register.migrateAdmin();
 
         verify(mFw, times(1)).migrate();
     }

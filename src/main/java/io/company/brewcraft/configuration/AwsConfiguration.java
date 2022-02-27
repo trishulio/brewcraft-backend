@@ -21,7 +21,9 @@ import io.company.brewcraft.service.AwsIamPolicyClient;
 import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsObjectStoreClient;
+import io.company.brewcraft.service.IdpTenantUserMembershipRepository;
 import io.company.brewcraft.service.IdpUserRepository;
+import io.company.brewcraft.service.impl.AwsIdpTenantUserMembershipRepository;
 import io.company.brewcraft.service.impl.user.AwsIdpUserRepository;
 
 @Configuration
@@ -47,9 +49,15 @@ public class AwsConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean()
-    public IdpUserRepository idpUserRepo(IdentityProviderClient idpClient) {
-        return new AwsIdpUserRepository((AwsCognitoIdpClient) idpClient);
+    @ConditionalOnMissingBean(IdpUserRepository.class)
+    public IdpUserRepository idpUserRepo(IdentityProviderClient idpClient, IdpTenantUserMembershipRepository idpTenatUserRepo) {
+        return new AwsIdpUserRepository(idpClient, idpTenatUserRepo);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean
+    public IdpTenantUserMembershipRepository idpTenatUserRepo(IdentityProviderClient idpClient) {
+        return new AwsIdpTenantUserMembershipRepository(idpClient);
     }
 
     @Bean

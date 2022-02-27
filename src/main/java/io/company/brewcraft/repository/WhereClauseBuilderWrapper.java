@@ -45,6 +45,18 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
     }
 
     @Override
+    public WhereClauseBuilder is(String path, Object value) {
+        this.delegate.is(new String[] { path }, value);
+        return this;
+    }
+
+    @Override
+    public WhereClauseBuilder is(String[] paths, Object value) {
+        this.delegate.is(paths, value);
+        return this;
+    }
+
+    @Override
     public WhereClauseBuilder not() {
         this.delegate.not();
         return this;

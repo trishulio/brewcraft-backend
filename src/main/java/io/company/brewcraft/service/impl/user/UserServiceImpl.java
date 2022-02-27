@@ -1,6 +1,6 @@
 package io.company.brewcraft.service.impl.user;
 
-import static io.company.brewcraft.repository.RepositoryUtil.*;
+import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +85,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 
         User addedUser = userRepo.saveAndFlush(user);
 
-        idpRepo.createUserInGroup(addedUser, contextHolder.getPrincipalContext().getTenantId());
+
+        idpRepo.createUserInTenant(addedUser, contextHolder.getTenantInContext());
 
         return addedUser;
     }
@@ -137,6 +138,6 @@ public class UserServiceImpl extends BaseService implements UserService {
     public void deleteUser(Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User", id));
         userRepo.deleteById(id);
-        idpRepo.deleteUser(user);
+        idpRepo.deleteUser(user.getEmail());
     }
 }

@@ -1,5 +1,7 @@
 package io.company.brewcraft.service;
 
+import java.util.UUID;
+
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.TenantIdProvider;
 import io.company.brewcraft.security.session.ContextHolder;
@@ -21,14 +23,14 @@ public class AwsTenantBucketNameProvider implements ObjectStoreNameProvider {
 
         TenantIdProvider tenantIdProvider = this.contextHolder.getPrincipalContext();
 
-        String tenantId = null;
+        UUID tenantId = null;
         if (tenantIdProvider != null) {
             tenantId = tenantIdProvider.getTenantId();
         }
 
         String bucketName = null;
         if (tenantId != null) {
-            bucketName = this.templates.getTenantVfsBucketName(tenantId);
+            bucketName = this.templates.getTenantVfsBucketName(tenantId.toString());
         }
 
         if (bucketName != null) {

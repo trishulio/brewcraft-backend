@@ -2,7 +2,6 @@ package io.company.brewcraft.security.idp;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import com.amazonaws.services.cognitoidp.model.DeleteGroupRequest;
 import com.amazonaws.services.cognitoidp.model.DeliveryMediumType;
 import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
 import com.amazonaws.services.cognitoidp.model.ResourceNotFoundException;
+import com.amazonaws.services.cognitoidp.model.UpdateGroupRequest;
 
 public class AwsCognitoIdpClient implements IdentityProviderClient {
     private static final Logger logger = LoggerFactory.getLogger(AwsCognitoIdpClient.class);
@@ -95,7 +95,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void createUserGroup(final String group, final String roleArn) {
+    public void createGroup(final String group, final String roleArn) {
         final CreateGroupRequest createGroupRequest = new CreateGroupRequest()
                                                       .withUserPoolId(userPoolId)
                                                       .withGroupName(group)
@@ -112,7 +112,25 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void deleteUserGroup(final String group) {
+    public void updateGroup(String group, String roleArn) {
+        UpdateGroupRequest request = new UpdateGroupRequest()
+                                     .withUserPoolId(userPoolId)
+                                     .withGroupName(group)
+                                     .withRoleArn(roleArn);
+
+        logger.debug("Attempting to update group {} in cognito user pool {}", group, userPoolId);
+        try {
+            this.awsIdpProvider.updateGroup(request);
+            logger.debug("Successfully update group {} in cognito user pool", group, userPoolId);
+        } catch (AWSCognitoIdentityProviderException e) {
+            String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
+            logger.error(msg);
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    @Override
+    public void deleteGroup(final String group) {
         final DeleteGroupRequest deleteGroupRequest = new DeleteGroupRequest().withUserPoolId(userPoolId).withGroupName(group);
         logger.debug("Attempting to delete group {} in cognito user pool {}", group, userPoolId);
         try {
@@ -126,7 +144,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public boolean userGroupExists(final String group) {
+    public boolean groupExists(final String group) {
         final GetGroupRequest getGroupRequest = new GetGroupRequest().withUserPoolId(userPoolId).withGroupName(group);
         logger.debug("Attempting to get group {} in cognito user pool {}", group, userPoolId);
         try {
