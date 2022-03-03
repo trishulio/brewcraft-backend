@@ -3,10 +3,12 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import io.company.brewcraft.service.AssignedToAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
-public interface BaseBrew extends ProductAccessor, ParentBrewAccessor {
+public interface BaseBrew extends ProductAccessor, ParentBrewAccessor, AssignedToAccessor, OwnedByAccessor {
 
     String getName();
 

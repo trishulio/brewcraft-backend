@@ -7,7 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.model.user.UserAccessor;
+import io.company.brewcraft.repository.user.impl.UserRefresher;
+import io.company.brewcraft.service.AssignedToAccessor;
 import io.company.brewcraft.service.BrewAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
@@ -20,8 +25,11 @@ public class BrewRefresher implements Refresher<Brew, BrewAccessor>, SelfParentR
 
     private final Refresher<Product, ProductAccessor> productRefresher;
 
-    public BrewRefresher(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
+    private final UserRefresher userRefresher;
+
+    public BrewRefresher(Refresher<Product, ProductAccessor> productRefresher, UserRefresher userRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
         this.productRefresher = productRefresher;
+        this.userRefresher = userRefresher;
         this.parentBrewRefresher = parentBrewRefresher;
         this.brewAccessorRefresher = brewAccessorRefresher;
     }
@@ -29,6 +37,8 @@ public class BrewRefresher implements Refresher<Brew, BrewAccessor>, SelfParentR
     @Override
     public void refresh(Collection<Brew> brews) {
         this.productRefresher.refreshAccessors(brews);
+        this.userRefresher.refreshAssignedToAccessors(brews);
+        this.userRefresher.refreshOwnedByAccessors(brews);
         this.refreshParentAccessors(brews);
     }
 

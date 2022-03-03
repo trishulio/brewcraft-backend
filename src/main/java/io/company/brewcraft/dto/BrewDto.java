@@ -2,6 +2,8 @@ package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
 
+import io.company.brewcraft.dto.user.UserDto;
+
 public class BrewDto extends BaseDto {
 
     private Long id;
@@ -20,6 +22,10 @@ public class BrewDto extends BaseDto {
 
     private LocalDateTime endedAt;
 
+    private UserDto assignedTo;
+
+    private UserDto ownedBy;
+
     private LocalDateTime createdAt;
 
     private Integer version;
@@ -34,7 +40,7 @@ public class BrewDto extends BaseDto {
     }
 
     public BrewDto(Long id, String name, String description, String batchId, ProductDto productDto, Long parentBrewId,
-            LocalDateTime startedAt, LocalDateTime endedAt, LocalDateTime createdAt, Integer version) {
+            LocalDateTime startedAt, LocalDateTime endedAt, UserDto assignedTo, UserDto ownedBy, LocalDateTime createdAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -43,6 +49,8 @@ public class BrewDto extends BaseDto {
         this.parentBrewId = parentBrewId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.assignedTo = assignedTo;
+        this.ownedBy = ownedBy;
         this.createdAt = createdAt;
         this.version = version;
     }
@@ -117,6 +125,22 @@ public class BrewDto extends BaseDto {
 
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
+    }
+
+    public UserDto getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(UserDto assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public UserDto getOwnedBy() {
+        return ownedBy;
+    }
+
+    public void setOwnedBy(UserDto ownedBy) {
+        this.ownedBy = ownedBy;
     }
 
     public Integer getVersion() {

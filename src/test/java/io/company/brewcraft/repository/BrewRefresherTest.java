@@ -9,7 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.user.User;
+import io.company.brewcraft.repository.user.impl.UserRefresher;
+import io.company.brewcraft.service.AssignedToAccessor;
 import io.company.brewcraft.service.BrewAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
@@ -19,6 +23,8 @@ public class BrewRefresherTest {
 
     private Refresher<Product, ProductAccessor> productRefresherMock;
 
+    private UserRefresher userRefresherMock;
+
     private AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorMock;
 
     private AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorMock;
@@ -27,22 +33,25 @@ public class BrewRefresherTest {
     @BeforeEach
     public void init() {
         productRefresherMock = mock(Refresher.class);
+        userRefresherMock = mock(UserRefresher.class);
         parentBrewAccessorMock = mock(AccessorRefresher.class);
         brewAccessorMock = mock(AccessorRefresher.class);
 
-        brewRefresher = new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock);
+        brewRefresher = new BrewRefresher(productRefresherMock, userRefresherMock, parentBrewAccessorMock, brewAccessorMock);
     }
 
     @Test
     public void testRefresh_PerformsRefreshOnChildEntities() {
         //Spy on brewRefresher as it makes a call to itself
-        brewRefresher = spy(new BrewRefresher(productRefresherMock, parentBrewAccessorMock, brewAccessorMock));
+        brewRefresher = spy(new BrewRefresher(productRefresherMock, userRefresherMock, parentBrewAccessorMock, brewAccessorMock));
 
         List<Brew> brews = List.of(new Brew(1L));
 
         brewRefresher.refresh(brews);
 
         verify(productRefresherMock, times(1)).refreshAccessors(brews);
+        verify(userRefresherMock, times(1)).refreshOwnedByAccessors(brews);
+        verify(userRefresherMock, times(1)).refreshOwnedByAccessors(brews);
         verify(brewRefresher, times(1)).refreshParentAccessors(brews);
     }
 

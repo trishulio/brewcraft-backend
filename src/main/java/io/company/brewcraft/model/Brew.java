@@ -25,6 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity(name = "BREW")
@@ -40,6 +41,8 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     public static final String FIELD_BREW_STAGES = "brewStages";
     public static final String FIELD_STARTED_AT = "startedAt";
     public static final String FIELD_ENDED_AT = "endedAt";
+    public static final String FIELD_ASSIGNED_TO = "assignedTo";
+    public static final String FIELD_OWNED_BY = "ownedBy";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brew_generator")
@@ -78,6 +81,14 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     @Column(name = "ended_at")
     private LocalDateTime endedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "assigned_to_user_id", referencedColumnName = "id")
+    private User assignedTo;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "owned_by_user_id", referencedColumnName = "id")
+    private User ownedBy;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -98,7 +109,7 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     }
 
     public Brew(Long id, String name, String description, String batchId, Product product, Brew parentBrew, List<Brew> childBrews, List<BrewStage> brewStages, LocalDateTime startedAt,
-            LocalDateTime endedAt, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+            LocalDateTime endedAt, User assignedTo, User ownedBy, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setName(name);
         setDescription(description);
@@ -109,6 +120,8 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
         setBrewStages(brewStages);
         setStartedAt(startedAt);
         setEndedAt(endedAt);
+        setAssignedTo(assignedTo);
+        setOwnedBy(ownedBy);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -310,6 +323,26 @@ public class Brew extends BaseEntity implements UpdateBrew, Audited, Identified<
     @Override
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
+    }
+
+    @Override
+    public User getAssignedTo() {
+        return assignedTo;
+    }
+
+    @Override
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    @Override
+    public User getOwnedBy() {
+        return ownedBy;
+    }
+
+    @Override
+    public void setOwnedBy(User ownedBy) {
+        this.ownedBy = ownedBy;
     }
 
     @Override
