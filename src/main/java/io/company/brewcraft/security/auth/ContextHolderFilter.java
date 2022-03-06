@@ -53,7 +53,9 @@ public class ContextHolderFilter implements Filter {
     
     private void setTenantContext() {
         UUID tenantId = this.ctxHolder.getPrincipalContext().getTenantId();
-        
-        this.ctxHolder.setTenantInContextProxy(() -> this.tenantService.get(tenantId));
+
+        if (tenantId != null) {
+            this.ctxHolder.setTenantInContextProxy(() -> this.tenantService.get(tenantId));
+        }
     }
 }

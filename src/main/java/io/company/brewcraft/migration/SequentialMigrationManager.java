@@ -34,10 +34,6 @@ public class SequentialMigrationManager implements MigrationManager {
         // Note: Can be replaced with a parallel task-set that uses blocking Async executor;
         TaskSet tasks = new SequentialTaskSet();
 
-        tasks.submit(() -> {
-            migrationReg.migrateAdmin();
-        });
-
         tenants.forEach(id -> tasks.submit(() -> {
             migrate(id);
         }));

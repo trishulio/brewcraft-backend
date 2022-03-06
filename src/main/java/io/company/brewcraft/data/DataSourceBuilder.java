@@ -18,8 +18,6 @@ public interface DataSourceBuilder {
 
     DataSourceBuilder autoCommit(boolean autoCommit);
 
-    DataSourceBuilder copy(DataSource ds);
-
     String username();
 
     String password();

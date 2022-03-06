@@ -9,73 +9,39 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractTenantDsManager implements TenantDataSourceManager {
+public class DataSourceQueryRunner {
+    private static final Logger log = LoggerFactory.getLogger(DataSourceQueryRunner.class);
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractTenantDsManager.class);
+    private DataSourceManager dsManager;
 
-    protected DataSourceManager dsMgr;
-    private String schemaPrefix;
-    private String adminSchemaName;
-
-    public AbstractTenantDsManager(DataSourceManager dsMgr, String adminSchemaName, String schemaPrefix) {
-        this.dsMgr = dsMgr;
-        this.adminSchemaName = adminSchemaName.toLowerCase();
-        this.schemaPrefix = schemaPrefix;
+    public DataSourceQueryRunner(DataSourceManager dsManager) {
+        this.dsManager = dsManager;
     }
 
-    @Override
-    public DataSource getAdminDataSource() {
-        return this.dsMgr.getAdminDataSource();
-    }
-
-    @Override
-    public DataSource getDataSource(String id) throws SQLException, IOException {
-        return this.dsMgr.getDataSource(fqName(id));
-    }
-
-    @Override
-    public String fqName(String tenantId) {
-        return String.format("%s%s", this.schemaPrefix, tenantId.replace("-", "_")).toLowerCase();
-    }
-
-    @Override
-    public String getAdminSchemaName() {
-        return this.adminSchemaName;
-    }
-
-    @Override
-    public Connection getConnection() throws SQLException, IOException {
-        return getDataSource().getConnection();
-    }
-
-    @Override
-    public <T> T query(String tenantId, CheckedSupplier<T, Connection, Exception> supplier) {
+    public <T> T query(DataSourceConfiguration dsConfig, CheckedSupplier<T, Connection, Exception> supplier) {
         try {
-            DataSource ds = this.getDataSource(tenantId);
+            DataSource ds = this.dsManager.getDataSource(dsConfig);
             return executeQuery(ds, supplier);
         } catch (SQLException | IOException e) {
-            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
+            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", dsConfig), e);
         }
     }
 
-    @Override
     public <T> T query(CheckedSupplier<T, Connection, Exception> supplier) {
-        return executeQuery(this.getAdminDataSource(), supplier);
+        return executeQuery(this.dsManager.getAdminDataSource(), supplier);
     }
 
-    @Override
-    public void query(String tenantId, CheckedConsumer<Connection, Exception> runnable) {
+    public void query(DataSourceConfiguration dsConfig, CheckedConsumer<Connection, Exception> runnable) {
         try {
-            DataSource ds = this.getDataSource(tenantId);
+            DataSource ds = this.dsManager.getDataSource(dsConfig);
             executeQuery(ds, runnable);
         } catch (SQLException | IOException e) {
-            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", tenantId), e);
+            throw new RuntimeException(String.format("Failed to fetch the datasource for tenant: %s", dsConfig), e);
         }
     }
 
-    @Override
     public void query(CheckedConsumer<Connection, Exception> runnable) {
-        executeQuery(this.getAdminDataSource(), runnable);
+        executeQuery(this.dsManager.getAdminDataSource(), runnable);
     }
 
     private <T> T executeQuery(DataSource ds, CheckedSupplier<T, Connection, Exception> supplier) {

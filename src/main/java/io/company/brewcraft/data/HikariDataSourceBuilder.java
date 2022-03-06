@@ -1,9 +1,5 @@
 package io.company.brewcraft.data;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -32,23 +28,5 @@ public class HikariDataSourceBuilder extends AbstractDataSourceBuilder {
         DataSource ds = new HikariDataSource(config);
 
         return ds;
-    }
-
-    @Override
-    public DataSourceBuilder copy(DataSource ds) {
-        try (Connection conn = ds.getConnection()) {
-            DatabaseMetaData md = conn.getMetaData();
-            username(md.getUserName());
-            url(md.getURL());
-            schema(conn.getSchema());
-            autoCommit(conn.getAutoCommit());
-
-            log.debug("poolSize not copied because it's not publicly available by JDBC");
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to copy datasource metadata", e);
-        }
-
-        return this;
     }
 }

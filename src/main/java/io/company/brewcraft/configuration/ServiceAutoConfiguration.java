@@ -16,6 +16,7 @@ import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
+import io.company.brewcraft.model.AdminTenant;
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.AwsObjectStoreFileClientProvider;
 import io.company.brewcraft.model.BaseFinishedGoodLot;
@@ -247,14 +248,23 @@ public class ServiceAutoConfiguration {
     public BlockingAsyncExecutor executor() {
         return new BlockingAsyncExecutor();
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(Tenant.class)
+    public Tenant adminTenant(@Value("${app.config.tenant.admin.id}") String id, @Value("${app.config.tenant.admin.name}") String name) {
+        UUID adminId = UUID.fromString(id);
+
+        return new AdminTenant(adminId, name);
+    }
 
     @Bean
     @ConditionalOnMissingBean(TenantManagementService.class)
-    public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, TenantIaasService tenantIaasService, UtilityProvider utilProvider) {
-        RepoService<UUID, Tenant, TenantAccessor> repoService = new CrudRepoService<>(tenantRepository, null);
+    public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, TenantIaasService tenantIaasService, Refresher<Tenant, TenantAccessor> tenantRefresher, UtilityProvider utilProvider, Tenant adminTenant) {
+        RepoService<UUID, Tenant, TenantAccessor> repoService = new CrudRepoService<>(tenantRepository, tenantRefresher);
         UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseTenant.class, UpdateTenant.class, Tenant.class, Set.of(""));
 
         final TenantManagementService tenantService = new TenantManagementService(
+            adminTenant,    
             repoService,
             updateService,
             tenantRepository,
@@ -284,8 +294,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AwsArnMapper.class)
-    public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition, @Value("${aws.iam.region}") String iamRegion) {
-        return new AwsArnMapper(accountId, partition, iamRegion);
+    public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition) {
+        return new AwsArnMapper(accountId, partition);
     }
 
     @Bean

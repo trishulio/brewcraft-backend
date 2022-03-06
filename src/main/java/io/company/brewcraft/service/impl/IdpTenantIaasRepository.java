@@ -13,6 +13,7 @@ public class IdpTenantIaasRepository {
 
     public IdpTenantIaasRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor) {
         this.idpClient = idpClient;
+        this.executor = executor;
     }
     
     public void add(List<? extends IaasTenant> tenants) {

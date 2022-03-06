@@ -35,29 +35,35 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 public class TenantManagementService implements CrudService<UUID, Tenant, BaseTenant, UpdateTenant, TenantAccessor> {
     private static final Logger log = LoggerFactory.getLogger(TenantManagementService.class);
     
+    private Tenant adminTenant;
     private RepoService<UUID, Tenant, TenantAccessor> repoService;
     private UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService;
-
     private TenantRepository tenantRepository;
     private MigrationManager migrationManager;
     private TenantIaasService iaasService;
 
     public TenantManagementService(
+        Tenant adminTenant,
         RepoService<UUID, Tenant, TenantAccessor> repoService,
         UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService,
         TenantRepository tenantRepository,
         MigrationManager migrationManager,
         TenantIaasService iaasService
     ) {
+        this.adminTenant = adminTenant;
+        this.repoService = repoService;
+        this.updateService = updateService;
         this.tenantRepository = tenantRepository;
         this.migrationManager = migrationManager;
         this.iaasService = iaasService;
     }
     
     @PostConstruct
-    public void registerMockTenants() {
-        // Mock data
+    public void migrateTenants() {
         List<Tenant> testTenants = new ArrayList<>();
+        testTenants.add(adminTenant);
+
+        // Mock data
         testTenants.add(new Tenant(UUID.fromString("eae07f11-4c9a-4a3b-8b23-9c05d695ab67")));
 
         this.migrationManager.migrateAll(testTenants);
@@ -100,9 +106,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
 
         this.iaasService.delete(tenants);
         
-        List<String> tenantIaasIds = tenants.stream().map(Tenant::getIaasId).toList();
-        
-        return this.delete(ids);
+        return this.repoService.delete(ids);
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,15 +58,15 @@ public class TenantManagementController extends BaseController {
 
     @GetMapping
     public PageDto<TenantDto> getAll(
-        List<UUID> ids,
-        List<String> names,
-        List<URL> urls,
-        Boolean isReady,
-        SortedSet<String> sort,
-        boolean orderAscending,
-        int page,
-        int size,
-        Set<String> attributes
+        @RequestParam(required = false, name = "ids") List<UUID> ids,
+        @RequestParam(required = false, name = "names") List<String> names,
+        @RequestParam(required = false, name = "urls") List<URL> urls,
+        @RequestParam(required = false, name = "is_ready") Boolean isReady,
+        @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
+        @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
+        @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<Tenant> tenants = this.tenantService.getAll(ids, names, urls, isReady, sort, orderAscending, page, size);
         
@@ -72,7 +74,7 @@ public class TenantManagementController extends BaseController {
     }
 
     @GetMapping("/{id}")
-    public TenantDto getTenant(@PathVariable UUID id, Set<String> attributes) {
+    public TenantDto getTenant(@PathVariable(required = true, name = "id") UUID id,  @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }
 
@@ -92,5 +94,11 @@ public class TenantManagementController extends BaseController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<TenantDto> patchTenant(@Valid @NotNull @RequestBody List<UpdateTenantDto> updateDtos) {
         return this.controller.patch(updateDtos);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public int deleteTenants(@RequestParam("ids") Set<UUID> ids) {
+        return this.controller.delete(ids);
     }
 }
