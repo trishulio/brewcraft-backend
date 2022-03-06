@@ -58,6 +58,13 @@ public class TenantUserRegister implements TenantRegister {
     }
 
     @Override
+    public void put(Tenant tenant) {
+        if (!exists(tenant)) {
+            add(tenant);
+        }
+    }
+
+    @Override
     public void remove(Tenant tenant) {
         DataSourceConfiguration config = this.configMgr.getConfiguration(tenant.getId());
 

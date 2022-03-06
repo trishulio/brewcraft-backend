@@ -36,6 +36,13 @@ public class TenantSchemaRegister implements TenantRegister {
     }
 
     @Override
+    public void put(Tenant tenant) {
+        if (!exists(tenant)) {
+            add(tenant);
+        }
+    }
+
+    @Override
     public void remove(Tenant tenant) {
         DataSourceConfiguration config = configProvider.getConfiguration(tenant.getId());
 

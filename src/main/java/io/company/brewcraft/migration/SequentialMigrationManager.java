@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.Tenant;
 
+// Note: Can be replaced with a parallel task-set that uses blocking Async executor;
 public class SequentialMigrationManager implements MigrationManager {
     private static final Logger log = LoggerFactory.getLogger(SequentialMigrationManager.class);
 
@@ -20,10 +21,7 @@ public class SequentialMigrationManager implements MigrationManager {
 
     @Override
     public void migrate(Tenant tenant) {
-        if (!tenantReg.exists(tenant)) {
-            log.info("Registering new tenantId: {}", tenant.getId());
-            tenantReg.add(tenant);
-        }
+        tenantReg.put(tenant);
 
         log.info("Applying migration to tenant: {}", tenant.getId());
         migrationReg.migrate(tenant);
@@ -31,7 +29,6 @@ public class SequentialMigrationManager implements MigrationManager {
 
     @Override
     public void migrateAll(List<Tenant> tenants) {
-        // Note: Can be replaced with a parallel task-set that uses blocking Async executor;
         TaskSet tasks = new SequentialTaskSet();
 
         tenants.forEach(id -> tasks.submit(() -> {

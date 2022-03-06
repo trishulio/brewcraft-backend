@@ -19,6 +19,12 @@ public class UnifiedTenantRegister implements TenantRegister {
     }
 
     @Override
+    public void put(Tenant tenant) {
+        userReg.put(tenant);
+        schemaReg.put(tenant);
+    }
+
+    @Override
     public void remove(Tenant tenant) {
         schemaReg.remove(tenant);
         userReg.remove(tenant);
