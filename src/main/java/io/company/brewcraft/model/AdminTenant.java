@@ -32,11 +32,6 @@ public class AdminTenant extends Tenant {
     }
 
     @Override
-    public void setIaasRole(IaasRole iaasRole) {
-        throwImmutableException();
-    }
-
-    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         throwImmutableException();
     }

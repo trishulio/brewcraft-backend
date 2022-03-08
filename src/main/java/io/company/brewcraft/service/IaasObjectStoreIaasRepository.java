@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 
 import com.amazonaws.services.s3.model.Bucket;
 
+import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStore;
+import io.company.brewcraft.model.UpdateIaasObjectStore;
 
 public class IaasObjectStoreIaasRepository {
     private AwsObjectStoreClient iamClient;
@@ -20,20 +22,29 @@ public class IaasObjectStoreIaasRepository {
     }
 
     public List<IaasObjectStore> get(Collection<String> ids) {
-        List<Supplier<Bucket>> suppliers = ids.stream()
-                .filter(id -> id != null)
-                .map(id -> (Supplier<Bucket>) () -> iamClient.get(id))
+        List<Bucket> buckets = iamClient.getAll()
+                                        .stream()
+                                        .filter(bucket -> ids.contains(bucket.getName()))
+                                        .toList();
+
+        return this.mapper.fromObjectStores(buckets);
+    }
+
+    public List<IaasObjectStore> add(Collection<? extends BaseIaasObjectStore> objectStores) {
+        List<Supplier<Bucket>> suppliers = objectStores.stream()
+                .filter(bucket -> bucket != null)
+                .map(bucket -> (Supplier<Bucket>) () -> iamClient.add(bucket.getName()))
                 .toList();
 
         List<Bucket> iamObjectStores = this.executor.supply(suppliers);
 
         return this.mapper.fromObjectStores(iamObjectStores);
     }
-
-    public List<IaasObjectStore> add(Collection<IaasObjectStore> objectStores) {
+    
+    public List<IaasObjectStore> put(Collection<? extends UpdateIaasObjectStore> objectStores) {
         List<Supplier<Bucket>> suppliers = objectStores.stream()
                 .filter(bucket -> bucket != null)
-                .map(bucket -> (Supplier<Bucket>) () -> iamClient.add(bucket.getName()))
+                .map(bucket -> (Supplier<Bucket>) () -> iamClient.put(bucket.getName()))
                 .toList();
 
         List<Bucket> iamObjectStores = this.executor.supply(suppliers);

@@ -2,9 +2,12 @@ package io.company.brewcraft.security.idp;
 
 import java.util.Map;
 
+import com.amazonaws.services.cognitoidp.model.GroupType;
+import com.amazonaws.services.cognitoidp.model.UserType;
+
 public interface IdentityProviderClient {
 
-    void createUser(String userName, final Map<String, String> userAttr);
+    UserType createUser(String userName, final Map<String, String> userAttr);
 
     void updateUser(String userName, final Map<String, String> userAttr);
 
@@ -14,9 +17,13 @@ public interface IdentityProviderClient {
 
     void removeUserFromGroup(String userName, String group);
 
-    void createGroup(String group, String roleArn);
+    GroupType getGroup(String group);
+    
+    GroupType createGroup(String group, String roleArn);
+    
+    GroupType putGroup(String group, String roleArn);
 
-    void updateGroup(String group, String roleArn);
+    GroupType updateGroup(String group, String roleArn);
     
     void deleteGroup(String group);
 

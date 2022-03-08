@@ -7,7 +7,9 @@ import java.util.function.Supplier;
 
 import com.amazonaws.services.identitymanagement.model.Policy;
 
+import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.UpdateIaasPolicy;
 
 public class IaasPolicyIaasRepository {
     private AwsIamPolicyClient iamClient;
@@ -37,13 +39,31 @@ public class IaasPolicyIaasRepository {
         return this.mapper.fromIamPolicies(iamPolicies);
     }
 
-    public List<IaasPolicy> add(Collection<IaasPolicy> policies) {
+    public List<IaasPolicy> add(Collection<? extends BaseIaasPolicy> policies) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
-        for (IaasPolicy iamPolicy: policies) {
+        for (BaseIaasPolicy iamPolicy: policies) {
             Supplier<Policy> supplier = new Supplier<Policy>() {
                 @Override
                 public Policy get() {
                     return iamClient.add(iamPolicy.getName(), iamPolicy.getDescription(), iamPolicy.getDocument());
+                }
+            };
+            suppliers.add(supplier);
+        }
+
+        List<Policy> iamPolicies = this.executor.supply(suppliers);
+
+        return this.mapper.fromIamPolicies(iamPolicies);
+    }
+    
+
+    public List<IaasPolicy> put(Collection<? extends UpdateIaasPolicy> policies) {
+        List<Supplier<Policy>> suppliers = new ArrayList<>();
+        for (UpdateIaasPolicy iamPolicy: policies) {
+            Supplier<Policy> supplier = new Supplier<Policy>() {
+                @Override
+                public Policy get() {
+                    return iamClient.put(iamPolicy.getName(), iamPolicy.getDescription(), iamPolicy.getDocument());
                 }
             };
             suppliers.add(supplier);

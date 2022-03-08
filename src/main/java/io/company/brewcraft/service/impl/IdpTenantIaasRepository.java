@@ -1,25 +1,57 @@
 package io.company.brewcraft.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import com.amazonaws.services.cognitoidp.model.GroupType;
+
+import io.company.brewcraft.model.BaseIaasIdpTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasRole;
-import io.company.brewcraft.model.IaasTenant;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
+import io.company.brewcraft.service.AwsArnMapper;
 import io.company.brewcraft.service.BlockingAsyncExecutor;
+import io.company.brewcraft.service.IaasRoleService;
+import io.company.brewcraft.service.mapper.IaasIdpTenantMapper;
 
 public class IdpTenantIaasRepository {
     private IdentityProviderClient idpClient;
     private BlockingAsyncExecutor executor;
+    private IaasIdpTenantMapper mapper;
+    private IaasRoleService roleService;
+    private AwsArnMapper arnMapper;
 
-    public IdpTenantIaasRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor) {
+    public IdpTenantIaasRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, IaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
         this.idpClient = idpClient;
         this.executor = executor;
+        this.mapper = mapper;
     }
     
-    public void add(List<? extends IaasTenant> tenants) {
-        List<Runnable> runnables = tenants.stream()
+    public List<IaasIdpTenant> get(Set<String> groupIds) {
+        List<Supplier<GroupType>> suppliers = groupIds.stream()
+                                                  .filter(groupId -> groupId != null)
+                                                  .map(groupId -> (Supplier<GroupType>) () -> idpClient.getGroup(groupId))
+                                                  .toList();
+        List<GroupType> groups = this.executor.supply(suppliers);
+        
+        Set<String> roleNames = groups.stream().map(group -> arnMapper.getName(group.getRoleArn())).collect(Collectors.toSet());
+        Iterator<IaasRole> roles = roleService.getAll(roleNames).iterator();
+
+        List<IaasIdpTenant> idpTenants = this.mapper.fromGroups(groups);
+        // TODO: Assuming that number of roles == number of idpTenants and that the order is same.  Need to validate that's always true.
+        idpTenants.forEach(idpTenant -> idpTenant.setIaasRole(roles.next()));
+        
+        return idpTenants;
+    }
+    
+    public List<IaasIdpTenant> add(List<? extends BaseIaasIdpTenant> tenants) {
+        List<Supplier<GroupType>> suppliers = tenants.stream()
                                    .filter(tenant -> tenant != null)
-                                   .map(tenant -> (Runnable) () -> {
+                                   .map(tenant -> (Supplier<GroupType>) () -> {
                                        String roleArn = null;
                                        IaasRole role = tenant.getIaasRole();
 
@@ -27,13 +59,34 @@ public class IdpTenantIaasRepository {
                                            roleArn = role.getIaasResourceName();
                                        }
 
-                                       idpClient.createGroup(tenant.getIaasId(), roleArn);
+                                       return idpClient.createGroup(tenant.getName(), roleArn);
                                    }).toList();
         
-        this.executor.run(runnables);
+        List<GroupType> groups = this.executor.supply(suppliers);
+        
+        return this.mapper.fromGroups(groups);
+    }
+    
+    public List<IaasIdpTenant> put(List<? extends UpdateIaasIdpTenant> tenants) {
+        List<Supplier<GroupType>> suppliers = tenants.stream()
+                .filter(tenant -> tenant != null)
+                .map(tenant -> (Supplier<GroupType>) () -> {
+                    String roleArn = null;
+                    IaasRole role = tenant.getIaasRole();
+
+                    if (role != null) {
+                        roleArn = role.getIaasResourceName();
+                    }
+
+                    return idpClient.putGroup(tenant.getName(), roleArn);
+                }).toList();
+
+        List<GroupType> groups = this.executor.supply(suppliers);
+        
+        return this.mapper.fromGroups(groups);
     }
 
-    public void delete(List<String> tenantIaasIds) {
+    public void delete(Set<String> tenantIaasIds) {
         List<Runnable> runnables = tenantIaasIds.stream()
                 .filter(tenantIaasId -> tenantIaasId != null)
                 .map(tenantIaasId -> (Runnable) () -> idpClient.deleteGroup(tenantIaasId))
@@ -45,27 +98,4 @@ public class IdpTenantIaasRepository {
     public boolean exists(String tenantIaasId) {
         return this.idpClient.groupExists(tenantIaasId);
     }
-
-    public void put(List<? extends IaasTenant> tenants) {
-        List<Runnable> runnables = tenants.stream()
-                .filter(tenant -> tenant != null)
-                .map(tenant -> (Runnable) () -> {
-                    if (this.exists(tenant.getIaasId())) {
-                        String roleArn = null;
-                        IaasRole role = tenant.getIaasRole();
-
-                        if (role != null) {
-                            roleArn = role.getIaasResourceName();
-                        }
-
-                        this.idpClient.updateGroup(tenant.getIaasId(), roleArn);
-                    } else {
-                        this.add(List.of(tenant));
-                    }
-                })
-                .toList();
-
-        this.executor.run(runnables);
-    }
-
 }

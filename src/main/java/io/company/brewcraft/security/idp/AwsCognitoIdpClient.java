@@ -14,13 +14,19 @@ import com.amazonaws.services.cognitoidp.model.AdminCreateUserResult;
 import com.amazonaws.services.cognitoidp.model.AdminDeleteUserRequest;
 import com.amazonaws.services.cognitoidp.model.AdminRemoveUserFromGroupRequest;
 import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesRequest;
+import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesResult;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.CreateGroupRequest;
+import com.amazonaws.services.cognitoidp.model.CreateGroupResult;
 import com.amazonaws.services.cognitoidp.model.DeleteGroupRequest;
 import com.amazonaws.services.cognitoidp.model.DeliveryMediumType;
 import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
+import com.amazonaws.services.cognitoidp.model.GetGroupResult;
+import com.amazonaws.services.cognitoidp.model.GroupType;
 import com.amazonaws.services.cognitoidp.model.ResourceNotFoundException;
 import com.amazonaws.services.cognitoidp.model.UpdateGroupRequest;
+import com.amazonaws.services.cognitoidp.model.UpdateGroupResult;
+import com.amazonaws.services.cognitoidp.model.UserType;
 
 public class AwsCognitoIdpClient implements IdentityProviderClient {
     private static final Logger logger = LoggerFactory.getLogger(AwsCognitoIdpClient.class);
@@ -35,13 +41,15 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void createUser(final String userName, final Map<String, String> userAttr) {
+    public UserType createUser(final String userName, final Map<String, String> userAttr) {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).toList();
         final AdminCreateUserRequest adminCreateUserRequest = new AdminCreateUserRequest().withUserPoolId(userPoolId).withUsername(userName).withDesiredDeliveryMediums(DeliveryMediumType.EMAIL).withUserAttributes(attributeTypes);
         logger.debug("Attempting to save user {} in cognito user pool {} ", userName, userPoolId);
         try {
             final AdminCreateUserResult adminCreateUserResult = this.awsIdpProvider.adminCreateUser(adminCreateUserRequest);
             logger.debug("Successfully Saved user {} in cognito user pool {} with status : {}", userName, userPoolId, adminCreateUserResult.getUser().getUserStatus());
+
+            return adminCreateUserResult.getUser();
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
             logger.error(msg);
@@ -54,7 +62,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         final List<AttributeType> attributeTypes = userAttr.entrySet().stream().map(attr -> getAttribute(attr.getKey(), attr.getValue())).toList();
         final AdminUpdateUserAttributesRequest adminUpdateUserRequest = new AdminUpdateUserAttributesRequest().withUserPoolId(userPoolId).withUsername(userName).withUserAttributes(attributeTypes);
         logger.debug("Attempting to update user {} in cognito user pool {} ", userName, userPoolId);
-        this.awsIdpProvider.adminUpdateUserAttributes(adminUpdateUserRequest);
+        AdminUpdateUserAttributesResult result = this.awsIdpProvider.adminUpdateUserAttributes(adminUpdateUserRequest);
         logger.debug("Successfully Updated user {} in cognito user pool {}", userName, userPoolId);
     }
 
@@ -95,15 +103,16 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void createGroup(final String group, final String roleArn) {
-        final CreateGroupRequest createGroupRequest = new CreateGroupRequest()
-                                                      .withUserPoolId(userPoolId)
-                                                      .withGroupName(group)
-                                                      .withRoleArn(roleArn);
-        logger.debug("Attempting to create group {} in cognito user pool {}", group, userPoolId);
+    public GroupType getGroup(String group) {
+        GetGroupRequest request = new GetGroupRequest()
+                                    .withGroupName(group)
+                                    .withUserPoolId(userPoolId);
+        
+        logger.debug("Attempting to get group {} in cognito user pool {}", group, userPoolId);
         try {
-            this.awsIdpProvider.createGroup(createGroupRequest);
-            logger.debug("Successfully created group {} in cognito user pool", group, userPoolId);
+            GetGroupResult result = this.awsIdpProvider.getGroup(request);
+            logger.debug("Successfully retrieved group {} in cognito user pool", group, userPoolId);
+            return result.getGroup();
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
             logger.error(msg);
@@ -112,7 +121,35 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void updateGroup(String group, String roleArn) {
+    public GroupType createGroup(final String group, final String roleArn) {
+        final CreateGroupRequest createGroupRequest = new CreateGroupRequest()
+                                                      .withUserPoolId(userPoolId)
+                                                      .withGroupName(group)
+                                                      .withRoleArn(roleArn);
+        logger.debug("Attempting to create group {} in cognito user pool {}", group, userPoolId);
+        try {
+            CreateGroupResult result = this.awsIdpProvider.createGroup(createGroupRequest);
+            logger.debug("Successfully created group {} in cognito user pool", group, userPoolId);
+            
+            return result.getGroup();
+        } catch (AWSCognitoIdentityProviderException e) {
+            String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
+            logger.error(msg);
+            throw new RuntimeException(msg, e);
+        }
+    }
+
+    @Override
+    public GroupType putGroup(String group, String roleArn) {
+        if (groupExists(group)) {
+            return updateGroup(group, roleArn);
+        } else {
+            return createGroup(group, roleArn);
+        }
+    }
+
+    @Override
+    public GroupType updateGroup(String group, String roleArn) {
         UpdateGroupRequest request = new UpdateGroupRequest()
                                      .withUserPoolId(userPoolId)
                                      .withGroupName(group)
@@ -120,8 +157,10 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
 
         logger.debug("Attempting to update group {} in cognito user pool {}", group, userPoolId);
         try {
-            this.awsIdpProvider.updateGroup(request);
+            UpdateGroupResult result = this.awsIdpProvider.updateGroup(request);
             logger.debug("Successfully update group {} in cognito user pool", group, userPoolId);
+            
+            return result.getGroup();
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
             logger.error(msg);

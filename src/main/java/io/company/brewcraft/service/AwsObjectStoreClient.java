@@ -1,9 +1,14 @@
 package io.company.brewcraft.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.DeleteBucketRequest;
+import com.amazonaws.services.s3.model.ListBucketsRequest;
 
 public class AwsObjectStoreClient {
     private AmazonS3 awsClient;
@@ -12,8 +17,16 @@ public class AwsObjectStoreClient {
         this.awsClient = awsClient;
     }
 
+    public List<Bucket> getAll() {
+        ListBucketsRequest request = new ListBucketsRequest();
+        return awsClient.listBuckets(request);    
+    }
+    
     public Bucket get(String bucketName) {
-        throw new UnsupportedOperationException("AWS SDK 1 doesn't have a GetBucketRequest operations. Only specific bucket attributes can be fetched. This method is unsupported until JDK is upgraded to v2");
+        List<Bucket> buckets = getAll();
+        Optional<Bucket> opt = buckets.stream().filter(bucket -> bucket.getName().equals(bucketName)).findAny();
+        
+        return opt.orElseThrow(() -> new AmazonS3Exception(String.format("Could not find the bucket with name: %s", bucketName)));
     }
 
     public void delete(String bucketName) {
@@ -29,6 +42,14 @@ public class AwsObjectStoreClient {
     }
 
     public Bucket put(String bucketName) {
-        throw new UnsupportedOperationException("Not implemented due to lack of use-case.");
+        if (exists(bucketName)) {
+            return get(bucketName);
+        } else {
+            return add(bucketName);
+        }
+    }
+    
+    public boolean exists(String bucketName) {
+        return awsClient.doesBucketExistV2(bucketName);
     }
 }

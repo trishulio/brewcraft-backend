@@ -7,7 +7,10 @@ import com.amazonaws.services.identitymanagement.model.DeleteRoleRequest;
 import com.amazonaws.services.identitymanagement.model.DeleteRoleResult;
 import com.amazonaws.services.identitymanagement.model.GetRoleRequest;
 import com.amazonaws.services.identitymanagement.model.GetRoleResult;
+import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
 import com.amazonaws.services.identitymanagement.model.Role;
+import com.amazonaws.services.identitymanagement.model.UpdateAssumeRolePolicyRequest;
+import com.amazonaws.services.identitymanagement.model.UpdateAssumeRolePolicyResult;
 import com.amazonaws.services.identitymanagement.model.UpdateRoleRequest;
 import com.amazonaws.services.identitymanagement.model.UpdateRoleResult;
 
@@ -45,15 +48,35 @@ public class AwsIamRoleClient {
         return result.getRole();
     }
 
-    public Role put(String roleName, String description) {
+    public Role update(String roleName, String description, String assumePolicyDocument) {
         UpdateRoleRequest request = new UpdateRoleRequest()
                                     .withRoleName(roleName)
                                     .withDescription(description);
 
         UpdateRoleResult result = this.awsIamClient.updateRole(request);
+        
+        UpdateAssumeRolePolicyRequest policyRequest = new UpdateAssumeRolePolicyRequest()
+                                                          .withRoleName(roleName)
+                                                          .withPolicyDocument(assumePolicyDocument);
+        UpdateAssumeRolePolicyResult policyResult = this.awsIamClient.updateAssumeRolePolicy(policyRequest);
 
-        return new Role()
-            .withDescription(description)
-            .withDescription(description);
+        return get(roleName);
+    }
+    
+    public boolean exists(String roleName) {
+        try {
+            get(roleName);
+            return true;
+        } catch (NoSuchEntityException e) {
+            return false;
+        }
+    }
+    
+    public Role put(String roleName, String description, String assumePolicyDocument) {
+        if (exists(roleName)) {
+            return update(roleName, description, assumePolicyDocument);
+        } else {
+            return add(roleName, description, assumePolicyDocument);
+        }
     }
 }

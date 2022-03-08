@@ -13,11 +13,11 @@ public class AwsIdpTenantUserMembershipRepository implements IdpTenantUserMember
 
     @Override
     public void add(IaasTenantUserMembership membership) {
-        this.idpClient.addUserToGroup(membership.getUser().getEmail(), membership.getTenant().getIaasId());
+        this.idpClient.addUserToGroup(membership.getUser().getEmail(), membership.getTenant().getName());
     }
 
     @Override
     public void remove(IaasTenantUserMembership membership) {
-        this.idpClient.removeUserFromGroup(membership.getUser().getEmail(), membership.getTenant().getIaasId());
+        this.idpClient.removeUserFromGroup(membership.getUser().getEmail(), membership.getTenant().getName());
     }
 }

@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 
 import io.company.brewcraft.service.CrudEntity;
 
-public class IaasTenant extends BaseModel implements UpdateIaasTenant, CrudEntity<String>, Audited {
+public class IaasIdpTenant extends BaseModel implements UpdateIaasIdpTenant, CrudEntity<String>, Audited {
     private String name;
+    private IaasRole role;
+    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
 
@@ -16,12 +18,12 @@ public class IaasTenant extends BaseModel implements UpdateIaasTenant, CrudEntit
 
     @Override
     public void setId(String id) {
-        setName(id);
-    }
+        setName(name);
+    }    
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
@@ -30,8 +32,28 @@ public class IaasTenant extends BaseModel implements UpdateIaasTenant, CrudEntit
     }
 
     @Override
+    public String getDescription() {
+        return this.description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public IaasRole getIaasRole() {
+        return this.role;
+    }
+
+    @Override
+    public void setIaasRole(IaasRole role) {
+        this.role = role;
+    }
+
+    @Override
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     @Override
@@ -41,7 +63,7 @@ public class IaasTenant extends BaseModel implements UpdateIaasTenant, CrudEntit
 
     @Override
     public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+        return this.lastUpdated;
     }
 
     @Override
@@ -51,8 +73,7 @@ public class IaasTenant extends BaseModel implements UpdateIaasTenant, CrudEntit
 
     @Override
     public Integer getVersion() {
-        // Not implemented due to lack of use-case
+        // Versioning not implemented due to lack of use-case.
         return -1;
     }
-
 }

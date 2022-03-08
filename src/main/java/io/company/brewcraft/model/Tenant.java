@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
@@ -22,7 +21,7 @@ import io.company.brewcraft.service.CrudEntity;
 @Entity(name = "tenant")
 @Table(name="TENANT")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>, Audited, IaasTenant {
+public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_URL = "url";
@@ -49,9 +48,6 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     @UpdateTimestamp
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
-    @Transient
-    private IaasRole iaasRole;
 
     public Tenant() {
         super();
@@ -82,15 +78,15 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     }
     
 
-    @Override
-    public String getIaasId() {
-        String iaasId = null;
-        if (getId() != null) {
-            iaasId = getId().toString();
-        }
-        
-        return iaasId;
-    }
+//    @Override
+//    public String getIaasId() {
+//        String iaasId = null;
+//        if (getId() != null) {
+//            iaasId = getId().toString();
+//        }
+//        
+//        return iaasId;
+//    }
 
     @Override
     public String getName() {
@@ -120,15 +116,6 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     @Override
     public void setIsReady(Boolean isReady) {
         this.isReady = isReady;
-    }
-    
-    @Override
-    public IaasRole getIaasRole() {
-        return this.iaasRole;
-    }
-    
-    public void setIaasRole(IaasRole iaasRole) {
-        this.iaasRole = iaasRole;
     }
 
     @Override

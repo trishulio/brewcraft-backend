@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 
 import com.amazonaws.services.identitymanagement.model.Role;
 
+import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.UpdateIaasRole;
 
 public class IaasRoleIaasRepository {
     private AwsIamRoleClient iamClient;
@@ -30,10 +32,21 @@ public class IaasRoleIaasRepository {
         return this.mapper.fromIamRoles(iamRoles);
     }
 
-    public List<IaasRole> add(Collection<IaasRole> policies) {
+    public List<IaasRole> add(Collection<? extends BaseIaasRole> policies) {
         List<Supplier<Role>> suppliers = policies.stream()
                 .filter(role -> role != null)
                 .map(role -> (Supplier<Role>) () -> iamClient.add(role.getName(), role.getDescription(), role.getAssumePolicyDocument()))
+                .toList();
+
+        List<Role> iamRoles = this.executor.supply(suppliers);
+
+        return this.mapper.fromIamRoles(iamRoles);
+    }
+
+    public List<IaasRole> put(Collection<? extends UpdateIaasRole> policies) {
+        List<Supplier<Role>> suppliers = policies.stream()
+                .filter(role -> role != null)
+                .map(role -> (Supplier<Role>) () -> iamClient.put(role.getName(), role.getDescription(), role.getAssumePolicyDocument()))
                 .toList();
 
         List<Role> iamRoles = this.executor.supply(suppliers);

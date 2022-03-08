@@ -15,9 +15,13 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import io.company.brewcraft.model.LazyIaasIdpTenant;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
+import io.company.brewcraft.security.session.LazyTenantContext;
 import io.company.brewcraft.security.session.PrincipalContext;
+import io.company.brewcraft.security.session.TenantContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
+import io.company.brewcraft.service.impl.IdpTenantIaasRepository;
 import io.company.brewcraft.service.impl.TenantManagementService;
 
 public class ContextHolderFilter implements Filter {
@@ -25,10 +29,12 @@ public class ContextHolderFilter implements Filter {
 
     private ThreadLocalContextHolder ctxHolder;
     private TenantManagementService tenantService;
+    private IdpTenantIaasRepository iaasIdpRepo;
 
-    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService) {
+    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService, IdpTenantIaasRepository iaasIdpRepo) {
         this.ctxHolder = ctxHolder;
         this.tenantService = tenantService;
+        this.iaasIdpRepo = iaasIdpRepo;
     }
 
     @Override
@@ -50,12 +56,16 @@ public class ContextHolderFilter implements Filter {
         }
         this.ctxHolder.setContext(principalCtx);
     }
-    
+
     private void setTenantContext() {
         UUID tenantId = this.ctxHolder.getPrincipalContext().getTenantId();
 
         if (tenantId != null) {
-            this.ctxHolder.setTenantInContextProxy(() -> this.tenantService.get(tenantId));
+            LazyIaasIdpTenant idpTenant = new LazyIaasIdpTenant(tenantId, this.iaasIdpRepo);
+            
+            TenantContext ctx = new LazyTenantContext(tenantService, idpTenant, tenantId);
+            
+            this.ctxHolder.setTenantContext(ctx);
         }
     }
 }

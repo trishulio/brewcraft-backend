@@ -3,7 +3,7 @@ package io.company.brewcraft.service.impl.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.company.brewcraft.model.IaasTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasTenantUserMembership;
 import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
@@ -30,7 +30,7 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     }
     
     @Override
-    public void createUserInTenant(IaasUser user, IaasTenant tenant) {
+    public void createUserInTenant(IaasUser user, IaasIdpTenant tenant) {
         this.createUser(user);
         
         IaasTenantUserMembership membership = new IaasTenantUserMembership(user, tenant);

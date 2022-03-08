@@ -2,13 +2,13 @@ package io.company.brewcraft.model;
 
 public class IaasTenantUserMembership extends BaseEntity {
     private IaasUser user;
-    private IaasTenant tenant;
+    private BaseIaasIdpTenant tenant;
 
     public IaasTenantUserMembership() {
         super();
     }
 
-    public IaasTenantUserMembership(IaasUser user, IaasTenant tenant) {
+    public IaasTenantUserMembership(IaasUser user, IaasIdpTenant tenant) {
         this();
         setUser(user);
         setTenant(tenant);
@@ -22,11 +22,11 @@ public class IaasTenantUserMembership extends BaseEntity {
         this.user = user;
     }
 
-    public IaasTenant getTenant() {
+    public BaseIaasIdpTenant getTenant() {
         return tenant;
     }
 
-    public void setTenant(IaasTenant tenant) {
+    public void setTenant(BaseIaasIdpTenant tenant) {
         this.tenant = tenant;
     }
 }

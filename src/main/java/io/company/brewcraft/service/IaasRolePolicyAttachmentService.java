@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentAccessor;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
 
 @Transactional
@@ -27,12 +27,15 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
 
     @Override
     public boolean exists(Set<IaasRolePolicyAttachmentId> ids) {
-        return this.iaasRepo.get(ids).size() > 0;
+        return iaasRepo.exists(ids).values()
+                                   .stream().filter(b -> !b)
+                                   .findAny()
+                                   .orElseGet(() -> true);
     }
 
     @Override
     public boolean exist(IaasRolePolicyAttachmentId id) {
-        return this.iaasRepo.get(List.of(id)).size() > 0;
+        return iaasRepo.exists(id);
     }
 
     @Override
@@ -44,14 +47,14 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
 
     @Override
     public int delete(IaasRolePolicyAttachmentId id) {
-        this.iaasRepo.delete(List.of(id));
+        this.iaasRepo.delete(Set.of(id));
 
         return 1;
     }
 
     @Override
     public IaasRolePolicyAttachment get(IaasRolePolicyAttachmentId id) {
-        return this.iaasRepo.get(List.of(id)).get(0);
+        return this.iaasRepo.get(Set.of(id)).get(0);
     }
 
     public List<IaasRolePolicyAttachment> getAll(Set<IaasRolePolicyAttachmentId> ids) {
@@ -100,7 +103,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
 
         List<IaasRolePolicyAttachment> updated = this.updateService.getPutEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 
     @Override
@@ -113,6 +116,6 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
 
         List<IaasRolePolicyAttachment> updated = this.updateService.getPatchEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 }
