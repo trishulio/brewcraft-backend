@@ -34,7 +34,7 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 @Transactional
 public class TenantManagementService implements CrudService<UUID, Tenant, BaseTenant, UpdateTenant, TenantAccessor> {
     private static final Logger log = LoggerFactory.getLogger(TenantManagementService.class);
-    
+
     private Tenant adminTenant;
     private RepoService<UUID, Tenant, TenantAccessor> repoService;
     private UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService;
@@ -57,7 +57,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         this.migrationManager = migrationManager;
         this.iaasService = iaasService;
     }
-    
+
     @PostConstruct
     public void migrateTenants() {
         List<Tenant> testTenants = new ArrayList<>();
@@ -77,7 +77,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         SortedSet<String> sort,
         boolean orderAscending,
         int page,
-        int size 
+        int size
     ) {
         Specification<Tenant> spec = WhereClauseBuilder.builder()
                                                        .in(new String[] { Tenant.FIELD_ID }, ids)
@@ -105,7 +105,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         this.repoService.saveAll(tenants);
 
         this.iaasService.delete(tenants);
-        
+
         return this.repoService.delete(ids);
     }
 
@@ -138,10 +138,10 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         final List<Tenant> entities = this.updateService.getAddEntities(additions);
 
         List<Tenant> tenants = this.repoService.saveAll(entities);
-        
+
         this.migrationManager.migrateAll(tenants);
         this.iaasService.put(tenants);
-        
+
         tenants.forEach(tenant -> tenant.setIsReady(true));
         return this.repoService.saveAll(tenants);
     }
@@ -156,10 +156,10 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         final List<Tenant> updated = this.updateService.getPutEntities(existing, updates);
 
         List<Tenant> tenants = this.repoService.saveAll(updated);
-        
+
         this.migrationManager.migrateAll(tenants);
         this.iaasService.put(tenants);
-        
+
         tenants.forEach(tenant -> tenant.setIsReady(true));
         return this.repoService.saveAll(tenants);
     }
@@ -182,10 +182,10 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         final List<Tenant> updated = this.updateService.getPatchEntities(existing, patches);
 
         List<Tenant> tenants = this.repoService.saveAll(updated);
-        
+
         this.migrationManager.migrateAll(tenants);
         this.iaasService.put(tenants);
-        
+
         tenants.forEach(tenant -> tenant.setIsReady(true));
         return this.repoService.saveAll(tenants);
     }

@@ -1,7 +1,7 @@
 package io.company.brewcraft.model;
 
 public interface IaasRolePolicyAttachmentAccessor {
-    IaasRolePolicyAttachment getTenantIaasRolePolicyAttachment();
+    IaasRolePolicyAttachment getIaasRolePolicyAttachment();
 
-    void setTenantIaasRolePolicyAttachment(IaasRolePolicyAttachment attachment);
+    void setIaasRolePolicyAttachment(IaasRolePolicyAttachment attachment);
 }

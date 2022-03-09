@@ -29,7 +29,7 @@ public class MigrationAutoConfiguration {
     public DataSourceQueryRunner dsQueryRunner(DataSourceManager dsManager) {
         return new DataSourceQueryRunner(dsManager);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantRegister.class)
     public TenantRegister tenantRegister(DataSourceQueryRunner dsQueryRunner, DataSourceConfigurationProvider<UUID> tenantDsConfigProvider, DataSourceConfiguration adminDsConfig, SecretsManager<String, String> secretMgr, JdbcDialect dialect, RandomGenerator randomGen) {

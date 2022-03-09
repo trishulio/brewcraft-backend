@@ -37,7 +37,7 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
 
     @Column(name = "url")
     private URL url;
-    
+
     @Column(name = "is_ready")
     private Boolean isReady;
 
@@ -76,7 +76,6 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     public void setId(UUID id) {
         this.id = id;
     }
-    
 
 //    @Override
 //    public String getIaasId() {
@@ -84,7 +83,7 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
 //        if (getId() != null) {
 //            iaasId = getId().toString();
 //        }
-//        
+//
 //        return iaasId;
 //    }
 

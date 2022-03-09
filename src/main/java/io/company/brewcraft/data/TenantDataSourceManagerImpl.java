@@ -21,7 +21,7 @@ public class TenantDataSourceManagerImpl implements TenantDataSourceManager {
 
         if (tenantId != null) {
             DataSourceConfiguration config = this.dsConfigMgr.getConfiguration(tenantId);
-            
+
             ds = this.dsMgr.getDataSource(config);
         }
 

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.company.brewcraft.model.IaasIdpTenant;
-import io.company.brewcraft.model.IaasTenantUserMembership;
+import io.company.brewcraft.model.IaasIdpTenantUserMembership;
 import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
@@ -28,12 +28,12 @@ public class AwsIdpUserRepository implements IdpUserRepository {
 
         this.idpClient.createUser(user.getEmail(), userAttrs);
     }
-    
+
     @Override
-    public void createUserInTenant(IaasUser user, IaasIdpTenant tenant) {
+    public void createUserInTenant(IaasUser user, IaasIdpTenant idpTenant) {
         this.createUser(user);
-        
-        IaasTenantUserMembership membership = new IaasTenantUserMembership(user, tenant);
+
+        IaasIdpTenantUserMembership membership = new IaasIdpTenantUserMembership(user, idpTenant);
 
         try {
             this.tenantUserRepo.add(membership);
@@ -50,7 +50,7 @@ public class AwsIdpUserRepository implements IdpUserRepository {
 
         this.idpClient.updateUser(user.getEmail(), userAttrs);
     }
-    
+
     @Override
     public void deleteUser(String username) {
         this.idpClient.deleteUser(username);

@@ -5,8 +5,8 @@ import io.company.brewcraft.model.IaasUser;
 
 public interface IdpUserRepository {
     void createUser(IaasUser user);
-    
-    void createUserInTenant(IaasUser user, IaasIdpTenant tenant);
+
+    void createUserInTenant(IaasUser user, IaasIdpTenant idpTenant);
 
     void updateUser(IaasUser user);
 

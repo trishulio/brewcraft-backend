@@ -55,7 +55,6 @@ public class IaasPolicyIaasRepository {
 
         return this.mapper.fromIamPolicies(iamPolicies);
     }
-    
 
     public List<IaasPolicy> put(Collection<? extends UpdateIaasPolicy> policies) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();

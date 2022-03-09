@@ -15,10 +15,10 @@ public class TenantIaasIdpResourcesMapper {
         while (idpTenantsIterator.hasNext()) {
             resources.add(fromComponents(idpTenantsIterator.next()));
         }
-        
+
         return resources;
     }
-    
+
     public TenantIaasIdpResources fromComponents(IaasIdpTenant idpTenant) {
         return new TenantIaasIdpResources(idpTenant);
     }

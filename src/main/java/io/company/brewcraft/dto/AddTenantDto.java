@@ -19,7 +19,7 @@ public class AddTenantDto extends BaseDto {
     public AddTenantDto() {
         super();
     }
-    
+
     public AddTenantDto(UUID id) {
         this();
         setId(id);

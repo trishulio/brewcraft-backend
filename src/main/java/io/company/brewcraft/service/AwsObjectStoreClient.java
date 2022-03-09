@@ -19,13 +19,13 @@ public class AwsObjectStoreClient {
 
     public List<Bucket> getAll() {
         ListBucketsRequest request = new ListBucketsRequest();
-        return awsClient.listBuckets(request);    
+        return awsClient.listBuckets(request);
     }
-    
+
     public Bucket get(String bucketName) {
         List<Bucket> buckets = getAll();
         Optional<Bucket> opt = buckets.stream().filter(bucket -> bucket.getName().equals(bucketName)).findAny();
-        
+
         return opt.orElseThrow(() -> new AmazonS3Exception(String.format("Could not find the bucket with name: %s", bucketName)));
     }
 
@@ -48,7 +48,7 @@ public class AwsObjectStoreClient {
             return add(bucketName);
         }
     }
-    
+
     public boolean exists(String bucketName) {
         return awsClient.doesBucketExistV2(bucketName);
     }

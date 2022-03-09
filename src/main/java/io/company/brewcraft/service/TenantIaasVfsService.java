@@ -26,9 +26,9 @@ public class TenantIaasVfsService {
     private IaasPolicyService policyService;
     private IaasRolePolicyAttachmentService rolePolicyAttachmentService;
     private IaasObjectStoreService objectStoreService;
-    
+
     private TenantIaasResourceBuilder resourceBuilder;
-    
+
     public TenantIaasVfsService(TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
         this.mapper = mapper;
         this.policyService = policyService;
@@ -42,17 +42,17 @@ public class TenantIaasVfsService {
         Set<String> objectStoreIds = new HashSet<>();
 
         tenants.stream()
-               .forEach(iaasTenant -> {
-                   String policyId = this.resourceBuilder.getPolicyName(iaasTenant);
+               .forEach(iaasIdpTenant -> {
+                   String policyId = this.resourceBuilder.getPolicyName(iaasIdpTenant);
                    policyIds.add(policyId);
 
-                   String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasTenant);
+                   String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
                    objectStoreIds.add(objectStoreId);
                 });
 
         List<IaasPolicy> policies = this.policyService.getAll(policyIds);
         List<IaasObjectStore> objectStores = this.objectStoreService.getAll(objectStoreIds);
-        
+
         return mapper.fromComponents(objectStores, policies);
     }
 
@@ -110,22 +110,22 @@ public class TenantIaasVfsService {
         return this.mapper.fromComponents(objectStores, policies);
     }
 
-    public void delete(List<IaasIdpTenant> iaasTenants) {
+    public void delete(List<IaasIdpTenant> iaasIdpTenants) {
         Set<String> objectStoreIds = new HashSet<>();
         Set<String> policyIds = new HashSet<>();
         Set<String> roleIds = new HashSet<>();
         Set<IaasRolePolicyAttachmentId> attachmentIds = new HashSet<>();
 
-        iaasTenants
+        iaasIdpTenants
         .stream()
-        .forEach(iaasTenant -> {
-            String policyId = this.resourceBuilder.getPolicyName(iaasTenant);
+        .forEach(iaasIdpTenant -> {
+            String policyId = this.resourceBuilder.getPolicyName(iaasIdpTenant);
             policyIds.add(policyId);
 
-            IaasRolePolicyAttachmentId attachmentId = new IaasRolePolicyAttachmentId(policyId, iaasTenant.getIaasRole().getId());
-            attachmentIds.add(attachmentId); 
+            IaasRolePolicyAttachmentId attachmentId = new IaasRolePolicyAttachmentId(policyId, iaasIdpTenant.getIaasRole().getId());
+            attachmentIds.add(attachmentId);
 
-            String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasTenant);
+            String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
             objectStoreIds.add(objectStoreId);
          });
 

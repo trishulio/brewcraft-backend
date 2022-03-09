@@ -69,8 +69,8 @@ public class AwsDocumentTemplates {
         this.cognitoIdPoolId = cognitoIdPoolId;
     }
 
-    public String getTenantBucketPolicyDoc(String tenantIaasId) {
-        String bucketName = getTenantVfsBucketName(tenantIaasId);
+    public String getTenantBucketPolicyDoc(String iaasIdpTenantId) {
+        String bucketName = getTenantVfsBucketName(iaasIdpTenantId);
         return String.format(POLICY_DOC_TENANT_BUCKET, bucketName);
     }
 
@@ -78,53 +78,53 @@ public class AwsDocumentTemplates {
         return String.format(POLICY_DOC_COGNITO_ID_ASSUME_ROLE, cognitoIdPoolId);
     }
 
-    public String getTenantVfsBucketName(String tenantIaasId) {
-        return String.format(BUCKET_NAME_TENANT_VFS, tenantIaasId);
+    public String getTenantVfsBucketName(String iaasIdpTenantId) {
+        return String.format(BUCKET_NAME_TENANT_VFS, iaasIdpTenantId);
     }
 
     public String getTenantIdFromTenantVfsBucketName(String bucketName) {
         return reverseFormat(BUCKET_NAME_TENANT_VFS, bucketName);
     }
 
-    public String getTenantIaasRoleName(String tenantIaasId) {
-        return String.format(ROLE_NAME_TENANT_IAAS, tenantIaasId);
+    public String getTenantIaasRoleName(String iaasIdpTenantId) {
+        return String.format(ROLE_NAME_TENANT_IAAS, iaasIdpTenantId);
     }
 
     public String getTenantIdFromTenantIaasRoleName(String roleName) {
         return reverseFormat(ROLE_NAME_TENANT_IAAS, roleName);
     }
 
-    public String getTenantVfsPolicyName(String tenantIaasId) {
-        return String.format(POLICY_NAME_TENANT_VFS, tenantIaasId);
+    public String getTenantVfsPolicyName(String iaasIdpTenantId) {
+        return String.format(POLICY_NAME_TENANT_VFS, iaasIdpTenantId);
     }
 
     public String getTenantIdFromTenantVfsPolicyName(String policyName) {
         return reverseFormat(POLICY_NAME_TENANT_VFS, policyName);
     }
 
-    public String getTenantVfsPolicyDescription(String tenantIaasId) {
-        return String.format(POLICY_DESCRIPTION_TENANT_VFS, tenantIaasId);
+    public String getTenantVfsPolicyDescription(String iaasIdpTenantId) {
+        return String.format(POLICY_DESCRIPTION_TENANT_VFS, iaasIdpTenantId);
     }
 
-    public String getTenantIaasRoleDescription(String tenantIaasId) {
-        return String.format(ROLE_DESCRIPTION_TENANT_VFS, tenantIaasId);
+    public String getTenantIaasRoleDescription(String iaasIdpTenantId) {
+        return String.format(ROLE_DESCRIPTION_TENANT_VFS, iaasIdpTenantId);
     }
 
     private String reverseFormat(String singlePlaceHolderTemplate, String formatted) {
-        String tenantIaasId = null;
+        String iaasIdpTenantId = null;
         Pattern pattern = Pattern.compile(String.format(singlePlaceHolderTemplate, "(.*)"));
 
         Matcher matcher = pattern.matcher(formatted);
         Optional<MatchResult> matched = matcher.results().findFirst();
 
         if (matched.isPresent()) {
-            tenantIaasId = formatted.substring(matched.get().start(), matched.get().end());
+            iaasIdpTenantId = formatted.substring(matched.get().start(), matched.get().end());
         }
 
-        if (tenantIaasId == null) {
+        if (iaasIdpTenantId == null) {
             throw new IllegalArgumentException("The bucketName doesn't follow the VFS tenant-bucket name pattern");
         }
 
-        return tenantIaasId;
+        return iaasIdpTenantId;
     }
 }

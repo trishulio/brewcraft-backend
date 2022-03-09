@@ -19,7 +19,6 @@ public class AdminTenant extends Tenant {
     public void setId(UUID id) {
         throwImmutableException();
     }
-    
 
     @Override
     public void setName(String name) {

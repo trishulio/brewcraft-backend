@@ -85,8 +85,7 @@ public class UserServiceImpl extends BaseService implements UserService {
 
         User addedUser = userRepo.saveAndFlush(user);
 
-
-        idpRepo.createUserInTenant(addedUser, contextHolder.getTenantContext().getIaasTenant());
+        idpRepo.createUserInTenant(addedUser, contextHolder.getTenantContext().getIaasIdpTenant());
 
         return addedUser;
     }

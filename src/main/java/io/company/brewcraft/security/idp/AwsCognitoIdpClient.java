@@ -107,7 +107,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         GetGroupRequest request = new GetGroupRequest()
                                     .withGroupName(group)
                                     .withUserPoolId(userPoolId);
-        
+
         logger.debug("Attempting to get group {} in cognito user pool {}", group, userPoolId);
         try {
             GetGroupResult result = this.awsIdpProvider.getGroup(request);
@@ -130,7 +130,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         try {
             CreateGroupResult result = this.awsIdpProvider.createGroup(createGroupRequest);
             logger.debug("Successfully created group {} in cognito user pool", group, userPoolId);
-            
+
             return result.getGroup();
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
@@ -159,7 +159,7 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
         try {
             UpdateGroupResult result = this.awsIdpProvider.updateGroup(request);
             logger.debug("Successfully update group {} in cognito user pool", group, userPoolId);
-            
+
             return result.getGroup();
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());

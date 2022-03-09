@@ -26,5 +26,5 @@ public class TenantRefresher implements Refresher<Tenant, TenantAccessor> {
     public void refreshAccessors(Collection<? extends TenantAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-    
+
 }

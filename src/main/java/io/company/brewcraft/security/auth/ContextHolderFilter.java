@@ -62,9 +62,9 @@ public class ContextHolderFilter implements Filter {
 
         if (tenantId != null) {
             LazyIaasIdpTenant idpTenant = new LazyIaasIdpTenant(tenantId, this.iaasIdpRepo);
-            
+
             TenantContext ctx = new LazyTenantContext(tenantService, idpTenant, tenantId);
-            
+
             this.ctxHolder.setTenantContext(ctx);
         }
     }

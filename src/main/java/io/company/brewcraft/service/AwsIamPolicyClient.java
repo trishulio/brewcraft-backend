@@ -57,7 +57,7 @@ public class AwsIamPolicyClient {
 
         return result.getPolicy();
     }
-    
+
     public boolean exists(String policyName) {
         try {
             get(policyName);
@@ -66,7 +66,7 @@ public class AwsIamPolicyClient {
             return false;
         }
     }
-    
+
     public Policy update(String policyName, String policyDocument) {
         String policyArn = awsMapper.getPolicyArn(policyName);
         // A policy can have max 5 versions. After that the existing versions need to be deleted.
@@ -91,7 +91,7 @@ public class AwsIamPolicyClient {
             return update(policyName, policyDocument);
         }
     }
-    
+
     public List<PolicyVersion> getPolicyVersions(String policyName) {
         String policyArn = awsMapper.getPolicyArn(policyName);
         List<PolicyVersion> policyVersions = new ArrayList<>();
@@ -103,30 +103,30 @@ public class AwsIamPolicyClient {
                                                         .withMarker(marker);
 
             ListPolicyVersionsResult listResult = this.awsIamClient.listPolicyVersions(listRequest);
-            
+
             if (listResult.getIsTruncated()) {
                 marker = listResult.getMarker();
             }
-            
+
             List<PolicyVersion> policyVersionsSubset = listResult.getVersions();
             policyVersions.addAll(policyVersionsSubset);
         } while (marker != null);
-        
+
         return policyVersions;
     }
-    
+
     public void deletePolicyVersions(String policyName) {
         List<PolicyVersion> versions = getPolicyVersions(policyName);
-        
+
         String policyArn = awsMapper.getPolicyArn(policyName);
         versions.forEach(version -> deletePolicyVersion(policyArn, version.getVersionId()));
     }
-    
+
     public void deletePolicyVersion(String policyArn, String versionId) {
         DeletePolicyVersionRequest request = new DeletePolicyVersionRequest()
                                                  .withPolicyArn(policyArn)
                                                  .withVersionId(versionId);
-        
+
         DeletePolicyVersionResult result = awsIamClient.deletePolicyVersion(request);
     }
 }

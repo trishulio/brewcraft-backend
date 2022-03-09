@@ -76,7 +76,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     public List<IaasRolePolicyAttachment> getByAccessorIds(Collection<? extends IaasRolePolicyAttachmentAccessor> accessors) {
         List<IaasRolePolicyAttachment> idProviders = accessors.stream()
                                     .filter(accessor -> accessor != null)
-                                    .map(accessor -> accessor.getTenantIaasRolePolicyAttachment())
+                                    .map(accessor -> accessor.getIaasRolePolicyAttachment())
                                     .filter(rolePolicy -> rolePolicy != null)
                                     .toList();
         return getByIds(idProviders);

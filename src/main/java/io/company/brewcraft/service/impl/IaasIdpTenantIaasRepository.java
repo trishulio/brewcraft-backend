@@ -31,24 +31,24 @@ public class IaasIdpTenantIaasRepository {
         this.mapper = mapper;
         this.arnMapper = arnMapper;
     }
-    
+
     public List<IaasIdpTenant> get(Set<String> groupIds) {
         List<Supplier<GroupType>> suppliers = groupIds.stream()
                                                   .filter(groupId -> groupId != null)
                                                   .map(groupId -> (Supplier<GroupType>) () -> idpClient.getGroup(groupId))
                                                   .toList();
         List<GroupType> groups = this.executor.supply(suppliers);
-        
+
         Set<String> roleNames = groups.stream().map(group -> arnMapper.getName(group.getRoleArn())).collect(Collectors.toSet());
         Iterator<IaasRole> roles = roleService.getAll(roleNames).iterator();
 
         List<IaasIdpTenant> idpTenants = this.mapper.fromGroups(groups);
         // TODO: Assuming that number of roles == number of idpTenants and that the order is same.  Need to validate that's always true.
         idpTenants.forEach(idpTenant -> idpTenant.setIaasRole(roles.next()));
-        
+
         return idpTenants;
     }
-    
+
     public List<IaasIdpTenant> add(List<? extends BaseIaasIdpTenant> tenants) {
         List<Supplier<GroupType>> suppliers = tenants.stream()
                                    .filter(tenant -> tenant != null)
@@ -62,12 +62,12 @@ public class IaasIdpTenantIaasRepository {
 
                                        return idpClient.createGroup(tenant.getName(), roleArn);
                                    }).toList();
-        
+
         List<GroupType> groups = this.executor.supply(suppliers);
-        
+
         return this.mapper.fromGroups(groups);
     }
-    
+
     public List<IaasIdpTenant> put(List<? extends UpdateIaasIdpTenant> tenants) {
         List<Supplier<GroupType>> suppliers = tenants.stream()
                 .filter(tenant -> tenant != null)
@@ -83,20 +83,20 @@ public class IaasIdpTenantIaasRepository {
                 }).toList();
 
         List<GroupType> groups = this.executor.supply(suppliers);
-        
+
         return this.mapper.fromGroups(groups);
     }
 
-    public void delete(Set<String> tenantIaasIds) {
-        List<Runnable> runnables = tenantIaasIds.stream()
-                .filter(tenantIaasId -> tenantIaasId != null)
-                .map(tenantIaasId -> (Runnable) () -> idpClient.deleteGroup(tenantIaasId))
+    public void delete(Set<String> iaasIdpTenantIds) {
+        List<Runnable> runnables = iaasIdpTenantIds.stream()
+                .filter(iaasIdpTenantId -> iaasIdpTenantId != null)
+                .map(iaasIdpTenantId -> (Runnable) () -> idpClient.deleteGroup(iaasIdpTenantId))
                 .toList();
 
         this.executor.run(runnables);
     }
 
-    public boolean exists(String tenantIaasId) {
-        return this.idpClient.groupExists(tenantIaasId);
+    public boolean exists(String iaasIdpTenantId) {
+        return this.idpClient.groupExists(iaasIdpTenantId);
     }
 }

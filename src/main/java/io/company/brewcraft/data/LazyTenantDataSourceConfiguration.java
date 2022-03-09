@@ -12,7 +12,7 @@ public class LazyTenantDataSourceConfiguration extends BaseModel implements Data
     private final String userName;
     private String password;
     private final String schemaName;
-    
+
     private SecretsManager<String, String> secretsManager;
 
     public LazyTenantDataSourceConfiguration(String fqTenantId, GlobalDataSourceConfiguration globalConfig, SecretsManager<String, String> secretsManager) {

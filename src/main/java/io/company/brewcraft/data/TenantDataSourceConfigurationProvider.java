@@ -13,7 +13,7 @@ import io.company.brewcraft.security.store.SecretsManager;
 public class TenantDataSourceConfigurationProvider implements DataSourceConfigurationProvider<UUID> {
     private LoadingCache<UUID, DataSourceConfiguration> cache;
     private DataSourceConfiguration adminDsConfig;
-    
+
     public TenantDataSourceConfigurationProvider(DataSourceConfiguration adminDsConfig,  Tenant adminTenant, GlobalDataSourceConfiguration globalTenantDsConfig, DataSourceConfigurationManager dsConfigMgr, SecretsManager<String, String> secretsManager) {
         this.adminDsConfig = adminDsConfig;
 
@@ -25,7 +25,7 @@ public class TenantDataSourceConfigurationProvider implements DataSourceConfigur
 
                                         if (!adminTenant.getId().equals(tenantId)) {
                                             String fqName = dsConfigMgr.getFqName(globalTenantDsConfig.getSchemaPrefix(), tenantId);
-                                            config = new LazyTenantDataSourceConfiguration(fqName, globalTenantDsConfig, secretsManager); 
+                                            config = new LazyTenantDataSourceConfiguration(fqName, globalTenantDsConfig, secretsManager);
                                         }
 
                                         return config;

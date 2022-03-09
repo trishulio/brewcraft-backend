@@ -22,7 +22,7 @@ public class ThreadLocalContextHolder implements ContextHolder {
     public TenantContext getTenantContext() {
         return this.tenantCtx.get();
     }
-    
+
     public void setTenantContext(TenantContext tenantContext) {
         this.tenantCtx.set(tenantContext);
     }

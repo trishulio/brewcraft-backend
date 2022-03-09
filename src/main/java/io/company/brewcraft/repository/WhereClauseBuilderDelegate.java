@@ -45,13 +45,13 @@ public class WhereClauseBuilderDelegate {
 
         accumulator.setIsNot(false);
     }
-    
+
     public void is(String[] paths, Object value) {
         if (value != null) {
             CriteriaSpec<Boolean> spec = new IsSpec<>(new ColumnSpec<>(paths), value);
             accumulator.add(spec);
         }
-        
+
         accumulator.setIsNot(false);
     }
 

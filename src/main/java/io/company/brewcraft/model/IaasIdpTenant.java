@@ -19,7 +19,7 @@ public class IaasIdpTenant extends BaseModel implements UpdateIaasIdpTenant, Cru
     @Override
     public void setId(String id) {
         setName(name);
-    }    
+    }
 
     @Override
     public String getName() {

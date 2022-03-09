@@ -19,55 +19,55 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getRoleName(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
-        return this.templates.getTenantIaasRoleName(iaasTenantId);
+    public <T extends BaseIaasIdpTenant> String getRoleName(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
+        return this.templates.getTenantIaasRoleName(iaasIdpTenantId);
     }
 
     @Override
-    public <R extends BaseIaasRole, T extends BaseIaasIdpTenant> R buildRole(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
+    public <R extends BaseIaasRole, T extends BaseIaasIdpTenant> R buildRole(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
         @SuppressWarnings("unchecked")
         R role = (R) new IaasRole();
-        role.setName(this.templates.getTenantIaasRoleName(iaasTenantId));
-        role.setDescription(this.templates.getTenantIaasRoleDescription(iaasTenantId));
+        role.setName(this.templates.getTenantIaasRoleName(iaasIdpTenantId));
+        role.setDescription(this.templates.getTenantIaasRoleDescription(iaasIdpTenantId));
         role.setAssumePolicyDocument(this.templates.getCognitoIdAssumeRolePolicyDoc());
 
         return role;
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getPolicyName(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
+    public <T extends BaseIaasIdpTenant> String getPolicyName(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
 
-        return this.templates.getTenantVfsPolicyName(iaasTenantId);
+        return this.templates.getTenantVfsPolicyName(iaasIdpTenantId);
     }
 
     @Override
-    public <P extends BaseIaasPolicy, T extends BaseIaasIdpTenant> P buildPolicy(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
+    public <P extends BaseIaasPolicy, T extends BaseIaasIdpTenant> P buildPolicy(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
         @SuppressWarnings("unchecked")
         P policy = (P) new IaasPolicy();
-        policy.setName(this.templates.getTenantVfsPolicyName(iaasTenantId));
-        policy.setDescription(this.templates.getTenantVfsPolicyDescription(iaasTenantId));
-        policy.setDocument(this.templates.getTenantBucketPolicyDoc(iaasTenantId));
+        policy.setName(this.templates.getTenantVfsPolicyName(iaasIdpTenantId));
+        policy.setDescription(this.templates.getTenantVfsPolicyDescription(iaasIdpTenantId));
+        policy.setDocument(this.templates.getTenantBucketPolicyDoc(iaasIdpTenantId));
 
         return policy;
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getObjectStoreName(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
+    public <T extends BaseIaasIdpTenant> String getObjectStoreName(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
 
-        return this.templates.getTenantVfsBucketName(iaasTenantId);
+        return this.templates.getTenantVfsBucketName(iaasIdpTenantId);
     }
 
     @Override
-    public <O extends BaseIaasObjectStore, T extends BaseIaasIdpTenant> O buildObjectStore(T iaasTenant) {
-        String iaasTenantId = iaasTenant.getName();
+    public <O extends BaseIaasObjectStore, T extends BaseIaasIdpTenant> O buildObjectStore(T iaasIdpTenant) {
+        String iaasIdpTenantId = iaasIdpTenant.getName();
         @SuppressWarnings("unchecked")
         O objectStore = (O) new IaasObjectStore();
-        objectStore.setName(this.templates.getTenantVfsBucketName(iaasTenantId));
+        objectStore.setName(this.templates.getTenantVfsBucketName(iaasIdpTenantId));
 
         return objectStore;
     }
@@ -76,10 +76,10 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     public <A extends BaseIaasRolePolicyAttachment> A buildAttachment(IaasPolicy policy, IaasRole role) {
         @SuppressWarnings("unchecked")
         A attachment = (A) new IaasRolePolicyAttachment();
-        
+
         attachment.setIaasPolicy(policy);
         attachment.setIaasRole(role);
-        
+
         return attachment;
     }
 }

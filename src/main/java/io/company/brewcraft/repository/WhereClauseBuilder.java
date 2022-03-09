@@ -17,9 +17,9 @@ public interface WhereClauseBuilder {
     WhereClauseBuilder in(String[] paths, Collection<?> collection);
 
     WhereClauseBuilder in(String path, Collection<?> collection);
-    
+
     WhereClauseBuilder is(String path, Object value);
-    
+
     WhereClauseBuilder is(String[] path, Object value);
 
     WhereClauseBuilder not();

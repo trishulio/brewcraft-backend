@@ -16,7 +16,7 @@ public class TenantIaasAuthService {
     private AwsDocumentTemplates templates;
     private TenantIaasAuthResourceMapper mapper;
     private IaasRoleService roleService;
-    
+
     public TenantIaasAuthService(TenantIaasAuthResourceMapper mapper, IaasRoleService roleService, AwsDocumentTemplates templates) {
         this.templates = templates;
         this.mapper = mapper;
@@ -35,7 +35,7 @@ public class TenantIaasAuthService {
          });
 
         List<IaasRole> roles = this.roleService.getAll(roleIds);
-        
+
         return this.mapper.fromComponents(roles);
     }
 

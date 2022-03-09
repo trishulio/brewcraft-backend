@@ -69,7 +69,7 @@ public class TenantManagementController extends BaseController {
         @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
     ) {
         Page<Tenant> tenants = this.tenantService.getAll(ids, names, urls, isReady, sort, orderAscending, page, size);
-        
+
         return this.controller.getAll(tenants, attributes);
     }
 

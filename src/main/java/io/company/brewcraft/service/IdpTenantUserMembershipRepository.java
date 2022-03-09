@@ -1,9 +1,9 @@
 package io.company.brewcraft.service;
 
-import io.company.brewcraft.model.IaasTenantUserMembership;
+import io.company.brewcraft.model.IaasIdpTenantUserMembership;
 
 public interface IdpTenantUserMembershipRepository {
-    void add(IaasTenantUserMembership membership);
+    void add(IaasIdpTenantUserMembership membership);
 
-    void remove(IaasTenantUserMembership membership);
+    void remove(IaasIdpTenantUserMembership membership);
 }

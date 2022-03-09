@@ -20,7 +20,7 @@ public class AwsIamRolePolicyAttachmentClient {
         this.awsClient = awsIamClient;
         this.arnMapper = arnMapper;
     }
-    
+
     public List<AttachedPolicy> get(String roleName) {
         List<AttachedPolicy> allPolicies = new ArrayList<>();
 
@@ -30,16 +30,16 @@ public class AwsIamRolePolicyAttachmentClient {
                                                       .withRoleName(roleName)
                                                       .withMarker(marker);
             ListAttachedRolePoliciesResult result = this.awsClient.listAttachedRolePolicies(request);
-            
+
             if (result.isTruncated()) {
                 marker = result.getMarker();
             }
 
             List<AttachedPolicy> policies = result.getAttachedPolicies();
-            allPolicies.addAll(policies); 
-            
+            allPolicies.addAll(policies);
+
         } while (marker != null);
-        
+
         return allPolicies;
     }
 

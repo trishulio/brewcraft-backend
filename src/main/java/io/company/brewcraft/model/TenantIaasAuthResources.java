@@ -6,7 +6,7 @@ public class TenantIaasAuthResources {
     public TenantIaasAuthResources() {
         super();
     }
-    
+
     public TenantIaasAuthResources(IaasRole role) {
         this();
         setRole(role);

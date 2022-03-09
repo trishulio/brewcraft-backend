@@ -24,7 +24,7 @@ public class IaasRolePolicyAttachmentIaasRepository {
         this.iamClient = iamClient;
         this.executor = executor;
     }
-    
+
     public List<IaasRolePolicyAttachment> get(Set<IaasRolePolicyAttachmentId> ids) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -63,27 +63,27 @@ public class IaasRolePolicyAttachmentIaasRepository {
 
         this.executor.run(runnables);
     }
-    
+
     public boolean exists(IaasRolePolicyAttachmentId id) {
         return exists(Set.of(id)).get(id);
     }
-    
+
     public Map<IaasRolePolicyAttachmentId, Boolean> exists(Set<IaasRolePolicyAttachmentId> ids) {
         Map<IaasRolePolicyAttachmentId, Boolean> exists = new HashMap<>();
 
         List<IaasRolePolicyAttachmentId> existingIds = getExistingIds(ids);
-        
+
         for (IaasRolePolicyAttachmentId existingId: existingIds) {
             if (ids.contains(existingId)) {
                 exists.put(existingId, true);
             }
         }
-        
+
         ids.forEach(id -> exists.putIfAbsent(id, false));
 
         return exists;
     }
-    
+
     private List<IaasRolePolicyAttachmentId> getExistingIds(Set<IaasRolePolicyAttachmentId> ids) {
         Map<String, Set<String>> roleNameToPolicyNames = new HashMap<>();
 
@@ -95,14 +95,14 @@ public class IaasRolePolicyAttachmentIaasRepository {
             }
             policyNames.add(id.getPolicyId());
         });
-        
+
         Set<String> roleNames = roleNameToPolicyNames.keySet();
-        
+
         List<IaasRolePolicyAttachmentId> attachmentIds = new ArrayList<>();
 
         roleNames.forEach(roleName -> {
             List<AttachedPolicy> policies = iamClient.get(roleName);
-            
+
             Set<String> policyNames = roleNameToPolicyNames.get(roleName);
 
             for (AttachedPolicy policy: policies) {
@@ -112,7 +112,7 @@ public class IaasRolePolicyAttachmentIaasRepository {
                 }
             }
         });
-        
+
         return attachmentIds;
     }
 }

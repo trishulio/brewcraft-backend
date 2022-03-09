@@ -315,7 +315,6 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
         return removed;
     }
 
-
     @Override
     public Quantity<?> getQuantity() {
         Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);

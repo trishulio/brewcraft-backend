@@ -5,6 +5,6 @@ import io.company.brewcraft.model.Tenant;
 
 public interface TenantContext {
     Tenant getTenant();
-    
-    IaasIdpTenant getIaasTenant();
+
+    IaasIdpTenant getIaasIdpTenant();
 }

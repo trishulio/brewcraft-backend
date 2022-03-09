@@ -25,7 +25,7 @@ public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
     private URI imageSrc;
 
     private URL imageUrl;
-    
+
     private Integer version;
 
     public ProductDto() {
@@ -113,7 +113,7 @@ public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
     public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
-    
+
     public URL getImageUrl() {
         return imageUrl;
     }

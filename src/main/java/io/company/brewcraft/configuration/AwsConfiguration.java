@@ -54,7 +54,7 @@ public class AwsConfiguration {
     public IdpUserRepository idpUserRepo(IdentityProviderClient idpClient, IdpTenantUserMembershipRepository idpTenatUserRepo) {
         return new AwsIdpUserRepository(idpClient, idpTenatUserRepo);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean
     public IdpTenantUserMembershipRepository idpTenatUserRepo(IdentityProviderClient idpClient) {

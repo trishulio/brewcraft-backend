@@ -5,6 +5,6 @@ import java.net.URL;
 
 public interface DecoratedImageUrlAccessor {
     URI getImageSrc();
-    
+
     void setImageUrl(URL imageUrl);
 }

@@ -25,7 +25,7 @@ public class CognitoPrincipalContext implements PrincipalContext {
         if (jwt != null) {
             setUsername(jwt);
             setTenantId(jwt);
-            setRoles(jwt);    
+            setRoles(jwt);
         }
 
         if (iaasToken != null) {
@@ -69,7 +69,7 @@ public class CognitoPrincipalContext implements PrincipalContext {
         }
 
         String sTenantId = groups.get(0);
-        
+
         UUID tenantId = UUID.fromString(sTenantId);
 
         this.tenantId = tenantId;

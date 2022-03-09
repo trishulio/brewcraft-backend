@@ -36,7 +36,7 @@ public class DataAutoConfiguration {
 
         return new LazyTenantDataSourceConfiguration(fqName, globalConfig, secretsMgr);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(DataSourceConfigurationProvider.class)
     public DataSourceConfigurationProvider<UUID> tenantDsConfigProvider(DataSourceConfiguration adminDsConfig, Tenant adminTenant, DataSourceConfigurationManager dsConfigMgr, SecretsManager<String, String> secretsManager, @Value("${spring.datasource.url}") String jdbcUrl, @Value("${app.config.ds.db-name}") String dbName, @Value("${app.config.tenant.ds.schema.prefix}") String schemaPrefix, @Value("${app.config.tenant.ds.schema.migration}") String schemaMigrationScriptPath, @Value("${app.config.tenant.ds.pool.size}") int poolSize, @Value("${app.config.tenant.ds.db.auto-commit}") boolean autoCommit) {

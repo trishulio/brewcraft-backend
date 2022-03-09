@@ -54,7 +54,7 @@ public class AwsIamRoleClient {
                                     .withDescription(description);
 
         UpdateRoleResult result = this.awsIamClient.updateRole(request);
-        
+
         UpdateAssumeRolePolicyRequest policyRequest = new UpdateAssumeRolePolicyRequest()
                                                           .withRoleName(roleName)
                                                           .withPolicyDocument(assumePolicyDocument);
@@ -62,7 +62,7 @@ public class AwsIamRoleClient {
 
         return get(roleName);
     }
-    
+
     public boolean exists(String roleName) {
         try {
             get(roleName);
@@ -71,7 +71,7 @@ public class AwsIamRoleClient {
             return false;
         }
     }
-    
+
     public Role put(String roleName, String description, String assumePolicyDocument) {
         if (exists(roleName)) {
             return update(roleName, description, assumePolicyDocument);

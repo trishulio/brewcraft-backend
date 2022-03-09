@@ -1,23 +1,23 @@
 package io.company.brewcraft.model;
 
 public class TenantIaasIdpResources extends BaseModel {
-    private IaasIdpTenant iaasTenant;
+    private IaasIdpTenant idpTenant;
 
     public TenantIaasIdpResources() {
         super();
     }
 
-    public TenantIaasIdpResources(IaasIdpTenant iaasTenant) {
+    public TenantIaasIdpResources(IaasIdpTenant idpTenant) {
         this();
-        setIaasTenant(iaasTenant);
+        setIaasIdpTenant(idpTenant);
     }
 
-    public BaseIaasIdpTenant getIaasTenant() {
-        return iaasTenant;
+    public BaseIaasIdpTenant getIaasIdpTenant() {
+        return idpTenant;
     }
 
-    public void setIaasTenant(IaasIdpTenant iaasTenant) {
-        this.iaasTenant = iaasTenant;
+    public void setIaasIdpTenant(IaasIdpTenant idpTenant) {
+        this.idpTenant = idpTenant;
     }
 
 }

@@ -252,7 +252,7 @@ public class ServiceAutoConfiguration {
     public BlockingAsyncExecutor executor() {
         return new BlockingAsyncExecutor();
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(Tenant.class)
     public Tenant adminTenant(@Value("${app.config.tenant.admin.id}") String id, @Value("${app.config.tenant.admin.name}") String name) {
@@ -268,7 +268,7 @@ public class ServiceAutoConfiguration {
         UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseTenant.class, UpdateTenant.class, Tenant.class, Set.of(""));
 
         final TenantManagementService tenantService = new TenantManagementService(
-            adminTenant,    
+            adminTenant,
             repoService,
             updateService,
             tenantRepository,
@@ -283,7 +283,7 @@ public class ServiceAutoConfiguration {
     public TenantIaasService tenantIaasService(TenantIaasAuthService authService, TenantIaasIdpService idpService, TenantIaasVfsService vfsService, IaasIdpTenantMapper mapper) {
         return new TenantIaasService(authService, idpService, vfsService, mapper);
     }
-    
+
     @Bean
     public IaasIdpTenantIaasRepository idpUserRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, IaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
         return new IaasIdpTenantIaasRepository(idpClient, executor, roleService, mapper, arnMapper);

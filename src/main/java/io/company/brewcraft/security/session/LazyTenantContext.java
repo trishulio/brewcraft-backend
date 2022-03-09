@@ -11,7 +11,7 @@ public class LazyTenantContext implements TenantContext {
     private IaasIdpTenant idpTenant;
     private Tenant tenant;
     private UUID tenantId;
-    
+
     public LazyTenantContext(TenantManagementService service, IaasIdpTenant idpTenant, UUID tenantId) {
         this.service = service;
         this.idpTenant = idpTenant;
@@ -23,12 +23,12 @@ public class LazyTenantContext implements TenantContext {
         if (this.tenant == null) {
             this.tenant = this.service.get(this.tenantId);
         }
-        
+
         return this.tenant;
     }
 
     @Override
-    public IaasIdpTenant getIaasTenant() {
+    public IaasIdpTenant getIaasIdpTenant() {
        return this.idpTenant;
     }
 

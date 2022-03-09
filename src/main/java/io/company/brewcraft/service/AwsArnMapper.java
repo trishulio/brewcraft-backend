@@ -17,7 +17,7 @@ public class AwsArnMapper {
     public String getPolicyArn(String policyName) {
         return getServiceArn("", AWS_SERVICE_IAM, AWS_SERVICE_PREFIX_POLICY, policyName);
     }
-    
+
     public String getName(String arn) {
         return Arn.fromString(arn).getResource().getResource();
     }

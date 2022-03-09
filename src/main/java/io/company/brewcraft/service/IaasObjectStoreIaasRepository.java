@@ -40,7 +40,7 @@ public class IaasObjectStoreIaasRepository {
 
         return this.mapper.fromObjectStores(iamObjectStores);
     }
-    
+
     public List<IaasObjectStore> put(Collection<? extends UpdateIaasObjectStore> objectStores) {
         List<Supplier<Bucket>> suppliers = objectStores.stream()
                 .filter(bucket -> bucket != null)

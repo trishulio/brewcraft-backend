@@ -18,13 +18,13 @@ public interface IdentityProviderClient {
     void removeUserFromGroup(String userName, String group);
 
     GroupType getGroup(String group);
-    
+
     GroupType createGroup(String group, String roleArn);
-    
+
     GroupType putGroup(String group, String roleArn);
 
     GroupType updateGroup(String group, String roleArn);
-    
+
     void deleteGroup(String group);
 
     boolean groupExists(String group);
