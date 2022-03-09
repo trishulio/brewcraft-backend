@@ -17,6 +17,7 @@ import io.company.brewcraft.security.idp.AwsFactory;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
+import io.company.brewcraft.service.AwsArnMapper;
 import io.company.brewcraft.service.AwsIamPolicyClient;
 import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
@@ -98,8 +99,8 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AwsIamPolicyClient.class)
-    public AwsIamPolicyClient awsIamPolicyClient(AmazonIdentityManagement iamClient) {
-        return new AwsIamPolicyClient(iamClient);
+    public AwsIamPolicyClient awsIamPolicyClient(AmazonIdentityManagement iamClient, AwsArnMapper arnMapper) {
+        return new AwsIamPolicyClient(iamClient, arnMapper);
     }
 
     @Bean
@@ -110,7 +111,7 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean()
-    public AwsIamRolePolicyAttachmentClient awsIamRolePolicyClientClient(AmazonIdentityManagementClient iamClient) {
-        return new AwsIamRolePolicyAttachmentClient(iamClient);
+    public AwsIamRolePolicyAttachmentClient awsIamRolePolicyClientClient(AmazonIdentityManagementClient iamClient, AwsArnMapper arnMapper) {
+        return new AwsIamRolePolicyAttachmentClient(iamClient, arnMapper);
     }
 }

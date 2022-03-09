@@ -18,17 +18,18 @@ import io.company.brewcraft.service.BlockingAsyncExecutor;
 import io.company.brewcraft.service.IaasRoleService;
 import io.company.brewcraft.service.mapper.IaasIdpTenantMapper;
 
-public class IdpTenantIaasRepository {
+public class IaasIdpTenantIaasRepository {
     private IdentityProviderClient idpClient;
     private BlockingAsyncExecutor executor;
     private IaasIdpTenantMapper mapper;
     private IaasRoleService roleService;
     private AwsArnMapper arnMapper;
 
-    public IdpTenantIaasRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, IaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
+    public IaasIdpTenantIaasRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, IaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
         this.idpClient = idpClient;
         this.executor = executor;
         this.mapper = mapper;
+        this.arnMapper = arnMapper;
     }
     
     public List<IaasIdpTenant> get(Set<String> groupIds) {

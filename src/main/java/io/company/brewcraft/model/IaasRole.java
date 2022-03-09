@@ -18,6 +18,15 @@ public class IaasRole extends BaseEntity implements UpdateIaasRole, CrudEntity<S
     private LocalDateTime lastUsed;
     private LocalDateTime lastUpdated;
     private LocalDateTime createdAt;
+    
+    public IaasRole() {
+        super();
+    }
+    
+    public IaasRole(String name) {
+        this();
+        setName(name);
+    }
 
     @Override
     public String getId() {

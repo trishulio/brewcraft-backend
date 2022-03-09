@@ -17,6 +17,16 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
 
     private LocalDateTime lastUpdated;
 
+    public IaasRolePolicyAttachment() {
+        super();
+    }
+    
+    public IaasRolePolicyAttachment(IaasRole role, IaasPolicy policy) {
+        this();
+        setIaasRole(role);
+        setIaasPolicy(policy);
+    }
+
     @Override
     public void setId(IaasRolePolicyAttachmentId id) {
         if (id != null) {

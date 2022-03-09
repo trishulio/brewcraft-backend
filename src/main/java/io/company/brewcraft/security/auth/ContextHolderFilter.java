@@ -21,7 +21,7 @@ import io.company.brewcraft.security.session.LazyTenantContext;
 import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.session.TenantContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
-import io.company.brewcraft.service.impl.IdpTenantIaasRepository;
+import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
 import io.company.brewcraft.service.impl.TenantManagementService;
 
 public class ContextHolderFilter implements Filter {
@@ -29,9 +29,9 @@ public class ContextHolderFilter implements Filter {
 
     private ThreadLocalContextHolder ctxHolder;
     private TenantManagementService tenantService;
-    private IdpTenantIaasRepository iaasIdpRepo;
+    private IaasIdpTenantIaasRepository iaasIdpRepo;
 
-    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService, IdpTenantIaasRepository iaasIdpRepo) {
+    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService, IaasIdpTenantIaasRepository iaasIdpRepo) {
         this.ctxHolder = ctxHolder;
         this.tenantService = tenantService;
         this.iaasIdpRepo = iaasIdpRepo;

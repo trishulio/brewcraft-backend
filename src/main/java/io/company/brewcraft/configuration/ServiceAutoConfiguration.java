@@ -201,7 +201,10 @@ import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.TenantIaasAuthService;
 import io.company.brewcraft.service.TenantIaasAuthorizationFetch;
+import io.company.brewcraft.service.TenantIaasIdpService;
+import io.company.brewcraft.service.TenantIaasResourceBuilder;
 import io.company.brewcraft.service.TenantIaasService;
 import io.company.brewcraft.service.TenantIaasVfsResourceMapper;
 import io.company.brewcraft.service.TenantIaasVfsService;
@@ -213,7 +216,7 @@ import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
-import io.company.brewcraft.service.impl.IdpTenantIaasRepository;
+import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
 import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
 import io.company.brewcraft.service.impl.MaterialLotService;
 import io.company.brewcraft.service.impl.MaterialServiceImpl;
@@ -230,6 +233,7 @@ import io.company.brewcraft.service.impl.SupplierServiceImpl;
 import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 import io.company.brewcraft.service.impl.user.UserServiceImpl;
+import io.company.brewcraft.service.mapper.IaasIdpTenantMapper;
 import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
@@ -276,20 +280,19 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasService.class)
-    public TenantIaasService tenantIaasService(TenantIaasVfsService iaasVfsService, IdpTenantIaasRepository idpUserRepository) {
-        return new TenantIaasService(iaasVfsService, idpUserRepository);
+    public TenantIaasService tenantIaasService(TenantIaasAuthService authService, TenantIaasIdpService idpService, TenantIaasVfsService vfsService, IaasIdpTenantMapper mapper) {
+        return new TenantIaasService(authService, idpService, vfsService, mapper);
     }
     
     @Bean
-    public IdpTenantIaasRepository idpUserRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor) {
-        return new IdpTenantIaasRepository(idpClient, executor);
+    public IaasIdpTenantIaasRepository idpUserRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, IaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
+        return new IaasIdpTenantIaasRepository(idpClient, executor, roleService, mapper, arnMapper);
     }
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasVfsService.class)
-    public TenantIaasVfsService iaasVfsService(AwsArnMapper arnMapper, TenantIaasVfsResourceMapper vfsResourceMapper, IaasPolicyService iaasPolicyService, IaasRoleService iaasRoleService, IaasObjectStoreService iaasObjectStoreService,
-            IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, AwsDocumentTemplates templates) {
-        return new TenantIaasVfsService(arnMapper, vfsResourceMapper, iaasPolicyService, iaasRoleService, iaasObjectStoreService, iaasRolePolicyAttachmentService, templates);
+    public TenantIaasVfsService iaasVfsService(TenantIaasVfsResourceMapper vfsResourceMapper, IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
+        return new TenantIaasVfsService(vfsResourceMapper, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, resourceBuilder);
     }
 
     @Bean

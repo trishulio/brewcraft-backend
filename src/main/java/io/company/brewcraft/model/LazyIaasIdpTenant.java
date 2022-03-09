@@ -3,14 +3,14 @@ package io.company.brewcraft.model;
 import java.util.Set;
 import java.util.UUID;
 
-import io.company.brewcraft.service.impl.IdpTenantIaasRepository;
+import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
 
 public class LazyIaasIdpTenant extends IaasIdpTenant {
     public String tenantId;
     private IaasIdpTenant delegate;
-    private IdpTenantIaasRepository iaasIdpRepo;
+    private IaasIdpTenantIaasRepository iaasIdpRepo;
 
-    public LazyIaasIdpTenant(UUID tenantId, IdpTenantIaasRepository iaasIdpRepo) {
+    public LazyIaasIdpTenant(UUID tenantId, IaasIdpTenantIaasRepository iaasIdpRepo) {
         this.tenantId = tenantId.toString();
         this.iaasIdpRepo = iaasIdpRepo;
     }

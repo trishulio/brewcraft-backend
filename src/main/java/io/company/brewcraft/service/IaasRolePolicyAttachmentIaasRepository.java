@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.amazonaws.services.identitymanagement.model.AttachedPolicy;
 
@@ -28,26 +29,30 @@ public class IaasRolePolicyAttachmentIaasRepository {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void add(Collection<? extends BaseIaasRolePolicyAttachment> attachments) {
-        List<Runnable> runnables = attachments.stream()
+    public List<IaasRolePolicyAttachment> add(Collection<? extends BaseIaasRolePolicyAttachment> attachments) {
+        List<Supplier<IaasRolePolicyAttachment>> suppliers = attachments.stream()
                 .filter(attachment -> attachment != null)
-                .map(attachment -> (Runnable) () -> {
+                .map(attachment -> (Supplier<IaasRolePolicyAttachment>) () -> {
                     iamClient.add(attachment.getIaasPolicy().getId(), attachment.getIaasRole().getId());
+
+                    return (IaasRolePolicyAttachment) attachment;
                 })
                 .toList();
 
-        this.executor.run(runnables);
+        return this.executor.supply(suppliers);
     }
 
-    public void put(Collection<? extends UpdateIaasRolePolicyAttachment> attachments) {
-        List<Runnable> runnables = attachments.stream()
+    public List<IaasRolePolicyAttachment> put(Collection<? extends UpdateIaasRolePolicyAttachment> attachments) {
+        List<Supplier<IaasRolePolicyAttachment>> suppliers = attachments.stream()
                 .filter(attachment -> attachment != null)
-                .map(attachment -> (Runnable) () -> {
+                .map(attachment -> (Supplier<IaasRolePolicyAttachment>) () -> {
                     iamClient.put(attachment.getIaasPolicy().getId(), attachment.getIaasRole().getId());
+
+                    return (IaasRolePolicyAttachment) attachment;
                 })
                 .toList();
 
-        this.executor.run(runnables);
+        return this.executor.supply(suppliers);
     }
 
     public void delete(Set<IaasRolePolicyAttachmentId> ids) {
