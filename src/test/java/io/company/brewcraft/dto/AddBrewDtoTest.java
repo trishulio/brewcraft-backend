@@ -25,8 +25,10 @@ public class AddBrewDtoTest {
         Long parentBrewId = 3L;
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        Long assignedToUserId = 7L;
+        Long ownedByUserId = 8L;
 
-        AddBrewDto addBrewDto = new AddBrewDto(name, description, batchId, productId, parentBrewId, startedAt, endedAt);
+        AddBrewDto addBrewDto = new AddBrewDto(name, description, batchId, productId, parentBrewId, startedAt, endedAt, assignedToUserId, ownedByUserId);
 
         assertEquals("testName", addBrewDto.getName());
         assertEquals("testDesc", addBrewDto.getDescription());
@@ -35,6 +37,8 @@ public class AddBrewDtoTest {
         assertEquals(3L, addBrewDto.getParentBrewId());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewDto.getStartedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewDto.getEndedAt());
+        assertEquals(7L, addBrewDto.getAssignedToUserId());
+        assertEquals(8L, addBrewDto.getOwnedByUserId());
     }
 
     @Test
@@ -83,5 +87,17 @@ public class AddBrewDtoTest {
         LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         addBrewDto.setEndedAt(endedAt);
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addBrewDto.getEndedAt());
+    }
+
+    @Test
+    public void testGetSetAssignedtoUserId() {
+        addBrewDto.setAssignedToUserId(7L);
+        assertEquals(7L, addBrewDto.getAssignedToUserId());
+    }
+
+    @Test
+    public void testGetSetOwnedByUserId() {
+        addBrewDto.setOwnedByUserId(8L);
+        assertEquals(8L, addBrewDto.getOwnedByUserId());
     }
 }

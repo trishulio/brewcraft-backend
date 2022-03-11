@@ -118,11 +118,11 @@ import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 import io.company.brewcraft.repository.user.impl.UserRoleRefresher;
 import io.company.brewcraft.repository.user.impl.UserSalutationRefresher;
 import io.company.brewcraft.repository.user.impl.UserStatusRefresher;
+import io.company.brewcraft.service.AssignedToAccessor;
 import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
-import io.company.brewcraft.service.ChildFinishedGoodsAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.FinishedGoodLotAccessor;
 import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionAccessor;
@@ -136,6 +136,7 @@ import io.company.brewcraft.service.MeasureAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
 import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 import io.company.brewcraft.service.ProductAccessor;
@@ -340,6 +341,26 @@ public class RepositoryConfiguration {
     }
 
     @Bean
+    public AccessorRefresher<Long, AssignedToAccessor, User> assignedToAccessorRefresher(UserRepository repo) {
+        return new AccessorRefresher<>(
+            User.class,
+            accessor -> accessor.getAssignedTo(),
+            (accessor, assignedTo) -> accessor.setAssignedTo(assignedTo),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<Long, OwnedByAccessor, User> ownedByAccessorRefresher(UserRepository repo) {
+        return new AccessorRefresher<>(
+            User.class,
+            accessor -> accessor.getOwnedBy(),
+            (accessor, ownedBy) -> accessor.setOwnedBy(ownedBy),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
     public AccessorRefresher<Long, BrewStageAccessor, BrewStage> brewStageAccessorRefresher(BrewStageRepository repo) {
         return new AccessorRefresher<>(
             BrewStage.class,
@@ -480,8 +501,8 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<Brew, BrewAccessor> brewRefresher(Refresher<Product, ProductAccessor> productRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
-        return new BrewRefresher(productRefresher, parentBrewAccessorRefresher, brewAccessorRefresher);
+    public Refresher<Brew, BrewAccessor> brewRefresher(Refresher<Product, ProductAccessor> productRefresher, UserRefresher userRefresher, AccessorRefresher<Long, ParentBrewAccessor, Brew> parentBrewAccessorRefresher, AccessorRefresher<Long, BrewAccessor, Brew> brewAccessorRefresher) {
+        return new BrewRefresher(productRefresher, userRefresher, parentBrewAccessorRefresher, brewAccessorRefresher);
     }
 
     @Bean
@@ -615,8 +636,8 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<User, UserAccessor> userRefresher(AccessorRefresher<Long, UserAccessor, User> userAccessorRefresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, @Lazy Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
-        return new UserRefresher(userAccessorRefresher, statusRefresher, salutationRefresher, roleBindingRefresher);
+    public UserRefresher userRefresher(AccessorRefresher<Long, UserAccessor, User> userAccessorRefresher, AccessorRefresher<Long, AssignedToAccessor, User> assignedToAccessorRefresher, AccessorRefresher<Long, OwnedByAccessor, User> ownedByAccessorRefresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, @Lazy Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
+        return new UserRefresher(userAccessorRefresher, assignedToAccessorRefresher, ownedByAccessorRefresher, statusRefresher, salutationRefresher, roleBindingRefresher);
     }
 
     @Bean

@@ -10,7 +10,7 @@ import io.company.brewcraft.model.Brew;
 
 public interface BrewService {
 
-    public Page<Brew> getBrews(Set<Long> ids, Set<String> batchIds, Set<String> names, Set<Long> productIds, Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,  LocalDateTime endedAtFrom, LocalDateTime endedAtTo, int page, int size, SortedSet<String> sort, boolean orderAscending);
+    public Page<Brew> getBrews(Set<Long> ids, Set<String> batchIds, Set<String> names, Set<Long> productIds, Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,  LocalDateTime endedAtFrom, LocalDateTime endedAtTo, Set<Long> assignedToUserIds, Set<Long> ownedByUserIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public Brew getBrew(Long brewId);
 

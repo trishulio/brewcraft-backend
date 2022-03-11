@@ -21,6 +21,10 @@ public class UpdateBrewDto extends BaseDto {
 
     private LocalDateTime endedAt;
 
+    private Long assignedToUserId;
+
+    private Long ownedByUserId;
+
     @NotNull
     private Integer version;
 
@@ -29,7 +33,7 @@ public class UpdateBrewDto extends BaseDto {
     }
 
     public UpdateBrewDto(String name, String description, String batchId, Long productId, Long parentBrewId, LocalDateTime startedAt,
-            LocalDateTime endedAt, Integer version) {
+            LocalDateTime endedAt, Long assignedToUserId, Long ownedByUserId,  Integer version) {
         super();
         this.name = name;
         this.description = description;
@@ -38,6 +42,8 @@ public class UpdateBrewDto extends BaseDto {
         this.parentBrewId = parentBrewId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.assignedToUserId = assignedToUserId;
+        this.ownedByUserId = ownedByUserId;
         this.version = version;
     }
 
@@ -95,6 +101,22 @@ public class UpdateBrewDto extends BaseDto {
 
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
+    }
+
+    public Long getAssignedToUserId() {
+        return assignedToUserId;
+    }
+
+    public void setAssignedToUserId(Long assignedToUserId) {
+        this.assignedToUserId = assignedToUserId;
+    }
+
+    public Long getOwnedByUserId() {
+        return ownedByUserId;
+    }
+
+    public void setOwnedByUserId(Long ownedByUserId) {
+        this.ownedByUserId = ownedByUserId;
     }
 
     public Integer getVersion() {
