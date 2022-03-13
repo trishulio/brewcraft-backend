@@ -471,7 +471,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IaasAuthorizationFetch.class)
-    public IaasAuthorizationFetch iaasAuthorizationFetch(AwsCognitoIdentityClient identityClient, AwsIdentityCredentialsMapper iaasAuthorizationMapper, @Value("${aws.cognito.userPool.url}") String userPoolUrl) {
+    public IaasAuthorizationFetch iaasAuthorizationFetch(AwsCognitoIdentityClient identityClient, AwsIdentityCredentialsMapper iaasAuthorizationMapper, @Value("${aws.cognito.user-pool.url}") String userPoolUrl) {
         return new AwsResourceCredentialsFetcher(identityClient, iaasAuthorizationMapper, userPoolUrl);
     }
 

@@ -39,13 +39,13 @@ public class AwsConfiguration {
     @Bean
     @ConditionalOnMissingBean(AWSCognitoIdentityProvider.class)
     public AWSCognitoIdentityProvider awsCognitoIdpProvider(AwsFactory awsFactory, @Value("${aws.cognito.region}") final String cognitoRegion, @Value("${aws.cognito.url}") final String cognitoUrl,
-            @Value("${aws.cognito.accessKey}") final String cognitoAccessKey, @Value("${aws.cognito.secretKey}") final String cognitoSecretKey) {
-        return awsFactory.getIdentityProvider(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoSecretKey);
+            @Value("${aws.cognito.access-key}") final String cognitoAccessKey, @Value("${aws.cognito.access-secret}") final String cognitoAccessSecret) {
+        return awsFactory.getIdentityProvider(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoAccessSecret);
     }
 
     @Bean
     @ConditionalOnMissingBean(IdentityProviderClient.class)
-    public IdentityProviderClient idpClient(AWSCognitoIdentityProvider awsIdpProvider, @Value("${aws.cognito.userPool.id}") final String cognitoUserPoolId) {
+    public IdentityProviderClient idpClient(AWSCognitoIdentityProvider awsIdpProvider, @Value("${aws.cognito.user-pool.id}") final String cognitoUserPoolId) {
         return new AwsCognitoIdpClient(awsIdpProvider, cognitoUserPoolId);
     }
 
@@ -75,19 +75,19 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AmazonS3.class)
-    public AmazonS3 s3Client(AwsFactory awsFactory, @Value("${aws.s3.region}") String region, @Value("${aws.s3.accessKey}") String s3AccessKey, @Value("${aws.s3.accessSecret}") String s3Secret) {
+    public AmazonS3 s3Client(AwsFactory awsFactory, @Value("${aws.s3.region}") String region, @Value("${aws.s3.access-key}") String s3AccessKey, @Value("${aws.s3.access-secret}") String s3Secret) {
         return awsFactory.s3Client(region, s3AccessKey, s3Secret);
     }
 
     @Bean
     @ConditionalOnMissingBean(AmazonIdentityManagement.class)
-    public AmazonIdentityManagement iamClient(AwsFactory awsFactory, @Value("${aws.iam.region}") String region, @Value("${aws.iam.accessKey}") String iamAccessKey, @Value("${aws.iam.accessSecret}") String iamSecret) {
+    public AmazonIdentityManagement iamClient(AwsFactory awsFactory, @Value("${aws.iam.region}") String region, @Value("${aws.iam.access-key}") String iamAccessKey, @Value("${aws.iam.access-secret}") String iamSecret) {
         return awsFactory.iamClient(region, iamAccessKey, iamSecret);
     }
 
     @Bean
     @ConditionalOnMissingBean(AmazonCognitoIdentity.class)
-    public AmazonCognitoIdentity cognitoIdentity(AwsFactory awsFactory, @Value("${aws.cognito.region}") String region, @Value("${aws.cognito.accessKey}") final String accessKey, @Value("${aws.cognito.secretKey}") final String accessSecret) {
+    public AmazonCognitoIdentity cognitoIdentity(AwsFactory awsFactory, @Value("${aws.cognito.region}") String region, @Value("${aws.cognito.access-key}") final String accessKey, @Value("${aws.cognito.access-secret}") final String accessSecret) {
         return awsFactory.getAwsCognitoIdentityClient(region, accessKey, accessSecret);
     }
 

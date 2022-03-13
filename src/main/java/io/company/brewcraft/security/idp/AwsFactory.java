@@ -24,11 +24,11 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 public class AwsFactory {
     private static final Logger logger = LoggerFactory.getLogger(AwsFactory.class);
 
-    public AWSCognitoIdentityProvider getIdentityProvider(final String cognitoRegion, String cognitoUrl, String cognitoAccessKey, String cognitoSecretKey) {
+    public AWSCognitoIdentityProvider getIdentityProvider(final String cognitoRegion, String cognitoUrl, String cognitoAccessKey, String cognitoAccessSecret) {
         logger.debug("Creating an instance of AwsCognitoIdp");
         final AwsClientBuilder.EndpointConfiguration endpointConfig = new AwsClientBuilder.EndpointConfiguration(cognitoUrl, cognitoRegion);
         final AWSCognitoIdentityProviderClientBuilder idpClientBuilder = AWSCognitoIdentityProviderClient.builder().withEndpointConfiguration(endpointConfig);
-        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(cognitoAccessKey, cognitoSecretKey);
+        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(cognitoAccessKey, cognitoAccessSecret);
         idpClientBuilder.withCredentials(new AWSStaticCredentialsProvider(basicAwsCredentials));
 
         AWSCognitoIdentityProvider awsCognitoIdp = idpClientBuilder.build();

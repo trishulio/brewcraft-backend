@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 public interface BaseIaasAuthorization {
     String getAccessKey();
 
-    void setAccessKey(String accessKeyId);
+    void setAccessKey(String accessKey);
 
     String getAccessSecret();
 
-    void setAccessSecret(String secretKey);
+    void setAccessSecret(String accessSecret);
 
     String getSessionToken();
 
