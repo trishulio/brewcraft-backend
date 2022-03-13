@@ -10,6 +10,7 @@ import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 
 public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     private AwsDocumentTemplates templates;
@@ -37,14 +38,14 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getPolicyName(T iaasIdpTenant) {
+    public <T extends BaseIaasIdpTenant> String getVfsPolicyName(T iaasIdpTenant) {
         String iaasIdpTenantId = iaasIdpTenant.getName();
 
         return this.templates.getTenantVfsPolicyName(iaasIdpTenantId);
     }
 
     @Override
-    public <P extends BaseIaasPolicy, T extends BaseIaasIdpTenant> P buildPolicy(T iaasIdpTenant) {
+    public <P extends BaseIaasPolicy, T extends BaseIaasIdpTenant> P buildVfsPolicy(T iaasIdpTenant) {
         String iaasIdpTenantId = iaasIdpTenant.getName();
         @SuppressWarnings("unchecked")
         P policy = (P) new IaasPolicy();
@@ -70,6 +71,15 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         objectStore.setName(this.templates.getTenantVfsBucketName(iaasIdpTenantId));
 
         return objectStore;
+    }
+
+    @Override
+    public <T extends BaseIaasIdpTenant> IaasRolePolicyAttachmentId buildVfsAttachmentId(T iaasIdpTenant) {
+        IaasRolePolicyAttachmentId id = new IaasRolePolicyAttachmentId();
+        id.setPolicyId(this.templates.getTenantVfsPolicyName(iaasIdpTenant.getName()));
+        id.setRoleId(this.templates.getTenantIaasRoleName(iaasIdpTenant.getName()));
+
+        return id;
     }
 
     @Override

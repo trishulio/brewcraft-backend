@@ -99,9 +99,7 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
             return null;
         }
 
-        List<IaasRolePolicyAttachment> existing = this.getByIds(updates);
-
-        List<IaasRolePolicyAttachment> updated = this.updateService.getPutEntities(existing, updates);
+        List<IaasRolePolicyAttachment> updated = this.updateService.getPutEntities(null, updates);
 
         return iaasRepo.put(updated);
     }

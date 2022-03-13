@@ -59,13 +59,13 @@ public class SimpleUpdateService <ID, E extends CrudEntity<ID>, BE, UE extends U
             Class<?> itemCls = this.baseEntityCls;
             if (update.getId() != null) {
                 final E existing = idToItemLookup.get(update.getId());
-                if (validator.rule(existing != null, "No existing %s found with Id: %s.", this.entityCls.getSimpleName(), update.getId())) {
+                if (existing != null) {
                     existing.optimisticLockCheck(update);
                     itemCls = this.updateEntityCls;
                 }
             }
             item.override(update, this.getPropertyNames(itemCls, this.excludeProps));
-            item.setId(update.getId()); // Note: During creation, this ID is ignored.
+            item.setId(update.getId()); // Note: During "creation" for JPA entities, this ID is ignored.
             return item;
         }).toList();
 

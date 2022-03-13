@@ -69,19 +69,19 @@ public class AwsIamPolicyClient {
 
     public Policy update(String policyName, String policyDocument) {
         String policyArn = awsMapper.getPolicyArn(policyName);
-        // A policy can have max 5 versions. After that the existing versions need to be deleted.
-        // This implementation removes all existing versions and retains only 1 at each time.
-        deletePolicyVersions(policyArn);
-
         CreatePolicyVersionRequest request = new CreatePolicyVersionRequest()
                                                  .withPolicyArn(policyArn)
                                                  .withPolicyDocument(policyDocument)
                                                  .withSetAsDefault(true);
 
         CreatePolicyVersionResult result = awsIamClient.createPolicyVersion(request);
+        // A policy can have max 5 versions. After that the existing versions need to be deleted.
+        // This implementation removes all existing versions and retains only 1 at each time.
+        deleteNonDefaultPolicyVersions(policyName);
+
         // TODO: Perform a test to make sure that when a new policy version is created, the get policy
         // returns the default document and not the original policy document.
-        return get(policyArn);
+        return get(policyName);
     }
 
     public Policy put(String policyName, String description, String policyDocument) {
@@ -115,11 +115,13 @@ public class AwsIamPolicyClient {
         return policyVersions;
     }
 
-    public void deletePolicyVersions(String policyName) {
+    public void deleteNonDefaultPolicyVersions(String policyName) {
         List<PolicyVersion> versions = getPolicyVersions(policyName);
 
         String policyArn = awsMapper.getPolicyArn(policyName);
-        versions.forEach(version -> deletePolicyVersion(policyArn, version.getVersionId()));
+        versions.stream()
+                .filter(version -> !version.isDefaultVersion())
+                .forEach(version -> deletePolicyVersion(policyArn, version.getVersionId()));
     }
 
     public void deletePolicyVersion(String policyArn, String versionId) {

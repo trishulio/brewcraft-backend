@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import io.company.brewcraft.model.BaseIaasPolicy;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasPolicyAccessor;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateIaasPolicy;
 
 @Transactional
@@ -95,11 +95,9 @@ public class IaasPolicyService extends BaseService implements CrudService<String
             return null;
         }
 
-        List<IaasPolicy> existing = this.getByIds(updates);
+        List<IaasPolicy> updated = this.updateService.getPutEntities(null, updates);
 
-        List<IaasPolicy> updated = this.updateService.getPutEntities(existing, updates);
-
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 
     @Override
@@ -112,6 +110,6 @@ public class IaasPolicyService extends BaseService implements CrudService<String
 
         List<IaasPolicy> updated = this.updateService.getPatchEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 }

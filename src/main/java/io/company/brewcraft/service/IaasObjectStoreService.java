@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import io.company.brewcraft.model.BaseIaasObjectStore;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreAccessor;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateIaasObjectStore;
 
 @Transactional
@@ -95,11 +95,9 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
             return null;
         }
 
-        List<IaasObjectStore> existing = this.getByIds(updates);
+        List<IaasObjectStore> updated = this.updateService.getPutEntities(null, updates);
 
-        List<IaasObjectStore> updated = this.updateService.getPutEntities(existing, updates);
-
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 
     @Override
@@ -112,6 +110,6 @@ public class IaasObjectStoreService extends BaseService implements CrudService<S
 
         List<IaasObjectStore> updated = this.updateService.getPatchEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 }

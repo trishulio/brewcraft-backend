@@ -23,6 +23,7 @@ import io.company.brewcraft.model.BaseFinishedGoodLot;
 import io.company.brewcraft.model.BaseFinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.BaseFinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodLotMixturePortion;
+import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
@@ -42,6 +43,7 @@ import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
@@ -67,6 +69,7 @@ import io.company.brewcraft.model.TenantContextObjectStoreFileClientProvider;
 import io.company.brewcraft.model.UpdateFinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodLotMixturePortion;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.model.UpdateIaasObjectStore;
 import io.company.brewcraft.model.UpdateIaasPolicy;
 import io.company.brewcraft.model.UpdateIaasRole;
@@ -136,6 +139,7 @@ import io.company.brewcraft.service.AwsObjectStoreClient;
 import io.company.brewcraft.service.AwsObjectStoreFileSystem;
 import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
 import io.company.brewcraft.service.AwsTenantBucketNameProvider;
+import io.company.brewcraft.service.AwsTenantIaasResourceBuilder;
 import io.company.brewcraft.service.BlockingAsyncExecutor;
 import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewService;
@@ -157,6 +161,7 @@ import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
 import io.company.brewcraft.service.FinishedGoodLotService;
 import io.company.brewcraft.service.IaasAuthorizationFetch;
+import io.company.brewcraft.service.IaasIdpTenantService;
 import io.company.brewcraft.service.IaasObjectStoreFileSystem;
 import io.company.brewcraft.service.IaasObjectStoreIaasRepository;
 import io.company.brewcraft.service.IaasObjectStoreService;
@@ -201,8 +206,10 @@ import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.TenantIaasAuthResourceMapper;
 import io.company.brewcraft.service.TenantIaasAuthService;
 import io.company.brewcraft.service.TenantIaasAuthorizationFetch;
+import io.company.brewcraft.service.TenantIaasIdpResourcesMapper;
 import io.company.brewcraft.service.TenantIaasIdpService;
 import io.company.brewcraft.service.TenantIaasResourceBuilder;
 import io.company.brewcraft.service.TenantIaasService;
@@ -279,9 +286,52 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(TenantIaasResourceBuilder.class)
+    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
+        return new AwsTenantIaasResourceBuilder(templates);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(TenantIaasAuthResourceMapper.class)
+    public TenantIaasAuthResourceMapper authResourceMapper() {
+        return new TenantIaasAuthResourceMapper();
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(TenantIaasAuthService.class)
+    public TenantIaasAuthService tenantIaasAuthService(TenantIaasAuthResourceMapper authResourceMapper, IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
+        return new TenantIaasAuthService(authResourceMapper, roleService, resourceBuilder);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(IaasIdpTenantService.class)
+    public IaasIdpTenantService iaasIdpTenantService(IaasIdpTenantIaasRepository iaasRepo, UtilityProvider utilProvider) {
+        UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasIdpTenant.class, UpdateIaasIdpTenant.class, IaasIdpTenant.class, java.util.Set.of());
+        return new IaasIdpTenantService(updateService, iaasRepo);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(TenantIaasIdpResourcesMapper.class)
+    public TenantIaasIdpResourcesMapper tenantIaasIdpResourcesMapper() {
+        return new TenantIaasIdpResourcesMapper();
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(TenantIaasIdpService.class)
+    public TenantIaasIdpService tenantIaasIdpService(IaasIdpTenantService idpService, TenantIaasIdpResourcesMapper mapper) {
+        return new TenantIaasIdpService(idpService, mapper);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(TenantIaasService.class)
     public TenantIaasService tenantIaasService(TenantIaasAuthService authService, TenantIaasIdpService idpService, TenantIaasVfsService vfsService, IaasIdpTenantMapper mapper) {
         return new TenantIaasService(authService, idpService, vfsService, mapper);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IaasIdpTenantMapper.class)
+    public IaasIdpTenantMapper idpTenantMapper(LocalDateTimeMapper dtMapper) {
+        return new IaasIdpTenantMapper(dtMapper);
     }
 
     @Bean

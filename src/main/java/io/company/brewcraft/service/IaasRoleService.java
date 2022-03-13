@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import io.company.brewcraft.model.BaseIaasRole;
-import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateIaasRole;
 
 @Transactional
@@ -94,11 +94,9 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
             return null;
         }
 
-        List<IaasRole> existing = this.getByIds(updates);
+        List<IaasRole> updated = this.updateService.getPutEntities(null, updates);
 
-        List<IaasRole> updated = this.updateService.getPutEntities(existing, updates);
-
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 
     @Override
@@ -111,6 +109,6 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
 
         List<IaasRole> updated = this.updateService.getPatchEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 }

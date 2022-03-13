@@ -93,11 +93,9 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
             return null;
         }
 
-        List<IaasIdpTenant> existing = this.getByIds(updates);
+        List<IaasIdpTenant> updated = this.updateService.getPutEntities(null, updates);
 
-        List<IaasIdpTenant> updated = this.updateService.getPutEntities(existing, updates);
-
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 
     @Override
@@ -110,6 +108,6 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
 
         List<IaasIdpTenant> updated = this.updateService.getPatchEntities(existing, updates);
 
-        return iaasRepo.add(updated);
+        return iaasRepo.put(updated);
     }
 }

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasRole;
@@ -13,14 +12,14 @@ import io.company.brewcraft.model.TenantIaasAuthResources;
 import io.company.brewcraft.model.UpdateIaasRole;
 
 public class TenantIaasAuthService {
-    private AwsDocumentTemplates templates;
+    private TenantIaasResourceBuilder resourceBuilder;
     private TenantIaasAuthResourceMapper mapper;
     private IaasRoleService roleService;
 
-    public TenantIaasAuthService(TenantIaasAuthResourceMapper mapper, IaasRoleService roleService, AwsDocumentTemplates templates) {
-        this.templates = templates;
-        this.mapper = mapper;
+    public TenantIaasAuthService(TenantIaasAuthResourceMapper mapper, IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
+        this.resourceBuilder = resourceBuilder;
         this.roleService = roleService;
+        this.mapper = mapper;
     }
 
     public List<TenantIaasAuthResources> get(List<IaasIdpTenant> idpTenants) {
@@ -28,9 +27,8 @@ public class TenantIaasAuthService {
 
         idpTenants
         .stream()
-        .map(idpTenant -> idpTenant.getId())
-        .forEach(idpTenantId -> {
-            String roleName = this.templates.getTenantIaasRoleName(idpTenantId);
+        .forEach(idpTenant -> {
+            String roleName = this.resourceBuilder.getRoleName(idpTenant);
             roleIds.add(roleName);
          });
 
@@ -43,13 +41,7 @@ public class TenantIaasAuthService {
         List<BaseIaasRole> roleUpdates = new ArrayList<>(idpTenants.size());
 
         idpTenants.forEach(idpTenant -> {
-            String idpTenantId = idpTenant.getId();
-
-            BaseIaasRole role = new IaasRole();
-            role.setName(this.templates.getTenantIaasRoleName(idpTenantId));
-            role.setDescription(this.templates.getTenantIaasRoleDescription(idpTenantId));
-            role.setAssumePolicyDocument(this.templates.getCognitoIdAssumeRolePolicyDoc());
-
+            BaseIaasRole role = this.resourceBuilder.buildRole(idpTenant);
             roleUpdates.add(role);
         });
 
@@ -62,12 +54,7 @@ public class TenantIaasAuthService {
         List<UpdateIaasRole> roleUpdates = new ArrayList<>(idpTenants.size());
 
         idpTenants.forEach(idpTenant -> {
-            String idpTenantId = idpTenant.getId();
-
-            UpdateIaasRole role = new IaasRole();
-            role.setName(this.templates.getTenantIaasRoleName(idpTenantId));
-            role.setDescription(this.templates.getTenantIaasRoleDescription(idpTenantId));
-            role.setAssumePolicyDocument(this.templates.getCognitoIdAssumeRolePolicyDoc());
+            UpdateIaasRole role = this.resourceBuilder.buildRole(idpTenant);
 
             roleUpdates.add(role);
         });
@@ -82,9 +69,8 @@ public class TenantIaasAuthService {
 
         idpTenants
         .stream()
-        .map(idpTenant -> idpTenant.getId())
-        .forEach(idpTenantId -> {
-            String roleName = this.templates.getTenantIaasRoleName(idpTenantId);
+        .forEach(idpTenant -> {
+            String roleName = this.resourceBuilder.getRoleName(idpTenant);
             roleIds.add(roleName);
          });
 

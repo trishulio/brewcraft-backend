@@ -34,12 +34,12 @@ public class IaasPolicy extends BaseEntity implements UpdateIaasPolicy, CrudEnti
 
     @Override
     public String getId() {
-        return getIaasResourceName();
+        return getName();
     }
 
     @Override
     public void setId(String id) {
-        setIaasResourceName(id);
+        setName(id);
     }
 
     @Override

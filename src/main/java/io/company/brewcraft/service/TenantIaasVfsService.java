@@ -43,7 +43,7 @@ public class TenantIaasVfsService {
 
         tenants.stream()
                .forEach(iaasIdpTenant -> {
-                   String policyId = this.resourceBuilder.getPolicyName(iaasIdpTenant);
+                   String policyId = this.resourceBuilder.getVfsPolicyName(iaasIdpTenant);
                    policyIds.add(policyId);
 
                    String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
@@ -64,7 +64,7 @@ public class TenantIaasVfsService {
             BaseIaasObjectStore objectStore = this.resourceBuilder.buildObjectStore(tenant);
             objectStoreAdditions.add(objectStore);
 
-            BaseIaasPolicy policy = this.resourceBuilder.buildPolicy(tenant);
+            BaseIaasPolicy policy = this.resourceBuilder.buildVfsPolicy(tenant);
             policiesAdditions.add(policy);
         });
 
@@ -91,7 +91,7 @@ public class TenantIaasVfsService {
             UpdateIaasObjectStore objectStore = this.resourceBuilder.buildObjectStore(tenant);
             objectStoreUpdates.add(objectStore);
 
-            UpdateIaasPolicy policy = this.resourceBuilder.buildPolicy(tenant);
+            UpdateIaasPolicy policy = this.resourceBuilder.buildVfsPolicy(tenant);
             policiesUpdates.add(policy);
         });
 
@@ -113,16 +113,15 @@ public class TenantIaasVfsService {
     public void delete(List<IaasIdpTenant> iaasIdpTenants) {
         Set<String> objectStoreIds = new HashSet<>();
         Set<String> policyIds = new HashSet<>();
-        Set<String> roleIds = new HashSet<>();
         Set<IaasRolePolicyAttachmentId> attachmentIds = new HashSet<>();
 
         iaasIdpTenants
         .stream()
         .forEach(iaasIdpTenant -> {
-            String policyId = this.resourceBuilder.getPolicyName(iaasIdpTenant);
+            String policyId = this.resourceBuilder.getVfsPolicyName(iaasIdpTenant);
             policyIds.add(policyId);
 
-            IaasRolePolicyAttachmentId attachmentId = new IaasRolePolicyAttachmentId(policyId, iaasIdpTenant.getIaasRole().getId());
+            IaasRolePolicyAttachmentId attachmentId = this.resourceBuilder.buildVfsAttachmentId(iaasIdpTenant);
             attachmentIds.add(attachmentId);
 
             String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
