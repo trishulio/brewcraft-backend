@@ -54,12 +54,13 @@ public class SkuController extends BaseController {
     public PageDto<SkuDto> getSkus(
             @RequestParam(required = false, name = "ids") Set<Long> ids,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
+            @RequestParam(required = false, name = "is_primary") Boolean isPrimary,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
 
-        Page<Sku> skuPage = skuService.getSkus(ids, productIds, page, size, sort, orderAscending);
+        Page<Sku> skuPage = skuService.getSkus(ids, productIds, isPrimary, page, size, sort, orderAscending);
 
         List<SkuDto> skuList = skuPage.stream()
                                       .map(sku -> skuMapper.toDto(sku))

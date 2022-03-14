@@ -59,6 +59,7 @@ public class SkuServiceTest {
        final Page<Sku> page = this.skuService.getSkus(
            Set.of(1L),
            Set.of(2L),
+           true,
            10,
            20,
            new TreeSet<>(List.of("id")),

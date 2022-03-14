@@ -324,7 +324,8 @@ INSERT INTO MEASURE VALUES
     (6, 'yield', current_timestamp, current_timestamp, 1),
     (7, 'brewhouseDuration', current_timestamp, current_timestamp, 1),
     (8, 'fermentationDays', current_timestamp, current_timestamp, 1),
-    (9, 'conditioningDays', current_timestamp, current_timestamp, 1);
+    (9, 'conditioningDays', current_timestamp, current_timestamp, 1),
+    (10, 'volumeIn', current_timestamp, current_timestamp, 1);
 CREATE SEQUENCE MEASURE_SEQUENCE START 10;
 
 CREATE TABLE PRODUCT (
@@ -559,6 +560,7 @@ CREATE TABLE SKU (
     PRODUCT_ID INTEGER REFERENCES PRODUCT(ID),
     DISPLAY_QTY_UNIT_SYMBOL VARCHAR(4) REFERENCES QTY_UNIT(SYMBOL),
     QTY_VALUE_IN_SYS_UNIT NUMERIC NOT NULL,
+    IS_PRIMARY BOOLEAN NOT NULL,
     CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     LAST_UPDATED TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     VERSION INTEGER

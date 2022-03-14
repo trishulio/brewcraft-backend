@@ -39,11 +39,13 @@ public class SkuServiceImpl implements SkuService {
     }
 
     @Override
-    public Page<Sku> getSkus(Set<Long> ids, Set<Long> productIds, int page, int size, SortedSet<String> sort,
+    public Page<Sku> getSkus(Set<Long> ids, Set<Long> productIds, Boolean isPrimary, int page, int size, SortedSet<String> sort,
             boolean orderAscending) {
         final Specification<Sku> spec = WhereClauseBuilder.builder()
                                                             .in(Sku.FIELD_ID, ids)
-                                                            .in(Sku.FIELD_PRODUCT, productIds).build();
+                                                            .in(Sku.FIELD_PRODUCT, productIds)
+                                                            .in(Sku.FIELD_IS_PRIMARY, isPrimary != null ? Set.of(isPrimary) : null)
+                                                            .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }

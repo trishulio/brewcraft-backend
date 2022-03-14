@@ -18,6 +18,8 @@ public class SkuDto extends BaseDto {
 
     private QuantityDto quantity;
 
+    private Boolean isPrimary;
+
     private Integer version;
 
     public SkuDto() {
@@ -29,7 +31,7 @@ public class SkuDto extends BaseDto {
         this.id = id;
     }
 
-    public SkuDto(Long id, String number, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    public SkuDto(Long id, String number, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Boolean isPrimary, Integer version) {
         this(id);
         this.number = number;
         this.name = name;
@@ -37,6 +39,7 @@ public class SkuDto extends BaseDto {
         this.product = product;
         this.materials = materials;
         this.quantity = quantity;
+        this.isPrimary = isPrimary;
         this.version = version;
     }
 
@@ -94,6 +97,14 @@ public class SkuDto extends BaseDto {
 
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getIsPrimary() {
+        return isPrimary;
+    }
+
+    public void setIsPrimary(Boolean isPrimary) {
+        this.isPrimary = isPrimary;
     }
 
     public Integer getVersion() {

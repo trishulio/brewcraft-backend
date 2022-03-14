@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,11 +35,12 @@ public class SkuTest {
         Product product = new Product(2L);
         List<SkuMaterial> materials = List.of(new SkuMaterial(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
+        Boolean isPrimary = true;
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, number, name, description, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, number, name, description, product, materials, quantity, isPrimary, created, lastUpdated, version);
 
         assertEquals(1L, sku.getId());
         assertEquals("testName", sku.getName());
@@ -49,6 +51,7 @@ public class SkuTest {
         assertEquals(List.of(expectedSkuMaterial), sku.getMaterials());
 
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), sku.getQuantity());
+        assertEquals(true, sku.getIsPrimary());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), sku.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), sku.getLastUpdated());
         assertEquals(1, sku.getVersion());
@@ -94,9 +97,15 @@ public class SkuTest {
     }
 
     @Test
-    public void testGetSeQuantity() {
+    public void testGetSetQuantity() {
         sku.setQuantity(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE));
         assertEquals(Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE), sku.getQuantity());
+    }
+
+    @Test
+    public void testGetSetIsPrimary() {
+        sku.setIsPrimary(true);
+        assertTrue(sku.getIsPrimary());
     }
 
     @Test
@@ -129,13 +138,14 @@ public class SkuTest {
         Product product = new Product(2L);
         List<SkuMaterial> materials = List.of(new SkuMaterial(9L));
         Quantity<?> quantity = Quantities.getQuantity(100.0, SupportedUnits.HECTOLITRE);
+        Boolean isPrimary = true;
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Sku sku = new Sku(id, number, name, description, product, materials, quantity, created, lastUpdated, version);
+        Sku sku = new Sku(id, number, name, description, product, materials, quantity, isPrimary, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"number\":\"1101094\",\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"number\":\"1101094\",\"name\":\"testName\",\"description\":\"testDescription\",\"product\":{\"id\":2,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"materials\":[{\"id\":9,\"quantity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"isPrimary\":true,\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, sku.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
