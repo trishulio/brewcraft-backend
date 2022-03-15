@@ -325,7 +325,7 @@ INSERT INTO MEASURE VALUES
     (7, 'brewhouseDuration', current_timestamp, current_timestamp, 1),
     (8, 'fermentationDays', current_timestamp, current_timestamp, 1),
     (9, 'conditioningDays', current_timestamp, current_timestamp, 1),
-    (10, 'volumeIn', current_timestamp, current_timestamp, 1);
+    (10, 'initialVolume', current_timestamp, current_timestamp, 1);
 CREATE SEQUENCE MEASURE_SEQUENCE START 10;
 
 CREATE TABLE PRODUCT (
