@@ -24,13 +24,13 @@ public class AddSkuDto extends BaseDto {
     private QuantityDto quantity;
 
     @NotNull
-    private Boolean isPrimary;
+    private boolean isPackageable;
 
     public AddSkuDto() {
         super();
     }
 
-    public AddSkuDto(String number, String name, String description, @NotNull Long productId, @NotNull List<AddSkuMaterialDto> materials, QuantityDto quantity, Boolean isPrimary) {
+    public AddSkuDto(String number, String name, String description, @NotNull Long productId, @NotNull List<AddSkuMaterialDto> materials, QuantityDto quantity, boolean isPackageable) {
         super();
         this.number = number;
         this.name = name;
@@ -38,7 +38,7 @@ public class AddSkuDto extends BaseDto {
         this.productId = productId;
         this.materials = materials;
         this.quantity = quantity;
-        this.isPrimary = isPrimary;
+        this.isPackageable = isPackageable;
     }
 
     public String getNumber() {
@@ -89,11 +89,11 @@ public class AddSkuDto extends BaseDto {
         this.quantity = quantity;
     }
 
-    public Boolean getIsPrimary() {
-        return isPrimary;
+    public boolean getIsPackageable() {
+        return isPackageable;
     }
 
-    public void setIsPrimary(Boolean isPrimary) {
-        this.isPrimary = isPrimary;
+    public void setIsPackageable(boolean isPackageable) {
+        this.isPackageable = isPackageable;
     }
 }

@@ -90,7 +90,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", sku.getDescription());
        assertEquals(new ProductDto(2L), sku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), sku.getQuantity());
-       assertEquals(true, sku.getIsPrimary());
+       assertEquals(true, sku.getIsPackageable());
        assertEquals(1, sku.getVersion());
 
        assertEquals(1, sku.getMaterials().size());
@@ -115,7 +115,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", actualSku.getDescription());
        assertEquals(new ProductDto(2L), actualSku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), actualSku.getQuantity());
-       assertEquals(true, actualSku.getIsPrimary());
+       assertEquals(true, actualSku.getIsPackageable());
        assertEquals(1, actualSku.getVersion());
 
        assertEquals(1, actualSku.getMaterials().size());
@@ -153,7 +153,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
-       assertEquals(true, skuDto.getIsPrimary());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(null, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());
@@ -178,7 +178,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
-       assertEquals(true, skuDto.getIsPrimary());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(1, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());
@@ -203,7 +203,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
-       assertEquals(true, skuDto.getIsPrimary());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(1, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());

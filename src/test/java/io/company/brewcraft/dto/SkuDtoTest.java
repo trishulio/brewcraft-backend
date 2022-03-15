@@ -26,10 +26,10 @@ public class SkuDtoTest {
         ProductDto product = new ProductDto(2L);
         List<SkuMaterialDto> materials = List.of(new SkuMaterialDto(3L));
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
-        Boolean isPrimary = true;
+        boolean isPackageable = true;
         int version = 1;
 
-        SkuDto skuDto = new SkuDto(id, number, name, description, product, materials, quantity, isPrimary, version);
+        SkuDto skuDto = new SkuDto(id, number, name, description, product, materials, quantity, isPackageable, version);
 
         assertEquals(1L, skuDto.getId());
         assertEquals("testName", skuDto.getName());
@@ -37,7 +37,7 @@ public class SkuDtoTest {
         assertEquals(new ProductDto(2L), skuDto.getProduct());
         assertEquals(List.of(new SkuMaterialDto(3L)), skuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), skuDto.getQuantity());
-        assertEquals(true, skuDto.getIsPrimary());
+        assertEquals(true, skuDto.getIsPackageable());
         assertEquals(1, skuDto.getVersion());
     }
 
@@ -84,9 +84,9 @@ public class SkuDtoTest {
     }
 
     @Test
-    public void testGetSetIsPrimary() {
-        skuDto.setIsPrimary(true);
-        assertTrue(skuDto.getIsPrimary());
+    public void testGetSetIsPackageable() {
+        skuDto.setIsPackageable(true);
+        assertTrue(skuDto.getIsPackageable());
     }
 
     @Test

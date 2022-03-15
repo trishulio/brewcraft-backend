@@ -40,7 +40,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     public static final String FIELD_PRODUCT = "product";
     public static final String FIELD_MATERIALS = "materials";
     public static final String FIELD_QUANTITY = "quantity";
-    public static final String FIELD_IS_PRIMARY = "isPrimary";
+    public static final String FIELD_IS_PACKAGEABLE = "isPackageable";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sku_generator")
@@ -68,8 +68,8 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
             @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "display_qty_unit_symbol", referencedColumnName = "symbol")) })
     private QuantityEntity quantity;
 
-    @Column(name = "is_primary")
-    private Boolean isPrimary;
+    @Column(name = "is_packageable")
+    private boolean isPackageable;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -90,7 +90,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
         setId(id);
     }
 
-    public Sku(Long id, String number, String name, String description, Product product, List<SkuMaterial> materials, Quantity<?> quantity, Boolean isPrimary, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Sku(Long id, String number, String name, String description, Product product, List<SkuMaterial> materials, Quantity<?> quantity, boolean isPackageable, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setNumber(number);
         setName(name);
@@ -98,7 +98,7 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
         setProduct(product);
         setMaterials(materials);
         setQuantity(quantity);
-        setIsPrimary(isPrimary);
+        setIsPackageable(isPackageable);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
@@ -228,13 +228,13 @@ public class Sku extends BaseEntity implements UpdateSku<SkuMaterial>, CrudEntit
     }
 
     @Override
-    public Boolean getIsPrimary() {
-        return isPrimary;
+    public boolean getIsPackageable() {
+        return isPackageable;
     }
 
     @Override
-    public void setIsPrimary(Boolean isPrimary) {
-        this.isPrimary = isPrimary;
+    public void setIsPackageable(boolean isPackageable) {
+        this.isPackageable = isPackageable;
     }
 
     @Override

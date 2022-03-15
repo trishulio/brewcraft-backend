@@ -20,7 +20,7 @@ public class UpdateSkuDto extends BaseDto {
 
     private QuantityDto quantity;
 
-    private Boolean isPrimary;
+    private Boolean isPackageable;
 
     @NotNull
     private Integer version;
@@ -29,7 +29,7 @@ public class UpdateSkuDto extends BaseDto {
         super();
     }
 
-    public UpdateSkuDto(String number, String name, String description, Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Boolean isPrimary, Integer version) {
+    public UpdateSkuDto(String number, String name, String description, Long productId, List<UpdateSkuMaterialDto> materials, QuantityDto quantity, Boolean isPackageable, Integer version) {
         super();
         this.number = number;
         this.name = name;
@@ -37,7 +37,7 @@ public class UpdateSkuDto extends BaseDto {
         this.productId = productId;
         this.materials = materials;
         this.quantity = quantity;
-        this.isPrimary = isPrimary;
+        this.isPackageable = isPackageable;
         this.version = version;
     }
 
@@ -89,12 +89,12 @@ public class UpdateSkuDto extends BaseDto {
         this.quantity = quantity;
     }
 
-    public Boolean getIsPrimary() {
-        return isPrimary;
+    public Boolean getIsPackageable() {
+        return isPackageable;
     }
 
-    public void setIsPrimary(Boolean isPrimary) {
-        this.isPrimary = isPrimary;
+    public void setIsPackageable(Boolean isPackageable) {
+        this.isPackageable = isPackageable;
     }
 
     public Integer getVersion() {
