@@ -25,8 +25,9 @@ public class AddSkuDtoTest {
         Long productId = 2L;
         List<AddSkuMaterialDto> materials = List.of(new AddSkuMaterialDto(3L));
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
+        boolean isPackageable = true;
 
-        AddSkuDto addSkuDto = new AddSkuDto(number, name, description, productId, materials, quantity);
+        AddSkuDto addSkuDto = new AddSkuDto(number, name, description, productId, materials, quantity, isPackageable);
 
         assertEquals("1101094", addSkuDto.getNumber());
         assertEquals("testName", addSkuDto.getName());
@@ -34,6 +35,7 @@ public class AddSkuDtoTest {
         assertEquals(2L, addSkuDto.getProductId());
         assertEquals(List.of(new AddSkuMaterialDto(3L)), addSkuDto.getMaterials());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), addSkuDto.getQuantity());
+        assertEquals(true, addSkuDto.getIsPackageable());
     }
 
     @Test
@@ -64,5 +66,11 @@ public class AddSkuDtoTest {
     public void testGetSetQuantity() {
         addSkuDto.setQuantity(new QuantityDto("hl", BigDecimal.valueOf(100.0)));
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), addSkuDto.getQuantity());
+    }
+
+    @Test
+    public void testGetSetIsPackageable() {
+        addSkuDto.setIsPackageable(true);
+        assertTrue(addSkuDto.getIsPackageable());
     }
 }

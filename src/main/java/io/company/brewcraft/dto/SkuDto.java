@@ -18,6 +18,8 @@ public class SkuDto extends BaseDto {
 
     private QuantityDto quantity;
 
+    private boolean isPackageable;
+
     private Integer version;
 
     public SkuDto() {
@@ -29,7 +31,7 @@ public class SkuDto extends BaseDto {
         this.id = id;
     }
 
-    public SkuDto(Long id, String number, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, Integer version) {
+    public SkuDto(Long id, String number, String name, String description, ProductDto product, List<SkuMaterialDto> materials, QuantityDto quantity, boolean isPackageable, Integer version) {
         this(id);
         this.number = number;
         this.name = name;
@@ -37,6 +39,7 @@ public class SkuDto extends BaseDto {
         this.product = product;
         this.materials = materials;
         this.quantity = quantity;
+        this.isPackageable = isPackageable;
         this.version = version;
     }
 
@@ -94,6 +97,14 @@ public class SkuDto extends BaseDto {
 
     public void setQuantity(QuantityDto quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean getIsPackageable() {
+        return isPackageable;
+    }
+
+    public void setIsPackageable(boolean isPackageable) {
+        this.isPackageable = isPackageable;
     }
 
     public Integer getVersion() {
