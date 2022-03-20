@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-public class TenantIaasVfsResources {
+public class TenantIaasVfsResources extends BaseModel {
     private IaasObjectStore objectStore;
     private IaasPolicy policy;
 

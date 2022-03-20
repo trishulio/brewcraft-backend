@@ -27,7 +27,7 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
 
     @BeforeEach
     public void init() {
-        mExecutor = MockUtils.mockExecutor();
+        mExecutor = TestUtils.mockExecutor();
         mAttachmentClient = mock(AwsIamRolePolicyAttachmentClient.class);
         repo = new IaasRolePolicyAttachmentIaasRepository(mAttachmentClient, mExecutor);
     }
@@ -38,38 +38,38 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
             new IaasRolePolicyAttachment(new IaasRole("ROLE_1"), new IaasPolicy("POLICY_1")),
             new IaasRolePolicyAttachment(new IaasRole("ROLE_2"), new IaasPolicy("POLICY_2"))
         );
-        
+
         List<IaasRolePolicyAttachment> attachments = repo.add(mAttachments);
-        
+
         List<IaasRolePolicyAttachment> expected = List.of(
             new IaasRolePolicyAttachment(new IaasRole("ROLE_1"), new IaasPolicy("POLICY_1")),
             new IaasRolePolicyAttachment(new IaasRole("ROLE_2"), new IaasPolicy("POLICY_2"))
         );
         assertEquals(expected, attachments);
-        
+
         verify(mAttachmentClient).add("POLICY_1", "ROLE_1");
         verify(mAttachmentClient).add("POLICY_2", "ROLE_2");
     }
-    
+
     @Test
     public void testPut_ReturnsAttachmentsFromClient_WhenAttachmentsAreNotNull() {
         List<IaasRolePolicyAttachment> mAttachments = List.of(
             new IaasRolePolicyAttachment(new IaasRole("ROLE_1"), new IaasPolicy("POLICY_1")),
             new IaasRolePolicyAttachment(new IaasRole("ROLE_2"), new IaasPolicy("POLICY_2"))
         );
-        
+
         List<IaasRolePolicyAttachment> attachments = repo.put(mAttachments);
-        
+
         List<IaasRolePolicyAttachment> expected = List.of(
             new IaasRolePolicyAttachment(new IaasRole("ROLE_1"), new IaasPolicy("POLICY_1")),
             new IaasRolePolicyAttachment(new IaasRole("ROLE_2"), new IaasPolicy("POLICY_2"))
         );
         assertEquals(expected, attachments);
-        
+
         verify(mAttachmentClient).put("POLICY_1", "ROLE_1");
         verify(mAttachmentClient).put("POLICY_2", "ROLE_2");
     }
-    
+
     @Test
     public void testDelete_CallsDeleteOnClient_WhenAttachmentsAreNotNull() {
         Set<IaasRolePolicyAttachmentId> ids = Set.of(
@@ -78,11 +78,11 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
         );
 
         repo.delete(ids);
-        
+
         verify(mAttachmentClient).delete("POLICY_1", "ROLE_1");
         verify(mAttachmentClient).delete("POLICY_2", "ROLE_2");
     }
-    
+
     @Test
     public void testExists_ReturnsBooleanMap_WhenIdsAreNotNull() {
         List<AttachedPolicy> mRoleAAttachedPolicies = List.of(new AttachedPolicy().withPolicyName("POLICY_1A"));
@@ -98,7 +98,7 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
         );
 
         Map<IaasRolePolicyAttachmentId, Boolean> exists = repo.exists(ids);
-        
+
         Map<IaasRolePolicyAttachmentId, Boolean> expected = Map.of(
             new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A"), true,
             new IaasRolePolicyAttachmentId("POLICY_2A", "ROLE_A"), false,
@@ -107,7 +107,7 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
         );
         assertEquals(expected, exists);
     }
-    
+
     @Test
     public void testExists_Id_ReturnsTrue_WhenExistsMapReturnsTrueForKey() {
         repo = spy(repo);
@@ -115,9 +115,9 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
             new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A"), true
         );
         doReturn(mExists).when(repo).exists(Set.of(new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A")));
-        
+
         boolean exists = repo.exists(new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A"));
-        
+
         assertTrue(exists);
     }
 
@@ -128,9 +128,9 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
             new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A"), false
         );
         doReturn(mExists).when(repo).exists(Set.of(new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A")));
-        
+
         boolean exists = repo.exists(new IaasRolePolicyAttachmentId("POLICY_1A", "ROLE_A"));
-        
+
         assertFalse(exists);
     }
 }

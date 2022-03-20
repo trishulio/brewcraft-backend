@@ -18,8 +18,8 @@ public class AwsIdentityCredentialsMapper {
         if (credentials != null) {
             authorization = new IaasAuthorization();
 
-            authorization.setAccessKey(credentials.getAccessKey());
-            authorization.setAccessSecret(credentials.getAccessSecret());
+            authorization.setAccessKey(credentials.getAccessKeyId());
+            authorization.setAccessSecret(credentials.getSecretKey());
             authorization.setSessionToken(credentials.getSessionToken());
             authorization.setExpiration(this.dtMapper.fromUtilDate(credentials.getExpiration()));
         }

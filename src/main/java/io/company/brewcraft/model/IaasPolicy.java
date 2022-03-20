@@ -110,9 +110,7 @@ public class IaasPolicy extends BaseEntity implements UpdateIaasPolicy, CrudEnti
 
     @Override
     public Integer getVersion() {
-        // TODO: Implement versioning if the entity is persisted in DB.
-        // Currently, the entities don't have a use-case for versioning.
-        // Hence, it's not implemented.
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

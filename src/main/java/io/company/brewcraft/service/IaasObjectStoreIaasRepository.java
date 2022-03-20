@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import com.amazonaws.services.s3.model.Bucket;
@@ -32,7 +33,7 @@ public class IaasObjectStoreIaasRepository {
 
     public List<IaasObjectStore> add(Collection<? extends BaseIaasObjectStore> objectStores) {
         List<Supplier<Bucket>> suppliers = objectStores.stream()
-                .filter(bucket -> bucket != null)
+                .filter(Objects::nonNull)
                 .map(bucket -> (Supplier<Bucket>) () -> iamClient.add(bucket.getName()))
                 .toList();
 
@@ -43,7 +44,7 @@ public class IaasObjectStoreIaasRepository {
 
     public List<IaasObjectStore> put(Collection<? extends UpdateIaasObjectStore> objectStores) {
         List<Supplier<Bucket>> suppliers = objectStores.stream()
-                .filter(bucket -> bucket != null)
+                .filter(Objects::nonNull)
                 .map(bucket -> (Supplier<Bucket>) () -> iamClient.put(bucket.getName()))
                 .toList();
 
@@ -54,7 +55,7 @@ public class IaasObjectStoreIaasRepository {
 
     public void delete(Collection<String> ids) {
         List<Runnable> runnables = ids.stream()
-                .filter(id -> id != null)
+                .filter(Objects::nonNull)
                 .map(id -> (Runnable) () -> iamClient.delete(id))
                 .toList();
 

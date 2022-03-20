@@ -1,7 +1,8 @@
 package io.company.brewcraft.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,12 +71,12 @@ public class SimpleUpdateServiceTest {
     }
 
     @Test
-    public void testGetPutEntities_ThrowsEntityNotFoundException_WhenUpdateEntityIdDoesNotExistInExistingEntities() {
+    public void testGetPutEntities_ReturnsNewEntities_WhenUpdateEntityIdDoesNotExistInExistingEntities() {
         final List<DummyCrudEntity> existing = List.of(new DummyCrudEntity(1L));
         final List<UpdateDummyCrudEntity> updates = List.of(new DummyCrudEntity(2L), new DummyCrudEntity(3L));
 
-        assertThrows(ValidationException.class, () -> this.service.getPutEntities(existing, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
-        assertThrows(ValidationException.class, () -> this.service.getPutEntities(null, updates), "1. No existing DummyCrudEntity found with Id: 2.\n2. No existing DummyCrudEntity found with Id: 3.");
+        assertEquals(updates, this.service.getPutEntities(existing, updates));
+        assertEquals(updates, this.service.getPutEntities(null, updates));
     }
 
     @Test

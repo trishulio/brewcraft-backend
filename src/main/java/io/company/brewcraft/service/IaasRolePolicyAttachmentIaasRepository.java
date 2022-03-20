@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -31,7 +32,7 @@ public class IaasRolePolicyAttachmentIaasRepository {
 
     public List<IaasRolePolicyAttachment> add(Collection<? extends BaseIaasRolePolicyAttachment> attachments) {
         List<Supplier<IaasRolePolicyAttachment>> suppliers = attachments.stream()
-                .filter(attachment -> attachment != null)
+                .filter(Objects::nonNull)
                 .map(attachment -> (Supplier<IaasRolePolicyAttachment>) () -> {
                     iamClient.add(attachment.getIaasPolicy().getId(), attachment.getIaasRole().getId());
 
@@ -44,7 +45,7 @@ public class IaasRolePolicyAttachmentIaasRepository {
 
     public List<IaasRolePolicyAttachment> put(Collection<? extends UpdateIaasRolePolicyAttachment> attachments) {
         List<Supplier<IaasRolePolicyAttachment>> suppliers = attachments.stream()
-                .filter(attachment -> attachment != null)
+                .filter(Objects::nonNull)
                 .map(attachment -> (Supplier<IaasRolePolicyAttachment>) () -> {
                     iamClient.put(attachment.getIaasPolicy().getId(), attachment.getIaasRole().getId());
 
@@ -57,7 +58,7 @@ public class IaasRolePolicyAttachmentIaasRepository {
 
     public void delete(Set<IaasRolePolicyAttachmentId> ids) {
         List<Runnable> runnables = ids.stream()
-                .filter(id -> id != null)
+                .filter(Objects::nonNull)
                 .map(id -> (Runnable) () -> iamClient.delete(id.getPolicyId(), id.getRoleId()))
                 .toList();
 

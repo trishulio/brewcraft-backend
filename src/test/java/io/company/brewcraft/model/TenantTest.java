@@ -1,7 +1,10 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,12 +24,12 @@ public class TenantTest {
     }
 
     @Test
-    public void testAllArgConstructor() {
-        tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", "TENANT_URL", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
+    public void testAllArgConstructor() throws MalformedURLException {
+        tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", new URL("http://localhost"), true, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
 
         assertEquals(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), tenant.getId());
         assertEquals("TENANT_1", tenant.getName());
-        assertEquals("TENANT_URL", tenant.getUrl());
+        assertEquals(new URL("http://localhost"), tenant.getUrl());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), tenant.getCreatedAt());
         assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), tenant.getLastUpdated());
     }
@@ -46,8 +49,8 @@ public class TenantTest {
     }
 
     @Test
-    public void testGetSetUrl() {
-        String url = "testUrl";
+    public void testGetSetUrl() throws MalformedURLException {
+        URL url = new URL("http://localhost");
         tenant.setUrl(url);
         assertSame(url, tenant.getUrl());
     }
@@ -67,10 +70,10 @@ public class TenantTest {
     }
 
     @Test
-    public void testToString_ReturnsJsonifiedString() throws JSONException {
-        tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", "TENANT_URL", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
+    public void testToString_ReturnsJsonifiedString() throws JSONException, MalformedURLException {
+        tenant = new Tenant(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), "TENANT_1", new URL("http://localhost"), true, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
 
-        final String json = "{\"id\":\"89efec46-fd0b-4fec-bcde-7f4bcef4f8e9\",\"name\":\"TENANT_1\",\"url\":\"TENANT_URL\",\"createdAt\":\"2000-01-01T00:00:00\",\"lastUpdated\":\"2001-01-01T00:00:00\"}";
+        final String json = "{\"id\":\"89efec46-fd0b-4fec-bcde-7f4bcef4f8e9\",\"name\":\"TENANT_1\",\"url\":\"http://localhost\",\"createdAt\":\"2000-01-01T00:00:00\",\"lastUpdated\":\"2001-01-01T00:00:00\", \"version\": null, \"isReady\": true}";
         JSONAssert.assertEquals(json, tenant.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

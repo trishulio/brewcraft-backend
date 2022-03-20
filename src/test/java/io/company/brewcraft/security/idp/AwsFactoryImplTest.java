@@ -1,6 +1,7 @@
 package io.company.brewcraft.security.idp;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ public class AwsFactoryImplTest {
 
     @BeforeEach
     public void init() {
-        factory = new AwsFactoryImpl();
+        factory = new AwsFactory();
     }
 
     @Test
@@ -24,13 +25,13 @@ public class AwsFactoryImplTest {
         final String cognitoRegion = "testCognitoRegion";
         final String cognitoUrl = "testCognitoUrl";
         final String cognitoAccessKey = "testCognitoAccessKey";
-        final String cognitoSecretKey = "testCognitoSecretKey";
+        final String cognitoAccessSecret = "testCognitoAccessSecret";
 
-        final AWSCognitoIdentityProvider awsCognitoIdp = factory.getIdentityProvider(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoSecretKey);
+        final AWSCognitoIdentityProvider awsCognitoIdp = factory.getIdentityProvider(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoAccessSecret);
 
         final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(awsCognitoIdp, "awsCredentialsProvider", true);
         assertTrue(awsCredentialsProvider instanceof AWSStaticCredentialsProvider);
         assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), cognitoAccessKey);
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), cognitoSecretKey);
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), cognitoAccessSecret);
     }
 }

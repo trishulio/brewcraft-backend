@@ -1,6 +1,6 @@
 package io.company.brewcraft.service.impl.user;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class AwsIdpUserRepositoryTest {
     @BeforeEach
     public void init() {
         mClient = mock(AwsCognitoIdpClient.class);
-        repo = new AwsIdpUserRepository(mClient);
+        repo = new AwsIdpUserRepository(mClient, null);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AwsIdpUserRepositoryTest {
     public void testDeleteUser_DeletesCognitoAttributes() {
         User user = new User();
         user.setUserName("USERNAME");
-        repo.deleteUser(user);
+        repo.deleteUser("USERNAME");
 
         mClient.deleteUser("USERNAME");
     }

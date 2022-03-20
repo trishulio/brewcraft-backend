@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -64,9 +65,9 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     @Override
     public List<IaasRolePolicyAttachment> getByIds(Collection<? extends Identified<IaasRolePolicyAttachmentId>> idProviders) {
         Set<IaasRolePolicyAttachmentId> ids = idProviders.stream()
-                    .filter(provider -> provider != null)
+                    .filter(Objects::nonNull)
                     .map(provider -> provider.getId())
-                    .filter(id -> id != null)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
         return this.iaasRepo.get(ids);
@@ -75,9 +76,9 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     @Override
     public List<IaasRolePolicyAttachment> getByAccessorIds(Collection<? extends IaasRolePolicyAttachmentAccessor> accessors) {
         List<IaasRolePolicyAttachment> idProviders = accessors.stream()
-                                    .filter(accessor -> accessor != null)
+                                    .filter(Objects::nonNull)
                                     .map(accessor -> accessor.getIaasRolePolicyAttachment())
-                                    .filter(rolePolicy -> rolePolicy != null)
+                                    .filter(Objects::nonNull)
                                     .toList();
         return getByIds(idProviders);
     }

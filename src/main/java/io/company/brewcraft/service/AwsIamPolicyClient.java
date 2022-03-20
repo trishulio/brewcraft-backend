@@ -3,6 +3,9 @@ package io.company.brewcraft.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.model.CreatePolicyRequest;
 import com.amazonaws.services.identitymanagement.model.CreatePolicyResult;
@@ -21,6 +24,8 @@ import com.amazonaws.services.identitymanagement.model.Policy;
 import com.amazonaws.services.identitymanagement.model.PolicyVersion;
 
 public class AwsIamPolicyClient {
+    private static final Logger log = LoggerFactory.getLogger(AwsIamPolicyClient.class);
+
     private AmazonIdentityManagement awsIamClient;
     private AwsArnMapper awsMapper;
 
@@ -88,6 +93,7 @@ public class AwsIamPolicyClient {
         if (!exists(policyName)) {
             return add(policyName, description, policyDocument);
         } else {
+            log.info("Updating the already existing policy. Description value will not be updated");
             return update(policyName, policyDocument);
         }
     }
@@ -104,9 +110,7 @@ public class AwsIamPolicyClient {
 
             ListPolicyVersionsResult listResult = this.awsIamClient.listPolicyVersions(listRequest);
 
-            if (listResult.getIsTruncated()) {
-                marker = listResult.getMarker();
-            }
+            marker = listResult.getIsTruncated() ? listResult.getMarker() : null;
 
             List<PolicyVersion> policyVersionsSubset = listResult.getVersions();
             policyVersions.addAll(policyVersionsSubset);

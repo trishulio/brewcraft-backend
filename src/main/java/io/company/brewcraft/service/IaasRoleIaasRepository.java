@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import com.amazonaws.services.identitymanagement.model.Role;
@@ -23,7 +24,7 @@ public class IaasRoleIaasRepository {
 
     public List<IaasRole> get(Collection<String> ids) {
         List<Supplier<Role>> suppliers = ids.stream()
-                .filter(id -> id != null)
+                .filter(Objects::nonNull)
                 .map(id -> (Supplier<Role>) () -> iamClient.get(id))
                 .toList();
 
@@ -34,7 +35,7 @@ public class IaasRoleIaasRepository {
 
     public List<IaasRole> add(Collection<? extends BaseIaasRole> policies) {
         List<Supplier<Role>> suppliers = policies.stream()
-                .filter(role -> role != null)
+                .filter(Objects::nonNull)
                 .map(role -> (Supplier<Role>) () -> iamClient.add(role.getName(), role.getDescription(), role.getAssumePolicyDocument()))
                 .toList();
 
@@ -45,7 +46,7 @@ public class IaasRoleIaasRepository {
 
     public List<IaasRole> put(Collection<? extends UpdateIaasRole> policies) {
         List<Supplier<Role>> suppliers = policies.stream()
-                .filter(role -> role != null)
+                .filter(Objects::nonNull)
                 .map(role -> (Supplier<Role>) () -> iamClient.put(role.getName(), role.getDescription(), role.getAssumePolicyDocument()))
                 .toList();
 
@@ -56,7 +57,7 @@ public class IaasRoleIaasRepository {
 
     public void delete(Collection<String> ids) {
         List<Runnable> runnables = ids.stream()
-                .filter(id -> id != null)
+                .filter(Objects::nonNull)
                 .map(id -> (Runnable) () -> iamClient.delete(id))
                 .toList();
 

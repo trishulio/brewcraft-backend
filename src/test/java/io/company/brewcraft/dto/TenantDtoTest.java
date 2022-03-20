@@ -1,7 +1,9 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -32,17 +34,17 @@ public class TenantDtoTest {
     }
 
     @Test
-    public void testGetSetUrl() {
-        String url = "testUrl";
+    public void testGetSetUrl() throws MalformedURLException {
+        URL url = new URL("https://localhost/");
         tenantDto.setUrl(url);
         assertSame(url, tenantDto.getUrl());
     }
 
     @Test
-    public void testGetSetCreated() {
+    public void testGetSetCreatedAt() {
         LocalDateTime created = LocalDateTime.now();
-        tenantDto.setCreated(created);
-        assertSame(created, tenantDto.getCreated());
+        tenantDto.setCreatedAt(created);
+        assertSame(created, tenantDto.getCreatedAt());
     }
 
     @Test

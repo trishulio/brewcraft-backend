@@ -65,7 +65,7 @@ public class CognitoPrincipalContext implements PrincipalContext {
         List<String> groups = jwt.getClaimAsStringList(CLAIM_GROUPS);
         if (groups.size() > 1) {
             String msg = String.format("Each user should only belong to a single cognito group. Instead found %s", groups.size());
-            throw new IllegalStateException(msg);
+            throw new IllegalArgumentException(msg);
         }
 
         String sTenantId = groups.get(0);

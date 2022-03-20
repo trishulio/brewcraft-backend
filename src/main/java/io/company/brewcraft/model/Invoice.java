@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.persistence.AssociationOverride;
@@ -340,7 +341,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public Tax getTax() {
         Tax tax = null;
         if (this.getInvoiceItems() != null) {
-            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
+            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(Objects::nonNull).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
 

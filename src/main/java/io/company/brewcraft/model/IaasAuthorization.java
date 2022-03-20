@@ -90,6 +90,7 @@ public class IaasAuthorization extends BaseEntity implements UpdateIaasAuthoriza
 
     @Override
     public Integer getVersion() {
-        return -1; // Versioning not implemented due to lack of use-case
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

@@ -114,7 +114,7 @@ public class IaasRole extends BaseEntity implements UpdateIaasRole, CrudEntity<S
 
     @Override
     public Integer getVersion() {
-        // TODO: The versioning is not implemented due to lack of use-case.
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

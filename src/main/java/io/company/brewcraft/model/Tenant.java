@@ -139,7 +139,7 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
 
     @Override
     public Integer getVersion() {
-        // Not implemented due to lack of use-case
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

@@ -55,7 +55,6 @@ public class FinishedGoodInventoryTest {
         assertEquals(new Sku(1L), finishedGoodInventory.getSku());
     }
 
-
     @Test
     public void testGetSetMixturePortions() {
         finishedGoodInventory.setMixturePortions(List.of(new FinishedGoodLotMixturePortion(5L)));

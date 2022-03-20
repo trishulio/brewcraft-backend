@@ -83,12 +83,12 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <A extends BaseIaasRolePolicyAttachment> A buildAttachment(IaasPolicy policy, IaasRole role) {
+    public <A extends BaseIaasRolePolicyAttachment> A buildAttachment(IaasRole role, IaasPolicy policy) {
         @SuppressWarnings("unchecked")
         A attachment = (A) new IaasRolePolicyAttachment();
 
-        attachment.setIaasPolicy(policy);
         attachment.setIaasRole(role);
+        attachment.setIaasPolicy(policy);
 
         return attachment;
     }

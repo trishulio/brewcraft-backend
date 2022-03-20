@@ -31,9 +31,7 @@ public class AwsIamRolePolicyAttachmentClient {
                                                       .withMarker(marker);
             ListAttachedRolePoliciesResult result = this.awsClient.listAttachedRolePolicies(request);
 
-            if (result.isTruncated()) {
-                marker = result.getMarker();
-            }
+            marker = result.isTruncated() ? result.getMarker() : null;
 
             List<AttachedPolicy> policies = result.getAttachedPolicies();
             allPolicies.addAll(policies);

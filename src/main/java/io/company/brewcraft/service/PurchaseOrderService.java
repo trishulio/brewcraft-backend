@@ -3,6 +3,7 @@ package io.company.brewcraft.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.Function;
@@ -140,16 +141,16 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         }
 
         Set<Long> supplierIds = updates.stream()
-                                       .filter(update -> update != null)
+                                       .filter(Objects::nonNull)
                                        .map(update -> update.getSupplier())
-                                       .filter(supplier -> supplier != null)
+                                       .filter(Objects::nonNull)
                                        .map(supplier -> supplier.getId())
-                                       .filter(id -> id != null)
+                                       .filter(Objects::nonNull)
                                        .collect(Collectors.toSet());
         Set<String> orderNumbers = updates.stream()
-                                          .filter(update -> update != null)
+                                          .filter(Objects::nonNull)
                                           .map(update -> update.getOrderNumber())
-                                          .filter(orderNumber -> orderNumber != null)
+                                          .filter(Objects::nonNull)
                                           .collect(Collectors.toSet());
 
         Specification<PurchaseOrder> spec = WhereClauseBuilder.builder()
@@ -160,7 +161,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                                                                                                       .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
 
         List<PurchaseOrder> pOs = updates.stream()
-                                         .filter(update -> update != null)
+                                         .filter(Objects::nonNull)
                                          .map(update -> {
                                             PurchaseOrder purchaseOrder = new PurchaseOrder();
                                             Class<? super PurchaseOrder> clz = BasePurchaseOrder.class;

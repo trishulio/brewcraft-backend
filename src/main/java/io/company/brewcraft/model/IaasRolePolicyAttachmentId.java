@@ -37,11 +37,11 @@ public class IaasRolePolicyAttachmentId extends BaseModel {
         }
 
         if (role != null ) {
-            id.setRoleId(role.getName());
+            id.setRoleId(role.getId());
         }
 
         if (policy != null) {
-            id.setPolicyId(policy.getIaasResourceName());
+            id.setPolicyId(policy.getId());
         }
 
         return id;

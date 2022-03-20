@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,9 +59,9 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
     @Override
     public List<IaasIdpTenant> getByIds(Collection<? extends Identified<String>> idProviders) {
         Set<String> ids = idProviders.stream()
-                    .filter(provider -> provider != null)
+                    .filter(Objects::nonNull)
                     .map(provider -> provider.getId())
-                    .filter(id -> id != null)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
         return this.iaasRepo.get(ids);
@@ -69,9 +70,9 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
     @Override
     public List<IaasIdpTenant> getByAccessorIds(Collection<? extends IaasIdpTenantAccessor> accessors) {
         List<IaasIdpTenant> idProviders = accessors.stream()
-                                    .filter(accessor -> accessor != null)
+                                    .filter(Objects::nonNull)
                                     .map(accessor -> accessor.getIdpTenant())
-                                    .filter(role -> role != null)
+                                    .filter(Objects::nonNull)
                                     .toList();
         return getByIds(idProviders);
     }

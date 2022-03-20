@@ -11,6 +11,23 @@ public class IaasIdpTenant extends BaseModel implements UpdateIaasIdpTenant, Cru
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
 
+    public IaasIdpTenant() {
+        super();
+    }
+
+    public IaasIdpTenant(String name) {
+        this();
+        setName(name);
+    }
+
+    public IaasIdpTenant(String name, IaasRole role, String description, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+        this(name);
+        setIaasRole(role);
+        setDescription(description);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+    }
+
     @Override
     public String getId() {
         return getName();
@@ -73,7 +90,7 @@ public class IaasIdpTenant extends BaseModel implements UpdateIaasIdpTenant, Cru
 
     @Override
     public Integer getVersion() {
-        // Versioning not implemented due to lack of use-case.
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

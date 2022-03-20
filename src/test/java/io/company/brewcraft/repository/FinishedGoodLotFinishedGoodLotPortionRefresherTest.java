@@ -21,7 +21,6 @@ public class FinishedGoodLotFinishedGoodLotPortionRefresherTest {
 
     private AccessorRefresher<Long, FinishedGoodLotFinishedGoodLotPortionAccessor, FinishedGoodLotFinishedGoodLotPortion> refresher;
 
-
     @BeforeEach
     public void init() {
         this.finishedGoodLotRefresher = mock(Refresher.class);

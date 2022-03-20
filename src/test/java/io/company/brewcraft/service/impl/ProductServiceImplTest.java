@@ -63,7 +63,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void testGetProducts_returnsProducts() throws Exception {
-        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), new URI("http://www.test.com"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Product productEntity = new Product(1L, "testProduct", "testDescription", new ProductCategory(1L), List.of(new ProductMeasureValue(1L,new Measure(1L, "abv", LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1), new BigDecimal("100"), new Product())), new URI("file://localhost/file"), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         List<Product> productEntities = Arrays.asList(productEntity);
 
@@ -88,7 +88,7 @@ public class ProductServiceImplTest {
         assertSame(productEntity.getDescription(), actualProduct.getDescription());
         assertSame(productEntity.getCategory().getId(), actualProduct.getCategory().getId());
         assertSame(productEntity.getTargetMeasures(), actualProduct.getTargetMeasures());
-        assertSame(productEntity.getImageSrc(), actualProduct.getImageSrc());
+        assertSame(productEntity.getImageSrc().compareTo(actualProduct.getImageSrc()), 0);
         assertSame(productEntity.getLastUpdated(), actualProduct.getLastUpdated());
         assertSame(productEntity.getCreatedAt(), actualProduct.getCreatedAt());
         assertSame(productEntity.getVersion(), actualProduct.getVersion());

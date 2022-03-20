@@ -290,32 +290,32 @@ public class ServiceAutoConfiguration {
     public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
         return new AwsTenantIaasResourceBuilder(templates);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantIaasAuthResourceMapper.class)
     public TenantIaasAuthResourceMapper authResourceMapper() {
         return new TenantIaasAuthResourceMapper();
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantIaasAuthService.class)
     public TenantIaasAuthService tenantIaasAuthService(TenantIaasAuthResourceMapper authResourceMapper, IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
         return new TenantIaasAuthService(authResourceMapper, roleService, resourceBuilder);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(IaasIdpTenantService.class)
     public IaasIdpTenantService iaasIdpTenantService(IaasIdpTenantIaasRepository iaasRepo, UtilityProvider utilProvider) {
         UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasIdpTenant.class, UpdateIaasIdpTenant.class, IaasIdpTenant.class, java.util.Set.of());
         return new IaasIdpTenantService(updateService, iaasRepo);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantIaasIdpResourcesMapper.class)
     public TenantIaasIdpResourcesMapper tenantIaasIdpResourcesMapper() {
         return new TenantIaasIdpResourcesMapper();
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantIaasIdpService.class)
     public TenantIaasIdpService tenantIaasIdpService(IaasIdpTenantService idpService, TenantIaasIdpResourcesMapper mapper) {

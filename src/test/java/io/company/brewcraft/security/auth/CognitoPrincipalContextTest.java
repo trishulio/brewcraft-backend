@@ -6,7 +6,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,33 +24,35 @@ public class CognitoPrincipalContextTest {
     @BeforeEach
     public void init() {
         mJwt = mock(Jwt.class);
+        doReturn(Arrays.asList("00000000-0000-0000-0000-000000000001")).when(mJwt).getClaimAsStringList(CognitoPrincipalContext.CLAIM_GROUPS);
+        doReturn("USERNAME_1").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_USERNAME);
+        doReturn("SCOPE_1 SCOPE_2").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_SCOPE);
+
         ctx = new CognitoPrincipalContext(mJwt, IAAS_TOKEN);
     }
 
     @Test
-    public void testGetTenantId_ReturnsTheFirstGroupValueInJwt_WhenSingleGroupIsPresent() {
-        doReturn(Arrays.asList("TENANT_1")).when(mJwt).getClaimAsStringList(CognitoPrincipalContext.CLAIM_GROUPS);
-        String tenantId = ctx.getTenantId();
-        assertEquals("TENANT_1", tenantId);
+    public void testConstructor_ThrowsError_WhenMultipleGroupValuesArePresent() {
+        mJwt = mock(Jwt.class);
+        doReturn(Arrays.asList("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002")).when(mJwt).getClaimAsStringList(CognitoPrincipalContext.CLAIM_GROUPS);
+        doReturn("USERNAME_1").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_USERNAME);
+        doReturn("SCOPE_1 SCOPE_2").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_SCOPE);
+
+        assertThrows(IllegalArgumentException.class, () -> new CognitoPrincipalContext(mJwt, IAAS_TOKEN), "ach user should only belong to a single cognito group. Instead found 2");
     }
 
     @Test
-    public void testGetTenantId_ThrowsError_WhenMultipleGroupValuesArePresent() {
-        doReturn(Arrays.asList("TENANT_1", "TENANT_2")).when(mJwt).getClaimAsStringList(CognitoPrincipalContext.CLAIM_GROUPS);
-        assertThrows(IllegalStateException.class, () -> ctx.getTenantId());
+    public void testGetTenantId_ReturnsTheFirstGroupValueInJwt_WhenSingleGroupIsPresent() {
+        assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000001"), ctx.getTenantId());
     }
 
     @Test
     public void testGetUsername_ReturnsUserValue() {
-        doReturn("USERNAME_1").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_USERNAME);
-        String username = ctx.getUsername();
-        assertEquals("USERNAME_1", username);
+        assertEquals("USERNAME_1", ctx.getUsername());
     }
 
     @Test
     public void testGetRoles_ReturnsTheCognitoScopes() {
-        doReturn("SCOPE_1 SCOPE_2").when(mJwt).getClaimAsString(CognitoPrincipalContext.CLAIM_SCOPE);
-        List<String> roles = ctx.getRoles();
-        assertEquals(Arrays.asList("SCOPE_1", "SCOPE_2"), roles);
+        assertEquals(Arrays.asList("SCOPE_1", "SCOPE_2"), ctx.getRoles());
     }
 }

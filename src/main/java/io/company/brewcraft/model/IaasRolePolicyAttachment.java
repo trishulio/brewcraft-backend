@@ -12,9 +12,7 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
 
     private IaasRole role;
     private IaasPolicy policy;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime lastUpdated;
 
     public IaasRolePolicyAttachment() {
@@ -25,6 +23,17 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
         this();
         setIaasRole(role);
         setIaasPolicy(policy);
+    }
+
+    public IaasRolePolicyAttachment(IaasRole role, IaasPolicy policy, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+        this(role, policy);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+    }
+
+    @Override
+    public IaasRolePolicyAttachmentId getId() {
+        return IaasRolePolicyAttachmentId.build(this.role, this.policy);
     }
 
     @Override
@@ -38,8 +47,8 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
                 this.policy = new IaasPolicy();
             }
 
-            this.role.setName(id.getRoleId());
-            this.policy.setIaasResourceName(id.getPolicyId());
+            this.role.setId(id.getRoleId());
+            this.policy.setId(id.getPolicyId());
         }
     }
 
@@ -64,11 +73,6 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
     }
 
     @Override
-    public IaasRolePolicyAttachmentId getId() {
-        return IaasRolePolicyAttachmentId.build(this.role, this.policy);
-    }
-
-    @Override
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -90,7 +94,7 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
 
     @Override
     public Integer getVersion() {
-        // TODO: Versioning is not implemented due to lack of use-case.
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }

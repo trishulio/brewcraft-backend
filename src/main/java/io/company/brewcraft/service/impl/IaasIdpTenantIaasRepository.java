@@ -2,6 +2,7 @@ package io.company.brewcraft.service.impl;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class IaasIdpTenantIaasRepository {
 
     public List<IaasIdpTenant> get(Set<String> groupIds) {
         List<Supplier<GroupType>> suppliers = groupIds.stream()
-                                                  .filter(groupId -> groupId != null)
+                                                  .filter(Objects::nonNull)
                                                   .map(groupId -> (Supplier<GroupType>) () -> idpClient.getGroup(groupId))
                                                   .toList();
         List<GroupType> groups = this.executor.supply(suppliers);
@@ -51,7 +52,7 @@ public class IaasIdpTenantIaasRepository {
 
     public List<IaasIdpTenant> add(List<? extends BaseIaasIdpTenant> tenants) {
         List<Supplier<GroupType>> suppliers = tenants.stream()
-                                   .filter(tenant -> tenant != null)
+                                   .filter(Objects::nonNull)
                                    .map(tenant -> (Supplier<GroupType>) () -> {
                                        String roleArn = null;
                                        IaasRole role = tenant.getIaasRole();
@@ -70,7 +71,7 @@ public class IaasIdpTenantIaasRepository {
 
     public List<IaasIdpTenant> put(List<? extends UpdateIaasIdpTenant> tenants) {
         List<Supplier<GroupType>> suppliers = tenants.stream()
-                .filter(tenant -> tenant != null)
+                .filter(Objects::nonNull)
                 .map(tenant -> (Supplier<GroupType>) () -> {
                     String roleArn = null;
                     IaasRole role = tenant.getIaasRole();
@@ -89,7 +90,7 @@ public class IaasIdpTenantIaasRepository {
 
     public void delete(Set<String> iaasIdpTenantIds) {
         List<Runnable> runnables = iaasIdpTenantIds.stream()
-                .filter(iaasIdpTenantId -> iaasIdpTenantId != null)
+                .filter(Objects::nonNull)
                 .map(iaasIdpTenantId -> (Runnable) () -> idpClient.deleteGroup(iaasIdpTenantId))
                 .toList();
 

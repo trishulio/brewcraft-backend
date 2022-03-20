@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -36,7 +37,7 @@ public class CollectionAccessorRefresher<I, A, V extends Identified<I>> {
             final Map<A, Set<I>> entityToCollectionEntitiesIds = new HashMap<>();
             final Set<I> allCollectionEntitiesIds = new HashSet<>();
 
-            accessors.stream().filter(accessor -> accessor != null).forEach(accessor -> {
+            accessors.stream().filter(Objects::nonNull).forEach(accessor -> {
                 Collection<V> collectionEntities = getter.apply(accessor);
 
                 if (collectionEntities != null && !collectionEntities.isEmpty()) {

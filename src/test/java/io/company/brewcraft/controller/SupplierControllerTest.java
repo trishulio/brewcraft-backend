@@ -1,9 +1,11 @@
 package io.company.brewcraft.controller;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,8 +28,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierAddress;
 import io.company.brewcraft.model.SupplierContact;
-import io.company.brewcraft.security.session.ContextHolder;
+import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
+import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -40,7 +44,13 @@ public class SupplierControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ContextHolder contextHolderMock;
+    private ThreadLocalContextHolder contextHolderMock;
+
+    @MockBean
+    private IaasIdpTenantIaasRepository iaadIdpTenantRepo;
+
+    @MockBean
+    private TenantManagementService tenantMgmtServiceMock;
 
     @MockBean
     public UtilityProvider utilityProvider;

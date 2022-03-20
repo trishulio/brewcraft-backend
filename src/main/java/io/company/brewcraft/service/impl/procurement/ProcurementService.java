@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.Function;
@@ -188,7 +189,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<BaseInvoice<? extends BaseInvoiceItem<?>>> bInvoices = new ArrayList<>(additions.size());
         List<BaseShipment<? extends BaseMaterialLot<?>>> bShipments = new ArrayList<>(additions.size());
         additions.stream()
-                 .filter(p -> p != null)
+                 .filter(Objects::nonNull)
                  .forEach(addition -> {
                      bInvoices.add(addition.getInvoice());
                      bShipments.add(addition.getShipment());
@@ -212,7 +213,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-               .filter(p -> p != null)
+               .filter(Objects::nonNull)
                .forEach(update -> {
                    uInvoices.add(update.getInvoice());
                    uShipments.add(update.getShipment());
@@ -245,7 +246,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-               .filter(p -> p != null)
+               .filter(Objects::nonNull)
                .forEach(update -> {
                    uInvoices.add(update.getInvoice());
                    uShipments.add(update.getShipment());

@@ -23,6 +23,12 @@ public class IaasObjectStore extends BaseEntity implements UpdateIaasObjectStore
         setId(id);
     }
 
+    public IaasObjectStore(String name, LocalDateTime createdAt, LocalDateTime lastUpdated) {
+        this(name);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
+    }
+
     @Override
     public void setId(String id) {
         setName(id);
@@ -65,7 +71,7 @@ public class IaasObjectStore extends BaseEntity implements UpdateIaasObjectStore
 
     @Override
     public Integer getVersion() {
-        // TODO: Versioning is not implemented due to lack of use-case
-        return -1;
+        // Versioning not implemented due to lack of use-case
+        return null;
     }
 }
