@@ -28,7 +28,7 @@ public interface RepoService<ID, E extends Identified<ID>, A> {
 
     List<E> saveAll(List<E> entities);
 
-    int delete(Set<ID> ids);
+    long delete(Set<ID> ids);
 
-    int delete(ID id);
+    long delete(ID id);
 }

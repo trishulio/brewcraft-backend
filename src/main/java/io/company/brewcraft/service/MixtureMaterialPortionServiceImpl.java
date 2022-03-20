@@ -197,7 +197,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
     }
 
     @Override
-    public int deleteMaterialPortions(Set<Long> materialPortionIds) {
+    public long deleteMaterialPortions(Set<Long> materialPortionIds) {
         return this.repoService.delete(materialPortionIds);
     }
 

@@ -137,7 +137,7 @@ public class InvoiceController extends BaseController {
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
+    public long deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
         return this.controller.delete(invoiceIds);
     }
 

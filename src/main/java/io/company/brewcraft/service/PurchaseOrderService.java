@@ -83,12 +83,12 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
     }
 
     @Override
-    public int delete(Set<Long> ids) {
+    public long delete(Set<Long> ids) {
         return this.repoService.delete(ids);
     }
 
     @Override
-    public int delete(Long id) {
+    public long delete(Long id) {
         return this.repoService.delete(id);
     }
 

@@ -35,14 +35,14 @@ public class IaasRoleService extends BaseService implements CrudService<String, 
     }
 
     @Override
-    public int delete(Set<String> ids) {
+    public long delete(Set<String> ids) {
         this.iaasRepo.delete(ids);
 
         return ids.size();
     }
 
     @Override
-    public int delete(String id) {
+    public long delete(String id) {
         this.iaasRepo.delete(List.of(id));
 
         return 1;

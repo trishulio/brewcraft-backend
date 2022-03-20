@@ -24,7 +24,7 @@ public interface MixtureMaterialPortionService {
 
     public List<MixtureMaterialPortion> patchMaterialPortions(List<UpdateMixtureMaterialPortion> materialPortion);
 
-    public int deleteMaterialPortions(Set<Long> materialPortionIds);
+    public long deleteMaterialPortions(Set<Long> materialPortionIds);
 
     public boolean materialPortionExists(Long materialPortionId);
 

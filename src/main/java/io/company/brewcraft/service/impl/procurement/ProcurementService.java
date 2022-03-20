@@ -146,12 +146,12 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     }
 
     @Override
-    public int delete(Set<ProcurementId> ids) {
-        int procurementsCount = repoService.delete(ids);
+    public long delete(Set<ProcurementId> ids) {
+        long procurementsCount = repoService.delete(ids);
 
         ProcurementIdCollection idCollection = new ProcurementIdCollection(ids);
-        int shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
-        int invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
+        long shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
+        long invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
@@ -159,10 +159,10 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     }
 
     @Override
-    public int delete(ProcurementId id) {
-        int procurementsCount = repoService.delete(id);
-        int shipmentsCount = shipmentService.delete(id.getShipmentId());
-        int invoicesCount = invoiceService.delete(id.getInvoiceId());
+    public long delete(ProcurementId id) {
+        long procurementsCount = repoService.delete(id);
+        long shipmentsCount = shipmentService.delete(id.getShipmentId());
+        long invoicesCount = invoiceService.delete(id.getInvoiceId());
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 

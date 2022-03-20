@@ -27,7 +27,10 @@ public class IaasPolicyService extends BaseService implements CrudService<String
 
     @Override
     public boolean exists(Set<String> ids) {
-        return this.iaasRepo.get(ids).size() > 0;
+        return iaasRepo.exists(ids).values()
+                                    .stream().filter(b -> !b)
+                                    .findAny()
+                                    .orElseGet(() -> true);
     }
 
     @Override
@@ -36,17 +39,13 @@ public class IaasPolicyService extends BaseService implements CrudService<String
     }
 
     @Override
-    public int delete(Set<String> ids) {
-        this.iaasRepo.delete(ids);
-
-        return ids.size();
+    public long delete(Set<String> ids) {
+        return this.iaasRepo.delete(ids);
     }
 
     @Override
-    public int delete(String id) {
-        this.iaasRepo.delete(List.of(id));
-
-        return 1;
+    public long delete(String id) {
+        return this.iaasRepo.delete(Set.of(id));
     }
 
     @Override

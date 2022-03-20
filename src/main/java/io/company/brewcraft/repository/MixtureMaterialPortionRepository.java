@@ -18,6 +18,6 @@ public interface MixtureMaterialPortionRepository extends JpaRepository<MixtureM
     @Override
     @Modifying
     @Query("delete from MIXTURE_MATERIAL_PORTION i where i.id in (:ids)")
-    int deleteByIds(Iterable<Long> ids);
+    long deleteByIds(Iterable<Long> ids);
 
 }

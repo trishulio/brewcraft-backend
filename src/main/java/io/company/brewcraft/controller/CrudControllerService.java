@@ -83,7 +83,7 @@ public class CrudControllerService<
         return patched.stream().map(entity -> mapper.toDto(entity)).toList();
     }
 
-    public int delete(Set<ID> ids) {
+    public long delete(Set<ID> ids) {
         return this.service.delete(ids);
     }
 

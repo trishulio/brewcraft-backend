@@ -40,17 +40,13 @@ public class IaasRolePolicyAttachmentService extends BaseService implements Crud
     }
 
     @Override
-    public int delete(Set<IaasRolePolicyAttachmentId> ids) {
-        this.iaasRepo.delete(ids);
-
-        return ids.size();
+    public long delete(Set<IaasRolePolicyAttachmentId> ids) {
+        return this.iaasRepo.delete(ids);
     }
 
     @Override
-    public int delete(IaasRolePolicyAttachmentId id) {
-        this.iaasRepo.delete(Set.of(id));
-
-        return 1;
+    public long delete(IaasRolePolicyAttachmentId id) {
+        return this.iaasRepo.delete(Set.of(id));
     }
 
     @Override

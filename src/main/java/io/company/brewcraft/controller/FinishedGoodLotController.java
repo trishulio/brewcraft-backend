@@ -103,7 +103,7 @@ public class FinishedGoodLotController extends BaseController {
 
     @DeleteMapping("")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deleteFinishedGoods(@RequestParam("ids") Set<Long> finishedGoodIds) {
+    public long deleteFinishedGoods(@RequestParam("ids") Set<Long> finishedGoodIds) {
         return this.finishedGoodLotService.delete(finishedGoodIds);
     }
 

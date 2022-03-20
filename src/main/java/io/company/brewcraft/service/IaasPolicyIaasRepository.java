@@ -2,7 +2,11 @@ package io.company.brewcraft.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import com.amazonaws.services.identitymanagement.model.Policy;
@@ -34,7 +38,10 @@ public class IaasPolicyIaasRepository {
             suppliers.add(supplier);
         }
 
-        List<Policy> iamPolicies = this.executor.supply(suppliers);
+        List<Policy> iamPolicies = this.executor.supply(suppliers)
+                                                .stream()
+                                                .filter(Objects::nonNull)
+                                                .toList();
 
         return this.mapper.fromIamPolicies(iamPolicies);
     }
@@ -73,19 +80,26 @@ public class IaasPolicyIaasRepository {
         return this.mapper.fromIamPolicies(iamPolicies);
     }
 
-    public void delete(Collection<String> ids) {
-        List<Runnable> runnables = new ArrayList<>();
+    public long delete(Set<String> ids) {
+        List<Supplier<Boolean>> suppliers = ids.stream()
+                                            .filter(Objects::nonNull)
+                                            .map(id -> (Supplier<Boolean>) () -> iamClient.delete(id))
+                                            .toList();
 
-        for (String id: ids) {
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    iamClient.delete(id);
-                }
-            };
-            runnables.add(runnable);
-        }
+        return this.executor.supply(suppliers)
+                             .stream()
+                             .filter(b -> b)
+                             .count();
+    }
+    
+    public Map<String, Boolean> exists(Set<String> ids) {
+        Map<String, Boolean> exists = new HashMap<>();
 
-        this.executor.run(runnables);
+        get(ids).stream()
+               .map(IaasPolicy::getId)
+               .forEach(existingId -> exists.put(existingId, true));
+        ids.forEach(id -> exists.putIfAbsent(id, false));
+
+        return exists;
     }
 }

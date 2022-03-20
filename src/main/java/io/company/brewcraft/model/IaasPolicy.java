@@ -27,9 +27,14 @@ public class IaasPolicy extends BaseEntity implements UpdateIaasPolicy, CrudEnti
         setId(id);
     }
 
-    public IaasPolicy(String id, String document) {
+    public IaasPolicy(String id, String document, String description, String iaasResourceName, String iaasId, LocalDateTime createdAt, LocalDateTime lastUpdated) {
         this(id);
         setDocument(document);
+        setDescription(description);
+        setIaasId(iaasId);
+        setIaasResourceName(iaasResourceName);
+        setCreatedAt(createdAt);
+        setLastUpdated(lastUpdated);
     }
 
     @Override

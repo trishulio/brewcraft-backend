@@ -108,7 +108,7 @@ public class PurchaseOrderController extends BaseController {
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
+    public long deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
         return this.controller.delete(ids);
     }
 }

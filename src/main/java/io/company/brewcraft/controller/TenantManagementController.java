@@ -98,7 +98,7 @@ public class TenantManagementController extends BaseController {
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deleteTenants(@RequestParam("ids") Set<UUID> ids) {
+    public long deleteTenants(@RequestParam("ids") Set<UUID> ids) {
         return this.controller.delete(ids);
     }
 }

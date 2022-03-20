@@ -92,7 +92,7 @@ public class ProcurementServiceTest {
     public void testDelete_Set_ReturnsRepoServiceDeleteCount() {
         doReturn(10).when(mRepoService).delete(Set.of(new ProcurementId(1L, 10L)));
 
-        int count = service.delete(Set.of(new ProcurementId(1L, 10L)));
+        long count = service.delete(Set.of(new ProcurementId(1L, 10L)));
 
         assertEquals(10, count);
     }
@@ -101,7 +101,7 @@ public class ProcurementServiceTest {
     public void testDelete_Id_ReturnsRepoServiceDeleteCount() {
         doReturn(10).when(mRepoService).delete(new ProcurementId(1L, 10L));
 
-        int count = service.delete(new ProcurementId(1L, 10L));
+        long count = service.delete(new ProcurementId(1L, 10L));
 
         assertEquals(10, count);
     }

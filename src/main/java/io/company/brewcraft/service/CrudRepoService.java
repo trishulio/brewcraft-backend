@@ -105,12 +105,12 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     }
 
     @Override
-    public int delete(Set<ID> ids) {
+    public long delete(Set<ID> ids) {
         return this.repo.deleteByIds(ids);
     }
 
     @Override
-    public int delete(ID id) {
+    public long delete(ID id) {
         return this.repo.deleteOneById(id);
     }
 }

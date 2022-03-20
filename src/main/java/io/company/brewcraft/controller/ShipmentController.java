@@ -161,7 +161,7 @@ public class ShipmentController extends BaseController {
     }
 
     @DeleteMapping
-    public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
+    public long deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
         return this.controller.delete(shipmentIds);
     }
 

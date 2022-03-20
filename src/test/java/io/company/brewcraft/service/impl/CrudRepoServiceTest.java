@@ -176,7 +176,7 @@ public class CrudRepoServiceTest {
     public void testDelete_ReturnsCountFromRepoDelete() {
         doReturn(1).when(mRepo).deleteOneById(1L);
 
-        int count = this.service.delete(1L);
+        long count = this.service.delete(1L);
 
         assertEquals(1, count);
     }

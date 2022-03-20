@@ -185,7 +185,7 @@ public class ProcurementController extends BaseController {
 
     @DeleteMapping("/")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
+    public long delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
         Set<ProcurementId> pIds = ids.stream().map(id -> ProcurementIdMapper.INSTANCE.fromDto(id)).collect(Collectors.toSet());
         return this.controller.delete(pIds);
     }

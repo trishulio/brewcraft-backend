@@ -12,9 +12,9 @@ public interface CrudService<ID, E extends Identified<ID>, BE, UE extends Identi
 
     boolean exist(ID id);
 
-    int delete(Set<ID> ids);
+    long delete(Set<ID> ids);
 
-    int delete(ID id);
+    long delete(ID id);
 
     E get(ID id);
 

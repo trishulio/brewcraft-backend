@@ -35,21 +35,36 @@ public class AwsIamPolicyClient {
     }
 
     public Policy get(String policyName) {
+        Policy policy = null;
+
         String policyArn = awsMapper.getPolicyArn(policyName);
         GetPolicyRequest request = new GetPolicyRequest()
                                        .withPolicyArn(policyArn);
+        try {
+            GetPolicyResult result = this.awsIamClient.getPolicy(request);
+            policy = result.getPolicy();
+        } catch (NoSuchEntityException e) {
+            log.error("No policy found with arn: {}", policyArn);
+        }
 
-        GetPolicyResult result = this.awsIamClient.getPolicy(request);
-
-        return result.getPolicy();
+        return policy;
     }
 
-    public void delete(String policyName) {
+    public boolean delete(String policyName) {
+        boolean success = false;
+
         String policyArn = awsMapper.getPolicyArn(policyName);
         DeletePolicyRequest request = new DeletePolicyRequest()
                                           .withPolicyArn(policyArn);
 
-        DeletePolicyResult result = this.awsIamClient.deletePolicy(request);
+        try {
+            DeletePolicyResult result = this.awsIamClient.deletePolicy(request);
+            success = true;
+        } catch (NoSuchEntityException e) { 
+            log.error("Failed to policy with ARN: {}", policyArn);
+        }
+
+        return success;
     }
 
     public Policy add(String policyName, String description, String policyDocument) {
@@ -64,12 +79,7 @@ public class AwsIamPolicyClient {
     }
 
     public boolean exists(String policyName) {
-        try {
-            get(policyName);
-            return true;
-        } catch (NoSuchEntityException e) {
-            return false;
-        }
+        return get(policyName) != null;
     }
 
     public Policy update(String policyName, String policyDocument) {

@@ -1,9 +1,7 @@
 package io.company.brewcraft.service;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Set;
@@ -50,12 +48,7 @@ public abstract class TestUtils {
     @SuppressWarnings("unchecked")
     public static <ID, E extends CrudEntity<ID>, BE, UE extends UpdatableEntity<ID>> UpdateService<ID, E, BE, UE> updateService(Class<BE> baseEntityCls, Class<UE> updateEntityCls, Class<E> entityCls, Set<String> excludeAttr) {
         UpdateService<ID, E, BE, UE> realService = new SimpleUpdateService<>(utilProvider(), baseEntityCls, updateEntityCls, entityCls, excludeAttr);
-
-        UpdateService<ID, E, BE, UE> mockService = mock(UpdateService.class);
-        doAnswer(inv -> realService.getAddEntities(inv.getArgument(0, List.class))).when(mockService).getAddEntities(any());
-        doAnswer(inv -> realService.getPutEntities(inv.getArgument(0, List.class), inv.getArgument(1, List.class))).when(mockService).getPutEntities(any(), any());
-        doAnswer(inv -> realService.getPatchEntities(inv.getArgument(0, List.class), inv.getArgument(1, List.class))).when(mockService).getPatchEntities(any(), any());
-
-        return mockService;
+        
+        return spy(realService);
     }
 }

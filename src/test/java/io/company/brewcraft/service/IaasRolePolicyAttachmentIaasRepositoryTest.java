@@ -71,16 +71,20 @@ public class IaasRolePolicyAttachmentIaasRepositoryTest {
     }
 
     @Test
-    public void testDelete_CallsDeleteOnClient_WhenAttachmentsAreNotNull() {
+    public void testDelete_ReturnsCountOfDeleted_WhenAttachmentsAreNotNull() {
+        doReturn(true).when(mAttachmentClient).delete("POLICY_1", "ROLE_1");
+        doReturn(false).when(mAttachmentClient).delete("POLICY_2", "ROLE_2");
+        doReturn(true).when(mAttachmentClient).delete("POLICY_3", "ROLE_3");
+
         Set<IaasRolePolicyAttachmentId> ids = Set.of(
             new IaasRolePolicyAttachmentId("POLICY_1", "ROLE_1"),
-            new IaasRolePolicyAttachmentId("POLICY_2", "ROLE_2")
+            new IaasRolePolicyAttachmentId("POLICY_2", "ROLE_2"),
+            new IaasRolePolicyAttachmentId("POLICY_3", "ROLE_3")
         );
 
-        repo.delete(ids);
+        long count = repo.delete(ids);
 
-        verify(mAttachmentClient).delete("POLICY_1", "ROLE_1");
-        verify(mAttachmentClient).delete("POLICY_2", "ROLE_2");
+        assertEquals(2, count);
     }
 
     @Test

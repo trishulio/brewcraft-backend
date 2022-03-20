@@ -18,5 +18,5 @@ public interface ProcurementRepository extends JpaRepository<Procurement, Procur
     @Override
     @Modifying
     @Query("delete from procurement p where p.id in (:ids)")
-    int deleteByIds(Iterable<ProcurementId> ids);
+    long deleteByIds(Iterable<ProcurementId> ids);
 }

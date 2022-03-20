@@ -56,13 +56,16 @@ public class IaasRolePolicyAttachmentIaasRepository {
         return this.executor.supply(suppliers);
     }
 
-    public void delete(Set<IaasRolePolicyAttachmentId> ids) {
-        List<Runnable> runnables = ids.stream()
+    public long delete(Set<IaasRolePolicyAttachmentId> ids) {
+        List<Supplier<Boolean>> suppliers = ids.stream()
                 .filter(Objects::nonNull)
-                .map(id -> (Runnable) () -> iamClient.delete(id.getPolicyId(), id.getRoleId()))
+                .map(id -> (Supplier<Boolean>) () -> iamClient.delete(id.getPolicyId(), id.getRoleId()))
                 .toList();
 
-        this.executor.run(runnables);
+        return this.executor.supply(suppliers)
+                     .stream()
+                     .filter(b -> b)
+                     .count();
     }
 
     public boolean exists(IaasRolePolicyAttachmentId id) {

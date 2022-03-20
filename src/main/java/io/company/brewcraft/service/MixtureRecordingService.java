@@ -22,7 +22,7 @@ public interface MixtureRecordingService {
 
     public List<MixtureRecording> patchMixtureRecordings(List<UpdateMixtureRecording> mixtureRecording);
 
-    public int deleteMixtureRecordings(Set<Long> mixtureRecordingIds);
+    public long deleteMixtureRecordings(Set<Long> mixtureRecordingIds);
 
     public boolean mixtureRecordingExists(Long mixtureRecordingId);
 

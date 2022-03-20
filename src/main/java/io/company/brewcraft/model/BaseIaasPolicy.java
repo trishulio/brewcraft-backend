@@ -12,4 +12,12 @@ public interface BaseIaasPolicy {
     String getDescription();
 
     void setDescription(String description);
+
+    String getIaasId();
+
+    void setIaasId(String iaasId);
+
+    String getIaasResourceName();
+
+    void setIaasResourceName(String iaasResourceName);
 }

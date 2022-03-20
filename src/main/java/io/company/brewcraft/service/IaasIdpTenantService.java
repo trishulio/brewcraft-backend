@@ -34,14 +34,14 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
     }
 
     @Override
-    public int delete(Set<String> ids) {
+    public long delete(Set<String> ids) {
         this.iaasRepo.delete(ids);
 
         return ids.size();
     }
 
     @Override
-    public int delete(String id) {
+    public long delete(String id) {
         this.iaasRepo.delete(Set.of(id));
 
         return 1;

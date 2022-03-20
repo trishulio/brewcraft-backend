@@ -99,7 +99,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
     }
 
     @Override
-    public int delete(Set<UUID> ids) {
+    public long delete(Set<UUID> ids) {
         List<Tenant> tenants = this.tenantRepository.findAllById(ids);
         tenants.forEach(tenant -> tenant.setIsReady(false));
         this.repoService.saveAll(tenants);
@@ -110,7 +110,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
     }
 
     @Override
-    public int delete(UUID id) {
+    public long delete(UUID id) {
         return this.delete(Set.of(id));
     }
 

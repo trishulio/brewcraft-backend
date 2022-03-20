@@ -17,5 +17,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>, JpaSpec
     @Override
     @Modifying
     @Query("delete from invoice i where i.id in (:ids)")
-    int deleteByIds(Iterable<Long> ids);
+    long deleteByIds(Iterable<Long> ids);
 }
