@@ -48,7 +48,7 @@ public abstract class TestUtils {
     @SuppressWarnings("unchecked")
     public static <ID, E extends CrudEntity<ID>, BE, UE extends UpdatableEntity<ID>> UpdateService<ID, E, BE, UE> updateService(Class<BE> baseEntityCls, Class<UE> updateEntityCls, Class<E> entityCls, Set<String> excludeAttr) {
         UpdateService<ID, E, BE, UE> realService = new SimpleUpdateService<>(utilProvider(), baseEntityCls, updateEntityCls, entityCls, excludeAttr);
-        
+
         return spy(realService);
     }
 }

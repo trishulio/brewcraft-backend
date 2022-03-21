@@ -86,9 +86,9 @@ public class PurchaseOrderControllerTest {
 
    @Test
    public void testDeletePurchaseOrders_ReturnsDeleteCountFromController() {
-       doReturn(1).when(mCrudController).delete(Set.of(1L));
+       doReturn(1L).when(mCrudController).delete(Set.of(1L));
 
-       assertEquals(1, this.controller.deletePurchaseOrder(Set.of(1L)));
+       assertEquals(1L, this.controller.deletePurchaseOrder(Set.of(1L)));
    }
 
    @Test

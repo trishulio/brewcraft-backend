@@ -48,7 +48,6 @@ public class IaasPolicyServiceTest {
         assertFalse(service.exists(Set.of("POLICY")));
     }
 
-
     @Test
     public void testExist_ReturnsTrue_WhenAllAttachmentsExists() {
         doAnswer(inv -> Map.of(inv.getArgument(0, Set.class).iterator().next(), true)).when(mIaasRepo).exists(anySet());
@@ -70,7 +69,6 @@ public class IaasPolicyServiceTest {
 
         assertEquals(9, deleteCount);
     }
-
 
     @Test
     public void testDelete_Id_CallsRepoDeleteWithIds() {

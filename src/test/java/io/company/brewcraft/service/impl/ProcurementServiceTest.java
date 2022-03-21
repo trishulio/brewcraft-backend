@@ -90,20 +90,20 @@ public class ProcurementServiceTest {
 
     @Test
     public void testDelete_Set_ReturnsRepoServiceDeleteCount() {
-        doReturn(10).when(mRepoService).delete(Set.of(new ProcurementId(1L, 10L)));
+        doReturn(10L).when(mRepoService).delete(Set.of(new ProcurementId(1L, 10L)));
 
         long count = service.delete(Set.of(new ProcurementId(1L, 10L)));
 
-        assertEquals(10, count);
+        assertEquals(10L, count);
     }
 
     @Test
     public void testDelete_Id_ReturnsRepoServiceDeleteCount() {
-        doReturn(10).when(mRepoService).delete(new ProcurementId(1L, 10L));
+        doReturn(10L).when(mRepoService).delete(new ProcurementId(1L, 10L));
 
         long count = service.delete(new ProcurementId(1L, 10L));
 
-        assertEquals(10, count);
+        assertEquals(10L, count);
     }
 
     @Test

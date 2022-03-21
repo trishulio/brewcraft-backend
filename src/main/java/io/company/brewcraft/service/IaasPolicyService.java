@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasPolicyAccessor;
@@ -16,8 +19,9 @@ import io.company.brewcraft.model.UpdateIaasPolicy;
 
 @Transactional
 public class IaasPolicyService extends BaseService implements CrudService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy, IaasPolicyAccessor> {
-    private final IaasPolicyIaasRepository iaasRepo;
+    private static final Logger log = LoggerFactory.getLogger(IaasPolicyService.class);
 
+    private final IaasPolicyIaasRepository iaasRepo;
     private UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService;
 
     public IaasPolicyService(UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService, IaasPolicyIaasRepository iaasRepo) {
@@ -35,7 +39,7 @@ public class IaasPolicyService extends BaseService implements CrudService<String
 
     @Override
     public boolean exist(String id) {
-        return this.iaasRepo.get(List.of(id)).size() > 0;
+        return exists(Set.of(id));
     }
 
     @Override
@@ -50,7 +54,16 @@ public class IaasPolicyService extends BaseService implements CrudService<String
 
     @Override
     public IaasPolicy get(String id) {
-        return this.iaasRepo.get(List.of(id)).get(0);
+        IaasPolicy policy = null;
+
+        List<IaasPolicy> policies = this.iaasRepo.get(Set.of(id));
+        if (policies.size() == 1) {
+            policy = policies.get(0);
+        } else {
+            log.debug("Get policy: '{}' returned {}", policies);
+        }
+
+        return policy;
     }
 
     public List<IaasPolicy> getAll(Set<String> ids) {

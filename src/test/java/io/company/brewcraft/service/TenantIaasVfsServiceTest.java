@@ -120,7 +120,6 @@ public class TenantIaasVfsServiceTest {
         assertEquals(expected, this.service.put(iaasIdpTenant));
     }
 
-
     @Test
     public void testDelete_DelegatesDelete_WhenIdpTenantsAreNotNull() {
         List<IaasIdpTenant> iaasIdpTenant = List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2"));

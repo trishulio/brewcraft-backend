@@ -1,7 +1,6 @@
 package io.company.brewcraft.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public class IaasPolicyIaasRepository {
         this.mapper = mapper;
     }
 
-    public List<IaasPolicy> get(Collection<String> ids) {
+    public List<IaasPolicy> get(Set<String> ids) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
         for (String id: ids) {
             Supplier<Policy> supplier = new Supplier<Policy>() {
@@ -46,7 +45,7 @@ public class IaasPolicyIaasRepository {
         return this.mapper.fromIamPolicies(iamPolicies);
     }
 
-    public List<IaasPolicy> add(Collection<? extends BaseIaasPolicy> policies) {
+    public List<IaasPolicy> add(List<? extends BaseIaasPolicy> policies) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
         for (BaseIaasPolicy iamPolicy: policies) {
             Supplier<Policy> supplier = new Supplier<Policy>() {
@@ -63,7 +62,7 @@ public class IaasPolicyIaasRepository {
         return this.mapper.fromIamPolicies(iamPolicies);
     }
 
-    public List<IaasPolicy> put(Collection<? extends UpdateIaasPolicy> policies) {
+    public List<IaasPolicy> put(List<? extends UpdateIaasPolicy> policies) {
         List<Supplier<Policy>> suppliers = new ArrayList<>();
         for (UpdateIaasPolicy iamPolicy: policies) {
             Supplier<Policy> supplier = new Supplier<Policy>() {
@@ -91,7 +90,7 @@ public class IaasPolicyIaasRepository {
                              .filter(b -> b)
                              .count();
     }
-    
+
     public Map<String, Boolean> exists(Set<String> ids) {
         Map<String, Boolean> exists = new HashMap<>();
 

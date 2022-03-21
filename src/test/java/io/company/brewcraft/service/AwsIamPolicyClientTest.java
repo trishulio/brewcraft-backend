@@ -21,7 +21,6 @@ import com.amazonaws.services.identitymanagement.model.GetPolicyRequest;
 import com.amazonaws.services.identitymanagement.model.GetPolicyResult;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsResult;
-import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
 import com.amazonaws.services.identitymanagement.model.Policy;
 import com.amazonaws.services.identitymanagement.model.PolicyVersion;
 
@@ -92,7 +91,7 @@ public class AwsIamPolicyClientTest {
     @Test
     public void testExists_ReturnsFalse_WhenGetPolicyThrowException() {
         client = spy(client);
-        doThrow(NoSuchEntityException.class).when(client).get("POLICY_1");
+        doReturn(null).when(client).get("POLICY_1");
 
         boolean exists = client.exists("POLICY_1");
         assertFalse(exists);

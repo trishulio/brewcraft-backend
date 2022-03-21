@@ -162,13 +162,13 @@ public class FinishedGoodLotControllerTest {
 
    @Test
    public void testDeleteFinishedGoods_ReturnsDeleteCountFromService() {
-       doReturn(99).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       doReturn(99L).when(this.mService).delete(Set.of(1L, 11L, 111L));
        long count = this.controller.deleteFinishedGoods(Set.of(1L, 11L, 111L));
-       assertEquals(99, count);
+       assertEquals(99L, count);
 
-       doReturn(9999).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       doReturn(9999L).when(this.mService).delete(Set.of(1L, 11L, 111L));
        count = this.controller.deleteFinishedGoods(Set.of(1L, 11L, 111L));
-       assertEquals(9999, count);
+       assertEquals(9999L, count);
    }
 
    @Test

@@ -60,7 +60,7 @@ public class AwsIamPolicyClient {
         try {
             DeletePolicyResult result = this.awsIamClient.deletePolicy(request);
             success = true;
-        } catch (NoSuchEntityException e) { 
+        } catch (NoSuchEntityException e) {
             log.error("Failed to policy with ARN: {}", policyArn);
         }
 

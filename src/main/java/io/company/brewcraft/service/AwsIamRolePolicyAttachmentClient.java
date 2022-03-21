@@ -17,7 +17,7 @@ import com.amazonaws.services.identitymanagement.model.ListAttachedRolePoliciesR
 import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
 
 public class AwsIamRolePolicyAttachmentClient {
-    private static final Logger log = LoggerFactory.getLogger(AwsIamRolePolicyAttachmentClient.class); 
+    private static final Logger log = LoggerFactory.getLogger(AwsIamRolePolicyAttachmentClient.class);
 
     private AmazonIdentityManagement awsClient;
     private AwsArnMapper arnMapper;

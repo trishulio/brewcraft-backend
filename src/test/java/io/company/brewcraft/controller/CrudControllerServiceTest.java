@@ -108,9 +108,9 @@ public class CrudControllerServiceTest {
 
     @Test
     public void testDelete_ReturnsCountFromServiceDelete() {
-        doReturn(100).when(mService).delete(Set.of(1L, 2L, 3L));
+        doReturn(100L).when(mService).delete(Set.of(1L, 2L, 3L));
 
-        assertEquals(100, controller.delete(Set.of(1L, 2L, 3L)));
+        assertEquals(100L, controller.delete(Set.of(1L, 2L, 3L)));
     }
 }
 
