@@ -10,5 +10,5 @@ public interface PrincipalContext extends TenantIdProvider {
 
     List<String> getRoles();
 
-    IaasAuthorizationCredentials getIaasToken();
+    IaasAuthorizationCredentials getIaasLogin();
 }

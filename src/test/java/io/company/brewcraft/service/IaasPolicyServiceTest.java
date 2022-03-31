@@ -24,12 +24,12 @@ public class IaasPolicyServiceTest {
 
     private UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> mUpdateService;
 
-    private IaasPolicyIaasRepository mIaasRepo;
+    private IaasRepository<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> mIaasRepo;
 
     @BeforeEach
     public void init() {
-        mUpdateService = TestUtils.updateService(BaseIaasPolicy.class, UpdateIaasPolicy.class, IaasPolicy.class, Set.of("createdAt"));
-        mIaasRepo = mock(IaasPolicyIaasRepository.class);
+        mUpdateService = TestBeans.updateService(BaseIaasPolicy.class, UpdateIaasPolicy.class, IaasPolicy.class, Set.of("createdAt"));
+        mIaasRepo = mock(IaasRepository.class);
 
         service = new IaasPolicyService(mUpdateService, mIaasRepo);
     }

@@ -21,10 +21,10 @@ import io.company.brewcraft.model.UpdateIaasPolicy;
 public class IaasPolicyService extends BaseService implements CrudService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy, IaasPolicyAccessor> {
     private static final Logger log = LoggerFactory.getLogger(IaasPolicyService.class);
 
-    private final IaasPolicyIaasRepository iaasRepo;
+    private final IaasRepository<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> iaasRepo;
     private UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService;
 
-    public IaasPolicyService(UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService, IaasPolicyIaasRepository iaasRepo) {
+    public IaasPolicyService(UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService, IaasRepository<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
     }

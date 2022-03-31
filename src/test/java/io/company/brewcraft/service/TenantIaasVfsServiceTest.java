@@ -124,8 +124,8 @@ public class TenantIaasVfsServiceTest {
     public void testDelete_DelegatesDelete_WhenIdpTenantsAreNotNull() {
         List<IaasIdpTenant> iaasIdpTenant = List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2"));
 
-        doReturn(new IaasRolePolicyAttachmentId("POLICY_ID_1", "OBJECT_STORE_1")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T1"));
-        doReturn(new IaasRolePolicyAttachmentId("POLICY_ID_2", "OBJECT_STORE_2")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T2"));
+        doReturn(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T1"));
+        doReturn(new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T2"));
         doReturn("POLICY_ID_1").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(0));
         doReturn("POLICY_ID_2").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(1));
         doReturn("OBJECT_STORE_1").when(mBuilder).getObjectStoreName(iaasIdpTenant.get(0));
@@ -134,7 +134,7 @@ public class TenantIaasVfsServiceTest {
         this.service.delete(iaasIdpTenant);
 
         InOrder order = inOrder(mAttachmentService, mPolicyService, mObjectStoreService);
-        order.verify(mAttachmentService, times(1)).delete(Set.of(new IaasRolePolicyAttachmentId("POLICY_ID_1", "OBJECT_STORE_1"), new IaasRolePolicyAttachmentId("POLICY_ID_2", "OBJECT_STORE_2")));
+        order.verify(mAttachmentService, times(1)).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")));
         order.verify(mPolicyService, times(1)).delete(Set.of("POLICY_ID_1", "POLICY_ID_2"));
         order.verify(mObjectStoreService, times(1)).delete(Set.of("OBJECT_STORE_1", "OBJECT_STORE_2"));
     }

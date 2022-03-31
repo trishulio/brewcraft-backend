@@ -9,6 +9,10 @@ import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.TenantIaasVfsResources;
 
 public class TenantIaasVfsResourceMapper {
+    public static final TenantIaasVfsResourceMapper INSTANCE = new TenantIaasVfsResourceMapper();
+
+    protected TenantIaasVfsResourceMapper() {}
+
     public List<TenantIaasVfsResources> fromComponents(List<IaasObjectStore> objectStores, List<IaasPolicy> policies) {
         int objectStoreCount = objectStores.size();
         boolean areSameSize = objectStoreCount == policies.size();

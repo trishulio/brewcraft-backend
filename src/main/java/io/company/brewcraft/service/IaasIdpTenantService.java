@@ -6,50 +6,61 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasIdpTenantAccessor;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.model.UpdateIaasIdpTenant;
-import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
 
 public class IaasIdpTenantService extends BaseService implements CrudService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant, IaasIdpTenantAccessor> {
-    private final IaasIdpTenantIaasRepository iaasRepo;
+    private static final Logger log = LoggerFactory.getLogger(IaasIdpTenantService.class);
 
+    private final IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
     private UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService;
 
-    public IaasIdpTenantService(UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService, IaasIdpTenantIaasRepository iaasRepo) {
+    public IaasIdpTenantService(UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService, IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
     }
 
     @Override
     public boolean exists(Set<String> ids) {
-        return this.iaasRepo.get(ids).size() > 0;
+        return iaasRepo.exists(ids).values()
+                                    .stream().filter(b -> !b)
+                                    .findAny()
+                                    .orElseGet(() -> true);
     }
 
     @Override
     public boolean exist(String id) {
-        return this.iaasRepo.get(Set.of(id)).size() > 0;
+        return exists(Set.of(id));
     }
 
     @Override
     public long delete(Set<String> ids) {
-        this.iaasRepo.delete(ids);
-
-        return ids.size();
+        return this.iaasRepo.delete(ids);
     }
 
     @Override
     public long delete(String id) {
-        this.iaasRepo.delete(Set.of(id));
-
-        return 1;
+        return this.iaasRepo.delete(Set.of(id));
     }
 
     @Override
     public IaasIdpTenant get(String id) {
-        return this.iaasRepo.get(Set.of(id)).get(0);
+        IaasIdpTenant policy = null;
+
+        List<IaasIdpTenant> policies = this.iaasRepo.get(Set.of(id));
+        if (policies.size() == 1) {
+            policy = policies.get(0);
+        } else {
+            log.debug("Get policy: '{}' returned {}", policies);
+        }
+
+        return policy;
     }
 
     public List<IaasIdpTenant> getAll(Set<String> ids) {
@@ -83,9 +94,9 @@ public class IaasIdpTenantService extends BaseService implements CrudService<Str
             return null;
         }
 
-        List<IaasIdpTenant> roles = this.updateService.getAddEntities(additions);
+        List<IaasIdpTenant> policies = this.updateService.getAddEntities(additions);
 
-        return iaasRepo.add(roles);
+        return iaasRepo.add(policies);
     }
 
     @Override

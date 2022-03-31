@@ -13,7 +13,6 @@ public class AwsResourceCredentialsFetcher implements IaasAuthorizationFetch {
 
     private AwsCognitoIdentityClient identityClient;
     private AwsIdentityCredentialsMapper iaasAuthorizationMapper;
-
     private String userPoolUrl;
 
     public AwsResourceCredentialsFetcher(AwsCognitoIdentityClient identityClient, AwsIdentityCredentialsMapper iaasAuthorizationMapper, String userPoolUrl) {
@@ -30,6 +29,6 @@ public class AwsResourceCredentialsFetcher implements IaasAuthorizationFetch {
         String identityId = this.identityClient.getIdentityId(identityPoolId, logins);
         Credentials credentials = this.identityClient.getCredentialsForIdentity(identityId, logins);
 
-        return iaasAuthorizationMapper.toIaasAuthorization(credentials);
+        return iaasAuthorizationMapper.fromIaasEntity(credentials);
     }
 }

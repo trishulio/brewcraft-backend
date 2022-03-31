@@ -24,12 +24,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import io.company.brewcraft.model.BaseIaasIdpTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierAddress;
 import io.company.brewcraft.model.SupplierContact;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
+import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.SupplierContactService;
-import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
 import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -49,7 +52,7 @@ public class SupplierContactControllerTest {
     private TenantManagementService tenantMgmtServiceMock;
 
     @MockBean
-    private IaasIdpTenantIaasRepository iaadIdpTenantRepo;
+    private IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
 
     @MockBean
     public UtilityProvider utilityProvider;

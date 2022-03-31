@@ -14,55 +14,57 @@ import com.amazonaws.services.identitymanagement.model.UpdateAssumeRolePolicyRes
 import com.amazonaws.services.identitymanagement.model.UpdateRoleRequest;
 import com.amazonaws.services.identitymanagement.model.UpdateRoleResult;
 
-public class AwsIamRoleClient {
-    private AmazonIdentityManagement awsIamClient;
+import io.company.brewcraft.model.BaseIaasRole;
+import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.UpdateIaasRole;
 
-    public AwsIamRoleClient(AmazonIdentityManagement awsIamClient) {
+public class AwsIamRoleClient implements IaasClient<String, IaasRole, BaseIaasRole, UpdateIaasRole> {
+    private AmazonIdentityManagement awsIamClient;
+    private IaasEntityMapper<Role, IaasRole> mapper;
+
+    public AwsIamRoleClient(AmazonIdentityManagement awsIamClient, IaasEntityMapper<Role, IaasRole> mapper) {
         this.awsIamClient = awsIamClient;
+        this.mapper = mapper;
     }
 
-    public Role get(String roleName) {
+    @Override
+    public IaasRole get(String roleName) {
         GetRoleRequest request = new GetRoleRequest()
                                  .withRoleName(roleName);
 
         GetRoleResult result = this.awsIamClient.getRole(request);
 
-        return result.getRole();
+        return this.mapper.fromIaasEntity(result.getRole());
     }
 
-    public void delete(String roleName) {
+    @Override
+    public boolean delete(String roleName) {
+        boolean success = false;
         DeleteRoleRequest request = new DeleteRoleRequest()
                                           .withRoleName(roleName);
+        try {
+            DeleteRoleResult result = this.awsIamClient.deleteRole(request);
+            success = true;
+        } catch (NoSuchEntityException e) {
+            success = false;
+        }
 
-        DeleteRoleResult result = this.awsIamClient.deleteRole(request);
+        return success;
     }
 
-    public Role add(String roleName, String description, String assumePolicyDocument) {
+    @Override
+    public <BE extends BaseIaasRole> IaasRole add(BE role) {
         CreateRoleRequest request = new CreateRoleRequest()
-                .withRoleName(roleName)
-                .withAssumeRolePolicyDocument(assumePolicyDocument)
-                .withDescription(description);
+                .withRoleName(role.getName())
+                .withAssumeRolePolicyDocument(role.getAssumePolicyDocument())
+                .withDescription(role.getDescription());
 
         CreateRoleResult result = this.awsIamClient.createRole(request);
 
-        return result.getRole();
+        return mapper.fromIaasEntity(result.getRole());
     }
 
-    public Role update(String roleName, String description, String assumePolicyDocument) {
-        UpdateRoleRequest request = new UpdateRoleRequest()
-                                    .withRoleName(roleName)
-                                    .withDescription(description);
-
-        UpdateRoleResult result = this.awsIamClient.updateRole(request);
-
-        UpdateAssumeRolePolicyRequest policyRequest = new UpdateAssumeRolePolicyRequest()
-                                                          .withRoleName(roleName)
-                                                          .withPolicyDocument(assumePolicyDocument);
-        UpdateAssumeRolePolicyResult policyResult = this.awsIamClient.updateAssumeRolePolicy(policyRequest);
-
-        return get(roleName);
-    }
-
+    @Override
     public boolean exists(String roleName) {
         try {
             get(roleName);
@@ -72,11 +74,27 @@ public class AwsIamRoleClient {
         }
     }
 
-    public Role put(String roleName, String description, String assumePolicyDocument) {
-        if (exists(roleName)) {
-            return update(roleName, description, assumePolicyDocument);
+    @Override
+    public <UE extends UpdateIaasRole> IaasRole put(UE role) {
+        if (exists(role.getName())) {
+            return update(role);
         } else {
-            return add(roleName, description, assumePolicyDocument);
+            return add(role);
         }
+    }
+
+    public <UE extends UpdateIaasRole> IaasRole update(UE role) {
+        UpdateRoleRequest request = new UpdateRoleRequest()
+                                    .withRoleName(role.getName())
+                                    .withDescription(role.getDescription());
+
+        UpdateRoleResult result = this.awsIamClient.updateRole(request);
+
+        UpdateAssumeRolePolicyRequest policyRequest = new UpdateAssumeRolePolicyRequest()
+                                                          .withRoleName(role.getName())
+                                                          .withPolicyDocument(role.getAssumePolicyDocument());
+        UpdateAssumeRolePolicyResult policyResult = this.awsIamClient.updateAssumeRolePolicy(policyRequest);
+
+        return get(role.getName());
     }
 }

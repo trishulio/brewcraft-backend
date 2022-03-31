@@ -3,16 +3,16 @@ package io.company.brewcraft.model;
 import java.util.Set;
 import java.util.UUID;
 
-import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
+import io.company.brewcraft.service.IaasRepository;
 
 public class LazyIaasIdpTenant extends IaasIdpTenant {
     public String tenantId;
     private IaasIdpTenant delegate;
-    private IaasIdpTenantIaasRepository iaasIdpRepo;
+    private IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
 
-    public LazyIaasIdpTenant(UUID tenantId, IaasIdpTenantIaasRepository iaasIdpRepo) {
+    public LazyIaasIdpTenant(UUID tenantId, IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo) {
         this.tenantId = tenantId.toString();
-        this.iaasIdpRepo = iaasIdpRepo;
+        this.iaasRepo = iaasRepo;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class LazyIaasIdpTenant extends IaasIdpTenant {
 
     private IaasIdpTenant delegate() {
         if (this.delegate == null) {
-            this.delegate = this.iaasIdpRepo.get(Set.of(this.tenantId)).get(0);
+            this.delegate = this.iaasRepo.get(Set.of(this.tenantId)).get(0);
         }
 
         return this.delegate;

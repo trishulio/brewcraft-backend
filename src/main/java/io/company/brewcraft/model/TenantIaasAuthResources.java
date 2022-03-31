@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-public class TenantIaasAuthResources {
+public class TenantIaasAuthResources extends BaseModel {
     private IaasRole role;
 
     public TenantIaasAuthResources() {

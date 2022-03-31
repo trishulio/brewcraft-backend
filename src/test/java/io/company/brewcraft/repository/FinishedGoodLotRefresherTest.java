@@ -91,5 +91,4 @@ public class FinishedGoodLotRefresherTest {
 
         verify(this.mRefresher, times(1)).refreshAccessors(accessors);
     }
-
 }

@@ -168,5 +168,4 @@ public class FinishedGoodLotPortion extends BaseEntity implements UpdateFinished
 
         return lotQty;
     }
-
 }

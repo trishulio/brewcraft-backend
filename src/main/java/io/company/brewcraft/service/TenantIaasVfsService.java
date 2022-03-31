@@ -15,6 +15,7 @@ import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
+import io.company.brewcraft.model.TenantIaasVfsDeleteResult;
 import io.company.brewcraft.model.TenantIaasVfsResources;
 import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.model.UpdateIaasObjectStore;
@@ -110,7 +111,7 @@ public class TenantIaasVfsService {
         return this.mapper.fromComponents(objectStores, policies);
     }
 
-    public void delete(List<IaasIdpTenant> iaasIdpTenants) {
+    public TenantIaasVfsDeleteResult delete(List<IaasIdpTenant> iaasIdpTenants) {
         Set<String> objectStoreIds = new HashSet<>();
         Set<String> policyIds = new HashSet<>();
         Set<IaasRolePolicyAttachmentId> attachmentIds = new HashSet<>();
@@ -129,7 +130,9 @@ public class TenantIaasVfsService {
          });
 
         this.rolePolicyAttachmentService.delete(attachmentIds);
-        this.policyService.delete(policyIds);
-        this.objectStoreService.delete(objectStoreIds);
+        long policyCount = this.policyService.delete(policyIds);
+        long objectStoreCount = this.objectStoreService.delete(objectStoreIds);
+
+        return new TenantIaasVfsDeleteResult(policyCount, objectStoreCount);
     }
 }

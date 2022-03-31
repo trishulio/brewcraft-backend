@@ -49,7 +49,7 @@ public class CognitoPrincipalContext implements PrincipalContext {
     }
 
     @Override
-    public IaasAuthorizationCredentials getIaasToken() {
+    public IaasAuthorizationCredentials getIaasLogin() {
         return this.iaasToken;
     }
 

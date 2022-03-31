@@ -8,6 +8,10 @@ import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.TenantIaasIdpResources;
 
 public class TenantIaasIdpResourcesMapper {
+    public static final TenantIaasIdpResourcesMapper INSTANCE = new TenantIaasIdpResourcesMapper();
+
+    protected TenantIaasIdpResourcesMapper() {}
+
     public List<TenantIaasIdpResources> fromComponents(List<IaasIdpTenant> idpTenants) {
         List<TenantIaasIdpResources> resources = new ArrayList<>();
 

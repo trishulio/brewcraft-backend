@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreAccessor;
@@ -16,42 +19,52 @@ import io.company.brewcraft.model.UpdateIaasObjectStore;
 
 @Transactional
 public class IaasObjectStoreService extends BaseService implements CrudService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore, IaasObjectStoreAccessor> {
-   private final IaasObjectStoreIaasRepository iaasRepo;
+    private static final Logger log = LoggerFactory.getLogger(IaasObjectStoreService.class);
+
+    private final IaasRepository<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> iaasRepo;
 
     private UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService;
 
-    public IaasObjectStoreService(UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService, IaasObjectStoreIaasRepository iaasRepo) {
+    public IaasObjectStoreService(UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService, IaasRepository<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> iaasRepo) {
         this.updateService = updateService;
         this.iaasRepo = iaasRepo;
     }
 
     @Override
     public boolean exists(Set<String> ids) {
-        return this.iaasRepo.get(ids).size() > 0;
+        return iaasRepo.exists(ids).values()
+                                    .stream().filter(b -> !b)
+                                    .findAny()
+                                    .orElseGet(() -> true);
     }
 
     @Override
     public boolean exist(String id) {
-        return this.iaasRepo.get(List.of(id)).size() > 0;
+        return exists(Set.of(id));
     }
 
     @Override
     public long delete(Set<String> ids) {
-        this.iaasRepo.delete(ids);
-
-        return ids.size();
+        return this.iaasRepo.delete(ids);
     }
 
     @Override
     public long delete(String id) {
-        this.iaasRepo.delete(List.of(id));
-
-        return 1;
+        return this.iaasRepo.delete(Set.of(id));
     }
 
     @Override
     public IaasObjectStore get(String id) {
-        return this.iaasRepo.get(List.of(id)).get(0);
+        IaasObjectStore objectStore = null;
+
+        List<IaasObjectStore> policies = this.iaasRepo.get(Set.of(id));
+        if (policies.size() == 1) {
+            objectStore = policies.get(0);
+        } else {
+            log.debug("Get objectStore: '{}' returned {}", policies);
+        }
+
+        return objectStore;
     }
 
     public List<IaasObjectStore> getAll(Set<String> ids) {

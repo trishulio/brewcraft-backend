@@ -10,7 +10,6 @@ import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 
 public interface TenantIaasResourceBuilder {
-
     <T extends BaseIaasIdpTenant> String getRoleName(T iaasIdpTenant);
     <R extends BaseIaasRole, T extends BaseIaasIdpTenant> R buildRole(T iaasIdpTenant);
 

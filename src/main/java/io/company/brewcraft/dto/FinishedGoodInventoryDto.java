@@ -94,5 +94,4 @@ public class FinishedGoodInventoryDto extends BaseDto {
     public void setPackagedOn(LocalDateTime packagedOn) {
         this.packagedOn = packagedOn;
     }
-
 }

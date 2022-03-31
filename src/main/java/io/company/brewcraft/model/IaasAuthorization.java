@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.service.CrudEntity;
 
-public class IaasAuthorization extends BaseEntity implements UpdateIaasAuthorization, CrudEntity<String>, Audited {
+public class IaasAuthorization extends BaseModel implements UpdateIaasAuthorization, CrudEntity<String> {
     private static final Logger log = LoggerFactory.getLogger(IaasAuthorization.class);
 
     private String accessKey;
@@ -15,8 +15,17 @@ public class IaasAuthorization extends BaseEntity implements UpdateIaasAuthoriza
     private String sessionToken;
     private LocalDateTime expiration;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime lastUpdated;
+    public IaasAuthorization() {
+        super();
+    }
+
+    public IaasAuthorization(String accessKey, String accessSecret, String sessionToken, LocalDateTime expiration) {
+        this();
+        setAccessKey(accessKey);
+        setAccessSecret(accessSecret);
+        setSessionToken(sessionToken);
+        setExpiration(expiration);
+    }
 
     @Override
     public String getId() {
@@ -66,26 +75,6 @@ public class IaasAuthorization extends BaseEntity implements UpdateIaasAuthoriza
     @Override
     public void setExpiration(LocalDateTime expiration) {
         this.expiration = expiration;
-    }
-
-    @Override
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Override
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    @Override
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     @Override

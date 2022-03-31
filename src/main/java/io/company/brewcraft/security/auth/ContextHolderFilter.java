@@ -15,13 +15,16 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import io.company.brewcraft.model.BaseIaasIdpTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.LazyIaasIdpTenant;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
 import io.company.brewcraft.security.session.LazyTenantContext;
 import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.session.TenantContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
-import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
+import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.impl.TenantManagementService;
 
 public class ContextHolderFilter implements Filter {
@@ -29,12 +32,12 @@ public class ContextHolderFilter implements Filter {
 
     private ThreadLocalContextHolder ctxHolder;
     private TenantManagementService tenantService;
-    private IaasIdpTenantIaasRepository iaasIdpRepo;
+    private IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
 
-    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService, IaasIdpTenantIaasRepository iaasIdpRepo) {
+    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantManagementService tenantService, IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo) {
         this.ctxHolder = ctxHolder;
         this.tenantService = tenantService;
-        this.iaasIdpRepo = iaasIdpRepo;
+        this.iaasRepo = iaasRepo;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class ContextHolderFilter implements Filter {
         UUID tenantId = this.ctxHolder.getPrincipalContext().getTenantId();
 
         if (tenantId != null) {
-            LazyIaasIdpTenant idpTenant = new LazyIaasIdpTenant(tenantId, this.iaasIdpRepo);
+            LazyIaasIdpTenant idpTenant = new LazyIaasIdpTenant(tenantId, this.iaasRepo);
 
             TenantContext ctx = new LazyTenantContext(tenantService, idpTenant, tenantId);
 

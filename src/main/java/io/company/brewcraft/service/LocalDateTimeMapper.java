@@ -4,10 +4,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class LocalDateTimeMapper {
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public abstract class LocalDateTimeMapper {
+    public static final LocalDateTimeMapper INSTANCE = Mappers.getMapper(LocalDateTimeMapper.class);
+
     private ZoneId zoneId;
 
-    public LocalDateTimeMapper(ZoneId zoneId) {
+    public LocalDateTimeMapper() {
+        this(ZoneId.systemDefault());
+    }
+
+    protected LocalDateTimeMapper(ZoneId zoneId) {
         this.zoneId = zoneId;
     }
 

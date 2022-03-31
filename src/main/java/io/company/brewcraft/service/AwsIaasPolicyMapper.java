@@ -1,41 +1,25 @@
 package io.company.brewcraft.service;
 
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import com.amazonaws.services.identitymanagement.model.Policy;
 
 import io.company.brewcraft.model.IaasPolicy;
 
-public class AwsIaasPolicyMapper {
-    private LocalDateTimeMapper dtMapper;
+@Mapper(uses = LocalDateTimeMapper.class)
+public interface AwsIaasPolicyMapper extends IaasEntityMapper<Policy, IaasPolicy> {
+    final AwsIaasPolicyMapper INSTANCE = Mappers.getMapper(AwsIaasPolicyMapper.class);
 
-    public AwsIaasPolicyMapper(LocalDateTimeMapper dtMapper) {
-        this.dtMapper = dtMapper;
-    }
-
-    public List<IaasPolicy> fromIamPolicies(List<Policy> iamPolicies) {
-        List<IaasPolicy> policies = null;
-
-        if (iamPolicies != null) {
-            policies = iamPolicies.stream().map(this::fromIamPolicy).toList();
-        }
-
-        return policies;
-    }
-
-    public IaasPolicy fromIamPolicy(Policy iamPolicy) {
-        IaasPolicy policy = null;
-
-        if (iamPolicy != null) {
-            policy = new IaasPolicy();
-            policy.setId(iamPolicy.getPolicyName());
-            policy.setDescription(iamPolicy.getDescription());
-            policy.setIaasId(iamPolicy.getPolicyId());
-            policy.setIaasResourceName(iamPolicy.getArn());
-            policy.setCreatedAt(this.dtMapper.fromUtilDate(iamPolicy.getCreateDate()));
-            policy.setLastUpdated(this.dtMapper.fromUtilDate(iamPolicy.getUpdateDate()));
-        }
-
-        return policy;
-    }
+    @Override
+    @Mapping(ignore = true, target = IaasPolicy.ATTR_ID) // ID is same as name
+    @Mapping(ignore = true, target = IaasPolicy.ATTR_DOCUMENT) // Policy does not contain document
+    @Mapping(source = "policyName", target = IaasPolicy.ATTR_NAME)
+    @Mapping(source = "description", target = IaasPolicy.ATTR_DESCRIPTION)
+    @Mapping(source = "policyId", target = IaasPolicy.ATTR_IAAS_ID)
+    @Mapping(source = "arn", target = IaasPolicy.ATTR_IAAS_RESOURCE_NAME)
+    @Mapping(source = "createDate", target = IaasPolicy.ATTR_CREATED_AT)
+    @Mapping(source = "updateDate", target = IaasPolicy.ATTR_LAST_UPDATED)
+    IaasPolicy fromIaasEntity(Policy iamPolicy);
 }

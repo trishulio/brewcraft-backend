@@ -28,12 +28,12 @@ public class IaasRolePolicyAttachmentServiceTest {
 
     private UpdateService<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> mUpdateService;
 
-    private IaasRolePolicyAttachmentIaasRepository mIaasRepo;
+    private IaasRepository<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> mIaasRepo;
 
     @BeforeEach
     public void init() {
-        mUpdateService = TestUtils.updateService(BaseIaasRolePolicyAttachment.class, UpdateIaasRolePolicyAttachment.class, IaasRolePolicyAttachment.class, Set.of("createdAt"));
-        mIaasRepo = mock(IaasRolePolicyAttachmentIaasRepository.class);
+        mUpdateService = TestBeans.updateService(BaseIaasRolePolicyAttachment.class, UpdateIaasRolePolicyAttachment.class, IaasRolePolicyAttachment.class, Set.of("createdAt"));
+        mIaasRepo = mock(IaasRepository.class);
 
         service = new IaasRolePolicyAttachmentService(mUpdateService, mIaasRepo);
     }
@@ -42,42 +42,45 @@ public class IaasRolePolicyAttachmentServiceTest {
     public void testExists_ReturnsTrue_WhenAllAttachmentsExists() {
         doAnswer(inv -> Map.of(inv.getArgument(0, Set.class).iterator().next(), true)).when(mIaasRepo).exists(anySet());
 
-        assertTrue(service.exists(Set.of(new IaasRolePolicyAttachmentId("POLICY", "ROLE"))));
+        assertTrue(service.exists(Set.of(new IaasRolePolicyAttachmentId("ROLE", "POLICY"))));
     }
 
     @Test
     public void testExists_ReturnsFalse_WhenAllAttachmentsDoesNotExists() {
         doAnswer(inv -> Map.of(inv.getArgument(0, Set.class).iterator().next(), false)).when(mIaasRepo).exists(anySet());
 
-        assertFalse(service.exists(Set.of(new IaasRolePolicyAttachmentId("POLICY", "ROLE"))));
+        assertFalse(service.exists(Set.of(new IaasRolePolicyAttachmentId("ROLE", "POLICY"))));
     }
 
     @Test
     public void testExist_ReturnsTrue_WhenAllAttachmentsExists() {
-        doReturn(true).when(mIaasRepo).exists(new IaasRolePolicyAttachmentId("POLICY", "ROLE"));
+        doAnswer(inv -> Map.of(inv.getArgument(0, Set.class).iterator().next(), true)).when(mIaasRepo).exists(anySet());
 
-        assertTrue(service.exist(new IaasRolePolicyAttachmentId("POLICY", "ROLE")));
+        assertTrue(service.exist(new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
     }
 
     @Test
     public void testExist_ReturnsFalse_WhenAllAttachmentsDoesNotExist() {
-        doReturn(false).when(mIaasRepo).exists(new IaasRolePolicyAttachmentId("POLICY", "ROLE"));
+        doAnswer(inv -> Map.of(inv.getArgument(0, Set.class).iterator().next(), false)).when(mIaasRepo).exists(anySet());
 
-        assertFalse(service.exist(new IaasRolePolicyAttachmentId("POLICY", "ROLE")));
+        assertFalse(service.exist(new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
     }
+
+    //--------
+    //----
 
     @Test
     public void testDelete_Set_CallsRepoDeleteWithIds() {
-        doReturn(99L).when(mIaasRepo).delete(Set.of(new IaasRolePolicyAttachmentId("POLICY_1", "ROLE_1"), new IaasRolePolicyAttachmentId("POLICY_2", "ROLE_2")));
-        long deleteCount = service.delete(Set.of(new IaasRolePolicyAttachmentId("POLICY_1", "ROLE_1"), new IaasRolePolicyAttachmentId("POLICY_2", "ROLE_2")));
+        doReturn(99L).when(mIaasRepo).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_2")));
+        long deleteCount = service.delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_2")));
 
         assertEquals(99L, deleteCount);
     }
 
     @Test
     public void testDelete_Id_CallsRepoDeleteWithIds() {
-        doReturn(1L).when(mIaasRepo).delete(Set.of(new IaasRolePolicyAttachmentId("POLICY", "ROLE")));
-        long deleteCount = service.delete(new IaasRolePolicyAttachmentId("POLICY", "ROLE"));
+        doReturn(1L).when(mIaasRepo).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
+        long deleteCount = service.delete(new IaasRolePolicyAttachmentId("ROLE", "POLICY"));
 
         assertEquals(1L, deleteCount);
     }
@@ -92,7 +95,7 @@ public class IaasRolePolicyAttachmentServiceTest {
             return List.of(new IaasRolePolicyAttachment(role, policy));
         }).when(mIaasRepo).get(anySet());
 
-        IaasRolePolicyAttachment attachment = service.get(new IaasRolePolicyAttachmentId("POLICY", "ROLE"));
+        IaasRolePolicyAttachment attachment = service.get(new IaasRolePolicyAttachmentId("ROLE", "POLICY"));
 
         assertEquals(new IaasRolePolicyAttachment(new IaasRole("ROLE"), new IaasPolicy("POLICY")), attachment);
     }
@@ -107,7 +110,7 @@ public class IaasRolePolicyAttachmentServiceTest {
             return List.of(new IaasRolePolicyAttachment(role, policy));
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasRolePolicyAttachment> attachments = service.getAll(Set.of(new IaasRolePolicyAttachmentId("POLICY", "ROLE")));
+        List<IaasRolePolicyAttachment> attachments = service.getAll(Set.of(new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
 
         List<IaasRolePolicyAttachment> expected = List.of(new IaasRolePolicyAttachment(new IaasRole("ROLE"), new IaasPolicy("POLICY")));
         assertEquals(expected, attachments);
@@ -123,7 +126,7 @@ public class IaasRolePolicyAttachmentServiceTest {
             return List.of(new IaasRolePolicyAttachment(role, policy));
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasRolePolicyAttachment> attachments = service.getByIds(Set.of(() -> new IaasRolePolicyAttachmentId("POLICY", "ROLE")));
+        List<IaasRolePolicyAttachment> attachments = service.getByIds(Set.of(() -> new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
 
         List<IaasRolePolicyAttachment> expected = List.of(new IaasRolePolicyAttachment(new IaasRole("ROLE"), new IaasPolicy("POLICY")));
 

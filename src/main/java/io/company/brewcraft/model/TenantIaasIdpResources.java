@@ -19,5 +19,4 @@ public class TenantIaasIdpResources extends BaseModel {
     public void setIaasIdpTenant(IaasIdpTenant idpTenant) {
         this.idpTenant = idpTenant;
     }
-
 }

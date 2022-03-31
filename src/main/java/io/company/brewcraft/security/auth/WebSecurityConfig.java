@@ -11,10 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
+import io.company.brewcraft.model.BaseIaasIdpTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.security.session.UtilityProviderFilter;
-import io.company.brewcraft.service.impl.IaasIdpTenantIaasRepository;
+import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.impl.TenantManagementService;
 import io.company.brewcraft.util.UtilityProvider;
 
@@ -40,8 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Filter ctxHolderFilter(ContextHolder ctxHolder, TenantManagementService tenantService, IaasIdpTenantIaasRepository idpRepo) {
-        return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder, tenantService, idpRepo);
+    public Filter ctxHolderFilter(ContextHolder ctxHolder, TenantManagementService tenantService, IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo) {
+        return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder, tenantService, iaasRepo);
     }
 
     @Bean

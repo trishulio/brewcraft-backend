@@ -7,7 +7,7 @@ public class IaasRolePolicyAttachmentId extends BaseModel {
     public IaasRolePolicyAttachmentId() {
     }
 
-    public IaasRolePolicyAttachmentId(String policyId, String roleId) {
+    public IaasRolePolicyAttachmentId(String roleId, String policyId) {
         this();
         setPolicyId(policyId);
         setRoleId(roleId);

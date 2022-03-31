@@ -23,9 +23,20 @@ public class IaasRole extends BaseEntity implements UpdateIaasRole, CrudEntity<S
         super();
     }
 
-    public IaasRole(String name) {
+    public IaasRole(String id) {
         this();
-        setName(name);
+        setId(id);
+    }
+
+    public IaasRole(String id, String description, String assumePolicyDocument, String iaasResourceName, String iaasId, LocalDateTime lastUsed, LocalDateTime lastUpdated, LocalDateTime createdAt) {
+        this(id);
+        setDescription(description);
+        setAssumePolicyDocument(assumePolicyDocument);
+        setIaasResourceName(iaasResourceName);
+        setIaasId(iaasId);
+        setLastUsed(lastUsed);
+        setLastUpdated(lastUpdated);
+        setCreatedAt(createdAt);
     }
 
     @Override

@@ -1,29 +1,22 @@
 package io.company.brewcraft.service;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
 import com.amazonaws.services.cognitoidentity.model.Credentials;
 
 import io.company.brewcraft.model.IaasAuthorization;
 
-public class AwsIdentityCredentialsMapper {
+@Mapper(uses = LocalDateTimeMapper.class)
+public interface AwsIdentityCredentialsMapper extends IaasEntityMapper<Credentials, IaasAuthorization> {
+    final AwsIdentityCredentialsMapper INSTANCE = Mappers.getMapper(AwsIdentityCredentialsMapper.class);
 
-    private LocalDateTimeMapper dtMapper;
-
-    public AwsIdentityCredentialsMapper(LocalDateTimeMapper dtMapper) {
-        this.dtMapper = dtMapper;
-    }
-
-    public IaasAuthorization toIaasAuthorization(Credentials credentials) {
-        IaasAuthorization authorization = null;
-
-        if (credentials != null) {
-            authorization = new IaasAuthorization();
-
-            authorization.setAccessKey(credentials.getAccessKeyId());
-            authorization.setAccessSecret(credentials.getSecretKey());
-            authorization.setSessionToken(credentials.getSessionToken());
-            authorization.setExpiration(this.dtMapper.fromUtilDate(credentials.getExpiration()));
-        }
-
-        return authorization;
-    }
+    @Override
+    @Mapping(ignore = true, target = IaasAuthorization.ATTR_ID) // AccessKey is the ID
+    @Mapping(source = "accessKeyId", target = IaasAuthorization.ATTR_ACCESS_KEY)
+    @Mapping(source = "secretKey", target = IaasAuthorization.ATTR_ACCESS_SECRET)
+    @Mapping(source = "sessionToken", target = IaasAuthorization.ATTR_SESSION_TOKEN)
+    @Mapping(source = "expiration", target = IaasAuthorization.ATTR_EXPIRATION)
+    IaasAuthorization fromIaasEntity(Credentials credentials);
 }

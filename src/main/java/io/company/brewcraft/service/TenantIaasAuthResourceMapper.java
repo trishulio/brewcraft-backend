@@ -7,6 +7,9 @@ import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.TenantIaasAuthResources;
 
 public class TenantIaasAuthResourceMapper {
+    public static final TenantIaasAuthResourceMapper INSTANCE = new TenantIaasAuthResourceMapper();
+
+    protected TenantIaasAuthResourceMapper() {}
 
     public List<TenantIaasAuthResources> fromComponents(List<IaasRole> roles) {
         List<TenantIaasAuthResources> resources = null;
@@ -22,5 +25,4 @@ public class TenantIaasAuthResourceMapper {
 
         return resources;
     }
-
 }

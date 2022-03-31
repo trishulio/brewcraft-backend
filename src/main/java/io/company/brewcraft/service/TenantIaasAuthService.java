@@ -5,10 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.TenantIaasAuthDeleteResult;
 import io.company.brewcraft.model.TenantIaasAuthResources;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.model.UpdateIaasRole;
 
 public class TenantIaasAuthService {
@@ -37,7 +40,7 @@ public class TenantIaasAuthService {
         return this.mapper.fromComponents(roles);
     }
 
-    public List<TenantIaasAuthResources> add(List<IaasIdpTenant> idpTenants) {
+    public List<TenantIaasAuthResources> add(List<BaseIaasIdpTenant> idpTenants) {
         List<BaseIaasRole> roleUpdates = new ArrayList<>(idpTenants.size());
 
         idpTenants.forEach(idpTenant -> {
@@ -50,7 +53,7 @@ public class TenantIaasAuthService {
         return this.mapper.fromComponents(roles);
     }
 
-    public List<TenantIaasAuthResources> put(List<IaasIdpTenant> idpTenants) {
+    public List<TenantIaasAuthResources> put(List<UpdateIaasIdpTenant> idpTenants) {
         List<UpdateIaasRole> roleUpdates = new ArrayList<>(idpTenants.size());
 
         idpTenants.forEach(idpTenant -> {
@@ -64,7 +67,7 @@ public class TenantIaasAuthService {
         return this.mapper.fromComponents(roles);
     }
 
-    public void delete(List<IaasIdpTenant> idpTenants) {
+    public TenantIaasAuthDeleteResult delete(List<IaasIdpTenant> idpTenants) {
         Set<String> roleIds = new HashSet<>();
 
         idpTenants
@@ -74,6 +77,8 @@ public class TenantIaasAuthService {
             roleIds.add(roleName);
          });
 
-        this.roleService.delete(roleIds);
+        long roleCount = this.roleService.delete(roleIds);
+
+        return new TenantIaasAuthDeleteResult(roleCount);
     }
 }

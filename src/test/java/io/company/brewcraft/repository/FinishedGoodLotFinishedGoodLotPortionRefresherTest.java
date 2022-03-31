@@ -53,6 +53,5 @@ public class FinishedGoodLotFinishedGoodLotPortionRefresherTest {
 
         verify(this.refresher, times(1)).refreshAccessors(accessors);
     }
-
 }
 

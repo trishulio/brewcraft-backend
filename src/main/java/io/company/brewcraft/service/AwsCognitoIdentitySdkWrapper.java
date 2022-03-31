@@ -1,5 +1,6 @@
 package io.company.brewcraft.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +23,25 @@ public class AwsCognitoIdentitySdkWrapper implements AwsCognitoIdentityClient {
 
     @Override
     public List<IdentityPoolShortDescription> getIdentityPools(int pageSize) {
-        ListIdentityPoolsRequest request = new ListIdentityPoolsRequest()
-                                            .withMaxResults(pageSize);
+        List<IdentityPoolShortDescription> identityPools = new ArrayList<>();
 
-        ListIdentityPoolsResult result = this.awsCognitoIdentityClient.listIdentityPools(request);
+        String nextToken = null;
+        do {
+            ListIdentityPoolsRequest request = new ListIdentityPoolsRequest()
+                                               .withNextToken(nextToken);
+            ListIdentityPoolsResult result = this.awsCognitoIdentityClient.listIdentityPools(request);
 
-        return result.getIdentityPools();
+            nextToken = result.getNextToken();
+
+            for (IdentityPoolShortDescription pool: result.getIdentityPools()) {
+                if (identityPools.size() >= pageSize) {
+                    break;
+                }
+                identityPools.add(pool);
+            }
+        } while (nextToken != null && identityPools.size() < pageSize);
+
+        return identityPools;
     }
 
     @Override

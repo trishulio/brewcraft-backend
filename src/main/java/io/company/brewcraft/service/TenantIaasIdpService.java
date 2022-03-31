@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.IaasIdpTenant;
+import io.company.brewcraft.model.TenantIaasIdpDeleteResult;
 import io.company.brewcraft.model.TenantIaasIdpResources;
 import io.company.brewcraft.model.UpdateIaasIdpTenant;
 
@@ -24,24 +25,24 @@ public class TenantIaasIdpService {
         return this.mapper.fromComponents(idpTenants);
     }
 
-    public List<TenantIaasIdpResources> add(List<? extends BaseIaasIdpTenant> tenants) {
-        @SuppressWarnings("unchecked")
-        List<IaasIdpTenant> idpTenants = this.idpService.add((List<BaseIaasIdpTenant>) tenants);
+    public List<TenantIaasIdpResources> add(List<BaseIaasIdpTenant> tenants) {
+        List<IaasIdpTenant> idpTenants = this.idpService.add(tenants);
 
         return this.mapper.fromComponents(idpTenants);
     }
 
-    public List<TenantIaasIdpResources> put(List<? extends UpdateIaasIdpTenant> tenants) {
-        @SuppressWarnings("unchecked")
-        List<IaasIdpTenant> idpTenants = this.idpService.put((List<UpdateIaasIdpTenant>) tenants);
+    public List<TenantIaasIdpResources> put(List<UpdateIaasIdpTenant> tenants) {
+        List<IaasIdpTenant> idpTenants = this.idpService.put(tenants);
 
         return this.mapper.fromComponents(idpTenants);
     }
 
-    public void delete(List<IaasIdpTenant> iaasIdpTenants) {
+    public TenantIaasIdpDeleteResult delete(List<IaasIdpTenant> iaasIdpTenants) {
         Set<String> iaasIdpTenantIds = iaasIdpTenants.stream().map(iaasIdpTenant -> iaasIdpTenant.getId()).collect(Collectors.toSet());
 
-        this.idpService.delete(iaasIdpTenantIds);
+        long idpCount = this.idpService.delete(iaasIdpTenantIds);
+
+        return new TenantIaasIdpDeleteResult(idpCount);
     }
 
     public boolean exist(String iaasIdpTenantId) {

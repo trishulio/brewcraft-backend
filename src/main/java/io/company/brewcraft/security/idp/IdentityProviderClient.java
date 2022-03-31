@@ -25,7 +25,7 @@ public interface IdentityProviderClient {
 
     GroupType updateGroup(String group, String roleArn);
 
-    void deleteGroup(String group);
+    boolean deleteGroup(String group);
 
     boolean groupExists(String group);
 }

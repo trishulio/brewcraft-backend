@@ -1,12 +1,11 @@
 package io.company.brewcraft.dto;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
-import io.company.brewcraft.model.DecoratedImageUrlAccessor;
+import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
 
-public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
+public class ProductDto extends BaseDto implements DecoratedIaasObjectStoreFileAccessor {
 
     private Long id;
 
@@ -24,7 +23,7 @@ public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
 
     private URI imageSrc;
 
-    private URL imageUrl;
+    private IaasObjectStoreFileDto objectStoreFile;
 
     private Integer version;
 
@@ -106,6 +105,7 @@ public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
         this.targetMeasures = targetMeasures;
     }
 
+    @Override
     public URI getImageSrc() {
         return this.imageSrc;
     }
@@ -114,20 +114,20 @@ public class ProductDto extends BaseDto implements DecoratedImageUrlAccessor {
         this.imageSrc = imageSrc;
     }
 
-    public URL getImageUrl() {
-        return imageUrl;
-    }
-
-    @Override
-    public void setImageUrl(URL imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public Integer getVersion() {
         return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public void setObjectStoreFile(IaasObjectStoreFileDto objectStoreFile) {
+        this.objectStoreFile = objectStoreFile;
+    }
+
+    public IaasObjectStoreFileDto getObjectStoreFile() {
+        return this.objectStoreFile;
     }
 }

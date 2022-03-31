@@ -1,8 +1,11 @@
 package io.company.brewcraft.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,66 +18,136 @@ import com.amazonaws.services.identitymanagement.model.DetachRolePolicyResult;
 import com.amazonaws.services.identitymanagement.model.ListAttachedRolePoliciesRequest;
 import com.amazonaws.services.identitymanagement.model.ListAttachedRolePoliciesResult;
 import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
-public class AwsIamRolePolicyAttachmentClient {
+import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.IaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
+import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
+
+public class AwsIamRolePolicyAttachmentClient implements IaasClient<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> {
     private static final Logger log = LoggerFactory.getLogger(AwsIamRolePolicyAttachmentClient.class);
 
+    private final InheritableThreadLocal<LoadingCache<String, Set<String>>> attachedPolicyNameLocalCache;
     private AmazonIdentityManagement awsClient;
     private AwsArnMapper arnMapper;
 
     public AwsIamRolePolicyAttachmentClient(AmazonIdentityManagement awsIamClient, AwsArnMapper arnMapper) {
         this.awsClient = awsIamClient;
         this.arnMapper = arnMapper;
+
+        this.attachedPolicyNameLocalCache = new InheritableThreadLocal<>();
     }
 
-    public List<AttachedPolicy> get(String roleName) {
-        List<AttachedPolicy> allPolicies = new ArrayList<>();
+    @Override
+    public IaasRolePolicyAttachment get(IaasRolePolicyAttachmentId id) {
+        IaasRolePolicyAttachment attachment = null;
+        try {
+            Set<String> attachedPolicyNames = getCache().get(id.getRoleId());
 
-        String marker = null;
-        do {
-            ListAttachedRolePoliciesRequest request = new ListAttachedRolePoliciesRequest()
-                                                      .withRoleName(roleName)
-                                                      .withMarker(marker);
-            ListAttachedRolePoliciesResult result = this.awsClient.listAttachedRolePolicies(request);
+            if (attachedPolicyNames.contains(id.getPolicyId())) {
 
-            marker = result.isTruncated() ? result.getMarker() : null;
+                IaasRole role = new IaasRole(id.getRoleId());
+                IaasPolicy policy = new IaasPolicy(id.getPolicyId());
 
-            List<AttachedPolicy> policies = result.getAttachedPolicies();
-            allPolicies.addAll(policies);
+                // Note: Attachment with Role and Policy containing IDs are returned.
+                // Ideally, we should fetch both the objects here but there aren't any
+                // use-cases for that yet so not worth it to add 2 extra api calls.
+                attachment = new IaasRolePolicyAttachment(role, policy);
+            }
 
-        } while (marker != null);
+            return attachment;
 
-        return allPolicies;
+        } catch (ExecutionException e) {
+            throw new RuntimeException("Failed to fetch all the attachedPolicies because " + e.getMessage(), e);
+        }
     }
 
-    public boolean delete(String policyName, String roleName) {
-        String policyArn = this.arnMapper.getPolicyArn(policyName);
+    @Override
+    public <BE extends BaseIaasRolePolicyAttachment> IaasRolePolicyAttachment add(BE attachment) {
+        String policyArn = this.arnMapper.getPolicyArn(attachment.getIaasPolicy().getId());
+
+        AttachRolePolicyRequest request = new AttachRolePolicyRequest()
+                                            .withPolicyArn(policyArn)
+                                            .withRoleName(attachment.getIaasRole().getId());
+
+        AttachRolePolicyResult result = this.awsClient.attachRolePolicy(request);
+
+        getCache().invalidate(attachment.getIaasRole().getId());
+
+        return (IaasRolePolicyAttachment) attachment;
+    }
+
+    @Override
+    public <UE extends UpdateIaasRolePolicyAttachment> IaasRolePolicyAttachment put(UE update) {
+        IaasRolePolicyAttachment attachment = get(update.getId());
+        if (attachment == null) {
+            attachment = add(update);
+        }
+        return attachment;
+    }
+
+    @Override
+    public boolean delete(IaasRolePolicyAttachmentId id) {
+        String policyArn = this.arnMapper.getPolicyArn(id.getPolicyId());
 
         DetachRolePolicyRequest request = new DetachRolePolicyRequest()
                                             .withPolicyArn(policyArn)
-                                            .withRoleName(roleName);
+                                            .withRoleName(id.getRoleId());
         try {
             DetachRolePolicyResult result = this.awsClient.detachRolePolicy(request);
+            getCache().invalidate(id.getRoleId());
             return true;
         } catch(NoSuchEntityException e) {
-            log.error("Failed to delete attachment with role: '{}' and policy: '{}'", roleName, policyArn);
+            log.error("Failed to delete attachment with role: '{}' and policy: '{}'", id.getRoleId(), policyArn);
             return false;
         }
     }
 
-    public void add(String policyName, String roleName) {
-        String policyArn = this.arnMapper.getPolicyArn(policyName);
-
-        AttachRolePolicyRequest request = new AttachRolePolicyRequest()
-                                            .withPolicyArn(policyArn)
-                                            .withRoleName(roleName);
-
-        AttachRolePolicyResult result = this.awsClient.attachRolePolicy(request);
+    @Override
+    public boolean exists(IaasRolePolicyAttachmentId id) {
+        return get(id) != null;
     }
 
-    public void put(String policyName, String roleName) {
-        // TODO: Test if the call to add for this entity is idempotent.
-        // If not, then this implementation won't work.
-        add(policyName, roleName);
+    private void initCache() {
+
+    }
+
+    private LoadingCache<String, Set<String>> getCache() {
+        LoadingCache<String, Set<String>> cache = this.attachedPolicyNameLocalCache.get();
+        if (cache == null) {
+            cache = CacheBuilder.newBuilder().build(new CacheLoader<String, Set<String>>(){
+                @Override
+                public Set<String> load(String roleName) throws Exception {
+                    Set<String> allPolicyNames = new HashSet<>();
+                    String marker = null;
+                    do {
+                        ListAttachedRolePoliciesRequest request = new ListAttachedRolePoliciesRequest()
+                                                                  .withRoleName(roleName)
+                                                                  .withMarker(marker);
+                        ListAttachedRolePoliciesResult result = null;
+                        try {
+                            result = awsClient.listAttachedRolePolicies(request);
+                        } catch (NoSuchEntityException e) {
+                            continue;
+                        }
+
+                        marker = BooleanUtils.isTrue(result.isTruncated()) ? result.getMarker() : null;
+
+                        List<AttachedPolicy> policies = result.getAttachedPolicies();
+                        policies.stream().map(policy -> policy.getPolicyName()).forEach(allPolicyNames::add);
+                    } while (marker != null);
+                    return allPolicyNames;
+                }
+            });
+
+            attachedPolicyNameLocalCache.set(cache);
+        }
+
+        return cache;
     }
 }

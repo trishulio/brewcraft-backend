@@ -1,6 +1,12 @@
 package io.company.brewcraft.model;
 
 public interface BaseIaasPolicy {
+    final String ATTR_NAME = "name";
+    final String ATTR_DOCUMENT = "document";
+    final String ATTR_DESCRIPTION = "description";
+    final String ATTR_IAAS_ID = "iaasId";
+    final String ATTR_IAAS_RESOURCE_NAME = "iaasResourceName";
+
     String getName();
 
     void setName(String name);

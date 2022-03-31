@@ -1,43 +1,26 @@
 package io.company.brewcraft.service;
 
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import com.amazonaws.services.identitymanagement.model.Role;
 
 import io.company.brewcraft.model.IaasRole;
 
-public class AwsIaasRoleMapper {
-    private LocalDateTimeMapper dtMapper;
+@Mapper(uses = LocalDateTimeMapper.class)
+public interface AwsIaasRoleMapper extends IaasEntityMapper<Role, IaasRole> {
+    final AwsIaasRoleMapper INSTANCE = Mappers.getMapper(AwsIaasRoleMapper.class);
 
-    public AwsIaasRoleMapper(LocalDateTimeMapper dtMapper) {
-        this.dtMapper = dtMapper;
-    }
-
-    public List<IaasRole> fromIamRoles(List<Role> iamRoles) {
-        List<IaasRole> policies = null;
-
-        if (iamRoles != null) {
-            policies = iamRoles.stream().map(this::fromIamRole).toList();
-        }
-
-        return policies;
-    }
-
-    public IaasRole fromIamRole(Role iamRole) {
-        IaasRole role = null;
-
-        if (iamRole != null) {
-            role = new IaasRole();
-            role.setId(iamRole.getRoleName());
-            role.setDescription(iamRole.getDescription());
-            role.setIaasResourceName(iamRole.getArn());
-            role.setIaasId(iamRole.getRoleId());
-            if (iamRole.getRoleLastUsed() != null) {
-                role.setLastUsed(this.dtMapper.fromUtilDate(iamRole.getRoleLastUsed().getLastUsedDate()));
-            }
-            role.setCreatedAt(this.dtMapper.fromUtilDate(iamRole.getCreateDate()));
-        }
-
-        return role;
-    }
+    @Override
+    @Mapping(ignore = true, target = IaasRole.ATTR_ID)
+    @Mapping(source = "roleName", target = IaasRole.ATTR_NAME)
+    @Mapping(source = "description", target = IaasRole.ATTR_DESCRIPTION)
+    @Mapping(source = "assumeRolePolicyDocument", target = IaasRole.ATTR_ASSUME_POLICY_DOCUMENT)
+    @Mapping(source = "arn", target = IaasRole.ATTR_IAAS_RESOURCE_NAME)
+    @Mapping(source = "roleId", target = IaasRole.ATTR_IAAS_ID)
+    @Mapping(source = "roleLastUsed.lastUsedDate", target = IaasRole.ATTR_LAST_USED)
+    @Mapping(source = "createDate", target = IaasRole.ATTR_CREATED_AT)
+    @Mapping(ignore = true, target = IaasRole.ATTR_LAST_UPDATED)
+    IaasRole fromIaasEntity(Role role);
 }

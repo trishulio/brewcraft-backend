@@ -5,6 +5,7 @@ import com.amazonaws.arn.Arn;
 public class AwsArnMapper {
     public static final String AWS_SERVICE_IAM = "iam";
     public static final String AWS_SERVICE_PREFIX_POLICY = "policy/";
+    public static final String AWS_SERVICE_PREFIX_ROLE = "role/";
 
     private String accountId;
     private String partition;
@@ -16,6 +17,10 @@ public class AwsArnMapper {
 
     public String getPolicyArn(String policyName) {
         return getServiceArn("", AWS_SERVICE_IAM, AWS_SERVICE_PREFIX_POLICY, policyName);
+    }
+
+    public String getRoleArn(String roleName) {
+        return getServiceArn("", AWS_SERVICE_IAM, AWS_SERVICE_PREFIX_ROLE, roleName);
     }
 
     public String getName(String arn) {

@@ -169,7 +169,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
 
     @Override
     public URI getImageSrc() {
-        // Hibernate threw error when trying to deserialize peristed value as URI.
+        // Hibernate threw error when trying to de-serialize persisted value as URI.
         // Hence, using Strings internally.
         URI uri = null;
         if (this.imageSrc != null) {

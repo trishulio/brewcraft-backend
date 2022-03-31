@@ -169,17 +169,23 @@ public class AwsCognitoIdpClient implements IdentityProviderClient {
     }
 
     @Override
-    public void deleteGroup(final String group) {
+    public boolean deleteGroup(final String group) {
+        boolean success = false;
         final DeleteGroupRequest deleteGroupRequest = new DeleteGroupRequest().withUserPoolId(userPoolId).withGroupName(group);
         logger.debug("Attempting to delete group {} in cognito user pool {}", group, userPoolId);
         try {
             this.awsIdpProvider.deleteGroup(deleteGroupRequest);
             logger.debug("Successfully deleted group {} in cognito user pool", group, userPoolId);
+            success = true;
+        } catch(ResourceNotFoundException e) {
+            logger.error("Failed to delete group: {}", group);
         } catch (AWSCognitoIdentityProviderException e) {
             String msg = String.format("ErrorCode: %s; StatusCode: %s; Message: %s", e.getErrorCode(), e.getStatusCode(), e.getMessage());
             logger.error(msg);
             throw new RuntimeException(msg, e);
         }
+
+        return success;
     }
 
     @Override

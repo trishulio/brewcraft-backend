@@ -1,37 +1,21 @@
 package io.company.brewcraft.service;
 
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import com.amazonaws.services.s3.model.Bucket;
 
 import io.company.brewcraft.model.IaasObjectStore;
 
-public class AwsIaasObjectStoreMapper {
-    private LocalDateTimeMapper dtMapper;
+@Mapper(uses = LocalDateTimeMapper.class)
+public interface AwsIaasObjectStoreMapper extends IaasEntityMapper<Bucket, IaasObjectStore> {
+    final AwsIaasObjectStoreMapper INSTANCE = Mappers.getMapper(AwsIaasObjectStoreMapper.class);
 
-    public AwsIaasObjectStoreMapper(LocalDateTimeMapper dtMapper) {
-        this.dtMapper = dtMapper;
-    }
-
-    public List<IaasObjectStore> fromObjectStores(List<Bucket> iamPolicies) {
-        List<IaasObjectStore> policies = null;
-
-        if (iamPolicies != null) {
-            policies = iamPolicies.stream().map(this::fromObjectStore).toList();
-        }
-
-        return policies;
-    }
-
-    public IaasObjectStore fromObjectStore(Bucket iamObjectStore) {
-        IaasObjectStore objectStore = null;
-
-        if (iamObjectStore != null) {
-            objectStore = new IaasObjectStore();
-            objectStore.setName(iamObjectStore.getName());
-            objectStore.setCreatedAt(this.dtMapper.fromUtilDate(iamObjectStore.getCreationDate()));
-        }
-
-        return objectStore;
-    }
+    @Override
+    @Mapping(ignore = true, target = IaasObjectStore.ATTR_ID) // Name is the ID
+    @Mapping(source = "name", target = IaasObjectStore.ATTR_NAME)
+    @Mapping(source = "creationDate", target = IaasObjectStore.ATTR_CREATED_AT)
+    @Mapping(ignore = true, target = IaasObjectStore.ATTR_LAST_UPDATED)
+    IaasObjectStore fromIaasEntity(Bucket bucket);
 }
