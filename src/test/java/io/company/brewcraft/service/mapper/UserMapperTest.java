@@ -31,7 +31,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsEntity_WhenAddDtoIsNotNull() {
+    public void testFromAddDto_ReturnsEntity_WhenAddDtoIsNotNull() {
         AddUserDto dto =  new AddUserDto(
             "userName",
             "displayName",
@@ -45,7 +45,7 @@ public class UserMapperTest {
             List.of(10L)
         );
 
-        User user = mapper.fromDto(dto);
+        User user = mapper.fromAddDto(dto);
 
         User expected = new User(
             null,
@@ -68,13 +68,14 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenAddDtoIsNull() {
-        assertNull(mapper.fromDto((AddUserDto) null));
+    public void testFromAddDto_ReturnsNull_WhenAddDtoIsNull() {
+        assertNull(mapper.fromAddDto((AddUserDto) null));
     }
 
     @Test
-    public void testFromDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
+    public void testFromUpdateDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
         UpdateUserDto dto =  new UpdateUserDto(
+            1L,
             "userName",
             "displayName",
             "firstName",
@@ -87,10 +88,10 @@ public class UserMapperTest {
             1
         );
 
-        User user = mapper.fromDto(dto);
+        User user = mapper.fromUpdateDto(dto);
 
         User expected = new User(
-            null,
+            1L,
             "userName",
             "displayName",
             "firstName",
@@ -110,8 +111,8 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenUpdateUserDtoIsNull() {
-        assertNull(mapper.fromDto((UpdateUserDto) null));
+    public void testFromUpdateDto_ReturnsNull_WhenUpdateUserDtoIsNull() {
+        assertNull(mapper.fromUpdateDto((UpdateUserDto) null));
     }
 
     @Test

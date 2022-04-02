@@ -10,6 +10,8 @@ import io.company.brewcraft.dto.NullOrNotBlank;
 
 public class UpdateUserDto extends BaseDto {
 
+    private Long id;
+
     @NullOrNotBlank
     private String userName;
 
@@ -38,9 +40,16 @@ public class UpdateUserDto extends BaseDto {
     private Integer version;
 
     public UpdateUserDto() {
+        super();
     }
 
-    public UpdateUserDto(String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageSrc, List<Long> roleIds, @NotNull Integer version) {
+    public UpdateUserDto(Long id) {
+        this();
+        setId(id);
+    }
+
+    public UpdateUserDto(Long id, String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageSrc, List<Long> roleIds, @NotNull Integer version) {
+        this(id);
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -51,6 +60,14 @@ public class UpdateUserDto extends BaseDto {
         setRoleIds(roleIds);
         setImageSrc(imageSrc);
         setVersion(version);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {

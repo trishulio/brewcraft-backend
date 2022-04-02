@@ -1,35 +1,6 @@
 package io.company.brewcraft.model.user;
 
-import java.util.List;
-
 import io.company.brewcraft.service.UpdatableEntity;
 
-public interface UpdateUser<R extends UpdateUserRole> extends UpdatableEntity<Long>, UserStatusAccessor, UserSalutationAccessor {
-    String getUserName();
-
-    void setUserName(String userName);
-
-    String getDisplayName();
-
-    void setDisplayName(String displayName);
-
-    String getFirstName();
-
-    void setFirstName(String firstName);
-
-    String getLastName();
-
-    void setLastName(String lastName);
-
-    String getImageSrc();
-
-    void setImageSrc(String imageSrc);
-
-    String getPhoneNumber();
-
-    void setPhoneNumber(String phoneNumber);
-
-    List<R> getRoles();
-
-    void setRoles(List<R> roles);
+public interface UpdateUser extends BaseUser, UpdatableEntity<Long> {
 }

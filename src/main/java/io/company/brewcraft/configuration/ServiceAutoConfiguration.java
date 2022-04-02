@@ -19,7 +19,6 @@ import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.migration.TenantRegister;
 import io.company.brewcraft.model.AdminTenant;
 import io.company.brewcraft.model.AwsDocumentTemplates;
-import io.company.brewcraft.model.IaasObjectStoreFileClientProvider;
 import io.company.brewcraft.model.BaseFinishedGoodLot;
 import io.company.brewcraft.model.BaseFinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.BaseFinishedGoodLotMaterialPortion;
@@ -46,6 +45,7 @@ import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
+import io.company.brewcraft.model.IaasObjectStoreFileClientProvider;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
@@ -87,8 +87,14 @@ import io.company.brewcraft.model.UpdateTenant;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementAccessor;
 import io.company.brewcraft.model.procurement.ProcurementId;
+import io.company.brewcraft.model.user.BaseUser;
+import io.company.brewcraft.model.user.BaseUserRole;
+import io.company.brewcraft.model.user.UpdateUser;
+import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
+import io.company.brewcraft.model.user.UserRole;
+import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.BrewStageRepository;
@@ -133,14 +139,13 @@ import io.company.brewcraft.service.AwsIaasObjectStoreMapper;
 import io.company.brewcraft.service.AwsIaasPolicyMapper;
 import io.company.brewcraft.service.AwsIaasRoleMapper;
 import io.company.brewcraft.service.AwsIamPolicyClient;
-import io.company.brewcraft.service.IaasPolicyRepository;
 import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsIdentityCredentialsMapper;
 import io.company.brewcraft.service.AwsObjectStoreClient;
 import io.company.brewcraft.service.AwsObjectStoreFileSystem;
+import io.company.brewcraft.service.AwsObjectStoreRepository;
 import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
-import io.company.brewcraft.service.TenantContextAwsBucketNameProvider;
 import io.company.brewcraft.service.AwsTenantIaasResourceBuilder;
 import io.company.brewcraft.service.BlockingAsyncExecutor;
 import io.company.brewcraft.service.BrewAccessor;
@@ -166,14 +171,13 @@ import io.company.brewcraft.service.FinishedGoodLotService;
 import io.company.brewcraft.service.IaasAuthorizationFetch;
 import io.company.brewcraft.service.IaasIdpTenantService;
 import io.company.brewcraft.service.IaasObjectStoreFileSystem;
-import io.company.brewcraft.service.AwsObjectStoreRepository;
 import io.company.brewcraft.service.IaasObjectStoreService;
+import io.company.brewcraft.service.IaasPolicyRepository;
 import io.company.brewcraft.service.IaasPolicyService;
-import io.company.brewcraft.service.IaasRoleRepository;
 import io.company.brewcraft.service.IaasRolePolicyAttachmentIaasRepository;
 import io.company.brewcraft.service.IaasRolePolicyAttachmentService;
+import io.company.brewcraft.service.IaasRoleRepository;
 import io.company.brewcraft.service.IaasRoleService;
-import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
@@ -191,7 +195,6 @@ import io.company.brewcraft.service.MixtureRecordingService;
 import io.company.brewcraft.service.MixtureRecordingServiceImpl;
 import io.company.brewcraft.service.MixtureService;
 import io.company.brewcraft.service.MixtureServiceImpl;
-import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
 import io.company.brewcraft.service.ProductCategoryService;
 import io.company.brewcraft.service.ProductDtoDecorator;
 import io.company.brewcraft.service.ProductMeasureValueService;
@@ -208,13 +211,16 @@ import io.company.brewcraft.service.StockLotServiceImpl;
 import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.TenantContextAwsBucketNameProvider;
+import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
+import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
 import io.company.brewcraft.service.TenantIaasAuthResourceMapper;
 import io.company.brewcraft.service.TenantIaasAuthService;
-import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
 import io.company.brewcraft.service.TenantIaasIdpResourcesMapper;
 import io.company.brewcraft.service.TenantIaasIdpService;
 import io.company.brewcraft.service.TenantIaasResourceBuilder;
 import io.company.brewcraft.service.TenantIaasService;
+import io.company.brewcraft.service.TenantIaasUserService;
 import io.company.brewcraft.service.TenantIaasVfsResourceMapper;
 import io.company.brewcraft.service.TenantIaasVfsService;
 import io.company.brewcraft.service.TransactionService;
@@ -239,11 +245,10 @@ import io.company.brewcraft.service.impl.SkuServiceImpl;
 import io.company.brewcraft.service.impl.StorageServiceImpl;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementService;
+import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
-import io.company.brewcraft.service.impl.user.UserServiceImpl;
+import io.company.brewcraft.service.impl.user.UserService;
 import io.company.brewcraft.service.mapper.TenantIaasIdpTenantMapper;
-import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
@@ -271,12 +276,12 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(TenantManagementService.class)
-    public TenantManagementService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, TenantIaasService tenantIaasService, Refresher<Tenant, TenantAccessor> tenantRefresher, UtilityProvider utilProvider, Tenant adminTenant) {
+    @ConditionalOnMissingBean(TenantService.class)
+    public TenantService tenantManagementService(TenantRepository tenantRepository, MigrationManager migrationManager, TenantRegister tenantRegister, TenantIaasService tenantIaasService, Refresher<Tenant, TenantAccessor> tenantRefresher, UtilityProvider utilProvider, Tenant adminTenant) {
         RepoService<UUID, Tenant, TenantAccessor> repoService = new CrudRepoService<>(tenantRepository, tenantRefresher);
         UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseTenant.class, UpdateTenant.class, Tenant.class, Set.of(""));
 
-        final TenantManagementService tenantService = new TenantManagementService(
+        final TenantService tenantService = new TenantService(
             adminTenant,
             repoService,
             updateService,
@@ -487,12 +492,6 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AwsIdentityCredentialsMapper.class)
-    public AwsIdentityCredentialsMapper awsIdentityCredentialsMapper(LocalDateTimeMapper dtMapper) {
-        return new AwsIdentityCredentialsMapper(dtMapper);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(SupplierService.class)
     public SupplierService supplierService(SupplierRepository supplierRepository) {
         final SupplierService supplierService = new SupplierServiceImpl(supplierRepository);
@@ -636,10 +635,11 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(UserRoleService.class)
-    public UserRoleService userRoleService(UserRoleRepository userRoleRepository) {
-        final UserRoleService userRoleService = new UserRoleService(userRoleRepository);
-        return userRoleService;
+    @ConditionalOnMissingBean(UserService.class)
+    public UserRoleService userRoleService(UtilityProvider utilProvider, UserRoleRepository userRoleRepository, Refresher<UserRole, UserRoleAccessor> userRoleRefresher) {
+        final UpdateService<Long, UserRole, BaseUserRole, UpdateUserRole> updateService = new SimpleUpdateService<>(utilProvider, BaseUserRole.class, UpdateUserRole.class, UserRole.class, Set.of());
+        final RepoService<Long, UserRole, UserRoleAccessor> repoService = new CrudRepoService<>(userRoleRepository, userRoleRefresher);
+        return new UserRoleService(updateService, repoService);
     }
 
     @Bean
@@ -651,8 +651,10 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UserService.class)
-    public UserService userService(UserRepository userRepository, IdpUserRepository idpRepo, Refresher<User, UserAccessor> userRefresher, ContextHolder contexHolder) {
-        return new UserServiceImpl(userRepository, idpRepo, userRefresher, contexHolder);
+    public UserService userService(UtilityProvider utilProvider, UserRepository userRepository, Refresher<User, UserAccessor> userRefresher, TenantIaasUserService iaasService) {
+        final UpdateService<Long, User, BaseUser, UpdateUser> updateService = new SimpleUpdateService<>(utilProvider, BaseUser.class, UpdateUser.class, User.class, Set.of());
+        final RepoService<Long, User, UserAccessor> repoService = new CrudRepoService<>(userRepository, userRefresher);
+        return new UserService(updateService, repoService, userRepository, iaasService);
     }
 
     @Bean

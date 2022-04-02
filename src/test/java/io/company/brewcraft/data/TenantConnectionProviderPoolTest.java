@@ -1,84 +1,52 @@
 package io.company.brewcraft.data;
 
-import static io.company.brewcraft.DbMockUtil.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TenantConnectionProviderPoolTest {
-
-    private static final String ADMIN_ID = "admin";
-
+    private DataSource mAdminDs;
     private TenantDataSourceManager mDsMgr;
+
     private TenantConnectionProviderPool providerPool;
 
-    private DataSource mAdminDs;
-
     @BeforeEach
-    public void init() {
+    public void init() throws SQLException {
         mAdminDs = mock(DataSource.class);
-
         mDsMgr = mock(TenantDataSourceManager.class);
-        providerPool = new TenantConnectionProviderPool(mDsMgr, ADMIN_ID);
+
+        providerPool = new TenantConnectionProviderPool(mDsMgr, mAdminDs);
     }
 
     @Test
-    public void testGetAnyConnectionProvider_ReturnsConnectionProviderWithAdminDataSourceFromDsManager() throws SQLException {
-        createAndSetMockConnection(mAdminDs, "USERNAME_1", "SCHEMA_1", "URL_1", false);
-        doReturn(mAdminDs).when(mDsMgr).getAdminDataSource();
+    public void testGetAnyConnectionProvider_ReturnsAdminConnectionProvider() throws SQLException {
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mAdminDs).getConnection();
 
-        ConnectionProvider provider = providerPool.getAnyConnectionProvider();
-        Connection conn = provider.getConnection();
+        Connection conn = providerPool.getAnyConnectionProvider().getConnection();
 
-        assertEquals("USERNAME_1", conn.getMetaData().getUserName());
-        assertEquals("SCHEMA_1", conn.getSchema());
-        assertEquals(false, conn.getAutoCommit());
+        assertEquals(mConn, conn);
     }
 
     @Test
-    public void testSelectConnectionProvider_ReturnsConnectionProviderWithAdminDs_WhenInputMatchesAdminId() throws SQLException {
-        createAndSetMockConnection(mAdminDs, "USERNAME_1", "SCHEMA_1", "URL_1", false);
-        doReturn(mAdminDs).when(mDsMgr).getAdminDataSource();
+    public void testSelectConnectionProvider_ReturnsConnectionProviderWithTenantDs() throws SQLException, IOException {
+        DataSource mDs = mock(DataSource.class);
+        doReturn(mDs).when(mDsMgr).getDataSource(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        ConnectionProvider provider = providerPool.selectConnectionProvider(ADMIN_ID);
-        Connection conn = provider.getConnection();
+        Connection mConn = mock(Connection.class);
+        doReturn(mConn).when(mDs).getConnection();
 
-        assertEquals("USERNAME_1", conn.getMetaData().getUserName());
-        assertEquals("SCHEMA_1", conn.getSchema());
-        assertEquals(false, conn.getAutoCommit());
-    }
-
-    @Test
-    public void testSelectConnectionProvider_ReturnsConnectionProviderWithTenantDs_WhenInputIsNotAdminDs() throws SQLException, IOException {
-        createAndSetMockConnection(mAdminDs, "USERNAME_1", "SCHEMA_1", "URL_1", false);
-        doReturn(mAdminDs).when(mDsMgr).getDataSource("TENANT_1");
-
-        ConnectionProvider provider = providerPool.selectConnectionProvider("TENANT_1");
-        Connection conn = provider.getConnection();
-
-        assertEquals("USERNAME_1", conn.getMetaData().getUserName());
-        assertEquals("SCHEMA_1", conn.getSchema());
-        assertEquals(false, conn.getAutoCommit());
-    }
-
-    @Test
-    public void testSelectConnectionProvider_ReturnsCachedConnectionProvider_OnSubsequentCalls() throws SQLException, IOException {
-        doReturn(mAdminDs).when(mDsMgr).getDataSource("TENANT_1");
-
-        ConnectionProvider tenantProvider = providerPool.selectConnectionProvider("TENANT_1");
-        ConnectionProvider sameTenantProvider = providerPool.selectConnectionProvider("TENANT_1");
-        ConnectionProvider diffTenantProvider = providerPool.selectConnectionProvider("TENANT_2");
-
-        assertSame(sameTenantProvider, tenantProvider);
-        assertNotSame(diffTenantProvider, tenantProvider);
+        Connection conn = providerPool.selectConnectionProvider("00000000-0000-0000-0000-000000000001").getConnection();
+        assertEquals(mConn, conn);
     }
 }

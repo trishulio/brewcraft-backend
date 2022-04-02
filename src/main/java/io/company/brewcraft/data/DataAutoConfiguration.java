@@ -70,7 +70,7 @@ public class DataAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(TenantDataSourceManager.class)
     public TenantDataSourceManager tenantDsManager(DataSourceManager dataSourceManager, DataSourceConfigurationProvider<UUID> tenantDsConfigProvider) {
-        TenantDataSourceManager mgr = new TenantDataSourceManagerImpl(dataSourceManager, (TenantDataSourceConfigurationProvider) tenantDsConfigProvider);
+        TenantDataSourceManager mgr = new TenantDataSourceManagerWrapper(dataSourceManager, (TenantDataSourceConfigurationProvider) tenantDsConfigProvider);
         return mgr;
     }
 

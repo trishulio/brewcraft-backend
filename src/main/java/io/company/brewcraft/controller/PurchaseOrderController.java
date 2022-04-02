@@ -36,7 +36,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/purchases/orders")
 public class PurchaseOrderController extends BaseController {
-
     private CrudControllerService<
         Long,
         PurchaseOrder,

@@ -2,19 +2,16 @@ package io.company.brewcraft.security.session;
 
 import java.util.UUID;
 
-import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.Tenant;
-import io.company.brewcraft.service.impl.TenantManagementService;
+import io.company.brewcraft.service.impl.TenantService;
 
 public class LazyTenantContext implements TenantContext {
-    private TenantManagementService service;
-    private IaasIdpTenant idpTenant;
     private Tenant tenant;
     private UUID tenantId;
+    private TenantService service;
 
-    public LazyTenantContext(TenantManagementService service, IaasIdpTenant idpTenant, UUID tenantId) {
+    public LazyTenantContext(TenantService service, UUID tenantId) {
         this.service = service;
-        this.idpTenant = idpTenant;
         this.tenantId = tenantId;
     }
 
@@ -25,10 +22,5 @@ public class LazyTenantContext implements TenantContext {
         }
 
         return this.tenant;
-    }
-
-    @Override
-    public IaasIdpTenant getIaasIdpTenant() {
-       return this.idpTenant;
     }
 }

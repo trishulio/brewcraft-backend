@@ -3,11 +3,11 @@ package io.company.brewcraft.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,28 +27,49 @@ import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.user.AddUserDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
 import io.company.brewcraft.dto.user.UserDto;
+import io.company.brewcraft.model.user.BaseUser;
 import io.company.brewcraft.model.user.UpdateUser;
-import io.company.brewcraft.model.user.UpdateUserRole;
 import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
+import io.company.brewcraft.service.impl.user.UserService;
 import io.company.brewcraft.service.mapper.user.UserMapper;
-import io.company.brewcraft.service.user.UserService;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.util.validator.Validator;
 
 @RestController
 @RequestMapping(path = "/api/v1/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController {
+    private CrudControllerService<
+        Long,
+        User,
+        BaseUser,
+        UpdateUser,
+        UserDto,
+        AddUserDto,
+        UpdateUserDto
+    > controller;
 
     private final UserService userService;
 
-    public UserController(final UserService userService, AttributeFilter filter) {
-        super(filter);
+    protected UserController(CrudControllerService<
+            Long,
+            User,
+            BaseUser,
+            UpdateUser,
+            UserDto,
+            AddUserDto,
+            UpdateUserDto
+        > controller, UserService userService)
+    {
+        this.controller = controller;
         this.userService = userService;
     }
 
+    @Autowired
+    public UserController(UserService userService, AttributeFilter filter) {
+        this(new CrudControllerService<>(filter, UserMapper.INSTANCE, userService, "User"), userService);
+    }
+
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
-    public PageDto<UserDto> getUsers(
+    public PageDto<UserDto> getAllUsers(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "user_names") Set<String> userNames,
@@ -61,48 +82,40 @@ public class UserController extends BaseController {
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
-        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
      ) {
         Page<User> userPage = userService.getUsers(ids, excludeIds, userNames, displayNames, emails, phoneNumbers, statusIds, salutationIds, roles, page, size, sort, orderAscending);
 
-        List<UserDto> userList = userPage
-                                 .stream()
-                                 .map(UserMapper.INSTANCE::toDto)
-                                 .toList();
-        return new PageDto<>(userList, userPage.getTotalPages(), userPage.getTotalElements());
+        return this.controller.getAll(userPage, attributes);
     }
 
-    @GetMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
-    public UserDto getUser(@PathVariable Long userId) {
-        User user = userService.getUser(userId);
-        Validator.assertion(user != null, EntityNotFoundException.class, "User", userId.toString());
-        return UserMapper.INSTANCE.toDto(user);
+    @GetMapping("/{userId}")
+    public UserDto getUser(@PathVariable(required = true, name = "userId") Long userId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        return this.controller.get(userId, attributes);
     }
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto addUser(@Valid @RequestBody @NotNull AddUserDto userDto) {
-        User user = UserMapper.INSTANCE.fromDto(userDto);
-        User addedUser = userService.addUser(user);
-        return UserMapper.INSTANCE.toDto(addedUser);
+    @DeleteMapping
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public long deleteUsers(@RequestParam("ids") Set<Long> userIds) {
+        return this.controller.delete(userIds);
     }
 
-    @PutMapping("/{userId}")
-    public UserDto putUser(@PathVariable Long userId, @Valid @RequestBody @NotNull UpdateUserDto userDto) {
-        UpdateUser<? extends UpdateUserRole> user = UserMapper.INSTANCE.fromDto(userDto);
-        User updatedUser = userService.putUser(userId, user);
-        return UserMapper.INSTANCE.toDto(updatedUser);
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public List<UserDto> addUser(@Valid @NotNull @RequestBody List<AddUserDto> addDtos) {
+        return this.controller.add(addDtos);
     }
 
-    @PatchMapping("/{userId}")
-    public UserDto patchUser(@PathVariable Long userId, @Valid @RequestBody @NotNull UpdateUserDto userDto) {
-        User user = UserMapper.INSTANCE.fromDto(userDto);
-        User patchedUser = userService.patchUser(userId, user);
-        return UserMapper.INSTANCE.toDto(patchedUser);
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<UserDto> updateUser(@Valid @NotNull @RequestBody List<UpdateUserDto> updateDtos) {
+        return this.controller.put(updateDtos);
     }
 
-    @DeleteMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
-    public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @PatchMapping
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<UserDto> patchUser(@Valid @NotNull @RequestBody List<UpdateUserDto> updateDtos) {
+        return this.controller.patch(updateDtos);
     }
 }

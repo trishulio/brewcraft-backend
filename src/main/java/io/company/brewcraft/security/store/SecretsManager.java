@@ -14,4 +14,5 @@ public interface SecretsManager<K, V> {
 
     public Boolean exists(K secretId) throws IOException;
 
+    public boolean remove(K secretId) throws IOException;
 }

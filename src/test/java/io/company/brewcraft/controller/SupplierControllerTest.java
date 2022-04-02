@@ -34,7 +34,7 @@ import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.SupplierService;
-import io.company.brewcraft.service.impl.TenantManagementService;
+import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -53,7 +53,7 @@ public class SupplierControllerTest {
     private IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
 
     @MockBean
-    private TenantManagementService tenantMgmtServiceMock;
+    private TenantService tenantMgmtServiceMock;
 
     @MockBean
     public UtilityProvider utilityProvider;

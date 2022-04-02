@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.company.brewcraft.model.IaasIdpTenant;
-import io.company.brewcraft.model.IaasIdpTenantUserMembership;
+import io.company.brewcraft.model.IaasUserTenantMembership;
 import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
@@ -33,7 +33,7 @@ public class AwsIdpUserRepository implements IdpUserRepository {
     public void createUserInTenant(IaasUser user, IaasIdpTenant idpTenant) {
         this.createUser(user);
 
-        IaasIdpTenantUserMembership membership = new IaasIdpTenantUserMembership(user, idpTenant);
+        IaasUserTenantMembership membership = new IaasUserTenantMembership(user, idpTenant);
 
         try {
             this.tenantUserRepo.add(membership);

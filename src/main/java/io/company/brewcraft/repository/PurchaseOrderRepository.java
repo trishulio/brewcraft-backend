@@ -17,4 +17,5 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
     @Override
     @Modifying
     @Query("delete from purchase_order p where p.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);}
+    long deleteByIds(Iterable<Long> ids);
+}

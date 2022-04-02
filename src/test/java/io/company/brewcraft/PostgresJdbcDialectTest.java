@@ -1,7 +1,8 @@
 package io.company.brewcraft;
 
-import static io.company.brewcraft.DbMockUtil.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.company.brewcraft.DbMockUtil.mockPs;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
@@ -142,20 +143,20 @@ public class PostgresJdbcDialectTest {
     @Test
     public void testDropOwned_RunsDropOwnedSql() throws SQLException {
         Connection mConn = mock(Connection.class);
-        PreparedStatement mPs = mockPs(mConn, sql.dropOwned("OWNER"), 1);
+        PreparedStatement mPs = mockPs(mConn, sql.dropOwnedBy("OWNER"), 1);
 
-        dialect.dropOwned(mConn, "OWNER");
+        dialect.dropOwnedBy(mConn, "OWNER");
 
         verify(mPs, times(1)).executeUpdate();
         verify(mPs, times(1)).close();
     }
 
     @Test
-    public void testReassignOwned_RunsReassignOwnedSql() throws SQLException {
+    public void testReassignOwnedByTo_RunsReassignOwnedSql() throws SQLException {
         Connection mConn = mock(Connection.class);
-        PreparedStatement mPs = mockPs(mConn, sql.reassignOwned("OWNER", "ASSIGNEE"), 1);
+        PreparedStatement mPs = mockPs(mConn, sql.reassignOwnedByTo("OWNER", "ASSIGNEE"), 1);
 
-        dialect.reassignOwned(mConn, "OWNER", "ASSIGNEE");
+        dialect.reassignOwnedByTo(mConn, "OWNER", "ASSIGNEE");
 
         verify(mPs, times(1)).executeUpdate();
         verify(mPs, times(1)).close();

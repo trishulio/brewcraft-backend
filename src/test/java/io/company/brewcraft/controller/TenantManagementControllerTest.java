@@ -1,132 +1,123 @@
 package io.company.brewcraft.controller;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
-import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.data.domain.PageImpl;
 
+import io.company.brewcraft.dto.AddTenantDto;
+import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.TenantDto;
-import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.service.TenantManagementService;
-import io.company.brewcraft.util.UtilityProvider;
-import io.company.brewcraft.util.controller.AttributeFilter;
+import io.company.brewcraft.dto.UpdateTenantDto;
+import io.company.brewcraft.model.BaseTenant;
+import io.company.brewcraft.model.Tenant;
+import io.company.brewcraft.model.UpdateTenant;
+import io.company.brewcraft.service.impl.TenantService;
 
-@WebMvcTest(TenantManagementController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
 public class TenantManagementControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private TenantManagementController controller;
 
-    @MockBean
-    private ContextHolder contextHolderMock;
+    private CrudControllerService<
+                UUID,
+                Tenant,
+                BaseTenant,
+                UpdateTenant,
+                TenantDto,
+                AddTenantDto,
+                UpdateTenantDto
+            > mCrudController;
 
-    @MockBean
-    private UtilityProvider utilityProvider;
+    private TenantService mService;
 
-    @MockBean
-    private AttributeFilter filter;
-
-    @MockBean
-    private TenantManagementService tenantManagementServiceMock;
-
-    @Test
-    public void testGetAll_ReturnsListOfAllTenants() throws Exception {
-       TenantDto tenant1 = new TenantDto(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"), "testName", "testUrl", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
-       TenantDto tenant2 = new TenantDto(UUID.fromString("33581762-ff4b-494f-bc40-c66216e2b420"), "testName2", "testUrl2", LocalDateTime.of(2021, 2, 3, 4, 5), LocalDateTime.of(2021, 2, 3, 4, 5));
-       List<TenantDto> tenantList = new ArrayList<>();
-       tenantList.add(tenant1);
-       tenantList.add(tenant2);
-
-       when(tenantManagementServiceMock.getTenants()).thenReturn(tenantList);
-
-       this.mockMvc.perform(get("/operations/tenants").header("Authorization", "Bearer " + "test"))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().json("[ {'id':'b3c97f3f-dd2d-42d0-9032-954f361de632',"
-                                  + " 'name':'testName',"
-                                  + " 'url':'testUrl',"
-                                  + " 'created':'2020-01-02T03:04:00',"
-                                  + " 'lastUpdated':'2020-01-02T03:04:00' },"
-                                  + "{'id':'33581762-ff4b-494f-bc40-c66216e2b420',"
-                                  + " 'name':'testName2',"
-                                  + " 'url':'testUrl2',"
-                                  + " 'created':'2021-02-03T04:05:00',"
-                                  + " 'lastUpdated':'2021-02-03T04:05:00' } ]"));
-
-        verify(tenantManagementServiceMock, times(1)).getTenants();
+    @BeforeEach
+    public void init() {
+        this.mCrudController = mock(CrudControllerService.class);
+        this.mService = mock(TenantService.class);
+        this.controller = new TenantManagementController(mCrudController, mService);
     }
 
     @Test
-    public void testGetTenant_ReturnsTenant() throws Exception {
-        TenantDto tenant = new TenantDto(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"), "testName", "testUrl", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4));
+    public void testGetAllTenant_ReturnsDtosFromController() throws MalformedURLException {
+        doReturn(new PageImpl<>(List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001"))))).when(mService).getAll(
+            Set.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+            Set.of("T1"),
+            Set.of(new URL("http://localhost/")),
+            true,
+            new TreeSet<>(List.of("id")),
+            true,
+            1,
+            10
+        );
+        doReturn(new PageDto<>(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))), 1, 1)).when(mCrudController).getAll(new PageImpl<>(List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")))), Set.of(""));
 
-        when(tenantManagementServiceMock.getTenant(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"))).thenReturn(tenant);
+        PageDto<TenantDto> page = this.controller.getAll(
+            Set.of(UUID.fromString("00000000-0000-0000-0000-000000000000")),
+            Set.of("T1"),
+            Set.of(new URL("http://localhost/")),
+            true,
+            new TreeSet<>(List.of("id")),
+            true,
+            1,
+            10,
+            Set.of("")
+        );
 
-        this.mockMvc.perform(get("/operations/tenants/b3c97f3f-dd2d-42d0-9032-954f361de632"))
-         .andExpect(status().isOk())
-         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-         .andExpect(content().json("{'id':'b3c97f3f-dd2d-42d0-9032-954f361de632',"
-                                 + " 'name':'testName',"
-                                 + " 'url':'testUrl',"
-                                 + " 'created':'2020-01-02T03:04:00'}"));
-
-         verify(tenantManagementServiceMock, times(1)).getTenant(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"));
+        PageDto<TenantDto> expected = new PageDto<>(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))), 1, 1);
+        assertEquals(expected, page);
     }
 
     @Test
-    public void testAddTenant_ReturnsNewTenantId() throws Exception {
-        JSONObject payload = new JSONObject();
-        payload.put("name", "testName");
-        payload.put("url", "testUrl");
+    public void testGetTenant_ReturnsDtoFromController() {
+        doReturn(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))).when(mCrudController).get(UUID.fromString("00000000-0000-0000-0000-000000000001"), Set.of(""));
 
-        when(tenantManagementServiceMock.addTenant(any())).thenReturn(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"));
+        TenantDto dto = this.controller.getTenant(UUID.fromString("00000000-0000-0000-0000-000000000001"), Set.of(""));
 
-        this.mockMvc.perform(post("/operations/tenants")
-         .contentType(MediaType.APPLICATION_JSON)
-         .content(payload.toString()))
-         .andExpect(status().isCreated())
-         .andExpect(content().json("{'id':'b3c97f3f-dd2d-42d0-9032-954f361de632'}"));
-
-        verify(tenantManagementServiceMock, times(1)).addTenant(any(TenantDto.class));
+        TenantDto expected = new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+        assertEquals(expected, dto);
     }
 
     @Test
-    public void testUpdateTenant_UpdatesTenant() throws Exception {
-        JSONObject payload = new JSONObject();
-        payload.put("name", "testName");
-        payload.put("url", "testUrl");
+    public void testDeleteTenants_ReturnsDeleteCountFromController() {
+        doReturn(1L).when(mCrudController).delete(Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
-        this.mockMvc.perform(put("/operations/tenants/b3c97f3f-dd2d-42d0-9032-954f361de632")
-         .contentType(MediaType.APPLICATION_JSON)
-         .content(payload.toString()))
-         .andExpect(status().isOk())
-         .andExpect(jsonPath("$").doesNotExist());
-
-        verify(tenantManagementServiceMock, times(1)).updateTenant(any(TenantDto.class), eq(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632")));
+        assertEquals(1L, this.controller.deleteTenants(Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001"))));
     }
 
     @Test
-    public void testDeleteTenant_DeletesTenant() throws Exception {
-        this.mockMvc.perform(delete("/operations/tenants/b3c97f3f-dd2d-42d0-9032-954f361de632"))
-         .andExpect(status().isOk());
+    public void testAddTenants_AddsToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001")))).when(mCrudController).add(List.of(new AddTenantDto()));
 
-         verify(tenantManagementServiceMock, times(1)).deleteTenant(UUID.fromString("b3c97f3f-dd2d-42d0-9032-954f361de632"));
+        List<TenantDto> dtos = this.controller.addTenant(List.of(new AddTenantDto()));
+
+        assertEquals(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))), dtos);
+    }
+
+    @Test
+    public void testUpdateTenants_PutsToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001")))).when(mCrudController).put(List.of(new UpdateTenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))));
+
+        List<TenantDto> dtos = this.controller.updateTenant(List.of(new UpdateTenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))));
+
+        assertEquals(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))), dtos);
+    }
+
+    @Test
+    public void testPatchTenants_PatchToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001")))).when(mCrudController).patch(List.of(new UpdateTenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))));
+
+        List<TenantDto> dtos = this.controller.patchTenant(List.of(new UpdateTenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))));
+
+        assertEquals(List.of(new TenantDto(UUID.fromString("00000000-0000-0000-0000-000000000001"))), dtos);
     }
 }

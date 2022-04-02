@@ -73,6 +73,8 @@ public class TenantUserRegister implements TenantRegister {
             dialect.dropOwnedBy(conn, config.getUserName());
             dialect.dropUser(conn, config.getUserName());
             conn.commit();
+
+            secretMgr.remove(config.getSchemaName());
         });
     }
 

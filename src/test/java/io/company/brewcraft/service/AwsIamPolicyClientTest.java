@@ -55,16 +55,15 @@ public class AwsIamPolicyClientTest {
             Policy policy = new Policy().withPolicyName(mAwsMapper.getName(req.getPolicyArn()));
             return new GetPolicyResult().withPolicy(policy);
         }).when(mAwsIamClient).getPolicy(any());
-        
 
         doAnswer(inv -> {
         	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
-        	
+
         	List<PolicyVersion> versions = List.of(
     			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
     			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
 			);
-        	
+
         	return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
 
@@ -105,15 +104,15 @@ public class AwsIamPolicyClientTest {
 
             return new CreatePolicyResult().withPolicy(policy);
         }).when(mAwsIamClient).createPolicy(any());
-        
+
         doAnswer(inv -> {
         	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
-        	
+
         	List<PolicyVersion> versions = List.of(
     			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
     			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
 			);
-        	
+
         	return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
 
@@ -132,25 +131,24 @@ public class AwsIamPolicyClientTest {
             Policy policy = new Policy().withPolicyName(mAwsMapper.getName(req.getPolicyArn()));
             return new GetPolicyResult().withPolicy(policy);
         }).when(mAwsIamClient).getPolicy(any());
-        
 
         doAnswer(inv -> {
         	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
-        	
+
         	List<PolicyVersion> versions = List.of(
     			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true).withVersionId("DEFAULT_V1"),
     			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false).withVersionId("NON_DEFAULT_V1")
 			);
-        	
+
         	return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
-        
+
         IaasPolicy policy = client.update(new IaasPolicy("POLICY_1", "DOCUMENT_1", "DESCRIPTION_1", "IAAS_RES_1", "IAAS_ID_1", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0)));
-        
+
         IaasPolicy expected = new IaasPolicy("POLICY_1");
         expected.setDocument("DEFAULT_DOCUMENT_POLICY_1_ARN");
         assertEquals(expected, policy);
-        
+
         InOrder order = inOrder(mAwsIamClient);
         order.verify(mAwsIamClient).createPolicyVersion(new CreatePolicyVersionRequest().withPolicyArn("POLICY_1_ARN").withPolicyDocument("DOCUMENT_1").withSetAsDefault(true));
         order.verify(mAwsIamClient).deletePolicyVersion(new DeletePolicyVersionRequest().withPolicyArn("POLICY_1_ARN").withVersionId("NON_DEFAULT_V1"));
@@ -163,7 +161,7 @@ public class AwsIamPolicyClientTest {
             Policy policy = new Policy().withPolicyName(mAwsMapper.getName(req.getPolicyArn()));
             return new GetPolicyResult().withPolicy(policy);
         }).when(mAwsIamClient).getPolicy(any());
-        
+
         assertTrue(client.exists("POLICY_NAME"));
     }
 

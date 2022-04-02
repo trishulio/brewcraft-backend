@@ -1,9 +1,11 @@
 package io.company.brewcraft.data;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -20,6 +22,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import io.company.brewcraft.model.Tenant;
+
 public class HibernateAutoConfigurationTest {
 
     private LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBeanMock;
@@ -28,7 +32,7 @@ public class HibernateAutoConfigurationTest {
 
     private JpaVendorAdapter jpaVendorAdapterMock;
 
-    private TenantDataSourceManager tenantDataSourceManageMock;
+    private DataSourceManager dataSourceManageMock;
 
     private MultiTenantConnectionProvider multiTenantConnectionProviderMock;
 
@@ -43,7 +47,7 @@ public class HibernateAutoConfigurationTest {
         localContainerEntityManagerFactoryBeanMock = mock(LocalContainerEntityManagerFactoryBean.class);
         entityManagerFactoryMock = mock(EntityManagerFactory.class);
         jpaVendorAdapterMock = mock(HibernateJpaVendorAdapter.class);
-        tenantDataSourceManageMock = mock(ContextHolderTenantDataSourceManager.class);
+        dataSourceManageMock = mock(DataSourceManager.class);
         multiTenantConnectionProviderMock = mock(TenantConnectionProviderPool.class);
         currentTenantIdentifierResolverMock = mock(TenantIdentifierResolver.class);
         dataSourceMock = mock(DataSource.class);
@@ -60,7 +64,7 @@ public class HibernateAutoConfigurationTest {
 
     @Test
     public void testCurrentTenantIdentifierResolver_ReturnsTenantIdentifierResolver() {
-        CurrentTenantIdentifierResolver currentTenantIdentifierResolver = hibernateAutoConfiguration.currentTenantIdentifierResolver(null);
+        CurrentTenantIdentifierResolver currentTenantIdentifierResolver = hibernateAutoConfiguration.currentTenantIdentifierResolver(null, new Tenant(UUID.randomUUID()));
 
         assertTrue(currentTenantIdentifierResolver instanceof TenantIdentifierResolver);
     }
@@ -83,9 +87,9 @@ public class HibernateAutoConfigurationTest {
 
     @Test
     public void testLocalContainerEntityManagerFactoryBean() {
-        when(tenantDataSourceManageMock.getAdminDataSource()).thenReturn(dataSourceMock);
+        when(dataSourceManageMock.getAdminDataSource()).thenReturn(dataSourceMock);
 
-        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = hibernateAutoConfiguration.entityManagerFactory(jpaVendorAdapterMock, tenantDataSourceManageMock, multiTenantConnectionProviderMock, currentTenantIdentifierResolverMock);
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = hibernateAutoConfiguration.entityManagerFactory(jpaVendorAdapterMock, dataSourceManageMock, multiTenantConnectionProviderMock, currentTenantIdentifierResolverMock);
 
         assertSame(dataSourceMock, localContainerEntityManagerFactoryBean.getDataSource());
         assertSame(jpaVendorAdapterMock, localContainerEntityManagerFactoryBean.getJpaVendorAdapter());

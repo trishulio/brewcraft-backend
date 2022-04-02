@@ -55,6 +55,7 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     }
 
     public Tenant(UUID id) {
+        this();
         setId(id);
     }
 

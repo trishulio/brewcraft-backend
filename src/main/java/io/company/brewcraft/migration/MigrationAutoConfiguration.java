@@ -48,6 +48,6 @@ public class MigrationAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(MigrationRegister.class)
     public MigrationRegister migrationReg(TenantDataSourceManager dsMgr, DataSourceConfigurationProvider<UUID> tenantDsConfigProvider) {
-        return new FlywayMigrationRegister(dsMgr, tenantDsConfigProvider);
+        return new FlywayTenantMigrationRegister(dsMgr, tenantDsConfigProvider);
     }
 }

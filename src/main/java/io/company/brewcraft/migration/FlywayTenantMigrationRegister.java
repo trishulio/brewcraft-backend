@@ -15,18 +15,18 @@ import io.company.brewcraft.data.DataSourceConfigurationProvider;
 import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.model.Tenant;
 
-public class FlywayMigrationRegister implements MigrationRegister {
-    private static final Logger log = LoggerFactory.getLogger(FlywayMigrationRegister.class);
+public class FlywayTenantMigrationRegister implements MigrationRegister {
+    private static final Logger log = LoggerFactory.getLogger(FlywayTenantMigrationRegister.class);
 
     private FluentConfigProvider provider;
     private TenantDataSourceManager dsMgr;
     private DataSourceConfigurationProvider<UUID> dataSourceConfigProvider;
 
-    public FlywayMigrationRegister(TenantDataSourceManager dsMgr, DataSourceConfigurationProvider<UUID> dataSourceConfigProvider) {
+    public FlywayTenantMigrationRegister(TenantDataSourceManager dsMgr, DataSourceConfigurationProvider<UUID> dataSourceConfigProvider) {
         this(() -> Flyway.configure(), dsMgr, dataSourceConfigProvider);
     }
 
-    protected FlywayMigrationRegister(FluentConfigProvider provider, TenantDataSourceManager dsMgr, DataSourceConfigurationProvider<UUID> dataSourceConfigProvider) {
+    protected FlywayTenantMigrationRegister(FluentConfigProvider provider, TenantDataSourceManager dsMgr, DataSourceConfigurationProvider<UUID> dataSourceConfigProvider) {
         this.provider = provider;
         this.dsMgr = dsMgr;
         this.dataSourceConfigProvider = dataSourceConfigProvider;

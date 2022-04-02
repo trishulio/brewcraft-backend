@@ -1,6 +1,6 @@
 package io.company.brewcraft;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,14 +59,14 @@ public class PostgresJdbcDialectSqlTest {
     }
 
     @Test
-    public void testReassignOwned_ReturnsSqlWithOwnerAndAssignee() {
-        String sql = pgSql.reassignOwned("OWNER", "ASSIGNEE");
+    public void testReassignOwnedByTo_ReturnsSqlWithOwnerAndAssignee() {
+        String sql = pgSql.reassignOwnedByTo("OWNER", "ASSIGNEE");
         assertEquals("REASSIGN OWNED BY OWNER TO ASSIGNEE", sql);
     }
 
     @Test
     public void testDropOwned_ReturnsSqlWithOwner() {
-        String sql = pgSql.dropOwned("OWNER");
+        String sql = pgSql.dropOwnedBy("OWNER");
         assertEquals("DROP OWNED BY OWNER", sql);
     }
 }

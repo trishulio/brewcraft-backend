@@ -1,6 +1,6 @@
 package io.company.brewcraft.migration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +22,19 @@ public class MigrationAutoConfigurationTest {
 
     @Test
     public void testTenantRegister_ReturnsInstanceOfFlywayTenantRegister() {
-        TenantRegister register = config.tenantRegister(null, null, null, null, null);
+        TenantRegister register = config.tenantRegister(null, null, null, null, null, null);
         assertTrue(register instanceof UnifiedTenantRegister);
     }
 
     @Test
     public void testMigrationMgr_ReturnsInstanceOfSequentialMigrationManager() {
-        MigrationManager mgr = config.migrationMgr(null, null, null);
+        MigrationManager mgr = config.migrationMgr(null, null);
         assertTrue(mgr instanceof SequentialMigrationManager);
     }
 
     @Test
     public void testMigrationRegister_ReturnsInstanceOfFlywayMigrationRegister() {
-        MigrationRegister register = config.migrationReg(null, null, null);
-        assertTrue(register instanceof FlywayMigrationRegister);
+        MigrationRegister register = config.migrationReg(null, null);
+        assertTrue(register instanceof FlywayTenantMigrationRegister);
     }
 }

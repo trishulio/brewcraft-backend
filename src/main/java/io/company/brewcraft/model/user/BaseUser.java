@@ -2,13 +2,13 @@ package io.company.brewcraft.model.user;
 
 import java.util.List;
 
-public interface BaseUser<R extends BaseUserRole> extends UserStatusAccessor, UserSalutationAccessor {
+public interface BaseUser extends UserStatusAccessor, UserSalutationAccessor {
     final String ATTR_DISPLAY_NAME = "displayName";
     final String ATTR_FIRST_NAME = "firstName";
     final String ATTR_LAST_NAME = "lastName";
     final String ATTR_EMAIL = "email";
     final String ATTR_IMAGE_URL = "imageSrc";
-    final String ATTR_PHONE_NUMBER_ = "phoneNumber";
+    final String ATTR_PHONE_NUMBER = "phoneNumber";
     final String ATTR_USER_NAME = "userName";
     final String ATTR_ROLES = "roles";
 
@@ -40,8 +40,7 @@ public interface BaseUser<R extends BaseUserRole> extends UserStatusAccessor, Us
 
     void setUserName(String userName);
 
-    List<R> getRoles();
+    List<UserRole> getRoles();
 
-    void setRoles(List<R> roles);
-
+    void setRoles(List<UserRole> roles);
 }

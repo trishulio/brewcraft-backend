@@ -24,7 +24,7 @@ import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsObjectStoreClient;
 import io.company.brewcraft.service.IdpTenantUserMembershipRepository;
 import io.company.brewcraft.service.IdpUserRepository;
-import io.company.brewcraft.service.impl.AwsIdpTenantUserMembershipRepository;
+import io.company.brewcraft.service.impl.AwsIaasUserTenantMembershipClient;
 import io.company.brewcraft.service.impl.user.AwsIdpUserRepository;
 
 @Configuration
@@ -58,7 +58,7 @@ public class AwsConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public IdpTenantUserMembershipRepository idpTenatUserRepo(IdentityProviderClient idpClient) {
-        return new AwsIdpTenantUserMembershipRepository(idpClient);
+        return new AwsIaasUserTenantMembershipClient(idpClient);
     }
 
     @Bean

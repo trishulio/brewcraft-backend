@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-public class TenantDataSourceManagerImpl implements TenantDataSourceManager {
+public class TenantDataSourceManagerWrapper implements TenantDataSourceManager {
     private DataSourceManager dsMgr;
     private DataSourceConfigurationProvider<UUID> dsConfigMgr;
 
-    public TenantDataSourceManagerImpl(DataSourceManager dsMgr, TenantDataSourceConfigurationProvider dsConfigMgr) {
+    public TenantDataSourceManagerWrapper(DataSourceManager dsMgr, TenantDataSourceConfigurationProvider dsConfigMgr) {
         this.dsMgr = dsMgr;
         this.dsConfigMgr = dsConfigMgr;
     }

@@ -11,18 +11,19 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
+import io.company.brewcraft.service.CrudEntity;
 
 @Entity(name = "user_role")
 @Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class UserRole extends BaseEntity implements BaseUserRole, UpdateUserRole, Audited {
+public class UserRole extends BaseEntity implements CrudEntity<Long>, UpdateUserRole, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
 

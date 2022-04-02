@@ -32,8 +32,8 @@ import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
-public class TenantManagementService implements CrudService<UUID, Tenant, BaseTenant, UpdateTenant, TenantAccessor> {
-    private static final Logger log = LoggerFactory.getLogger(TenantManagementService.class);
+public class TenantService implements CrudService<UUID, Tenant, BaseTenant, UpdateTenant, TenantAccessor> {
+    private static final Logger log = LoggerFactory.getLogger(TenantService.class);
 
     private Tenant adminTenant;
     private RepoService<UUID, Tenant, TenantAccessor> repoService;
@@ -42,7 +42,7 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
     private MigrationManager migrationManager;
     private TenantIaasService iaasService;
 
-    public TenantManagementService(
+    public TenantService(
         Tenant adminTenant,
         RepoService<UUID, Tenant, TenantAccessor> repoService,
         UpdateService<UUID, Tenant, BaseTenant, UpdateTenant> updateService,
@@ -70,9 +70,9 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
     }
 
     public Page<Tenant> getAll(
-        List<UUID> ids,
-        List<String> names,
-        List<URL> urls,
+        Set<UUID> ids,
+        Set<String> names,
+        Set<URL> urls,
         Boolean isReady,
         SortedSet<String> sort,
         boolean orderAscending,
@@ -104,9 +104,11 @@ public class TenantManagementService implements CrudService<UUID, Tenant, BaseTe
         tenants.forEach(tenant -> tenant.setIsReady(false));
         this.repoService.saveAll(tenants);
 
+        long deleteCount = this.repoService.delete(ids);
+
         this.iaasService.delete(tenants);
 
-        return this.repoService.delete(ids);
+        return deleteCount;
     }
 
     @Override

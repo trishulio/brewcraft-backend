@@ -31,25 +31,25 @@ import io.company.brewcraft.dto.UpdateTenantDto;
 import io.company.brewcraft.model.BaseTenant;
 import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.model.UpdateTenant;
-import io.company.brewcraft.service.impl.TenantManagementService;
+import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.service.mapper.TenantMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
 @RequestMapping(path = "/operations/tenants")
 public class TenantManagementController extends BaseController {
-    private TenantManagementService tenantService;
+    private TenantService tenantService;
 
     private CrudControllerService<UUID, Tenant, BaseTenant, UpdateTenant, TenantDto, AddTenantDto, UpdateTenantDto> controller;
 
     @Autowired
-    public TenantManagementController(TenantManagementService tenantService, AttributeFilter filter) {
+    public TenantManagementController(TenantService tenantService, AttributeFilter filter) {
         this(new CrudControllerService<>(filter, TenantMapper.INSTANCE, tenantService, "Tenant"), tenantService);
     }
 
     public TenantManagementController(
             CrudControllerService<UUID, Tenant, BaseTenant, UpdateTenant, TenantDto, AddTenantDto, UpdateTenantDto> controller,
-            TenantManagementService tenantService
+            TenantService tenantService
         ) {
         super();
         this.controller = controller;
@@ -58,9 +58,9 @@ public class TenantManagementController extends BaseController {
 
     @GetMapping
     public PageDto<TenantDto> getAll(
-        @RequestParam(required = false, name = "ids") List<UUID> ids,
-        @RequestParam(required = false, name = "names") List<String> names,
-        @RequestParam(required = false, name = "urls") List<URL> urls,
+        @RequestParam(required = false, name = "ids") Set<UUID> ids,
+        @RequestParam(required = false, name = "names") Set<String> names,
+        @RequestParam(required = false, name = "urls") Set<URL> urls,
         @RequestParam(required = false, name = "is_ready") Boolean isReady,
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,

@@ -1,10 +1,11 @@
 package io.company.brewcraft;
 
-import static io.company.brewcraft.DbMockUtil.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -12,15 +13,13 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.data.CachingDataSourceManager;
 import io.company.brewcraft.data.DataSourceBuilder;
+import io.company.brewcraft.data.DataSourceConfiguration;
 import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
-import io.company.brewcraft.data.JdbcDialect;
-import io.company.brewcraft.data.SchemaDataSourceManager;
-import io.company.brewcraft.security.store.SecretsManager;
 
 @SuppressWarnings("unchecked")
 public class SchemaDataSourceManagerTest {
@@ -28,78 +27,49 @@ public class SchemaDataSourceManagerTest {
 
     private DataSourceManager mgr;
 
-    private DataSource mDs;
+    private DataSource mAdminDs;
     private DataSourceBuilder mDsBuilder;
-    private JdbcDialect mDialect;
-    private SecretsManager<String, String> mSecretsMgr;
 
     @BeforeEach
     public void init() throws SQLException {
         mDsBuilder = mockDsBuilder();
 
-        mDs = mock(DataSource.class);
-        createAndSetMockConnection(mDs, "USERNAME", "SCHEMA", "jdbc:db://localhost:port/db_name", false);
+        mAdminDs = mock(DataSource.class);
 
-        mSecretsMgr = mock(SecretsManager.class);
-        mDialect = mock(JdbcDialect.class);
-
-        mgr = new SchemaDataSourceManager(mDs, mDsBuilder, mDialect, mSecretsMgr, POOL_SIZE);
+        mgr = new CachingDataSourceManager(mAdminDs, mDsBuilder);
     }
 
     @Test
-    public void testGetAdminDataSource_ReturnsAdminDsObject() {
-        DataSource ds = mgr.getAdminDataSource();
-        assertSame(mDs, ds);
-    }
+    public void testGetDataSource_ReturnsNewDataSourceFromConfig() throws SQLException, IOException, URISyntaxException {
+        DataSourceConfiguration mConfig = mock(DataSourceConfiguration.class);
+        doReturn(new URI("jdbc://localhost:5432")).when(mConfig).getUrl();
+        doReturn("schema").when(mConfig).getSchemaName();
+        doReturn("username").when(mConfig).getUserName();
+        doReturn("password").when(mConfig).getPassword();
+        doReturn(1).when(mConfig).getPoolSize();
+        doReturn(true).when(mConfig).isAutoCommit();
 
-    @Test
-    @Disabled
-    // Disabled because data-source can be created without having schema. This is
-    // needed in case data-source is used itself to create the schema)
-    public void testGetDataSource_ThrowsSQLException_WhenSchemaDoesNotExists() throws SQLException, IOException {
-        Connection mConn = mDs.getConnection();
-        doReturn(false).when(mDialect).schemaExists(mConn, "ABC_123");
-        assertThrows(SQLException.class, () -> mgr.getDataSource("ABC_123"));
-    }
+        DataSource ds = mgr.getDataSource(mConfig);
+        ds = mgr.getDataSource(mConfig);
+        ds = mgr.getDataSource(mConfig);
 
-    @Test
-    public void testGetDataSource_ReturnsDataSourceWithSpecifiedUser() throws SQLException, IOException {
-        doReturn("ABCDE").when(mSecretsMgr).get("ABC_123");
+        assertEquals("jdbc://localhost:5432", ds.getConnection().getMetaData().getURL());
+        assertEquals("schema", ds.getConnection().getSchema());
+        assertEquals("username", ds.getConnection().getMetaData().getUserName());
+        assertEquals(true, ds.getConnection().getAutoCommit());
 
-        DataSource ds = mgr.getDataSource("ABC_123");
-        Connection conn = ds.getConnection();
-
-        assertNotSame(mDs, ds);
-
-        assertEquals("ABC_123", conn.getSchema());
-        assertFalse(conn.getAutoCommit());
-
-        assertEquals("ABC_123", conn.getMetaData().getUserName());
-        assertEquals("jdbc:db://localhost:port/db_name", conn.getMetaData().getURL());
-
-        verify(mDsBuilder, times(1)).clear();
-        // Hack: Cannot get these values from DataSource itself. Hence verifying using builder getters.
-        assertEquals("ABCDE", mDsBuilder.password());
-        assertEquals(POOL_SIZE, mDsBuilder.poolSize());
-    }
-
-    @Test
-    public void testGetDataSource_ReturnsDataSourceFromCache_WhenSubsequentCallsAreMade() throws SQLException, IOException {
-        doReturn("ABCDE").when(mSecretsMgr).get("ABC_123");
-
-        DataSource ds1 = mgr.getDataSource("ABC_123");
-        DataSource ds2 = mgr.getDataSource("ABC_123");
-        DataSource ds3 = mgr.getDataSource("ABC_123");
-
-        assertNotSame(mDs, ds1);
-        assertSame(ds1, ds2);
-        assertSame(ds2, ds3);
+        verify(mDsBuilder, times(1)).poolSize(1);
+        verify(mDsBuilder, times(1)).password("password");
 
         verify(mDsBuilder, times(1)).build();
     }
 
-    /** --------------- Mock Initialization Methods --------------- **/
+    @Test
+    public void testGetAdminDataSource_ReturnsAdminDs() {
+        assertEquals(mAdminDs, mgr.getAdminDataSource());
+    }
 
+    /** --------------- Mock Initialization Methods --------------- **/
     private DataSourceBuilder mockDsBuilder() throws SQLException {
         DataSourceBuilder builder = spy(new HikariDataSourceBuilder());
 
