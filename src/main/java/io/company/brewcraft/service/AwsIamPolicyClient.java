@@ -3,6 +3,7 @@ package io.company.brewcraft.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,7 @@ import com.amazonaws.services.identitymanagement.model.DeletePolicyVersionReques
 import com.amazonaws.services.identitymanagement.model.DeletePolicyVersionResult;
 import com.amazonaws.services.identitymanagement.model.GetPolicyRequest;
 import com.amazonaws.services.identitymanagement.model.GetPolicyResult;
+import com.amazonaws.services.identitymanagement.model.GetPolicyVersionRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsResult;
 import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
@@ -93,7 +95,16 @@ public class AwsIamPolicyClient implements IaasClient<String, IaasPolicy, BaseIa
 
     @Override
     public boolean exists(String policyName) {
-        return get(policyName) != null;
+        String policyArn = awsMapper.getPolicyArn(policyName);
+        GetPolicyRequest request = new GetPolicyRequest()
+                                       .withPolicyArn(policyArn);
+        try {
+            this.awsIamClient.getPolicy(request);
+            return true;
+        } catch (NoSuchEntityException e) {
+            log.error("No policy found with arn: {}", policyArn);
+            return false;
+        }
     }
 
     @Override
@@ -135,7 +146,7 @@ public class AwsIamPolicyClient implements IaasClient<String, IaasPolicy, BaseIa
 
             ListPolicyVersionsResult listResult = this.awsIamClient.listPolicyVersions(listRequest);
 
-            marker = listResult.getIsTruncated() ? listResult.getMarker() : null;
+            marker = BooleanUtils.isTrue(listResult.getIsTruncated()) ? listResult.getMarker() : null;
 
             List<PolicyVersion> policyVersionsSubset = listResult.getVersions();
             policyVersions.addAll(policyVersionsSubset);
