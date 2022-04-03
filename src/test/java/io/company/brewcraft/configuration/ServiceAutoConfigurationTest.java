@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
+import io.company.brewcraft.model.user.UserRole;
+import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRefresher;
 import io.company.brewcraft.repository.BrewRepository;
@@ -41,7 +43,6 @@ import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
-import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
@@ -244,8 +245,11 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testUserRoleService_ReturnsInstanceOfUserRoleService() {
-        final UserRoleRepository userRoleRepositoryMock = mock(UserRoleRepository.class);
-        final UserRoleService service = this.serviceAutoConfiguration.userRoleService(userRoleRepositoryMock);
+                final UtilityProvider utilProvider = mock(UtilityProvider.class);
+        final UserRoleRepository userRoleRepository = mock(UserRoleRepository.class);
+        final Refresher<UserRole, UserRoleAccessor> userRoleRefresher = mock(Refresher.class);
+        
+        final UserRoleService service = this.serviceAutoConfiguration.userRoleService(utilProvider, userRoleRepository, userRoleRefresher);
 
         assertTrue(service instanceof UserRoleService);
     }
@@ -263,10 +267,9 @@ public class ServiceAutoConfigurationTest {
         final UserRepository userRepositoryMock = mock(UserRepository.class);
         final Refresher<User, UserAccessor> userRefresher = mock(Refresher.class);
         final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
-        final ContextHolder contextHolderMock = mock(ContextHolder.class);
         final TenantIaasUserService idpUserService = mock(TenantIaasUserService.class);
 
-        UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserService, userRefresher, contextHolderMock);
+        UserService service = this.serviceAutoConfiguration.userService(mUtilProvider, userRepositoryMock, userRefresher, idpUserService);
     }
 
     @Test

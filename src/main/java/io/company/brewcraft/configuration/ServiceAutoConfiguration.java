@@ -1,6 +1,6 @@
 package io.company.brewcraft.configuration;
 
-import java.time.ZoneId;
+import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
-import com.amazonaws.services.identitymanagement.model.Policy;
 
+import io.company.brewcraft.controller.IaasObjectStoreFileController;
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.dto.UpdateInvoice;
@@ -25,6 +25,7 @@ import io.company.brewcraft.model.BaseFinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.BaseFinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
+import io.company.brewcraft.model.BaseIaasObjectStoreFile;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
@@ -45,8 +46,9 @@ import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
-import io.company.brewcraft.model.IaasObjectStoreFileClientProvider;
+import io.company.brewcraft.model.IaasObjectStoreFile;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasRepositoryProvider;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
@@ -66,12 +68,12 @@ import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.TemporaryImageSrcDecorator;
 import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.model.TenantAccessor;
-import io.company.brewcraft.model.TenantContextObjectStoreFileClientProvider;
 import io.company.brewcraft.model.UpdateFinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.UpdateFinishedGoodLotMixturePortion;
 import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.model.UpdateIaasObjectStore;
+import io.company.brewcraft.model.UpdateIaasObjectStoreFile;
 import io.company.brewcraft.model.UpdateIaasPolicy;
 import io.company.brewcraft.model.UpdateIaasRole;
 import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
@@ -128,23 +130,12 @@ import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
-import io.company.brewcraft.security.idp.AwsFactory;
-import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.AwsArnMapper;
 import io.company.brewcraft.service.AwsCognitoIdentityClient;
 import io.company.brewcraft.service.AwsCognitoIdentitySdkWrapper;
-import io.company.brewcraft.service.AwsIaasObjectStoreMapper;
-import io.company.brewcraft.service.AwsIaasPolicyMapper;
-import io.company.brewcraft.service.AwsIaasRoleMapper;
-import io.company.brewcraft.service.AwsIamPolicyClient;
-import io.company.brewcraft.service.AwsIamRoleClient;
-import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsIdentityCredentialsMapper;
-import io.company.brewcraft.service.AwsObjectStoreClient;
-import io.company.brewcraft.service.AwsObjectStoreFileSystem;
-import io.company.brewcraft.service.AwsObjectStoreRepository;
 import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
 import io.company.brewcraft.service.AwsTenantIaasResourceBuilder;
 import io.company.brewcraft.service.BlockingAsyncExecutor;
@@ -169,19 +160,18 @@ import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
 import io.company.brewcraft.service.FinishedGoodLotService;
 import io.company.brewcraft.service.IaasAuthorizationFetch;
+import io.company.brewcraft.service.IaasClient;
 import io.company.brewcraft.service.IaasIdpTenantService;
-import io.company.brewcraft.service.IaasObjectStoreFileSystem;
+import io.company.brewcraft.service.IaasObjectStoreFileService;
 import io.company.brewcraft.service.IaasObjectStoreService;
-import io.company.brewcraft.service.IaasPolicyRepository;
 import io.company.brewcraft.service.IaasPolicyService;
-import io.company.brewcraft.service.IaasRolePolicyAttachmentIaasRepository;
+import io.company.brewcraft.service.IaasRepository;
+import io.company.brewcraft.service.IaasRepositoryProviderProxy;
 import io.company.brewcraft.service.IaasRolePolicyAttachmentService;
-import io.company.brewcraft.service.IaasRoleRepository;
 import io.company.brewcraft.service.IaasRoleService;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
-import io.company.brewcraft.service.LocalDateTimeMapper;
 import io.company.brewcraft.service.LotAggregationService;
 import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.MaterialService;
@@ -227,7 +217,6 @@ import io.company.brewcraft.service.TransactionService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.UserRoleService;
 import io.company.brewcraft.service.UserSalutationService;
-import io.company.brewcraft.service.impl.AwsIdpTenantWithRoleRepository;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
 import io.company.brewcraft.service.impl.EquipmentServiceImpl;
@@ -255,12 +244,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @Configuration
 public class ServiceAutoConfiguration {
-    @Bean
-    @ConditionalOnMissingBean(LocalDateTimeMapper.class)
-    public LocalDateTimeMapper dtMapper() {
-        return new LocalDateTimeMapper(ZoneId.systemDefault());
-    }
-
     @Bean
     @ConditionalOnMissingBean(BlockingAsyncExecutor.class)
     public BlockingAsyncExecutor executor() {
@@ -299,12 +282,6 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(TenantIaasAuthResourceMapper.class)
-    public TenantIaasAuthResourceMapper authResourceMapper() {
-        return new TenantIaasAuthResourceMapper();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(TenantIaasAuthService.class)
     public TenantIaasAuthService tenantIaasAuthService(TenantIaasAuthResourceMapper authResourceMapper, IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
         return new TenantIaasAuthService(authResourceMapper, roleService, resourceBuilder);
@@ -312,15 +289,11 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IaasIdpTenantService.class)
-    public IaasIdpTenantService iaasIdpTenantService(AwsIdpTenantWithRoleRepository iaasRepo, UtilityProvider utilProvider) {
+    public IaasIdpTenantService iaasIdpTenantService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> client) {
         UpdateService<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasIdpTenant.class, UpdateIaasIdpTenant.class, IaasIdpTenant.class, java.util.Set.of());
-        return new IaasIdpTenantService(updateService, iaasRepo);
-    }
+        IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo = new BulkIaasClient<>(executor, client);
 
-    @Bean
-    @ConditionalOnMissingBean(TenantIaasIdpResourcesMapper.class)
-    public TenantIaasIdpResourcesMapper tenantIaasIdpResourcesMapper() {
-        return new TenantIaasIdpResourcesMapper();
+        return new IaasIdpTenantService(updateService, iaasRepo);
     }
 
     @Bean
@@ -336,17 +309,6 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(TenantIaasIdpTenantMapper.class)
-    public TenantIaasIdpTenantMapper idpTenantMapper(LocalDateTimeMapper dtMapper) {
-        return new TenantIaasIdpTenantMapper(dtMapper);
-    }
-
-    @Bean
-    public AwsIdpTenantWithRoleRepository idpUserRepository(IdentityProviderClient idpClient, BlockingAsyncExecutor executor, IaasRoleService roleService, TenantIaasIdpTenantMapper mapper, AwsArnMapper arnMapper) {
-        return new AwsIdpTenantWithRoleRepository(idpClient, executor, roleService, mapper, arnMapper);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(TenantIaasVfsService.class)
     public TenantIaasVfsService iaasVfsService(TenantIaasVfsResourceMapper vfsResourceMapper, IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
         return new TenantIaasVfsService(vfsResourceMapper, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, resourceBuilder);
@@ -359,12 +321,6 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(TenantIaasVfsResourceMapper.class)
-    public TenantIaasVfsResourceMapper vfsResourcesMapper() {
-        return new TenantIaasVfsResourceMapper();
-    }
-
-    @Bean
     @ConditionalOnMissingBean(AwsDocumentTemplates.class)
     public AwsDocumentTemplates awsDocumentTemplates(@Value("${aws.cognito.identity.pool.id}") String cognitoIdPoolId) {
         return new AwsDocumentTemplates(cognitoIdPoolId);
@@ -372,79 +328,43 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IaasPolicyService.class)
-    public IaasPolicyService iaasPolicyService(UtilityProvider utilProvider, IaasPolicyRepository iaasRepo) {
+    public IaasPolicyService iaasPolicyService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> iaasClient) {
         UpdateService<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasPolicy.class, UpdateIaasPolicy.class, IaasPolicy.class, Set.of());
+        IaasRepository<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
+
         return new IaasPolicyService(updateService, iaasRepo);
     }
 
     @Bean
-    @ConditionalOnMissingBean(IaasPolicyRepository.class)
-    public IaasPolicyRepository policyIaasRepository(AwsIamPolicyClient iamClient, BlockingAsyncExecutor executor, AwsIaasPolicyMapper mapper) {
-        BulkIaasClient<String, Policy, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> bulkClient = new BulkIaasClient<>(executor, mapper);
-        return new IaasPolicyRepository(bulkClient, iamClient);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(AwsIaasPolicyMapper.class)
-    public AwsIaasPolicyMapper iaasPolicyMapper(LocalDateTimeMapper dtMapper) {
-        return new AwsIaasPolicyMapper(dtMapper);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(IaasRoleService.class)
-    public IaasRoleService iaasRoleService(UtilityProvider utilProvider, IaasRoleRepository iaasRepo) {
+    public IaasRoleService iaasRoleService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasRole, BaseIaasRole, UpdateIaasRole> iaasClient) {
         UpdateService<String, IaasRole, BaseIaasRole, UpdateIaasRole> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasRole.class, UpdateIaasRole.class, IaasRole.class, Set.of());
+        IaasRepository<String, IaasRole, BaseIaasRole, UpdateIaasRole> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
+ 
         return new IaasRoleService(updateService, iaasRepo);
     }
 
     @Bean
-    @ConditionalOnMissingBean(IaasRoleRepository.class)
-    public IaasRoleRepository roleIaasRepository(AwsIamRoleClient iamClient, BlockingAsyncExecutor executor, AwsIaasRoleMapper mapper) {
-        return new IaasRoleRepository(iamClient, executor, mapper);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(AwsIaasRoleMapper.class)
-    public AwsIaasRoleMapper iaasRoleMapper(LocalDateTimeMapper dtMapper) {
-        return new AwsIaasRoleMapper(dtMapper);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(IaasObjectStoreService.class)
-    public IaasObjectStoreService iaasObjectStoreService(UtilityProvider utilProvider, AwsObjectStoreRepository iaasRepo) {
+    public IaasObjectStoreService iaasObjectStoreService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> iaasClient) {
         UpdateService<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasObjectStore.class, UpdateIaasObjectStore.class, IaasObjectStore.class, Set.of());
+        IaasRepository<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
+
         return new IaasObjectStoreService(updateService, iaasRepo);
     }
 
     @Bean
-    @ConditionalOnMissingBean(AwsObjectStoreRepository.class)
-    public AwsObjectStoreRepository objectStoreIaasRepository(AwsObjectStoreClient iamClient, BlockingAsyncExecutor executor, AwsIaasObjectStoreMapper mapper) {
-        return new AwsObjectStoreRepository(iamClient, executor, mapper);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(AwsIaasObjectStoreMapper.class)
-    public AwsIaasObjectStoreMapper iaasObjectStoreMapper(LocalDateTimeMapper dtMapper) {
-        return new AwsIaasObjectStoreMapper(dtMapper);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(IaasRolePolicyAttachmentService.class)
-    public IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService(UtilityProvider utilProvider, IaasRolePolicyAttachmentIaasRepository iaasRepo) {
+    public IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> iaasClient) {
         UpdateService<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasRolePolicyAttachment.class, UpdateIaasRolePolicyAttachment.class, IaasRolePolicyAttachment.class, Set.of());
+        IaasRepository<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
         return new IaasRolePolicyAttachmentService(updateService, iaasRepo);
     }
 
     @Bean
-    @ConditionalOnMissingBean(IaasRolePolicyAttachmentIaasRepository.class)
-    public IaasRolePolicyAttachmentIaasRepository iaasRepository(AwsIamRolePolicyAttachmentClient iamClient, BlockingAsyncExecutor executor) {
-        return new IaasRolePolicyAttachmentIaasRepository(iamClient, executor);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(TemporaryImageSrcDecorator.class)
-    public TemporaryImageSrcDecorator temporaryImageSrcDecorator(IaasObjectStoreFileSystem objectStoreFileSystem, @Value("${app.object-store.temp.path.hours}") Long durationHours) {
-        return new TemporaryImageSrcDecorator(objectStoreFileSystem, durationHours);
+    public TemporaryImageSrcDecorator temporaryImageSrcDecorator(IaasObjectStoreFileController objectStoreFileController) {
+        return new TemporaryImageSrcDecorator(objectStoreFileController);
     }
 
     @Bean
@@ -454,21 +374,17 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IaasObjectStoreFileSystem.class)
-    public IaasObjectStoreFileSystem iaasObjectStoreFilesystem(IaasObjectStoreFileClientProvider fileClientProvider, BlockingAsyncExecutor executor, LocalDateTimeMapper dtMapper) {
-        return new AwsObjectStoreFileSystem(fileClientProvider, executor, dtMapper);
-    }
+    public IaasObjectStoreFileService objectStoreFileService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider) {
+        final UpdateService<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasObjectStoreFile.class, UpdateIaasObjectStoreFile.class, IaasObjectStoreFile.class, Set.of());
+        IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasRepo = new IaasRepositoryProviderProxy<>(iaasObjectStoreFileClientProvider);
 
+        return new IaasObjectStoreFileService(updateService, iaasRepo);
+    }
+    
     @Bean
     @ConditionalOnMissingBean(TenantContextIaasObjectStoreNameProvider.class)
     public TenantContextIaasObjectStoreNameProvider objectStoreNameProvider(AwsDocumentTemplates awsTemplates, ContextHolder contextHolder, @Value("app.object-store.bucket.name") String appBucketName) {
         return new TenantContextAwsBucketNameProvider(awsTemplates, contextHolder, appBucketName);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(IaasObjectStoreFileClientProvider.class)
-    public IaasObjectStoreFileClientProvider amazonS3Provider(@Value("${aws.s3.region}") String region, TenantContextIaasObjectStoreNameProvider objectStoreNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory) {
-        return new TenantContextObjectStoreFileClientProvider(region, objectStoreNameProvider, authFetcher, awsFactory);
     }
 
     @Bean

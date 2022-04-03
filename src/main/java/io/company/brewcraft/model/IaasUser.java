@@ -7,7 +7,7 @@ import io.company.brewcraft.service.CrudEntity;
 public class IaasUser extends BaseEntity implements CrudEntity<String>, UpdateIaasUser, Audited {
     private String userName;
     private String email;
-    private String phoneNumber;
+    private String phoneNumber; // We are not persisting it in the IDP
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
 

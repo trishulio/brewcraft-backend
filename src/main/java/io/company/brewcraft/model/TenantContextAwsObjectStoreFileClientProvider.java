@@ -12,37 +12,41 @@ import com.google.common.cache.LoadingCache;
 import io.company.brewcraft.security.idp.AwsFactory;
 import io.company.brewcraft.service.AwsS3FileClient;
 import io.company.brewcraft.service.IaasClient;
+import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.LocalDateTimeMapper;
-import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
+import io.company.brewcraft.service.SequentialExecutor;
 import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
+import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
 
-public class TenantContextObjectStoreFileClientProvider implements IaasObjectStoreFileClientProvider {
+public class TenantContextAwsObjectStoreFileClientProvider implements IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> {
     // Because the IaasAuthorization expires in 1 hour so the existing client becomes useless.
     public static final Duration DURATION_REMOVE_UNUSED_CLIENTS = Duration.ofHours(1);
 
     private String region;
     private TenantContextIaasAuthorizationFetch authFetcher;
-    private LoadingCache<GetAmazonS3ClientArgs, IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> > cache;
+    private LoadingCache<GetAmazonS3ClientArgs, IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> > cache;
     private TenantContextIaasObjectStoreNameProvider bucketNameProvider;
 
-    public TenantContextObjectStoreFileClientProvider(String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, Long getPresignUrlDuration) {
+    public TenantContextAwsObjectStoreFileClientProvider(String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, Long getPresignUrlDuration) {
         this.region = region;
         this.authFetcher = authFetcher;
         this.bucketNameProvider = bucketNameProvider;
 
         this.cache = CacheBuilder.newBuilder()
                                  .expireAfterWrite(DURATION_REMOVE_UNUSED_CLIENTS)
-                                 .build(new CacheLoader<GetAmazonS3ClientArgs, IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> >(){
+                                 .build(new CacheLoader<GetAmazonS3ClientArgs, IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> >(){
                                     @Override
-                                    public IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  load(GetAmazonS3ClientArgs args) throws Exception {
+                                    public IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  load(GetAmazonS3ClientArgs args) throws Exception {
                                         AmazonS3 s3Client = awsFactory.s3Client(args.region, args.accessKey, args.accessSecret, args.sessionToken);
-                                        return new AwsS3FileClient(s3Client, args.bucketName, LocalDateTimeMapper.INSTANCE, getPresignUrlDuration); // TODO: Pass in duration from env config
+                                        IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> client = new AwsS3FileClient(s3Client, args.bucketName, LocalDateTimeMapper.INSTANCE, getPresignUrlDuration);
+                                        
+                                        return new SequentialExecutor<>(client);
                                     }
                                  });
     }
 
     @Override
-    public IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  getClient() {
+    public IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  getIaasRepository() {
         IaasAuthorization authorization = authFetcher.fetch();
 
         GetAmazonS3ClientArgs args = new GetAmazonS3ClientArgs(this.region, bucketNameProvider.getObjectStoreName(), authorization.getAccessKey(), authorization.getAccessSecret(), authorization.getSessionToken());
