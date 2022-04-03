@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import io.company.brewcraft.dto.user.UserDto;
+import io.company.brewcraft.model.user.User;
+
 public class BrewTest {
 
     private Brew brew;
@@ -32,11 +35,13 @@ public class BrewTest {
         List<BrewStage> brewStages = List.of(new BrewStage());
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        User assignedTo = new User(7L);
+        User ownedBy = new User(8L);
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, created, lastUpdated, version);
+        Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, assignedTo, ownedBy, created, lastUpdated, version);
 
         assertEquals(1L, brew.getId());
         assertEquals("testName", brew.getName());
@@ -55,6 +60,8 @@ public class BrewTest {
         stage.setBrew(brew);
         assertEquals(stage, brew.getBrewStages().iterator().next());
 
+        assertEquals(new User(7L), brew.getAssignedTo());
+        assertEquals(new User(8L), brew.getOwnedBy());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
         assertEquals(1, brew.getVersion());
@@ -139,6 +146,18 @@ public class BrewTest {
     }
 
     @Test
+    public void testGetSetAssignedTo() {
+        brew.setAssignedTo(new User(7L));
+        assertEquals(new User(7L), brew.getAssignedTo());
+    }
+
+    @Test
+    public void testGetSetOwnedBy() {
+        brew.setOwnedBy(new User(8L));
+        assertEquals(new User(8L), brew.getOwnedBy());
+    }
+
+    @Test
     public void testGetSetCreated() {
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         brew.setCreatedAt(created);
@@ -171,13 +190,15 @@ public class BrewTest {
         List<BrewStage> brewStages = List.of(new BrewStage());
         LocalDateTime startedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime endedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
+        User assignedTo = new User(7L);
+        User ownedBy = new User(8L);
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         int version = 1;
 
-        Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, created, lastUpdated, version);
+        Brew brew = new Brew(id, name, description, batchId, product, parentBrew, childBrews, brewStages, startedAt, endedAt, assignedTo, ownedBy, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"batchId\":\"2\",\"product\":{\"id\":null,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"parentBrew\":{\"id\":null,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"startedAt\":\"2020-01-02T03:04:00\",\"endedAt\":\"2020-01-02T03:04:00\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"batchId\":\"2\",\"product\":{\"id\":null,\"name\":null,\"description\":null,\"category\":null,\"targetMeasures\":null,\"imageSrc\":null,\"createdAt\":null,\"lastUpdated\":null,\"deletedAt\":null,\"version\":null},\"parentBrew\":{\"id\":null,\"name\":null,\"description\":null,\"batchId\":null,\"product\":null,\"parentBrew\":null,\"startedAt\":null,\"endedAt\":null,\"assignedTo\":null,\"ownedBy\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"startedAt\":\"2020-01-02T03:04:00\",\"endedAt\":\"2020-01-02T03:04:00\",\"assignedTo\":{\"id\":7,\"userName\":null,\"displayName\":null,\"firstName\":null,\"lastName\":null,\"email\":null,\"roleBindings\":null,\"imageUrl\":null,\"phoneNumber\":null,\"status\":null,\"salutation\":null,\"version\":null,\"createdAt\":null,\"lastUpdated\":null,\"roles\":null},\"ownedBy\":{\"id\":8,\"userName\":null,\"displayName\":null,\"firstName\":null,\"lastName\":null,\"email\":null,\"roleBindings\":null,\"imageUrl\":null,\"phoneNumber\":null,\"status\":null,\"salutation\":null,\"version\":null,\"createdAt\":null,\"lastUpdated\":null,\"roles\":null},\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, brew.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

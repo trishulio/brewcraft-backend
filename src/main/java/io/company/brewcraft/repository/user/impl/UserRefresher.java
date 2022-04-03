@@ -18,18 +18,25 @@ import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.model.user.UserStatusAccessor;
 import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.Refresher;
+import io.company.brewcraft.service.AssignedToAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
+import io.company.brewcraft.service.ProductAccessor;
 
 public class UserRefresher implements Refresher<User, UserAccessor> {
     private static final Logger log = LoggerFactory.getLogger(UserRefresher.class);
 
     private final AccessorRefresher<Long, UserAccessor, User> refresher;
+    private final AccessorRefresher<Long, AssignedToAccessor, User> assignedToAccessorRefresher;
+    private final AccessorRefresher<Long, OwnedByAccessor, User> ownedByAccessorRefresher;
     private final Refresher<UserStatus, UserStatusAccessor> statusRefresher;
     private final Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher;
     private final Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher;
 
     @Autowired
-    public UserRefresher(AccessorRefresher<Long, UserAccessor, User> refresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
+    public UserRefresher(AccessorRefresher<Long, UserAccessor, User> refresher, AccessorRefresher<Long, AssignedToAccessor, User> assignedToAccessorRefresher, AccessorRefresher<Long, OwnedByAccessor, User> ownedByAccessorRefresher, Refresher<UserStatus, UserStatusAccessor> statusRefresher, Refresher<UserSalutation, UserSalutationAccessor> salutationRefresher, Refresher<UserRoleBinding, UserRoleBindingAccessor> roleBindingRefresher) {
         this.refresher = refresher;
+        this.assignedToAccessorRefresher = assignedToAccessorRefresher;
+        this.ownedByAccessorRefresher = ownedByAccessorRefresher;
         this.statusRefresher = statusRefresher;
         this.salutationRefresher = salutationRefresher;
         this.roleBindingRefresher = roleBindingRefresher;
@@ -47,5 +54,13 @@ public class UserRefresher implements Refresher<User, UserAccessor> {
     @Override
     public void refreshAccessors(Collection<? extends UserAccessor> accessors) {
         refresher.refreshAccessors(accessors);
+    }
+
+    public void refreshAssignedToAccessors(Collection<? extends AssignedToAccessor> accessors) {
+        assignedToAccessorRefresher.refreshAccessors(accessors);
+    }
+
+    public void refreshOwnedByAccessors(Collection<? extends OwnedByAccessor> accessors) {
+        ownedByAccessorRefresher.refreshAccessors(accessors);
     }
 }

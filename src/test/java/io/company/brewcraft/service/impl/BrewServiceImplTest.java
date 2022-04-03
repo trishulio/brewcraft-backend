@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.Product;
+import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.service.BrewAccessor;
@@ -73,7 +74,7 @@ public class BrewServiceImplTest {
     @Test
     public void testAddBrew_AddsBrew() {
         Brew brew = new Brew(1L, "testName", "testDesc", "2", new Product(), new Brew(), null, null,
-                LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4),
+                LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), new User(7L), new User(8L),
                 LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2021, 1, 2, 3, 4), 1);
 
         Brew addedBrew = brewService.addBrew(brew);
@@ -90,6 +91,8 @@ public class BrewServiceImplTest {
 
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), addedBrew.getStartedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), addedBrew.getEndedAt());
+        assertEquals(new User(7L), addedBrew.getAssignedTo());
+        assertEquals(new User(8L), addedBrew.getOwnedBy());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), addedBrew.getCreatedAt());
         assertEquals(LocalDateTime.of(2021, 1, 2, 3, 4), addedBrew.getLastUpdated());
         assertEquals(1, addedBrew.getVersion());
@@ -101,11 +104,11 @@ public class BrewServiceImplTest {
     @Test
     public void testPutBrew_OverridesWhenBrewExists() {
         Brew existing = new Brew(1L, "testName", "testDesc", "2", new Product(2L), new Brew(3L), null, null,
-                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
+                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4), new User(7L), new User(8L),
                 LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
-                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4), new User(9L), new User(10L),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
@@ -124,6 +127,8 @@ public class BrewServiceImplTest {
 
         assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
         assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(new User(9L), brew.getAssignedTo());
+        assertEquals(new User(10L), brew.getOwnedBy());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
         assertEquals(1, brew.getVersion());
@@ -135,7 +140,7 @@ public class BrewServiceImplTest {
     @Test
     public void testPutBrew_AddsNrewBrew_WhenNoBrewExists() {
         Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
-                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4), new User(7L), new User(8L),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.empty()).when(brewRepositoryMock).findById(1L);
@@ -154,6 +159,8 @@ public class BrewServiceImplTest {
 
         assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
         assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(new User(7L), brew.getAssignedTo());
+        assertEquals(new User(8L), brew.getOwnedBy());
         assertEquals(LocalDateTime.of(2012, 1, 2, 3, 4), brew.getCreatedAt());
         assertEquals(LocalDateTime.of(2013, 1, 2, 3, 4), brew.getLastUpdated());
         assertEquals(1, brew.getVersion());
@@ -177,11 +184,11 @@ public class BrewServiceImplTest {
     @Test
     public void testPatchBrew_PatchesExistingBrew() {
         Brew existing = new Brew(1L, "testName", "testDesc", "2", new Product(2L), new Brew(3L), null, null,
-                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4),
+                LocalDateTime.of(2017, 1, 2, 3, 4), LocalDateTime.of(2018, 1, 2, 3, 4), new User(7L), new User(8L),
                 LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         Brew update = new Brew(null, "testNameUpdate", "testDescUpdate", "3", new Product(), new Brew(), null, null,
-                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4),
+                LocalDateTime.of(2010, 1, 2, 3, 4), LocalDateTime.of(2011, 1, 2, 3, 4), new User(9L), new User(10L),
                 LocalDateTime.of(2012, 1, 2, 3, 4), LocalDateTime.of(2013, 1, 2, 3, 4), 1);
 
         doReturn(Optional.of(existing)).when(brewRepositoryMock).findById(1L);
@@ -200,6 +207,8 @@ public class BrewServiceImplTest {
 
         assertEquals(LocalDateTime.of(2010, 1, 2, 3, 4), brew.getStartedAt());
         assertEquals(LocalDateTime.of(2011, 1, 2, 3, 4), brew.getEndedAt());
+        assertEquals(new User(9L), brew.getAssignedTo());
+        assertEquals(new User(10L), brew.getOwnedBy());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), brew.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), brew.getLastUpdated());
         assertEquals(1, brew.getVersion());

@@ -22,10 +22,14 @@ import io.company.brewcraft.repository.user.impl.UserRefresher;
 import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 import io.company.brewcraft.repository.user.impl.UserSalutationRefresher;
 import io.company.brewcraft.repository.user.impl.UserStatusRefresher;
+import io.company.brewcraft.service.AssignedToAccessor;
+import io.company.brewcraft.service.OwnedByAccessor;
 
 public class UserRefresherTest {
 
     private AccessorRefresher<Long, UserAccessor, User> mRefresher;
+    private AccessorRefresher<Long, AssignedToAccessor, User> mAssignedToRefresher;
+    private AccessorRefresher<Long, OwnedByAccessor, User> mOwnedByRefresher;
     private Refresher<UserStatus, UserStatusAccessor> mStatusRefresher;
     private Refresher<UserSalutation, UserSalutationAccessor> mSalutationRefresher;
     private Refresher<UserRoleBinding, UserRoleBindingAccessor> mRoleBindingRefresher;
@@ -35,10 +39,12 @@ public class UserRefresherTest {
     @BeforeEach
     public void init() {
         mRefresher = mock(AccessorRefresher.class);
+        mAssignedToRefresher = mock(AccessorRefresher.class);
+        mOwnedByRefresher = mock(AccessorRefresher.class);
         mStatusRefresher = mock(Refresher.class);
         mSalutationRefresher = mock(Refresher.class);
         mRoleBindingRefresher = mock(Refresher.class);
-        userRefresher = new UserRefresher(mRefresher, mStatusRefresher, mSalutationRefresher, mRoleBindingRefresher);
+        userRefresher = new UserRefresher(mRefresher, mAssignedToRefresher, mOwnedByRefresher, mStatusRefresher, mSalutationRefresher, mRoleBindingRefresher);
     }
 
     @Test
@@ -69,5 +75,21 @@ public class UserRefresherTest {
         userRefresher.refreshAccessors(List.of(accessor));
 
         verify(mRefresher, times(1)).refreshAccessors(List.of(accessor));
+    }
+
+    @Test
+    public void testAssignedToRefreshAccessors_CallsAccessorRefresher() {
+        AssignedToAccessor accessor = mock(AssignedToAccessor.class);
+        userRefresher.refreshAssignedToAccessors(List.of(accessor));
+
+        verify(mAssignedToRefresher, times(1)).refreshAccessors(List.of(accessor));
+    }
+
+    @Test
+    public void testOwnedByRefreshAccessors_CallsAccessorRefresher() {
+        OwnedByAccessor accessor = mock(OwnedByAccessor.class);
+        userRefresher.refreshOwnedByAccessors(List.of(accessor));
+
+        verify(mOwnedByRefresher, times(1)).refreshAccessors(List.of(accessor));
     }
 }

@@ -53,7 +53,7 @@ public class SkuControllerTest {
    @Test
    public void testGetSkus_CallsServicesWithArguments_AndReturnsPageDtoOfSkuDtosMappedFromSkusPage() {
        final List<Sku> skus = List.of(
-               new Sku(1L, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(1L, new Sku(1L), new Material(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)
+               new Sku(1L, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(1L, new Sku(1L), new Material(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), true, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)
        );
        final Page<Sku> mPage = mock(Page.class);
        doReturn(skus.stream()).when(mPage).stream();
@@ -62,6 +62,7 @@ public class SkuControllerTest {
        doReturn(mPage).when(this.skuService).getSkus(
            Set.of(1L),
            Set.of(2L),
+           true,
            1,
            10,
            new TreeSet<>(List.of("id")),
@@ -71,6 +72,7 @@ public class SkuControllerTest {
        final PageDto<SkuDto> dto = this.skuController.getSkus(
            Set.of(1L),
            Set.of(2L),
+           true,
            new TreeSet<>(List.of("id")),
            true,
            1,
@@ -88,6 +90,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", sku.getDescription());
        assertEquals(new ProductDto(2L), sku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), sku.getQuantity());
+       assertEquals(true, sku.getIsPackageable());
        assertEquals(1, sku.getVersion());
 
        assertEquals(1, sku.getMaterials().size());
@@ -100,7 +103,7 @@ public class SkuControllerTest {
 
    @Test
    public void testGetSku_ReturnsSkuDtoMappedFromServiceSku() {
-       final Sku expectedSku = new Sku(1L, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(1L, new Sku(1L), new Material(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
+       final Sku expectedSku = new Sku(1L, "1101094", "testName", "testDescription", new Product(2L), List.of(new SkuMaterial(1L, new Sku(1L), new Material(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1)), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.HECTOLITRE), true, LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), 1);
 
        doReturn(expectedSku).when(this.skuService).getSku(1L);
 
@@ -112,6 +115,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", actualSku.getDescription());
        assertEquals(new ProductDto(2L), actualSku.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), actualSku.getQuantity());
+       assertEquals(true, actualSku.getIsPackageable());
        assertEquals(1, actualSku.getVersion());
 
        assertEquals(1, actualSku.getMaterials().size());
@@ -139,7 +143,7 @@ public class SkuControllerTest {
    public void testAddSku_ReturnsSkuDtoAfterAddingToService() {
        doAnswer(i -> i.getArgument(0)).when(this.skuService).addSkus(anyList());
 
-       final AddSkuDto payload = new AddSkuDto("1101094", "testName", "testDescription", 2L, List.of(new AddSkuMaterialDto(2L, new QuantityDto("hl", BigDecimal.valueOf(100)))), new QuantityDto("hl", BigDecimal.valueOf(100)));
+       final AddSkuDto payload = new AddSkuDto("1101094", "testName", "testDescription", 2L, List.of(new AddSkuMaterialDto(2L, new QuantityDto("hl", BigDecimal.valueOf(100)))), new QuantityDto("hl", BigDecimal.valueOf(100)), true);
 
        final SkuDto skuDto = this.skuController.addSku(payload);
 
@@ -149,6 +153,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(null, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());
@@ -163,7 +168,7 @@ public class SkuControllerTest {
    public void testPutSku_ReturnsSkuDtoAfterUpdatingItToService() {
        doAnswer(i -> i.getArgument(0)).when(this.skuService).putSkus(anyList());
 
-       UpdateSkuDto payload = new UpdateSkuDto("1101094", "testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100)), 1)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
+       UpdateSkuDto payload = new UpdateSkuDto("1101094", "testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100)), 1)), new QuantityDto("hl", BigDecimal.valueOf(100)), true, 1);
 
        final SkuDto skuDto = this.skuController.putSku(1L, payload);
 
@@ -173,6 +178,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(1, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());
@@ -187,7 +193,7 @@ public class SkuControllerTest {
    public void testPatchSku_ReturnsSkuDtoAfterPatchingItToService() {
        doAnswer(i -> i.getArgument(0)).when(this.skuService).patchSkus(anyList());
 
-       UpdateSkuDto payload = new UpdateSkuDto("1101094", "testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100)), 1)), new QuantityDto("hl", BigDecimal.valueOf(100)), 1);
+       UpdateSkuDto payload = new UpdateSkuDto("1101094", "testName", "testDescription", 2L, List.of(new UpdateSkuMaterialDto(1L, 2L, new QuantityDto("hl", BigDecimal.valueOf(100)), 1)), new QuantityDto("hl", BigDecimal.valueOf(100)), true, 1);
 
        final SkuDto skuDto = this.skuController.patchSku(1L, payload);
 
@@ -197,6 +203,7 @@ public class SkuControllerTest {
        assertEquals("testDescription", skuDto.getDescription());
        assertEquals(new ProductDto(2L), skuDto.getProduct());
        assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100)), skuDto.getQuantity());
+       assertEquals(true, skuDto.getIsPackageable());
        assertEquals(1, skuDto.getVersion());
 
        assertEquals(1, skuDto.getMaterials().size());

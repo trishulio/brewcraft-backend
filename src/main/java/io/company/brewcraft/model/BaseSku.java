@@ -18,4 +18,8 @@ public interface BaseSku<T extends BaseSkuMaterial<? extends BaseSku<T>>> extend
 
     void setDescription(String description);
 
+    boolean getIsPackageable();
+
+    void setIsPackageable(boolean isPackageable);
+
 }

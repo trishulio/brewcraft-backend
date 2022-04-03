@@ -20,6 +20,7 @@ import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.UpdateBrew;
+import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.repository.BrewRepository;
 import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.WhereClauseBuilder;
@@ -44,7 +45,7 @@ public class BrewServiceImpl extends BaseService implements BrewService {
     @Override
     public Page<Brew> getBrews(Set<Long> ids, Set<String> batchIds, Set<String> names, Set<Long> productIds,
             Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,
-            LocalDateTime endedAtFrom, LocalDateTime endedAtTo,  int page, int size, SortedSet<String> sort, boolean orderAscending) {
+            LocalDateTime endedAtFrom, LocalDateTime endedAtTo, Set<Long> assignedToUserIds, Set<Long> ownedByUserIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
 
             Specification<Brew> spec = WhereClauseBuilder
                 .builder()
@@ -56,6 +57,8 @@ public class BrewServiceImpl extends BaseService implements BrewService {
                 .not().in(new String[] { Brew.FIELD_BREW_STAGES, BrewStage.FIELD_TASK, BrewTask.FIELD_ID }, excludeStageTaskIds)
                 .between(Brew.FIELD_STARTED_AT, startedAtFrom, startedAtTo)
                 .between(Brew.FIELD_ENDED_AT, endedAtFrom, endedAtTo)
+                .in(new String[] { Brew.FIELD_ASSIGNED_TO, User.FIELD_ID }, assignedToUserIds)
+                .in(new String[] { Brew.FIELD_OWNED_BY, User.FIELD_ID }, ownedByUserIds)
                 .build();
 
             Page<Brew> brewPage = brewRepository.findAll(spec, pageRequest(sort, orderAscending, page, size));

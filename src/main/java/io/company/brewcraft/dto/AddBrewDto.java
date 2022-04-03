@@ -19,6 +19,10 @@ public class AddBrewDto extends BaseDto {
 
     private Long parentBrewId;
 
+    private Long assignedToUserId;
+
+    private Long ownedByUserId;
+
     private LocalDateTime startedAt;
 
     private LocalDateTime endedAt;
@@ -28,7 +32,7 @@ public class AddBrewDto extends BaseDto {
     }
 
     public AddBrewDto(String name, String description, @NotNull String batchId, @NotNull Long productId,
-            Long parentBrewId, LocalDateTime startedAt, LocalDateTime endedAt) {
+            Long parentBrewId, LocalDateTime startedAt, LocalDateTime endedAt, Long assignedToUserId, Long ownedByUserId) {
         this();
         this.name = name;
         this.description = description;
@@ -37,6 +41,8 @@ public class AddBrewDto extends BaseDto {
         this.parentBrewId = parentBrewId;
         this.startedAt = startedAt;
         this.endedAt = endedAt;
+        this.assignedToUserId = assignedToUserId;
+        this.ownedByUserId = ownedByUserId;
     }
 
     public String getName() {
@@ -94,4 +100,21 @@ public class AddBrewDto extends BaseDto {
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
     }
+
+    public Long getAssignedToUserId() {
+        return assignedToUserId;
+    }
+
+    public void setAssignedToUserId(Long assignedToUserId) {
+        this.assignedToUserId = assignedToUserId;
+    }
+
+    public Long getOwnedByUserId() {
+        return ownedByUserId;
+    }
+
+    public void setOwnedByUserId(Long ownedByUserId) {
+        this.ownedByUserId = ownedByUserId;
+    }
+
 }
