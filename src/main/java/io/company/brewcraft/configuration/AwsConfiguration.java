@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
-import com.amazonaws.services.cognitoidp.model.GroupType;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient;
 import com.amazonaws.services.s3.AmazonS3;
@@ -53,16 +52,12 @@ import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsObjectStoreClient;
 import io.company.brewcraft.service.IaasClient;
-import io.company.brewcraft.service.IaasEntityMapper;
 import io.company.brewcraft.service.IaasRoleService;
-import io.company.brewcraft.service.IdpTenantUserMembershipRepository;
-import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
 import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
 import io.company.brewcraft.service.impl.AwsIaasUserTenantMembershipClient;
 import io.company.brewcraft.service.impl.AwsIdpTenantWithRoleClient;
 import io.company.brewcraft.service.impl.user.AwsCognitoUserClient;
-import io.company.brewcraft.service.impl.user.AwsIdpUserRepository;
 import io.company.brewcraft.service.mapper.AwsCognitoAdminGetUserResultMapper;
 import io.company.brewcraft.service.mapper.AwsCognitoUserMapper;
 import io.company.brewcraft.service.mapper.AwsGroupTypeMapper;
@@ -87,12 +82,6 @@ public class AwsConfiguration {
     @ConditionalOnMissingBean(IdentityProviderClient.class)
     public IdentityProviderClient idpClient(AWSCognitoIdentityProvider awsIdpProvider, @Value("${aws.cognito.user-pool.id}") final String cognitoUserPoolId) {
         return new AwsCognitoIdpClient(awsIdpProvider, cognitoUserPoolId);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(IdpUserRepository.class)
-    public IdpUserRepository idpUserRepo(IdentityProviderClient idpClient, IdpTenantUserMembershipRepository idpTenatUserRepo) {
-        return new AwsIdpUserRepository(idpClient, idpTenatUserRepo);
     }
 
     @Bean
@@ -130,39 +119,39 @@ public class AwsConfiguration {
     public AwsIamRolePolicyAttachmentClient awsIamRolePolicyClientClient(AmazonIdentityManagementClient iamClient, AwsArnMapper arnMapper) {
         return new AwsIamRolePolicyAttachmentClient(iamClient, arnMapper);
     }
-    
+
     @Bean
-    public IaasClient<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> awsIdpTenantClient(AWSCognitoIdentityProvider idp, String userPoolId, IaasEntityMapper<GroupType, IaasIdpTenant> mapper, AwsArnMapper arnMapper, IaasRoleService roleService) {
-        return new AwsIdpTenantWithRoleClient(idp, userPoolId, mapper, arnMapper, roleService);
+    public IaasClient<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> awsIdpTenantClient(AWSCognitoIdentityProvider idp, @Value("${aws.cognito.user-pool.id}") String userPoolId, AwsArnMapper arnMapper, IaasRoleService roleService) {
+        return new AwsIdpTenantWithRoleClient(idp, userPoolId, AwsGroupTypeMapper.INSTANCE, arnMapper, roleService);
     }
-    
+
     @Bean
     public IaasClient<String, IaasPolicy, BaseIaasPolicy, UpdateIaasPolicy> awsIamPolicyClient(AmazonIdentityManagement awsIamClient, AwsArnMapper awsMapper) {
         return new AwsIamPolicyClient(awsIamClient, awsMapper, AwsIaasPolicyMapper.INSTANCE);
     }
-    
+
     @Bean
     public IaasClient<String, IaasRole, BaseIaasRole, UpdateIaasRole> awsIamRoleClient(AmazonIdentityManagement awsIamClient) {
         return new AwsIamRoleClient(awsIamClient, AwsIaasRoleMapper.INSTANCE);
     }
-    
+
     @Bean
     public IaasClient<String, IaasObjectStore, BaseIaasObjectStore, UpdateIaasObjectStore> awsObjectStoreClient(AmazonS3 awsClient) {
         return new AwsObjectStoreClient(awsClient, AwsIaasObjectStoreMapper.INSTANCE);
     }
-    
+
     @Bean
-    public IaasClient<String, IaasUser, BaseIaasUser, UpdateIaasUser> awsUserClient(AWSCognitoIdentityProvider idp, String userPoolId) {
+    public IaasClient<String, IaasUser, BaseIaasUser, UpdateIaasUser> awsUserClient(AWSCognitoIdentityProvider idp, @Value("${aws.cognito.user-pool.id}") String userPoolId) {
         return new AwsCognitoUserClient(idp, userPoolId, AwsCognitoAdminGetUserResultMapper.INSTANCE, AwsCognitoUserMapper.INSTANCE);
     }
-    
+
     @Bean
-    public IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> awsCognitoUserGroupMembership(AWSCognitoIdentityProvider idp, String userPoolId) {
+    public IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> awsCognitoUserGroupMembership(AWSCognitoIdentityProvider idp, @Value("${aws.cognito.user-pool.id}") String userPoolId) {
         return new AwsIaasUserTenantMembershipClient(idp, userPoolId, AwsGroupTypeMapper.INSTANCE);
     }
-    
+
     @Bean
-    public IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider(@Value("${aws.s3.region}") String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, Long getPresignUrlDuration) {
+    public IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider(@Value("${aws.s3.region}") String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, @Value("${app.object-store.file.get.url.expiry}") Long getPresignUrlDuration) {
         return new TenantContextAwsObjectStoreFileClientProvider(region, bucketNameProvider, authFetcher, awsFactory, getPresignUrlDuration);
     }
 }

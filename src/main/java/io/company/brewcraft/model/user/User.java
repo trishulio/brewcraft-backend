@@ -33,7 +33,7 @@ import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
 
-@Entity
+@Entity(name = "user")
 @Table(name = "_user")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Audited {

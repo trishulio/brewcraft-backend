@@ -39,7 +39,7 @@ public class TenantContextAwsObjectStoreFileClientProvider implements IaasReposi
                                     public IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  load(GetAmazonS3ClientArgs args) throws Exception {
                                         AmazonS3 s3Client = awsFactory.s3Client(args.region, args.accessKey, args.accessSecret, args.sessionToken);
                                         IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> client = new AwsS3FileClient(s3Client, args.bucketName, LocalDateTimeMapper.INSTANCE, getPresignUrlDuration);
-                                        
+
                                         return new SequentialExecutor<>(client);
                                     }
                                  });

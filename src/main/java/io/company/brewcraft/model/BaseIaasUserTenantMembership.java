@@ -2,13 +2,14 @@ package io.company.brewcraft.model;
 
 public interface BaseIaasUserTenantMembership {
     final String ATTR_USER = "user";
-    final String ATTR_TENANT = "tenant";
+    final String ATTR_TENANT_ID = "tenantId";
 
     IaasUser getUser();
 
     void setUser(IaasUser user);
 
-    IaasIdpTenant getTenant();
+    String getTenantId();
 
-    void setTenant(IaasIdpTenant idpTenant);
+    void setTenantId(String tenantId);
+
 }

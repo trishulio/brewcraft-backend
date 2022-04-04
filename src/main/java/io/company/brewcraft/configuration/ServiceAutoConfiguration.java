@@ -29,6 +29,8 @@ import io.company.brewcraft.model.BaseIaasObjectStoreFile;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
+import io.company.brewcraft.model.BaseIaasUser;
+import io.company.brewcraft.model.BaseIaasUserTenantMembership;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.BaseMaterialLot;
 import io.company.brewcraft.model.BaseMixtureMaterialPortion;
@@ -52,6 +54,9 @@ import io.company.brewcraft.model.IaasRepositoryProvider;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
+import io.company.brewcraft.model.IaasUser;
+import io.company.brewcraft.model.IaasUserTenantMembership;
+import io.company.brewcraft.model.IaasUserTenantMembershipId;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceAccessor;
 import io.company.brewcraft.model.InvoiceItem;
@@ -77,6 +82,8 @@ import io.company.brewcraft.model.UpdateIaasObjectStoreFile;
 import io.company.brewcraft.model.UpdateIaasPolicy;
 import io.company.brewcraft.model.UpdateIaasRole;
 import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
+import io.company.brewcraft.model.UpdateIaasUser;
+import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.model.UpdateMaterialLot;
 import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
@@ -210,6 +217,7 @@ import io.company.brewcraft.service.TenantIaasIdpResourcesMapper;
 import io.company.brewcraft.service.TenantIaasIdpService;
 import io.company.brewcraft.service.TenantIaasResourceBuilder;
 import io.company.brewcraft.service.TenantIaasService;
+import io.company.brewcraft.service.TenantIaasUserMapper;
 import io.company.brewcraft.service.TenantIaasUserService;
 import io.company.brewcraft.service.TenantIaasVfsResourceMapper;
 import io.company.brewcraft.service.TenantIaasVfsService;
@@ -283,8 +291,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasAuthService.class)
-    public TenantIaasAuthService tenantIaasAuthService(TenantIaasAuthResourceMapper authResourceMapper, IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
-        return new TenantIaasAuthService(authResourceMapper, roleService, resourceBuilder);
+    public TenantIaasAuthService tenantIaasAuthService(IaasRoleService roleService, TenantIaasResourceBuilder resourceBuilder) {
+        return new TenantIaasAuthService(TenantIaasAuthResourceMapper.INSTANCE, roleService, resourceBuilder);
     }
 
     @Bean
@@ -298,20 +306,20 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasIdpService.class)
-    public TenantIaasIdpService tenantIaasIdpService(IaasIdpTenantService idpService, TenantIaasIdpResourcesMapper mapper) {
-        return new TenantIaasIdpService(idpService, mapper);
+    public TenantIaasIdpService tenantIaasIdpService(IaasIdpTenantService idpService) {
+        return new TenantIaasIdpService(idpService, TenantIaasIdpResourcesMapper.INSTANCE);
     }
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasService.class)
-    public TenantIaasService tenantIaasService(TenantIaasAuthService authService, TenantIaasIdpService idpService, TenantIaasVfsService vfsService, TenantIaasIdpTenantMapper mapper) {
-        return new TenantIaasService(authService, idpService, vfsService, mapper);
+    public TenantIaasService tenantIaasService(TenantIaasAuthService authService, TenantIaasIdpService idpService, TenantIaasVfsService vfsService) {
+        return new TenantIaasService(authService, idpService, vfsService, TenantIaasIdpTenantMapper.INSTANCE);
     }
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasVfsService.class)
-    public TenantIaasVfsService iaasVfsService(TenantIaasVfsResourceMapper vfsResourceMapper, IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
-        return new TenantIaasVfsService(vfsResourceMapper, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, resourceBuilder);
+    public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
+        return new TenantIaasVfsService(TenantIaasVfsResourceMapper.INSTANCE, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, resourceBuilder);
     }
 
     @Bean
@@ -340,7 +348,7 @@ public class ServiceAutoConfiguration {
     public IaasRoleService iaasRoleService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasRole, BaseIaasRole, UpdateIaasRole> iaasClient) {
         UpdateService<String, IaasRole, BaseIaasRole, UpdateIaasRole> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasRole.class, UpdateIaasRole.class, IaasRole.class, Set.of());
         IaasRepository<String, IaasRole, BaseIaasRole, UpdateIaasRole> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
- 
+
         return new IaasRoleService(updateService, iaasRepo);
     }
 
@@ -380,7 +388,7 @@ public class ServiceAutoConfiguration {
 
         return new IaasObjectStoreFileService(updateService, iaasRepo);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantContextIaasObjectStoreNameProvider.class)
     public TenantContextIaasObjectStoreNameProvider objectStoreNameProvider(AwsDocumentTemplates awsTemplates, ContextHolder contextHolder, @Value("app.object-store.bucket.name") String appBucketName) {
@@ -395,8 +403,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IaasAuthorizationFetch.class)
-    public IaasAuthorizationFetch iaasAuthorizationFetch(AwsCognitoIdentityClient identityClient, AwsIdentityCredentialsMapper iaasAuthorizationMapper, @Value("${aws.cognito.user-pool.url}") String userPoolUrl) {
-        return new AwsResourceCredentialsFetcher(identityClient, iaasAuthorizationMapper, userPoolUrl);
+    public IaasAuthorizationFetch iaasAuthorizationFetch(AwsCognitoIdentityClient identityClient, @Value("${aws.cognito.user-pool.url}") String userPoolUrl) {
+        return new AwsResourceCredentialsFetcher(identityClient, AwsIdentityCredentialsMapper.INSTANCE, userPoolUrl);
     }
 
     @Bean
@@ -571,6 +579,19 @@ public class ServiceAutoConfiguration {
         final UpdateService<Long, User, BaseUser, UpdateUser> updateService = new SimpleUpdateService<>(utilProvider, BaseUser.class, UpdateUser.class, User.class, Set.of());
         final RepoService<Long, User, UserAccessor> repoService = new CrudRepoService<>(userRepository, userRefresher);
         return new UserService(updateService, repoService, userRepository, iaasService);
+    }
+
+    @Bean
+    public TenantIaasUserService tenantIaasUserService(
+            BlockingAsyncExecutor executor,
+            ContextHolder ctxHolder,
+            IaasClient<String, IaasUser, BaseIaasUser, UpdateIaasUser> userClient,
+            IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> membershipClient
+    ) {
+        IaasRepository<String, IaasUser, BaseIaasUser, UpdateIaasUser> userRepository = new BulkIaasClient<>(executor, userClient);
+        IaasRepository<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> membershipRepository = new BulkIaasClient<>(executor, membershipClient);
+
+        return new TenantIaasUserService(userRepository, membershipRepository, TenantIaasUserMapper.INSTANCE, TenantIaasIdpTenantMapper.INSTANCE, ctxHolder);
     }
 
     @Bean

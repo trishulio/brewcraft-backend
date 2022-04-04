@@ -9,7 +9,7 @@ import io.company.brewcraft.model.Identified;
 
 public class SequentialExecutor<ID, Entity extends Identified<ID>, BaseEntity, UpdateEntity> implements IaasRepository<ID, Entity, BaseEntity, UpdateEntity> {
     private IaasClient<ID, Entity, BaseEntity, UpdateEntity> iaasClient;
-    
+
     public SequentialExecutor(IaasClient<ID, Entity, BaseEntity, UpdateEntity> iaasClient) {
         this.iaasClient = iaasClient;
     }

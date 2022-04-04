@@ -14,7 +14,7 @@ import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesRequest;
 import com.amazonaws.services.cognitoidp.model.AdminUpdateUserAttributesResult;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.DeliveryMediumType;
-import com.amazonaws.services.cognitoidp.model.ResourceNotFoundException;
+import com.amazonaws.services.cognitoidp.model.UserNotFoundException;
 import com.amazonaws.services.cognitoidp.model.UserType;
 
 import io.company.brewcraft.model.BaseIaasUser;
@@ -50,7 +50,7 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
         try {
              AdminGetUserResult result = idp.adminGetUser(req);
              return resultMapper.fromIaasEntity(result);
-        } catch (ResourceNotFoundException e) {
+        } catch (UserNotFoundException e) {
             log.error("Failed to fetch user: {}", id);
         }
 
@@ -73,7 +73,7 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
 
     @Override
     public <UE extends UpdateIaasUser> IaasUser put(UE update) {
-        if (exists(update.getId())) {
+        if (!exists(update.getId())) {
             return add(update);
         } else {
             return update(update);
@@ -90,7 +90,7 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
         try {
             AdminDeleteUserResult result = this.idp.adminDeleteUser(req);
             success = true;
-        } catch (ResourceNotFoundException e) {
+        } catch (UserNotFoundException e) {
             log.error("Failed to delete user: {}", id);
         }
 

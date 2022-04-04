@@ -3,7 +3,6 @@ package io.company.brewcraft.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.services.cognitoidentity.model.ResourceNotFoundException;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.CreateGroupRequest;
 import com.amazonaws.services.cognitoidp.model.CreateGroupResult;
@@ -12,6 +11,7 @@ import com.amazonaws.services.cognitoidp.model.DeleteGroupResult;
 import com.amazonaws.services.cognitoidp.model.GetGroupRequest;
 import com.amazonaws.services.cognitoidp.model.GetGroupResult;
 import com.amazonaws.services.cognitoidp.model.GroupType;
+import com.amazonaws.services.cognitoidp.model.ResourceNotFoundException;
 import com.amazonaws.services.cognitoidp.model.UpdateGroupRequest;
 import com.amazonaws.services.cognitoidp.model.UpdateGroupResult;
 

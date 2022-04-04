@@ -116,5 +116,4 @@ public class AddBrewDto extends BaseDto {
     public void setOwnedByUserId(Long ownedByUserId) {
         this.ownedByUserId = ownedByUserId;
     }
-
 }

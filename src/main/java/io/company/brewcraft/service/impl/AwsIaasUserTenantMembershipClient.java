@@ -46,11 +46,11 @@ public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTen
         GroupType group = getGroup(id.getUserId(), id.getTenantId());
         if (group != null) {
             membership = new IaasUserTenantMembership();
-            membership.setTenant(groupMapper.fromIaasEntity(group));
 
             // We could fetch the user object by injecting the IaasUserClient here but since
             // there's no use-case, a dummy object is assigned with the ID value to save an API call
             membership.setUser(new IaasUser(id.getUserId()));
+            membership.setTenantId(id.getTenantId());
         }
 
         return membership;
@@ -60,7 +60,7 @@ public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTen
     public <BE extends BaseIaasUserTenantMembership> IaasUserTenantMembership add(BE addition) {
         AdminAddUserToGroupRequest request = new AdminAddUserToGroupRequest()
                                                  .withUsername(addition.getUser().getId())
-                                                 .withGroupName(addition.getTenant().getId())
+                                                 .withGroupName(addition.getTenantId())
                                                  .withUserPoolId(userPoolId);
         AdminAddUserToGroupResult result = this.idp.adminAddUserToGroup(request);
 
@@ -113,7 +113,7 @@ public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTen
                     .withUsername(userName)
                     .withUserPoolId(userPoolId);
 
-           AdminListGroupsForUserResult result = idp.adminListGroupsForUser(null);
+           AdminListGroupsForUserResult result = idp.adminListGroupsForUser(request);
            next = result.getNextToken();
 
            groups.addAll(result.getGroups());

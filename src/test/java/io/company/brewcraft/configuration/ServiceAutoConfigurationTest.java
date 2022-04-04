@@ -248,7 +248,7 @@ public class ServiceAutoConfigurationTest {
                 final UtilityProvider utilProvider = mock(UtilityProvider.class);
         final UserRoleRepository userRoleRepository = mock(UserRoleRepository.class);
         final Refresher<UserRole, UserRoleAccessor> userRoleRefresher = mock(Refresher.class);
-        
+
         final UserRoleService service = this.serviceAutoConfiguration.userRoleService(utilProvider, userRoleRepository, userRoleRefresher);
 
         assertTrue(service instanceof UserRoleService);

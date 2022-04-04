@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.model.BaseIaasUser;
 import io.company.brewcraft.model.BaseIaasUserTenantMembership;
-import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.model.IaasUserTenantMembership;
 import io.company.brewcraft.model.IaasUserTenantMembershipId;
@@ -17,7 +16,6 @@ import io.company.brewcraft.model.UpdateIaasUser;
 import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.security.session.ContextHolder;
-import io.company.brewcraft.security.session.TenantContext;
 import io.company.brewcraft.service.mapper.TenantIaasIdpTenantMapper;
 
 public class TenantIaasUserService {
@@ -46,13 +44,13 @@ public class TenantIaasUserService {
     }
 
     public List<IaasUserTenantMembership> put(List<User> users) {
-        TenantContext ctx = this.ctxHolder.getTenantContext();
-        IaasIdpTenant tenant = tenantMapper.fromTenant(ctx.getTenant());
+        String tenantId = this.ctxHolder.getPrincipalContext().getTenantId().toString();
 
         List<UpdateIaasUser> updates = userMapper.fromUsers(users);
-        List<IaasUser> iaasUsers = this.userService.put(updates);
 
-        List<IaasUserTenantMembership> memberships = iaasUsers.stream().map(iaasUser -> new IaasUserTenantMembership(iaasUser, tenant)).toList();
+        List<IaasUser> iaasUsers = this.userService.put(updates);
+        List<IaasUserTenantMembership> memberships = iaasUsers.stream().map(iaasUser -> new IaasUserTenantMembership(iaasUser, tenantId)).toList();
+
         return this.membershipService.put(memberships);
     }
 

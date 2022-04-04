@@ -28,6 +28,7 @@ public class AwsCognitoIdentitySdkWrapper implements AwsCognitoIdentityClient {
         String nextToken = null;
         do {
             ListIdentityPoolsRequest request = new ListIdentityPoolsRequest()
+                                               .withMaxResults(pageSize)
                                                .withNextToken(nextToken);
             ListIdentityPoolsResult result = this.awsCognitoIdentityClient.listIdentityPools(request);
 

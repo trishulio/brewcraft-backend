@@ -4,21 +4,21 @@ import io.company.brewcraft.service.CrudEntity;
 
 public class IaasUserTenantMembership extends BaseEntity implements CrudEntity<IaasUserTenantMembershipId>,  UpdateIaasUserTenantMembership {
     private IaasUser user;
-    private IaasIdpTenant tenant;
+    private String tenantId;
 
     public IaasUserTenantMembership() {
         super();
     }
 
-    public IaasUserTenantMembership(IaasUser user, IaasIdpTenant idpTenant) {
+    public IaasUserTenantMembership(IaasUser user, String tenantId) {
         this();
         setUser(user);
-        setTenant(idpTenant);
+        setTenantId(tenantId);
     }
 
     @Override
     public IaasUserTenantMembershipId getId() {
-        return IaasUserTenantMembershipId.build(this.user, this.tenant);
+        return IaasUserTenantMembershipId.build(this.user, this.tenantId);
     }
 
     @Override
@@ -27,9 +27,7 @@ public class IaasUserTenantMembership extends BaseEntity implements CrudEntity<I
             if (user == null) {
                 user = new IaasUser(id.getUserId());
             }
-            if (tenant == null) {
-                tenant = new IaasIdpTenant(id.getTenantId());
-            }
+            this.tenantId = id.getTenantId();
         }
     }
 
@@ -44,13 +42,13 @@ public class IaasUserTenantMembership extends BaseEntity implements CrudEntity<I
     }
 
     @Override
-    public IaasIdpTenant getTenant() {
-        return tenant;
+    public String getTenantId() {
+        return tenantId;
     }
 
     @Override
-    public void setTenant(IaasIdpTenant idpTenant) {
-        this.tenant = idpTenant;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     @Override

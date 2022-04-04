@@ -1,7 +1,6 @@
 package io.company.brewcraft.security.auth;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,9 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
-import io.company.brewcraft.security.session.LazyTenantContext;
 import io.company.brewcraft.security.session.PrincipalContext;
-import io.company.brewcraft.security.session.TenantContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.service.impl.TenantService;
 
@@ -36,7 +33,6 @@ public class ContextHolderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         setPrincipalContext((HttpServletRequest) request);
-        setTenantContext();
 
         chain.doFilter(request, response);
     }
@@ -51,15 +47,5 @@ public class ContextHolderFilter implements Filter {
             principalCtx = new CognitoPrincipalContext(jwt, request.getHeader(HEADER_NAME_IAAS_TOKEN));
         }
         this.ctxHolder.setContext(principalCtx);
-    }
-
-    private void setTenantContext() {
-        UUID tenantId = this.ctxHolder.getPrincipalContext().getTenantId();
-
-        if (tenantId != null) {
-            TenantContext ctx = new LazyTenantContext(tenantService, tenantId);
-
-            this.ctxHolder.setTenantContext(ctx);
-        }
     }
 }

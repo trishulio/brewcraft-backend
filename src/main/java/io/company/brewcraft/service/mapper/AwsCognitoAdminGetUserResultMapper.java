@@ -1,7 +1,6 @@
 package io.company.brewcraft.service.mapper;
 
 
-
 import java.util.List;
 
 import org.mapstruct.Mapper;
@@ -23,25 +22,25 @@ public interface AwsCognitoAdminGetUserResultMapper extends IaasEntityMapper<Adm
     @Override
     default IaasUser fromIaasEntity(AdminGetUserResult result) {
         IaasUser iaasUser = null;
-        
+
         if (result != null) {
             iaasUser = new IaasUser();
             iaasUser.setUserName(result.getUsername());
             iaasUser.setCreatedAt(LocalDateTimeMapper.INSTANCE.fromUtilDate(result.getUserCreateDate()));
             iaasUser.setLastUpdated(LocalDateTimeMapper.INSTANCE.fromUtilDate(result.getUserLastModifiedDate()));
-            
+
             List<AttributeType> attributes = result.getUserAttributes();
             if (!CollectionUtils.isEmpty(attributes)) {
                 for(AttributeType attr: attributes) {
                     if (CognitoPrincipalContext.ATTRIBUTE_EMAIL.equalsIgnoreCase(attr.getName())) {
                         iaasUser.setEmail(attr.getValue());
-                    }   
+                    }
                 }
             }
 
             iaasUser.setPhoneNumber(null);
         }
-        
+
         return iaasUser;
     }
 }

@@ -9,7 +9,7 @@ import io.company.brewcraft.model.Identified;
 
 public class IaasRepositoryProviderProxy<ID, Entity extends Identified<ID>, BaseEntity, UpdateEntity> implements IaasRepository<ID, Entity, BaseEntity, UpdateEntity> {
     private IaasRepositoryProvider<ID, Entity, BaseEntity, UpdateEntity> provider;
-    
+
     public IaasRepositoryProviderProxy(IaasRepositoryProvider<ID, Entity, BaseEntity, UpdateEntity> provider) {
         this.provider = provider;
     }
