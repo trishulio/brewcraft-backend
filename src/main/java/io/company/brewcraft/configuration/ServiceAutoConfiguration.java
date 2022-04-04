@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
 
 import io.company.brewcraft.controller.IaasObjectStoreFileController;
+import io.company.brewcraft.controller.UserDtoDecorator;
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.dto.UpdateInvoice;
@@ -579,6 +580,11 @@ public class ServiceAutoConfiguration {
         final UpdateService<Long, User, BaseUser, UpdateUser> updateService = new SimpleUpdateService<>(utilProvider, BaseUser.class, UpdateUser.class, User.class, Set.of());
         final RepoService<Long, User, UserAccessor> repoService = new CrudRepoService<>(userRepository, userRefresher);
         return new UserService(updateService, repoService, userRepository, iaasService);
+    }
+
+    @Bean
+    public UserDtoDecorator userDecorator(TemporaryImageSrcDecorator imgDecorator) {
+        return new UserDtoDecorator(imgDecorator);
     }
 
     @Bean

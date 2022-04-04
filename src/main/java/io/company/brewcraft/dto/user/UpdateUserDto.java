@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto.user;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -31,7 +32,7 @@ public class UpdateUserDto extends BaseDto {
     @NullOrNotBlank
     private String phoneNumber;
 
-    private String imageSrc;
+    private URI imageSrc;
 
     @Size(min = 1)
     private List<Long> roleIds;
@@ -48,7 +49,7 @@ public class UpdateUserDto extends BaseDto {
         setId(id);
     }
 
-    public UpdateUserDto(Long id, String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageSrc, List<Long> roleIds, @NotNull Integer version) {
+    public UpdateUserDto(Long id, String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, URI imageSrc, List<Long> roleIds, @NotNull Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -134,11 +135,11 @@ public class UpdateUserDto extends BaseDto {
         this.roleIds = roleIds;
     }
 
-    public String getImageSrc() {
+    public URI getImageSrc() {
         return imageSrc;
     }
 
-    public void setImageSrc(String imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
 

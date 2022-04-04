@@ -1,5 +1,7 @@
 package io.company.brewcraft.model.user;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +108,7 @@ public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Au
         setId(id);
     }
 
-    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageSrc, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, URI imageSrc, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -174,13 +176,26 @@ public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Au
     }
 
     @Override
-    public String getImageSrc() {
-        return imageSrc;
+    public URI getImageSrc() {
+        URI uri = null;
+        if (this.imageSrc != null) {
+            try {
+                uri = new URI(this.imageSrc);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(String.format("Failed to convert to URI, value: %s", this.imageSrc), e);
+            }
+        }
+
+        return uri;
     }
 
     @Override
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
+    public void setImageSrc(URI imageSrc) {
+        if (imageSrc != null) {
+            this.imageSrc = imageSrc.toString();
+        } else {
+            this.imageSrc = null;
+        }
     }
 
     @Override

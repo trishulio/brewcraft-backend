@@ -1,7 +1,9 @@
 package io.company.brewcraft.dto.user;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class UserDtoTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),
@@ -43,7 +45,7 @@ public class UserDtoTest {
         assertEquals("LAST_NAME", dto.getLastName());
         assertEquals("EMAIL", dto.getEmail());
         assertEquals("PHONE_NUMBER", dto.getPhoneNumber());
-        assertEquals("IMAGE_URL", dto.getImageSrc());
+        assertEquals(URI.create("IMAGE_URL"), dto.getImageSrc());
         assertEquals(new UserStatusDto(1L), dto.getStatus());
         assertEquals(new UserSalutationDto(2L), dto.getSalutation());
         assertEquals(List.of(new UserRoleDto(3L)), dto.getRoles());
@@ -97,8 +99,8 @@ public class UserDtoTest {
     @Test
     public void testAccessImageSrc() {
         assertNull(dto.getImageSrc());
-        dto.setImageSrc("imageSrc");
-        assertEquals("imageSrc", dto.getImageSrc());
+        dto.setImageSrc(URI.create("imageSrc"));
+        assertEquals(URI.create("imageSrc"), dto.getImageSrc());
     }
 
     @Test

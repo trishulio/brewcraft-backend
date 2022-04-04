@@ -64,8 +64,8 @@ public class UserController extends BaseController {
     }
 
     @Autowired
-    public UserController(UserService userService, AttributeFilter filter) {
-        this(new CrudControllerService<>(filter, UserMapper.INSTANCE, userService, "User"), userService);
+    public UserController(UserService userService, AttributeFilter filter, UserDtoDecorator decorator) {
+        this(new CrudControllerService<>(filter, UserMapper.INSTANCE, userService, "User", decorator), userService);
     }
 
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE)

@@ -3,6 +3,7 @@ package io.company.brewcraft.service.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageSrc",
+            URI.create("imageSrc"),
             List.of(10L)
         );
 
@@ -55,7 +56,7 @@ public class UserMapperTest {
             "lastName",
             "email",
             "phoneNumber",
-            "imageSrc",
+            URI.create("imageSrc"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),
@@ -83,7 +84,7 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageSrc",
+            URI.create("imageSrc"),
             List.of(10L),
             1
         );
@@ -98,7 +99,7 @@ public class UserMapperTest {
             "lastName",
             null,
             "phoneNumber",
-            "imageSrc",
+            URI.create("imageSrc"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),
@@ -125,7 +126,7 @@ public class UserMapperTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(3L)),
@@ -144,7 +145,7 @@ public class UserMapperTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),

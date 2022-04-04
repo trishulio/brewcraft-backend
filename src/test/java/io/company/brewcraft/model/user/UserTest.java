@@ -1,7 +1,9 @@
 package io.company.brewcraft.model.user;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class UserTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(3L)),
@@ -43,7 +45,7 @@ public class UserTest {
         assertEquals("LAST_NAME", user.getLastName());
         assertEquals("EMAIL", user.getEmail());
         assertEquals("PHONE_NUMBER", user.getPhoneNumber());
-        assertEquals("IMAGE_URL", user.getImageSrc());
+        assertEquals(URI.create("IMAGE_URL"), user.getImageSrc());
         assertEquals(new UserStatus(1L), user.getStatus());
         assertEquals(new UserSalutation(2L), user.getSalutation());
         assertEquals(List.of(new UserRole(3L)), user.getRoles());
@@ -97,8 +99,8 @@ public class UserTest {
     @Test
     public void testAccessImageSrc() {
         assertNull(user.getImageSrc());
-        user.setImageSrc("imageSrc");
-        assertEquals("imageSrc", user.getImageSrc());
+        user.setImageSrc(URI.create("imageSrc"));
+        assertEquals(URI.create("imageSrc"), user.getImageSrc());
     }
 
     @Test

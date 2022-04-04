@@ -3,6 +3,7 @@ package io.company.brewcraft.dto.user;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.net.URI;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ public class UpdateUserDtoTest {
             1L,
             2L,
             "phoneNumber",
-            "imageSrc",
+            URI.create("imageSrc"),
             List.of(10L),
             1
         );
@@ -41,7 +42,7 @@ public class UpdateUserDtoTest {
         assertEquals(1L, dto.getStatusId());
         assertEquals(2L, dto.getSalutationId());
         assertEquals("phoneNumber", dto.getPhoneNumber());
-        assertEquals("imageSrc", dto.getImageSrc());
+        assertEquals(URI.create("imageSrc"), dto.getImageSrc());
         assertEquals(List.of(10L), dto.getRoleIds());
         assertEquals(1, dto.getVersion());
     }
@@ -91,8 +92,8 @@ public class UpdateUserDtoTest {
     @Test
     public void testAccessImageSrc() {
         assertNull(dto.getImageSrc());
-        dto.setImageSrc("imageSrc");
-        assertEquals("imageSrc", dto.getImageSrc());
+        dto.setImageSrc(URI.create("imageSrc"));
+        assertEquals(URI.create("imageSrc"), dto.getImageSrc());
     }
 
     @Test

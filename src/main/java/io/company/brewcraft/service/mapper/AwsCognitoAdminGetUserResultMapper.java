@@ -1,6 +1,5 @@
 package io.company.brewcraft.service.mapper;
 
-
 import java.util.List;
 
 import org.mapstruct.Mapper;

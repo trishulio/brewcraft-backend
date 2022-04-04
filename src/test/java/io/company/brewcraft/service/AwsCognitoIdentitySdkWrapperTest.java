@@ -49,9 +49,9 @@ public class AwsCognitoIdentitySdkWrapperTest {
             new IdentityPoolShortDescription().withIdentityPoolId("POOL_ID_6").withIdentityPoolName("POOL_NAME_6")
         );
 
-        doReturn(new ListIdentityPoolsResult().withIdentityPools(page1).withNextToken("NEXT_1")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken(null));
-        doReturn(new ListIdentityPoolsResult().withIdentityPools(page2).withNextToken("NEXT_2")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_1"));
-        doReturn(new ListIdentityPoolsResult().withIdentityPools(page3).withNextToken(null)).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_2"));
+        doReturn(new ListIdentityPoolsResult().withIdentityPools(page1).withNextToken("NEXT_1")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken(null).withMaxResults(10));
+        doReturn(new ListIdentityPoolsResult().withIdentityPools(page2).withNextToken("NEXT_2")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_1").withMaxResults(10));
+        doReturn(new ListIdentityPoolsResult().withIdentityPools(page3).withNextToken(null)).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_2").withMaxResults(10));
 
         List<IdentityPoolShortDescription> pools = client.getIdentityPools(10);
 
@@ -77,8 +77,8 @@ public class AwsCognitoIdentitySdkWrapperTest {
             new IdentityPoolShortDescription().withIdentityPoolId("POOL_ID_4").withIdentityPoolName("POOL_NAME_4")
         );
 
-        doReturn(new ListIdentityPoolsResult().withIdentityPools(page1).withNextToken("NEXT_1")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken(null));
-        doReturn(new ListIdentityPoolsResult().withIdentityPools(page2).withNextToken("NEXT_2")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_1"));
+        doReturn(new ListIdentityPoolsResult().withIdentityPools(page1).withNextToken("NEXT_1")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken(null).withMaxResults(3));
+        doReturn(new ListIdentityPoolsResult().withIdentityPools(page2).withNextToken("NEXT_2")).when(mAws).listIdentityPools(new ListIdentityPoolsRequest().withNextToken("NEXT_1").withMaxResults(3));
 
         List<IdentityPoolShortDescription> pools = client.getIdentityPools(3);
 

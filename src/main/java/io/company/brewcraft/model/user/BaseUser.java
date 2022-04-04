@@ -1,5 +1,6 @@
 package io.company.brewcraft.model.user;
 
+import java.net.URI;
 import java.util.List;
 
 public interface BaseUser extends UserStatusAccessor, UserSalutationAccessor {
@@ -28,9 +29,9 @@ public interface BaseUser extends UserStatusAccessor, UserSalutationAccessor {
 
     void setEmail(String email);
 
-    String getImageSrc();
+    URI getImageSrc();
 
-    void setImageSrc(String imageSrc);
+    void setImageSrc(URI imageSrc);
 
     String getPhoneNumber();
 

@@ -1,6 +1,7 @@
 
 package io.company.brewcraft.dto.user;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.constraints.Email;
@@ -38,12 +39,12 @@ public class AddUserDto extends BaseDto {
     @NotEmpty
     private List<Long> roleIds;
 
-    private String imageSrc;
+    private URI imageSrc;
 
     public AddUserDto() {
     }
 
-    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageSrc, List<Long> roleIds) {
+    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, URI imageSrc, List<Long> roleIds) {
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -128,11 +129,11 @@ public class AddUserDto extends BaseDto {
         this.roleIds = roleIds;
     }
 
-    public String getImageSrc() {
+    public URI getImageSrc() {
         return imageSrc;
     }
 
-    public void setImageSrc(String imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
 }
