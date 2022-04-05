@@ -113,10 +113,6 @@ public class AwsIamRolePolicyAttachmentClient implements IaasClient<IaasRolePoli
         return get(id) != null;
     }
 
-    private void initCache() {
-
-    }
-
     private LoadingCache<String, Set<String>> getCache() {
         LoadingCache<String, Set<String>> cache = this.attachedPolicyNameLocalCache.get();
         if (cache == null) {
@@ -133,6 +129,7 @@ public class AwsIamRolePolicyAttachmentClient implements IaasClient<IaasRolePoli
                         try {
                             result = awsClient.listAttachedRolePolicies(request);
                         } catch (NoSuchEntityException e) {
+                            marker = null;
                             continue;
                         }
 

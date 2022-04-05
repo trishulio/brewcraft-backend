@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.dto.user.UserDto;
 import io.company.brewcraft.model.EntityDecorator;
-import io.company.brewcraft.model.TemporaryImageSrcDecorator;
+import io.company.brewcraft.service.TemporaryImageSrcDecorator;
 
 public class UserDtoDecorator implements EntityDecorator<UserDto> {
 

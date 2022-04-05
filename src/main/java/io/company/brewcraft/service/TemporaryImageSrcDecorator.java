@@ -1,4 +1,4 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.service;
 
 import java.net.URI;
 import java.util.Iterator;
@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import io.company.brewcraft.controller.IaasObjectStoreFileController;
 import io.company.brewcraft.dto.IaasObjectStoreFileDto;
+import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
+import io.company.brewcraft.model.EntityDecorator;
 
 public class TemporaryImageSrcDecorator implements EntityDecorator<DecoratedIaasObjectStoreFileAccessor> {
     private IaasObjectStoreFileController objectStoreController;

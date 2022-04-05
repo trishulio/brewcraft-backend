@@ -179,4 +179,9 @@ public class IaasObjectStoreFileServiceTest {
         verify(mIaasRepo, times(1)).put(attachments);
         verify(mUpdateService).getPutEntities(null, updates);
     }
+
+    @Test
+    public void testPatch_ThrowsNotSupportedException() {
+        assertThrows(UnsupportedOperationException.class, () -> service.patch(List.of()));
+    }
 }

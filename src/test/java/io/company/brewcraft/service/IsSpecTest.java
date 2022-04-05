@@ -1,10 +1,8 @@
-package io.company.brewcraft.service.impl;
+package io.company.brewcraft.service;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-
-import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,10 +13,7 @@ import javax.persistence.criteria.Root;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.CriteriaSpec;
-import io.company.brewcraft.service.InSpec;
-
-public class InSpecTest {
+public class IsSpecTest {
     private CriteriaSpec<Boolean> spec;
 
     private CriteriaSpec<String> mDelegate;
@@ -40,11 +35,11 @@ public class InSpecTest {
     }
 
     @Test
-    public void testGetExpression_ReturnsInSpecExpressionOnDelegatePath() {
-        Expression<Boolean> mInExpr = mock(Predicate.class);
-        doReturn(mInExpr).when(mExpr).in(Set.of("val1", "val2"));
+    public void testGetExpression_ReturnsIsSpecExpressionOnDelegatePath() {
+        Expression<Boolean> mIsExpr = mock(Predicate.class);
+        doReturn(mIsExpr).when(mCb).equal(mExpr, "val1");
 
-        spec = new InSpec<>(mDelegate, Set.of("val1", "val2"));
-        assertSame(mInExpr, spec.getExpression(mRoot, mCq, mCb));
+        spec = new IsSpec<>(mDelegate, "val1");
+        assertSame(mIsExpr, spec.getExpression(mRoot, mCq, mCb));
     }
 }

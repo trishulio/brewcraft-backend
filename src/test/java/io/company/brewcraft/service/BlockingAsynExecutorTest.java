@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -54,6 +55,35 @@ public class BlockingAsynExecutorTest {
     }
 
     @Test
+    public void testSupply_ThrowsException_WhenAnyActionThrowsException() {
+        Supplier<Integer> supplier1 = new Supplier<Integer>() {
+            @Override
+            public Integer get() {
+                try {
+                    Thread.sleep(2000);
+                    throw new RuntimeException("Expect to fail");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("Failed to execute supplier");
+                }
+            }
+        };
+
+        Supplier<Integer> supplier2 = new Supplier<Integer>() {
+            @Override
+            public Integer get() {
+                try {
+                    Thread.sleep(2000);
+                    return 2;
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("Failed to execute supplier");
+                }
+            }
+        };
+
+        assertThrows(RuntimeException.class, () -> this.executor.supply(List.of(supplier1, supplier2)));
+    }
+
+    @Test
     public void testRun_ExecutesRunnablesParallely() {
         Runnable mock = mock(Runnable.class);
 
@@ -88,5 +118,38 @@ public class BlockingAsynExecutorTest {
 
         assertEquals(2, seconds);
         verify(mock, times(2)).run();
+    }
+
+    @Test
+    public void testRun_ThrowsException_WhenAnyRunnableThrowsException() {
+        Runnable mock = mock(Runnable.class);
+
+        Runnable runnable1 = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    throw new RuntimeException("Expected to fail");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("Failed to execute runnable");
+                }
+            }
+        };
+
+        Runnable runnable2 = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    mock.run();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException("Failed to execute runnable");
+                }
+            }
+        };
+
+        assertThrows(RuntimeException.class, () -> this.executor.run(List.of(runnable1, runnable2)));
+
+        verify(mock, times(1)).run();
     }
 }

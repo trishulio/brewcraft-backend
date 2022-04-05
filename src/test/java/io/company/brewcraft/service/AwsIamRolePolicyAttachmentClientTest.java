@@ -42,11 +42,19 @@ public class AwsIamRolePolicyAttachmentClientTest {
     @Test
     public void testGet_ReturnsPoliciesGeneratedFromFetchedRoleAndPolicies() {
         List<AttachedPolicy> attachedPolicies = List.of(new AttachedPolicy().withPolicyName("POLICY_1"), new AttachedPolicy().withPolicyName("POLICY_2"));
-        doReturn(new ListAttachedRolePoliciesResult().withAttachedPolicies(attachedPolicies)).when(mAwsClient).listAttachedRolePolicies(new ListAttachedRolePoliciesRequest().withRoleName("ROLE_1"));
+        doReturn(new ListAttachedRolePoliciesResult().withAttachedPolicies(attachedPolicies).withIsTruncated(true).withMarker("MARKER")).when(mAwsClient).listAttachedRolePolicies(new ListAttachedRolePoliciesRequest().withRoleName("ROLE_1"));
+        doThrow(NoSuchEntityException.class).when(mAwsClient).listAttachedRolePolicies(new ListAttachedRolePoliciesRequest().withRoleName("ROLE_1").withMarker("MARKER"));
 
         IaasRolePolicyAttachment attachment = client.get(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_1"));
 
         assertEquals(new IaasRolePolicyAttachment(new IaasRole("ROLE_1"), new IaasPolicy("POLICY_1")), attachment);
+    }
+
+    @Test
+    public void testGet_ThrowsException_WhenCacheThrowsException() {
+        doThrow(RuntimeException.class).when(mAwsClient).listAttachedRolePolicies(new ListAttachedRolePoliciesRequest().withRoleName("ROLE_1"));
+
+        assertThrows(RuntimeException.class, () -> client.get(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_1")));
     }
 
     @Test

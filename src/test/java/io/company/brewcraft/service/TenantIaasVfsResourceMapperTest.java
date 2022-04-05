@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -45,5 +46,11 @@ public class TenantIaasVfsResourceMapperTest {
             new TenantIaasVfsResources(new IaasObjectStore("OS_2"), new IaasPolicy("P2"))
         );
         assertEquals(expected, resources);
+    }
+
+    @Test
+    public void testFromComponents_ThrowsException_WhenComponentsAreNotSameSize() {
+        assertThrows(IllegalArgumentException.class, () -> mapper.fromComponents(List.of(), List.of(new IaasPolicy())));
+        assertThrows(IllegalArgumentException.class, () -> mapper.fromComponents(List.of(new IaasObjectStore()), List.of()));
     }
 }

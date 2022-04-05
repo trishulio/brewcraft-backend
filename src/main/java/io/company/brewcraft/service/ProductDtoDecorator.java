@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import io.company.brewcraft.dto.ProductDto;
 import io.company.brewcraft.model.EntityDecorator;
-import io.company.brewcraft.model.TemporaryImageSrcDecorator;
 
 public class ProductDtoDecorator implements EntityDecorator<ProductDto> {
     private static final Logger logger = LoggerFactory.getLogger(ProductDtoDecorator.class);

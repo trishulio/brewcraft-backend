@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -40,6 +41,13 @@ public class CachedAwsCognitoIdentityClientTest {
     }
 
     @Test
+    public void testGetIdentityPools_ThrowsException_WhenClientThrowsException() {
+        doThrow(RuntimeException.class).when(mDelegate).getIdentityPools(1);
+
+        assertThrows(RuntimeException.class, () -> client.getIdentityPools(1));
+    }
+
+    @Test
     public void testGetIdentityId_ReturnsCachedEntities() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_" + inv.getArgument(1, Map.class).get("K")).when(mDelegate).getIdentityId(anyString(), anyMap());
 
@@ -52,6 +60,13 @@ public class CachedAwsCognitoIdentityClientTest {
     }
 
     @Test
+    public void testGetIdentityId_ThrowsException_WhenClientThrowsException() {
+        doThrow(RuntimeException.class).when(mDelegate).getIdentityId("IDENTITY_POOL_ID", Map.of("login", "creds"));
+
+        assertThrows(RuntimeException.class, () -> client.getIdentityId("IDENTITY_POOL_ID", Map.of("login", "creds")));
+    }
+
+    @Test
     public void testGetCredentialsForIdentity_ReturnsCachedEntities() {
         doReturn(new Credentials().withAccessKeyId("ACCESS_KEY").withSecretKey("ACCESS_SECRET").withSessionToken("SESSION_TOKEN")).when(mDelegate).getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
 
@@ -61,5 +76,12 @@ public class CachedAwsCognitoIdentityClientTest {
 
         assertEquals(new Credentials().withAccessKeyId("ACCESS_KEY").withSecretKey("ACCESS_SECRET").withSessionToken("SESSION_TOKEN"), creds);
         verify(mDelegate, times(1)).getCredentialsForIdentity(anyString(), anyMap());
+    }
+
+    @Test
+    public void testGetCredentialsForIdentity_ThrowsException_WhenClientThrowsException() {
+        doThrow(RuntimeException.class).when(mDelegate).getCredentialsForIdentity("IDENTITY_POOL_ID", Map.of("login", "creds"));
+
+        assertThrows(RuntimeException.class, () -> client.getCredentialsForIdentity("IDENTITY_POOL_ID", Map.of("login", "creds")));
     }
 }
