@@ -67,7 +67,7 @@ public class PurchaseOrderController extends BaseController {
         this(new CrudControllerService<>(filter, PurchaseOrderMapper.INSTANCE, purchaseOrderService, "PurchaseOrder"), purchaseOrderService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<PurchaseOrderDto> getAllPurchaseOrders(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -84,7 +84,7 @@ public class PurchaseOrderController extends BaseController {
         return this.controller.getAll(orders, attributes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
     public PurchaseOrderDto getPurchaseOrder(@PathVariable("id") Long id, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }

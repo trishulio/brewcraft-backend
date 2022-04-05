@@ -16,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     @Override
     @Modifying
     @Query("delete from user u where u.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

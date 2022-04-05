@@ -101,7 +101,7 @@ public class FinishedGoodLotController extends BaseController {
         return dto;
     }
 
-    @DeleteMapping("")
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteFinishedGoods(@RequestParam("ids") Set<Long> finishedGoodIds) {
         return this.finishedGoodLotService.delete(finishedGoodIds);

@@ -3,21 +3,21 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class AddIaasObjectStoreFileDto extends BaseDto {
-    private LocalDateTime expiration;
+    private LocalDateTime minValidUntil;
 
     public AddIaasObjectStoreFileDto() {
         super();
     }
 
-    public AddIaasObjectStoreFileDto(LocalDateTime expiration) {
-        this.expiration = expiration;
+    public AddIaasObjectStoreFileDto(LocalDateTime minValidUntil) {
+        this.minValidUntil = minValidUntil;
     }
 
-    public LocalDateTime getExpiration() {
-        return this.expiration;
+    public LocalDateTime getMinValidUntil() {
+        return minValidUntil;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
-        this.expiration = expiration;
+    public void setMinValidUntil(LocalDateTime minValidUntil) {
+        this.minValidUntil = minValidUntil;
     }
 }

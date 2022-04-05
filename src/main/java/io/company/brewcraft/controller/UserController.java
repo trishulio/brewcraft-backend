@@ -90,7 +90,7 @@ public class UserController extends BaseController {
         return this.controller.getAll(userPage, attributes);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
     public UserDto getUser(@PathVariable(required = true, name = "userId") Long userId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(userId, attributes);
     }

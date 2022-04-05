@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.net.URI;
 import java.net.URL;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -34,12 +35,16 @@ public class AwsS3FileClient implements IaasClient<URI, IaasObjectStoreFile, Bas
     public AwsS3FileClient(AmazonS3 s3, String bucketName, LocalDateTimeMapper dtMapper, long getDuration) {
         this.s3 = s3;
         this.bucketName = bucketName;
-        this.presignUrlCache = CacheBuilder.newBuilder().build(new CacheLoader<PresignUrlRequest, IaasObjectStoreFile>(){
+        this.presignUrlCache = CacheBuilder.newBuilder()
+                                            .expireAfterWrite(Duration.ofHours(1))
+                                            .build(new CacheLoader<PresignUrlRequest, IaasObjectStoreFile>(){
             @Override
             public IaasObjectStoreFile load(PresignUrlRequest key) throws Exception {
-                GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, key.fileKey)
+                IaasObjectStoreFile file = new IaasObjectStoreFile(URI.create(key.fileKey), key.expiration, null);
+
+                GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, file.getFileKey().toString())
                         .withMethod(key.method)
-                        .withExpiration(dtMapper.toUtilDate(key.expiration));
+                        .withExpiration(dtMapper.toUtilDate(file.getExpiration()));
 
                 URL url = s3.generatePresignedUrl(req);
 

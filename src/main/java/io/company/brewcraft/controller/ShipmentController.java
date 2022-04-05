@@ -75,12 +75,12 @@ public class ShipmentController extends BaseController {
         this(new CrudControllerService<>(filter, ShipmentMapper.INSTANCE, shipmentService, "Shipment"), shipmentService);
     }
 
-    @GetMapping(value = "/{shipmentId}")
+    @GetMapping(value = "/{shipmentId}", consumes = MediaType.ALL_VALUE)
     public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(shipmentId, attributes);
     }
 
-    @GetMapping("")
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<ShipmentDto> getShipments(
         // shipment filters
         @RequestParam(required = false, name = "ids") Set<Long> ids,

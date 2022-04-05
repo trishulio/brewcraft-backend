@@ -74,7 +74,7 @@ public class InvoiceController extends BaseController {
         this(new CrudControllerService<>(filter, InvoiceMapper.INSTANCE, invoiceService, "Invoice"), invoiceService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<InvoiceDto> getAll(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -130,7 +130,7 @@ public class InvoiceController extends BaseController {
         return this.controller.getAll(invoices, attributes);
     }
 
-    @GetMapping("/{invoiceId}")
+    @GetMapping(value = "/{invoiceId}", consumes = MediaType.ALL_VALUE)
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(invoiceId, attributes);
     }

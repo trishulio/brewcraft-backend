@@ -56,7 +56,7 @@ public class TenantManagementController extends BaseController {
         this.tenantService = tenantService;
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<TenantDto> getAll(
         @RequestParam(required = false, name = "ids") Set<UUID> ids,
         @RequestParam(required = false, name = "names") Set<String> names,
@@ -73,7 +73,7 @@ public class TenantManagementController extends BaseController {
         return this.controller.getAll(tenants, attributes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
     public TenantDto getTenant(@PathVariable(required = true, name = "id") UUID id,  @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }

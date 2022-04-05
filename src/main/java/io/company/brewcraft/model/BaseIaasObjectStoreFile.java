@@ -8,6 +8,7 @@ public interface BaseIaasObjectStoreFile {
     final String ATTR_FILE_KEY = "fileKey";
     final String ATTR_EXPIRATION = "expiration";
     final String ATTR_FILE_URL = "fileUrl";
+    final String ATTR_MIN_VALID_UNTIL = "minValidUntil";
 
     URI getFileKey();
 
@@ -20,4 +21,6 @@ public interface BaseIaasObjectStoreFile {
     URL getFileUrl();
 
     void setFileUrl(URL fileUrl);
+
+    void setMinValidUntil(LocalDateTime minValidUntil);
 }

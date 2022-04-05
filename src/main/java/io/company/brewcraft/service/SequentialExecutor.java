@@ -3,6 +3,7 @@ package io.company.brewcraft.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import io.company.brewcraft.model.Identified;
@@ -40,6 +41,7 @@ public class SequentialExecutor<ID, Entity extends Identified<ID>, BaseEntity, U
 
         this.get(ids)
              .stream()
+             .filter(Objects::nonNull)
              .map(Identified::getId)
              .forEach(existingId -> exists.put(existingId, true));
         ids.forEach(id -> exists.putIfAbsent(id, false));

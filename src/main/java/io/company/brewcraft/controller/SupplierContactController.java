@@ -46,7 +46,7 @@ public class SupplierContactController extends BaseController {
         this.supplierContactService = supplierContactService;
     }
 
-    @GetMapping("/contacts")
+    @GetMapping(value = "/contacts", consumes = MediaType.ALL_VALUE)
     public GetSupplierContactsDto getContacts(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "supplier_ids") Set<Long> supplierIds,
@@ -62,7 +62,7 @@ public class SupplierContactController extends BaseController {
         return new GetSupplierContactsDto(supplierContactDtos, supplierContacts.getTotalElements(), supplierContacts.getTotalPages());
     }
 
-    @GetMapping("/contacts/{contactId}")
+    @GetMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE)
     public SupplierContactWithSupplierDto getContact(@PathVariable Long contactId) {
         SupplierContact supplierContact = supplierContactService.getContact(contactId);
 
@@ -103,7 +103,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDtoWithSupplier(patchedContact);
     }
 
-    @DeleteMapping("/contacts/{contactId}")
+    @DeleteMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE)
     public void deleteContact(@PathVariable Long contactId) {
         supplierContactService.deleteContact(contactId);
     }

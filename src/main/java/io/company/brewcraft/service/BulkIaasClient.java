@@ -70,6 +70,7 @@ public class BulkIaasClient<ID, Entity extends Identified<ID>, BaseEntity, Updat
 
         this.get(ids)
              .stream()
+             .filter(Objects::nonNull)
              .map(Identified::getId)
              .forEach(existingId -> exists.put(existingId, true));
         ids.forEach(id -> exists.putIfAbsent(id, false));

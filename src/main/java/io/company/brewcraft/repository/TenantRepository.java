@@ -19,5 +19,5 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID>, JpaSpecif
     @Override
     @Modifying
     @Query("delete from tenant t where t.id in (:ids)")
-    long deleteByIds(Iterable<UUID> ids);
+    int deleteByIds(Iterable<UUID> ids);
 }

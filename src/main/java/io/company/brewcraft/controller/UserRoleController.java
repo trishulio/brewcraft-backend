@@ -69,7 +69,7 @@ public class UserRoleController extends BaseController {
         this(new CrudControllerService<>(filter, UserRoleMapper.INSTANCE, userRoleService, "UserRole"), userRoleService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public PageDto<UserRoleDto> getAllUserRoles(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -85,7 +85,7 @@ public class UserRoleController extends BaseController {
         return this.controller.getAll(orders, attributes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
     public UserRoleDto getUserRole(@PathVariable("id") Long id, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }

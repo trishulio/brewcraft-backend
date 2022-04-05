@@ -384,7 +384,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     public IaasObjectStoreFileService objectStoreFileService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider) {
-        final UpdateService<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasObjectStoreFile.class, UpdateIaasObjectStoreFile.class, IaasObjectStoreFile.class, Set.of());
+        final UpdateService<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasObjectStoreFile.class, UpdateIaasObjectStoreFile.class, IaasObjectStoreFile.class, Set.of(IaasObjectStoreFile.ATTR_MIN_VALID_UNTIL));
         IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasRepo = new IaasRepositoryProviderProxy<>(iaasObjectStoreFileClientProvider);
 
         return new IaasObjectStoreFileService(updateService, iaasRepo);

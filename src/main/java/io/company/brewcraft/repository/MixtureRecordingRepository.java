@@ -16,6 +16,6 @@ public interface MixtureRecordingRepository extends JpaRepository<MixtureRecordi
     @Override
     @Modifying
     @Query("delete from MIXTURE_RECORDING i where i.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 
 }

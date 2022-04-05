@@ -67,7 +67,7 @@ public class IaasObjectStoreFileController extends BaseController {
         this(new CrudControllerService<>(filter, IaasObjectStoreFileMapper.INSTANCE, objectStoreFileService, "IaasObjectStoreFile"), objectStoreFileService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
     public List<IaasObjectStoreFileDto> getAll(
         @RequestParam(name = "files") Set<URI> files
     ) {
@@ -76,7 +76,7 @@ public class IaasObjectStoreFileController extends BaseController {
         return objectStoreFiles.stream().map(IaasObjectStoreFileMapper.INSTANCE::toDto).toList();
     }
 
-    @GetMapping("/{file}")
+    @GetMapping(value = "/{file}", consumes = MediaType.ALL_VALUE)
     public IaasObjectStoreFileDto getIaasObjectStoreFile(@PathVariable(required = true, name = "fileId") URI fileId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(fileId, attributes);
     }

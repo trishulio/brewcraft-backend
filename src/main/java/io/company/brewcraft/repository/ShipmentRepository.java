@@ -17,5 +17,5 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
     @Override
     @Modifying
     @Query("delete from shipment s where s.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

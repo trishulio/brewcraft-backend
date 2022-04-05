@@ -3,7 +3,7 @@ package io.company.brewcraft.repository;
 public interface ExtendedRepository<ID> {
     boolean existsByIds(Iterable<ID> ids);
 
-    long deleteByIds(Iterable<ID> ids);
+    int deleteByIds(Iterable<ID> ids);
 
-    long deleteOneById(ID id);
+    int deleteOneById(ID id);
 }

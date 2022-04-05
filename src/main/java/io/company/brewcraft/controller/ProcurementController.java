@@ -79,7 +79,7 @@ public class ProcurementController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping(value = "/", consumes = MediaType.ALL_VALUE)
     public PageDto<ProcurementDto> getAll(
         // shipment filters
         @RequestParam(required = false, name = "shipment_ids") Set<Long> shipmentIds,
@@ -159,7 +159,7 @@ public class ProcurementController extends BaseController {
         return this.controller.getAll(procurements, attributes);
     }
 
-    @GetMapping("/{shipmentId}/{invoiceId}")
+    @GetMapping(value = "/{shipmentId}/{invoiceId}", consumes = MediaType.ALL_VALUE)
     public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         ProcurementId id = new ProcurementId(shipmentId, invoiceId);
         return this.controller.get(id, attributes);
@@ -183,7 +183,7 @@ public class ProcurementController extends BaseController {
         return this.controller.patch(dtos);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping(value = "/", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
         Set<ProcurementId> pIds = ids.stream().map(id -> ProcurementIdMapper.INSTANCE.fromDto(id)).collect(Collectors.toSet());

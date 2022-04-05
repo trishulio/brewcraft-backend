@@ -43,7 +43,7 @@ public class SupplierController extends BaseController {
         this.supplierService = supplierService;
     }
 
-    @GetMapping("/suppliers")
+    @GetMapping(value = "/suppliers", consumes = MediaType.ALL_VALUE)
     public GetSuppliersDto getSuppliers(
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
@@ -57,7 +57,7 @@ public class SupplierController extends BaseController {
         return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());
     }
 
-    @GetMapping("/suppliers/{supplierId}")
+    @GetMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE)
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getSupplier(supplierId);
 
@@ -96,7 +96,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(patchedSupplier);
     }
 
-    @DeleteMapping("/suppliers/{supplierId}")
+    @DeleteMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE)
     public void deleteSupplier(@PathVariable Long supplierId) {
         supplierService.deleteSupplier(supplierId);
     }

@@ -36,7 +36,7 @@ public class LotAggregationController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping("/procurements/quantity")
+    @GetMapping(value = "/procurements/quantity", consumes = MediaType.ALL_VALUE)
     public PageDto<ProcurementLotDto> getAggregatedProcurementQuantity(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -80,7 +80,7 @@ public class LotAggregationController extends BaseController {
         return new PageDto<>(contentDto, inventory.getTotalPages(), inventory.getTotalElements());
     }
 
-    @GetMapping("/stock/quantity")
+    @GetMapping(value = "/stock/quantity", consumes = MediaType.ALL_VALUE)
     public PageDto<StockLotDto> getAggregatedStockQuantity(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,

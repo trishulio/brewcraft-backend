@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class UpdateIaasObjectStoreFileDto extends BaseDto {
     private URI fileKey;
-    private LocalDateTime expiration;
+    private LocalDateTime minValidUntil;
 
     public UpdateIaasObjectStoreFileDto() {
         super();
@@ -15,9 +15,9 @@ public class UpdateIaasObjectStoreFileDto extends BaseDto {
         setFileKey(fileKey);
     }
 
-    public UpdateIaasObjectStoreFileDto(URI fileKey, LocalDateTime expiration) {
+    public UpdateIaasObjectStoreFileDto(URI fileKey, LocalDateTime minValidUntil) {
         this(fileKey);
-        setExpiration(expiration);
+        setMinValidUntil(minValidUntil);
     }
 
     public URI getFileKey() {
@@ -28,11 +28,11 @@ public class UpdateIaasObjectStoreFileDto extends BaseDto {
         this.fileKey = fileKey;
     }
 
-    public LocalDateTime getExpiration() {
-        return this.expiration;
+    public LocalDateTime getMinValidUntil() {
+        return minValidUntil;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
-        this.expiration = expiration;
+    public void setMinValidUntil(LocalDateTime minValidUntil) {
+        this.minValidUntil = minValidUntil;
     }
 }

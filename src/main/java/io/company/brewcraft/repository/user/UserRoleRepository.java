@@ -16,5 +16,5 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long>, JpaSp
     @Override
     @Modifying
     @Query("delete from user_role ur where ur.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

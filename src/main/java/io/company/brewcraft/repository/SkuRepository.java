@@ -17,5 +17,5 @@ public interface SkuRepository extends JpaRepository<Sku, Long>, JpaSpecificatio
     @Override
     @Modifying
     @Query("delete from SKU i where i.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

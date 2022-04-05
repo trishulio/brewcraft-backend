@@ -17,5 +17,5 @@ public interface FinishedGoodLotRepository extends JpaRepository<FinishedGoodLot
     @Override
     @Modifying
     @Query("delete from finished_good_lot i where i.id in (:ids)")
-    long deleteByIds(Iterable<Long> ids);
+    int deleteByIds(Iterable<Long> ids);
 }

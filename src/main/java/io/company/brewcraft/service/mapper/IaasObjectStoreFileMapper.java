@@ -17,13 +17,15 @@ public interface IaasObjectStoreFileMapper extends BaseMapper<IaasObjectStoreFil
     @Mapping(target = IaasObjectStoreFile.ATTR_ID, ignore = true)
     @Mapping(target = IaasObjectStoreFile.ATTR_FILE_KEY, ignore = true)
     @Mapping(target = IaasObjectStoreFile.ATTR_FILE_URL, ignore = true)
-    @Mapping(target = IaasObjectStoreFile.ATTR_EXPIRATION, source = "expiration")
+    @Mapping(target = IaasObjectStoreFile.ATTR_EXPIRATION, ignore = true)
+    @Mapping(target = IaasObjectStoreFile.ATTR_MIN_VALID_UNTIL, source = "minValidUntil")
     IaasObjectStoreFile fromAddDto(AddIaasObjectStoreFileDto dto);
 
     @Override
     @Mapping(target = IaasObjectStoreFile.ATTR_ID, ignore = true)
     @Mapping(target = IaasObjectStoreFile.ATTR_FILE_URL, ignore = true)
-    @Mapping(target = IaasObjectStoreFile.ATTR_EXPIRATION, source = "expiration")
+    @Mapping(target = IaasObjectStoreFile.ATTR_EXPIRATION, ignore = true)
+    @Mapping(target = IaasObjectStoreFile.ATTR_MIN_VALID_UNTIL, source = "minValidUntil")
     IaasObjectStoreFile fromUpdateDto(UpdateIaasObjectStoreFileDto dto);
 
     @Override
