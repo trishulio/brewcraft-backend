@@ -1,12 +1,12 @@
 package io.company.brewcraft.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +66,6 @@ public class IaasRolePolicyAttachmentServiceTest {
         assertFalse(service.exist(new IaasRolePolicyAttachmentId("ROLE", "POLICY")));
     }
 
-    //--------
-    //----
-
     @Test
     public void testDelete_Set_CallsRepoDeleteWithIds() {
         doReturn(99L).when(mIaasRepo).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_2")));
@@ -98,6 +95,15 @@ public class IaasRolePolicyAttachmentServiceTest {
         IaasRolePolicyAttachment attachment = service.get(new IaasRolePolicyAttachmentId("ROLE", "POLICY"));
 
         assertEquals(new IaasRolePolicyAttachment(new IaasRole("ROLE"), new IaasPolicy("POLICY")), attachment);
+    }
+
+    @Test
+    public void testGet_ReturnsNull_WhenNoAttachmentIsFound() {
+        doReturn(new ArrayList<>()).when(mIaasRepo).get(anySet());
+
+        IaasRolePolicyAttachment attachment = service.get(new IaasRolePolicyAttachmentId("ROLE", "POLICY"));
+
+        assertNull(attachment);
     }
 
     @Test
@@ -180,6 +186,11 @@ public class IaasRolePolicyAttachmentServiceTest {
     }
 
     @Test
+    public void testAdd_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.add(null));
+    }
+
+    @Test
     public void testPut_ReturnsPutRepoEntities_AfterSavingPutEntitiesFromUpdateService() {
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasRepo).put(anyList());
 
@@ -198,6 +209,11 @@ public class IaasRolePolicyAttachmentServiceTest {
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(attachments);
         verify(mUpdateService).getPutEntities(null, updates);
+    }
+
+    @Test
+    public void testPut_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.put(null));
     }
 
     @Test
@@ -230,5 +246,10 @@ public class IaasRolePolicyAttachmentServiceTest {
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(attachments);
         verify(mUpdateService).getPatchEntities(anyList(), eq(updates));
+    }
+
+    @Test
+    public void testPatch_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.patch(null));
     }
 }

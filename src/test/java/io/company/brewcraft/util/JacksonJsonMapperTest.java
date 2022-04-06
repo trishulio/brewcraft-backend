@@ -1,6 +1,7 @@
 package io.company.brewcraft.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -136,7 +137,7 @@ public class JacksonJsonMapperTest {
 
     @Test
     public void testMoneySerialization_ReturnsNullString_WhenEntityIsNull() {
-        String json = mapper.writeString(null);
+        String json = mapper.writeString((Money) null);
 
         assertEquals("null", json);
     }

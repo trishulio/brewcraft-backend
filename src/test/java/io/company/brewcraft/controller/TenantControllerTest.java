@@ -24,9 +24,9 @@ import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.model.UpdateTenant;
 import io.company.brewcraft.service.impl.TenantService;
 
-public class TenantManagementControllerTest {
+public class TenantControllerTest {
 
-    private TenantManagementController controller;
+    private TenantController controller;
 
     private CrudControllerService<
                 UUID,
@@ -44,7 +44,7 @@ public class TenantManagementControllerTest {
     public void init() {
         this.mCrudController = mock(CrudControllerService.class);
         this.mService = mock(TenantService.class);
-        this.controller = new TenantManagementController(mCrudController, mService);
+        this.controller = new TenantController(mCrudController, mService);
     }
 
     @Test

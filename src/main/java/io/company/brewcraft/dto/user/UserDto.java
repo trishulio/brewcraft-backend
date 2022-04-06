@@ -48,7 +48,7 @@ public class UserDto extends BaseDto implements DecoratedIaasObjectStoreFileAcce
         setId(id);
     }
 
-    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, URI imageSrc, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, URI imageSrc, IaasObjectStoreFileDto objectStoreFile, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -57,6 +57,7 @@ public class UserDto extends BaseDto implements DecoratedIaasObjectStoreFileAcce
         setEmail(email);
         setPhoneNumber(phoneNumber);
         setImageSrc(imageSrc);
+        setObjectStoreFile(objectStoreFile);
         setStatus(status);
         setSalutation(salutation);
         setRoles(roles);

@@ -1,15 +1,10 @@
 package io.company.brewcraft.dto;
 
 import java.net.URL;
-import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
 
 public class AddTenantDto extends BaseDto {
-    @Null
-    private UUID id;
-
     @NotBlank
     private String name;
 
@@ -20,23 +15,9 @@ public class AddTenantDto extends BaseDto {
         super();
     }
 
-    public AddTenantDto(UUID id) {
-        this();
-        setId(id);
-    }
-
-    public AddTenantDto(UUID id, String name, URL url) {
-        this(id);
+    public AddTenantDto(String name, URL url) {
         setName(name);
         setUrl(url);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {

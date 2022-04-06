@@ -32,6 +32,18 @@ public class UserMapperTest {
     }
 
     @Test
+    public void testFromDto_ReturnsNull_WhenIdIsNull() {
+        assertNull(mapper.fromDto(null));
+    }
+
+    @Test
+    public void testFromDto_ReturnsPojo_WhenIdIsNotNull() {
+        User expected = new User(1L);
+
+        assertEquals(expected, mapper.fromDto(1L));
+    }
+
+    @Test
     public void testFromAddDto_ReturnsEntity_WhenAddDtoIsNotNull() {
         AddUserDto dto =  new AddUserDto(
             "userName",
@@ -146,6 +158,7 @@ public class UserMapperTest {
             "EMAIL",
             "PHONE_NUMBER",
             URI.create("IMAGE_URL"),
+            null,
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),

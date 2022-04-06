@@ -55,4 +55,9 @@ public class CognitoPrincipalContextTest {
     public void testGetRoles_ReturnsTheCognitoScopes() {
         assertEquals(Arrays.asList("SCOPE_1", "SCOPE_2"), ctx.getRoles());
     }
+
+    @Test
+    public void testGetIaasLogin_ReturnsIaasToken() {
+        assertEquals(IAAS_TOKEN, ctx.getIaasLogin());
+    }
 }

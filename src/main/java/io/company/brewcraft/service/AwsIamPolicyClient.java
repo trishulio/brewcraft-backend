@@ -18,7 +18,6 @@ import com.amazonaws.services.identitymanagement.model.DeletePolicyVersionReques
 import com.amazonaws.services.identitymanagement.model.DeletePolicyVersionResult;
 import com.amazonaws.services.identitymanagement.model.GetPolicyRequest;
 import com.amazonaws.services.identitymanagement.model.GetPolicyResult;
-import com.amazonaws.services.identitymanagement.model.GetPolicyVersionRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsResult;
 import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
@@ -155,7 +154,7 @@ public class AwsIamPolicyClient implements IaasClient<String, IaasPolicy, BaseIa
         return policyVersions;
     }
 
-    public void deleteNonDefaultPolicyVersions(String policyName) {
+    protected void deleteNonDefaultPolicyVersions(String policyName) {
         List<PolicyVersion> versions = getPolicyVersions(policyName);
 
         String policyArn = awsMapper.getPolicyArn(policyName);
@@ -164,7 +163,7 @@ public class AwsIamPolicyClient implements IaasClient<String, IaasPolicy, BaseIa
                 .forEach(version -> deletePolicyVersion(policyArn, version.getVersionId()));
     }
 
-    public void deletePolicyVersion(String policyArn, String versionId) {
+    protected void deletePolicyVersion(String policyArn, String versionId) {
         DeletePolicyVersionRequest request = new DeletePolicyVersionRequest()
                                                  .withPolicyArn(policyArn)
                                                  .withVersionId(versionId);
@@ -172,7 +171,7 @@ public class AwsIamPolicyClient implements IaasClient<String, IaasPolicy, BaseIa
         DeletePolicyVersionResult result = awsIamClient.deletePolicyVersion(request);
     }
 
-    private String getDefaultDocument(String policyName) {
+    protected String getDefaultDocument(String policyName) {
         return getPolicyVersions(policyName).stream()
                                      .filter(version -> version.getIsDefaultVersion()).findAny().get()
                                      .getDocument();

@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.IaasObjectStoreFileDto;
+
 public class UserDtoTest {
 
     private UserDto dto;
@@ -30,6 +32,7 @@ public class UserDtoTest {
             "EMAIL",
             "PHONE_NUMBER",
             URI.create("IMAGE_URL"),
+            new IaasObjectStoreFileDto(URI.create("file.txt")),
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),
@@ -46,6 +49,7 @@ public class UserDtoTest {
         assertEquals("EMAIL", dto.getEmail());
         assertEquals("PHONE_NUMBER", dto.getPhoneNumber());
         assertEquals(URI.create("IMAGE_URL"), dto.getImageSrc());
+        assertEquals(new IaasObjectStoreFileDto(URI.create("file.txt")), dto.getObjectStoreFile());
         assertEquals(new UserStatusDto(1L), dto.getStatus());
         assertEquals(new UserSalutationDto(2L), dto.getSalutation());
         assertEquals(List.of(new UserRoleDto(3L)), dto.getRoles());
@@ -101,6 +105,14 @@ public class UserDtoTest {
         assertNull(dto.getImageSrc());
         dto.setImageSrc(URI.create("imageSrc"));
         assertEquals(URI.create("imageSrc"), dto.getImageSrc());
+    }
+
+    @Test
+    public void testAccessObjectStoreFile() {
+        assertNull(dto.getObjectStoreFile());
+        dto.setObjectStoreFile(new IaasObjectStoreFileDto(URI.create("file.txt")));
+
+        assertEquals(new IaasObjectStoreFileDto(URI.create("file.txt")), dto.getObjectStoreFile());
     }
 
     @Test

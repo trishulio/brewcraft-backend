@@ -38,17 +38,17 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
 @RequestMapping(path = "/operations/tenants")
-public class TenantManagementController extends BaseController {
+public class TenantController extends BaseController {
     private TenantService tenantService;
 
     private CrudControllerService<UUID, Tenant, BaseTenant, UpdateTenant, TenantDto, AddTenantDto, UpdateTenantDto> controller;
 
     @Autowired
-    public TenantManagementController(TenantService tenantService, AttributeFilter filter) {
+    public TenantController(TenantService tenantService, AttributeFilter filter) {
         this(new CrudControllerService<>(filter, TenantMapper.INSTANCE, tenantService, "Tenant"), tenantService);
     }
 
-    public TenantManagementController(
+    public TenantController(
             CrudControllerService<UUID, Tenant, BaseTenant, UpdateTenant, TenantDto, AddTenantDto, UpdateTenantDto> controller,
             TenantService tenantService
         ) {

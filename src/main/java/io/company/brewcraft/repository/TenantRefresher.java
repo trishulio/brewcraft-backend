@@ -20,6 +20,7 @@ public class TenantRefresher implements Refresher<Tenant, TenantAccessor> {
 
     @Override
     public void refresh(Collection<Tenant> tenants) {
+        // Nothing to refresh
     }
 
     @Override

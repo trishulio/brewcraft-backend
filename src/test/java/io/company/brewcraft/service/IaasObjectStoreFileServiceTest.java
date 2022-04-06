@@ -160,6 +160,11 @@ public class IaasObjectStoreFileServiceTest {
     }
 
     @Test
+    public void testAdd_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.add(null));
+    }
+
+    @Test
     public void testPut_ReturnsPutRepoEntities_AfterSavingPutEntitiesFromUpdateService() throws MalformedURLException {
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasRepo).put(anyList());
 
@@ -181,7 +186,17 @@ public class IaasObjectStoreFileServiceTest {
     }
 
     @Test
+    public void testPut_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.put(null));
+    }
+
+    @Test
     public void testPatch_ThrowsNotSupportedException() {
         assertThrows(UnsupportedOperationException.class, () -> service.patch(List.of()));
+    }
+
+    @Test
+    public void testPatch_DoesNothingReturnsNull_WhenArgIsNull() {
+        assertNull(service.patch(null));
     }
 }

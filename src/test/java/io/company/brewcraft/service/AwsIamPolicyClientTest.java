@@ -22,7 +22,6 @@ import com.amazonaws.services.identitymanagement.model.DeletePolicyRequest;
 import com.amazonaws.services.identitymanagement.model.DeletePolicyVersionRequest;
 import com.amazonaws.services.identitymanagement.model.GetPolicyRequest;
 import com.amazonaws.services.identitymanagement.model.GetPolicyResult;
-import com.amazonaws.services.identitymanagement.model.GetPolicyVersionRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsRequest;
 import com.amazonaws.services.identitymanagement.model.ListPolicyVersionsResult;
 import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
@@ -190,5 +189,28 @@ public class AwsIamPolicyClientTest {
         doAnswer(inv -> inv.getArgument(0, IaasPolicy.class)).when(client).update(any());
 
         assertEquals(new IaasPolicy("POLICY_1"), client.put(new IaasPolicy("POLICY_1")));
+    }
+
+    @Test
+    public void testGetPolicyVersions_ReturnsAllVersions() {
+        List<PolicyVersion> pageA = List.of(new PolicyVersion().withVersionId("A1"), new PolicyVersion().withVersionId("A2"));
+        List<PolicyVersion> pageB = List.of(new PolicyVersion().withVersionId("B1"), new PolicyVersion().withVersionId("B2"));
+        List<PolicyVersion> pageC = List.of(new PolicyVersion().withVersionId("C1"), new PolicyVersion().withVersionId("C2"));
+
+        doReturn(new ListPolicyVersionsResult().withVersions(pageA).withMarker("next_1").withIsTruncated(true)).when(mAwsIamClient).listPolicyVersions(new ListPolicyVersionsRequest().withPolicyArn("POLICY_1_ARN"));
+        doReturn(new ListPolicyVersionsResult().withVersions(pageB).withMarker("next_2").withIsTruncated(true)).when(mAwsIamClient).listPolicyVersions(new ListPolicyVersionsRequest().withPolicyArn("POLICY_1_ARN").withMarker("next_1"));
+        doReturn(new ListPolicyVersionsResult().withVersions(pageC).withIsTruncated(false)).when(mAwsIamClient).listPolicyVersions(new ListPolicyVersionsRequest().withPolicyArn("POLICY_1_ARN").withMarker("next_2"));
+
+        List<PolicyVersion> versions = client.getPolicyVersions("POLICY_1");
+
+        List<PolicyVersion> expected = List.of(
+            new PolicyVersion().withVersionId("A1"),
+            new PolicyVersion().withVersionId("A2"),
+            new PolicyVersion().withVersionId("B1"),
+            new PolicyVersion().withVersionId("B2"),
+            new PolicyVersion().withVersionId("C1"),
+            new PolicyVersion().withVersionId("C2")
+        );
+        assertEquals(expected, versions);
     }
 }

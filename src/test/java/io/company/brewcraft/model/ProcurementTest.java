@@ -55,6 +55,14 @@ public class ProcurementTest {
     }
 
     @Test
+    public void testSetId_SetsNullIdsOnInvoiceAndShipment_WhenIdIsNull() {
+        procurement.setId(null);
+
+        assertEquals(new Invoice(), procurement.getInvoice());
+        assertEquals(new Shipment(), procurement.getShipment());
+    }
+
+    @Test
     public void testAccessId_ReturnsNonNullId_WhenChildrenAreNotNull() {
         procurement.setShipment(new Shipment(1L));
         procurement.setInvoice(new Invoice(10L));

@@ -16,9 +16,10 @@ public class UpdateUserRoleDto extends BaseDto {
         setId(id);
     }
 
-    public UpdateUserRoleDto(Long id, String name) {
+    public UpdateUserRoleDto(Long id, String name, Integer version) {
         this(id);
         setName(name);
+        setVersion(version);
     }
 
     public Long getId() {

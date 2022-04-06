@@ -1,6 +1,8 @@
 package io.company.brewcraft.service;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.*;
@@ -79,5 +81,19 @@ public class TenantIaasIdpServiceTest {
 
         assertEquals(new TenantIaasIdpDeleteResult(2), res);
         verify(mIdpTenantService).delete(Set.of("T1", "T2"));
+    }
+
+    @Test
+    public void testExists_ReturnsTrue_WhenIdpReturnsTrue() {
+        doReturn(true).when(mIdpTenantService).exist("T1");
+
+        assertTrue(service.exist("T1"));
+    }
+
+    @Test
+    public void testExists_ReturnsFalse_WhenIdpReturnsFalse() {
+        doReturn(false).when(mIdpTenantService).exist("T1");
+
+        assertFalse(service.exist("T1"));
     }
 }
