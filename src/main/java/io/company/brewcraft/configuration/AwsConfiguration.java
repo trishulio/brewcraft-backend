@@ -38,9 +38,7 @@ import io.company.brewcraft.model.UpdateIaasPolicy;
 import io.company.brewcraft.model.UpdateIaasRole;
 import io.company.brewcraft.model.UpdateIaasUser;
 import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
-import io.company.brewcraft.security.idp.AwsCognitoIdpClient;
 import io.company.brewcraft.security.idp.AwsFactory;
-import io.company.brewcraft.security.idp.IdentityProviderClient;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
 import io.company.brewcraft.service.AwsArnMapper;
@@ -76,12 +74,6 @@ public class AwsConfiguration {
     public AWSCognitoIdentityProvider awsCognitoIdpProvider(AwsFactory awsFactory, @Value("${aws.cognito.region}") final String cognitoRegion, @Value("${aws.cognito.url}") final String cognitoUrl,
             @Value("${aws.cognito.access-key}") final String cognitoAccessKey, @Value("${aws.cognito.access-secret}") final String cognitoAccessSecret) {
         return awsFactory.getIdentityProvider(cognitoRegion, cognitoUrl, cognitoAccessKey, cognitoAccessSecret);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(IdentityProviderClient.class)
-    public IdentityProviderClient idpClient(AWSCognitoIdentityProvider awsIdpProvider, @Value("${aws.cognito.user-pool.id}") final String cognitoUserPoolId) {
-        return new AwsCognitoIdpClient(awsIdpProvider, cognitoUserPoolId);
     }
 
     @Bean

@@ -11,7 +11,7 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 
-public class AwsFactoryImplTest {
+public class AwsFactoryTest {
 
     private AwsFactory factory;
 

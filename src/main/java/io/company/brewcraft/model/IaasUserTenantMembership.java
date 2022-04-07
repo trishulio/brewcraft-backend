@@ -10,6 +10,10 @@ public class IaasUserTenantMembership extends BaseEntity implements CrudEntity<I
         super();
     }
 
+    public IaasUserTenantMembership(IaasUserTenantMembershipId id) {
+        setId(id);
+    }
+
     public IaasUserTenantMembership(IaasUser user, String tenantId) {
         this();
         setUser(user);

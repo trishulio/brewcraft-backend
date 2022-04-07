@@ -22,12 +22,11 @@ import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.model.IaasUserTenantMembership;
 import io.company.brewcraft.model.IaasUserTenantMembershipId;
 import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
-import io.company.brewcraft.security.idp.AwsCognitoIdpClient;
 import io.company.brewcraft.service.IaasClient;
 import io.company.brewcraft.service.IaasEntityMapper;
 
 public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> {
-    private static final Logger log = LoggerFactory.getLogger(AwsCognitoIdpClient.class);
+    private static final Logger log = LoggerFactory.getLogger(AwsIaasUserTenantMembershipClient.class);
 
     private final AWSCognitoIdentityProvider idp;
     private final String userPoolId;
@@ -84,9 +83,9 @@ public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTen
                                                       .withUsername(id.getUserId())
                                                       .withGroupName(id.getTenantId())
                                                       .withUserPoolId(userPoolId);
-
         try {
             AdminRemoveUserFromGroupResult result = this.idp.adminRemoveUserFromGroup(request);
+            success = true;
         } catch (ResourceNotFoundException e) {
             log.error("Failed to remove user: {} from group: {}", id.getUserId(), id.getTenantId());
         }
@@ -111,6 +110,7 @@ public class AwsIaasUserTenantMembershipClient implements IaasClient<IaasUserTen
         do {
             AdminListGroupsForUserRequest request = new AdminListGroupsForUserRequest()
                     .withUsername(userName)
+                    .withNextToken(next)
                     .withUserPoolId(userPoolId);
 
            AdminListGroupsForUserResult result = idp.adminListGroupsForUser(request);
