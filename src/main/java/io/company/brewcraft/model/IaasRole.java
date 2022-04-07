@@ -28,7 +28,7 @@ public class IaasRole extends BaseEntity implements UpdateIaasRole, CrudEntity<S
         setId(id);
     }
 
-    public IaasRole(String id, String description, String assumePolicyDocument, String iaasResourceName, String iaasId, LocalDateTime lastUsed, LocalDateTime lastUpdated, LocalDateTime createdAt) {
+    public IaasRole(String id, String description, String assumePolicyDocument, String iaasResourceName, String iaasId, LocalDateTime lastUsed, LocalDateTime createdAt, LocalDateTime lastUpdated) {
         this(id);
         setDescription(description);
         setAssumePolicyDocument(assumePolicyDocument);
@@ -79,26 +79,32 @@ public class IaasRole extends BaseEntity implements UpdateIaasRole, CrudEntity<S
         this.assumePolicyDocument = assumePolicyDocument;
     }
 
+    @Override
     public String getIaasResourceName() {
         return iaasResourceName;
     }
 
+    @Override
     public void setIaasResourceName(String iaasResourceName) {
         this.iaasResourceName = iaasResourceName;
     }
 
+    @Override
     public String getIaasId() {
         return iaasId;
     }
 
+    @Override
     public void setIaasId(String iaasId) {
         this.iaasId = iaasId;
     }
 
+    @Override
     public LocalDateTime getLastUsed() {
         return lastUsed;
     }
 
+    @Override
     public void setLastUsed(LocalDateTime lastUsed) {
         this.lastUsed = lastUsed;
     }

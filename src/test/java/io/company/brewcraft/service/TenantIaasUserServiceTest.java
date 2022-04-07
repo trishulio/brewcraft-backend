@@ -57,8 +57,8 @@ public class TenantIaasUserServiceTest {
         List<IaasUserTenantMembership> memberships = service.put(users);
 
         List<IaasUserTenantMembership> expected = List.of(
-            new IaasUserTenantMembership(new IaasUser("USERNAME_1", "example-1@localhost", "phone-number-1"), "00000000-0000-0000-0000-000000000001"),
-            new IaasUserTenantMembership(new IaasUser("USERNAME_2", "example-2@localhost", "phone-number-2"), "00000000-0000-0000-0000-000000000001")
+            new IaasUserTenantMembership(new IaasUser("USERNAME_1", "example-1@localhost", "phone-number-1", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0)), "00000000-0000-0000-0000-000000000001"),
+            new IaasUserTenantMembership(new IaasUser("USERNAME_2", "example-2@localhost", "phone-number-2", LocalDateTime.of(2001, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0)), "00000000-0000-0000-0000-000000000001")
         );
 
         assertEquals(expected, memberships);

@@ -1,10 +1,5 @@
 package io.company.brewcraft.model;
 
-import java.util.Optional;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class AwsDocumentTemplates {
     private static final String POLICY_DOC_TENANT_BUCKET = "{\n"
             + "    \"Version\": \"2012-10-17\",\n"
@@ -82,24 +77,12 @@ public class AwsDocumentTemplates {
         return String.format(BUCKET_NAME_TENANT_VFS, iaasIdpTenantId);
     }
 
-    public String getTenantIdFromTenantVfsBucketName(String bucketName) {
-        return reverseFormat(BUCKET_NAME_TENANT_VFS, bucketName);
-    }
-
     public String getTenantIaasRoleName(String iaasIdpTenantId) {
         return String.format(ROLE_NAME_TENANT_IAAS, iaasIdpTenantId);
     }
 
-    public String getTenantIdFromTenantIaasRoleName(String roleName) {
-        return reverseFormat(ROLE_NAME_TENANT_IAAS, roleName);
-    }
-
     public String getTenantVfsPolicyName(String iaasIdpTenantId) {
         return String.format(POLICY_NAME_TENANT_VFS, iaasIdpTenantId);
-    }
-
-    public String getTenantIdFromTenantVfsPolicyName(String policyName) {
-        return reverseFormat(POLICY_NAME_TENANT_VFS, policyName);
     }
 
     public String getTenantVfsPolicyDescription(String iaasIdpTenantId) {
@@ -108,23 +91,5 @@ public class AwsDocumentTemplates {
 
     public String getTenantIaasRoleDescription(String iaasIdpTenantId) {
         return String.format(ROLE_DESCRIPTION_TENANT_VFS, iaasIdpTenantId);
-    }
-
-    private String reverseFormat(String singlePlaceHolderTemplate, String formatted) {
-        String iaasIdpTenantId = null;
-        Pattern pattern = Pattern.compile(String.format(singlePlaceHolderTemplate, "(.*)"));
-
-        Matcher matcher = pattern.matcher(formatted);
-        Optional<MatchResult> matched = matcher.results().findFirst();
-
-        if (matched.isPresent()) {
-            iaasIdpTenantId = formatted.substring(matched.get().start(), matched.get().end());
-        }
-
-        if (iaasIdpTenantId == null) {
-            throw new IllegalArgumentException("The bucketName doesn't follow the VFS tenant-bucket name pattern");
-        }
-
-        return iaasIdpTenantId;
     }
 }

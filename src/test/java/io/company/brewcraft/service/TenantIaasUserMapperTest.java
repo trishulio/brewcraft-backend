@@ -52,7 +52,7 @@ public class TenantIaasUserMapperTest {
         ));
 
         List<IaasUser> expected = List.of(
-            new IaasUser("USERNAME", "EMAIL", "PHONE_NUMBER")
+            new IaasUser("USERNAME", "EMAIL", "PHONE_NUMBER", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0))
         );
         assertEquals(expected, users);
     }
@@ -83,7 +83,7 @@ public class TenantIaasUserMapperTest {
 
         IaasUser user = mapper.fromUser(arg);
 
-        IaasUser expected = new IaasUser("USERNAME", "EMAIL", "PHONE_NUMBER");
+        IaasUser expected = new IaasUser("USERNAME", "EMAIL", "PHONE_NUMBER", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
         assertEquals(expected, user);
     }
 }

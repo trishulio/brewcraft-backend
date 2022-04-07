@@ -1,14 +1,23 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.dto;
 
 import java.time.LocalDateTime;
-
-import io.company.brewcraft.dto.BaseDto;
 
 public class IaasAuthorizationDto extends BaseDto {
     private String accessKey;
     private String accessSecret;
     private String sessionToken;
     private LocalDateTime expiration;
+
+    public IaasAuthorizationDto() {
+        super();
+    }
+
+    public IaasAuthorizationDto(String accessKey, String accessSecret, String sessionToken, LocalDateTime expiration) {
+        setAccessKey(accessKey);
+        setAccessSecret(accessSecret);
+        setSessionToken(sessionToken);
+        setExpiration(expiration);
+    }
 
     public String getAccessKey() {
         return accessKey;

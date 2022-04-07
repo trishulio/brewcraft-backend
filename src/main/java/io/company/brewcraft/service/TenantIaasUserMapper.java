@@ -27,7 +27,7 @@ public class TenantIaasUserMapper {
         IdpUser idpUser = null;
 
         if (user != null) {
-            idpUser = (IdpUser) new IaasUser(user.getUserName(), user.getEmail(), user.getPhoneNumber());
+            idpUser = (IdpUser) new IaasUser(user.getUserName(), user.getEmail(), user.getPhoneNumber(), null, null);
         }
 
         return idpUser;

@@ -1,4 +1,4 @@
-package io.company.brewcraft.model;
+package io.company.brewcraft.service;
 
 import java.net.URI;
 import java.time.Duration;
@@ -9,14 +9,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import io.company.brewcraft.model.BaseIaasObjectStoreFile;
+import io.company.brewcraft.model.BaseModel;
+import io.company.brewcraft.model.IaasAuthorization;
+import io.company.brewcraft.model.IaasObjectStoreFile;
+import io.company.brewcraft.model.IaasRepositoryProvider;
+import io.company.brewcraft.model.UpdateIaasObjectStoreFile;
 import io.company.brewcraft.security.idp.AwsFactory;
-import io.company.brewcraft.service.AwsS3FileClient;
-import io.company.brewcraft.service.IaasClient;
-import io.company.brewcraft.service.IaasRepository;
-import io.company.brewcraft.service.LocalDateTimeMapper;
-import io.company.brewcraft.service.SequentialExecutor;
-import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
-import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
 
 public class TenantContextAwsObjectStoreFileClientProvider implements IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> {
     // Because the IaasAuthorization expires in 1 hour so the existing client becomes useless.
