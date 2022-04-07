@@ -199,8 +199,8 @@ public class IaasRoleServiceTest {
         List<IaasRole> attachments = service.patch(updates);
 
         List<IaasRole> expected = List.of(
-            new IaasRole("ROLE_1", "DESCRIPION_1", "DOCUMENT_1_UPDATED", "IAAS_RES_NAME_1", "IAAS_ID_1", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0), null),
-            new IaasRole("ROLE_2", "DESCRIPION_2_UPDATED", "DOCUMENT_2", "IAAS_RES_NAME_2", "IAAS_ID_2_UPDATED", LocalDateTime.of(2000, 2, 1, 0, 0), LocalDateTime.of(2001, 2, 1, 0, 0), null)
+            new IaasRole("ROLE_1", "DESCRIPION_1", "DOCUMENT_1_UPDATED", "IAAS_RES_NAME_1", "IAAS_ID_1", LocalDateTime.of(2000, 1, 1, 0, 0), null, LocalDateTime.of(2002, 1, 1, 0, 0)),
+            new IaasRole("ROLE_2", "DESCRIPION_2_UPDATED", "DOCUMENT_2", "IAAS_RES_NAME_2", "IAAS_ID_2_UPDATED", LocalDateTime.of(2000, 2, 1, 0, 0), null, LocalDateTime.of(2002, 2, 1, 0, 0))
         );
 
         assertEquals(expected, attachments);

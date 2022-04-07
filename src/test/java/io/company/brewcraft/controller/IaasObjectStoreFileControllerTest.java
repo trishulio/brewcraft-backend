@@ -10,11 +10,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.AddIaasObjectStoreFileDto;
 import io.company.brewcraft.dto.IaasObjectStoreFileDto;
-import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.UpdateIaasObjectStoreFileDto;
 import io.company.brewcraft.model.BaseIaasObjectStoreFile;
 import io.company.brewcraft.model.IaasObjectStoreFile;
@@ -46,16 +44,15 @@ public class IaasObjectStoreFileControllerTest {
 
     @Test
     public void testGetAllIaasObjectStoreFile_ReturnsDtosFromController() {
-        doReturn(new PageImpl<>(List.of(new IaasObjectStoreFile(URI.create("file_1.txt"))))).when(mService).getAll(
+        doReturn(List.of(new IaasObjectStoreFile(URI.create("file_1.txt")))).when(mService).getAll(
             Set.of(URI.create("file_1.txt"))
         );
-        doReturn(new PageDto<>(List.of(new IaasObjectStoreFileDto(URI.create("file_1.txt"))), 1, 1)).when(mCrudController).getAll(new PageImpl<>(List.of(new IaasObjectStoreFile(URI.create("file_1.txt")))), Set.of(""));
 
         List<IaasObjectStoreFileDto> page = this.controller.getAll(
             Set.of(URI.create("file_1.txt"))
         );
 
-        PageDto<IaasObjectStoreFileDto> expected = new PageDto<>(List.of(new IaasObjectStoreFileDto(URI.create("file_1.txt"))), 1, 1);
+        List<IaasObjectStoreFileDto> expected = List.of(new IaasObjectStoreFileDto(URI.create("file_1.txt")));
         assertEquals(expected, page);
     }
 

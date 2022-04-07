@@ -41,7 +41,7 @@ public class UnifiedTenantRegisterTest {
 
     @Test
     public void testPut_CallsPutOnAllRegisters() {
-        register.add(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+        register.put(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
         order.verify(mUserReg, times(1)).put(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
         order.verify(mSchemaReg, times(1)).put(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));

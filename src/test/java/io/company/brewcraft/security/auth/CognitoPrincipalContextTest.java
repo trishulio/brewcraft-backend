@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import io.company.brewcraft.model.IaasAuthorizationCredentials;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
 import io.company.brewcraft.security.session.PrincipalContext;
 
@@ -58,6 +59,6 @@ public class CognitoPrincipalContextTest {
 
     @Test
     public void testGetIaasLogin_ReturnsIaasToken() {
-        assertEquals(IAAS_TOKEN, ctx.getIaasLogin());
+        assertEquals(new IaasAuthorizationCredentials(IAAS_TOKEN), ctx.getIaasLogin());
     }
 }

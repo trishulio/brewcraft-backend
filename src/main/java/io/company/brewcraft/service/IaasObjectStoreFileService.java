@@ -117,6 +117,10 @@ public class IaasObjectStoreFileService extends BaseService implements CrudServi
 
     @Override
     public List<IaasObjectStoreFile> patch(List<UpdateIaasObjectStoreFile> updates) {
+        if (updates == null) {
+            return null;
+        }
+
         throw new UnsupportedOperationException("Patch is not supported for file urls");
     }
 }

@@ -39,7 +39,7 @@ public class AwsIaasRoleMapperTest {
 
         IaasRole entity = mapper.fromIaasEntity(role);
 
-        IaasRole expected = new IaasRole("ROLE_1_NAME", "ROLE_1_DESCRIPTION", "ROLE_1_DOC", "ROLE_1_ARN", "ROLE_1_ID", LocalDateTime.of(1902, 3, 2, 0, 0), null, LocalDateTime.of(1901, 2, 1, 0, 0));
+        IaasRole expected = new IaasRole("ROLE_1_NAME", "ROLE_1_DESCRIPTION", "ROLE_1_DOC", "ROLE_1_ARN", "ROLE_1_ID", LocalDateTime.of(1902, 3, 2, 0, 0), LocalDateTime.of(1901, 2, 1, 0, 0), null);
 
         assertEquals(expected, entity);
     }
