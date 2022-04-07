@@ -19,6 +19,11 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
         super();
     }
 
+    public IaasRolePolicyAttachment(IaasRolePolicyAttachmentId id) {
+        this();
+        setId(id);
+    }
+
     public IaasRolePolicyAttachment(IaasRole role, IaasPolicy policy) {
         this();
         setIaasRole(role);
