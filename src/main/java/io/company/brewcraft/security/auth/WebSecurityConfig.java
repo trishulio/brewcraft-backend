@@ -2,6 +2,7 @@ package io.company.brewcraft.security.auth;
 
 import javax.servlet.Filter;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,17 +34,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @ConditionalOnMissingBean(JwtDecoder.class)
     public JwtDecoder decoder(OAuth2ResourceServerProperties props) {
         String jwkUri = props.getJwt().getJwkSetUri();
         return NimbusJwtDecoder.withJwkSetUri(jwkUri).build();
     }
 
     @Bean
+    @ConditionalOnMissingBean(Filter.class)
     public Filter ctxHolderFilter(ContextHolder ctxHolder, TenantService tenantService) {
         return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder, tenantService);
     }
 
     @Bean
+    @ConditionalOnMissingBean(Filter.class)
     public Filter utilityFilter(UtilityProvider utilityProvider) {
         return new UtilityProviderFilter(utilityProvider);
     }

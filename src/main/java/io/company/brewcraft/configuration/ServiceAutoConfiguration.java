@@ -383,6 +383,7 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(IaasObjectStoreFileService.class)
     public IaasObjectStoreFileService objectStoreFileService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider) {
         final UpdateService<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> updateService = new SimpleUpdateService<>(utilProvider, BaseIaasObjectStoreFile.class, UpdateIaasObjectStoreFile.class, IaasObjectStoreFile.class, Set.of(IaasObjectStoreFile.ATTR_MIN_VALID_UNTIL));
         IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasRepo = new IaasRepositoryProviderProxy<>(iaasObjectStoreFileClientProvider);
@@ -431,6 +432,7 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(InvoiceItemService.class)
     public InvoiceItemService invoiceItemService(UtilityProvider utilProvider) {
         final UpdateService<Long, InvoiceItem, BaseInvoiceItem<?>, UpdateInvoiceItem<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseInvoiceItem.class, UpdateInvoiceItem.class, InvoiceItem.class, Set.of(BaseInvoiceItem.ATTR_INVOICE));
         return new InvoiceItemService(updateService);
@@ -583,11 +585,13 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(UserDtoDecorator.class)
     public UserDtoDecorator userDecorator(TemporaryImageSrcDecorator imgDecorator) {
         return new UserDtoDecorator(imgDecorator);
     }
 
     @Bean
+    @ConditionalOnMissingBean(TenantIaasUserService.class)
     public TenantIaasUserService tenantIaasUserService(
             BlockingAsyncExecutor executor,
             ContextHolder ctxHolder,
@@ -684,6 +688,7 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SkuMaterialService.class)
     public SkuMaterialService skuMaterialService(UtilityProvider utilProvider) {
         final UpdateService<Long, SkuMaterial, BaseSkuMaterial<?>, UpdateSkuMaterial<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseSkuMaterial.class, UpdateSkuMaterial.class, SkuMaterial.class, Set.of(BaseSkuMaterial.ATTR_SKU));
         return new SkuMaterialService(updateService);
@@ -698,18 +703,21 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(FinishedGoodLotMaterialPortionService.class)
     public FinishedGoodLotMaterialPortionService finishedGoodMaterialPortionService(UtilityProvider utilProvider) {
         final UpdateService<Long, FinishedGoodLotMaterialPortion, BaseFinishedGoodLotMaterialPortion<?>, UpdateFinishedGoodLotMaterialPortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotMaterialPortion.class, UpdateFinishedGoodLotMaterialPortion.class, FinishedGoodLotMaterialPortion.class, Set.of(BaseFinishedGoodLotMaterialPortion.ATTR_FINISHED_GOOD_LOT));
         return new FinishedGoodLotMaterialPortionService(updateService);
     }
 
     @Bean
+    @ConditionalOnMissingBean(FinishedGoodLotMixturePortionService.class)
     public FinishedGoodLotMixturePortionService finishedGoodMixturePortionService(UtilityProvider utilProvider) {
         final UpdateService<Long, FinishedGoodLotMixturePortion, BaseFinishedGoodLotMixturePortion<?>, UpdateFinishedGoodLotMixturePortion<?>> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotMixturePortion.class, UpdateFinishedGoodLotMixturePortion.class, FinishedGoodLotMixturePortion.class, Set.of(BaseFinishedGoodLotMixturePortion.ATTR_FINISHED_GOOD_LOT));
         return new FinishedGoodLotMixturePortionService(updateService);
     }
 
     @Bean
+    @ConditionalOnMissingBean(FinishedGoodLotFinishedGoodLotPortionService.class)
     public FinishedGoodLotFinishedGoodLotPortionService finishedGoodLotFinishedGoodLotPortionService(UtilityProvider utilProvider) {
         final UpdateService<Long, FinishedGoodLotFinishedGoodLotPortion, BaseFinishedGoodLotFinishedGoodLotPortion, UpdateFinishedGoodLotFinishedGoodLotPortion> updateService = new SimpleUpdateService<>(utilProvider, BaseFinishedGoodLotFinishedGoodLotPortion.class, UpdateFinishedGoodLotFinishedGoodLotPortion.class, FinishedGoodLotFinishedGoodLotPortion.class, Set.of(BaseFinishedGoodLotFinishedGoodLotPortion.ATTR_FINISHED_GOOD_LOT_TARGET));
         return new FinishedGoodLotFinishedGoodLotPortionService(updateService);

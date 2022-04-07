@@ -19,6 +19,7 @@ import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasObjectStoreFile;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
+import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.BaseIaasUser;
 import io.company.brewcraft.model.BaseIaasUserTenantMembership;
 import io.company.brewcraft.model.IaasIdpTenant;
@@ -27,6 +28,8 @@ import io.company.brewcraft.model.IaasObjectStoreFile;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRepositoryProvider;
 import io.company.brewcraft.model.IaasRole;
+import io.company.brewcraft.model.IaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 import io.company.brewcraft.model.IaasUser;
 import io.company.brewcraft.model.IaasUserTenantMembership;
 import io.company.brewcraft.model.IaasUserTenantMembershipId;
@@ -36,6 +39,7 @@ import io.company.brewcraft.model.UpdateIaasObjectStore;
 import io.company.brewcraft.model.UpdateIaasObjectStoreFile;
 import io.company.brewcraft.model.UpdateIaasPolicy;
 import io.company.brewcraft.model.UpdateIaasRole;
+import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
 import io.company.brewcraft.model.UpdateIaasUser;
 import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
 import io.company.brewcraft.security.idp.AwsFactory;
@@ -83,12 +87,6 @@ public class AwsConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(SecretsManager.class)
-    public SecretsManager<String, String> secretManager(AWSSecretsManager awsSecretsMgr) {
-        return new AwsSecretsManagerClient(awsSecretsMgr);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(AmazonS3.class)
     public AmazonS3 s3Client(AwsFactory awsFactory, @Value("${aws.s3.region}") String region, @Value("${aws.s3.access-key}") String s3AccessKey, @Value("${aws.s3.access-secret}") String s3Secret) {
         return awsFactory.s3Client(region, s3AccessKey, s3Secret);
@@ -107,8 +105,14 @@ public class AwsConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(SecretsManager.class)
+    public SecretsManager<String, String> secretManager(AWSSecretsManager awsSecretsMgr) {
+        return new AwsSecretsManagerClient(awsSecretsMgr);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(AwsIamRolePolicyAttachmentClient.class)
-    public AwsIamRolePolicyAttachmentClient awsIamRolePolicyClientClient(AmazonIdentityManagementClient iamClient, AwsArnMapper arnMapper) {
+    public IaasClient<IaasRolePolicyAttachmentId, IaasRolePolicyAttachment, BaseIaasRolePolicyAttachment, UpdateIaasRolePolicyAttachment> awsIamRolePolicyClientClient(AmazonIdentityManagementClient iamClient, AwsArnMapper arnMapper) {
         return new AwsIamRolePolicyAttachmentClient(iamClient, arnMapper);
     }
 
@@ -143,6 +147,7 @@ public class AwsConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(IaasRepositoryProvider.class)
     public IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider(@Value("${aws.s3.region}") String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, @Value("${app.object-store.file.get.url.expiry}") Long getPresignUrlDuration) {
         return new TenantContextAwsObjectStoreFileClientProvider(region, bucketNameProvider, authFetcher, awsFactory, getPresignUrlDuration);
     }
