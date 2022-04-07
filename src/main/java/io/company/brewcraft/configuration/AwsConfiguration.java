@@ -14,6 +14,7 @@ import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 
+import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasObjectStoreFile;
@@ -42,21 +43,31 @@ import io.company.brewcraft.model.UpdateIaasRolePolicyAttachment;
 import io.company.brewcraft.model.UpdateIaasUser;
 import io.company.brewcraft.model.UpdateIaasUserTenantMembership;
 import io.company.brewcraft.security.idp.AwsFactory;
+import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
 import io.company.brewcraft.service.AwsArnMapper;
+import io.company.brewcraft.service.AwsCognitoIdentityClient;
+import io.company.brewcraft.service.AwsCognitoIdentitySdkWrapper;
 import io.company.brewcraft.service.AwsIaasObjectStoreMapper;
 import io.company.brewcraft.service.AwsIaasPolicyMapper;
 import io.company.brewcraft.service.AwsIaasRoleMapper;
 import io.company.brewcraft.service.AwsIamPolicyClient;
 import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
+import io.company.brewcraft.service.AwsIdentityCredentialsMapper;
 import io.company.brewcraft.service.AwsObjectStoreClient;
+import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
+import io.company.brewcraft.service.AwsTenantIaasResourceBuilder;
+import io.company.brewcraft.service.CachedAwsCognitoIdentityClient;
+import io.company.brewcraft.service.IaasAuthorizationFetch;
 import io.company.brewcraft.service.IaasClient;
 import io.company.brewcraft.service.IaasRoleService;
+import io.company.brewcraft.service.TenantContextAwsBucketNameProvider;
 import io.company.brewcraft.service.TenantContextAwsObjectStoreFileClientProvider;
 import io.company.brewcraft.service.TenantContextIaasAuthorizationFetch;
 import io.company.brewcraft.service.TenantContextIaasObjectStoreNameProvider;
+import io.company.brewcraft.service.TenantIaasResourceBuilder;
 import io.company.brewcraft.service.impl.AwsIaasUserTenantMembershipClient;
 import io.company.brewcraft.service.impl.AwsIdpTenantWithRoleClient;
 import io.company.brewcraft.service.impl.user.AwsCognitoUserClient;
@@ -103,6 +114,18 @@ public class AwsConfiguration {
     public AmazonCognitoIdentity cognitoIdentity(AwsFactory awsFactory, @Value("${aws.cognito.region}") String region, @Value("${aws.cognito.access-key}") final String accessKey, @Value("${aws.cognito.access-secret}") final String accessSecret) {
         return awsFactory.getAwsCognitoIdentityClient(region, accessKey, accessSecret);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(AwsArnMapper.class)
+    public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition) {
+        return new AwsArnMapper(accountId, partition);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(AwsDocumentTemplates.class)
+    public AwsDocumentTemplates awsDocumentTemplates(@Value("${aws.cognito.identity.pool.id}") String cognitoIdPoolId) {
+        return new AwsDocumentTemplates(cognitoIdPoolId);
+    }
 
     @Bean
     @ConditionalOnMissingBean(SecretsManager.class)
@@ -145,10 +168,37 @@ public class AwsConfiguration {
     public IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> awsCognitoUserGroupMembership(AWSCognitoIdentityProvider idp, @Value("${aws.cognito.user-pool.id}") String userPoolId) {
         return new AwsIaasUserTenantMembershipClient(idp, userPoolId, AwsGroupTypeMapper.INSTANCE);
     }
+    
+    @Bean
+    @ConditionalOnMissingBean(AwsCognitoIdentityClient.class)
+    public AwsCognitoIdentityClient cognitoIdentityClient(AmazonCognitoIdentity cognitoIdentity, @Value("${app.iaas.credentials.expiry.duration}") long credentialsExpiryDurationSeconds) {
+        AwsCognitoIdentityClient cognitoIdentityClient = new AwsCognitoIdentitySdkWrapper(cognitoIdentity);
+
+        return new CachedAwsCognitoIdentityClient(cognitoIdentityClient, credentialsExpiryDurationSeconds);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IaasAuthorizationFetch.class)
+    public IaasAuthorizationFetch iaasAuthorizationFetch(AwsCognitoIdentityClient identityClient, @Value("${aws.cognito.user-pool.url}") String userPoolUrl) {
+        return new AwsResourceCredentialsFetcher(identityClient, AwsIdentityCredentialsMapper.INSTANCE, userPoolUrl);
+    }
 
     @Bean
     @ConditionalOnMissingBean(IaasRepositoryProvider.class)
     public IaasRepositoryProvider<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> iaasObjectStoreFileClientProvider(@Value("${aws.s3.region}") String region, TenantContextIaasObjectStoreNameProvider bucketNameProvider, TenantContextIaasAuthorizationFetch authFetcher, AwsFactory awsFactory, @Value("${app.object-store.file.get.url.expiry}") Long getPresignUrlDuration) {
         return new TenantContextAwsObjectStoreFileClientProvider(region, bucketNameProvider, authFetcher, awsFactory, getPresignUrlDuration);
     }
+
+    @Bean
+    @ConditionalOnMissingBean(TenantIaasResourceBuilder.class)
+    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
+        return new AwsTenantIaasResourceBuilder(templates);
+    }
+    
+    @Bean
+    @ConditionalOnMissingBean(TenantContextIaasObjectStoreNameProvider.class)
+    public TenantContextIaasObjectStoreNameProvider objectStoreNameProvider(AwsDocumentTemplates awsTemplates, ContextHolder contextHolder, @Value("app.object-store.bucket.name") String appBucketName) {
+        return new TenantContextAwsBucketNameProvider(awsTemplates, contextHolder, appBucketName);
+    }
+
 }
