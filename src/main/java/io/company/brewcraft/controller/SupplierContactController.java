@@ -46,7 +46,7 @@ public class SupplierContactController extends BaseController {
         this.supplierContactService = supplierContactService;
     }
 
-    @GetMapping(value = "/contacts", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/contacts", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetSupplierContactsDto getContacts(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "supplier_ids") Set<Long> supplierIds,
@@ -62,7 +62,7 @@ public class SupplierContactController extends BaseController {
         return new GetSupplierContactsDto(supplierContactDtos, supplierContacts.getTotalElements(), supplierContacts.getTotalPages());
     }
 
-    @GetMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactWithSupplierDto getContact(@PathVariable Long contactId) {
         SupplierContact supplierContact = supplierContactService.getContact(contactId);
 
@@ -75,7 +75,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDtoWithSupplier(supplierContact);
     }
 
-    @PostMapping("{supplierId}/contacts")
+    @PostMapping(value = "{supplierId}/contacts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierContactDto addContact(@PathVariable Long supplierId, @Valid @RequestBody AddSupplierContactDto supplierContactDo) {
         SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDo);
@@ -85,7 +85,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDto(addedContact);
     }
 
-    @PutMapping("{supplierId}/contacts/{contactId}")
+    @PutMapping(value = "{supplierId}/contacts/{contactId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactDto putContact(@PathVariable Long supplierId, @PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
         SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDto);
 
@@ -94,7 +94,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDto(putContact);
     }
 
-    @PatchMapping("/contacts/{contactId}")
+    @PatchMapping(value = "/contacts/{contactId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactWithSupplierDto patchContact(@PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactWithSupplierDto supplierContactDto) {
         SupplierContact supplierContact  = supplierContactMapper.fromDto(supplierContactDto);
 

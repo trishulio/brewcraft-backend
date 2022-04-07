@@ -35,7 +35,7 @@ import io.company.brewcraft.service.mapper.user.UserMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/users")
 public class UserController extends BaseController {
     private CrudControllerService<
         Long,
@@ -68,7 +68,7 @@ public class UserController extends BaseController {
         this(new CrudControllerService<>(filter, UserMapper.INSTANCE, userService, "User", decorator), userService);
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<UserDto> getAllUsers(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -90,30 +90,30 @@ public class UserController extends BaseController {
         return this.controller.getAll(userPage, attributes);
     }
 
-    @GetMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{userId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDto getUser(@PathVariable(required = true, name = "userId") Long userId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(userId, attributes);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteUsers(@RequestParam("ids") Set<Long> userIds) {
         return this.controller.delete(userIds);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<UserDto> addUser(@Valid @NotNull @RequestBody List<AddUserDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<UserDto> updateUser(@Valid @NotNull @RequestBody List<UpdateUserDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<UserDto> patchUser(@Valid @NotNull @RequestBody List<UpdateUserDto> updateDtos) {
         return this.controller.patch(updateDtos);

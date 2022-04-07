@@ -56,7 +56,7 @@ public class FinishedGoodLotController extends BaseController {
         this.finishedGoodLotService = finishedGoodService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<FinishedGoodLotDto> getFinishedGoods(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -90,7 +90,7 @@ public class FinishedGoodLotController extends BaseController {
         return this.response(finishedGoods, attributes);
     }
 
-    @GetMapping(value = "/{finishedGoodId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{finishedGoodId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FinishedGoodLotDto getFinishedGood(@PathVariable(required = true, name = "finishedGoodId") Long finishedGoodId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         final FinishedGoodLot finishedGood = this.finishedGoodLotService.get(finishedGoodId);
         Validator.assertion(finishedGood != null, EntityNotFoundException.class, "FinishedGood", finishedGoodId.toString());
@@ -107,7 +107,7 @@ public class FinishedGoodLotController extends BaseController {
         return this.finishedGoodLotService.delete(finishedGoodIds);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<FinishedGoodLotDto> addFinishedGood(@Valid @NotNull @RequestBody List<AddFinishedGoodLotDto> payloads) {
         final List<BaseFinishedGoodLot<? extends BaseFinishedGoodLotMixturePortion<?>, ? extends BaseFinishedGoodLotMaterialPortion<?>>> additions = payloads.stream()
@@ -122,7 +122,7 @@ public class FinishedGoodLotController extends BaseController {
         return dtos;
     }
 
-    @PutMapping("/{finishedGoodId}")
+    @PutMapping(value = "/{finishedGoodId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FinishedGoodLotDto updateFinishedGood(@PathVariable(required = true, name = "finishedGoodId") Long finishedGoodId, @Valid @NotNull @RequestBody UpdateFinishedGoodLotDto payload) {
         final UpdateFinishedGoodLot<FinishedGoodLotMixturePortion, FinishedGoodLotMaterialPortion> update = mapper.fromDto(payload);
         update.setId(finishedGoodId);
@@ -133,7 +133,7 @@ public class FinishedGoodLotController extends BaseController {
         return dto;
     }
 
-    @PutMapping("")
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FinishedGoodLotDto> updateFinishedGoods(@Valid @NotNull @RequestBody List<UpdateFinishedGoodLotDto> updateFinishedGoodDtos) {
         final List<UpdateFinishedGoodLot<? extends UpdateFinishedGoodLotMixturePortion<?>, ? extends UpdateFinishedGoodLotMaterialPortion<?>>> finishedGoods = updateFinishedGoodDtos.stream()
                                                                                                                                                                             .map(updateFinishedGoodDto -> mapper.fromDto(updateFinishedGoodDto))
@@ -146,7 +146,7 @@ public class FinishedGoodLotController extends BaseController {
                                .toList();
     }
 
-    @PatchMapping("/{finishedGoodId}")
+    @PatchMapping(value = "/{finishedGoodId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FinishedGoodLotDto patchFinishedGood(@PathVariable(required = true, name = "finishedGoodId") Long finishedGoodId, @Valid @NotNull @RequestBody UpdateFinishedGoodLotDto payload) {
         final UpdateFinishedGoodLot<FinishedGoodLotMixturePortion, FinishedGoodLotMaterialPortion> patch = mapper.fromDto(payload);
         patch.setId(finishedGoodId);

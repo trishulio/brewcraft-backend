@@ -35,7 +35,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/products/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/products/categories")
 public class ProductCategoryController extends BaseController {
 
     private ProductCategoryService productCategoryService;
@@ -47,7 +47,7 @@ public class ProductCategoryController extends BaseController {
         this.productCategoryService = productCategoryService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<CategoryDto> getCategories(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false) Set<String> names,
@@ -69,7 +69,7 @@ public class ProductCategoryController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryWithParentDto getCategory(@PathVariable Long categoryId) {
         ProductCategory productCategory = productCategoryService.getCategory(categoryId);
 
@@ -78,7 +78,7 @@ public class ProductCategoryController extends BaseController {
         return productCategoryMapper.toCategoryWithParentDto(productCategory);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Valid @RequestBody AddCategoryDto addProductCategoryDto) {
         ProductCategory productCategory = productCategoryMapper.fromDto(addProductCategoryDto);
@@ -89,7 +89,7 @@ public class ProductCategoryController extends BaseController {
         return productCategoryMapper.toDto(addedProductCategory);
     }
 
-    @PutMapping("/{categoryId}")
+    @PutMapping(value = "/{categoryId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto putCategory(@Valid @RequestBody UpdateCategoryDto updateCategoryDto, @PathVariable Long categoryId) {
         ProductCategory productCategory = productCategoryMapper.fromDto(updateCategoryDto);
         Long parentCategoryId = updateCategoryDto.getParentCategoryId();
@@ -99,7 +99,7 @@ public class ProductCategoryController extends BaseController {
         return productCategoryMapper.toDto(putProductCategory);
     }
 
-    @PatchMapping("/{categoryId}")
+    @PatchMapping(value = "/{categoryId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto patchCategory(@Valid @RequestBody UpdateCategoryDto updateCategoryDto, @PathVariable Long categoryId) {
         ProductCategory productCategory = productCategoryMapper.fromDto(updateCategoryDto);
         Long parentCategoryId = updateCategoryDto.getParentCategoryId();

@@ -44,7 +44,7 @@ public interface MixtureMapper {
 
     MixtureDto toDto(Mixture mixture);
 
-    @AfterMapping
+    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void afterToDto(@MappingTarget MixtureDto mixtureDto, Mixture mixture) {
         if (mixture.getParentMixtures() != null && !mixture.getParentMixtures().isEmpty()) {
             mixtureDto.setParentMixtureIds(mixture.getParentMixtures().stream().map(parentMixture -> parentMixture.getId()).collect(Collectors.toSet()));

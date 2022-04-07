@@ -43,7 +43,7 @@ public class SupplierController extends BaseController {
         this.supplierService = supplierService;
     }
 
-    @GetMapping(value = "/suppliers", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/suppliers", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetSuppliersDto getSuppliers(
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
@@ -57,7 +57,7 @@ public class SupplierController extends BaseController {
         return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());
     }
 
-    @GetMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getSupplier(supplierId);
 
@@ -68,7 +68,7 @@ public class SupplierController extends BaseController {
         }
     }
 
-    @PostMapping("/suppliers")
+    @PostMapping(value = "/suppliers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierDto addSupplier(@Valid @RequestBody AddSupplierDto supplierDto) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
@@ -78,7 +78,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(addedSupplier);
     }
 
-    @PutMapping("/suppliers/{supplierId}")
+    @PutMapping(value = "/suppliers/{supplierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto putSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
 
@@ -87,7 +87,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(putSupplier);
     }
 
-    @PatchMapping("/suppliers/{supplierId}")
+    @PatchMapping(value = "/suppliers/{supplierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
 

@@ -36,7 +36,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/mixtures/portions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/mixtures/portions")
 public class MixtureMaterialPortionController extends BaseController {
 
     private MixtureMaterialPortionService materialPortionService;
@@ -48,7 +48,7 @@ public class MixtureMaterialPortionController extends BaseController {
         this.materialPortionService = materialPortionService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MixtureMaterialPortionDto> getMaterialPortions(
             @RequestParam(name = "ids", required = false) Set<Long> ids,
             @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
@@ -71,7 +71,7 @@ public class MixtureMaterialPortionController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{materialPortionId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{materialPortionId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto getMaterialPortion(@PathVariable Long materialPortionId) {
         MixtureMaterialPortion materialPortion = materialPortionService.getMaterialPortion(materialPortionId);
 
@@ -80,7 +80,7 @@ public class MixtureMaterialPortionController extends BaseController {
         return materialPortionMapper.toDto(materialPortion);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<MixtureMaterialPortionDto> addMMaterialPortions(@Valid @RequestBody List<AddMixtureMaterialPortionDto> addMaterialPortionDtos) {
         List<BaseMixtureMaterialPortion> materialPortions = addMaterialPortionDtos.stream()
@@ -94,7 +94,7 @@ public class MixtureMaterialPortionController extends BaseController {
                                     .toList();
     }
 
-    @PutMapping("/{materialPortionId}")
+    @PutMapping(value = "/{materialPortionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto putMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);
@@ -104,7 +104,7 @@ public class MixtureMaterialPortionController extends BaseController {
         return materialPortionMapper.toDto(putMaterialPortion);
     }
 
-    @PutMapping("")
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MixtureMaterialPortionDto> putMaterialPortions(@Valid @RequestBody List<UpdateMixtureMaterialPortionDto> updateMaterialPortionDtos) {
         List<UpdateMixtureMaterialPortion> materialPortions = updateMaterialPortionDtos.stream()
                                                                                        .map(updateMaterialPortionDto -> materialPortionMapper.fromDto(updateMaterialPortionDto))
@@ -118,7 +118,7 @@ public class MixtureMaterialPortionController extends BaseController {
 
     }
 
-    @PatchMapping("/{materialPortionId}")
+    @PatchMapping(value = "/{materialPortionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto patchMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);

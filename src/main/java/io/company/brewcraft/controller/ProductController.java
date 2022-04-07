@@ -35,7 +35,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/products", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/products")
 public class ProductController extends BaseController {
 
     private ProductService productService;
@@ -48,7 +48,7 @@ public class ProductController extends BaseController {
         this.decorator = decorator;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<ProductDto> getProducts(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false, name = "category_ids") Set<Long> categoryIds,
@@ -71,7 +71,7 @@ public class ProductController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{productId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto getProduct(@PathVariable Long productId) {
         Product product = productService.getProduct(productId);
 
@@ -84,7 +84,7 @@ public class ProductController extends BaseController {
         return dto;
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto addProduct(@Valid @RequestBody AddProductDto addProductDto) {
         Product product = productMapper.fromDto(addProductDto);
@@ -97,7 +97,7 @@ public class ProductController extends BaseController {
         return dto;
     }
 
-    @PutMapping("/{productId}")
+    @PutMapping(value = "/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto putProduct(@Valid @RequestBody UpdateProductDto updateProductDto, @PathVariable Long productId) {
         Product product = productMapper.fromDto(updateProductDto);
 
@@ -109,7 +109,7 @@ public class ProductController extends BaseController {
         return dto;
     }
 
-    @PatchMapping("/{productId}")
+    @PatchMapping(value = "/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto patchProduct(@Valid @RequestBody UpdateProductDto updateProductDto, @PathVariable Long productId) {
         Product product = productMapper.fromDto(updateProductDto);
 

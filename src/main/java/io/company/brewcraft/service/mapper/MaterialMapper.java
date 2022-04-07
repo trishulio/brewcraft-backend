@@ -52,7 +52,7 @@ public interface MaterialMapper {
     @Mapping(target = Material.ATTR_VERSION, ignore = true)
     Material fromDto(Long id);
 
-    @BeforeMapping
+    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         MaterialCategory category = material.getCategory();
@@ -73,14 +73,14 @@ public interface MaterialMapper {
 
     //Mapstruct creates a new category entity even if the source categoryId is null, this is a workaround for the issue
     //See for more details: https://github.com/mapstruct/mapstruct/issues/879#issuecomment-346479822
-    @AfterMapping
+    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void afterFromDto(@MappingTarget Material target, UpdateMaterialDto materialDto) {
         if (target.getCategory().getId() == null) {
             target.setCategory(null);
         }
     }
 
-    @AfterMapping
+    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void afterFromDto(@MappingTarget Material material, MaterialDto materialDto) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
 

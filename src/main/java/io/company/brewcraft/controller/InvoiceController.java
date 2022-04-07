@@ -75,7 +75,7 @@ public class InvoiceController extends BaseController {
         this(new CrudControllerService<>(filter, InvoiceMapper.INSTANCE, invoiceService, "Invoice"), invoiceService);
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<InvoiceDto> getAll(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -131,30 +131,30 @@ public class InvoiceController extends BaseController {
         return this.controller.getAll(invoices, attributes);
     }
 
-    @GetMapping(value = "/{invoiceId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{invoiceId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(invoiceId, attributes);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
         return this.controller.delete(invoiceIds);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<InvoiceDto> addInvoice(@Valid @NotNull @RequestBody List<AddInvoiceDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<InvoiceDto> updateInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<InvoiceDto> patchInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.patch(updateDtos);

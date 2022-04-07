@@ -35,7 +35,7 @@ import io.company.brewcraft.service.mapper.user.UserRoleMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/users/roles", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/users/roles")
 public class UserRoleController extends BaseController {
 
     private CrudControllerService<
@@ -69,7 +69,7 @@ public class UserRoleController extends BaseController {
         this(new CrudControllerService<>(filter, UserRoleMapper.INSTANCE, userRoleService, "UserRole"), userRoleService);
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<UserRoleDto> getAllUserRoles(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -85,28 +85,28 @@ public class UserRoleController extends BaseController {
         return this.controller.getAll(orders, attributes);
     }
 
-    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public UserRoleDto getUserRole(@PathVariable("id") Long id, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<UserRoleDto> postUserRole(@Valid @NotNull @RequestBody List<AddUserRoleDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserRoleDto> putUserRole(@Valid @NotNull @RequestBody List<UpdateUserRoleDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserRoleDto> patchUserRole(@Valid @NotNull @RequestBody List<UpdateUserRoleDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteUserRoles(@RequestParam("ids") Set<Long> ids) {
         return this.controller.delete(ids);

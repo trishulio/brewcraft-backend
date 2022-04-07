@@ -38,7 +38,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews")
 public class BrewController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(BrewController.class);
 
@@ -51,7 +51,7 @@ public class BrewController extends BaseController {
         this.brewService = brewService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<BrewDto> getBrews(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false, name = "batch_ids") Set<String> batchIds,
@@ -81,7 +81,7 @@ public class BrewController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{brewId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{brewId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BrewDto getBrew(@PathVariable Long brewId) {
         Brew brew = brewService.getBrew(brewId);
 
@@ -90,7 +90,7 @@ public class BrewController extends BaseController {
         return brewMapper.toDto(brew);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public BrewDto addBrew(@Valid @RequestBody AddBrewDto addBrewDto) {
         Brew brew = brewMapper.fromDto(addBrewDto);
@@ -100,7 +100,7 @@ public class BrewController extends BaseController {
         return brewMapper.toDto(addedBrew);
     }
 
-    @PutMapping("/{brewId}")
+    @PutMapping(value = "/{brewId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BrewDto putBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.fromDto(updateBrewDto);
 
@@ -109,7 +109,7 @@ public class BrewController extends BaseController {
         return brewMapper.toDto(putBrew);
     }
 
-    @PatchMapping("/{brewId}")
+    @PatchMapping(value = "/{brewId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BrewDto patchBrew(@PathVariable Long brewId, @Valid @RequestBody UpdateBrewDto updateBrewDto) {
         Brew brew = brewMapper.fromDto(updateBrewDto);
 

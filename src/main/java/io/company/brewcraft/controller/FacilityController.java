@@ -33,7 +33,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/facilities")
 public class FacilityController extends BaseController {
 
     private FacilityService facilityService;
@@ -45,7 +45,7 @@ public class FacilityController extends BaseController {
         this.facilityService = facilityService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<FacilityDto> getAllFacilities(
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
@@ -60,7 +60,7 @@ public class FacilityController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{facilityId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{facilityId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FacilityDto getFacility(@PathVariable Long facilityId) {
         Facility facility =  facilityService.getFacility(facilityId);
 
@@ -69,7 +69,7 @@ public class FacilityController extends BaseController {
         return facilityMapper.toDto(facility);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FacilityDto addFacility(@Valid @RequestBody AddFacilityDto facilityDto) {
         Facility facility = facilityMapper.fromDto(facilityDto);
@@ -79,7 +79,7 @@ public class FacilityController extends BaseController {
         return facilityMapper.toDto(addedFacility);
     }
 
-    @PutMapping("/{facilityId}")
+    @PutMapping(value = "/{facilityId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FacilityDto putFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
         Facility facility = facilityMapper.fromDto(facilityDto);
 
@@ -88,7 +88,7 @@ public class FacilityController extends BaseController {
         return facilityMapper.toDto(putFacility);
     }
 
-    @PatchMapping("/{facilityId}")
+    @PatchMapping(value = "/{facilityId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FacilityDto patchFacility(@PathVariable Long facilityId, @Valid @RequestBody UpdateFacilityDto facilityDto) {
         Facility facility = facilityMapper.fromDto(facilityDto);
 

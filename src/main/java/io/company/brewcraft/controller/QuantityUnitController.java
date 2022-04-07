@@ -22,7 +22,7 @@ import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/quantity/units", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/quantity/units")
 public class QuantityUnitController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(QuantityUnitController.class);
 
@@ -35,7 +35,7 @@ public class QuantityUnitController extends BaseController {
         this.quantityUnitService = quantityUnitService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<UnitDto> getUnits(@RequestParam(required = false) Set<String> symbols,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = UnitEntity.FIELD_SYMBOL) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,

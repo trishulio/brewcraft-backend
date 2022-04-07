@@ -38,7 +38,7 @@ public interface ProductMapper {
 
     ProductDto toDto(Product product);
 
-    @BeforeMapping
+    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void beforetoDto(@MappingTarget ProductDto productDto, Product product) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         ProductCategory category = product.getCategory();
@@ -59,14 +59,14 @@ public interface ProductMapper {
 
     //Mapstruct creates a new category entity even if the source categoryId is null, this is a workaround for the issue
     //See for more details: https://github.com/mapstruct/mapstruct/issues/879#issuecomment-346479822
-    @AfterMapping
+    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void afterFromDto(@MappingTarget Product target, UpdateProductDto productDto) {
         if (target.getCategory().getId() == null) {
             target.setCategory(null);
         }
     }
 
-    @AfterMapping
+    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
     default void afterFromDto(@MappingTarget Product product, ProductDto productDto) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
 

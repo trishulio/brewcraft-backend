@@ -28,7 +28,7 @@ import io.company.brewcraft.service.mapper.FinishedGoodInventoryMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/inventory/finished-goods/stock", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/inventory/finished-goods/stock")
 public class FinishedGoodInventoryController extends BaseController {
     private static FinishedGoodInventoryMapper mapper = FinishedGoodInventoryMapper.INSTANCE;
 
@@ -40,7 +40,7 @@ public class FinishedGoodInventoryController extends BaseController {
         this.finishedGoodInventoryService = finishedGoodInventoryService;
     }
 
-    @GetMapping(value = "/quantity", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/quantity", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<FinishedGoodInventoryAggregationDto> getAllAggregation(
         @RequestParam(required = false, name = "sku_ids") Set<Long> skuIds,
         @RequestParam(name = "aggr_fn", defaultValue = "SUM") AggregationFunction aggrFn,
@@ -58,7 +58,7 @@ public class FinishedGoodInventoryController extends BaseController {
         return this.aggregationResponse(finishedGoods, attributes);
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<FinishedGoodInventoryDto> getAll(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,

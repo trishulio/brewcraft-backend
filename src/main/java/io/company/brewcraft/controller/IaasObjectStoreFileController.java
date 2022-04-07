@@ -68,7 +68,7 @@ public class IaasObjectStoreFileController extends BaseController {
         this(new CrudControllerService<>(filter, IaasObjectStoreFileMapper.INSTANCE, objectStoreFileService, "IaasObjectStoreFile"), objectStoreFileService);
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<IaasObjectStoreFileDto> getAll(
         @RequestParam(name = "files") Set<URI> files
     ) {
@@ -77,30 +77,30 @@ public class IaasObjectStoreFileController extends BaseController {
         return objectStoreFiles.stream().map(IaasObjectStoreFileMapper.INSTANCE::toDto).toList();
     }
 
-    @GetMapping(value = "/{file}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{file}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public IaasObjectStoreFileDto getIaasObjectStoreFile(@PathVariable(required = true, name = "fileId") URI fileId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(fileId, attributes);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteIaasObjectStoreFiles(@RequestParam("fileIds") Set<URI> fileIds) {
         return this.controller.delete(fileIds);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<IaasObjectStoreFileDto> addIaasObjectStoreFile(@Valid @NotNull @RequestBody List<AddIaasObjectStoreFileDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<IaasObjectStoreFileDto> updateIaasObjectStoreFile(@Valid @NotNull @RequestBody List<UpdateIaasObjectStoreFileDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<IaasObjectStoreFileDto> patchIaasObjectStoreFile(@Valid @NotNull @RequestBody List<UpdateIaasObjectStoreFileDto> updateDtos) {
         return this.controller.patch(updateDtos);

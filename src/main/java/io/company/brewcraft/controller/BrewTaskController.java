@@ -22,7 +22,7 @@ import io.company.brewcraft.service.mapper.BrewTaskMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/tasks")
 public class BrewTaskController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(BrewTaskController.class);
 
@@ -35,7 +35,7 @@ public class BrewTaskController extends BaseController {
         this.brewTaskService = brewTaskService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<BrewTaskDto> getBrewTasks(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false) Set<String> names,

@@ -57,7 +57,7 @@ public class TenantController extends BaseController {
         this.tenantService = tenantService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<TenantDto> getAll(
         @RequestParam(required = false, name = "ids") Set<UUID> ids,
         @RequestParam(required = false, name = "names") Set<String> names,
@@ -74,30 +74,30 @@ public class TenantController extends BaseController {
         return this.controller.getAll(tenants, attributes);
     }
 
-    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public TenantDto getTenant(@PathVariable(required = true, name = "id") UUID id,  @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<TenantDto> addTenant(@Valid @NotNull @RequestBody List<AddTenantDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<TenantDto> updateTenant(@Valid @NotNull @RequestBody List<UpdateTenantDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<TenantDto> patchTenant(@Valid @NotNull @RequestBody List<UpdateTenantDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long deleteTenants(@RequestParam("ids") Set<UUID> ids) {
         return this.controller.delete(ids);

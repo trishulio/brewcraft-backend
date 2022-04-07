@@ -33,7 +33,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/facilities")
 public class StorageController extends BaseController {
 
     private StorageService storageService;
@@ -61,7 +61,7 @@ public class StorageController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/storages/{storageId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/storages/{storageId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public StorageDto getStorage(@PathVariable Long storageId) {
         Storage storage = storageService.getStorage(storageId);
 
@@ -72,7 +72,7 @@ public class StorageController extends BaseController {
         return storageDto;
     }
 
-    @PostMapping("/{facilityId}/storages")
+    @PostMapping(value = "/{facilityId}/storages", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public StorageDto addStorage(@PathVariable Long facilityId, @Valid @RequestBody AddStorageDto storageDto) {
         Storage storage = storageMapper.fromDto(storageDto);
@@ -82,7 +82,7 @@ public class StorageController extends BaseController {
         return storageMapper.toDto(addedStorage);
     }
 
-    @PutMapping("/{facilityId}/storages/{storageId}")
+    @PutMapping(value = "/{facilityId}/storages/{storageId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public StorageDto putStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long facilityId, @PathVariable Long storageId) {
         Storage storage = storageMapper.fromDto(storageDto);
 
@@ -91,7 +91,7 @@ public class StorageController extends BaseController {
         return storageMapper.toDto(putStorage);
     }
 
-    @PatchMapping("/storages/{storageId}")
+    @PatchMapping(value = "/storages/{storageId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public StorageDto patchStorage(@Valid @RequestBody UpdateStorageDto storageDto, @PathVariable Long storageId) {
         Storage storage = storageMapper.fromDto(storageDto);
 

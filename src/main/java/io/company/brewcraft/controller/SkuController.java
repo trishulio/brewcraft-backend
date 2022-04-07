@@ -36,7 +36,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/skus", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/skus")
 public class SkuController extends BaseController {
 
     private static final Logger log = LoggerFactory.getLogger(SkuController.class);
@@ -50,7 +50,7 @@ public class SkuController extends BaseController {
         this.skuService = skuService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<SkuDto> getSkus(
             @RequestParam(required = false, name = "ids") Set<Long> ids,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
@@ -71,7 +71,7 @@ public class SkuController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{skuId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{skuId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto getSku(@PathVariable Long skuId) {
         Sku sku = skuService.getSku(skuId);
 
@@ -80,7 +80,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(sku);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SkuDto addSku(@Valid @RequestBody AddSkuDto addSkuDto) {
         Sku sku = skuMapper.fromDto(addSkuDto);
@@ -90,7 +90,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(addedSku);
     }
 
-    @PutMapping("/{skuId}")
+    @PutMapping(value = "/{skuId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto putSku(@PathVariable Long skuId, @Valid @RequestBody UpdateSkuDto updateSkuDto) {
         Sku sku = skuMapper.fromDto(updateSkuDto);
         sku.setId(skuId);
@@ -100,7 +100,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(putSku);
     }
 
-    @PatchMapping("/{skuId}")
+    @PatchMapping(value = "/{skuId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto patchSku(@PathVariable Long skuId, @Valid @RequestBody UpdateSkuDto updateSkuDto) {
         Sku sku = skuMapper.fromDto(updateSkuDto);
         sku.setId(skuId);

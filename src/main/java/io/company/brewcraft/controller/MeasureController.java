@@ -22,7 +22,7 @@ import io.company.brewcraft.service.mapper.MeasureMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/measures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/measures")
 public class MeasureController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(MeasureController.class);
 
@@ -35,7 +35,7 @@ public class MeasureController extends BaseController {
         this.measureService = measureService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MeasureDto> getMeasures(@RequestParam(required = false) Set<Long> ids,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,

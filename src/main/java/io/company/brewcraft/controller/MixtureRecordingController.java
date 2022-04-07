@@ -36,7 +36,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/mixtures/recordings", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/mixtures/recordings")
 public class MixtureRecordingController extends BaseController {
 
     private MixtureRecordingService mixtureRecordingService;
@@ -48,7 +48,7 @@ public class MixtureRecordingController extends BaseController {
         this.mixtureRecordingService = mixtureRecordingService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MixtureRecordingDto> getMixtureRecordings(
             @RequestParam(name = "ids", required = false) Set<Long> ids,
             @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
@@ -70,7 +70,7 @@ public class MixtureRecordingController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{mixtureRecordingId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureRecordingDto getMixtureRecording(@PathVariable Long mixtureRecordingId) {
         MixtureRecording mixtureRecording = mixtureRecordingService.getMixtureRecording(mixtureRecordingId);
 
@@ -79,7 +79,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(mixtureRecording);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<MixtureRecordingDto> addMixtureRecordings(@Valid @RequestBody List<AddMixtureRecordingDto> addMixtureRecordingDtos) {
         List<BaseMixtureRecording> mixtureRecordings = addMixtureRecordingDtos.stream()
@@ -93,7 +93,7 @@ public class MixtureRecordingController extends BaseController {
                                      .toList();
     }
 
-    @PutMapping("/{mixtureRecordingId}")
+    @PutMapping(value = "/{mixtureRecordingId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureRecordingDto putMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
         MixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         mixtureRecording.setId(mixtureRecordingId);
@@ -103,7 +103,7 @@ public class MixtureRecordingController extends BaseController {
         return mixtureRecordingMapper.toDto(putMixtureRecording);
     }
 
-    @PutMapping("")
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MixtureRecordingDto> putMixtureRecordings(@Valid @RequestBody List<UpdateMixtureRecordingDto> updateMixtureRecordingDtos) {
         List<UpdateMixtureRecording> mixtureRecordings = updateMixtureRecordingDtos.stream()
                                                                                    .map(updateMixtureRecordingDto -> mixtureRecordingMapper.fromDto(updateMixtureRecordingDto))
@@ -116,7 +116,7 @@ public class MixtureRecordingController extends BaseController {
                                    .toList();
     }
 
-    @PatchMapping("/{mixtureRecordingId}")
+    @PatchMapping(value = "/{mixtureRecordingId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureRecordingDto patchMixtureRecording(@Valid @RequestBody UpdateMixtureRecordingDto updateMixtureRecordingDto, @PathVariable Long mixtureRecordingId) {
         UpdateMixtureRecording mixtureRecording = mixtureRecordingMapper.fromDto(updateMixtureRecordingDto);
         mixtureRecording.setId(mixtureRecordingId);

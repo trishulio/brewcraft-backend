@@ -22,7 +22,7 @@ import io.company.brewcraft.service.mapper.BrewStageStatusMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/stages/statuses", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/stages/statuses")
 public class BrewStageStatusController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(BrewStageStatusController.class);
 
@@ -35,7 +35,7 @@ public class BrewStageStatusController extends BaseController {
         this.brewStageStatusService = brewStageStatusService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<BrewStageStatusDto> getStatuses(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false) Set<String> names,
