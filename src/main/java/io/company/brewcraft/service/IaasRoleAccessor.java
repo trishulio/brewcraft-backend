@@ -7,5 +7,5 @@ public interface IaasRoleAccessor {
 
     IaasRole getIaasRole();
 
-    void setIaasRole(IaasRole tenantRole);
+    void setIaasRole(IaasRole iaasRole);
 }

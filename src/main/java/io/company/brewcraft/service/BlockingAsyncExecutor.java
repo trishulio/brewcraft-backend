@@ -7,8 +7,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
 public class BlockingAsyncExecutor {
-    // TODO: add lots of logging here since it's asynchronous and non-transactional
-    // Add fault-tolerance to this executor using resilience4j library.
+    // Note: Add fault-tolerance to this executor using resilience4j library.
+    // if the need arises.
 
     public <R> List<R> supply(List<Supplier<R>> suppliers) {
         @SuppressWarnings("unchecked")

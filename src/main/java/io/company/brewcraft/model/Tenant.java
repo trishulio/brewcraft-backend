@@ -78,16 +78,6 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
         this.id = id;
     }
 
-//    @Override
-//    public String getIaasId() {
-//        String iaasId = null;
-//        if (getId() != null) {
-//            iaasId = getId().toString();
-//        }
-//
-//        return iaasId;
-//    }
-
     @Override
     public String getName() {
         return name;

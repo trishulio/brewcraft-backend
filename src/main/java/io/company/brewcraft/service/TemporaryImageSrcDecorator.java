@@ -27,7 +27,7 @@ public class TemporaryImageSrcDecorator implements EntityDecorator<DecoratedIaas
     @Override
     public <R extends DecoratedIaasObjectStoreFileAccessor> void decorate(List<R> entities) {
         // Catching the exception so that the request doesn't fail at the controller level.
-        // The service call will have completed at this point so the operation would have.
+        // The service call will have completed at this point so the operation would have been committed.
         // This is a temporary hack. Need ideas on where decorating the entity would be ideal.
         try {
             Map<URI, R> uriToEntity = entities.stream()
