@@ -17,17 +17,14 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import io.company.brewcraft.security.session.CognitoPrincipalContext;
 import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
-import io.company.brewcraft.service.impl.TenantService;
 
 public class ContextHolderFilter implements Filter {
     public static final String HEADER_NAME_IAAS_TOKEN = "X-Iaas-Token";
 
     private ThreadLocalContextHolder ctxHolder;
-    private TenantService tenantService;
 
-    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder, TenantService tenantService) {
+    public ContextHolderFilter(ThreadLocalContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
-        this.tenantService = tenantService;
     }
 
     @Override

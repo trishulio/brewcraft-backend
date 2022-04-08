@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.security.session.UtilityProviderFilter;
-import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.util.UtilityProvider;
 
 @Configuration
@@ -40,13 +39,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnMissingBean(Filter.class)
-    public Filter ctxHolderFilter(ContextHolder ctxHolder, TenantService tenantService) {
-        return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder, tenantService);
+    @ConditionalOnMissingBean(ContextHolderFilter.class)
+    public Filter ctxHolderFilter(ContextHolder ctxHolder) {
+        return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder);
     }
 
     @Bean
-    @ConditionalOnMissingBean(Filter.class)
+    @ConditionalOnMissingBean(UtilityProviderFilter.class)
     public Filter utilityFilter(UtilityProvider utilityProvider) {
         return new UtilityProviderFilter(utilityProvider);
     }
