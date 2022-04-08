@@ -74,8 +74,7 @@ public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Au
     @CriteriaJoin
     private List<UserRoleBinding> roleBindings;
 
-    @Column(name = "image_url")
-    @URL
+    @Column(name = "image_source")
     private String imageSrc;
 
     @Column(name = "phone_number")

@@ -28,7 +28,7 @@ public class UserTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            URI.create("IMAGE_URL"),
+            URI.create("IMAGE_SRC"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(3L)),
@@ -44,7 +44,7 @@ public class UserTest {
         assertEquals("LAST_NAME", user.getLastName());
         assertEquals("EMAIL", user.getEmail());
         assertEquals("PHONE_NUMBER", user.getPhoneNumber());
-        assertEquals(URI.create("IMAGE_URL"), user.getImageSrc());
+        assertEquals(URI.create("IMAGE_SRC"), user.getImageSrc());
         assertEquals(new UserStatus(1L), user.getStatus());
         assertEquals(new UserSalutation(2L), user.getSalutation());
         assertEquals(List.of(new UserRole(3L)), user.getRoles());
