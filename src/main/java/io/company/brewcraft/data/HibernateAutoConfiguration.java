@@ -29,7 +29,6 @@ import io.company.brewcraft.security.session.ContextHolder;
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, AuthConfiguration.class})
 @EnableTransactionManagement
 public class HibernateAutoConfiguration {
-
     @Bean
     @ConditionalOnMissingBean(MultiTenantConnectionProvider.class)
     public MultiTenantConnectionProvider multiTenantConnectionProvider(TenantDataSourceManager tenantDataSourceManager, DataSource adminDataSource) {

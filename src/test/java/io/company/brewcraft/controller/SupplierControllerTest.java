@@ -42,7 +42,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class SupplierControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 

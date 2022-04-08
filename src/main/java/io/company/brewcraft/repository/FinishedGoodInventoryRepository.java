@@ -8,5 +8,4 @@ import io.company.brewcraft.model.FinishedGoodInventory;
 
 @Repository
 public interface FinishedGoodInventoryRepository extends JpaRepository<FinishedGoodInventory, Long>, JpaSpecificationExecutor<FinishedGoodInventory> {
-
 }

@@ -14,7 +14,6 @@ import io.company.brewcraft.repository.SupplierRefresher;
 import io.company.brewcraft.service.PurchaseOrderAccessor;
 
 public class PurchaseOrderRefresherTest {
-
     private PurchaseOrderRefresher purchaseOrderRefresher;
 
     private AccessorRefresher<Long, PurchaseOrderAccessor, PurchaseOrder> mRefresher;

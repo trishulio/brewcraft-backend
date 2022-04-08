@@ -12,7 +12,6 @@ import io.company.brewcraft.dto.IaasAuthorizationDto;
 import io.company.brewcraft.model.IaasAuthorization;
 
 public class IaasAuthorizationMapperTest {
-
     private IaasAuthorizationMapper mapper;
 
     @BeforeEach

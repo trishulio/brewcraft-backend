@@ -26,7 +26,6 @@ import io.company.brewcraft.service.AssignedToAccessor;
 import io.company.brewcraft.service.OwnedByAccessor;
 
 public class UserRefresherTest {
-
     private AccessorRefresher<Long, UserAccessor, User> mRefresher;
     private AccessorRefresher<Long, AssignedToAccessor, User> mAssignedToRefresher;
     private AccessorRefresher<Long, OwnedByAccessor, User> mOwnedByRefresher;

@@ -17,7 +17,6 @@ import io.company.brewcraft.data.DataSourceBuilder;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
 
 public class HikariDataSourceBuilderTest {
-
     private DataSourceBuilder builder;
 
     @BeforeEach

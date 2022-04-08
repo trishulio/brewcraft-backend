@@ -25,7 +25,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class SkuServiceImpl implements SkuService {
-
     private final RepoService<Long, Sku, SkuAccessor> repoService;
 
     private final UpdateService<Long, Sku, BaseSku<? extends BaseSkuMaterial<?>>, UpdateSku<? extends UpdateSkuMaterial<?>>> updateService;

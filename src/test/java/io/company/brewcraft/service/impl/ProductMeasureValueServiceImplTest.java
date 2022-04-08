@@ -20,7 +20,6 @@ import io.company.brewcraft.model.ProductMeasureValue;
 import io.company.brewcraft.service.ProductMeasureValueService;
 
 public class ProductMeasureValueServiceImplTest {
-
     private ProductMeasureValueService productMeasureValueService;
 
     @BeforeEach

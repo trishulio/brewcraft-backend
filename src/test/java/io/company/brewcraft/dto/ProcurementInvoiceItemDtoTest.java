@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceItemDto;
 
 public class ProcurementInvoiceItemDtoTest {
-
     ProcurementInvoiceItemDto invoiceItem;
 
     @BeforeEach

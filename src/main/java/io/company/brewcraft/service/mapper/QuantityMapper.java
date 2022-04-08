@@ -15,7 +15,6 @@ import tec.uom.se.quantity.Quantities;
 
 @Mapper(uses = { QuantityUnitMapper.class })
 public abstract class QuantityMapper {
-
     public static final QuantityMapper INSTANCE = Mappers.getMapper(QuantityMapper.class);
 
     @Mapping(source = "unit.symbol", target = "symbol")

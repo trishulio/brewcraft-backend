@@ -17,7 +17,6 @@ import io.company.brewcraft.data.PostgresJdbcDialect;
 import io.company.brewcraft.data.PostgresJdbcDialectSql;
 
 public class PostgresJdbcDialectTest {
-
     private JdbcDialect dialect;
 
     private PostgresJdbcDialectSql sql;

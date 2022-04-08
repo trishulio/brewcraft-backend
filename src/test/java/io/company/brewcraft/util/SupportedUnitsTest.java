@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import tec.uom.se.quantity.Quantities;
 
 public class SupportedUnitsTest {
-
     @Test
     public void validateSupportedUnitSymbols() {
         assertEquals("each", SupportedUnits.EACH.getSymbol());

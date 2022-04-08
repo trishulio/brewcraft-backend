@@ -38,7 +38,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/mixtures/recordings")
 public class MixtureRecordingController extends BaseController {
-
     private MixtureRecordingService mixtureRecordingService;
 
     private MixtureRecordingMapper mixtureRecordingMapper = MixtureRecordingMapper.INSTANCE;
@@ -58,7 +57,6 @@ public class MixtureRecordingController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<MixtureRecording> mixtureRecordingPage = mixtureRecordingService.getMixtureRecordings(ids, mixtureIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureRecordingDto> mixtureRecordingList = mixtureRecordingPage.stream()

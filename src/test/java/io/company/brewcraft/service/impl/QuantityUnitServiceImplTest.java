@@ -32,7 +32,6 @@ import io.company.brewcraft.service.QuantityUnitService;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class QuantityUnitServiceImplTest {
-
     private QuantityUnitService quantityUnitService;
 
     private QuantityUnitRepository quantityUnitRepositoryMock;

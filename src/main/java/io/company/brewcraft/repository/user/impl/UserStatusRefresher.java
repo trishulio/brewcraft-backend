@@ -8,7 +8,6 @@ import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.Refresher;
 
 public class UserStatusRefresher implements Refresher<UserStatus, UserStatusAccessor> {
-
     private final AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher;
 
     public UserStatusRefresher(AccessorRefresher<Long, UserStatusAccessor, UserStatus> refresher) {

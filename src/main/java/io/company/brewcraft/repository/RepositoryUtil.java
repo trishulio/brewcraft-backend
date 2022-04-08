@@ -7,7 +7,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 public abstract class RepositoryUtil {
-
     public static PageRequest pageRequest(SortedSet<String> sort, boolean orderAscending, int page, int size) {
         Sort sortBy = Sort.unsorted();
         if (sort != null && sort.size() > 0) {

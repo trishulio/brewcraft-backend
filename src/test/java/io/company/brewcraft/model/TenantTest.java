@@ -15,7 +15,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class TenantTest {
-
     private Tenant tenant;
 
     @BeforeEach

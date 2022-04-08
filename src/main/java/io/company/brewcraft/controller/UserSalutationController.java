@@ -41,7 +41,6 @@ public class UserSalutationController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<UserSalutation> userSalutationPage = userSalutationService.getSalutations(ids, sort, orderAscending, page, size);
 
         List<UserSalutationDto> userSalutations = userSalutationPage.stream()

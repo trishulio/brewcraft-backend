@@ -3,7 +3,6 @@ package io.company.brewcraft.data;
 import java.util.Properties;
 
 public abstract class AbstractDataSourceBuilder implements DataSourceBuilder {
-
     protected Properties props;
 
     private String keyUsername;

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.data.PostgresJdbcDialectSql;
 
 public class PostgresJdbcDialectSqlTest {
-
     private PostgresJdbcDialectSql pgSql;
 
     @BeforeEach

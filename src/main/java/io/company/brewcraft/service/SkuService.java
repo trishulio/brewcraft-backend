@@ -13,7 +13,6 @@ import io.company.brewcraft.model.UpdateSku;
 import io.company.brewcraft.model.UpdateSkuMaterial;
 
 public interface SkuService {
-
     public Page<Sku> getSkus(Set<Long> ids, Set<Long> productIds, Boolean isPackageable, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public Sku getSku(Long id);

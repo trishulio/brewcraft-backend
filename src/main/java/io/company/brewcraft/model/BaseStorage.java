@@ -1,7 +1,6 @@
 package io.company.brewcraft.model;
 
 public interface BaseStorage {
-
     public Facility getFacility();
 
     public void setFacility(Facility facility);

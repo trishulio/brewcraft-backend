@@ -21,7 +21,6 @@ import io.company.brewcraft.util.UtilityProvider;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

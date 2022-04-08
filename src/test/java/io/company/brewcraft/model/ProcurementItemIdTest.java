@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.procurement.ProcurementItemId;
 
 public class ProcurementItemIdTest {
-
     private ProcurementItemId id;
 
     @BeforeEach

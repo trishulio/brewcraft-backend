@@ -36,7 +36,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/materials")
 public class MaterialController extends BaseController {
-
     private MaterialService materialService;
 
     private MaterialMapper materialMapper = MaterialMapper.INSTANCE;
@@ -56,7 +55,6 @@ public class MaterialController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-
         Page<Material> materialsPage = materialService.getMaterials(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
 
         List<MaterialDto> materialsList = materialsPage.stream()

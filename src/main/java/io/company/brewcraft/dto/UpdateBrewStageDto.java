@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class UpdateBrewStageDto extends BaseDto {
-
     private Long brewId;
 
     private Long statusId;

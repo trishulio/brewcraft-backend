@@ -17,7 +17,6 @@ import io.company.brewcraft.model.user.UserSalutation;
 import io.company.brewcraft.model.user.UserStatus;
 
 public class TenantIaasUserMapperTest {
-
     private TenantIaasUserMapper mapper;
 
     @BeforeEach

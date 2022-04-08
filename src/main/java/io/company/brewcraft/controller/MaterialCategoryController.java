@@ -37,7 +37,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/materials/categories")
 public class MaterialCategoryController extends BaseController {
-
     private MaterialCategoryService materialCategoryService;
 
     private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;

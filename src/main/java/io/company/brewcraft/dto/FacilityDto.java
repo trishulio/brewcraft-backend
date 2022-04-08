@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class FacilityDto extends BaseDto {
-
     private Long id;
 
     private String name;

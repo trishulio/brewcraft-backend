@@ -37,7 +37,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/users/roles")
 public class UserRoleController extends BaseController {
-
     private CrudControllerService<
         Long,
         UserRole,

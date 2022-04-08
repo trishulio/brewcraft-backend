@@ -9,7 +9,6 @@ import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
 public interface BaseBrew extends ProductAccessor, ParentBrewAccessor, AssignedToAccessor, OwnedByAccessor {
-
     String getName();
 
     void setName(String name);

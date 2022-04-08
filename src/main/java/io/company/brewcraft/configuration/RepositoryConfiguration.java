@@ -153,7 +153,6 @@ import io.company.brewcraft.service.SupplierAccessor;
 
 @Configuration
 public class RepositoryConfiguration {
-
     @Bean
     @PersistenceContext
     public QueryResolver queryResolver(EntityManager em) {

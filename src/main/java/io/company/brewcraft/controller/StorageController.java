@@ -35,7 +35,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/facilities")
 public class StorageController extends BaseController {
-
     private StorageService storageService;
 
     private StorageMapper storageMapper = StorageMapper.INSTANCE;

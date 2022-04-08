@@ -7,7 +7,6 @@ import io.company.brewcraft.service.MeasureAccessor;
 import io.company.brewcraft.service.MixtureAccessor;
 
 public interface BaseMixtureRecording extends MixtureAccessor, MeasureAccessor {
-
     BigDecimal getValue();
 
     void setValue(BigDecimal value);

@@ -6,7 +6,6 @@ import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 
 public class BrewStageStatusRefresher implements Refresher<BrewStageStatus, BrewStageStatusAccessor> {
-
     private final AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresher;
 
     public BrewStageStatusRefresher(AccessorRefresher<Long, BrewStageStatusAccessor, BrewStageStatus> refresher) {

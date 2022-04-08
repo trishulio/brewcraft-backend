@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.user.UpdateUserRoleDto;
 
 public class UpdateUserRoleDtoTest {
-
     private UpdateUserRoleDto dto;
 
     @BeforeEach

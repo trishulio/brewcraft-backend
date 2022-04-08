@@ -12,7 +12,6 @@ import io.company.brewcraft.model.MixtureRecording;
 
 @Mapper(uses = { MeasureMapper.class, MixtureMapper.class })
 public interface MixtureRecordingMapper {
-
     MixtureRecordingMapper INSTANCE = Mappers.getMapper(MixtureRecordingMapper.class);
 
     MixtureRecordingDto toDto(MixtureRecording mixtureRecording);

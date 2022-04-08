@@ -16,7 +16,6 @@ import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 
 public class AwsTenantIaasResourceBuilderTest {
-
     private TenantIaasResourceBuilder builder;
     private AwsDocumentTemplates mTemplates;
 

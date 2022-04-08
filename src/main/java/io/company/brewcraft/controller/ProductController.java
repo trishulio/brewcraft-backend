@@ -37,7 +37,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/products")
 public class ProductController extends BaseController {
-
     private ProductService productService;
     private ProductMapper productMapper = ProductMapper.INSTANCE;
     private ProductDtoDecorator decorator;
@@ -58,7 +57,6 @@ public class ProductController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-
         Page<Product> productsPage = productService.getProducts(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
 
         List<ProductDto> productsList = productsPage.stream()

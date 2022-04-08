@@ -19,7 +19,6 @@ import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 
 @Transactional
 public class QuantityUnitServiceImpl implements QuantityUnitService {
-
     private QuantityUnitMapper quantityUnitMapper = QuantityUnitMapper.INSTANCE;
 
     private QuantityUnitRepository quantityUnitRepository;

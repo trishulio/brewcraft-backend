@@ -15,7 +15,6 @@ import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.service.mapper.procurement.ProcurementPurchaseOrderMapper;
 
 public class ProcurementPurchaseOrderMapperTest {
-
     private ProcurementPurchaseOrderMapper mapper;
 
     @BeforeEach

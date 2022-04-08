@@ -36,7 +36,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/facilities")
 public class EquipmentController extends BaseController {
-
     private EquipmentService equipmentService;
 
     private EquipmentMapper equipmentMapper = EquipmentMapper.INSTANCE;
@@ -57,7 +56,6 @@ public class EquipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-
         Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()

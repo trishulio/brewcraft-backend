@@ -18,7 +18,6 @@ import io.company.brewcraft.model.MaterialCategory;
 
 @Mapper(uses = { QuantityUnitMapper.class, MaterialCategoryMapper.class })
 public interface MaterialMapper {
-
     MaterialMapper INSTANCE = Mappers.getMapper(MaterialMapper.class);
 
     @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")
@@ -52,7 +51,7 @@ public interface MaterialMapper {
     @Mapping(target = Material.ATTR_VERSION, ignore = true)
     Material fromDto(Long id);
 
-    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @BeforeMapping
     default void beforetoDto(@MappingTarget MaterialDto materialDto, Material material) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
         MaterialCategory category = material.getCategory();
@@ -73,14 +72,14 @@ public interface MaterialMapper {
 
     //Mapstruct creates a new category entity even if the source categoryId is null, this is a workaround for the issue
     //See for more details: https://github.com/mapstruct/mapstruct/issues/879#issuecomment-346479822
-    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @AfterMapping
     default void afterFromDto(@MappingTarget Material target, UpdateMaterialDto materialDto) {
         if (target.getCategory().getId() == null) {
             target.setCategory(null);
         }
     }
 
-    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @AfterMapping
     default void afterFromDto(@MappingTarget Material material, MaterialDto materialDto) {
         MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
 

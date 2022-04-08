@@ -33,7 +33,6 @@ import io.company.brewcraft.util.QuantityCalculator;
 @Entity
 @Table(name = "sku_material")
 public class SkuMaterial extends BaseEntity implements UpdateSkuMaterial<Sku>, Audited, CrudEntity<Long> {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sku_material_generator")
     @SequenceGenerator(name = "sku_material_generator", sequenceName = "sku_material_sequence", allocationSize = 1)

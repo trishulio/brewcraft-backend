@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import io.company.brewcraft.model.BrewStage;
 
 public interface BrewStageRepository extends JpaRepository<BrewStage, Long>, JpaSpecificationExecutor<BrewStage> {
-
 }

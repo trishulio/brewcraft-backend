@@ -6,7 +6,6 @@ import io.company.brewcraft.util.JsonMapper;
 import io.company.brewcraft.util.entity.ReflectionManipulator;
 
 public abstract class BaseModel {
-
     protected static ReflectionManipulator util;
     protected static JsonMapper jsonMapper;
 

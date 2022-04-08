@@ -9,7 +9,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class CurrencyTest {
-
     private Currency currency;
 
     @BeforeEach

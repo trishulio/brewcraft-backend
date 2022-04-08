@@ -10,7 +10,6 @@ import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.NullOrNotBlank;
 
 public class UpdateUserDto extends BaseDto {
-
     private Long id;
 
     @NullOrNotBlank

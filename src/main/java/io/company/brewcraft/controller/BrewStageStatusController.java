@@ -43,7 +43,6 @@ public class BrewStageStatusController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<BrewStageStatus> brewStageStatusPage = brewStageStatusService.getStatuses(ids, names, page, size, sort, orderAscending);
 
         List<BrewStageStatusDto> brewStageStatusList = brewStageStatusPage.stream()

@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JacksonJsonMapper implements JsonMapper {
-
     public ObjectMapper mapper;
 
     public JacksonJsonMapper(ObjectMapper mapper) {

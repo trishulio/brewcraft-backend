@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class InvoiceStatusDtoTest {
-
     private InvoiceStatusDto invoiceStatus;
 
     @BeforeEach

@@ -20,7 +20,6 @@ import io.company.brewcraft.service.CriteriaJoin;
 @Immutable
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class FinishedGoodInventory extends BaseFinishedGoodInventory {
-
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
     public static final String FIELD_MATERIAL_PORTIONS = "materialPortions";
     public static final String FIELD_FINISHED_GOOD_LOT_PORTIONS = "finishedGoodLotPortions";

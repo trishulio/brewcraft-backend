@@ -18,7 +18,6 @@ import io.company.brewcraft.service.ParentBrewAccessor;
 import io.company.brewcraft.service.ProductAccessor;
 
 public class BrewRefresherTest {
-
     private BrewRefresher brewRefresher;
 
     private Refresher<Product, ProductAccessor> productRefresherMock;

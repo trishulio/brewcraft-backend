@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.Storage;
 
 public interface StorageService {
-
     public Page<Storage> getAllStorages(int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public Storage getStorage(Long storageId);

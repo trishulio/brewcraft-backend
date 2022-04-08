@@ -6,7 +6,6 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class FacilityEquipmentDto extends BaseDto {
-
     private Long id;
 
     @NotBlank
@@ -21,7 +20,6 @@ public class FacilityEquipmentDto extends BaseDto {
     private Integer version;
 
     public FacilityEquipmentDto() {
-
     }
 
     public FacilityEquipmentDto(Long id) {

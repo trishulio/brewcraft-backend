@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.Version;
 
 public class MockJsonGenerator extends JsonGenerator {
-
     private StringBuffer buffer;
 
     public MockJsonGenerator() {
@@ -85,7 +84,6 @@ public class MockJsonGenerator extends JsonGenerator {
     @Override
     public void writeStartObject() throws IOException {
         if (buffer.length() > 1 && Set.of(']', '}').contains(this.buffer.charAt(this.buffer.length() - 1))) {
-
         }
         this.buffer.append("{");
     }

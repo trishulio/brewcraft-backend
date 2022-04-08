@@ -12,7 +12,6 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 
 public class AwsFactoryTest {
-
     private AwsFactory factory;
 
     @BeforeEach

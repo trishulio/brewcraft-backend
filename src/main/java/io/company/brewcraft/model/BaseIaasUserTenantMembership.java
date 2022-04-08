@@ -11,5 +11,4 @@ public interface BaseIaasUserTenantMembership {
     String getTenantId();
 
     void setTenantId(String tenantId);
-
 }

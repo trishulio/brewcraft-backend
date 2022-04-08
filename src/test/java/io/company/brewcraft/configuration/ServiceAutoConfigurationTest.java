@@ -95,7 +95,6 @@ import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class ServiceAutoConfigurationTest {
-
     private ServiceAutoConfiguration serviceAutoConfiguration;
 
     @BeforeEach

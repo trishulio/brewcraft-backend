@@ -14,7 +14,6 @@ import io.company.brewcraft.model.MaterialCategory;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialMapperTest {
-
     private MaterialMapper materialMapper;
 
     @BeforeEach

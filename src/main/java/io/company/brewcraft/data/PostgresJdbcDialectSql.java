@@ -1,7 +1,6 @@
 package io.company.brewcraft.data;
 
 public class PostgresJdbcDialectSql {
-
     public String createSchemaIfNotExist(String schemaName) {
         return f("CREATE SCHEMA IF NOT EXISTS %s", schemaName);
     }

@@ -11,7 +11,6 @@ import io.company.brewcraft.model.Sku;
 
 @Mapper(uses = { ProductMapper.class, QuantityMapper.class, QuantityUnitMapper.class, SkuMaterialMapper.class })
 public interface SkuMapper {
-
     SkuMapper INSTANCE = Mappers.getMapper(SkuMapper.class);
 
     Sku fromDto(SkuDto dto);

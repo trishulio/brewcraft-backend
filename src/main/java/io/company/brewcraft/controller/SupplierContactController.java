@@ -36,7 +36,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/suppliers")
 public class SupplierContactController extends BaseController {
-
     private SupplierContactService supplierContactService;
 
     private SupplierContactMapper supplierContactMapper = SupplierContactMapper.INSTANCE;
@@ -69,7 +68,6 @@ public class SupplierContactController extends BaseController {
         if (supplierContact == null) {
             throw new EntityNotFoundException("SupplierContact", contactId.toString());
         } else {
-
         }
 
         return supplierContactMapper.toDtoWithSupplier(supplierContact);

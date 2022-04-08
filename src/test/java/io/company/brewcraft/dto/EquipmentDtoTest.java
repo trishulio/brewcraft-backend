@@ -11,7 +11,6 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class EquipmentDtoTest {
-
     private EquipmentDto equipmentDto;
 
     @BeforeEach

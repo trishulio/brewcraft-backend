@@ -15,7 +15,6 @@ import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 
 public class UserRoleBindingRefresherTest {
-
     private Refresher<UserRole, UserRoleAccessor> mUserRoleRefresher;
 
     private Refresher<UserRoleBinding, UserRoleBindingAccessor> userRoleBindingRefresher;

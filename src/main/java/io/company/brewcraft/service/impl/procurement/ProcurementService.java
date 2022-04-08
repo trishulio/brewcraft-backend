@@ -105,7 +105,6 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         int page,
         int size
     ) {
-
         Specification<Procurement> spec = WhereClauseBuilder.builder()
                                                             // shipment filters
                                                             .in(new String[] { Procurement.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentIds)

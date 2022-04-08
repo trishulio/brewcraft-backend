@@ -25,7 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import io.company.brewcraft.model.Tenant;
 
 public class HibernateAutoConfigurationTest {
-
     private LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBeanMock;
 
     private EntityManagerFactory entityManagerFactoryMock;

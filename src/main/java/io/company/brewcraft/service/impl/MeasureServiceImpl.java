@@ -17,7 +17,6 @@ import io.company.brewcraft.service.MeasureService;
 
 @Transactional
 public class MeasureServiceImpl extends BaseService implements MeasureService {
-
     private MeasureRepository measureRepository;
 
     public MeasureServiceImpl(MeasureRepository measureRepository) {

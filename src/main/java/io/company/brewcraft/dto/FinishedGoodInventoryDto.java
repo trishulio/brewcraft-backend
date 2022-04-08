@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class FinishedGoodInventoryDto extends BaseDto {
-
     private Long id;
 
     private SkuDto sku;

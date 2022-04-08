@@ -37,7 +37,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/products/categories")
 public class ProductCategoryController extends BaseController {
-
     private ProductCategoryService productCategoryService;
 
     private ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;

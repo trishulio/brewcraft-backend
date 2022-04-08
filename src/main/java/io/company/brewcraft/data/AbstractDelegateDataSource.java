@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 public abstract class AbstractDelegateDataSource implements DataSource {
-
     protected DataSource adminDs;
 
     public AbstractDelegateDataSource(DataSource adminDs) {

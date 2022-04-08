@@ -14,7 +14,6 @@ import io.company.brewcraft.service.ProductMeasureValueService;
 
 @Transactional
 public class ProductMeasureValueServiceImpl extends BaseService implements ProductMeasureValueService {
-
     @Override
     public List<ProductMeasureValue> merge(List<ProductMeasureValue> existingValues, List<ProductMeasureValue> newValues) {
         if (existingValues == null) {

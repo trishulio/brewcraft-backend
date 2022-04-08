@@ -27,7 +27,6 @@ import io.company.brewcraft.repository.user.UserSalutationRepository;
 import io.company.brewcraft.service.UserSalutationService;
 
 public class UserSalutationServiceTest {
-
     private UserSalutationService userSalutationService;
 
     private UserSalutationRepository userSalutationRepository;

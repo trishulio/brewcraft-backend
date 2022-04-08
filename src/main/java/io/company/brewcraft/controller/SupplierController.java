@@ -33,7 +33,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1")
 public class SupplierController extends BaseController {
-
     private SupplierService supplierService;
 
     private SupplierMapper supplierMapper = SupplierMapper.INSTANCE;

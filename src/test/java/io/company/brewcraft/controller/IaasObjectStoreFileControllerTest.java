@@ -20,7 +20,6 @@ import io.company.brewcraft.model.UpdateIaasObjectStoreFile;
 import io.company.brewcraft.service.IaasObjectStoreFileService;
 
 public class IaasObjectStoreFileControllerTest {
-
     private IaasObjectStoreFileController controller;
 
     private CrudControllerService<

@@ -25,7 +25,6 @@ import io.company.brewcraft.model.UpdateTenant;
 import io.company.brewcraft.service.impl.TenantService;
 
 public class TenantControllerTest {
-
     private TenantController controller;
 
     private CrudControllerService<

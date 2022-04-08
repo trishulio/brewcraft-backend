@@ -23,7 +23,6 @@ import io.company.brewcraft.model.ProductCategory;
 import io.company.brewcraft.model.ProductMeasureValue;
 
 public class ProductMapperTest {
-
     private ProductMapper productMapper;
 
     @BeforeEach

@@ -13,7 +13,6 @@ import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.impl.UserRoleRefresher;
 
 public class UserRoleRefresherTest {
-
     private AccessorRefresher<Long, UserRoleAccessor, UserRole> refresher;
 
     private UserRoleRefresher userRoleRefresher;

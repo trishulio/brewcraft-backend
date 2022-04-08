@@ -77,7 +77,6 @@ import io.company.brewcraft.service.mapper.AwsGroupTypeMapper;
 
 @Configuration
 public class AwsConfiguration {
-
     @Bean
     @ConditionalOnMissingBean(AwsFactory.class)
     public AwsFactory awsFactory() {

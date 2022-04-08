@@ -8,7 +8,6 @@ import javax.validation.constraints.Null;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SupplierContactWithSupplierDto {
-
     private Long id;
 
     @NotNull
@@ -39,7 +38,6 @@ public class SupplierContactWithSupplierDto {
     private Integer version;
 
     public SupplierContactWithSupplierDto() {
-
     }
 
     public SupplierContactWithSupplierDto(Long id, String firstName, String lastName,

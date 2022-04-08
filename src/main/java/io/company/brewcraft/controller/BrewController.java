@@ -69,7 +69,6 @@ public class BrewController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<Brew> brewPage = brewService.getBrews(ids, batchIds, names, productIds, stageTaskIds, excludeStageTaskIds, startedAtFrom, startedAtTo, endedAtFrom, endedAtTo, assignedToUserIds, ownedByUserIds, page, size, sort, orderAscending);
 
         List<BrewDto> brewList = brewPage.stream()

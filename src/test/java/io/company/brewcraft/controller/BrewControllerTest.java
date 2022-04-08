@@ -29,7 +29,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class BrewControllerTest {
-
    private BrewController brewController;
 
    private BrewService brewService;

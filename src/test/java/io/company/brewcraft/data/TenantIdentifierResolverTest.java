@@ -18,7 +18,6 @@ import io.company.brewcraft.security.session.PrincipalContext;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 
 public class TenantIdentifierResolverTest {
-
     private ContextHolder mCtxHolder;
     private PrincipalContext mCtx;
 

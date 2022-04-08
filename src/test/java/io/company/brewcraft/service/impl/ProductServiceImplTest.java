@@ -40,7 +40,6 @@ import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class ProductServiceImplTest {
-
     private ProductService productService;
 
     private ProductRepository productRepositoryMock;

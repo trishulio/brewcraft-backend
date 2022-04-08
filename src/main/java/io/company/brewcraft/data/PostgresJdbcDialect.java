@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PostgresJdbcDialect implements JdbcDialect {
-
     private PostgresJdbcDialectSql pgSql;
 
     public PostgresJdbcDialect(PostgresJdbcDialectSql pgSql) {

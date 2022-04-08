@@ -16,7 +16,6 @@ import io.company.brewcraft.model.Facility;
 
 @Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, AddressMapper.class})
 public interface EquipmentMapper {
-
     EquipmentMapper INSTANCE = Mappers.getMapper(EquipmentMapper.class);
 
     Equipment fromDto(Long id);

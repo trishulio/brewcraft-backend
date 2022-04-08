@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name="SUPPLIER_ADDRESS")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class SupplierAddress extends AddressEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "supplier_address_generator")
     @SequenceGenerator(name="supplier_address_generator", sequenceName = "supplier_address_sequence", allocationSize = 1)

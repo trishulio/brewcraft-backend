@@ -47,7 +47,6 @@ import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class FinishedGoodLotControllerTest {
-
    private FinishedGoodLotController controller;
 
    private FinishedGoodLotService mService;

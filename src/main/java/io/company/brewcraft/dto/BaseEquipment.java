@@ -8,7 +8,6 @@ import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.Facility;
 
 public interface BaseEquipment {
-
     public Facility getFacility();
 
     public void setFacility(Facility facility);

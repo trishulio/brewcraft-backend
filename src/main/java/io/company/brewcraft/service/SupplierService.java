@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.Supplier;
 
 public interface SupplierService {
-
     public Page<Supplier> getSuppliers(int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public Supplier getSupplier(Long id);

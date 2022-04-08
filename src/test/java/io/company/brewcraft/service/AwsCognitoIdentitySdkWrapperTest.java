@@ -22,7 +22,6 @@ import com.amazonaws.services.cognitoidentity.model.ListIdentityPoolsRequest;
 import com.amazonaws.services.cognitoidentity.model.ListIdentityPoolsResult;
 
 public class AwsCognitoIdentitySdkWrapperTest {
-
     private AwsCognitoIdentityClient client;
 
     private AmazonCognitoIdentity mAws;

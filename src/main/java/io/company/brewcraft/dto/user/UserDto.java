@@ -9,7 +9,6 @@ import io.company.brewcraft.dto.IaasObjectStoreFileDto;
 import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
 
 public class UserDto extends BaseDto implements DecoratedIaasObjectStoreFileAccessor {
-
     private Long id;
 
     private String userName;

@@ -16,12 +16,12 @@ public class CycleAvoidingMappingContext {
     private Map<Object, Object> knownInstances = new IdentityHashMap<Object, Object>();
 
     @SuppressWarnings("unchecked")
-    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @BeforeMapping
     public <T> T getMappedInstance(Object source, @TargetType Class<T> targetType) {
         return (T) knownInstances.get(source);
     }
 
-    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @BeforeMapping
     public void storeMappedInstance(Object source, @MappingTarget Object target) {
         knownInstances.put(source, target);
     }

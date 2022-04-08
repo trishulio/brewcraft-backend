@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class UpdateBrewDto extends BaseDto {
-
     private String name;
 
     private String description;

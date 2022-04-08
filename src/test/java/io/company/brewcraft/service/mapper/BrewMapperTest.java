@@ -17,7 +17,6 @@ import io.company.brewcraft.model.Product;
 import io.company.brewcraft.model.user.User;
 
 public class BrewMapperTest {
-
     private BrewMapper brewMapper;
 
     @BeforeEach

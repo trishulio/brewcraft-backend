@@ -8,7 +8,6 @@ import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
 
 public interface BaseBrewStage extends BrewStageStatusAccessor, BrewTaskAccessor, BrewAccessor {
-
     public List<Mixture> getMixtures();
 
     public void setMixtures(List<Mixture> mixtures);

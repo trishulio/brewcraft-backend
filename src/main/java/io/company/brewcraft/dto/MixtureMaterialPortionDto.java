@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class MixtureMaterialPortionDto extends BaseDto {
-
     private Long id;
 
     private MaterialLotDto materialLot;

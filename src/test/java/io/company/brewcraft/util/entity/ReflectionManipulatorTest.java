@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.util.Dummy;
 
 public class ReflectionManipulatorTest {
-
     public static class TestData {
         public TestData() {}
 

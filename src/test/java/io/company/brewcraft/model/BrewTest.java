@@ -14,7 +14,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import io.company.brewcraft.model.user.User;
 
 public class BrewTest {
-
     private Brew brew;
 
     @BeforeEach

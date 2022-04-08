@@ -26,7 +26,6 @@ import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageService;
 
 public class BrewStageServiceImplTest {
-
     private BrewStageService brewStageService;
 
     private BrewStageRepository brewStageRepositoryMock;

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.user.UserDto;
 
 public class BrewDtoTest {
-
     private BrewDto brewDto;
 
     @BeforeEach

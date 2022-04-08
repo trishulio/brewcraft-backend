@@ -12,7 +12,6 @@ import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.QueryResolver;
 
 public class RepositoryConfigurationTest {
-
     private RepositoryConfiguration repoConf;
 
     @BeforeEach

@@ -14,7 +14,6 @@ import io.company.brewcraft.model.MaterialCategory;
 
 @Mapper()
 public interface MaterialCategoryMapper {
-
     MaterialCategoryMapper INSTANCE = Mappers.getMapper(MaterialCategoryMapper.class);
 
     @Mapping(target = "parentCategoryId", source = "parentCategory.id")

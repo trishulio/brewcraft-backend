@@ -12,7 +12,6 @@ import io.company.brewcraft.dto.CategoryDto;
 import io.company.brewcraft.model.MaterialCategory;
 
 public class MaterialCategoryMapperTest {
-
     private MaterialCategoryMapper materialCategoryMapper;
 
     @BeforeEach

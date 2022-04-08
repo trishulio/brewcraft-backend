@@ -11,7 +11,6 @@ import io.company.brewcraft.model.MixtureMaterialPortion;
 import io.company.brewcraft.model.UpdateMixtureMaterialPortion;
 
 public interface MixtureMaterialPortionService {
-
     public Page<MixtureMaterialPortion> getMaterialPortions(Set<Long> ids, Set<Long> mixtureIds, Set<Long> materialLotIds, Set<Long> brewStageIds, Set<Long> brewIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public MixtureMaterialPortion getMaterialPortion(Long materialPortionId);

@@ -30,7 +30,6 @@ import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class SupplierContactServiceImplTest {
-
     private SupplierContactService supplierContactService;
 
     private SupplierContactRepository supplierContactRepositoryMock;

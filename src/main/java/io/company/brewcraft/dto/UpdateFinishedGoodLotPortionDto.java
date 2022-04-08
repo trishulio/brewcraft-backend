@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotNull;
 
 public class UpdateFinishedGoodLotPortionDto extends BaseDto {
-
     private Long id;
 
     private Long finishedGoodLotId;

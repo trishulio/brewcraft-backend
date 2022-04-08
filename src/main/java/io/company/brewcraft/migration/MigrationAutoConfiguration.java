@@ -17,7 +17,6 @@ import io.company.brewcraft.security.store.SecretsManager;
 
 @Configuration
 public class MigrationAutoConfiguration {
-
     @Bean
     @ConditionalOnMissingBean(RandomGenerator.class)
     public RandomGenerator randomGenerator() {

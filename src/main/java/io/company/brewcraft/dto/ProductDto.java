@@ -6,7 +6,6 @@ import java.util.List;
 import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
 
 public class ProductDto extends BaseDto implements DecoratedIaasObjectStoreFileAccessor {
-
     private Long id;
 
     private String name;

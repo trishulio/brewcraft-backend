@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.util.Dummy;
 
 public class AttributeFilterTest {
-
     private AttributeFilter filter;
 
     @BeforeEach

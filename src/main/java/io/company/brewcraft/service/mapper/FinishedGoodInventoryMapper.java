@@ -10,7 +10,6 @@ import io.company.brewcraft.model.FinishedGoodInventoryAggregation;
 
 @Mapper(uses = { SkuMapper.class, FinishedGoodLotMaterialPortionMapper.class, FinishedGoodLotMixturePortionMapper.class, FinishedGoodLotFinishedGoodLotPortionMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class})
 public interface FinishedGoodInventoryMapper {
-
     FinishedGoodInventoryMapper INSTANCE = Mappers.getMapper(FinishedGoodInventoryMapper.class);
 
     FinishedGoodInventoryAggregationDto toDto(FinishedGoodInventoryAggregation finishedGood);

@@ -27,7 +27,6 @@ import io.company.brewcraft.service.InvoiceService;
 
 @SuppressWarnings("unchecked")
 public class InvoiceControllerTest {
-
    private InvoiceController controller;
 
    private CrudControllerService<

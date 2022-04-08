@@ -12,7 +12,6 @@ import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
 public class UtilityProviderFilter implements Filter {
-
     private UtilityProvider provider;
 
     public UtilityProviderFilter(UtilityProvider provider) {

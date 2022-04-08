@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class BrewStageDto extends BaseDto {
-
     private Long id;
 
     private BrewDto brew;

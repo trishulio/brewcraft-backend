@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class UpdateSkuMaterialDto extends BaseDto {
-
     private Long id;
 
     private Long materialId;

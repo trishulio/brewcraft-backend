@@ -6,7 +6,6 @@ import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.SupplierDto;
 
 public class ProcurementPurchaseOrderDto extends BaseDto {
-
     private Long id;
     private String orderNumber;
     private SupplierDto supplier;

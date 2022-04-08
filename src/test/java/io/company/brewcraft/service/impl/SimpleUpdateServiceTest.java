@@ -23,7 +23,6 @@ import io.company.brewcraft.util.validator.ValidationException;
 import io.company.brewcraft.util.validator.Validator;
 
 public class SimpleUpdateServiceTest {
-
     private UpdateService<Long, DummyCrudEntity, BaseDummyCrudEntity, UpdateDummyCrudEntity> service;
 
     private UtilityProvider mUtilProvider;
@@ -43,7 +42,6 @@ public class SimpleUpdateServiceTest {
 
     @Test
     public void testGetAddEntities_ReturnsListOfEntitiesWithBasePropertiesOnly_WhenAdditionsAreNotNull() {
-
         final List<BaseDummyCrudEntity> additions = List.of(new DummyCrudEntity(1L, "VALUE", "EXCLUDED_VALUE", 1));
 
         final List<DummyCrudEntity> entities = this.service.getAddEntities(additions);

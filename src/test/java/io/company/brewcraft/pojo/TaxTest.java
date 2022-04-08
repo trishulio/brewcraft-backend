@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Tax;
 
 public class TaxTest {
-
     private Tax tax;
 
     @BeforeEach

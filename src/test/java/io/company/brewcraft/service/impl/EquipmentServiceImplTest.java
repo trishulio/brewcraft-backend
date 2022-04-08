@@ -35,7 +35,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class EquipmentServiceImplTest {
-
     private EquipmentService equipmentService;
 
     private EquipmentRepository equipmentRepositoryMock;

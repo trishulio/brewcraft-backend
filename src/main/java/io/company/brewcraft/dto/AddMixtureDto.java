@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 public class AddMixtureDto extends BaseDto {
-
     private Set<Long> parentMixtureIds;
 
     @NotNull

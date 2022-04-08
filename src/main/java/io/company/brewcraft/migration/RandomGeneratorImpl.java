@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class RandomGeneratorImpl implements RandomGenerator {
-
     @Override
     public String string(int len) {
         String capitalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -20,7 +20,6 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.NotSpec;
 
 public class PredicateSpecAccumulatorTest {
-
     private PredicateSpecAccumulator accumulator;
 
     private List<CriteriaSpec<Boolean>> mAggregations;

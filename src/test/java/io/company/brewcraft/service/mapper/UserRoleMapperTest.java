@@ -15,7 +15,6 @@ import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.service.mapper.user.UserRoleMapper;
 
 public class UserRoleMapperTest {
-
     private UserRoleMapper mapper;
 
     @BeforeEach

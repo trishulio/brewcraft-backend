@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Lot.AggregationField;
 
 public class AggregationFieldTest {
-
     @Test
     public void testLotNumber_GetPath_ReturnsLotNumberField() {
         String[] path = AggregationField.LOT_NUMBER.getPath();

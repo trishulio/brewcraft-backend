@@ -6,7 +6,6 @@ import com.amazonaws.services.cognitoidp.model.GroupType;
 import com.amazonaws.services.cognitoidp.model.UserType;
 
 public interface IdentityProviderClient {
-
     UserType createUser(String userName, final Map<String, String> userAttr);
 
     void updateUser(String userName, final Map<String, String> userAttr);

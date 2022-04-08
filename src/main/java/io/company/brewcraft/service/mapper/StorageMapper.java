@@ -16,7 +16,6 @@ import io.company.brewcraft.model.Storage;
 
 @Mapper(uses = { QuantityMapper.class } )
 public interface StorageMapper {
-
     StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);
 
     FacilityBaseDto facilityToFacilityBaseDto(Facility facility);

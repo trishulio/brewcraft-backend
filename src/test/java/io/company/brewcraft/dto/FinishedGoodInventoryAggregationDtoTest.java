@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class FinishedGoodInventoryAggregationDtoTest {
-
     private FinishedGoodInventoryAggregationDto finishedGoodInventoryAggregationDto;
 
     @BeforeEach

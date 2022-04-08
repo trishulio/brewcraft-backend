@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class SkuDto extends BaseDto {
-
     private Long id;
 
     private String number;

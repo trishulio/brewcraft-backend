@@ -16,7 +16,6 @@ import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.service.mapper.CurrencyMapper;
 
 public class MoneyDeserializer extends JsonDeserializer<Money> {
-
     @Override
     public Money deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode node = p.getCodec().readTree(p);

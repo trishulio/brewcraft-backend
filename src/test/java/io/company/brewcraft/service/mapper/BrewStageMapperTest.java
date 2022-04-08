@@ -21,7 +21,6 @@ import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Mixture;
 
 public class BrewStageMapperTest {
-
     private BrewStageMapper brewStageMapper;
 
     @BeforeEach

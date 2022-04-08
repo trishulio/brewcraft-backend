@@ -16,7 +16,6 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.IsNullSpec;
 
 public class IsNullSpecTest {
-
     private CriteriaSpec<Boolean> spec;
 
     private CriteriaSpec<?> mDelegate;

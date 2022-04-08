@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class FinishedGoodLotPortionDto extends BaseDto {
-
     private Long id;
 
     private FinishedGoodLotDto finishedGoodLot;

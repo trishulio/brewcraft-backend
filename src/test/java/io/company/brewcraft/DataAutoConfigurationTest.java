@@ -17,7 +17,6 @@ import io.company.brewcraft.data.TenantDataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManagerWrapper;
 
 public class DataAutoConfigurationTest {
-
     private DataAutoConfiguration config;
 
     @BeforeEach

@@ -23,7 +23,6 @@ import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.service.mapper.user.UserMapper;
 
 public class UserMapperTest {
-
     private UserMapper mapper;
 
     @BeforeEach

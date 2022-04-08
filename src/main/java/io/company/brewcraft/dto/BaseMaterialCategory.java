@@ -5,7 +5,6 @@ import java.util.Set;
 import io.company.brewcraft.model.MaterialCategory;
 
 public interface BaseMaterialCategory<T extends BaseMaterialCategory<T>> {
-
     public String getName();
 
     public void setName(String name);

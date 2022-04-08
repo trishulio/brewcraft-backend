@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class AddressDto {
-
     private Long id;
 
     private String addressLine1;
@@ -17,7 +16,6 @@ public class AddressDto {
     private String postalCode;
 
     public AddressDto() {
-
     }
 
     public AddressDto(Long id, String addressLine1, String addressLine2, String country, String province, String city, String postalCode) {

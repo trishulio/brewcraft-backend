@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public class ErrorResponseTest {
-
     @Test
     public void testErrorResponse_constructor() {
         LocalDateTime localDateTime = LocalDateTime.now();

@@ -15,7 +15,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialTest {
-
     private Material materialEntity;
 
     @BeforeEach

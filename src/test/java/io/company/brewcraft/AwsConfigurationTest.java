@@ -10,7 +10,6 @@ import io.company.brewcraft.security.store.AwsSecretsManagerClient;
 import io.company.brewcraft.security.store.SecretsManager;
 
 public class AwsConfigurationTest {
-
     private AwsConfiguration config;
 
     @BeforeEach

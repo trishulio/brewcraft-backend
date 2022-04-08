@@ -22,7 +22,6 @@ import io.company.brewcraft.model.UpdatePurchaseOrder;
 import io.company.brewcraft.service.PurchaseOrderService;
 
 public class PurchaseOrderControllerTest {
-
    private PurchaseOrderController controller;
 
    private CrudControllerService<

@@ -13,7 +13,6 @@ import io.company.brewcraft.model.Supplier;
 
 @Mapper(uses = { SupplierContactMapper.class, AddressMapper.class})
 public interface SupplierMapper {
-
     SupplierMapper INSTANCE = Mappers.getMapper(SupplierMapper.class);
 
     SupplierDto toDto(Supplier supplier);

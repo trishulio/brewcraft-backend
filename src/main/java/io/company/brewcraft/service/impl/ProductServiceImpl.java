@@ -33,7 +33,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class ProductServiceImpl extends BaseService implements ProductService {
-
     private ProductRepository productRepository;
 
     private ProductCategoryService productCategoryService;

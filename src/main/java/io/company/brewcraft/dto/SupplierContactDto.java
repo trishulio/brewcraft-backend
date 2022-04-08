@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class SupplierContactDto {
-
     private Long id;
 
     private String firstName;

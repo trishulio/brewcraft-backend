@@ -16,7 +16,6 @@ import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 
 public class LotAggregationService {
-
     private AggregationService aggrService;
 
     public LotAggregationService(AggregationService aggrService) {

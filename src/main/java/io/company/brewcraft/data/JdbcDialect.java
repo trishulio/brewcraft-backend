@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface JdbcDialect {
-
     boolean createSchemaIfNotExists(Connection conn, String schemaName) throws SQLException;
 
     void dropSchema(Connection conn, String schemaName) throws SQLException;

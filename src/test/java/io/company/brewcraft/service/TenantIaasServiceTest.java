@@ -28,7 +28,6 @@ import io.company.brewcraft.model.UpdateIaasIdpTenant;
 import io.company.brewcraft.service.mapper.TenantIaasIdpTenantMapper;
 
 public class TenantIaasServiceTest {
-
     private TenantIaasService service;
 
     private TenantIaasAuthService mAuthService;

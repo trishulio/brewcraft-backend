@@ -35,7 +35,6 @@ import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class FinishedGoodLotServiceTest {
-
    private FinishedGoodLotService service;
 
    private FinishedGoodLotMaterialPortionService mFgMaterialPortionService;

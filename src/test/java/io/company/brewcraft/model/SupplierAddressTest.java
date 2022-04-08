@@ -11,7 +11,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class SupplierAddressTest {
-
     private SupplierAddress supplierAddress;
 
     @BeforeEach

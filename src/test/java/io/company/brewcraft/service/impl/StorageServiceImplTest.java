@@ -30,7 +30,6 @@ import io.company.brewcraft.service.StorageService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class StorageServiceImplTest {
-
     private StorageService storageService;
 
     private StorageRepository storageRepositoryMock;

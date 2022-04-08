@@ -30,7 +30,6 @@ import io.company.brewcraft.model.procurement.UpdateProcurementItem;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 
 public class ProcurementControllerTest {
-
     private ProcurementController controller;
 
     private ProcurementService mService;

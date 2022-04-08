@@ -33,7 +33,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class ProductControllerTest {
-
    private ProductController productController;
    private ProductDtoDecorator decorator;
 

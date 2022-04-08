@@ -36,7 +36,6 @@ import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class SkuControllerTest {
-
    private SkuController skuController;
 
    private SkuService skuService;

@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.sql.DataSource;
 
 public abstract class DbMockUtil {
-
     public static PreparedStatement mockPs(Connection conn, String sql, boolean isResultSet) throws SQLException {
         PreparedStatement stmt = mockPs(conn, sql);
         doReturn(isResultSet).when(stmt).execute();

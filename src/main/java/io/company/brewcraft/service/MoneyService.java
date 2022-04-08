@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.joda.money.Money;
 
 public class MoneyService {
-
     public static Money total(Collection<? extends MoneySupplier> moneySuppliers) {
         Money total = null;
         if (moneySuppliers != null) {

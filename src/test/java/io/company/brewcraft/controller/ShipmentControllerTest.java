@@ -27,7 +27,6 @@ import io.company.brewcraft.model.UpdateShipment;
 import io.company.brewcraft.service.impl.ShipmentService;
 
 public class ShipmentControllerTest {
-
    private ShipmentController controller;
 
    private CrudControllerService<

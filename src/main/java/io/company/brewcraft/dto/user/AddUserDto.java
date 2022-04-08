@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.dto.BaseDto;
 
 public class AddUserDto extends BaseDto {
-
     @NotBlank
     private String userName;
 

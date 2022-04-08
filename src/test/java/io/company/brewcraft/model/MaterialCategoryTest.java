@@ -12,7 +12,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class MaterialCategoryTest {
-
     private MaterialCategory materialCategoryEntityTest;
 
     @BeforeEach

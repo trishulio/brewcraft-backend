@@ -26,7 +26,6 @@ import io.company.brewcraft.service.IsNullSpec;
 import io.company.brewcraft.service.LikeSpec;
 
 public class WhereClauseBuilderDelegateTest {
-
     private WhereClauseBuilderDelegate builder;
     private PredicateSpecAccumulator mAccumulator;
 

@@ -35,7 +35,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/facilities")
 public class FacilityController extends BaseController {
-
     private FacilityService facilityService;
 
     private FacilityMapper facilityMapper = FacilityMapper.INSTANCE;

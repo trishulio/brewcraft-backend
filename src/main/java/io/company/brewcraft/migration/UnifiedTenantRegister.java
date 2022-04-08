@@ -3,7 +3,6 @@ package io.company.brewcraft.migration;
 import io.company.brewcraft.model.Tenant;
 
 public class UnifiedTenantRegister implements TenantRegister {
-
     private TenantRegister userReg;
     private TenantRegister schemaReg;
 

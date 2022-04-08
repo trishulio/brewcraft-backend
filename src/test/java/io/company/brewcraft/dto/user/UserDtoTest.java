@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.IaasObjectStoreFileDto;
 
 public class UserDtoTest {
-
     private UserDto dto;
 
     @BeforeEach

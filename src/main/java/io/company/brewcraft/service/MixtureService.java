@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.Mixture;
 
 public interface MixtureService {
-
     public Page<Mixture> getMixtures(Set<Long> ids, Set<Long> parentMixtureIds, Set<Long> equipmentIds, Set<Long> brewStageIds, Set<Long> brewIds, Set<Long> brewBatchIds, Set<Long> stageStatusIds, Set<Long> stageTaskIds, Set<Long> productIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public Mixture getMixture(Long mixtureId);

@@ -38,7 +38,6 @@ import io.company.brewcraft.util.validator.Validator;
 @RestController
 @RequestMapping(path = "/api/v1/skus")
 public class SkuController extends BaseController {
-
     private static final Logger log = LoggerFactory.getLogger(SkuController.class);
 
     private SkuService skuService;
@@ -59,7 +58,6 @@ public class SkuController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<Sku> skuPage = skuService.getSkus(ids, productIds, isPackageable, page, size, sort, orderAscending);
 
         List<SkuDto> skuList = skuPage.stream()

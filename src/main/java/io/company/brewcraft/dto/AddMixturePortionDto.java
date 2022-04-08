@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotNull;
 
 public class AddMixturePortionDto extends BaseDto {
-
     @NotNull
     private Long mixtureId;
 

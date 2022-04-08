@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class MixturePortionDto extends BaseDto {
-
     private Long id;
 
     private MixtureDto mixture;

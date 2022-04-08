@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 
 public class AddProductMeasureValueDto extends BaseDto {
-
     @NotNull
     private Long measureId;
 

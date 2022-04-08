@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.StorageType;
 
 public class UpdateStorageDtoTest {
-
     private UpdateStorageDto updateStorageDto;
 
     @BeforeEach

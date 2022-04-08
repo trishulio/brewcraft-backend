@@ -50,7 +50,6 @@ public class AwsIamRolePolicyAttachmentClient implements IaasClient<IaasRolePoli
             Set<String> attachedPolicyNames = getCache().get(id.getRoleId());
 
             if (attachedPolicyNames.contains(id.getPolicyId())) {
-
                 IaasRole role = new IaasRole(id.getRoleId());
                 IaasPolicy policy = new IaasPolicy(id.getPolicyId());
 

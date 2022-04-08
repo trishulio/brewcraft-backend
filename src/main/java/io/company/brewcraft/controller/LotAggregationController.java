@@ -28,7 +28,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/inventory")
 public class LotAggregationController extends BaseController {
-
     private final LotAggregationService service;
 
     public LotAggregationController(LotAggregationService service, AttributeFilter filter) {

@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.util.Set;
 
 public class MixtureDto extends BaseDto {
-
     private Long id;
 
     private Set<Long> parentMixtureIds;

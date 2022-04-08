@@ -16,7 +16,6 @@ import io.company.brewcraft.model.ProductCategory;
 
 @Mapper(uses = { ProductMeasureValueMapper.class, ProductCategoryMapper.class })
 public interface ProductMapper {
-
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     Product fromDto(ProductDto dto);
@@ -38,7 +37,7 @@ public interface ProductMapper {
 
     ProductDto toDto(Product product);
 
-    @BeforeMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @BeforeMapping
     default void beforetoDto(@MappingTarget ProductDto productDto, Product product) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
         ProductCategory category = product.getCategory();
@@ -59,14 +58,14 @@ public interface ProductMapper {
 
     //Mapstruct creates a new category entity even if the source categoryId is null, this is a workaround for the issue
     //See for more details: https://github.com/mapstruct/mapstruct/issues/879#issuecomment-346479822
-    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @AfterMapping
     default void afterFromDto(@MappingTarget Product target, UpdateProductDto productDto) {
         if (target.getCategory().getId() == null) {
             target.setCategory(null);
         }
     }
 
-    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @AfterMapping
     default void afterFromDto(@MappingTarget Product product, ProductDto productDto) {
         ProductCategoryMapper productCategoryMapper = ProductCategoryMapper.INSTANCE;
 

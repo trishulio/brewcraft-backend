@@ -19,7 +19,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class JacksonJsonMapperTest {
-
     public static class TestData {
         private int x, y;
 

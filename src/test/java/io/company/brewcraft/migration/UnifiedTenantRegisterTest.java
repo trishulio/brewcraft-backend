@@ -13,7 +13,6 @@ import org.mockito.InOrder;
 import io.company.brewcraft.model.Tenant;
 
 public class UnifiedTenantRegisterTest {
-
     private TenantRegister register;
 
     private TenantUserRegister mUserReg;

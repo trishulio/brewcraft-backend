@@ -21,7 +21,6 @@ import com.amazonaws.services.s3.model.DeleteBucketRequest;
 import io.company.brewcraft.model.IaasObjectStore;
 
 public class AwsObjectStoreClientTest {
-
     private AwsObjectStoreClient client;
 
     private AmazonS3 s3;

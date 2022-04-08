@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.model.StorageType;
 
 public class AddStorageDto extends BaseDto {
-
     @NotBlank
     private String name;
 

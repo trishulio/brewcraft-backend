@@ -18,7 +18,6 @@ import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
 import com.amazonaws.services.secretsmanager.model.UpdateSecretRequest;
 
 public class AwsSecretsManagerClient implements SecretsManager<String, String> {
-
     private final AWSSecretsManager client;
 
     private static final Logger logger = LoggerFactory.getLogger(AwsSecretsManagerClient.class);

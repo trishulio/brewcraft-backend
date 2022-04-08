@@ -24,7 +24,6 @@ import io.company.brewcraft.dto.NullOrNotBlank.List;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 public @interface NullOrNotBlank {
-
     String message() default "{javax.validation.constraints.NullOrNotBlank.message}";
 
     Class<?>[] groups() default { };

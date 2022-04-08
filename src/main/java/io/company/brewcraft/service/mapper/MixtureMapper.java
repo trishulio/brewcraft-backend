@@ -18,7 +18,6 @@ import io.company.brewcraft.model.Mixture;
 
 @Mapper(uses = { EquipmentMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, BrewStageMapper.class})
 public interface MixtureMapper {
-
     MixtureMapper INSTANCE = Mappers.getMapper(MixtureMapper.class);
 
     Mixture fromDto(Long id);
@@ -44,7 +43,7 @@ public interface MixtureMapper {
 
     MixtureDto toDto(Mixture mixture);
 
-    @AfterMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @AfterMapping
     default void afterToDto(@MappingTarget MixtureDto mixtureDto, Mixture mixture) {
         if (mixture.getParentMixtures() != null && !mixture.getParentMixtures().isEmpty()) {
             mixtureDto.setParentMixtureIds(mixture.getParentMixtures().stream().map(parentMixture -> parentMixture.getId()).collect(Collectors.toSet()));

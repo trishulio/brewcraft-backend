@@ -6,7 +6,6 @@ import io.company.brewcraft.service.CrudEntity;
 
 @Profile("IgnoredFromSpringContextTests")
 public class DummyCrudEntity extends BaseEntity implements CrudEntity<Long>, BaseDummyCrudEntity, UpdateDummyCrudEntity {
-
     private Long id;
     private String value;
     private String excludedValue;

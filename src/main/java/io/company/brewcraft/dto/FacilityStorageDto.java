@@ -5,7 +5,6 @@ import javax.validation.constraints.NotBlank;
 import io.company.brewcraft.model.StorageType;
 
 public class FacilityStorageDto extends BaseDto {
-
     private Long id;
 
     @NotBlank
@@ -16,7 +15,6 @@ public class FacilityStorageDto extends BaseDto {
     private Integer version;
 
     public FacilityStorageDto() {
-
     }
 
     public FacilityStorageDto(Long id, String name, StorageType type, Integer version) {

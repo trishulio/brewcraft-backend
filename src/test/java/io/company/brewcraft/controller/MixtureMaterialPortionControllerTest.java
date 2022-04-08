@@ -32,7 +32,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import tec.uom.se.quantity.Quantities;
 
 public class MixtureMaterialPortionControllerTest {
-
     private MixtureMaterialPortionController materialPortionController;
 
     private MixtureMaterialPortionService materialPortionService;

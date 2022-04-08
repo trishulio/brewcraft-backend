@@ -33,7 +33,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.SupportedUnits;
 
 public class MaterialServiceImplTest {
-
     private MaterialService materialService;
 
     private MaterialRepository materialRepositoryMock;

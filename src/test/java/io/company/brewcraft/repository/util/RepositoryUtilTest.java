@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort.Direction;
 import io.company.brewcraft.repository.RepositoryUtil;
 
 public class RepositoryUtilTest {
-
     @Test
     public void testPageRequest_ReturnsPageRequestUnsorted_WhenOrderByIsNull() {
         PageRequest expected = PageRequest.of(1, 10, Sort.unsorted());

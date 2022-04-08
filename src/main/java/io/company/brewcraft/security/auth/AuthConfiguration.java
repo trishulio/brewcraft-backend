@@ -9,7 +9,6 @@ import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 
 @Configuration
 public class AuthConfiguration {
-
     @Bean
     @ConditionalOnMissingBean(ContextHolder.class)
     public ContextHolder ctxHolder() {

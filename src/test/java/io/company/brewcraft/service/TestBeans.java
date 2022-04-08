@@ -9,7 +9,6 @@ import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.validator.Validator;
 
 public abstract class TestBeans {
-
     public static BlockingAsyncExecutor mockExecutor() {
         BlockingAsyncExecutor executor = new BlockingAsyncExecutor();
 

@@ -30,7 +30,6 @@ import io.company.brewcraft.service.MaterialCategoryService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class MaterialCategoryServiceImplTest {
-
     private MaterialCategoryService materialCategoryService;
 
     private MaterialCategoryRepository materialCategoryRepository;

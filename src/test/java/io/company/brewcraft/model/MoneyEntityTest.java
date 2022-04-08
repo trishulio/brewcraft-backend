@@ -11,7 +11,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class MoneyEntityTest {
-
     private MoneyEntity money;
 
     @BeforeEach

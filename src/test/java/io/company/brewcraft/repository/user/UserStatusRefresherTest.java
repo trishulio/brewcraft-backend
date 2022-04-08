@@ -13,7 +13,6 @@ import io.company.brewcraft.repository.AccessorRefresher;
 import io.company.brewcraft.repository.user.impl.UserStatusRefresher;
 
 public class UserStatusRefresherTest {
-
     private AccessorRefresher<Long, UserStatusAccessor, UserStatus> mRefresher;
 
     private UserStatusRefresher userStatusRefresher;

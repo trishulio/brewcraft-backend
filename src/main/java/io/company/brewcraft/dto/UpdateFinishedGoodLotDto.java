@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class UpdateFinishedGoodLotDto extends BaseDto {
-
     private Long id;
 
     private Long skuId;
