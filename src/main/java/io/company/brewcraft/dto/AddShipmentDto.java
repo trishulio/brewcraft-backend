@@ -12,7 +12,6 @@ public class AddShipmentDto extends BaseDto {
     private Collection<AddMaterialLotDto> lots;
 
     public AddShipmentDto() {
-
     }
 
     public AddShipmentDto(String shipmentNumber, String description, Long shipmentStatusId, LocalDateTime deliveryDueDate, LocalDateTime deliveredDate, Collection<AddMaterialLotDto> lots) {

@@ -12,7 +12,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class BrewStageTest {
-
     private BrewStage brewStage;
 
     @BeforeEach

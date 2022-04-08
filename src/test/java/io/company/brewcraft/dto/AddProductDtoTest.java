@@ -2,14 +2,13 @@ package io.company.brewcraft.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AddProductDtoTest {
-
     private AddProductDto addProductDto;
 
     @BeforeEach
@@ -23,7 +22,7 @@ public class AddProductDtoTest {
         String description = "testDesc";
         Long categoryId = 1L;
         List<AddProductMeasureValueDto> targetMeasures = List.of(new AddProductMeasureValueDto());
-        URL imageSrc = new URL("http://www.test.com");
+        URI imageSrc = new URI("http://www.test.com");
 
         AddProductDto addProductDto = new AddProductDto(name, description, categoryId, targetMeasures, imageSrc);
 
@@ -64,7 +63,7 @@ public class AddProductDtoTest {
 
     @Test
     public void testGetSetImageSrc() throws Exception {
-        addProductDto.setImageSrc(new URL("http://www.test.com"));
-        assertEquals(new URL("http://www.test.com"), addProductDto.getImageSrc());
+        addProductDto.setImageSrc(new URI("http://www.test.com"));
+        assertEquals(new URI("http://www.test.com"), addProductDto.getImageSrc());
     }
 }

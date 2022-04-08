@@ -6,7 +6,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddSkuDto extends BaseDto {
-
     @NotBlank
     private String number;
 

@@ -11,7 +11,6 @@ import io.company.brewcraft.model.Invoice;
 
 @Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, InvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, PurchaseOrderMapper.class })
 public interface InvoiceMapper extends BaseMapper<Invoice, InvoiceDto, AddInvoiceDto, UpdateInvoiceDto> {
-
     InvoiceMapper INSTANCE = Mappers.getMapper(InvoiceMapper.class);
 
     @Override

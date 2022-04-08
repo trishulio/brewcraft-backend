@@ -188,7 +188,7 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
     public List<MaterialLot> getLots() {
         List<MaterialLot> lots = null;
         if (this.lots != null) {
-            lots = this.lots.stream().collect(Collectors.toList());
+            lots = this.lots.stream().toList();
         }
         return lots;
     }
@@ -198,13 +198,13 @@ public class Shipment extends BaseEntity implements UpdateShipment<MaterialLot>,
         if (this.lots == null) {
             this.lots = new ArrayList<>();
         } else {
-            this.lots.stream().collect(Collectors.toList()).forEach(this::removeLot);
+            this.lots.stream().toList().forEach(this::removeLot);
         }
 
         if (lots == null) {
             this.lots.clear();
         } else {
-            lots.stream().collect(Collectors.toList()).forEach(this::addLot);
+            lots.stream().toList().forEach(this::addLot);
         }
     }
 

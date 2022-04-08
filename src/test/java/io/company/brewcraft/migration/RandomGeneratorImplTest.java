@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RandomGeneratorImplTest {
-
     private RandomGenerator rand;
 
     @BeforeEach

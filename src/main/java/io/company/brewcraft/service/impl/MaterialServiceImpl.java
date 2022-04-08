@@ -29,7 +29,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class MaterialServiceImpl extends BaseService implements MaterialService {
-
     private MaterialRepository materialRepository;
 
     private MaterialCategoryService materialCategoryService;

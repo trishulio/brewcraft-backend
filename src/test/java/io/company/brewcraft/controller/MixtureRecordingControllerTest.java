@@ -28,7 +28,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class MixtureRecordingControllerTest {
-
     private MixtureRecordingController mixtureRecordingController;
 
     private MixtureRecordingService mixtureRecordingService;

@@ -1,5 +1,6 @@
 package io.company.brewcraft.dto.user;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.NullOrNotBlank;
 
 public class UpdateUserDto extends BaseDto {
+    private Long id;
 
     @NullOrNotBlank
     private String userName;
@@ -29,7 +31,7 @@ public class UpdateUserDto extends BaseDto {
     @NullOrNotBlank
     private String phoneNumber;
 
-    private String imageUrl;
+    private URI imageSrc;
 
     @Size(min = 1)
     private List<Long> roleIds;
@@ -38,9 +40,16 @@ public class UpdateUserDto extends BaseDto {
     private Integer version;
 
     public UpdateUserDto() {
+        super();
     }
 
-    public UpdateUserDto(String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, String imageUrl, List<Long> roleIds, @NotNull Integer version) {
+    public UpdateUserDto(Long id) {
+        this();
+        setId(id);
+    }
+
+    public UpdateUserDto(Long id, String userName, String displayName, String firstName, String lastName, Long statusId, Long salutationId, String phoneNumber, URI imageSrc, List<Long> roleIds, @NotNull Integer version) {
+        this(id);
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -49,8 +58,16 @@ public class UpdateUserDto extends BaseDto {
         setSalutationId(salutationId);
         setPhoneNumber(phoneNumber);
         setRoleIds(roleIds);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setVersion(version);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -117,12 +134,12 @@ public class UpdateUserDto extends BaseDto {
         this.roleIds = roleIds;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public URI getImageSrc() {
+        return imageSrc;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(URI imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     public Integer getVersion() {

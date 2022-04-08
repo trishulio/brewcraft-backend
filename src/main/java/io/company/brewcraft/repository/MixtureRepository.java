@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import io.company.brewcraft.model.Mixture;
 
 public interface MixtureRepository extends JpaRepository<Mixture, Long>, JpaSpecificationExecutor<Mixture> {
-
 }

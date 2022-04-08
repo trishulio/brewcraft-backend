@@ -13,7 +13,6 @@ import io.company.brewcraft.repository.SupplierRefresher;
 import io.company.brewcraft.service.SupplierAccessor;
 
 public class SupplierRefresherTest {
-
     private SupplierRefresher supplierRefresher;
 
     private AccessorRefresher<Long, SupplierAccessor, Supplier> mRefresher;

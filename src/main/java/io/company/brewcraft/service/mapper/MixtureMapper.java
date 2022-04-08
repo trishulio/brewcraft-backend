@@ -18,7 +18,6 @@ import io.company.brewcraft.model.Mixture;
 
 @Mapper(uses = { EquipmentMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, BrewStageMapper.class})
 public interface MixtureMapper {
-
     MixtureMapper INSTANCE = Mappers.getMapper(MixtureMapper.class);
 
     Mixture fromDto(Long id);

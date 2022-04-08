@@ -42,7 +42,6 @@ import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class FinishedGoodInventoryControllerTest {
-
    private FinishedGoodInventoryController finishedGoodInventoryController;
 
    private FinishedGoodInventoryService finishedGoodInventoryService;

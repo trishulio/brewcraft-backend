@@ -1,11 +1,12 @@
 package io.company.brewcraft.migration;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -16,82 +17,80 @@ import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.data.DataSourceConfiguration;
+import io.company.brewcraft.data.DataSourceConfigurationProvider;
 import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.model.Tenant;
 
 public class FlywayTenantMigrationRegisterTest {
-
-    public static final String DB_SCRIPT_PATH_ADMIN = "db/migrations/admin";
-    public static final String DB_SCRIPT_PATH_TENANT = "db/migrations/tenant";
-
-    private MigrationRegister register;
     private TenantDataSourceManager mDsMgr;
+    private DataSource mDs;
     private FluentConfiguration mFwConfig;
+    private DataSourceConfigurationProvider<UUID> mConfigProvider;
+    private DataSourceConfiguration mConfig;
+
+    private FlywayTenantMigrationRegister register;
 
     @BeforeEach
-    public void init() {
+    public void init() throws SQLException, IOException {
+        mConfig = mock(DataSourceConfiguration.class);
+        doReturn("MIGRATION_PATH").when(mConfig).getMigrationScriptPath();
+        doReturn("SCHEMA").when(mConfig).getSchemaName();
+
+        mConfigProvider = mock(DataSourceConfigurationProvider.class);
+        doReturn(mConfig).when(mConfigProvider).getConfiguration(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+
         mDsMgr = mock(TenantDataSourceManager.class);
-        // dsMgr.fqName(String id) >>> 'TENANT_' + id
-        doAnswer(inv -> "TENANT_" + inv.getArgument(0, String.class)).when(mDsMgr).fqName(anyString());
+        mDs = mock(DataSource.class);
+        doReturn(mDs).when(mDsMgr).getDataSource(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
         mFwConfig = mock(FluentConfiguration.class);
-        register = new FlywayMigrationRegister(() -> mFwConfig, mDsMgr, DB_SCRIPT_PATH_TENANT, DB_SCRIPT_PATH_ADMIN);
+        register = new FlywayTenantMigrationRegister(() -> mFwConfig, mDsMgr, mConfigProvider);
     }
 
     @Test
-    public void testIsMigrated_ReturnsTrue_WhenNumberOfAppliedMigrationsIsSameAsAllMigrations() throws SQLException, IOException {
-        DataSource mDs = mock(DataSource.class);
-        doReturn(mDs).when(mDsMgr).getDataSource("12345");
+    public void testMigrate_RunsFlywayOnTenantWithTenantsDataSource() {
+        Flyway mFw = mockFlyway(mFwConfig, "SCHEMA", "MIGRATION_PATH", mDs);
 
-        Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
+        register.migrate(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
-        MigrationInfoService mInfoService = mock(MigrationInfoService.class);
-        doReturn(new MigrationInfo[] { mock(MigrationInfo.class) }).when(mInfoService).all();
-        doReturn(new MigrationInfo[] { mock(MigrationInfo.class) }).when(mInfoService).applied();
-        doReturn(mInfoService).when(mFw).info();
+        verify(mFw).migrate();
+    }
 
-        boolean b = register.isMigrated("12345");
+    @Test
+    public void testIsMigrated_ReturnsTrue_WhenAllScriptsAreApplied() {
+        MigrationInfoService mInfo = mock(MigrationInfoService.class);
+
+        MigrationInfo[] mApplied = new MigrationInfo[3];
+        doReturn(mApplied).when(mInfo).applied();
+
+        MigrationInfo[] mAll = new MigrationInfo[3];
+        doReturn(mAll).when(mInfo).all();
+
+        Flyway mFw = mockFlyway(mFwConfig, "SCHEMA", "MIGRATION_PATH", mDs);
+        doReturn(mInfo).when(mFw).info();
+
+        boolean b = register.isMigrated(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
         assertTrue(b);
     }
 
     @Test
-    public void testIsMigrated_ReturnsFalse_WhenNumberOfAppliedMigrationsIsLessThanAllMigrations() throws SQLException, IOException {
-        DataSource mDs = mock(DataSource.class);
-        doReturn(mDs).when(mDsMgr).getDataSource("12345");
+    public void testIsMigrated_ReturnsFalse_WhenAllScriptsAreNotApplied() {
+        MigrationInfoService mInfo = mock(MigrationInfoService.class);
 
-        Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
+        MigrationInfo[] mApplied = new MigrationInfo[3];
+        doReturn(mApplied).when(mInfo).applied();
 
-        MigrationInfoService mInfoService = mock(MigrationInfoService.class);
-        doReturn(new MigrationInfo[] { mock(MigrationInfo.class), mock(MigrationInfo.class) }).when(mInfoService).all();
-        doReturn(new MigrationInfo[] { mock(MigrationInfo.class) }).when(mInfoService).applied();
-        doReturn(mInfoService).when(mFw).info();
+        MigrationInfo[] mAll = new MigrationInfo[5];
+        doReturn(mAll).when(mInfo).all();
 
-        boolean b = register.isMigrated("12345");
+        Flyway mFw = mockFlyway(mFwConfig, "SCHEMA", "MIGRATION_PATH", mDs);
+        doReturn(mInfo).when(mFw).info();
+
+        boolean b = register.isMigrated(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
         assertFalse(b);
-    }
-
-    @Test
-    public void testMigrateTenantSchema_ConfiguresFlywayWithTenantDatasourceAndMigrationScriptsAndRunsMigrate() throws SQLException, IOException {
-        DataSource mDs = mock(DataSource.class);
-        doReturn(mDs).when(mDsMgr).getDataSource("12345");
-
-        Flyway mFw = mockFlyway(mFwConfig, "TENANT_12345", DB_SCRIPT_PATH_TENANT, mDs);
-        register.migrate("12345");
-
-        verify(mFw, times(1)).migrate();
-    }
-
-    @Test
-    public void testMigrateAppSchema_ConfiguresFlywayWithAdminDatasourceAndMigrationScriptsAndRunsMigrate() throws SQLException, IOException {
-        DataSource mDs = mock(DataSource.class);
-        doReturn(mDs).when(mDsMgr).getAdminDataSource();
-        doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
-
-        Flyway mFw = mockFlyway(mFwConfig, "ADMIN_SCHEMA", DB_SCRIPT_PATH_ADMIN, mDs);
-        register.migrate();
-
-        verify(mFw, times(1)).migrate();
     }
 
     private Flyway mockFlyway(FluentConfiguration config, String schemas, String location, DataSource ds) {

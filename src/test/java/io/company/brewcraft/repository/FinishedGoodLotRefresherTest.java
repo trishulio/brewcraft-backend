@@ -15,7 +15,6 @@ import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
 import io.company.brewcraft.service.FinishedGoodLotAccessor;
 
 public class FinishedGoodLotRefresherTest {
-
     private FinishedGoodLotRefresher finishedGoodLotRefresher;
 
     private AccessorRefresher<Long, FinishedGoodLotAccessor, FinishedGoodLot> mRefresher;
@@ -91,5 +90,4 @@ public class FinishedGoodLotRefresherTest {
 
         verify(this.mRefresher, times(1)).refreshAccessors(accessors);
     }
-
 }

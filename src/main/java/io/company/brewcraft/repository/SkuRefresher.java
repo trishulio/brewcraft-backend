@@ -39,7 +39,7 @@ public class SkuRefresher implements Refresher<Sku, SkuAccessor> {
     @Override
     public void refresh(Collection<Sku> skus) {
         this.productRefresher.refreshAccessors(skus);
-        final List<SkuMaterial> materials = skus.stream().filter(i -> i.getMaterials() != null).flatMap(i -> i.getMaterials().stream()).collect(Collectors.toList());
+        final List<SkuMaterial> materials = skus.stream().filter(i -> i.getMaterials() != null).flatMap(i -> i.getMaterials().stream()).toList();
 
         this.skuMaterialRefresher.refresh(materials);
     }

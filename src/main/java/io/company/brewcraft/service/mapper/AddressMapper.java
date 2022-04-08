@@ -9,7 +9,6 @@ import io.company.brewcraft.model.SupplierAddress;
 
 @Mapper
 public interface AddressMapper {
-
     AddressMapper INSTANCE = Mappers.getMapper(AddressMapper.class);
 
     AddressDto addressToAddressDto(FacilityAddress address);

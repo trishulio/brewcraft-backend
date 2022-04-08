@@ -36,7 +36,7 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/mixtures", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/mixtures")
 public class MixtureController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(MixtureController.class);
 
@@ -49,7 +49,7 @@ public class MixtureController extends BaseController {
         this.mixtureService = mixtureService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MixtureDto> getMixtures(@RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false, name = "parent_mixture_ids") Set<Long> parentMixtureIds,
             @RequestParam(required = false, name = "equipment_ids") Set<Long> equipmentIds,
@@ -63,12 +63,11 @@ public class MixtureController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<Mixture> mixturePage = mixtureService.getMixtures(ids, parentMixtureIds, equipmentIds, brewStageIds, brewIds,
                 brewBatchIds, stageStatusIds, stageTaskIds, productIds, page, size, sort, orderAscending);
 
         List<MixtureDto> mixtureList = mixturePage.stream().map(mixture -> mixtureMapper.toDto(mixture))
-                .collect(Collectors.toList());
+                .toList();
 
         PageDto<MixtureDto> dto = new PageDto<>(mixtureList, mixturePage.getTotalPages(),
                 mixturePage.getTotalElements());
@@ -76,7 +75,7 @@ public class MixtureController extends BaseController {
         return dto;
     }
 
-    @GetMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{mixtureId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureDto getMixture(@PathVariable Long mixtureId) {
         Mixture mixture = mixtureService.getMixture(mixtureId);
 
@@ -85,7 +84,7 @@ public class MixtureController extends BaseController {
         return mixtureMapper.toDto(mixture);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MixtureDto addMixture(@Valid @RequestBody AddMixtureDto addMixtureDto) {
         Mixture mixture = mixtureMapper.fromDto(addMixtureDto);
@@ -95,7 +94,7 @@ public class MixtureController extends BaseController {
         return mixtureMapper.toDto(addedMixture);
     }
 
-    @PutMapping("/{mixtureId}")
+    @PutMapping(value = "/{mixtureId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureDto putMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {
         Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
 
@@ -104,7 +103,7 @@ public class MixtureController extends BaseController {
         return mixtureMapper.toDto(putMixture);
     }
 
-    @PatchMapping("/{mixtureId}")
+    @PatchMapping(value = "/{mixtureId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureDto patchMixture(@PathVariable Long mixtureId, @Valid @RequestBody UpdateMixtureDto updateMixtureDto) {
         Mixture mixture = mixtureMapper.fromDto(updateMixtureDto);
 

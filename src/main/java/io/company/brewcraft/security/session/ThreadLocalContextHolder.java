@@ -1,10 +1,9 @@
 package io.company.brewcraft.security.session;
 
 public class ThreadLocalContextHolder implements ContextHolder {
+    private InheritableThreadLocal<PrincipalContext> principalCtx;
 
-    InheritableThreadLocal<PrincipalContext> principalCtx;
-
-    public ThreadLocalContextHolder() {
+   public ThreadLocalContextHolder() {
         this.principalCtx = new InheritableThreadLocal<>();
     }
 
@@ -13,7 +12,6 @@ public class ThreadLocalContextHolder implements ContextHolder {
         return this.principalCtx.get();
     }
 
-    @Override
     public void setContext(PrincipalContext principalCtx) {
         this.principalCtx.set(principalCtx);
     }

@@ -3,6 +3,7 @@ package io.company.brewcraft.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.Function;
@@ -82,12 +83,12 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
     }
 
     @Override
-    public int delete(Set<Long> ids) {
+    public long delete(Set<Long> ids) {
         return this.repoService.delete(ids);
     }
 
     @Override
-    public int delete(Long id) {
+    public long delete(Long id) {
         return this.repoService.delete(id);
     }
 
@@ -125,7 +126,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
             final Set<Long> existingIds = existing.stream().map(shipment -> shipment.getId()).collect(Collectors.toSet());
             final Set<Long> nonExistingIds = patches.stream().map(patch -> patch.getId()).filter(patchId -> !existingIds.contains(patchId)).collect(Collectors.toSet());
 
-            throw new EntityNotFoundException(String.format("Cannot find shipments with Ids: %s", nonExistingIds));
+            throw new EntityNotFoundException(String.format("Cannot find purchaseOrder with Ids: %s", nonExistingIds));
         }
 
         final List<PurchaseOrder> updated = this.updateService.getPatchEntities(existing, patches);
@@ -140,16 +141,16 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
         }
 
         Set<Long> supplierIds = updates.stream()
-                                       .filter(update -> update != null)
+                                       .filter(Objects::nonNull)
                                        .map(update -> update.getSupplier())
-                                       .filter(supplier -> supplier != null)
+                                       .filter(Objects::nonNull)
                                        .map(supplier -> supplier.getId())
-                                       .filter(id -> id != null)
+                                       .filter(Objects::nonNull)
                                        .collect(Collectors.toSet());
         Set<String> orderNumbers = updates.stream()
-                                          .filter(update -> update != null)
+                                          .filter(Objects::nonNull)
                                           .map(update -> update.getOrderNumber())
-                                          .filter(orderNumber -> orderNumber != null)
+                                          .filter(Objects::nonNull)
                                           .collect(Collectors.toSet());
 
         Specification<PurchaseOrder> spec = WhereClauseBuilder.builder()
@@ -160,7 +161,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                                                                                                       .collect(Collectors.toMap(po -> new PurchaseOrderNumberSupplierIdKey(po), Function.identity()));
 
         List<PurchaseOrder> pOs = updates.stream()
-                                         .filter(update -> update != null)
+                                         .filter(Objects::nonNull)
                                          .map(update -> {
                                             PurchaseOrder purchaseOrder = new PurchaseOrder();
                                             Class<? super PurchaseOrder> clz = BasePurchaseOrder.class;
@@ -175,7 +176,7 @@ public class PurchaseOrderService extends BaseService implements CrudService<Lon
                                             purchaseOrder.override(update, getPropertyNames(clz, Set.of(PurchaseOrder.ATTR_ID, PurchaseOrder.ATTR_VERSION)));
                                             return purchaseOrder;
                                          })
-                                         .collect(Collectors.toList());
+                                         .toList();
 
         return this.repoService.saveAll(pOs);
     }

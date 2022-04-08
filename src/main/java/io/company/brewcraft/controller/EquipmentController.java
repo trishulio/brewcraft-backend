@@ -34,9 +34,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/facilities", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/facilities")
 public class EquipmentController extends BaseController {
-
     private EquipmentService equipmentService;
 
     private EquipmentMapper equipmentMapper = EquipmentMapper.INSTANCE;
@@ -46,7 +45,7 @@ public class EquipmentController extends BaseController {
         this.equipmentService = equipmentService;
     }
 
-    @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false) Set<String> types,
@@ -57,19 +56,18 @@ public class EquipmentController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-
         Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
 
         List<EquipmentDto> equipmentList = equipmentPage.stream()
                                                         .map(equipment -> equipmentMapper.toDto(equipment))
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         PageDto<EquipmentDto> dto = new PageDto<EquipmentDto>(equipmentList, equipmentPage.getTotalPages(), equipmentPage.getTotalElements());
 
         return dto;
     }
 
-    @GetMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public EquipmentDto getEquipment(@PathVariable Long equipmentId) {
         Equipment equipment = equipmentService.getEquipment(equipmentId);
 
@@ -78,7 +76,7 @@ public class EquipmentController extends BaseController {
         return equipmentMapper.toDto(equipment);
     }
 
-    @PostMapping("/{facilityId}/equipment")
+    @PostMapping(value = "/{facilityId}/equipment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
@@ -88,7 +86,7 @@ public class EquipmentController extends BaseController {
         return equipmentMapper.toDto(addedEquipment);
     }
 
-    @PutMapping("/{facilityId}/equipment/{equipmentId}")
+    @PutMapping(value = "/{facilityId}/equipment/{equipmentId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long facilityId,  @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
 
@@ -97,7 +95,7 @@ public class EquipmentController extends BaseController {
         return equipmentMapper.toDto(putEquipment);
     }
 
-    @PatchMapping("/equipment/{equipmentId}")
+    @PatchMapping(value = "/equipment/{equipmentId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long equipmentId) {
         Equipment equipment = equipmentMapper.fromDto(equipmentDto);
 

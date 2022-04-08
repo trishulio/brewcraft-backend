@@ -1,10 +1,13 @@
 package io.company.brewcraft.migration;
 
+import io.company.brewcraft.model.Tenant;
+
 public interface TenantRegister {
+    void add(Tenant tenant);
 
-    void add(String tenantId);
+    void put(Tenant tenant);
 
-    void remove(String tenantId);
+    void remove(Tenant tenant);
 
-    boolean exists(String tenantId);
+    boolean exists(Tenant tenant);
 }

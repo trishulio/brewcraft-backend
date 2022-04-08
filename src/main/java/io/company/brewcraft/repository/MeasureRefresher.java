@@ -6,7 +6,6 @@ import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.service.MeasureAccessor;
 
 public class MeasureRefresher implements Refresher<Measure, MeasureAccessor> {
-
     private final AccessorRefresher<Long, MeasureAccessor, Measure> refresher;
 
     public MeasureRefresher(AccessorRefresher<Long, MeasureAccessor, Measure> refresher) {

@@ -13,7 +13,6 @@ import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
 public class MoneySerializer extends JsonSerializer<Money> {
-
     @Override
     public void serialize(Money value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (value == null) {

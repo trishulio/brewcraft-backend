@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AddMixtureDtoTest {
-
     private AddMixtureDto addMixtureDto;
 
     @BeforeEach

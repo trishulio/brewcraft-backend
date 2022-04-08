@@ -38,7 +38,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class ProcurementItemMapperTest {
-
     private ProcurementItemMapper mapper;
 
     @BeforeEach

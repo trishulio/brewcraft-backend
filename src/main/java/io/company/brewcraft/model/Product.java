@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,10 @@ import javax.persistence.Version;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import io.company.brewcraft.service.CriteriaJoin;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import io.company.brewcraft.service.CriteriaJoin;
 
 @Entity(name = "PRODUCT")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
@@ -54,7 +55,7 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     private List<ProductMeasureValue> targetMeasures;
 
     @Column(name = "image_source")
-    private URL imageSrc;
+    private String imageSrc;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -79,14 +80,13 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
         this.id = id;
     }
 
-    public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures,
-            URL imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
+    public Product(Long id, String name, String description, ProductCategory category, List<ProductMeasureValue> targetMeasures, URI imageSrc, LocalDateTime createdAt, LocalDateTime lastUpdated, LocalDateTime deletedAt, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
         this.category = category;
         this.targetMeasures = targetMeasures;
-        this.imageSrc = imageSrc;
+        setImageSrc(imageSrc);
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.deletedAt = deletedAt;
@@ -168,13 +168,26 @@ public class Product extends BaseEntity implements UpdateProduct, Identified<Lon
     }
 
     @Override
-    public URL getImageSrc() {
-        return imageSrc;
+    public URI getImageSrc() {
+        URI uri = null;
+        if (this.imageSrc != null) {
+            try {
+                uri = new URI(this.imageSrc);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(String.format("Failed to convert to URI, value: %s", this.imageSrc), e);
+            }
+        }
+
+        return uri;
     }
 
     @Override
-    public void setImageSrc(URL imageSrc) {
-        this.imageSrc = imageSrc;
+    public void setImageSrc(URI imageSrc) {
+        if (imageSrc != null) {
+            this.imageSrc = imageSrc.toString();
+        } else {
+            this.imageSrc = null;
+        }
     }
 
     @Override

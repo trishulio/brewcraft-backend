@@ -12,7 +12,6 @@ import io.company.brewcraft.service.mapper.user.UserMapper;
 
 @Mapper(uses = { ProductMapper.class, UserMapper.class })
 public interface BrewMapper {
-
     BrewMapper INSTANCE = Mappers.getMapper(BrewMapper.class);
 
     @Mapping(target = "parentBrew", source = "parentBrewId")

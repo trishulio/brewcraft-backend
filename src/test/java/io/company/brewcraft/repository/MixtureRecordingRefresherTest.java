@@ -15,7 +15,6 @@ import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.service.MixtureRecordingAccessor;
 
 public class MixtureRecordingRefresherTest {
-
     private MixtureRecordingRefresher mixtureRecordingRefresher;
 
     private MeasureRefresher measureRefresherMock;

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class FinishedGoodInventoryDto extends BaseDto {
-
     private Long id;
 
     private SkuDto sku;
@@ -94,5 +93,4 @@ public class FinishedGoodInventoryDto extends BaseDto {
     public void setPackagedOn(LocalDateTime packagedOn) {
         this.packagedOn = packagedOn;
     }
-
 }

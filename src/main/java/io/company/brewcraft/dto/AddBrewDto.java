@@ -6,7 +6,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddBrewDto extends BaseDto {
-
     private String name;
 
     private String description;
@@ -116,5 +115,4 @@ public class AddBrewDto extends BaseDto {
     public void setOwnedByUserId(Long ownedByUserId) {
         this.ownedByUserId = ownedByUserId;
     }
-
 }

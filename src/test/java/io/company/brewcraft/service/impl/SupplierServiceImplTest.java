@@ -28,7 +28,6 @@ import io.company.brewcraft.service.SupplierService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class SupplierServiceImplTest {
-
     private SupplierService supplierService;
 
     private SupplierRepository supplierRepositoryMock;

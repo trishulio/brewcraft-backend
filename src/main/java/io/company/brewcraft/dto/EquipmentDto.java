@@ -4,7 +4,6 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class EquipmentDto extends BaseDto {
-
     private Long id;
 
     private FacilityBaseDto facility;

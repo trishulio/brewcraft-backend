@@ -18,7 +18,6 @@ import io.company.brewcraft.repository.ShipmentRefresher;
 import io.company.brewcraft.repository.ShipmentStatusRefresher;
 
 public class ShipmentRefresherTest {
-
     private ShipmentRefresher shipmentRefresher;
 
     private AccessorRefresher<Long, ShipmentAccessor, Shipment> mRefresher;

@@ -12,7 +12,6 @@ import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.service.mapper.user.UserStatusMapper;
 
 public class UserStatusMapperTest {
-
     private UserStatusMapper mapper;
 
     @BeforeEach

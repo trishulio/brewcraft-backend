@@ -1,40 +1,63 @@
 package io.company.brewcraft.migration;
 
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.company.brewcraft.data.DataSourceConfiguration;
+import io.company.brewcraft.data.DataSourceConfigurationProvider;
+import io.company.brewcraft.data.DataSourceQueryRunner;
 import io.company.brewcraft.data.JdbcDialect;
-import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.data.TenantDataSourceConfigurationProvider;
+import io.company.brewcraft.model.Tenant;
 
 public class TenantSchemaRegister implements TenantRegister {
-    private TenantDataSourceManager dsMgr;
+    private static final Logger log = LoggerFactory.getLogger(TenantSchemaRegister.class);
+
+    private DataSourceConfigurationProvider<UUID> configProvider;
+    private DataSourceQueryRunner runner;
     private JdbcDialect dialect;
 
-    public TenantSchemaRegister(TenantDataSourceManager dsMgr, JdbcDialect dialect) {
-        this.dsMgr = dsMgr;
+    public TenantSchemaRegister(TenantDataSourceConfigurationProvider configProvider, DataSourceQueryRunner queryRunner, JdbcDialect dialect) {
+        this.configProvider = configProvider;
+        this.runner = queryRunner;
         this.dialect = dialect;
     }
 
     @Override
-    public void add(String tenantId) {
-        dsMgr.query(tenantId, tenantConn -> {
-            String fqName = dsMgr.fqName(tenantId);
-            dialect.createSchemaIfNotExists(tenantConn, fqName);
-            tenantConn.commit();
+    public void add(Tenant tenant) {
+        DataSourceConfiguration config = configProvider.getConfiguration(tenant.getId());
+
+        runner.query(config, conn -> {
+            dialect.createSchemaIfNotExists(conn, config.getSchemaName());
+            conn.commit();
         });
     }
 
     @Override
-    public void remove(String tenantId) {
-        dsMgr.query(tenantId, tenantConn -> {
-            String fqName = dsMgr.fqName(tenantId);
-            dialect.dropSchema(tenantConn, fqName);
-            tenantConn.commit();
+    public void put(Tenant tenant) {
+        if (!exists(tenant)) {
+            add(tenant);
+        }
+    }
+
+    @Override
+    public void remove(Tenant tenant) {
+        DataSourceConfiguration config = configProvider.getConfiguration(tenant.getId());
+
+        runner.query(config, conn -> {
+            dialect.dropSchema(conn, config.getSchemaName());
+            conn.commit();
         });
     }
 
     @Override
-    public boolean exists(String tenantId) {
-        return dsMgr.query(tenantId, tenantConn -> {
-            String fqName = dsMgr.fqName(tenantId);
-            return dialect.schemaExists(tenantConn, fqName);
+    public boolean exists(Tenant tenant) {
+        DataSourceConfiguration config = configProvider.getConfiguration(tenant.getId());
+
+        return runner.query(config, conn -> {
+            return dialect.schemaExists(conn, config.getSchemaName());
         });
     }
 }

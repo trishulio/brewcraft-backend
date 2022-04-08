@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 public class AddressEntity extends BaseEntity {
-
     @Column(name = "address_line_1")
     private String addressLine1;
 

@@ -1,7 +1,6 @@
 package io.company.brewcraft.data;
 
 public class PostgresJdbcDialectSql {
-
     public String createSchemaIfNotExist(String schemaName) {
         return f("CREATE SCHEMA IF NOT EXISTS %s", schemaName);
     }
@@ -30,11 +29,11 @@ public class PostgresJdbcDialectSql {
         return f("DROP SCHEMA %s", schemaName);
     }
 
-    public String reassignOwned(String owner, String assignee) {
+    public String reassignOwnedByTo(String owner, String assignee) {
         return f("REASSIGN OWNED BY %s TO %s", owner, assignee);
     }
 
-    public String dropOwned(String owner) {
+    public String dropOwnedBy(String owner) {
         return f("DROP OWNED BY %s", owner);
     }
 

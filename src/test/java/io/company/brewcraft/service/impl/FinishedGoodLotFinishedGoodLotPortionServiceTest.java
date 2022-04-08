@@ -21,7 +21,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class FinishedGoodLotFinishedGoodLotPortionServiceTest {
-
     private FinishedGoodLotFinishedGoodLotPortionService service;
     private UpdateService<Long, FinishedGoodLotFinishedGoodLotPortion, BaseFinishedGoodLotFinishedGoodLotPortion, UpdateFinishedGoodLotFinishedGoodLotPortion> mUpdateService;
 

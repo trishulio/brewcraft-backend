@@ -16,7 +16,6 @@ import io.company.brewcraft.service.CrudEntity;
 @Entity(name = "finished_good_lot_finished_good_lot_portion")
 @PrimaryKeyJoinColumn(name="FINISHED_GOOD_LOT_PORTION_ID")
 public class FinishedGoodLotFinishedGoodLotPortion extends FinishedGoodLotPortion implements UpdateFinishedGoodLotFinishedGoodLotPortion, CrudEntity<Long>, Audited {
-
     public static final String FIELD_FINISHED_GOOD_LOT = "finishedGoodLot";
 
     @ManyToOne(fetch = FetchType.LAZY)

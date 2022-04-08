@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.procurement.ProcurementPurchaseOrderDto;
 
 public class ProcurementPurchaseOrderDtoTest {
-
     private ProcurementPurchaseOrderDto dto;
 
     @BeforeEach

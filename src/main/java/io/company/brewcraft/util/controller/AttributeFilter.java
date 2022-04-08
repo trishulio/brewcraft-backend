@@ -27,7 +27,6 @@ public class AttributeFilter {
             final Object NULL_VALUE = null;
             PropertyDescriptor[] pds = Introspector.getBeanInfo(o.getClass()).getPropertyDescriptors();
             for (PropertyDescriptor pd : pds) {
-
                 if (!predicate.apply(pd.getName())) {
                     continue;
                 }

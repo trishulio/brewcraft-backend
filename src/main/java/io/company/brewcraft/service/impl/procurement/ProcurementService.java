@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.Function;
@@ -104,7 +105,6 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         int page,
         int size
     ) {
-
         Specification<Procurement> spec = WhereClauseBuilder.builder()
                                                             // shipment filters
                                                             .in(new String[] { Procurement.FIELD_SHIPMENT, Shipment.FIELD_ID }, shipmentIds)
@@ -145,12 +145,12 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     }
 
     @Override
-    public int delete(Set<ProcurementId> ids) {
-        int procurementsCount = repoService.delete(ids);
+    public long delete(Set<ProcurementId> ids) {
+        long procurementsCount = repoService.delete(ids);
 
         ProcurementIdCollection idCollection = new ProcurementIdCollection(ids);
-        int shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
-        int invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
+        long shipmentsCount = shipmentService.delete(idCollection.getShipmentIds());
+        long invoicesCount = invoiceService.delete(idCollection.getInvoiceIds());
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
@@ -158,10 +158,10 @@ public class ProcurementService extends BaseService implements CrudService<Procu
     }
 
     @Override
-    public int delete(ProcurementId id) {
-        int procurementsCount = repoService.delete(id);
-        int shipmentsCount = shipmentService.delete(id.getShipmentId());
-        int invoicesCount = invoiceService.delete(id.getInvoiceId());
+    public long delete(ProcurementId id) {
+        long procurementsCount = repoService.delete(id);
+        long shipmentsCount = shipmentService.delete(id.getShipmentId());
+        long invoicesCount = invoiceService.delete(id.getInvoiceId());
 
         log.info("Deleted - Shipments: {}; Invoices: {}; Procurements: {}", shipmentsCount, invoicesCount, procurementsCount);
 
@@ -188,7 +188,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<BaseInvoice<? extends BaseInvoiceItem<?>>> bInvoices = new ArrayList<>(additions.size());
         List<BaseShipment<? extends BaseMaterialLot<?>>> bShipments = new ArrayList<>(additions.size());
         additions.stream()
-                 .filter(p -> p != null)
+                 .filter(Objects::nonNull)
                  .forEach(addition -> {
                      bInvoices.add(addition.getInvoice());
                      bShipments.add(addition.getShipment());
@@ -202,7 +202,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
                                                             shipment.setInvoiceItemsFromInvoice(invoice);
                                                             return new Procurement(shipment, invoice);
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }
@@ -212,7 +212,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-               .filter(p -> p != null)
+               .filter(Objects::nonNull)
                .forEach(update -> {
                    uInvoices.add(update.getInvoice());
                    uShipments.add(update.getShipment());
@@ -235,7 +235,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
                                                             return procurement;
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }
@@ -245,7 +245,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
         List<UpdateInvoice<? extends UpdateInvoiceItem<?>>> uInvoices = new ArrayList<>(updates.size());
         List<UpdateShipment<? extends UpdateMaterialLot<?>>> uShipments = new ArrayList<>(updates.size());
         updates.stream()
-               .filter(p -> p != null)
+               .filter(Objects::nonNull)
                .forEach(update -> {
                    uInvoices.add(update.getInvoice());
                    uShipments.add(update.getShipment());
@@ -268,7 +268,7 @@ public class ProcurementService extends BaseService implements CrudService<Procu
 
                                                             return procurement;
                                                         })
-                                                        .collect(Collectors.toList());
+                                                        .toList();
 
         return repoService.saveAll(procurements);
     }

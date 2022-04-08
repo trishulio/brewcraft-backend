@@ -16,7 +16,6 @@ import io.company.brewcraft.repository.user.UserSalutationRepository;
 
 @Transactional
 public class UserSalutationService extends BaseService {
-
     private UserSalutationRepository userSalutationRepository;
 
     public UserSalutationService(UserSalutationRepository userSalutationRepository) {

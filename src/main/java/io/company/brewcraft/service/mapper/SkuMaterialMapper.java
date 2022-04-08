@@ -12,7 +12,6 @@ import io.company.brewcraft.model.SkuMaterial;
 
 @Mapper(uses = { MaterialMapper.class, QuantityMapper.class })
 public interface SkuMaterialMapper {
-
     SkuMaterialMapper INSTANCE = Mappers.getMapper(SkuMaterialMapper.class);
 
     @Mapping(target = SkuMaterial.ATTR_MATERIAL, source = "materialId")

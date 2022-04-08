@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 
 public class AddMixtureRecordingDto extends BaseDto {
-
     @NotNull
     private Long mixtureId;
 

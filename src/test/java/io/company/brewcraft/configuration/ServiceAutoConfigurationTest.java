@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.user.User;
 import io.company.brewcraft.model.user.UserAccessor;
+import io.company.brewcraft.model.user.UserRole;
+import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.repository.AggregationRepository;
 import io.company.brewcraft.repository.BrewRefresher;
 import io.company.brewcraft.repository.BrewRepository;
@@ -41,7 +43,6 @@ import io.company.brewcraft.repository.ShipmentRepository;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
-import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.service.AggregationService;
 import io.company.brewcraft.service.BrewService;
 import io.company.brewcraft.service.BrewStageService;
@@ -55,7 +56,6 @@ import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
 import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionService;
 import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
-import io.company.brewcraft.service.IdpUserRepository;
 import io.company.brewcraft.service.InvoiceItemService;
 import io.company.brewcraft.service.InvoiceService;
 import io.company.brewcraft.service.InvoiceStatusService;
@@ -73,7 +73,7 @@ import io.company.brewcraft.service.ProductService;
 import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.SupplierContactService;
 import io.company.brewcraft.service.SupplierService;
-import io.company.brewcraft.service.TenantManagementService;
+import io.company.brewcraft.service.TenantIaasUserService;
 import io.company.brewcraft.service.UserRoleService;
 import io.company.brewcraft.service.UserSalutationService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
@@ -87,16 +87,14 @@ import io.company.brewcraft.service.impl.ProductServiceImpl;
 import io.company.brewcraft.service.impl.ShipmentService;
 import io.company.brewcraft.service.impl.SupplierContactServiceImpl;
 import io.company.brewcraft.service.impl.SupplierServiceImpl;
-import io.company.brewcraft.service.impl.TenantManagementServiceImpl;
+import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
-import io.company.brewcraft.service.impl.user.UserServiceImpl;
-import io.company.brewcraft.service.user.UserService;
+import io.company.brewcraft.service.impl.user.UserService;
 import io.company.brewcraft.util.ThreadLocalUtilityProvider;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 public class ServiceAutoConfigurationTest {
-
     private ServiceAutoConfiguration serviceAutoConfiguration;
 
     @BeforeEach
@@ -105,9 +103,9 @@ public class ServiceAutoConfigurationTest {
     }
 
     @Test
-    public void testTenantManagementService_returnsInstanceOfTenantManagementServiceImpl() {
-        final TenantManagementService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null);
-        assertTrue(tenantManagementService instanceof TenantManagementServiceImpl);
+    public void testTenantManagementService_returnsInstanceOfTenantManagementService() {
+        final TenantService tenantManagementService = this.serviceAutoConfiguration.tenantManagementService(null, null, null, null, null, null, null);
+        assertTrue(tenantManagementService instanceof TenantService);
     }
 
     @Test
@@ -246,8 +244,11 @@ public class ServiceAutoConfigurationTest {
 
     @Test
     public void testUserRoleService_ReturnsInstanceOfUserRoleService() {
-        final UserRoleRepository userRoleRepositoryMock = mock(UserRoleRepository.class);
-        final UserRoleService service = this.serviceAutoConfiguration.userRoleService(userRoleRepositoryMock);
+                final UtilityProvider utilProvider = mock(UtilityProvider.class);
+        final UserRoleRepository userRoleRepository = mock(UserRoleRepository.class);
+        final Refresher<UserRole, UserRoleAccessor> userRoleRefresher = mock(Refresher.class);
+
+        final UserRoleService service = this.serviceAutoConfiguration.userRoleService(utilProvider, userRoleRepository, userRoleRefresher);
 
         assertTrue(service instanceof UserRoleService);
     }
@@ -264,12 +265,10 @@ public class ServiceAutoConfigurationTest {
     public void testUserService_ReturnsInstanceOfUserService() {
         final UserRepository userRepositoryMock = mock(UserRepository.class);
         final Refresher<User, UserAccessor> userRefresher = mock(Refresher.class);
-        final IdpUserRepository idpUserRepositoryMock = mock(IdpUserRepository.class);
-        final ContextHolder contextHolderMock = mock(ContextHolder.class);
+        final UtilityProvider mUtilProvider = mock(UtilityProvider.class);
+        final TenantIaasUserService idpUserService = mock(TenantIaasUserService.class);
 
-        final UserService service = this.serviceAutoConfiguration.userService(userRepositoryMock, idpUserRepositoryMock, userRefresher, contextHolderMock);
-
-        assertTrue(service instanceof UserServiceImpl);
+        UserService service = this.serviceAutoConfiguration.userService(mUtilProvider, userRepositoryMock, userRefresher, idpUserService);
     }
 
     @Test

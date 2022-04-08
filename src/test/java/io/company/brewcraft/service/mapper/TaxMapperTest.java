@@ -13,7 +13,6 @@ import io.company.brewcraft.dto.TaxDto;
 import io.company.brewcraft.model.Tax;
 
 public class TaxMapperTest {
-
     private TaxMapper mapper;
 
     @BeforeEach

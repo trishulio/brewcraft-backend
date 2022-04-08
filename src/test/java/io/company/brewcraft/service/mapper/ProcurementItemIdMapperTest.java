@@ -11,7 +11,6 @@ import io.company.brewcraft.model.procurement.ProcurementItemId;
 import io.company.brewcraft.service.mapper.procurement.ProcurementItemIdMapper;
 
 public class ProcurementItemIdMapperTest {
-
     private ProcurementItemIdMapper mapper;
 
     @BeforeEach

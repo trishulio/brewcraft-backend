@@ -10,7 +10,6 @@ import io.company.brewcraft.model.ProductMeasureValue;
 
 @Mapper(uses = { MeasureMapper.class })
 public interface ProductMeasureValueMapper {
-
     ProductMeasureValueMapper INSTANCE = Mappers.getMapper(ProductMeasureValueMapper.class);
 
     ProductMeasureValue fromDto(ProductMeasureValueDto dto);

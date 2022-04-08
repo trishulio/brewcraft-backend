@@ -1,10 +1,11 @@
 package io.company.brewcraft.dto.user;
 
-public class AddUserRoleDto {
+import io.company.brewcraft.dto.BaseDto;
+
+public class AddUserRoleDto extends BaseDto {
     private String name;
 
     public AddUserRoleDto() {
-
     }
 
     public AddUserRoleDto(String name) {

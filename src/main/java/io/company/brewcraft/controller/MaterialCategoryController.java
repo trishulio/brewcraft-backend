@@ -35,9 +35,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/materials/categories", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/materials/categories")
 public class MaterialCategoryController extends BaseController {
-
     private MaterialCategoryService materialCategoryService;
 
     private MaterialCategoryMapper materialCategoryMapper = MaterialCategoryMapper.INSTANCE;
@@ -47,7 +46,7 @@ public class MaterialCategoryController extends BaseController {
         this.materialCategoryService = materialCategoryService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<CategoryDto> getCategories(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false) Set<String> names,
@@ -62,14 +61,14 @@ public class MaterialCategoryController extends BaseController {
 
         List<CategoryDto> materialCategoriesList = materialCategoriesPage.stream()
                                                                          .map(materialCategory -> materialCategoryMapper.toDto(materialCategory))
-                                                                         .collect(Collectors.toList());
+                                                                         .toList();
 
         PageDto<CategoryDto> dto = new PageDto<CategoryDto>(materialCategoriesList, materialCategoriesPage.getTotalPages(), materialCategoriesPage.getTotalElements());
 
         return dto;
     }
 
-    @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{categoryId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryWithParentDto getCategory(@PathVariable Long categoryId) {
         MaterialCategory materialCategory = materialCategoryService.getCategory(categoryId);
 
@@ -78,7 +77,7 @@ public class MaterialCategoryController extends BaseController {
         return materialCategoryMapper.toCategoryWithParentDto(materialCategory);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Valid @RequestBody AddCategoryDto addMaterialCategoryDto) {
         MaterialCategory materialCategory = materialCategoryMapper.fromDto(addMaterialCategoryDto);
@@ -89,7 +88,7 @@ public class MaterialCategoryController extends BaseController {
         return materialCategoryMapper.toDto(addedMaterialCategory);
     }
 
-    @PutMapping("/{categoryId}")
+    @PutMapping(value = "/{categoryId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto putCategory(@Valid @RequestBody UpdateCategoryDto updateMaterialCategoryDto, @PathVariable Long categoryId) {
         MaterialCategory materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
         Long parentCategoryId = updateMaterialCategoryDto.getParentCategoryId();
@@ -99,7 +98,7 @@ public class MaterialCategoryController extends BaseController {
         return materialCategoryMapper.toDto(putMaterialCategory);
     }
 
-    @PatchMapping("/{categoryId}")
+    @PatchMapping(value = "/{categoryId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryDto patchCategory(@Valid @RequestBody UpdateCategoryDto updateMaterialCategoryDto, @PathVariable Long categoryId) {
         MaterialCategory materialCategory = materialCategoryMapper.fromDto(updateMaterialCategoryDto);
         Long parentCategoryId = updateMaterialCategoryDto.getParentCategoryId();

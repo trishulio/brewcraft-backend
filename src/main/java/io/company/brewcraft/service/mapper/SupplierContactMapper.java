@@ -17,7 +17,6 @@ import io.company.brewcraft.model.SupplierContact;
 
 @Mapper
 public interface SupplierContactMapper {
-
     SupplierContactMapper INSTANCE = Mappers.getMapper(SupplierContactMapper.class);
 
     SupplierContactWithSupplierDto supplierContactToSupplierContactWithSupplierDto(SupplierContact contact);

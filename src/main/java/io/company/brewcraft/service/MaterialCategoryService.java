@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.MaterialCategory;
 
 public interface MaterialCategoryService {
-
     public Page<MaterialCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentIds, Set<String> parentNames,
             int page, int size, SortedSet<String> sort, boolean orderAscending);
 

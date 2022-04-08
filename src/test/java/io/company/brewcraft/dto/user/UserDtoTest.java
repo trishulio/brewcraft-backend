@@ -1,15 +1,18 @@
 package io.company.brewcraft.dto.user;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UserDtoTest {
+import io.company.brewcraft.dto.IaasObjectStoreFileDto;
 
+public class UserDtoTest {
     private UserDto dto;
 
     @BeforeEach
@@ -27,7 +30,8 @@ public class UserDtoTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
+            new IaasObjectStoreFileDto(URI.create("file.txt")),
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),
@@ -43,7 +47,8 @@ public class UserDtoTest {
         assertEquals("LAST_NAME", dto.getLastName());
         assertEquals("EMAIL", dto.getEmail());
         assertEquals("PHONE_NUMBER", dto.getPhoneNumber());
-        assertEquals("IMAGE_URL", dto.getImageUrl());
+        assertEquals(URI.create("IMAGE_URL"), dto.getImageSrc());
+        assertEquals(new IaasObjectStoreFileDto(URI.create("file.txt")), dto.getObjectStoreFile());
         assertEquals(new UserStatusDto(1L), dto.getStatus());
         assertEquals(new UserSalutationDto(2L), dto.getSalutation());
         assertEquals(List.of(new UserRoleDto(3L)), dto.getRoles());
@@ -95,10 +100,18 @@ public class UserDtoTest {
     }
 
     @Test
-    public void testAccessImageUrl() {
-        assertNull(dto.getImageUrl());
-        dto.setImageUrl("imageUrl");
-        assertEquals("imageUrl", dto.getImageUrl());
+    public void testAccessImageSrc() {
+        assertNull(dto.getImageSrc());
+        dto.setImageSrc(URI.create("imageSrc"));
+        assertEquals(URI.create("imageSrc"), dto.getImageSrc());
+    }
+
+    @Test
+    public void testAccessObjectStoreFile() {
+        assertNull(dto.getObjectStoreFile());
+        dto.setObjectStoreFile(new IaasObjectStoreFileDto(URI.create("file.txt")));
+
+        assertEquals(new IaasObjectStoreFileDto(URI.create("file.txt")), dto.getObjectStoreFile());
     }
 
     @Test

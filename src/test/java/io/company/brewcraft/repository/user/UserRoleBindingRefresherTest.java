@@ -15,7 +15,6 @@ import io.company.brewcraft.repository.Refresher;
 import io.company.brewcraft.repository.user.impl.UserRoleBindingRefresher;
 
 public class UserRoleBindingRefresherTest {
-
     private Refresher<UserRole, UserRoleAccessor> mUserRoleRefresher;
 
     private Refresher<UserRoleBinding, UserRoleBindingAccessor> userRoleBindingRefresher;
@@ -40,5 +39,15 @@ public class UserRoleBindingRefresherTest {
         userRoleBindingRefresher.refresh(bindings);
 
         verify(mUserRoleRefresher, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
+    }
+
+    @Test
+    public void testRefreshAccessors_DoesNothing() {
+        List<UserRoleBindingAccessor> accessors = List.of(mock(UserRoleBindingAccessor.class), mock(UserRoleBindingAccessor.class));
+
+        userRoleBindingRefresher.refreshAccessors(accessors);
+
+        verifyNoInteractions(accessors.get(0));
+        verifyNoInteractions(accessors.get(1));
     }
 }

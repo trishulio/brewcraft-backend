@@ -38,7 +38,7 @@ public class InvoiceRefresher implements Refresher<Invoice, InvoiceAccessor> {
         this.poRefresher.refreshAccessors(invoices);
         this.invoiceStatusRefresher.refreshAccessors(invoices);
 
-        final List<InvoiceItem> invoiceItems = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getInvoiceItems().stream()).collect(Collectors.toList());
+        final List<InvoiceItem> invoiceItems = invoices == null ? null : invoices.stream().filter(i -> i != null && i.getItemCount() > 0).flatMap(i -> i.getInvoiceItems().stream()).toList();
         this.invoiceItemRefresher.refresh(invoiceItems);
     }
 

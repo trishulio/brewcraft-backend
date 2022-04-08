@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MaterialPortionDtoTest {
-
     private MaterialPortionDto materialPortionBaseDto;
 
     @BeforeEach

@@ -2,12 +2,12 @@ package io.company.brewcraft.controller;
 
 import java.util.List;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,7 +33,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1")
 public class SupplierController extends BaseController {
-
     private SupplierService supplierService;
 
     private SupplierMapper supplierMapper = SupplierMapper.INSTANCE;
@@ -43,7 +42,7 @@ public class SupplierController extends BaseController {
         this.supplierService = supplierService;
     }
 
-    @GetMapping("/suppliers")
+    @GetMapping(value = "/suppliers", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetSuppliersDto getSuppliers(
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
@@ -52,12 +51,12 @@ public class SupplierController extends BaseController {
     ) {
         Page<Supplier> suppliers = supplierService.getSuppliers(page, size, sort, orderAscending);
 
-        List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.toDto(supplier)).collect(Collectors.toList());
+        List<SupplierDto> supplierDtos = suppliers.stream().map(supplier -> supplierMapper.toDto(supplier)).toList();
 
         return new GetSuppliersDto(supplierDtos, suppliers.getTotalElements(), suppliers.getTotalPages());
     }
 
-    @GetMapping("/suppliers/{supplierId}")
+    @GetMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto getSupplier(@PathVariable Long supplierId) {
         Supplier supplier = supplierService.getSupplier(supplierId);
 
@@ -68,7 +67,7 @@ public class SupplierController extends BaseController {
         }
     }
 
-    @PostMapping("/suppliers")
+    @PostMapping(value = "/suppliers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierDto addSupplier(@Valid @RequestBody AddSupplierDto supplierDto) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
@@ -78,7 +77,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(addedSupplier);
     }
 
-    @PutMapping("/suppliers/{supplierId}")
+    @PutMapping(value = "/suppliers/{supplierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto putSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
 
@@ -87,7 +86,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(putSupplier);
     }
 
-    @PatchMapping("/suppliers/{supplierId}")
+    @PatchMapping(value = "/suppliers/{supplierId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierDto patchSupplier(@Valid @RequestBody UpdateSupplierDto supplierDto, @PathVariable Long supplierId) {
         Supplier supplier = supplierMapper.fromDto(supplierDto);
 
@@ -96,7 +95,7 @@ public class SupplierController extends BaseController {
         return supplierMapper.toDto(patchedSupplier);
     }
 
-    @DeleteMapping("/suppliers/{supplierId}")
+    @DeleteMapping(value = "/suppliers/{supplierId}", consumes = MediaType.ALL_VALUE)
     public void deleteSupplier(@PathVariable Long supplierId) {
         supplierService.deleteSupplier(supplierId);
     }

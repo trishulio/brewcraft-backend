@@ -15,7 +15,6 @@ import io.company.brewcraft.repository.MixtureRefresher;
 import io.company.brewcraft.service.MixtureMaterialPortionAccessor;
 
 public class MixtureMaterialPortionRefresherTest {
-
     private MixtureMaterialPortionRefresher mixtureMaterialPortionRefresher;
 
     private MixtureRefresher mixtureRefresherMock;

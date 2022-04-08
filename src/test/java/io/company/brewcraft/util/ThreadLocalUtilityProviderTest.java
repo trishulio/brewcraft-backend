@@ -15,7 +15,6 @@ import io.company.brewcraft.data.CheckedRunnable;
 import io.company.brewcraft.util.validator.Validator;
 
 public class ThreadLocalUtilityProviderTest {
-
     private UtilityProvider provider;
 
     @BeforeEach

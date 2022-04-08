@@ -14,7 +14,6 @@ import io.company.brewcraft.dto.MeasureDto;
 import io.company.brewcraft.dto.ProductMeasureValueDto;
 
 public class ProductMeasureValueDtoTest {
-
     ProductMeasureValueDto productMeasureValueDto;
 
     @BeforeEach

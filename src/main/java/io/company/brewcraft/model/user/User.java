@@ -1,5 +1,7 @@
 package io.company.brewcraft.model.user;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +23,22 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Email;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.company.brewcraft.model.Audited;
 import io.company.brewcraft.model.BaseEntity;
 import io.company.brewcraft.service.CriteriaJoin;
+import io.company.brewcraft.service.CrudEntity;
 
-@Entity
+@Entity(name = "user")
 @Table(name = "_user")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<UserRole>, Audited {
+public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_USER_NAME = "userName";
     public static final String FIELD_DISPLAY_NAME = "displayName";
@@ -73,7 +76,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
     @Column(name = "image_url")
     @URL
-    private String imageUrl;
+    private String imageSrc;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -105,7 +108,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         setId(id);
     }
 
-    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public User(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, URI imageSrc, UserStatus status, UserSalutation salutation, List<UserRole> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -114,7 +117,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
         setEmail(email);
         setPhoneNumber(phoneNumber);
         setStatus(status);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setRoles(roles);
         setSalutation(salutation);
         setCreatedAt(createdAt);
@@ -173,13 +176,26 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public URI getImageSrc() {
+        URI uri = null;
+        if (this.imageSrc != null) {
+            try {
+                uri = new URI(this.imageSrc);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(String.format("Failed to convert to URI, value: %s", this.imageSrc), e);
+            }
+        }
+
+        return uri;
     }
 
     @Override
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(URI imageSrc) {
+        if (imageSrc != null) {
+            this.imageSrc = imageSrc.toString();
+        } else {
+            this.imageSrc = null;
+        }
     }
 
     @Override
@@ -264,7 +280,7 @@ public class User extends BaseEntity implements BaseUser<UserRole>, UpdateUser<U
 
         return this.roleBindings.stream()
                                 .map(binding -> binding.getRole())
-                                .collect(Collectors.toList());
+                                .toList();
     }
 
     /**

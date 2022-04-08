@@ -34,7 +34,6 @@ import io.company.brewcraft.service.GroupByClauseBuilder;
 import io.company.brewcraft.service.SelectClauseBuilder;
 
 public class QueryResolverTest {
-
     private QueryResolver qResolver;
 
     private EntityManager mEm;

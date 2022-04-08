@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.Currency;
 
 public class CurrencyMapperTest {
-
     private CurrencyMapper mapper;
 
     @BeforeEach

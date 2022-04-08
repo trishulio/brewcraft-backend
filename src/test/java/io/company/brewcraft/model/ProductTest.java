@@ -2,7 +2,7 @@ package io.company.brewcraft.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +12,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ProductTest {
-
     private Product product;
 
     @BeforeEach
@@ -27,7 +26,7 @@ public class ProductTest {
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
-        URL imageSrc = new URL("http://www.test.com");
+        URI imageSrc = new URI("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -84,8 +83,8 @@ public class ProductTest {
 
     @Test
     public void testGetSetImageSrc() throws Exception {
-        product.setImageSrc(new URL("http://www.test.com"));
-        assertEquals(new URL("http://www.test.com"), product.getImageSrc());
+        product.setImageSrc(new URI("http://www.test.com"));
+        assertEquals(new URI("http://www.test.com"), product.getImageSrc());
     }
 
     @Test
@@ -123,7 +122,7 @@ public class ProductTest {
         String description = "testDesc";
         ProductCategory category = new ProductCategory();
         List<ProductMeasureValue> targetMeasures = List.of();
-        URL imageSrc = new URL("http://www.test.com");
+        URI imageSrc = new URI("http://www.test.com");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime deletedAt = LocalDateTime.of(2020, 1, 2, 3, 4);

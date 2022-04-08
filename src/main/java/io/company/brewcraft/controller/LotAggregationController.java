@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +28,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/inventory")
 public class LotAggregationController extends BaseController {
-
     private final LotAggregationService service;
 
     public LotAggregationController(LotAggregationService service, AttributeFilter filter) {
@@ -36,7 +35,7 @@ public class LotAggregationController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping("/procurements/quantity")
+    @GetMapping(value = "/procurements/quantity", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<ProcurementLotDto> getAggregatedProcurementQuantity(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -75,12 +74,12 @@ public class LotAggregationController extends BaseController {
             size
         );
 
-        final List<ProcurementLotDto> contentDto = inventory.stream().map(i -> ProcurementLotMapper.INSTANCE.toDto(i)).collect(Collectors.toList());
+        final List<ProcurementLotDto> contentDto = inventory.stream().map(i -> ProcurementLotMapper.INSTANCE.toDto(i)).toList();
 
         return new PageDto<>(contentDto, inventory.getTotalPages(), inventory.getTotalElements());
     }
 
-    @GetMapping("/stock/quantity")
+    @GetMapping(value = "/stock/quantity", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<StockLotDto> getAggregatedStockQuantity(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -119,7 +118,7 @@ public class LotAggregationController extends BaseController {
             size
         );
 
-        final List<StockLotDto> contentDto = inventory.stream().map(i -> StockLotMapper.INSTANCE.toDto(i)).collect(Collectors.toList());
+        final List<StockLotDto> contentDto = inventory.stream().map(i -> StockLotMapper.INSTANCE.toDto(i)).toList();
 
         return new PageDto<>(contentDto, inventory.getTotalPages(), inventory.getTotalElements());
     }

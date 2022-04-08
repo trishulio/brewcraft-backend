@@ -151,16 +151,16 @@ public class BrewStage extends BaseEntity implements UpdateBrewStage, Audited, I
             if (mixtures == null) {
                 this.mixtures.clear();
             } else {
-                this.mixtures.stream().filter(mixture -> !mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::removeMixture);
+                this.mixtures.stream().filter(mixture -> !mixtures.contains(mixture)).toList().forEach(this::removeMixture);
             }
         }
 
         if (mixtures != null) {
             if (this.mixtures == null) {
                 this.mixtures = new ArrayList<>();
-                mixtures.stream().collect(Collectors.toList()).forEach(this::addMixture);
+                mixtures.stream().toList().forEach(this::addMixture);
             } else {
-                mixtures.stream().filter(mixture -> !this.mixtures.contains(mixture)).collect(Collectors.toList()).forEach(this::addMixture);
+                mixtures.stream().filter(mixture -> !this.mixtures.contains(mixture)).toList().forEach(this::addMixture);
             }
         }
     }

@@ -57,5 +57,4 @@ public class FinishedGoodLotRefresher implements Refresher<FinishedGoodLot, Fini
     public void refreshAccessors(Collection<? extends FinishedGoodLotAccessor> accessors) {
         this.refresher.refreshAccessors(accessors);
     }
-
 }

@@ -21,7 +21,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class UserSalutationControllerTest {
-
    private UserSalutationController userSalutationController;
 
    private UserSalutationService userSalutationService;

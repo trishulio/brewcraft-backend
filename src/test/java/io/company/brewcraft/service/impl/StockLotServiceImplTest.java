@@ -15,7 +15,6 @@ import io.company.brewcraft.service.StockLotService;
 import io.company.brewcraft.service.StockLotServiceImpl;
 
 public class StockLotServiceImplTest {
-
     private StockLotService stockLotService;
 
     private StockLotRepository stockLotRepositoryMock;

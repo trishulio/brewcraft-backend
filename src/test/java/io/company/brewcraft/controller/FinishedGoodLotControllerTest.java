@@ -1,7 +1,8 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
@@ -46,7 +47,6 @@ import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class FinishedGoodLotControllerTest {
-
    private FinishedGoodLotController controller;
 
    private FinishedGoodLotService mService;
@@ -161,13 +161,13 @@ public class FinishedGoodLotControllerTest {
 
    @Test
    public void testDeleteFinishedGoods_ReturnsDeleteCountFromService() {
-       doReturn(99).when(this.mService).delete(Set.of(1L, 11L, 111L));
-       int count = this.controller.deleteFinishedGoods(Set.of(1L, 11L, 111L));
-       assertEquals(99, count);
+       doReturn(99L).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       long count = this.controller.deleteFinishedGoods(Set.of(1L, 11L, 111L));
+       assertEquals(99L, count);
 
-       doReturn(9999).when(this.mService).delete(Set.of(1L, 11L, 111L));
+       doReturn(9999L).when(this.mService).delete(Set.of(1L, 11L, 111L));
        count = this.controller.deleteFinishedGoods(Set.of(1L, 11L, 111L));
-       assertEquals(9999, count);
+       assertEquals(9999L, count);
    }
 
    @Test

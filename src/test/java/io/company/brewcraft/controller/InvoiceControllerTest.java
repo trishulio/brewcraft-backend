@@ -27,7 +27,6 @@ import io.company.brewcraft.service.InvoiceService;
 
 @SuppressWarnings("unchecked")
 public class InvoiceControllerTest {
-
    private InvoiceController controller;
 
    private CrudControllerService<
@@ -121,9 +120,9 @@ public class InvoiceControllerTest {
 
    @Test
    public void testDeleteInvoices_ReturnsDeleteCountFromController() {
-       doReturn(1).when(mCrudController).delete(Set.of(1L));
+       doReturn(1L).when(mCrudController).delete(Set.of(1L));
 
-       assertEquals(1, this.controller.deleteInvoices(Set.of(1L)));
+       assertEquals(1L, this.controller.deleteInvoices(Set.of(1L)));
    }
 
    @Test

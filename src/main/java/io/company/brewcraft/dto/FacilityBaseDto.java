@@ -1,7 +1,6 @@
 package io.company.brewcraft.dto;
 
 public class FacilityBaseDto extends BaseDto {
-
     private Long id;
 
     private String name;

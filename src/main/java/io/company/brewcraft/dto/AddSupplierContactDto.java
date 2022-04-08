@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotBlank;
 
 public class AddSupplierContactDto {
-
     @NotBlank
     private String firstName;
 

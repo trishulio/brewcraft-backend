@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PostgresJdbcDialect implements JdbcDialect {
-
     private PostgresJdbcDialectSql pgSql;
 
     public PostgresJdbcDialect(PostgresJdbcDialectSql pgSql) {
@@ -77,14 +76,14 @@ public class PostgresJdbcDialect implements JdbcDialect {
     }
 
     @Override
-    public void dropOwned(Connection conn, String owner) throws SQLException {
-        String sql = this.pgSql.dropOwned(owner);
+    public void dropOwnedBy(Connection conn, String owner) throws SQLException {
+        String sql = this.pgSql.dropOwnedBy(owner);
         update(conn, sql);
     }
 
     @Override
-    public void reassignOwned(Connection conn, String owner, String assignee) throws SQLException {
-        String sql = this.pgSql.reassignOwned(owner, assignee);
+    public void reassignOwnedByTo(Connection conn, String owner, String assignee) throws SQLException {
+        String sql = this.pgSql.reassignOwnedByTo(owner, assignee);
         update(conn, sql);
     }
 

@@ -1,8 +1,6 @@
 package io.company.brewcraft;
 
-import static io.company.brewcraft.DbMockUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -19,7 +17,6 @@ import io.company.brewcraft.data.DataSourceBuilder;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
 
 public class HikariDataSourceBuilderTest {
-
     private DataSourceBuilder builder;
 
     @BeforeEach
@@ -102,20 +99,5 @@ public class HikariDataSourceBuilderTest {
         assertNull(builder.url());
         assertFalse(builder.autoCommit());
         assertEquals(-1, builder.poolSize());
-    }
-
-    @Test
-    public void testCopy_CopiesUsernameUrlSchemaAutoCommit_FromBaseDs() throws SQLException {
-        DataSource mDs = mock(DataSource.class);
-        createAndSetMockConnection(mDs, "USERNAME", "SCHEMA", "URL", false);
-
-        builder.copy(mDs);
-
-        assertEquals("USERNAME", builder.username());
-        assertEquals("URL", builder.url());
-        assertEquals("SCHEMA", builder.schema());
-        assertEquals(false, builder.autoCommit());
-
-        verify(mDs.getConnection(), times(1)).close();
     }
 }

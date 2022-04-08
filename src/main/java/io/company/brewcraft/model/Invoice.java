@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.persistence.AssociationOverride;
@@ -248,7 +249,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public List<InvoiceItem> getInvoiceItems() {
         List<InvoiceItem> invoiceItems = null;
         if (this.invoiceItems != null) {
-            invoiceItems = this.invoiceItems.stream().collect(Collectors.toList());
+            invoiceItems = this.invoiceItems.stream().toList();
         }
         return invoiceItems;
     }
@@ -258,13 +259,13 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         if (this.invoiceItems == null) {
             this.invoiceItems = new ArrayList<>();
         } else {
-            this.invoiceItems.stream().collect(Collectors.toList()).forEach(this::removeItem);
+            this.invoiceItems.stream().toList().forEach(this::removeItem);
         }
 
         if (invoiceItems == null) {
             this.invoiceItems.clear();
         } else {
-            invoiceItems.stream().collect(Collectors.toList()).forEach(this::addItem);
+            invoiceItems.stream().toList().forEach(this::addItem);
         }
     }
 
@@ -340,7 +341,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     public Tax getTax() {
         Tax tax = null;
         if (this.getInvoiceItems() != null) {
-            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(i -> i != null).map(i -> i.getTax()).collect(Collectors.toSet());
+            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(Objects::nonNull).map(i -> i.getTax()).collect(Collectors.toSet());
             tax = Tax.total(taxes);
         }
 

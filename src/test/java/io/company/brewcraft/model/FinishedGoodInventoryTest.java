@@ -14,7 +14,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class FinishedGoodInventoryTest {
-
     private FinishedGoodInventory finishedGoodInventory;
 
     @BeforeEach
@@ -54,7 +53,6 @@ public class FinishedGoodInventoryTest {
         finishedGoodInventory.setSku(new Sku(1L));
         assertEquals(new Sku(1L), finishedGoodInventory.getSku());
     }
-
 
     @Test
     public void testGetSetMixturePortions() {

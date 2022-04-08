@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity(name = "finished_good_lot_material_portion")
 @PrimaryKeyJoinColumn(name="MATERIAL_PORTION_ID")
 public class FinishedGoodLotMaterialPortion extends MaterialPortion implements UpdateFinishedGoodLotMaterialPortion<FinishedGoodLot> {
-
     public static final String FIELD_FINISHED_GOOD_LOT = "finishedGoodLot";
 
     @ManyToOne(fetch = FetchType.LAZY)

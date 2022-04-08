@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import io.company.brewcraft.model.Supplier;
 
 public interface BaseSupplierContact {
-
     public Supplier getSupplier();
 
     public void setSupplier(Supplier supplier);

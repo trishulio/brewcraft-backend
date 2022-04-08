@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import io.company.brewcraft.model.StorageType;
 
 public class StorageDto extends BaseDto {
-
     private Long id;
 
     private FacilityBaseDto facility;

@@ -18,7 +18,6 @@ import io.company.brewcraft.model.Mixture;
 import io.company.brewcraft.model.MixtureRecording;
 
 public class MixtureRecordingMapperTest {
-
     private MixtureRecordingMapper mixtureRecordingMapper;
 
     @BeforeEach

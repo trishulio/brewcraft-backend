@@ -4,6 +4,7 @@ import static io.company.brewcraft.repository.RepositoryUtil.pageRequest;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
@@ -61,7 +62,7 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
             return null;
         }
 
-        final Set<ID> ids = idProviders.stream().filter(provider -> provider != null).map(provider -> provider.getId()).filter(id -> id != null).collect(Collectors.toSet());
+        final Set<ID> ids = idProviders.stream().filter(Objects::nonNull).map(provider -> provider.getId()).filter(Objects::nonNull).collect(Collectors.toSet());
 
         return this.repo.findAllById(ids);
     }
@@ -73,11 +74,11 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
         }
 
         final Set<ID> ids = accessors.stream()
-                                     .filter(accessor -> accessor != null)
+                                     .filter(Objects::nonNull)
                                      .map(accessor -> entityGetter.apply(accessor))
-                                     .filter(identified -> identified != null)
+                                     .filter(Objects::nonNull)
                                      .map(identified -> identified.getId())
-                                     .filter(id -> id != null)
+                                     .filter(Objects::nonNull)
                                      .collect(Collectors.toSet());
         return this.repo.findAllById(ids);
     }
@@ -104,12 +105,12 @@ public class CrudRepoService<T extends JpaRepository<E, ID> & JpaSpecificationEx
     }
 
     @Override
-    public int delete(Set<ID> ids) {
-        return this.repo.deleteByIds(ids);
+    public long delete(Set<ID> ids) {
+        return Long.valueOf(this.repo.deleteByIds(ids));
     }
 
     @Override
-    public int delete(ID id) {
-        return this.repo.deleteOneById(id);
+    public long delete(ID id) {
+        return Long.valueOf(this.repo.deleteOneById(id));
     }
 }

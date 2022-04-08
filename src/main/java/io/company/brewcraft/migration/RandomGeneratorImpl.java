@@ -1,9 +1,9 @@
 package io.company.brewcraft.migration;
 
-import java.util.Random;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 public class RandomGeneratorImpl implements RandomGenerator {
-
     @Override
     public String string(int len) {
         String capitalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -13,7 +13,12 @@ public class RandomGeneratorImpl implements RandomGenerator {
 
         String values = capitalChars + lowercaseChars + numbers + symbols;
 
-        Random random = new Random();
+        SecureRandom random = null;
+        try {
+            random = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
         char[] password = new char[len];
         for (int i = 0; i < len; i++) {

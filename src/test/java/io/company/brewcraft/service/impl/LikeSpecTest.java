@@ -17,7 +17,6 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.LikeSpec;
 
 public class LikeSpecTest {
-
     private CriteriaSpec<Boolean> spec;
 
     private CriteriaSpec<String> mDelegate;

@@ -14,13 +14,11 @@ import io.company.brewcraft.service.FinishedGoodLotAccessor;
 import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionAccessor;
 
 public class FinishedGoodLotFinishedGoodLotPortionRefresherTest {
-
     private FinishedGoodLotFinishedGoodLotPortionRefresher finishedGoodLotFinishedGoodLotPortionRefresher;
 
     private Refresher<FinishedGoodLot, FinishedGoodLotAccessor> finishedGoodLotRefresher;
 
     private AccessorRefresher<Long, FinishedGoodLotFinishedGoodLotPortionAccessor, FinishedGoodLotFinishedGoodLotPortion> refresher;
-
 
     @BeforeEach
     public void init() {
@@ -54,6 +52,5 @@ public class FinishedGoodLotFinishedGoodLotPortionRefresherTest {
 
         verify(this.refresher, times(1)).refreshAccessors(accessors);
     }
-
 }
 

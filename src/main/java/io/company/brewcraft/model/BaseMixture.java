@@ -7,7 +7,6 @@ import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.ParentMixturesAccessor;
 
 public interface BaseMixture extends ParentMixturesAccessor, EquipmentAccessor, BrewStageAccessor, QuantityAccessor {
-
     List<MixtureMaterialPortion> getMaterialPortions();
 
     void setMaterialPortions(List<MixtureMaterialPortion> materialPortions);

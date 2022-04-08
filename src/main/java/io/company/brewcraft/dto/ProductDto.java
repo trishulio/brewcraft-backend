@@ -1,10 +1,11 @@
 package io.company.brewcraft.dto;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
-public class ProductDto extends BaseDto {
+import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
 
+public class ProductDto extends BaseDto implements DecoratedIaasObjectStoreFileAccessor {
     private Long id;
 
     private String name;
@@ -19,7 +20,9 @@ public class ProductDto extends BaseDto {
 
     private List<ProductMeasureValueDto> targetMeasures;
 
-    private URL imageSrc;
+    private URI imageSrc;
+
+    private IaasObjectStoreFileDto objectStoreFile;
 
     private Integer version;
 
@@ -33,7 +36,7 @@ public class ProductDto extends BaseDto {
     }
 
     public ProductDto(Long id, String name, String description, CategoryDto productClass, CategoryDto type,
-            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, URL imageSrc, Integer version) {
+            CategoryDto style, List<ProductMeasureValueDto> targetMeasures, URI imageSrc, Integer version) {
         this(id);
         this.name = name;
         this.description = description;
@@ -101,11 +104,12 @@ public class ProductDto extends BaseDto {
         this.targetMeasures = targetMeasures;
     }
 
-    public URL getImageSrc() {
-        return imageSrc;
+    @Override
+    public URI getImageSrc() {
+        return this.imageSrc;
     }
 
-    public void setImageSrc(URL imageSrc) {
+    public void setImageSrc(URI imageSrc) {
         this.imageSrc = imageSrc;
     }
 
@@ -115,5 +119,14 @@ public class ProductDto extends BaseDto {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public void setObjectStoreFile(IaasObjectStoreFileDto objectStoreFile) {
+        this.objectStoreFile = objectStoreFile;
+    }
+
+    public IaasObjectStoreFileDto getObjectStoreFile() {
+        return this.objectStoreFile;
     }
 }

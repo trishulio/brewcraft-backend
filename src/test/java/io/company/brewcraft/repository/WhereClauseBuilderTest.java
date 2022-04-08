@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 @SuppressWarnings({ "unchecked" })
 public class WhereClauseBuilderTest {
-
     private WhereClauseBuilder builder;
 
     private WhereClauseBuilderDelegate mDelegate;

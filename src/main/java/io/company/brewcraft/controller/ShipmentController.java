@@ -40,7 +40,7 @@ import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/purchases/shipments", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/purchases/shipments")
 public class ShipmentController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(ShipmentController.class);
 
@@ -75,12 +75,12 @@ public class ShipmentController extends BaseController {
         this(new CrudControllerService<>(filter, ShipmentMapper.INSTANCE, shipmentService, "Shipment"), shipmentService);
     }
 
-    @GetMapping(value = "/{shipmentId}")
+    @GetMapping(value = "/{shipmentId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ShipmentDto getShipment(@PathVariable(name = "shipmentId") Long shipmentId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(shipmentId, attributes);
     }
 
-    @GetMapping("")
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<ShipmentDto> getShipments(
         // shipment filters
         @RequestParam(required = false, name = "ids") Set<Long> ids,
@@ -160,22 +160,22 @@ public class ShipmentController extends BaseController {
         return this.controller.getAll(shipmentsPage, attributes);
     }
 
-    @DeleteMapping
-    public int deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
+    public long deleteShipments(@RequestParam("ids") Set<Long> shipmentIds) {
         return this.controller.delete(shipmentIds);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ShipmentDto> putShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ShipmentDto> patchShipment(@RequestBody @Valid @NotNull List<UpdateShipmentDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ShipmentDto> addShipment(@RequestBody @Valid @NotNull List<AddShipmentDto> addDtos) {
         return this.controller.add(addDtos);
     }

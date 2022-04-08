@@ -18,6 +18,10 @@ public interface WhereClauseBuilder {
 
     WhereClauseBuilder in(String path, Collection<?> collection);
 
+    WhereClauseBuilder is(String path, Object value);
+
+    WhereClauseBuilder is(String[] path, Object value);
+
     WhereClauseBuilder not();
 
     WhereClauseBuilder like(String[] paths, Set<String> queries);

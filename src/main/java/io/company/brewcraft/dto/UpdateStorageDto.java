@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.model.StorageType;
 
 public class UpdateStorageDto extends BaseDto {
-
     @NullOrNotBlank
     private String name;
 

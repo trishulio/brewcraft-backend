@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import io.company.brewcraft.model.StockLot;
 
 public interface StockLotRepository extends JpaRepository<StockLot, Long>, JpaSpecificationExecutor<StockLot> {
-
 }

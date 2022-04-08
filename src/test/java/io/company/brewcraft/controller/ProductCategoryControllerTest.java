@@ -25,7 +25,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class ProductCategoryControllerTest {
-
    private ProductCategoryController productCategoryController;
 
    private ProductCategoryService productCategoryService;

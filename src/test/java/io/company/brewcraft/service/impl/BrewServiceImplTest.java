@@ -24,7 +24,6 @@ import io.company.brewcraft.service.BrewAccessor;
 import io.company.brewcraft.service.BrewService;
 
 public class BrewServiceImplTest {
-
     private BrewService brewService;
 
     private BrewRepository brewRepositoryMock;

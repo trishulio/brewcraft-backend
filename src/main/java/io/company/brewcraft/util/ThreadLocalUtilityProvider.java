@@ -3,7 +3,6 @@ package io.company.brewcraft.util;
 import io.company.brewcraft.util.validator.Validator;
 
 public class ThreadLocalUtilityProvider implements UtilityProvider {
-
     private InheritableThreadLocal<Validator> validatorCache;
 
     public ThreadLocalUtilityProvider() {

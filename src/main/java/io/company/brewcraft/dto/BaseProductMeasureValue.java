@@ -4,7 +4,6 @@ import io.company.brewcraft.model.Measure;
 import io.company.brewcraft.model.Product;
 
 public interface BaseProductMeasureValue {
-
     public Product getProduct();
 
     public void setProduct(Product product);

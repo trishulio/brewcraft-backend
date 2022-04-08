@@ -24,7 +24,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class InvoiceTest {
-
     private Invoice invoice;
 
     @BeforeEach

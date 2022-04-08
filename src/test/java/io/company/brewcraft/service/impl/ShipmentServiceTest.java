@@ -167,10 +167,10 @@ public class ShipmentServiceTest {
 
    @Test
    public void testDelete_CallsRepoServiceDeleteBulk_WhenShipmentExists() {
-       doReturn(123).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
+       doReturn(123L).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
 
-       final int count = this.service.delete(Set.of(1L, 2L, 3L));
-       assertEquals(123, count);
+       final long count = this.service.delete(Set.of(1L, 2L, 3L));
+       assertEquals(123L, count);
    }
 
    @Test

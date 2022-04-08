@@ -1,6 +1,7 @@
 
 package io.company.brewcraft.dto.user;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.constraints.Email;
@@ -11,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import io.company.brewcraft.dto.BaseDto;
 
 public class AddUserDto extends BaseDto {
-
     @NotBlank
     private String userName;
 
@@ -38,12 +38,12 @@ public class AddUserDto extends BaseDto {
     @NotEmpty
     private List<Long> roleIds;
 
-    private String imageUrl;
+    private URI imageSrc;
 
     public AddUserDto() {
     }
 
-    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, String imageUrl, List<Long> roleIds) {
+    public AddUserDto(@NotBlank String userName, @NotBlank String displayName, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String email, @NotNull Long statusId, @NotNull Long salutationId, @NotBlank String phoneNumber, URI imageSrc, List<Long> roleIds) {
         setUserName(userName);
         setDisplayName(displayName);
         setFirstName(firstName);
@@ -52,7 +52,7 @@ public class AddUserDto extends BaseDto {
         setStatusId(statusId);
         setSalutationId(salutationId);
         setPhoneNumber(phoneNumber);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
         setRoleIds(roleIds);
     }
 
@@ -128,11 +128,11 @@ public class AddUserDto extends BaseDto {
         this.roleIds = roleIds;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public URI getImageSrc() {
+        return imageSrc;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(URI imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }

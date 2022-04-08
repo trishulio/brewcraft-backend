@@ -20,7 +20,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class QuantityUnitControllerTest {
-
    private QuantityUnitController quantityUnitController;
 
    private QuantityUnitService quantityUnitService;

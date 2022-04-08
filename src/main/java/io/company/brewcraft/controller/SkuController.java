@@ -36,9 +36,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/skus", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/skus")
 public class SkuController extends BaseController {
-
     private static final Logger log = LoggerFactory.getLogger(SkuController.class);
 
     private SkuService skuService;
@@ -50,28 +49,27 @@ public class SkuController extends BaseController {
         this.skuService = skuService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<SkuDto> getSkus(
             @RequestParam(required = false, name = "ids") Set<Long> ids,
             @RequestParam(required = false, name = "product_ids") Set<Long> productIds,
-            @RequestParam(required = false, name = "is_packageable") boolean isPackageable,
+            @RequestParam(required = false, name = "is_packageable") Boolean isPackageable,
             @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<Sku> skuPage = skuService.getSkus(ids, productIds, isPackageable, page, size, sort, orderAscending);
 
         List<SkuDto> skuList = skuPage.stream()
                                       .map(sku -> skuMapper.toDto(sku))
-                                      .collect(Collectors.toList());
+                                      .toList();
 
         PageDto<SkuDto> dto = new PageDto<>(skuList, skuPage.getTotalPages(), skuPage.getTotalElements());
 
         return dto;
     }
 
-    @GetMapping(value = "/{skuId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{skuId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto getSku(@PathVariable Long skuId) {
         Sku sku = skuService.getSku(skuId);
 
@@ -80,7 +78,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(sku);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SkuDto addSku(@Valid @RequestBody AddSkuDto addSkuDto) {
         Sku sku = skuMapper.fromDto(addSkuDto);
@@ -90,7 +88,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(addedSku);
     }
 
-    @PutMapping("/{skuId}")
+    @PutMapping(value = "/{skuId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto putSku(@PathVariable Long skuId, @Valid @RequestBody UpdateSkuDto updateSkuDto) {
         Sku sku = skuMapper.fromDto(updateSkuDto);
         sku.setId(skuId);
@@ -100,7 +98,7 @@ public class SkuController extends BaseController {
         return skuMapper.toDto(putSku);
     }
 
-    @PatchMapping("/{skuId}")
+    @PatchMapping(value = "/{skuId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SkuDto patchSku(@PathVariable Long skuId, @Valid @RequestBody UpdateSkuDto updateSkuDto) {
         Sku sku = skuMapper.fromDto(updateSkuDto);
         sku.setId(skuId);

@@ -2,6 +2,7 @@ package io.company.brewcraft.data;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import javax.sql.DataSource;
@@ -17,24 +18,19 @@ import com.google.common.cache.LoadingCache;
 
 public class TenantConnectionProviderPool extends AbstractMultiTenantConnectionProvider {
     private static final Logger log = LoggerFactory.getLogger(TenantConnectionProviderPool.class);
-
     private static final long serialVersionUID = 1L;
 
     private LoadingCache<String, ConnectionProvider> cache;
-    private String adminId;
+    private ConnectionProvider adminConnProvider;
 
-    public TenantConnectionProviderPool(TenantDataSourceManager dsMgr, String adminId) {
-        this.adminId = adminId;
+    public TenantConnectionProviderPool(TenantDataSourceManager dsMgr, DataSource adminDs) {
+        this.adminConnProvider = new TenantDataSourceManagerConnectionProvider(adminDs);
 
         this.cache = CacheBuilder.newBuilder().build(new CacheLoader<String, ConnectionProvider>() {
             @Override
-            public ConnectionProvider load(String tenantId) throws Exception {
-                DataSource ds = null;
-                if (tenantId.equalsIgnoreCase(adminId)) {
-                    ds = dsMgr.getAdminDataSource();
-                } else {
-                    ds = dsMgr.getDataSource(tenantId);
-                }
+            public ConnectionProvider load(String sTenantId) throws Exception {
+                UUID tenantId = UUID.fromString(sTenantId);
+                DataSource ds = dsMgr.getDataSource(tenantId);
 
                 return new TenantDataSourceManagerConnectionProvider(ds);
             }
@@ -43,7 +39,7 @@ public class TenantConnectionProviderPool extends AbstractMultiTenantConnectionP
 
     @Override
     protected ConnectionProvider getAnyConnectionProvider() {
-        return selectConnectionProvider(adminId);
+        return this.adminConnProvider;
     }
 
     @Override

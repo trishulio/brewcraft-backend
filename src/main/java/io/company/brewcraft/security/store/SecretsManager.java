@@ -3,7 +3,6 @@ package io.company.brewcraft.security.store;
 import java.io.IOException;
 
 public interface SecretsManager<K, V> {
-
     public V get(K secretId) throws IOException ;
 
     public void put(K secretId, V secret) throws IOException;
@@ -14,4 +13,5 @@ public interface SecretsManager<K, V> {
 
     public Boolean exists(K secretId) throws IOException;
 
+    public boolean remove(K secretId) throws IOException;
 }

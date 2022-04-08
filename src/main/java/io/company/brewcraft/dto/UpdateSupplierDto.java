@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class UpdateSupplierDto {
-
     @NullOrNotBlank
     private String name;
 

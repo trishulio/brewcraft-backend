@@ -1,6 +1,6 @@
 package io.company.brewcraft;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.sql.DataSource;
 
@@ -8,16 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import io.company.brewcraft.data.ContextHolderTenantDataSourceManager;
+import io.company.brewcraft.data.CachingDataSourceManager;
 import io.company.brewcraft.data.DataAutoConfiguration;
 import io.company.brewcraft.data.DataSourceBuilder;
 import io.company.brewcraft.data.DataSourceManager;
 import io.company.brewcraft.data.HikariDataSourceBuilder;
-import io.company.brewcraft.data.SchemaDataSourceManager;
 import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.data.TenantDataSourceManagerWrapper;
 
 public class DataAutoConfigurationTest {
-
     private DataAutoConfiguration config;
 
     @BeforeEach
@@ -27,8 +26,8 @@ public class DataAutoConfigurationTest {
 
     @Test
     public void testDataSourceManager_ReturnsSchemaBasedDataSourceManager() {
-        DataSourceManager mgr = config.dataSourceManager(null, null, null, null, 1);
-        assertTrue(mgr instanceof SchemaDataSourceManager);
+        DataSourceManager mgr = config.dataSourceManager(null, null);
+        assertTrue(mgr instanceof CachingDataSourceManager);
     }
 
     @Test
@@ -39,13 +38,13 @@ public class DataAutoConfigurationTest {
 
     @Test
     public void testTenantDsManager_ReturnsContextHolderDsManager() {
-        TenantDataSourceManager mgr = config.tenantDsManager(null, null, "admin_schema", "schema_prefix");
-        assertTrue(mgr instanceof ContextHolderTenantDataSourceManager);
+        TenantDataSourceManager mgr = config.tenantDsManager(null, null);
+        assertTrue(mgr instanceof TenantDataSourceManagerWrapper);
     }
 
     @Test
     public void testJdbcTemplate_ReturnsJdbcTemplate() {
-        DataSourceManager dataSourceManagerMock = Mockito.mock(SchemaDataSourceManager.class);
+        DataSourceManager dataSourceManagerMock = Mockito.mock(CachingDataSourceManager.class);
         DataSource dataSourceMock = Mockito.mock(DataSource.class);
 
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);
@@ -55,7 +54,7 @@ public class DataAutoConfigurationTest {
 
     @Test
     public void testTransactionTemplate_ReturnsTransactionTemplate() {
-        DataSourceManager dataSourceManagerMock = Mockito.mock(SchemaDataSourceManager.class);
+        DataSourceManager dataSourceManagerMock = Mockito.mock(CachingDataSourceManager.class);
         DataSource dataSourceMock = Mockito.mock(DataSource.class);
 
         Mockito.when(dataSourceManagerMock.getAdminDataSource()).thenReturn(dataSourceMock);

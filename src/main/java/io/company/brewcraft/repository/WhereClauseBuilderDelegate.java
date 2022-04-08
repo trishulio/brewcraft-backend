@@ -9,12 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.BetweenSpec;
+import io.company.brewcraft.service.ColumnSpec;
+import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.InSpec;
 import io.company.brewcraft.service.IsNullSpec;
+import io.company.brewcraft.service.IsSpec;
 import io.company.brewcraft.service.LikeSpec;
-import io.company.brewcraft.service.ColumnSpec;
 
 public class WhereClauseBuilderDelegate {
     private static final Logger log = LoggerFactory.getLogger(WhereClauseBuilderDelegate.class);
@@ -39,6 +40,15 @@ public class WhereClauseBuilderDelegate {
     public void in(String[] paths, Collection<?> collection) {
         if (collection != null) {
             CriteriaSpec<Boolean> spec = new InSpec<>(new ColumnSpec<>(paths), collection);
+            accumulator.add(spec);
+        }
+
+        accumulator.setIsNot(false);
+    }
+
+    public void is(String[] paths, Object value) {
+        if (value != null) {
+            CriteriaSpec<Boolean> spec = new IsSpec<>(new ColumnSpec<>(paths), value);
             accumulator.add(spec);
         }
 

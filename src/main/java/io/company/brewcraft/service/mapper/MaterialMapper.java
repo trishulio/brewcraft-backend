@@ -18,7 +18,6 @@ import io.company.brewcraft.model.MaterialCategory;
 
 @Mapper(uses = { QuantityUnitMapper.class, MaterialCategoryMapper.class })
 public interface MaterialMapper {
-
     MaterialMapper INSTANCE = Mappers.getMapper(MaterialMapper.class);
 
     @Mapping(target = "baseQuantityUnit", source = "baseQuantityUnit")

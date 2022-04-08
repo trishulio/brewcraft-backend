@@ -1,12 +1,14 @@
 package io.company.brewcraft.migration;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,88 +16,133 @@ import org.mockito.InOrder;
 
 import io.company.brewcraft.data.CheckedConsumer;
 import io.company.brewcraft.data.CheckedSupplier;
+import io.company.brewcraft.data.DataSourceConfiguration;
+import io.company.brewcraft.data.DataSourceQueryRunner;
 import io.company.brewcraft.data.JdbcDialect;
-import io.company.brewcraft.data.TenantDataSourceManager;
+import io.company.brewcraft.data.TenantDataSourceConfigurationProvider;
+import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.security.store.SecretsManager;
 
 @SuppressWarnings("unchecked")
 public class TenantUserRegisterTest {
     private TenantRegister register;
 
-    private TenantDataSourceManager mDsMgr;
-    private SecretsManager<String, String> mSecretMgr;
+    private DataSourceQueryRunner mQueryRunner;
+    private TenantDataSourceConfigurationProvider mConfigProvider;
+    private DataSourceConfiguration mConfig;
+    private DataSourceConfiguration mAdminDsConfig;
+    private SecretsManager<String, String> mSecretsMgr;
     private JdbcDialect mDialect;
     private RandomGenerator mRand;
 
     @BeforeEach
     public void init() {
-        mDsMgr = mock(TenantDataSourceManager.class);
-        doAnswer(inv -> "TENANT_" + inv.getArgument(0, String.class)).when(mDsMgr).fqName(anyString()); // "12345" >>> "TENANT_12345"
-
-        mSecretMgr = mock(SecretsManager.class);
+        mQueryRunner = mock(DataSourceQueryRunner.class);
+        mSecretsMgr = mock(SecretsManager.class);
         mDialect = mock(JdbcDialect.class);
         mRand = mock(RandomGenerator.class);
 
-        register = new TenantUserRegister(mDsMgr, mSecretMgr, mDialect, mRand, "DB_NAME");
+        mAdminDsConfig = mock(DataSourceConfiguration.class);
+        doReturn("ADMIN").when(mAdminDsConfig).getUserName();
+
+        mConfig = mock(DataSourceConfiguration.class);
+        doReturn("DBNAME").when(mConfig).getDbName();
+        doReturn("USERNAME").when(mConfig).getUserName();
+        doReturn("SCHEMA").when(mConfig).getSchemaName();
+
+        mConfigProvider = mock(TenantDataSourceConfigurationProvider.class);
+        doReturn(mConfig).when(mConfigProvider).getConfiguration(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+
+        register = new TenantUserRegister(mQueryRunner, mConfigProvider, mAdminDsConfig, mSecretsMgr, mDialect, mRand);
     }
 
     @Test
-    public void testAdd_CreatesUserAndGrantPrivilegesAndStorePassInSecretManager() throws SQLException, IOException {
+    public void testAdd_CreatesUserAndSavesPassword() throws SQLException, IOException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(0, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedConsumer.class));
+        doAnswer(inv -> {
+            CheckedConsumer<Connection, Exception> consumer = inv.getArgument(0, CheckedConsumer.class);
+            consumer.run(mConn);
+            return null;
+        }).when(mQueryRunner).query(any(CheckedConsumer.class));
 
-        doReturn("1234567890").when(mRand).string(TenantUserRegister.LENGTH_PASSWORD);
+        doReturn("PASSWORD").when(mRand).string(TenantUserRegister.PASSWORD_LENGTH);
 
-        register.add("12345");
+        register.add(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
-        InOrder order = inOrder(mDialect, mConn);
-        verify(mSecretMgr, times(1)).put("TENANT_12345", "1234567890");
-
-        order.verify(mDialect, times(1)).createUser(mConn, "TENANT_12345", "1234567890");
-        order.verify(mDialect, times(1)).grantPrivilege(mConn, "CONNECT", "DATABASE", "DB_NAME", "TENANT_12345");
-        order.verify(mDialect, times(1)).grantPrivilege(mConn, "CREATE", "DATABASE", "DB_NAME", "TENANT_12345");
-
-        order.verify(mConn, times(1)).commit();
+        InOrder order = inOrder(mDialect, mSecretsMgr);
+        order.verify(mDialect).createUser(mConn, "USERNAME", "PASSWORD");
+        order.verify(mDialect).grantPrivilege(mConn, "CONNECT", "DATABASE", "DBNAME", "USERNAME");
+        order.verify(mDialect).grantPrivilege(mConn, "CREATE", "DATABASE", "DBNAME", "USERNAME");
+        order.verify(mSecretsMgr).put("SCHEMA", "PASSWORD");
     }
 
     @Test
-    public void testExists_ReturnsTrue_WhenUserExistsReturnsTrue() throws SQLException {
+    public void testPut_DoesNothing_WhenExistReturnsTrue() {
+        register = spy(register);
+
+        doReturn(true).when(register).exists(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+
+        register.put(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+
+        verify(register, times(0)).add(any(Tenant.class));
+    }
+
+    @Test
+    public void testPut_CallsAdd_WhenExistsReturnsFalse() {
+        register = spy(register);
+
+        doReturn(false).when(register).exists(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+
+        register.put(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+
+        verify(register, times(1)).add(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+    }
+
+    @Test
+    public void testRemove_DropsSchema_WhenRemoveIsCalled() throws IOException, SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> {
+            CheckedConsumer<Connection, Exception> consumer = inv.getArgument(0, CheckedConsumer.class);
+            consumer.run(mConn);
+            return null;
+        }).when(mQueryRunner).query(any(CheckedConsumer.class));
 
-        doReturn(true).when(mDialect).userExists(mConn, "TENANT_12345");
+        register.remove(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
-        boolean b = register.exists("12345");
+        InOrder order = inOrder(mDialect, mSecretsMgr);
+        order.verify(mDialect).reassignOwnedByTo(mConn, "USERNAME", "ADMIN");
+        order.verify(mDialect).dropOwnedBy(mConn, "USERNAME");
+        order.verify(mDialect).dropUser(mConn, "USERNAME");
+        order.verify(mSecretsMgr).remove("SCHEMA");
+    }
+
+    @Test
+    public void testExists_ReturnsTrue_WhenDialectReturnsTrue() throws IOException, SQLException {
+        Connection mConn = mock(Connection.class);
+        doAnswer(inv -> {
+            CheckedSupplier<Boolean, Connection, Exception> supplier = inv.getArgument(0, CheckedSupplier.class);
+            return supplier.get(mConn);
+        }).when(mQueryRunner).query(any(CheckedSupplier.class));
+
+        doReturn(true).when(mDialect).userExists(mConn, "USERNAME");
+
+        boolean b = register.exists(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
         assertTrue(b);
     }
 
     @Test
-    public void testExists_ReturnsFalse_WhenUserExistsReturnsFalse() throws SQLException {
+    public void testExists_ReturnsFalse_WhenDialectReturnsFalse() throws IOException, SQLException {
         Connection mConn = mock(Connection.class);
-        doAnswer(inv -> inv.getArgument(0, CheckedSupplier.class).get(mConn)).when(mDsMgr).query(any(CheckedSupplier.class));
+        doAnswer(inv -> {
+            CheckedSupplier<Boolean, Connection, Exception> supplier = inv.getArgument(0, CheckedSupplier.class);
+            return supplier.get(mConn);
+        }).when(mQueryRunner).query(any(CheckedSupplier.class));
 
-        doReturn(false).when(mDialect).userExists(mConn, "TENANT_12345");
+        doReturn(false).when(mDialect).userExists(mConn, "USERNAME");
 
-        boolean b = register.exists("12345");
+        boolean b = register.exists(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
 
         assertFalse(b);
-    }
-
-    @Test
-    public void testRemove_TransfersUserOwnershipAndThenDropUser() throws SQLException {
-        Connection mConn = mock(Connection.class);
-        doAnswer(inv -> {inv.getArgument(0, CheckedConsumer.class).run(mConn); return null;}).when(mDsMgr).query(any(CheckedConsumer.class));
-
-        doReturn("ADMIN_SCHEMA").when(mDsMgr).getAdminSchemaName();
-
-        register.remove("12345");
-
-        InOrder order = inOrder(mDialect, mConn);
-        order.verify(mDialect, times(1)).reassignOwned(mConn, "TENANT_12345", "ADMIN_SCHEMA");
-        order.verify(mDialect, times(1)).dropOwned(mConn, "TENANT_12345");
-        order.verify(mDialect, times(1)).dropUser(mConn, "TENANT_12345");
-
-        order.verify(mConn, times(1)).commit();
     }
 }

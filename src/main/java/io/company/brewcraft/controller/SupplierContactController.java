@@ -3,12 +3,12 @@ package io.company.brewcraft.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,7 +36,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/suppliers")
 public class SupplierContactController extends BaseController {
-
     private SupplierContactService supplierContactService;
 
     private SupplierContactMapper supplierContactMapper = SupplierContactMapper.INSTANCE;
@@ -46,7 +45,7 @@ public class SupplierContactController extends BaseController {
         this.supplierContactService = supplierContactService;
     }
 
-    @GetMapping("/contacts")
+    @GetMapping(value = "/contacts", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public GetSupplierContactsDto getContacts(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "supplier_ids") Set<Long> supplierIds,
@@ -57,25 +56,24 @@ public class SupplierContactController extends BaseController {
     ) {
         Page<SupplierContact> supplierContacts = supplierContactService.getSupplierContacts(ids, supplierIds, page, size, sort, orderAscending);
 
-        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).collect(Collectors.toList());
+        List<SupplierContactWithSupplierDto> supplierContactDtos = supplierContacts.stream().map(supplierContact -> supplierContactMapper.toDtoWithSupplier(supplierContact)).toList();
 
         return new GetSupplierContactsDto(supplierContactDtos, supplierContacts.getTotalElements(), supplierContacts.getTotalPages());
     }
 
-    @GetMapping("/contacts/{contactId}")
+    @GetMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactWithSupplierDto getContact(@PathVariable Long contactId) {
         SupplierContact supplierContact = supplierContactService.getContact(contactId);
 
         if (supplierContact == null) {
             throw new EntityNotFoundException("SupplierContact", contactId.toString());
         } else {
-
         }
 
         return supplierContactMapper.toDtoWithSupplier(supplierContact);
     }
 
-    @PostMapping("{supplierId}/contacts")
+    @PostMapping(value = "{supplierId}/contacts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SupplierContactDto addContact(@PathVariable Long supplierId, @Valid @RequestBody AddSupplierContactDto supplierContactDo) {
         SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDo);
@@ -85,7 +83,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDto(addedContact);
     }
 
-    @PutMapping("{supplierId}/contacts/{contactId}")
+    @PutMapping(value = "{supplierId}/contacts/{contactId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactDto putContact(@PathVariable Long supplierId, @PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactDto supplierContactDto) {
         SupplierContact supplierContact = supplierContactMapper.fromDto(supplierContactDto);
 
@@ -94,7 +92,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDto(putContact);
     }
 
-    @PatchMapping("/contacts/{contactId}")
+    @PatchMapping(value = "/contacts/{contactId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public SupplierContactWithSupplierDto patchContact(@PathVariable Long contactId, @Valid @RequestBody UpdateSupplierContactWithSupplierDto supplierContactDto) {
         SupplierContact supplierContact  = supplierContactMapper.fromDto(supplierContactDto);
 
@@ -103,7 +101,7 @@ public class SupplierContactController extends BaseController {
         return supplierContactMapper.toDtoWithSupplier(patchedContact);
     }
 
-    @DeleteMapping("/contacts/{contactId}")
+    @DeleteMapping(value = "/contacts/{contactId}", consumes = MediaType.ALL_VALUE)
     public void deleteContact(@PathVariable Long contactId) {
         supplierContactService.deleteContact(contactId);
     }

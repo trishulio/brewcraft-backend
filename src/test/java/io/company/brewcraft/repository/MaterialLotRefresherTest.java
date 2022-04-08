@@ -15,7 +15,6 @@ import io.company.brewcraft.repository.StorageRefresher;
 import io.company.brewcraft.service.MaterialLotAccessor;
 
 public class MaterialLotRefresherTest {
-
     private MaterialLotRefresher materialLotRefresher;
 
     private InvoiceItemRefresher mItemRefresher;

@@ -21,7 +21,6 @@ import io.company.brewcraft.repository.EquipmentRepositoryGetAllEquipmentSpecifi
 
 @SuppressWarnings("unchecked")
 public class EquipmentRepositoryGetAllEquipmentSpecificationTest {
-
     private EquipmentRepositoryGetAllEquipmentSpecification specification;
 
     @Test

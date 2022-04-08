@@ -1,12 +1,14 @@
 package io.company.brewcraft.dto.user;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import io.company.brewcraft.dto.BaseDto;
+import io.company.brewcraft.dto.IaasObjectStoreFileDto;
+import io.company.brewcraft.model.DecoratedIaasObjectStoreFileAccessor;
 
-public class UserDto extends BaseDto {
-
+public class UserDto extends BaseDto implements DecoratedIaasObjectStoreFileAccessor {
     private Long id;
 
     private String userName;
@@ -21,7 +23,9 @@ public class UserDto extends BaseDto {
 
     private String phoneNumber;
 
-    private String imageUrl;
+    private URI imageSrc;
+
+    private IaasObjectStoreFileDto objectStoreFile;
 
     private UserStatusDto status;
 
@@ -43,7 +47,7 @@ public class UserDto extends BaseDto {
         setId(id);
     }
 
-    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, String imageUrl, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public UserDto(Long id, String userName, String displayName, String firstName, String lastName, String email, String phoneNumber, URI imageSrc, IaasObjectStoreFileDto objectStoreFile, UserStatusDto status, UserSalutationDto salutation, List<UserRoleDto> roles, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setUserName(userName);
         setDisplayName(displayName);
@@ -51,7 +55,8 @@ public class UserDto extends BaseDto {
         setLastName(lastName);
         setEmail(email);
         setPhoneNumber(phoneNumber);
-        setImageUrl(imageUrl);
+        setImageSrc(imageSrc);
+        setObjectStoreFile(objectStoreFile);
         setStatus(status);
         setSalutation(salutation);
         setRoles(roles);
@@ -141,12 +146,22 @@ public class UserDto extends BaseDto {
         this.roles = roles;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    @Override
+    public URI getImageSrc() {
+        return this.imageSrc;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageSrc(URI imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public IaasObjectStoreFileDto getObjectStoreFile() {
+        return this.objectStoreFile;
+    }
+
+    @Override
+    public void setObjectStoreFile(IaasObjectStoreFileDto objectStoreFile) {
+        this.objectStoreFile = objectStoreFile;
     }
 
     public LocalDateTime getCreatedAt() {

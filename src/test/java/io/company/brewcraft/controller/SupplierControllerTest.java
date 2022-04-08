@@ -1,9 +1,11 @@
 package io.company.brewcraft.controller;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,11 +25,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import io.company.brewcraft.model.BaseIaasIdpTenant;
+import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.SupplierAddress;
 import io.company.brewcraft.model.SupplierContact;
-import io.company.brewcraft.security.session.ContextHolder;
+import io.company.brewcraft.model.UpdateIaasIdpTenant;
+import io.company.brewcraft.security.session.ThreadLocalContextHolder;
+import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.SupplierService;
+import io.company.brewcraft.service.impl.TenantService;
 import io.company.brewcraft.util.UtilityProvider;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
@@ -35,12 +42,17 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 public class SupplierControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ContextHolder contextHolderMock;
+    private ThreadLocalContextHolder contextHolderMock;
+
+    @MockBean
+    private IaasRepository<String, IaasIdpTenant, BaseIaasIdpTenant, UpdateIaasIdpTenant> iaasRepo;
+
+    @MockBean
+    private TenantService tenantMgmtServiceMock;
 
     @MockBean
     public UtilityProvider utilityProvider;

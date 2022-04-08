@@ -19,7 +19,6 @@ import io.company.brewcraft.repository.ColumnSpecAccumulator;
 import io.company.brewcraft.service.CriteriaSpec;
 
 public class ColumnSpecAccumulatorTest {
-
     private ColumnSpecAccumulator accumulator;
 
     private Root<?> mRoot = mock(Root.class);

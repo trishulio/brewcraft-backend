@@ -3,6 +3,7 @@ package io.company.brewcraft.service.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import io.company.brewcraft.model.user.UserStatus;
 import io.company.brewcraft.service.mapper.user.UserMapper;
 
 public class UserMapperTest {
-
     private UserMapper mapper;
 
     @BeforeEach
@@ -31,7 +31,19 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsEntity_WhenAddDtoIsNotNull() {
+    public void testFromDto_ReturnsNull_WhenIdIsNull() {
+        assertNull(mapper.fromDto(null));
+    }
+
+    @Test
+    public void testFromDto_ReturnsPojo_WhenIdIsNotNull() {
+        User expected = new User(1L);
+
+        assertEquals(expected, mapper.fromDto(1L));
+    }
+
+    @Test
+    public void testFromAddDto_ReturnsEntity_WhenAddDtoIsNotNull() {
         AddUserDto dto =  new AddUserDto(
             "userName",
             "displayName",
@@ -41,11 +53,11 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageUrl",
+            URI.create("imageSrc"),
             List.of(10L)
         );
 
-        User user = mapper.fromDto(dto);
+        User user = mapper.fromAddDto(dto);
 
         User expected = new User(
             null,
@@ -55,7 +67,7 @@ public class UserMapperTest {
             "lastName",
             "email",
             "phoneNumber",
-            "imageUrl",
+            URI.create("imageSrc"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),
@@ -68,13 +80,14 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenAddDtoIsNull() {
-        assertNull(mapper.fromDto((AddUserDto) null));
+    public void testFromAddDto_ReturnsNull_WhenAddDtoIsNull() {
+        assertNull(mapper.fromAddDto((AddUserDto) null));
     }
 
     @Test
-    public void testFromDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
+    public void testFromUpdateDto_ReturnsEntity_WhenUpdateUserDtoIsNotNull() {
         UpdateUserDto dto =  new UpdateUserDto(
+            1L,
             "userName",
             "displayName",
             "firstName",
@@ -82,22 +95,22 @@ public class UserMapperTest {
             1L,
             2L,
             "phoneNumber",
-            "imageUrl",
+            URI.create("imageSrc"),
             List.of(10L),
             1
         );
 
-        User user = mapper.fromDto(dto);
+        User user = mapper.fromUpdateDto(dto);
 
         User expected = new User(
-            null,
+            1L,
             "userName",
             "displayName",
             "firstName",
             "lastName",
             null,
             "phoneNumber",
-            "imageUrl",
+            URI.create("imageSrc"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(10L)),
@@ -110,8 +123,8 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testFromDto_ReturnsNull_WhenUpdateUserDtoIsNull() {
-        assertNull(mapper.fromDto((UpdateUserDto) null));
+    public void testFromUpdateDto_ReturnsNull_WhenUpdateUserDtoIsNull() {
+        assertNull(mapper.fromUpdateDto((UpdateUserDto) null));
     }
 
     @Test
@@ -124,7 +137,7 @@ public class UserMapperTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
             new UserStatus(1L),
             new UserSalutation(2L),
             List.of(new UserRole(3L)),
@@ -143,7 +156,8 @@ public class UserMapperTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            "IMAGE_URL",
+            URI.create("IMAGE_URL"),
+            null,
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
             List.of(new UserRoleDto(3L)),

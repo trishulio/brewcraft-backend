@@ -12,7 +12,6 @@ import io.company.brewcraft.model.BrewStage;
 
 @Mapper(uses = { BrewMapper.class, BrewStageStatusMapper.class, BrewTaskMapper.class })
 public interface BrewStageMapper {
-
     BrewStageMapper INSTANCE = Mappers.getMapper(BrewStageMapper.class);
 
     BrewStage fromDto(Long id);

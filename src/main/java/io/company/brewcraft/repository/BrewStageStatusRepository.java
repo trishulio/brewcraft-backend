@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import io.company.brewcraft.model.BrewStageStatus;
 
 public interface BrewStageStatusRepository extends JpaRepository<BrewStageStatus, Long>, JpaSpecificationExecutor<BrewStageStatus> {
-
     @Query("select s from BREW_STAGE_STATUS s where s.name = :name")
     Optional<BrewStageStatus> findByName(@Param("name") String name);
 

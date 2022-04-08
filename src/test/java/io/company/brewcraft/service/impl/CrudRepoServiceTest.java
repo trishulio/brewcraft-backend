@@ -169,15 +169,15 @@ public class CrudRepoServiceTest {
     public void testDeleteByIds_DelegatesToRepositoryAndReturnsDeleteCount() {
         doReturn(99).when(this.mRepo).deleteByIds(Set.of(1L, 2L));
 
-        assertEquals(99, this.service.delete(Set.of(1L, 2L)));
+        assertEquals(99L, this.service.delete(Set.of(1L, 2L)));
     }
 
     @Test
     public void testDelete_ReturnsCountFromRepoDelete() {
         doReturn(1).when(mRepo).deleteOneById(1L);
 
-        int count = this.service.delete(1L);
+        long count = this.service.delete(1L);
 
-        assertEquals(1, count);
+        assertEquals(1L, count);
     }
 }

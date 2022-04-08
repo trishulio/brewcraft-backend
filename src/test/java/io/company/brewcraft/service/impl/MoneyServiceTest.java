@@ -15,7 +15,6 @@ import io.company.brewcraft.service.MoneyService;
 import io.company.brewcraft.service.MoneySupplier;
 
 public class MoneyServiceTest {
-
     private MoneyService service;
 
     @BeforeEach

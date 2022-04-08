@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -74,7 +75,7 @@ public class InvoiceController extends BaseController {
         this(new CrudControllerService<>(filter, InvoiceMapper.INSTANCE, invoiceService, "Invoice"), invoiceService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<InvoiceDto> getAll(
         @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
@@ -130,30 +131,30 @@ public class InvoiceController extends BaseController {
         return this.controller.getAll(invoices, attributes);
     }
 
-    @GetMapping("/{invoiceId}")
+    @GetMapping(value = "/{invoiceId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public InvoiceDto getInvoice(@PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(invoiceId, attributes);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
+    public long deleteInvoices(@RequestParam("ids") Set<Long> invoiceIds) {
         return this.controller.delete(invoiceIds);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<InvoiceDto> addInvoice(@Valid @NotNull @RequestBody List<AddInvoiceDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<InvoiceDto> updateInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<InvoiceDto> patchInvoice(@Valid @NotNull @RequestBody List<UpdateInvoiceDto> updateDtos) {
         return this.controller.patch(updateDtos);

@@ -14,7 +14,6 @@ import io.company.brewcraft.dto.UpdateCategoryDto;
 import io.company.brewcraft.model.ProductCategory;
 
 public class ProductCategoryMapperTest {
-
     private ProductCategoryMapper productCategoryMapper;
 
     @BeforeEach

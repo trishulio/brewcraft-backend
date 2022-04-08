@@ -25,7 +25,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class SkuMapperTest {
-
     private SkuMapper skuMapper;
 
     @BeforeEach
@@ -35,7 +34,6 @@ public class SkuMapperTest {
 
     @Test
     public void testFromAddDto_ReturnsEntity() {
-
         AddSkuDto dto = new AddSkuDto("1101094", "testName", "testDescription", 2L, List.of(new AddSkuMaterialDto(3L)), new QuantityDto("hl", BigDecimal.valueOf(100)), true);
 
         Sku sku = skuMapper.fromDto(dto);

@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.company.brewcraft.security.store.KvStore;
 
 public class InMemoryKvStore<K, V> implements KvStore<K, V> {
-
     private Map<K, V> data;
 
     public InMemoryKvStore() {

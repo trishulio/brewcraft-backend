@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public class UpdateMixtureDto extends BaseDto {
-
     private Set<Long> parentMixtureIds;
 
     private QuantityDto quantity;
@@ -18,7 +17,6 @@ public class UpdateMixtureDto extends BaseDto {
     private Integer version;
 
     public UpdateMixtureDto() {
-
     }
 
     public UpdateMixtureDto(Set<Long> parentMixtureIds, QuantityDto quantity, Long equipmentId, Long brewStageId,

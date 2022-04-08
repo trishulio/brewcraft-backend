@@ -6,7 +6,6 @@ import io.company.brewcraft.model.EquipmentStatus;
 import io.company.brewcraft.model.EquipmentType;
 
 public class UpdateEquipmentDto extends BaseDto {
-
     @NullOrNotBlank()
     private String name;
 

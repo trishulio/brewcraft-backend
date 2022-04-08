@@ -19,7 +19,6 @@ import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
 public class ProductCategoryServiceImpl extends BaseService implements ProductCategoryService {
-
     private ProductCategoryRepository productCategoryRepository;
 
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
@@ -29,7 +28,6 @@ public class ProductCategoryServiceImpl extends BaseService implements ProductCa
     @Override
     public Page<ProductCategory> getCategories(Set<Long> ids, Set<String> names, Set<Long> parentCategoryIds, Set<String> parentNames,
             int page, int size, SortedSet<String> sort, boolean orderAscending) {
-
         Specification<ProductCategory> spec = WhereClauseBuilder.builder()
                 .in(ProductCategory.FIELD_ID, ids)
                 .in(ProductCategory.FIELD_NAME, names)

@@ -19,7 +19,6 @@ import io.company.brewcraft.repository.InvoiceStatusRefresher;
 import io.company.brewcraft.repository.PurchaseOrderRefresher;
 
 public class InvoiceRefresherTest {
-
     private InvoiceRefresher invoiceRefresher;
 
     private AccessorRefresher<Long, InvoiceAccessor, Invoice> mRefresher;

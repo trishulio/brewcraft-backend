@@ -44,9 +44,8 @@ import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/procurements", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/procurements")
 public class ProcurementController extends BaseController {
-
     private ProcurementService service;
 
     private CrudControllerService<
@@ -79,7 +78,7 @@ public class ProcurementController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping(value = "/", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<ProcurementDto> getAll(
         // shipment filters
         @RequestParam(required = false, name = "shipment_ids") Set<Long> shipmentIds,
@@ -159,33 +158,33 @@ public class ProcurementController extends BaseController {
         return this.controller.getAll(procurements, attributes);
     }
 
-    @GetMapping("/{shipmentId}/{invoiceId}")
+    @GetMapping(value = "/{shipmentId}/{invoiceId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ProcurementDto get(@PathVariable(required = true, name = "shipmentId") Long shipmentId, @PathVariable(required = true, name = "invoiceId") Long invoiceId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         ProcurementId id = new ProcurementId(shipmentId, invoiceId);
         return this.controller.get(id, attributes);
     }
 
-    @PostMapping("/")
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<ProcurementDto> add(@Valid @RequestBody @NotNull List<AddProcurementDto> dtos) {
         return this.controller.add(dtos);
     }
 
-    @PutMapping("/")
+    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<ProcurementDto> put(@Valid @RequestBody @NotNull List<UpdateProcurementDto> dtos) {
         return this.controller.put(dtos);
     }
 
-    @PatchMapping("/")
+    @PatchMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<ProcurementDto> patch(@Valid @RequestBody @NotNull List<UpdateProcurementDto> dtos) {
         return this.controller.patch(dtos);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping(value = "/", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
+    public long delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
         Set<ProcurementId> pIds = ids.stream().map(id -> ProcurementIdMapper.INSTANCE.fromDto(id)).collect(Collectors.toSet());
         return this.controller.delete(pIds);
     }

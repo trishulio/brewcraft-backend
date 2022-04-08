@@ -6,7 +6,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class AddFacilityDto extends BaseDto {
-
     @NotBlank
     private String name;
 

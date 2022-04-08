@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.SupplierContact;
 
 public interface SupplierContactService {
-
     public Page<SupplierContact> getSupplierContacts(Set<Long> ids, Set<Long> supplierIds, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     public SupplierContact getContact(Long contactId);

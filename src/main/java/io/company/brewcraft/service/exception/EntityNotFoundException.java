@@ -3,7 +3,6 @@ package io.company.brewcraft.service.exception;
 import java.text.MessageFormat;
 
 public class EntityNotFoundException extends RuntimeException {
-
     private static final long serialVersionUID = 1L;
 
     public EntityNotFoundException(String msg) {

@@ -11,7 +11,6 @@ import io.company.brewcraft.model.FinishedGoodLot;
 
 @Mapper(uses = { SkuMapper.class, FinishedGoodLotMaterialPortionMapper.class, FinishedGoodLotMixturePortionMapper.class, FinishedGoodLotFinishedGoodLotPortionMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class})
 public interface FinishedGoodLotMapper {
-
     FinishedGoodLotMapper INSTANCE = Mappers.getMapper(FinishedGoodLotMapper.class);
 
     FinishedGoodLot fromDto(Long id);

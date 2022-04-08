@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class AddSupplierDto extends BaseDto {
-
     @NotBlank
     private String name;
 

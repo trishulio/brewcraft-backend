@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity(name = "PRODUCT_MEASURE_VALUE")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class ProductMeasureValue extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_measure_value_generator")
     @SequenceGenerator(name = "product_measure_value_generator", sequenceName = "product_measure_value_sequence", allocationSize = 1)

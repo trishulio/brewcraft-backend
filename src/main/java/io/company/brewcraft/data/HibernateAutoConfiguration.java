@@ -3,11 +3,12 @@ package io.company.brewcraft.data;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.cfg.Environment;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -20,6 +21,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.security.auth.AuthConfiguration;
 import io.company.brewcraft.security.session.ContextHolder;
 
@@ -27,18 +29,17 @@ import io.company.brewcraft.security.session.ContextHolder;
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, AuthConfiguration.class})
 @EnableTransactionManagement
 public class HibernateAutoConfiguration {
-
     @Bean
     @ConditionalOnMissingBean(MultiTenantConnectionProvider.class)
-    public MultiTenantConnectionProvider multiTenantConnectionProvider(TenantDataSourceManager tenantDataSourceManager, @Value("${app.config.data.admin.name}") String adminIdentifier) {
-        MultiTenantConnectionProvider multiTenantConnectionProvider = new TenantConnectionProviderPool(tenantDataSourceManager, adminIdentifier);
+    public MultiTenantConnectionProvider multiTenantConnectionProvider(TenantDataSourceManager tenantDataSourceManager, DataSource adminDataSource) {
+        MultiTenantConnectionProvider multiTenantConnectionProvider = new TenantConnectionProviderPool(tenantDataSourceManager, adminDataSource);
         return multiTenantConnectionProvider;
     }
 
     @Bean
     @ConditionalOnMissingBean(CurrentTenantIdentifierResolver.class)
-    public CurrentTenantIdentifierResolver currentTenantIdentifierResolver(ContextHolder contextHolder) {
-        CurrentTenantIdentifierResolver currentTenantIdentifierResolver = new TenantIdentifierResolver(contextHolder);
+    public CurrentTenantIdentifierResolver currentTenantIdentifierResolver(ContextHolder contextHolder, Tenant adminTenant) {
+        CurrentTenantIdentifierResolver currentTenantIdentifierResolver = new TenantIdentifierResolver(contextHolder, adminTenant);
         return currentTenantIdentifierResolver;
     }
 
@@ -50,9 +51,9 @@ public class HibernateAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(LocalContainerEntityManagerFactoryBean.class)
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaVendorAdapter jpaVendorAdapter, TenantDataSourceManager tenantDataSourceManager, MultiTenantConnectionProvider multiTenantConnectionProvider, CurrentTenantIdentifierResolver currentTenantIdentifierResolver) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaVendorAdapter jpaVendorAdapter, DataSourceManager dataSourceManager, MultiTenantConnectionProvider multiTenantConnectionProvider, CurrentTenantIdentifierResolver currentTenantIdentifierResolver) {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(tenantDataSourceManager.getAdminDataSource());
+        entityManagerFactory.setDataSource(dataSourceManager.getAdminDataSource());
         entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
         entityManagerFactory.setPackagesToScan("io.company.brewcraft.model");
 

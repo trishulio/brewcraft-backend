@@ -19,7 +19,6 @@ import io.company.brewcraft.service.CriteriaSpec;
 import io.company.brewcraft.service.InSpec;
 
 public class InSpecTest {
-
     private CriteriaSpec<Boolean> spec;
 
     private CriteriaSpec<String> mDelegate;

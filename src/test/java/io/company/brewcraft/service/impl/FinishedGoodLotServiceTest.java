@@ -35,7 +35,6 @@ import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class FinishedGoodLotServiceTest {
-
    private FinishedGoodLotService service;
 
    private FinishedGoodLotMaterialPortionService mFgMaterialPortionService;
@@ -129,10 +128,10 @@ public class FinishedGoodLotServiceTest {
 
    @Test
    public void testDelete_CallsRepoServiceDeleteBulk_WhenFinishedGoodExists() {
-       doReturn(123).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
+       doReturn(123L).when(this.mRepoService).delete(Set.of(1L, 2L, 3L));
 
-       final int count = this.service.delete(Set.of(1L, 2L, 3L));
-       assertEquals(123, count);
+       final long count = this.service.delete(Set.of(1L, 2L, 3L));
+       assertEquals(123L, count);
    }
 
    @Test

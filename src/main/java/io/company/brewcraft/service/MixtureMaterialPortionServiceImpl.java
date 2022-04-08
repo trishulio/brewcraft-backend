@@ -71,7 +71,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = materialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        List<Long> lotIds = materialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
         Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
 
         materialPortions.forEach(materialPortion -> {
@@ -103,7 +103,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = putMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        List<Long> lotIds = putMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
         Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
 
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(putMaterialPortions);
@@ -149,7 +149,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = patchMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).collect(Collectors.toList());
+        List<Long> lotIds = patchMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
         Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
 
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(patchMaterialPortions);
@@ -197,7 +197,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
     }
 
     @Override
-    public int deleteMaterialPortions(Set<Long> materialPortionIds) {
+    public long deleteMaterialPortions(Set<Long> materialPortionIds) {
         return this.repoService.delete(materialPortionIds);
     }
 

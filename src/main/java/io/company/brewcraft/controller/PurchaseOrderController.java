@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,7 +37,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 @RestController
 @RequestMapping(path = "/api/v1/purchases/orders")
 public class PurchaseOrderController extends BaseController {
-
     private CrudControllerService<
         Long,
         PurchaseOrder,
@@ -68,7 +68,7 @@ public class PurchaseOrderController extends BaseController {
         this(new CrudControllerService<>(filter, PurchaseOrderMapper.INSTANCE, purchaseOrderService, "PurchaseOrder"), purchaseOrderService);
     }
 
-    @GetMapping
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<PurchaseOrderDto> getAllPurchaseOrders(
         @RequestParam(name = "ids", required = false) Set<Long> ids,
         @RequestParam(name = "exclude_ids", required = false) Set<Long> excludeIds,
@@ -85,30 +85,30 @@ public class PurchaseOrderController extends BaseController {
         return this.controller.getAll(orders, attributes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PurchaseOrderDto getPurchaseOrder(@PathVariable("id") Long id, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
         return this.controller.get(id, attributes);
     }
 
-    @PostMapping
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public List<PurchaseOrderDto> postPurchaseOrder(@Valid @NotNull @RequestBody List<AddPurchaseOrderDto> addDtos) {
         return this.controller.add(addDtos);
     }
 
-    @PutMapping
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PurchaseOrderDto> putPurchaseOrder(@Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
         return this.controller.put(updateDtos);
     }
 
-    @PatchMapping
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PurchaseOrderDto> patchPurchaseOrder(@Valid @NotNull @RequestBody List<UpdatePurchaseOrderDto> updateDtos) {
         return this.controller.patch(updateDtos);
     }
 
-    @DeleteMapping
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public int deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
+    public long deletePurchaseOrder(@RequestParam("ids") Set<Long> ids) {
         return this.controller.delete(ids);
     }
 }

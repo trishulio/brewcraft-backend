@@ -23,7 +23,6 @@ import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class MixtureRecordingServiceImplTest {
-
     private MixtureRecordingService mixtureRecordingService;
 
     private RepoService<Long, MixtureRecording, MixtureRecordingAccessor> repoService;

@@ -1,6 +1,7 @@
 package io.company.brewcraft.configuration;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,6 +39,8 @@ import io.company.brewcraft.model.SkuAccessor;
 import io.company.brewcraft.model.SkuMaterial;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.Tenant;
+import io.company.brewcraft.model.TenantAccessor;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.model.procurement.ProcurementAccessor;
 import io.company.brewcraft.model.procurement.ProcurementId;
@@ -109,6 +112,8 @@ import io.company.brewcraft.repository.StorageRefresher;
 import io.company.brewcraft.repository.StorageRepository;
 import io.company.brewcraft.repository.SupplierRefresher;
 import io.company.brewcraft.repository.SupplierRepository;
+import io.company.brewcraft.repository.TenantRefresher;
+import io.company.brewcraft.repository.TenantRepository;
 import io.company.brewcraft.repository.user.UserRepository;
 import io.company.brewcraft.repository.user.UserRoleRepository;
 import io.company.brewcraft.repository.user.UserSalutationRepository;
@@ -148,7 +153,6 @@ import io.company.brewcraft.service.SupplierAccessor;
 
 @Configuration
 public class RepositoryConfiguration {
-
     @Bean
     @PersistenceContext
     public QueryResolver queryResolver(EntityManager em) {
@@ -493,9 +497,19 @@ public class RepositoryConfiguration {
     @Bean
     public AccessorRefresher<Long, MixtureRecordingAccessor, MixtureRecording> mixtureRecordingAccessorRefresher(MixtureRecordingRepository repo) {
         return new AccessorRefresher<>(
-                MixtureRecording.class,
+            MixtureRecording.class,
             accessor -> accessor.getMixtureRecording(),
             (accessor, mixtureRecording) -> accessor.setMixtureRecording(mixtureRecording),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<UUID, TenantAccessor, Tenant> tAccessorRefresher(TenantRepository repo) {
+        return new AccessorRefresher<>(
+            Tenant.class,
+            accessor -> accessor.getTenant(),
+            (accessor, tenant) -> accessor.setTenant(tenant),
             ids -> repo.findAllById(ids)
         );
     }
@@ -658,5 +672,10 @@ public class RepositoryConfiguration {
     @Bean
     public Refresher<UserStatus, UserStatusAccessor> userStatusRefresher(AccessorRefresher<Long, UserStatusAccessor, UserStatus> userStatusAccessorRefresher) {
         return new UserStatusRefresher(userStatusAccessorRefresher);
+    }
+
+    @Bean
+    public Refresher<Tenant, TenantAccessor> tenantRefresher(AccessorRefresher<UUID, TenantAccessor, Tenant> tenantAccessRefresher) {
+        return new TenantRefresher(tenantAccessRefresher);
     }
 }

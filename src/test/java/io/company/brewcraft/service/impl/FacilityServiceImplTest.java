@@ -30,7 +30,6 @@ import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 public class FacilityServiceImplTest {
-
     private FacilityService facilityService;
 
     private FacilityRepository facilityRepositoryMock;

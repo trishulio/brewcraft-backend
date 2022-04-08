@@ -27,7 +27,6 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 
 @SuppressWarnings("unchecked")
 public class MaterialControllerTest {
-
    private MaterialController materialController;
 
    private MaterialService materialService;

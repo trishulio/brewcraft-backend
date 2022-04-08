@@ -42,7 +42,6 @@ import io.company.brewcraft.util.SupportedUnits;
 @Entity(name = "finished_good_lot")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot<FinishedGoodLotMixturePortion, FinishedGoodLotMaterialPortion>, CrudEntity<Long>, Audited {
-
     public static final String FIELD_ID = "id";
     public static final String FIELD_SKU = "sku";
     public static final String FIELD_MIXTURE_PORTIONS = "mixturePortions";
@@ -315,7 +314,6 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
         return removed;
     }
 
-
     @Override
     public Quantity<?> getQuantity() {
         Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.quantity);
@@ -374,5 +372,4 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }

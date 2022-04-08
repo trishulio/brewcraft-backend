@@ -97,7 +97,7 @@ public class MixtureRecordingServiceImpl extends BaseService implements MixtureR
     }
 
     @Override
-    public int deleteMixtureRecordings(Set<Long> mixtureRecordingIds) {
+    public long deleteMixtureRecordings(Set<Long> mixtureRecordingIds) {
         return this.repoService.delete(mixtureRecordingIds);
     }
 

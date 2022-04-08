@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 @SuppressWarnings("rawtypes")
 public class UnitSerializer extends JsonSerializer<Unit> {
-
     @Override
     public void serialize(Unit value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (value == null) {

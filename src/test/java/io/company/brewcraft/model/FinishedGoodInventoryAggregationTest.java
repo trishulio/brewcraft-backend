@@ -14,7 +14,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class FinishedGoodInventoryAggregationTest {
-
     private FinishedGoodInventoryAggregation finishedGoodInventory;
 
     @BeforeEach

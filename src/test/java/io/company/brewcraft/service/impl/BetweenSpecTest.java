@@ -18,7 +18,6 @@ import io.company.brewcraft.service.BetweenSpec;
 import io.company.brewcraft.service.CriteriaSpec;
 
 public class BetweenSpecTest {
-
     class MockComparable extends BaseModel implements Comparable<MockComparable> {
         private int value;
 

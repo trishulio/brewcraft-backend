@@ -118,12 +118,12 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
     }
 
     @Override
-    public int delete(Set<Long> ids) {
+    public long delete(Set<Long> ids) {
         return this.repoService.delete(ids);
     }
 
     @Override
-    public int delete(Long id) {
+    public long delete(Long id) {
         return this.repoService.delete(id);
     }
 

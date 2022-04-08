@@ -22,7 +22,7 @@ import io.company.brewcraft.service.mapper.BrewTaskMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/tasks")
 public class BrewTaskController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(BrewTaskController.class);
 
@@ -35,7 +35,7 @@ public class BrewTaskController extends BaseController {
         this.brewTaskService = brewTaskService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<BrewTaskDto> getBrewTasks(
             @RequestParam(required = false) Set<Long> ids,
             @RequestParam(required = false) Set<String> names,
@@ -43,12 +43,11 @@ public class BrewTaskController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<BrewTask> brewTaskPage = brewTaskService.getTasks(ids, names, page, size, sort, orderAscending);
 
         List<BrewTaskDto> brewTaskList = brewTaskPage.stream()
                                                      .map(brewTask -> brewTaskMapper.toDto(brewTask))
-                                                     .collect(Collectors.toList());
+                                                     .toList();
 
         PageDto<BrewTaskDto> dto = new PageDto<>(brewTaskList, brewTaskPage.getTotalPages(), brewTaskPage.getTotalElements());
 

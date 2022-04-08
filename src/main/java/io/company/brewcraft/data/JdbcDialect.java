@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface JdbcDialect {
-
     boolean createSchemaIfNotExists(Connection conn, String schemaName) throws SQLException;
 
     void dropSchema(Connection conn, String schemaName) throws SQLException;
@@ -13,9 +12,9 @@ public interface JdbcDialect {
 
     void dropUser(Connection conn, String username) throws SQLException;
 
-    void dropOwned(Connection conn, String owner) throws SQLException;
+    void dropOwnedBy(Connection conn, String owner) throws SQLException;
 
-    void reassignOwned(Connection conn, String owner, String assignee) throws SQLException;
+    void reassignOwnedByTo(Connection conn, String owner, String assignee) throws SQLException;
 
     void grantPrivilege(Connection conn, String privilege, String resourceType, String resourceName, String username) throws SQLException;
 

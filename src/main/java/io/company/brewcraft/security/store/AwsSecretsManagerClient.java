@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.model.CreateSecretRequest;
+import com.amazonaws.services.secretsmanager.model.DeleteSecretRequest;
+import com.amazonaws.services.secretsmanager.model.DeleteSecretResult;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.amazonaws.services.secretsmanager.model.InvalidParameterException;
@@ -16,7 +18,6 @@ import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
 import com.amazonaws.services.secretsmanager.model.UpdateSecretRequest;
 
 public class AwsSecretsManagerClient implements SecretsManager<String, String> {
-
     private final AWSSecretsManager client;
 
     private static final Logger logger = LoggerFactory.getLogger(AwsSecretsManagerClient.class);
@@ -108,5 +109,19 @@ public class AwsSecretsManagerClient implements SecretsManager<String, String> {
             logger.error("Error updating secret with secretId: {}", secretId);
             throw new IOException(e);
         }
+    }
+
+    @Override
+    public boolean remove(String secretId) throws IOException {
+        boolean success = false;
+        try {
+            DeleteSecretRequest req = new DeleteSecretRequest().withSecretId(secretId);
+            DeleteSecretResult result = client.deleteSecret(req);
+            success = true;
+        } catch (ResourceNotFoundException e) {
+            logger.error("Error deleting secret: {}", secretId);
+        }
+
+        return success;
     }
 }

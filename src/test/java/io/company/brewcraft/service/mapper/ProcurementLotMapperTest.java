@@ -21,7 +21,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class ProcurementLotMapperTest {
-
     private ProcurementLotMapper mapper;
 
     @BeforeEach

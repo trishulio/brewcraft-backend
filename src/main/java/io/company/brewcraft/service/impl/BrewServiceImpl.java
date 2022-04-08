@@ -46,7 +46,6 @@ public class BrewServiceImpl extends BaseService implements BrewService {
     public Page<Brew> getBrews(Set<Long> ids, Set<String> batchIds, Set<String> names, Set<Long> productIds,
             Set<Long> stageTaskIds, Set<Long> excludeStageTaskIds, LocalDateTime startedAtFrom, LocalDateTime startedAtTo,
             LocalDateTime endedAtFrom, LocalDateTime endedAtTo, Set<Long> assignedToUserIds, Set<Long> ownedByUserIds, int page, int size, SortedSet<String> sort, boolean orderAscending) {
-
             Specification<Brew> spec = WhereClauseBuilder
                 .builder()
                 .in(Brew.FIELD_ID, ids)

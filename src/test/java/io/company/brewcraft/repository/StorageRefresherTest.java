@@ -13,7 +13,6 @@ import io.company.brewcraft.repository.StorageRefresher;
 import io.company.brewcraft.service.StorageAccessor;
 
 public class StorageRefresherTest {
-
     private StorageRefresher storageRefresher;
 
     private AccessorRefresher<Long, StorageAccessor, Storage> mRefresher;

@@ -21,7 +21,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class SkuMaterialServiceTest {
-
     private SkuMaterialService service;
     private UpdateService<Long, SkuMaterial, BaseSkuMaterial<?>, UpdateSkuMaterial<?>> mUpdateService;
 

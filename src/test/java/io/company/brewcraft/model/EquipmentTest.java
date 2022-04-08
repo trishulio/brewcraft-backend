@@ -19,7 +19,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class EquipmentTest {
-
     private Equipment equipment;
 
     @BeforeEach

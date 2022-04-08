@@ -16,7 +16,6 @@ import io.company.brewcraft.model.ProductCategory;
 
 @Mapper(uses = { ProductMeasureValueMapper.class, ProductCategoryMapper.class })
 public interface ProductMapper {
-
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     Product fromDto(ProductDto dto);

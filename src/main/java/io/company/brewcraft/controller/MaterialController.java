@@ -34,9 +34,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/materials", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/materials")
 public class MaterialController extends BaseController {
-
     private MaterialService materialService;
 
     private MaterialMapper materialMapper = MaterialMapper.INSTANCE;
@@ -46,7 +45,7 @@ public class MaterialController extends BaseController {
         this.materialService = materialService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MaterialDto> getMaterials(
         @RequestParam(required = false) Set<Long> ids,
         @RequestParam(required = false) Set<Long> categoryIds,
@@ -56,19 +55,18 @@ public class MaterialController extends BaseController {
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
         @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
     ) {
-
         Page<Material> materialsPage = materialService.getMaterials(ids, categoryIds, categoryNames, page, size, sort, orderAscending);
 
         List<MaterialDto> materialsList = materialsPage.stream()
                                                        .map(material -> materialMapper.toDto(material))
-                                                       .collect(Collectors.toList());
+                                                       .toList();
 
         PageDto<MaterialDto> dto = new PageDto<MaterialDto>(materialsList, materialsPage.getTotalPages(), materialsPage.getTotalElements());
 
         return dto;
     }
 
-    @GetMapping(value = "/{materialId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{materialId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MaterialDto getMaterial(@PathVariable Long materialId) {
         Material material = materialService.getMaterial(materialId);
 
@@ -77,7 +75,7 @@ public class MaterialController extends BaseController {
         return materialMapper.toDto(material);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MaterialDto addMaterial(@Valid @RequestBody AddMaterialDto addMaterialDto) {
         Material material = materialMapper.fromDto(addMaterialDto);
@@ -87,7 +85,7 @@ public class MaterialController extends BaseController {
         return materialMapper.toDto(addedMaterial);
     }
 
-    @PutMapping("/{materialId}")
+    @PutMapping(value = "/{materialId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MaterialDto putMaterial(@Valid @RequestBody UpdateMaterialDto updateMaterialDto, @PathVariable Long materialId) {
         Material material = materialMapper.fromDto(updateMaterialDto);
 
@@ -96,7 +94,7 @@ public class MaterialController extends BaseController {
         return materialMapper.toDto(putMaterial);
     }
 
-    @PatchMapping("/{materialId}")
+    @PatchMapping(value = "/{materialId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MaterialDto patchMaterial(@Valid @RequestBody UpdateMaterialDto updateMaterialDto, @PathVariable Long materialId) {
         Material material = materialMapper.fromDto(updateMaterialDto);
 

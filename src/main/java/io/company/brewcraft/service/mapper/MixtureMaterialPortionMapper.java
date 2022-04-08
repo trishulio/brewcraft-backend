@@ -12,7 +12,6 @@ import io.company.brewcraft.model.MixtureMaterialPortion;
 
 @Mapper(uses = { MaterialLotMapper.class, QuantityMapper.class, QuantityUnitMapper.class, MixtureMapper.class, MoneyMapper.class})
 public interface MixtureMaterialPortionMapper {
-
     MixtureMaterialPortionMapper INSTANCE = Mappers.getMapper(MixtureMaterialPortionMapper.class);
 
     MixtureMaterialPortionDto toDto(MixtureMaterialPortion materialPortion);

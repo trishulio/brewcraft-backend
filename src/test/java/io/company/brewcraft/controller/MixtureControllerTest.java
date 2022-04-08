@@ -35,7 +35,6 @@ import tec.uom.se.quantity.Quantities;
 
 @SuppressWarnings("unchecked")
 public class MixtureControllerTest {
-
    private MixtureController mixtureController;
 
    private MixtureService mixtureService;

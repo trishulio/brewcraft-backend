@@ -1,119 +1,51 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.user.AddUserDto;
 import io.company.brewcraft.dto.user.UpdateUserDto;
 import io.company.brewcraft.dto.user.UserDto;
-import io.company.brewcraft.dto.user.UserRoleDto;
-import io.company.brewcraft.dto.user.UserSalutationDto;
-import io.company.brewcraft.dto.user.UserStatusDto;
+import io.company.brewcraft.model.user.BaseUser;
 import io.company.brewcraft.model.user.UpdateUser;
 import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.model.user.UserRole;
-import io.company.brewcraft.model.user.UserSalutation;
-import io.company.brewcraft.model.user.UserStatus;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
-import io.company.brewcraft.service.user.UserService;
-import io.company.brewcraft.util.controller.AttributeFilter;
+import io.company.brewcraft.service.impl.user.UserService;
 
 public class UserControllerTest {
+    private UserController controller;
+
+    private CrudControllerService<
+                Long,
+                User,
+                BaseUser,
+                UpdateUser,
+                UserDto,
+                AddUserDto,
+                UpdateUserDto
+            > mCrudController;
 
     private UserService mService;
 
-    private UserController controller;
-
     @BeforeEach
     public void init() {
-        mService = mock(UserService.class);
-        controller = new UserController(mService, new AttributeFilter());
+        this.mCrudController = mock(CrudControllerService.class);
+        this.mService = mock(UserService.class);
+        this.controller = new UserController(mCrudController, mService);
     }
 
     @Test
-    public void testGetUser_ThrowsEntityNotFoundException_WhenUserDoesNotExist() {
-        when(mService.getUser(1L)).thenReturn(null);
-
-        assertThrows(EntityNotFoundException.class, () -> controller.getUser(1L));
-    }
-
-    @Test
-    public void testGetUser_ReturnsUserDto_WhenUserExists() {
-        User user = new User(
-            1L,
-            "USER_NAME",
-            "DISPLAY_NAME",
-            "FIRST_NAME",
-            "LAST_NAME",
-            "EMAIL",
-            "PHONE_NUMBER",
-            "IMAGE_URL",
-            new UserStatus(1L),
-            new UserSalutation(2L),
-            List.of(new UserRole(3L)),
-            LocalDateTime.of(1999, 1, 1, 0, 0),
-            LocalDateTime.of(2000, 1, 1, 0, 0),
-            1
-        );
-
-        doReturn(user).when(mService).getUser(1L);
-
-        UserDto dto = controller.getUser(1L);
-
-        UserDto expected = new UserDto(
-            1L,
-            "USER_NAME",
-            "DISPLAY_NAME",
-            "FIRST_NAME",
-            "LAST_NAME",
-            "EMAIL",
-            "PHONE_NUMBER",
-            "IMAGE_URL",
-            new UserStatusDto(1L),
-            new UserSalutationDto(2L),
-            List.of(new UserRoleDto(3L)),
-            LocalDateTime.of(1999, 1, 1, 0, 0),
-            LocalDateTime.of(2000, 1, 1, 0, 0),
-            1
-        );
-
-        assertEquals(expected, dto);
-    }
-
-    @Test
-    public void testGetUsers_ReturnsUserPageDtoMatchedRequestParameters_WhenAttributeValuesProvided() {
-        Page<User> userPage = new PageImpl<>(List.of(
-            new User(
-                1L,
-                "userName",
-                "displayName",
-                "firstName",
-                "lastName",
-                "email",
-                "phoneNumber",
-                "imageUrl",
-                new UserStatus(1L),
-                new UserSalutation(2L),
-                List.of(new UserRole(3L)),
-                LocalDateTime.of(1999, 12, 12, 0, 0),
-                LocalDateTime.of(2000, 12, 12, 0, 0),
-                1
-            )
-        ));
-        doReturn(userPage).when(mService).getUsers(
+    public void testGetAllUser_ReturnsDtosFromController() {
+        doReturn(new PageImpl<>(List.of(new User(1L)))).when(mService).getUsers(
             Set.of(1L),
             Set.of(2L),
             Set.of("userName"),
@@ -128,8 +60,9 @@ public class UserControllerTest {
             new TreeSet<>(List.of("username")),
             true
         );
+        doReturn(new PageDto<>(List.of(new UserDto(1L)), 1, 1)).when(mCrudController).getAll(new PageImpl<>(List.of(new User(1L))), Set.of(""));
 
-        final PageDto<UserDto> pageDto = controller.getUsers(
+        PageDto<UserDto> page = this.controller.getAllUsers(
             Set.of(1L),
             Set.of(2L),
             Set.of("userName"),
@@ -142,201 +75,55 @@ public class UserControllerTest {
             new TreeSet<>(List.of("username")),
             true,
             1,
-            100
+            100,
+            Set.of("")
         );
 
-        PageDto<UserDto> expected = new PageDto<UserDto>(
-            List.of(new UserDto(
-                1L,
-                "userName",
-                "displayName",
-                "firstName",
-                "lastName",
-                "email",
-                "phoneNumber",
-                "imageUrl",
-                new UserStatusDto(1L),
-                new UserSalutationDto(2L),
-                List.of(new UserRoleDto(3L)),
-                LocalDateTime.of(1999, 12, 12, 0, 0),
-                LocalDateTime.of(2000, 12, 12, 0, 0),
-                1
-            )),
-            1,
-            1
-        );
-
-        assertEquals(expected, pageDto);
+        PageDto<UserDto> expected = new PageDto<>(List.of(new UserDto(1L)), 1, 1);
+        assertEquals(expected, page);
     }
 
     @Test
-    public void testGetUser_ReturnsUserDto_WhenServiceReturnUser() {
-        User user = new User(
-            1L,
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            "email",
-            "phoneNumber",
-            "imageUrl",
-            new UserStatus(1L),
-            new UserSalutation(2L),
-            List.of(new UserRole(3L)),
-            LocalDateTime.of(1999, 12, 12, 0, 0),
-            LocalDateTime.of(2000, 12, 12, 0, 0),
-            1
-        );
-        doReturn(user).when(mService).getUser(1L);
+    public void testGetUser_ReturnsDtoFromController() {
+        doReturn(new UserDto(1L)).when(mCrudController).get(1L, Set.of(""));
 
-        UserDto dto = controller.getUser(1L);
+        UserDto dto = this.controller.getUser(1L, Set.of(""));
 
-        UserDto expected = new UserDto(
-            1L,
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            "email",
-            "phoneNumber",
-            "imageUrl",
-            new UserStatusDto(1L),
-            new UserSalutationDto(2L),
-            List.of(new UserRoleDto(3L)),
-            LocalDateTime.of(1999, 12, 12, 0, 0),
-            LocalDateTime.of(2000, 12, 12, 0, 0),
-            1
-        );
+        UserDto expected = new UserDto(1L);
         assertEquals(expected, dto);
     }
 
     @Test
-    public void testGetUser_ThrowsEntityNotFoundException_WhenServiceReturnsNull() {
-        doReturn(null).when(mService).getUser(1L);
-        assertThrows(EntityNotFoundException.class, () -> controller.getUser(1L));
+    public void testDeleteUsers_ReturnsDeleteCountFromController() {
+        doReturn(1L).when(mCrudController).delete(Set.of(1L));
+
+        assertEquals(1L, this.controller.deleteUsers(Set.of(1L)));
     }
 
     @Test
-    public void testAddUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(0, User.class)).when(mService).addUser(any(User.class));
-        AddUserDto additionDto = new AddUserDto(
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            "email",
-            1L,
-            2L,
-            "phoneNumber",
-            "imageUrl",
-            List.of(10L)
-        );
+    public void testAddUsers_AddsToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new UserDto(1L))).when(mCrudController).add(List.of(new AddUserDto()));
 
-        UserDto dto = controller.addUser(additionDto);
+        List<UserDto> dtos = this.controller.addUser(List.of(new AddUserDto()));
 
-        UserDto expected = new UserDto(
-            null,
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            "email",
-            "phoneNumber",
-            "imageUrl",
-            new UserStatusDto(1L),
-            new UserSalutationDto(2L),
-            List.of(new UserRoleDto(10L)),
-            null,
-            null,
-            null
-        );
-
-        assertEquals(expected, dto);
+        assertEquals(List.of(new UserDto(1L)), dtos);
     }
 
     @Test
-    public void testPutUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).putUser(eq(1L), any(UpdateUser.class));
-        UpdateUserDto updateDto = new UpdateUserDto(
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            1L,
-            2L,
-            "phoneNumber",
-            "imageUrl",
-            List.of(10L),
-            1
-        );
+    public void testUpdateUsers_PutsToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new UserDto(1L))).when(mCrudController).put(List.of(new UpdateUserDto(1L)));
 
-        UserDto dto = controller.putUser(1L, updateDto);
+        List<UserDto> dtos = this.controller.updateUser(List.of(new UpdateUserDto(1L)));
 
-        UserDto expected = new UserDto(
-            null,
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            null,
-            "phoneNumber",
-            "imageUrl",
-            new UserStatusDto(1L),
-            new UserSalutationDto(2L),
-            List.of(new UserRoleDto(10L)),
-            null,
-            null,
-            1
-        );
-
-        assertEquals(expected, dto);
+        assertEquals(List.of(new UserDto(1L)), dtos);
     }
 
     @Test
-    public void testPatchUser_ReturnsUserDtoFromService_WhenInputArgIsNotNull() {
-        doAnswer(inv -> inv.getArgument(1, User.class)).when(mService).patchUser(eq(1L), any(UpdateUser.class));
-        UpdateUserDto updateDto = new UpdateUserDto(
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            1L,
-            2L,
-            "phoneNumber",
-            "imageUrl",
-            List.of(10L),
-            1
-        );
+    public void testPatchUsers_PatchToControllerAndReturnsListOfDtos() {
+        doReturn(List.of(new UserDto(1L))).when(mCrudController).patch(List.of(new UpdateUserDto(1L)));
 
-        UserDto dto = controller.patchUser(1L, updateDto);
+        List<UserDto> dtos = this.controller.patchUser(List.of(new UpdateUserDto(1L)));
 
-        UserDto expected = new UserDto(
-            null,
-            "userName",
-            "displayName",
-            "firstName",
-            "lastName",
-            null,
-            "phoneNumber",
-            "imageUrl",
-            new UserStatusDto(1L),
-            new UserSalutationDto(2L),
-            List.of(new UserRoleDto(10L)),
-            null,
-            null,
-            1
-        );
-
-        assertEquals(expected, dto);
-    }
-
-    @Test
-    public void testDeleteUser_DeletesUser_WhenUserIdIsProvided() {
-        ArgumentCaptor<Long> userIdCaptor = ArgumentCaptor.forClass(Long.class);
-        doNothing().when(mService).deleteUser(userIdCaptor.capture());
-
-        controller.deleteUser(1L);
-
-        assertEquals(1L, userIdCaptor.getValue());
+        assertEquals(List.of(new UserDto(1L)), dtos);
     }
 }

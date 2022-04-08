@@ -9,7 +9,6 @@ import io.company.brewcraft.security.session.ContextHolder;
 import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 
 public class AuthConfigurationTest {
-
     private AuthConfiguration config;
 
     @BeforeEach

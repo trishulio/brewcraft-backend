@@ -36,9 +36,8 @@ import io.company.brewcraft.util.controller.AttributeFilter;
 import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/brews/mixtures/portions", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/v1/brews/mixtures/portions")
 public class MixtureMaterialPortionController extends BaseController {
-
     private MixtureMaterialPortionService materialPortionService;
 
     private MixtureMaterialPortionMapper materialPortionMapper = MixtureMaterialPortionMapper.INSTANCE;
@@ -48,7 +47,7 @@ public class MixtureMaterialPortionController extends BaseController {
         this.materialPortionService = materialPortionService;
     }
 
-    @GetMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<MixtureMaterialPortionDto> getMaterialPortions(
             @RequestParam(name = "ids", required = false) Set<Long> ids,
             @RequestParam(name = "mixture_ids", required = false) Set<Long> mixtureIds,
@@ -59,19 +58,18 @@ public class MixtureMaterialPortionController extends BaseController {
             @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
             @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
             @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size) {
-
         Page<MixtureMaterialPortion> materialPortionPage = materialPortionService.getMaterialPortions(ids, mixtureIds, materialLotIds, brewStageIds, brewIds, page, size, sort, orderAscending);
 
         List<MixtureMaterialPortionDto> materialPortionList = materialPortionPage.stream()
                                                                                  .map(materialPortion -> materialPortionMapper.toDto(materialPortion))
-                                                                                 .collect(Collectors.toList());
+                                                                                 .toList();
 
         PageDto<MixtureMaterialPortionDto> dto = new PageDto<>(materialPortionList, materialPortionPage.getTotalPages(), materialPortionPage.getTotalElements());
 
         return dto;
     }
 
-    @GetMapping(value = "/{materialPortionId}", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{materialPortionId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto getMaterialPortion(@PathVariable Long materialPortionId) {
         MixtureMaterialPortion materialPortion = materialPortionService.getMaterialPortion(materialPortionId);
 
@@ -80,7 +78,7 @@ public class MixtureMaterialPortionController extends BaseController {
         return materialPortionMapper.toDto(materialPortion);
     }
 
-    @PostMapping("")
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<MixtureMaterialPortionDto> addMMaterialPortions(@Valid @RequestBody List<AddMixtureMaterialPortionDto> addMaterialPortionDtos) {
         List<BaseMixtureMaterialPortion> materialPortions = addMaterialPortionDtos.stream()
@@ -91,10 +89,10 @@ public class MixtureMaterialPortionController extends BaseController {
 
         return addedMaterialPortions.stream()
                                     .map(addedMaterialPortion -> materialPortionMapper.toDto(addedMaterialPortion))
-                                    .collect(Collectors.toList());
+                                    .toList();
     }
 
-    @PutMapping("/{materialPortionId}")
+    @PutMapping(value = "/{materialPortionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto putMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);
@@ -104,7 +102,7 @@ public class MixtureMaterialPortionController extends BaseController {
         return materialPortionMapper.toDto(putMaterialPortion);
     }
 
-    @PutMapping("")
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MixtureMaterialPortionDto> putMaterialPortions(@Valid @RequestBody List<UpdateMixtureMaterialPortionDto> updateMaterialPortionDtos) {
         List<UpdateMixtureMaterialPortion> materialPortions = updateMaterialPortionDtos.stream()
                                                                                        .map(updateMaterialPortionDto -> materialPortionMapper.fromDto(updateMaterialPortionDto))
@@ -114,11 +112,11 @@ public class MixtureMaterialPortionController extends BaseController {
 
             return putMaterialPortions.stream()
                                       .map(putMaterialPortion -> materialPortionMapper.toDto(putMaterialPortion))
-                                      .collect(Collectors.toList());
+                                      .toList();
 
     }
 
-    @PatchMapping("/{materialPortionId}")
+    @PatchMapping(value = "/{materialPortionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public MixtureMaterialPortionDto patchMaterialPortion(@PathVariable Long materialPortionId, @Valid @RequestBody UpdateMixtureMaterialPortionDto updateMaterialPortionDto) {
         MixtureMaterialPortion materialPortion = materialPortionMapper.fromDto(updateMaterialPortionDto);
         materialPortion.setId(materialPortionId);

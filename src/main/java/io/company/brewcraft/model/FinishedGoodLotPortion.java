@@ -37,7 +37,6 @@ import io.company.brewcraft.util.QuantityCalculator;
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class FinishedGoodLotPortion extends BaseEntity implements UpdateFinishedGoodLotPortion, CrudEntity<Long>, Audited {
-
     public static final String FIELD_ID = "id";
     public static final String FIELD_FINISHED_GOOD_LOT = "finishedGoodLot";
     public static final String FIELD_QUANTITY = "quantity";
@@ -168,5 +167,4 @@ public class FinishedGoodLotPortion extends BaseEntity implements UpdateFinished
 
         return lotQty;
     }
-
 }

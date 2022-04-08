@@ -26,7 +26,6 @@ import io.company.brewcraft.repository.MeasureRepository;
 import io.company.brewcraft.service.MeasureService;
 
 public class MeasureServiceImplTest {
-
     private MeasureService measureService;
 
     private MeasureRepository measureRepositoryMock;

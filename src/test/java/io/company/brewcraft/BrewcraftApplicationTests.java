@@ -22,9 +22,6 @@ import io.company.brewcraft.migration.MigrationManager;
 class BrewcraftApplicationTests {
     private static Logger log = LoggerFactory.getLogger(BrewcraftApplicationTests.class);
 
-    @MockBean // Mocking migration manager to avoid running the PostConstuct during the test.
-    private MigrationManager migrationMgr;
-
     @Test
     void contextLoads() {
     }

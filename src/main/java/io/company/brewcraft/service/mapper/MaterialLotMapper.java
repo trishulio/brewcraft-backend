@@ -11,7 +11,6 @@ import io.company.brewcraft.model.MaterialLot;
 
 @Mapper(uses = { MaterialMapper.class, InvoiceItemMapper.class, StorageMapper.class, QuantityMapper.class })
 public interface MaterialLotMapper extends BaseMapper<MaterialLot, MaterialLotDto, AddMaterialLotDto, UpdateMaterialLotDto> {
-
     MaterialLotMapper INSTANCE = Mappers.getMapper(MaterialLotMapper.class);
 
     @Mapping(target = MaterialLot.ATTR_ID)

@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 
 public class TenantDataSourceManagerConnectionProvider implements ConnectionProvider {
-
     private static final long serialVersionUID = 1L;
     private DataSource dataSource;
 

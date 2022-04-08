@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import io.company.brewcraft.model.BrewStageStatus;
 
 public interface BrewStageStatusService {
-
     Page<BrewStageStatus> getStatuses(Set<Long> ids, Set<String> names, int page, int size, SortedSet<String> sort, boolean orderAscending);
 
     BrewStageStatus getStatus(Long id);

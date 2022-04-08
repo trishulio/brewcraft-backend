@@ -61,5 +61,4 @@ public class IncompatibleQuantityUnitException extends IllegalArgumentException 
             throw new IncompatibleQuantityUnitException(error);
         }
     }
-
 }

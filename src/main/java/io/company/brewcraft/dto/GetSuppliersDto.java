@@ -3,7 +3,6 @@ package io.company.brewcraft.dto;
 import java.util.List;
 
 public class GetSuppliersDto {
-
     List<SupplierDto> suppliers;
 
     Long totalItems;
@@ -11,7 +10,6 @@ public class GetSuppliersDto {
     int totalPages;
 
     public GetSuppliersDto() {
-
     }
 
     public GetSuppliersDto(List<SupplierDto> suppliers, Long totalItems, int totalPages) {

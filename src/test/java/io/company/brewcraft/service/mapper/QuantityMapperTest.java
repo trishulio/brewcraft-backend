@@ -17,7 +17,6 @@ import tec.uom.se.quantity.Quantities;
 import tec.uom.se.unit.Units;
 
 public class QuantityMapperTest {
-
     QuantityMapper mapper;
 
     @BeforeEach

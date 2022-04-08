@@ -1,7 +1,8 @@
 package io.company.brewcraft.migration;
 
-public class UnifiedTenantRegister implements TenantRegister {
+import io.company.brewcraft.model.Tenant;
 
+public class UnifiedTenantRegister implements TenantRegister {
     private TenantRegister userReg;
     private TenantRegister schemaReg;
 
@@ -11,19 +12,25 @@ public class UnifiedTenantRegister implements TenantRegister {
     }
 
     @Override
-    public void add(String tenantId) {
-        userReg.add(tenantId);
-        schemaReg.add(tenantId);
+    public void add(Tenant tenant) {
+        userReg.add(tenant);
+        schemaReg.add(tenant);
     }
 
     @Override
-    public void remove(String tenantId) {
-        schemaReg.remove(tenantId);
-        userReg.remove(tenantId);
+    public void put(Tenant tenant) {
+        userReg.put(tenant);
+        schemaReg.put(tenant);
     }
 
     @Override
-    public boolean exists(String tenantId) {
-        return userReg.exists(tenantId) && schemaReg.exists(tenantId);
+    public void remove(Tenant tenant) {
+        schemaReg.remove(tenant);
+        userReg.remove(tenant);
+    }
+
+    @Override
+    public boolean exists(Tenant tenant) {
+        return userReg.exists(tenant) && schemaReg.exists(tenant);
     }
 }

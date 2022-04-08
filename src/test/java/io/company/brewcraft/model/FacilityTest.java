@@ -13,7 +13,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class FacilityTest {
-
     private Facility facility;
 
     @BeforeEach

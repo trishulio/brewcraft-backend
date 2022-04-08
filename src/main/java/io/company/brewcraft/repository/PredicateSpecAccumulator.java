@@ -47,7 +47,7 @@ public class PredicateSpecAccumulator {
 
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate[] predicates = new Predicate[this.aggregations.size()];
-        predicates = this.aggregations.stream().map(spec -> spec.getExpression(root, query, criteriaBuilder)).collect(Collectors.toList()).toArray(predicates);
+        predicates = this.aggregations.stream().map(spec -> spec.getExpression(root, query, criteriaBuilder)).toList().toArray(predicates);
 
         return predicates;
     }

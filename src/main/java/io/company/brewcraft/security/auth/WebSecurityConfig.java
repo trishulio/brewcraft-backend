@@ -2,6 +2,7 @@ package io.company.brewcraft.security.auth;
 
 import javax.servlet.Filter;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +13,13 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 import io.company.brewcraft.security.session.ContextHolder;
+import io.company.brewcraft.security.session.ThreadLocalContextHolder;
 import io.company.brewcraft.security.session.UtilityProviderFilter;
 import io.company.brewcraft.util.UtilityProvider;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -31,17 +32,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @ConditionalOnMissingBean(JwtDecoder.class)
     public JwtDecoder decoder(OAuth2ResourceServerProperties props) {
         String jwkUri = props.getJwt().getJwkSetUri();
         return NimbusJwtDecoder.withJwkSetUri(jwkUri).build();
     }
 
     @Bean
+    @ConditionalOnMissingBean(ContextHolderFilter.class)
     public Filter ctxHolderFilter(ContextHolder ctxHolder) {
-        return new ContextHolderFilter(ctxHolder);
+        return new ContextHolderFilter((ThreadLocalContextHolder) ctxHolder);
     }
 
     @Bean
+    @ConditionalOnMissingBean(UtilityProviderFilter.class)
     public Filter utilityFilter(UtilityProvider utilityProvider) {
         return new UtilityProviderFilter(utilityProvider);
     }

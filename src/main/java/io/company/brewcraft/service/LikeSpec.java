@@ -8,7 +8,6 @@ import javax.persistence.criteria.Root;
 import io.company.brewcraft.model.BaseModel;
 
 public class LikeSpec extends BaseModel implements CriteriaSpec<Boolean> {
-
     private CriteriaSpec<String> spec;
     private String text;
 

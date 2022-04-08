@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.model.EntityDecorator;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.CrudService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -28,6 +29,21 @@ public class CrudControllerService<
     private BaseMapper<Entity, EntityDto, AddDto, UpdateDto> mapper;
     private CrudService<ID, Entity, AddEntity, UpdateEntity, ?> service;
     private String entityName;
+    private EntityDecorator<EntityDto> decorator;
+
+    public CrudControllerService(
+        AttributeFilter filter,
+        BaseMapper<Entity, EntityDto, AddDto, UpdateDto> mapper,
+        CrudService<ID, Entity, AddEntity, UpdateEntity, ?> service,
+        String entityName,
+        EntityDecorator<EntityDto> decorator
+    ) {
+        this.filter = filter;
+        this.mapper = mapper;
+        this.service = service;
+        this.entityName = entityName;
+        this.decorator = decorator;
+    }
 
     public CrudControllerService(
         AttributeFilter filter,
@@ -35,15 +51,14 @@ public class CrudControllerService<
         CrudService<ID, Entity, AddEntity, UpdateEntity, ?> service,
         String entityName
     ) {
-        this.filter = filter;
-        this.mapper = mapper;
-        this.service = service;
-        this.entityName = entityName;
+        this(filter, mapper, service, entityName, new NoActionDecorator<EntityDto>());
     }
 
     public PageDto<EntityDto> getAll(Page<Entity> entities, Set<String> attributes) {
-        final List<EntityDto> content = entities.stream().map(i -> mapper.toDto(i)).collect(Collectors.toList());
-        content.forEach(invoice -> this.filter(invoice, attributes));
+        final List<EntityDto> content = entities.stream().map(i -> mapper.toDto(i)).toList();
+        content.forEach(entity -> this.filter(entity, attributes));
+
+        this.decorator.decorate(content);
 
         final PageDto<EntityDto> dto = new PageDto<>();
         dto.setContent(content);
@@ -59,6 +74,8 @@ public class CrudControllerService<
         EntityDto dto = mapper.toDto(e);
         this.filter(dto, attributes);
 
+        this.decorator.decorate(List.of(dto));
+
         return dto;
     }
 
@@ -66,24 +83,36 @@ public class CrudControllerService<
         List<AddEntity> additions = (List<AddEntity>) addDtos.stream().map(dto -> mapper.fromAddDto(dto)).collect(Collectors.toList());
         List<Entity> added = this.service.add(additions);
 
-        return added.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        List<EntityDto> dtos = added.stream().map(entity -> mapper.toDto(entity)).toList();
+
+        this.decorator.decorate(dtos);
+
+        return dtos;
     }
 
     public List<EntityDto> put(List<UpdateDto> updateDtos) {
         List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
         List<Entity> updated = this.service.put(updates);
 
-        return updated.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        List<EntityDto> dtos = updated.stream().map(entity -> mapper.toDto(entity)).toList();
+
+        this.decorator.decorate(dtos);
+
+        return dtos;
     }
 
     public List<EntityDto> patch(List<UpdateDto> updateDtos) {
         List<UpdateEntity> updates = updateDtos.stream().map(dto -> mapper.fromUpdateDto(dto)).collect(Collectors.toList());
         List<Entity> patched = this.service.patch(updates);
 
-        return patched.stream().map(entity -> mapper.toDto(entity)).collect(Collectors.toList());
+        List<EntityDto> dtos = patched.stream().map(entity -> mapper.toDto(entity)).toList();
+
+        this.decorator.decorate(dtos);
+
+        return dtos;
     }
 
-    public int delete(Set<ID> ids) {
+    public long delete(Set<ID> ids) {
         return this.service.delete(ids);
     }
 

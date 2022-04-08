@@ -3,7 +3,6 @@ package io.company.brewcraft.data;
 import javax.sql.DataSource;
 
 public interface DataSourceBuilder {
-
     DataSource build();
 
     DataSourceBuilder username(String username);
@@ -17,8 +16,6 @@ public interface DataSourceBuilder {
     DataSourceBuilder poolSize(int size);
 
     DataSourceBuilder autoCommit(boolean autoCommit);
-
-    DataSourceBuilder copy(DataSource ds);
 
     String username();
 

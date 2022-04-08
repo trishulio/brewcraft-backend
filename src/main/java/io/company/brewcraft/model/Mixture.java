@@ -139,15 +139,15 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
             if (parentMixtures == null) {
                 this.parentMixtures.clear();
             } else {
-                this.parentMixtures.stream().filter(parentMixture -> !parentMixtures.contains(parentMixture)).collect(Collectors.toList()).forEach(this::removeParentMixture);
+                this.parentMixtures.stream().filter(parentMixture -> !parentMixtures.contains(parentMixture)).toList().forEach(this::removeParentMixture);
             }
         }
 
         if (parentMixtures != null) {
             if (this.parentMixtures == null) {
-                parentMixtures.stream().collect(Collectors.toList()).forEach(this::addParentMixture);
+                parentMixtures.stream().toList().forEach(this::addParentMixture);
             } else {
-                parentMixtures.stream().filter(parentMixture -> !this.parentMixtures.contains(parentMixture)).collect(Collectors.toList()).forEach(this::addParentMixture);
+                parentMixtures.stream().filter(parentMixture -> !this.parentMixtures.contains(parentMixture)).toList().forEach(this::addParentMixture);
             }
         }
     }
@@ -210,16 +210,16 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
             if (materialPortions == null) {
                 this.materialPortions.clear();
             } else {
-                this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::removeMaterialPortion);
+                this.materialPortions.stream().filter(materialPortion -> !materialPortions.contains(materialPortion)).toList().forEach(this::removeMaterialPortion);
             }
         }
 
         if (materialPortions != null) {
             if (this.materialPortions == null) {
                 this.materialPortions = new ArrayList<>();
-                materialPortions.stream().collect(Collectors.toList()).forEach(this::addMaterialPortion);
+                materialPortions.stream().toList().forEach(this::addMaterialPortion);
             } else {
-                materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).collect(Collectors.toList()).forEach(this::addMaterialPortion);
+                materialPortions.stream().filter(materialPortion -> !this.materialPortions.contains(materialPortion)).toList().forEach(this::addMaterialPortion);
             }
         }
     }
@@ -267,16 +267,16 @@ public class Mixture extends BaseEntity implements UpdateMixture, Audited, Ident
             if (recordedMeasures == null) {
                 this.recordedMeasures.clear();
             } else {
-                this.recordedMeasures.stream().filter(recordedMeasure -> !recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::removeRecordedMeasure);
+                this.recordedMeasures.stream().filter(recordedMeasure -> !recordedMeasures.contains(recordedMeasure)).toList().forEach(this::removeRecordedMeasure);
             }
         }
 
         if (recordedMeasures != null) {
             if (this.recordedMeasures == null) {
                 this.recordedMeasures = new ArrayList<>();
-                recordedMeasures.stream().collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+                recordedMeasures.stream().toList().forEach(this::addRecordedMeasure);
             } else {
-                recordedMeasures.stream().filter(recordedMeasure -> !this.recordedMeasures.contains(recordedMeasure)).collect(Collectors.toList()).forEach(this::addRecordedMeasure);
+                recordedMeasures.stream().filter(recordedMeasure -> !this.recordedMeasures.contains(recordedMeasure)).toList().forEach(this::addRecordedMeasure);
             }
         }
     }

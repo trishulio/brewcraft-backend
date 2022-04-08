@@ -24,7 +24,6 @@ import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
 
 public class ProcurementShipmentMapperTest {
-
     private ProcurementShipmentMapper mapper;
 
     @BeforeEach

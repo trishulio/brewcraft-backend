@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.dto.procurement.UpdateProcurementMaterialLotDto;
 
 public class UpdateProcurementMaterialLotDtoTest {
-
     private UpdateProcurementMaterialLotDto dto;
 
     @BeforeEach

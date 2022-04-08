@@ -13,7 +13,6 @@ import io.company.brewcraft.repository.MaterialRefresher;
 import io.company.brewcraft.service.MaterialAccessor;
 
 public class MaterialRefresherTest {
-
     private MaterialRefresher materialRefresher;
 
     private AccessorRefresher<Long, MaterialAccessor, Material> mRefresher;

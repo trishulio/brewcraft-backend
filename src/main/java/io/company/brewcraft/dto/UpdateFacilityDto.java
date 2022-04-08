@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 public class UpdateFacilityDto extends BaseDto {
-
     @NullOrNotBlank
     private String name;
 

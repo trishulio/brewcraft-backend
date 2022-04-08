@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.InvoiceStatus;
 
 public class InvoiceStatusTest {
-
     private InvoiceStatus invoiceStatus;
 
     @BeforeEach

@@ -30,7 +30,6 @@ import io.company.brewcraft.model.procurement.UpdateProcurementItem;
 import io.company.brewcraft.service.impl.procurement.ProcurementService;
 
 public class ProcurementControllerTest {
-
     private ProcurementController controller;
 
     private ProcurementService mService;
@@ -184,11 +183,11 @@ public class ProcurementControllerTest {
     @Test
     public void testDelete_ReturnsCountFromCrudDelete() {
         ArgumentCaptor<Set<ProcurementId>> captor = ArgumentCaptor.forClass(Set.class);
-        doReturn(3).when(mCrudController).delete(captor.capture());
+        doReturn(3L).when(mCrudController).delete(captor.capture());
 
-        int count = controller.delete(Set.of(new ProcurementIdDto(1L, 1L), new ProcurementIdDto(2L, 2L), new ProcurementIdDto(3L, 3L)));
+        long count = controller.delete(Set.of(new ProcurementIdDto(1L, 1L), new ProcurementIdDto(2L, 2L), new ProcurementIdDto(3L, 3L)));
 
-        assertEquals(3, count);
+        assertEquals(3L, count);
         assertThat(captor.getValue()).hasSameElementsAs(Set.of(new ProcurementId(1L, 1L), new ProcurementId(2L, 2L), new ProcurementId(3L, 3L)));
     }
 }

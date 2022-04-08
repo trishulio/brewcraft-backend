@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import io.company.brewcraft.dto.user.UserDto;
 
 public class BrewDto extends BaseDto {
-
     private Long id;
 
     private String name;
