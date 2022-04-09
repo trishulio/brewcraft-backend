@@ -32,8 +32,8 @@ pipeline {
                     export CODE_COVERAGE=true
                     export SONARQUBE=true
                     export SONARQUBE_HOST_URL=${SONARQUBE_URL}
-                    export SONARQUBE_LOGIN=${SONARQUBE_USR}
-                    export SONARQUBE_PROJECT_KEY=${SONARQUBE_PSW}
+                    export SONARQUBE_PROJECT_KEY=${SONARQUBE_USR}
+                    export SONARQUBE_LOGIN=${SONARQUBE_PSW}
                     make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
