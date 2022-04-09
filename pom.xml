@@ -262,8 +262,8 @@
             </activation>
             <properties>
                 <sonar.host.url>${env.SONARQUBE_HOST_URL}</sonar.host.url>
-                <sonar.login>${env.SONARQUBE_LOGIN}</sonar.login>
                 <sonar.projectKey>${env.SONARQUBE_PROJECT_KEY}</sonar.projectKey>
+                <sonar.login>${env.SONARQUBE_LOGIN}</sonar.login>
             </properties>
             <build>
                 <plugins>
@@ -274,7 +274,7 @@
                         <executions>
                             <execution>
                                 <id>sonar</id>
-                                <phase>install</phase>
+                                <phase>verify</phase>
                                 <goals>
                                     <goal>sonar</goal>
                                 </goals>
