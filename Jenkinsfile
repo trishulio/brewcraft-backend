@@ -3,6 +3,10 @@ pipeline {
         label 'docker'
     }
 
+    environment {
+        SONARQUBE = credentials('brewcraft_sonarqube')
+    }
+
     stages {
         stage ('Checkout') {
             steps {
@@ -15,6 +19,7 @@ pipeline {
                 script {
                     def commitId = sh(script: 'git rev-parse HEAD', returnStdout: true)
                     IMAGE_TAG = "${env.BRANCH_NAME}_${commitId}"
+                    SONARQUBE_URL="https://sonarqube.cloudville.me"
                 }
             }
         }
@@ -23,20 +28,13 @@ pipeline {
             steps {
                 // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
                 sh """
-                    export CODE_COVERAGE=true
                     export MUTATION_COVERAGE=false
+                    export CODE_COVERAGE=true
+                    export SONARQUBE=true
+                    export SONARQUBE_HOST_URL=${SONARQUBE_URL}
+                    export SONARQUBE_LOGIN=${SONARQUBE_USR}
+                    export SONARQUBE_PROJECT_KEY=${SONARQUBE_PSW}
                     make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
-                """
-            }
-        }
-
-        stage ('Analyze') {
-            steps {
-                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
-                sh """
-                    export CODE_COVERAGE=true
-                    export MUTATION_COVERAGE=false
-                    make analyze PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
         }
