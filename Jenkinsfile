@@ -30,6 +30,15 @@ pipeline {
             }
         }
 
+        stage ('Analyze') {
+            steps {
+                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
+                sh """
+                    make analyze PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
+                """
+            }
+        }
+
         stage ('Containerize') {
             steps {
                 sh "make containerize VERSION=${IMAGE_TAG}"

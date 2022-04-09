@@ -11,5 +11,15 @@ services:
     volumes:
       - ${PWD}:/usr/code/app
       - m2-data:/root/.m2
+
+  analyze:
+    image: maven:3.6.3-openjdk-17
+    container_name: brewcraft_maven
+    working_dir: /usr/code/app
+    command: ['mvn', 'clean', 'verify', 'sonar:sonar', '-Dsonar.projectKey=northstacksoftware_brewcraft-backend_AYANNAQ3nhyMVeKuAySr']
+    volumes:
+      - ${PWD}:/usr/code/app
+      - m2-data:/root/.m2
+
 volumes:
   m2-data:
