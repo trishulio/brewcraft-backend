@@ -8,9 +8,6 @@ VERSION:=1.0.0-SNAPSHOT
 install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
-analyze:
-	docker-compose -f docker-compose-install.yml run --rm analyze
-
 containerize:
 	docker build . -t ${APP_NAME}:${VERSION}
 
