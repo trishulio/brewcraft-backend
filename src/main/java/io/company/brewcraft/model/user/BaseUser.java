@@ -8,7 +8,7 @@ public interface BaseUser extends UserStatusAccessor, UserSalutationAccessor {
     final String ATTR_FIRST_NAME = "firstName";
     final String ATTR_LAST_NAME = "lastName";
     final String ATTR_EMAIL = "email";
-    final String ATTR_IMAGE_URL = "imageSrc";
+    final String ATTR_IMAGE_SRC = "imageSrc";
     final String ATTR_PHONE_NUMBER = "phoneNumber";
     final String ATTR_USER_NAME = "userName";
     final String ATTR_ROLES = "roles";

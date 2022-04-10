@@ -26,7 +26,7 @@ public interface UserMapper extends BaseMapper<User, UserDto, AddUserDto, Update
     @Mapping(target = User.ATTR_FIRST_NAME, ignore = true)
     @Mapping(target = User.ATTR_LAST_NAME, ignore = true)
     @Mapping(target = User.ATTR_ROLES, ignore = true)
-    @Mapping(target = User.ATTR_IMAGE_URL, ignore = true)
+    @Mapping(target = User.ATTR_IMAGE_SRC, ignore = true)
     @Mapping(target = User.ATTR_PHONE_NUMBER, ignore = true)
     User fromDto(Long id);
 

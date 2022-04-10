@@ -30,7 +30,7 @@ public class UserDtoTest {
             "LAST_NAME",
             "EMAIL",
             "PHONE_NUMBER",
-            URI.create("IMAGE_URL"),
+            URI.create("IMAGE_SRC"),
             new IaasObjectStoreFileDto(URI.create("file.txt")),
             new UserStatusDto(1L),
             new UserSalutationDto(2L),
@@ -47,7 +47,7 @@ public class UserDtoTest {
         assertEquals("LAST_NAME", dto.getLastName());
         assertEquals("EMAIL", dto.getEmail());
         assertEquals("PHONE_NUMBER", dto.getPhoneNumber());
-        assertEquals(URI.create("IMAGE_URL"), dto.getImageSrc());
+        assertEquals(URI.create("IMAGE_SRC"), dto.getImageSrc());
         assertEquals(new IaasObjectStoreFileDto(URI.create("file.txt")), dto.getObjectStoreFile());
         assertEquals(new UserStatusDto(1L), dto.getStatus());
         assertEquals(new UserSalutationDto(2L), dto.getSalutation());
