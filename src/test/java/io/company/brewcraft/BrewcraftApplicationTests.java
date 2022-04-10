@@ -16,11 +16,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import io.company.brewcraft.migration.MigrationManager;
+import io.company.brewcraft.service.impl.TenantService;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class BrewcraftApplicationTests {
     private static Logger log = LoggerFactory.getLogger(BrewcraftApplicationTests.class);
+
+    @MockBean
+    private TenantService tenantService;
 
     @Test
     void contextLoads() {

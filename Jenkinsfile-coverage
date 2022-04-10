@@ -39,6 +39,7 @@ pipeline {
                 sh """
                     export CODE_COVERAGE=${env.CODE_COVERAGE}
                     export MUTATION_COVERAGE=${env.MUTATION_COVERAGE}
+                    export SONARQUBE=false
                     make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
