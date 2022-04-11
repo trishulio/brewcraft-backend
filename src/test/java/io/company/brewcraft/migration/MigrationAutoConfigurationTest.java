@@ -2,6 +2,8 @@ package io.company.brewcraft.migration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ public class MigrationAutoConfigurationTest {
     }
 
     @Test
-    public void testRandomGenerator_ReturnsInstanceOfRandonGeneratorImpl() {
+    public void testRandomGenerator_ReturnsInstanceOfRandonGeneratorImpl() throws NoSuchAlgorithmException {
         RandomGenerator rand = config.randomGenerator();
         assertTrue(rand instanceof RandomGeneratorImpl);
     }

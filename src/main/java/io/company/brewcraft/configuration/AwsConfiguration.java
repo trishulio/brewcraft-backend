@@ -113,13 +113,13 @@ public class AwsConfiguration {
     public AmazonCognitoIdentity cognitoIdentity(AwsFactory awsFactory, @Value("${aws.cognito.region}") String region, @Value("${aws.cognito.access-key}") final String accessKey, @Value("${aws.cognito.access-secret}") final String accessSecret) {
         return awsFactory.getAwsCognitoIdentityClient(region, accessKey, accessSecret);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(AwsArnMapper.class)
     public AwsArnMapper arnMapper(@Value("${aws.deployment.accountId}") String accountId, @Value("${aws.deployment.parition}") String partition) {
         return new AwsArnMapper(accountId, partition);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(AwsDocumentTemplates.class)
     public AwsDocumentTemplates awsDocumentTemplates(@Value("${aws.cognito.identity.pool.id}") String cognitoIdPoolId) {
@@ -167,7 +167,7 @@ public class AwsConfiguration {
     public IaasClient<IaasUserTenantMembershipId, IaasUserTenantMembership, BaseIaasUserTenantMembership, UpdateIaasUserTenantMembership> awsCognitoUserGroupMembership(AWSCognitoIdentityProvider idp, @Value("${aws.cognito.user-pool.id}") String userPoolId) {
         return new AwsIaasUserTenantMembershipClient(idp, userPoolId, AwsGroupTypeMapper.INSTANCE);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(AwsCognitoIdentityClient.class)
     public AwsCognitoIdentityClient cognitoIdentityClient(AmazonCognitoIdentity cognitoIdentity, @Value("${app.iaas.credentials.expiry.duration}") long credentialsExpiryDurationSeconds) {
@@ -193,7 +193,7 @@ public class AwsConfiguration {
     public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
         return new AwsTenantIaasResourceBuilder(templates);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantContextIaasObjectStoreNameProvider.class)
     public TenantContextIaasObjectStoreNameProvider objectStoreNameProvider(AwsDocumentTemplates awsTemplates, ContextHolder contextHolder, @Value("app.object-store.bucket.name") String appBucketName) {
