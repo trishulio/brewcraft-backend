@@ -102,8 +102,8 @@ public class UserService extends BaseService implements CrudService<Long, User, 
 
     @Override
     public long delete(Set<Long> ids) {
-        long deleteCount = this.repoService.delete(ids);
         List<User> users = this.userRepo.findAllById(ids);
+        long deleteCount = this.repoService.delete(ids);
         this.iaasService.delete(users);
 
         return deleteCount;

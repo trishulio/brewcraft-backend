@@ -1,44 +1,40 @@
 package io.company.brewcraft.migration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.regex.Pattern;
+import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RandomGeneratorImplTest {
-    private RandomGenerator rand;
+    private RandomGenerator generator;
+
+    private Random mRandom;
 
     @BeforeEach
     public void init() {
-        rand = new RandomGeneratorImpl();
-    }
+        // Manually extending the class because Mockito cannot mock
+        // java.util.Random class due to one of it's properties.
+        class RandomMock extends Random {
+            int i = 1;
+            @Override
+            public int nextInt(int l) {
+                int r = i;
+                i = (i * 2) % l;
+                return r;
+            }
+        }
 
-    @Test
-    public void testString_ReturnsRandomStringOfLength10_WhenInputIs10() {
-        String s = rand.string(10);
-        assertEquals(10, s.length());
-    }
-
-    @Test
-    public void testString_ReturnsRandomStringOfLength20_WhenInputIs20() {
-        String s = rand.string(20);
-        assertEquals(20, s.length());
+        mRandom = new RandomMock();
+        generator = new RandomGeneratorImpl(mRandom);
     }
 
     @Test
     public void testString_ReturnsString_WithAlphaNumAndSpecialChars() {
-        String s = rand.string(50);
+        String s = generator.string(50);
 
-        Pattern lowercase = Pattern.compile("[a-z]");
-        Pattern uppercase = Pattern.compile("[A-Z]");
-        Pattern digit = Pattern.compile("[0-9]");
-        Pattern special = Pattern.compile("[!@#$%^&*_=+-/.?<>)]");
-
-        assertTrue(1 < lowercase.matcher(s).results().count());
-        assertTrue(1 < uppercase.matcher(s).results().count());
-        assertTrue(1 < digit.matcher(s).results().count());
-        assertTrue(1 < special.matcher(s).results().count());
+        assertEquals(50, s.length());
+        assertEquals("BCEIQg#wQg#wQg#wQg#wQg#wQg#wQg#wQg#wQg#wQg#wQg#wQg", s);
     }
 }
