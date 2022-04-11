@@ -1,6 +1,6 @@
 package io.company.brewcraft.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Mass;
@@ -16,7 +16,7 @@ public class SupportedUnitsTest {
         assertEquals("each", SupportedUnits.EACH.getSymbol());
         assertEquals("mg", SupportedUnits.MILLIGRAM.getSymbol());
         assertEquals("g", SupportedUnits.GRAM.getSymbol());
-        assertEquals("kg", SupportedUnits.KILOGRAM.getSymbol());
+        assertEquals("g", SupportedUnits.GRAM.getSymbol());
         assertEquals("ml", SupportedUnits.MILLILITRE.getSymbol());
         assertEquals("l", SupportedUnits.LITRE.getSymbol());
         assertEquals("hl", SupportedUnits.HECTOLITRE.getSymbol());

@@ -23,16 +23,16 @@ public class QuantityDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        dto = new QuantityDto("kg", new BigDecimal("100"));
-        assertEquals("kg", dto.getSymbol());
+        dto = new QuantityDto("g", new BigDecimal("100"));
+        assertEquals("g", dto.getSymbol());
         assertEquals(new BigDecimal("100"), dto.getValue());
     }
 
     @Test
     public void testAccessSymbol() {
         assertNull(dto.getSymbol());
-        dto.setSymbol("kg");
-        assertEquals("kg", dto.getSymbol());
+        dto.setSymbol("g");
+        assertEquals("g", dto.getSymbol());
     }
 
     @Test

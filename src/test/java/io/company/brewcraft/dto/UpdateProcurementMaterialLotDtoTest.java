@@ -20,11 +20,11 @@ public class UpdateProcurementMaterialLotDtoTest {
 
     @Test
     public void testAllArgsConstructor_SetsValuesAllFields() {
-        dto = new UpdateProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10.00")), 3L, 1);
+        dto = new UpdateProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10.00")), 3L, 1);
 
         assertEquals(1L, dto.getId());
         assertEquals("LOT_1", dto.getLotNumber());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
         assertEquals(3L, dto.getStorageId());
         assertEquals(1, dto.getVersion());
     }
@@ -46,8 +46,8 @@ public class UpdateProcurementMaterialLotDtoTest {
     @Test
     public void testAccessQuantity() {
         assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", new BigDecimal("10.00")));
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        dto.setQuantity(new QuantityDto("g", new BigDecimal("10.00")));
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
     }
 
     @Test

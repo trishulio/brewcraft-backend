@@ -43,7 +43,7 @@ public class ShipmentMapperTest {
             100L,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            List.of(new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 3L))
+            List.of(new AddMaterialLotDto("LOT_1", new QuantityDto("g", new BigDecimal("10")), 2L, 3L))
         );
 
         final Shipment shipment = this.mapper.fromAddDto(dto);
@@ -57,7 +57,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            List.of(new MaterialLot(null, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), null, null, null)),
+            List.of(new MaterialLot(null, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM), new InvoiceItem(2L), new Storage(3L), null, null, null)),
             null
         );
 
@@ -78,7 +78,7 @@ public class ShipmentMapperTest {
             100L,
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
-            List.of(new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), 2L, 3L, 1)),
+            List.of(new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10")), 2L, 3L, 1)),
             1
         );
 
@@ -93,7 +93,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             null,
             null,
-            List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), null, null, 1)),
+            List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM), new InvoiceItem(2L), new Storage(3L), null, null, 1)),
             1
         );
 
@@ -116,7 +116,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM), new InvoiceItem(2L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
 
@@ -129,7 +129,7 @@ public class ShipmentMapperTest {
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
-            List.of(new MaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10")), new InvoiceItemDto(2L), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
+            List.of(new MaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10")), new InvoiceItemDto(2L), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1)),
             1
         );
 

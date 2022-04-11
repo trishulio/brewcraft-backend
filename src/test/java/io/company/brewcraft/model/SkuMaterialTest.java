@@ -16,7 +16,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class SkuMaterialTest {
     private SkuMaterial skuMaterial;
@@ -68,9 +68,9 @@ public class SkuMaterialTest {
     @Test
     public void testSetMaterial_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
         Material material = new Material(3L);
-        material.setBaseQuantityUnit(Units.LITRE);
+        material.setBaseQuantityUnit(SupportedUnits.LITRE);
 
-        skuMaterial.setQuantity(Quantities.getQuantity("10 kg"));
+        skuMaterial.setQuantity(Quantities.getQuantity("10 g"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setMaterial(material));
     }
 
@@ -83,7 +83,7 @@ public class SkuMaterialTest {
     @Test
     public void testSetQuantity_ThrowsException_WhenQuantityIsIncompatibleWithMaterialQuantityUnit() {
         Material material = new Material(3L);
-        material.setBaseQuantityUnit(Units.KILOGRAM);
+        material.setBaseQuantityUnit(SupportedUnits.GRAM);
         skuMaterial.setMaterial(material);
 
         assertThrows(IncompatibleQuantityUnitException.class, () -> skuMaterial.setQuantity(Quantities.getQuantity("10 l")));

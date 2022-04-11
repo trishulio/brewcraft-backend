@@ -65,7 +65,7 @@ public class FinishedGoodLotMaterialPortionTest {
         MaterialLot materialLot = new MaterialLot(2L);
         materialLot.setQuantity(Quantities.getQuantity("10 l"));
 
-        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        materialPortion.setQuantity(Quantities.getQuantity("10 g"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setMaterialLot(materialLot));
     }
 
@@ -78,7 +78,7 @@ public class FinishedGoodLotMaterialPortionTest {
     @Test
     public void testSetQuantity_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
         MaterialLot materialLot = new MaterialLot(2L);
-        materialLot.setQuantity(Quantities.getQuantity("10 kg"));
+        materialLot.setQuantity(Quantities.getQuantity("10 g"));
         materialPortion.setMaterialLot(materialLot);
 
         assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setQuantity(Quantities.getQuantity("10 l")));

@@ -19,14 +19,14 @@ public class QuantityDto extends BaseDto {
     }
 
     public Number getValue() {
-        BigDecimal value = null;
-        if (this.value != null) {
-            value = new BigDecimal(this.value.stripTrailingZeros().toPlainString());
-        }
-        return value;
+        return this.value;
     }
 
     public void setValue(BigDecimal value) {
+        if (value != null) {
+            value = new BigDecimal(value.stripTrailingZeros().toPlainString());
+        }
+
         this.value = value;
     }
 

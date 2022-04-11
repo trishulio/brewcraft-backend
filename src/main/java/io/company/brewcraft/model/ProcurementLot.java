@@ -27,91 +27,91 @@ public class ProcurementLot extends Lot {
         super(id, lotNumber, quantity, material, shipment, invoiceItem, storage);
     }
 
-    public ProcurementLot(Long id, String lotNumber, Material material, String materialName, InvoiceItem invoiceItem, Shipment shipment, Storage storage, UnitEntity unit, BigDecimal value) {
-        super(id, lotNumber, material, materialName, invoiceItem, shipment, storage, unit, value);
+    public ProcurementLot(Long id, String lotNumber, Material material, String materialName, InvoiceItem invoiceItem, Shipment shipment, Storage storage, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(id, lotNumber, material, materialName, invoiceItem, shipment, storage, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, unit, value);
+    public ProcurementLot(String lotNumber, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, invoiceItem, unit, value);
+    public ProcurementLot(String lotNumber, InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Shipment shipment, UnitEntity unit, BigDecimal value) {
-        super(shipment, unit, value);
+    public ProcurementLot(Shipment shipment, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(shipment, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(shipment, invoiceItem, unit, value);
+    public ProcurementLot(Shipment shipment, InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(shipment, invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(material, materialName, unit, value);
+    public ProcurementLot(Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Storage storage, UnitEntity unit, BigDecimal value) {
-        super(storage, unit, value);
+    public ProcurementLot(Storage storage, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(storage, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(storage, invoiceItem, unit, value);
+    public ProcurementLot(Storage storage, InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(storage, invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(invoiceItem, unit, value);
+    public ProcurementLot(InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(shipment, material, materialName, unit, value);
+    public ProcurementLot(Shipment shipment, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(shipment, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(shipment, invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(shipment, invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(storage, material, materialName, unit, value);
+    public ProcurementLot(Storage storage, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(storage, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(storage, invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(storage, invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, invoiceItem, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, storage, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, storage, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, storage, invoiceItem, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, storage, invoiceItem, displayUnit, qtyValueInSysUnit);
     }
 
-    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity unit, BigDecimal value) {
-        super(lotNumber, shipment, storage, invoiceItem, material, materialName, unit, value);
+    public ProcurementLot(String lotNumber, Shipment shipment, Storage storage, InvoiceItem invoiceItem, Material material, String materialName, UnitEntity displayUnit, BigDecimal qtyValueInSysUnit) {
+        super(lotNumber, shipment, storage, invoiceItem, material, materialName, displayUnit, qtyValueInSysUnit);
     }
 }

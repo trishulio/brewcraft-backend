@@ -23,10 +23,10 @@ public class MaterialMapperTest {
 
     @Test
     public void testFromDto_ReturnsEntity_WhenDtoIsNotNull() {
-        MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", "http://www.test.com", 1);
+        MaterialDto dto = new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "g", "http://www.test.com", 1);
         Material material = materialMapper.fromDto(dto);
 
-        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", null, null, 1), material);
+        assertEquals(new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.GRAM, "http://www.test.com", null, null, 1), material);
     }
 
     @Test
@@ -43,10 +43,10 @@ public class MaterialMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
-        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.KILOGRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        Material material = new Material(1L, "testMaterial", "testDescription", new MaterialCategory(1L), "testUPC", SupportedUnits.GRAM, "http://www.test.com", LocalDateTime.of(2020, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
         MaterialDto dto = materialMapper.toDto(material);
 
-        assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "kg", "http://www.test.com", 1), dto);
+        assertEquals(new MaterialDto(1L, "testMaterial", "testDescription", new CategoryDto(1L), null, null, "testUPC", "g", "http://www.test.com", 1), dto);
     }
 
     @Test

@@ -1,6 +1,6 @@
 package io.company.brewcraft.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
-
-import tec.uom.se.unit.Units;
 
 public class UnitSerializerTest {
     private JsonSerializer<Unit> serializer;
@@ -32,8 +30,8 @@ public class UnitSerializerTest {
 
     @Test
     public void testSerialize_ReturnsJsonUnit_WhenValueIsNotNull() throws IOException {
-        serializer.serialize(Units.KILOGRAM, mGen, null);
+        serializer.serialize(SupportedUnits.GRAM, mGen, null);
 
-        assertEquals("{\"symbol\":\"kg\"}", mGen.json());
+        assertEquals("{\"symbol\":\"g\"}", mGen.json());
     }
 }

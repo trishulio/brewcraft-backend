@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
 
 public class JacksonJsonMapperTest {
     public static class TestData {
@@ -81,9 +80,9 @@ public class JacksonJsonMapperTest {
 
     @Test
     public void testQuantitySerialization_ReturnsJsonWithSymbolAndValue_WhenQuantityIsNotNull() {
-        String json = mapper.writeString(Quantities.getQuantity(new BigDecimal("10.99"), Units.KILOGRAM));
+        String json = mapper.writeString(Quantities.getQuantity(new BigDecimal("10.99"), SupportedUnits.GRAM));
 
-        assertEquals("{\"symbol\":\"kg\",\"value\":10.99}", json);
+        assertEquals("{\"symbol\":\"g\",\"value\":10.99}", json);
     }
 
     @Test
@@ -103,18 +102,18 @@ public class JacksonJsonMapperTest {
 
     @Test
     public void testUnitSerialization_ReturnsJsonWithSymbol_WhenUnitIsNotNull() {
-        String json = mapper.writeString(Units.KILOGRAM);
+        String json = mapper.writeString(SupportedUnits.KILOGRAM);
 
         assertEquals("{\"symbol\":\"kg\"}", json);
     }
 
     @Test
     public void testUnitDeserialization_ReturnsUnit_WhenJsonIsNotNull() {
-        String json = "{\"symbol\":\"kg\"}";
+        String json = "{\"symbol\":\"g\"}";
 
         Unit<?> unit = mapper.readString(json, Unit.class);
 
-        assertEquals(Units.KILOGRAM, unit);
+        assertEquals(SupportedUnits.GRAM, unit);
     }
 
     @Test

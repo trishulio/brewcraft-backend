@@ -45,7 +45,7 @@ public class QuantityUnitServiceImplTest {
 
     @Test
     public void testGetRoles_returnsRoles() throws Exception {
-        Page<UnitEntity> expectedUnitsPage = new PageImpl<>(List.of(new UnitEntity("kg", "kg")));
+        Page<UnitEntity> expectedUnitsPage = new PageImpl<>(List.of(new UnitEntity("g", "g")));
 
         final ArgumentCaptor<Specification<UnitEntity>> specificationCaptor = ArgumentCaptor.forClass(Specification.class);
 
@@ -53,7 +53,7 @@ public class QuantityUnitServiceImplTest {
 
         Page<UnitEntity> actualUnitsPage = quantityUnitService.getUnits(null, new TreeSet<>(List.of("id")), true, 0, 100);
 
-        assertEquals(List.of(new UnitEntity("kg", "kg")), actualUnitsPage.getContent());
+        assertEquals(List.of(new UnitEntity("g", "g")), actualUnitsPage.getContent());
 
         // TODO: Pending testing for the specification
         // specificationCaptor.getValue();

@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
@@ -20,8 +21,8 @@ public class QuantityEntityTest {
 
     @Test
     public void testAllArgsConstructor() {
-        quantity = new QuantityEntity(new UnitEntity("KG"), new BigDecimal("100"));
-        assertEquals(new UnitEntity("KG"), quantity.getUnit());
+        quantity = new QuantityEntity(new UnitEntity("g"), new BigDecimal("100"));
+        assertEquals(new UnitEntity("g"), quantity.getUnit());
         assertEquals(new BigDecimal("100"), quantity.getValue());
     }
 

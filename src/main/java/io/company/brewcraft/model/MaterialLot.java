@@ -158,10 +158,6 @@ public class MaterialLot extends BaseEntity implements UpdateMaterialLot<Shipmen
         this.quantity = QuantityMapper.INSTANCE.toEntity(quantity);
     }
 
-    protected void setQuantity(QuantityEntity quantityEntity) {
-        this.quantity = quantityEntity;
-    }
-
     @Override
     public Shipment getShipment() {
         return this.shipment;

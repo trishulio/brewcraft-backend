@@ -17,7 +17,7 @@ import io.company.brewcraft.model.Tax;
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class InvoiceItemTest {
     private InvoiceItem invoiceItem;
@@ -32,7 +32,7 @@ public class InvoiceItemTest {
         InvoiceItem invoiceItem = new InvoiceItem(2L,
                 0,
                 "desc2",
-                Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
                 new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
                 new Material(7L),
@@ -42,7 +42,7 @@ public class InvoiceItemTest {
 
         assertEquals(2L, invoiceItem.getId());
         assertEquals("desc2", invoiceItem.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), invoiceItem.getQuantity());
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), invoiceItem.getPrice());
         assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), invoiceItem.getTax());
         assertEquals(Money.parse("CAD 20"), invoiceItem.getAmount());
@@ -75,17 +75,17 @@ public class InvoiceItemTest {
     @Test
     public void testAccessQuantity() {
         assertNull(invoiceItem.getQuantity());
-        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM));
-        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM), invoiceItem.getQuantity());
     }
 
     @Test
     public void testSetQuantity_ThrowsException_WhenMaterialHasIncompatibleUnit() {
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
+        material.setBaseQuantityUnit(SupportedUnits.LITRE);
         invoiceItem.setMaterial(material);
 
-        assertThrows(IncompatibleQuantityUnitException.class, () -> invoiceItem.setQuantity(Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> invoiceItem.setQuantity(Quantities.getQuantity("10 g")));
     }
 
     @Test
@@ -111,10 +111,10 @@ public class InvoiceItemTest {
 
     @Test
     public void testSetMaterial_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
-        invoiceItem.setQuantity(Quantities.getQuantity("10 kg"));
+        invoiceItem.setQuantity(Quantities.getQuantity("10 g"));
 
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
+        material.setBaseQuantityUnit(SupportedUnits.LITRE);
         assertThrows(IncompatibleQuantityUnitException.class, () -> invoiceItem.setMaterial(material));
     }
 
@@ -141,7 +141,7 @@ public class InvoiceItemTest {
 
     @Test
     public void testGetAmount_ReturnsProductOfQuantityAndPrice() {
-        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.KILOGRAM));
+        invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.GRAM));
         invoiceItem.setPrice(Money.parse("CAD 10"));
 
         assertEquals(Money.parse("CAD 110"), invoiceItem.getAmount());

@@ -12,8 +12,8 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
+import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
 
 public class MaterialLotTest {
     private MaterialLot lot;
@@ -31,11 +31,11 @@ public class MaterialLotTest {
 
     @Test
     public void testAllArgConstructor() {
-        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
         assertEquals(1L, this.lot.getId());
         assertEquals("LOT_1", this.lot.getLotNumber());
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), this.lot.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), this.lot.getQuantity());
         assertEquals(new InvoiceItem(200L), this.lot.getInvoiceItem());
         assertEquals(new Storage(300L), this.lot.getStorage());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), this.lot.getCreatedAt());
@@ -60,19 +60,19 @@ public class MaterialLotTest {
     @Test
     public void testAccessQuantity() {
         assertNull(this.lot.getQuantity());
-        this.lot.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM));
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), this.lot.getQuantity());
+        this.lot.setQuantity(Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), this.lot.getQuantity());
     }
 
     @Test
     public void testSetQuantity_ThrowsException_WhenQuantityUnitIsIncompatible() {
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
+        material.setBaseQuantityUnit(SupportedUnits.LITRE);
         InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setMaterial(material);
 
         lot.setInvoiceItem(invoiceItem);
-        assertThrows(IncompatibleQuantityUnitException.class, () -> lot.setQuantity(Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> lot.setQuantity(Quantities.getQuantity("10 g")));
     }
 
     @Test
@@ -80,15 +80,8 @@ public class MaterialLotTest {
         InvoiceItem invoiceItem = new InvoiceItem();
         lot.setInvoiceItem(invoiceItem);
 
-        lot.setQuantity(Quantities.getQuantity("10 kg"));
-        assertEquals(Quantities.getQuantity("10 kg"), lot.getQuantity());
-    }
-
-    @Test
-    public void testAccessQuantityOverloadedEntity() {
-        assertNull(this.lot.getQuantity());
-        this.lot.setQuantity(new QuantityEntity(new UnitEntity("kg"), new BigDecimal("10.00")));
-        assertEquals(Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), this.lot.getQuantity());
+        lot.setQuantity(Quantities.getQuantity("10 g"));
+        assertEquals(Quantities.getQuantity("10 g"), lot.getQuantity());
     }
 
     @Test
@@ -109,12 +102,12 @@ public class MaterialLotTest {
     @Test
     public void testSetInvoiceItem_ThrowsException_WhenMaterialUnitIsIncompatibleWithQuantity() {
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.LITRE);
+        material.setBaseQuantityUnit(SupportedUnits.LITRE);
 
         InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setMaterial(material);
 
-        lot.setQuantity(Quantities.getQuantity("10 kg"));
+        lot.setQuantity(Quantities.getQuantity("10 g"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> lot.setInvoiceItem(invoiceItem));
     }
 
@@ -122,12 +115,12 @@ public class MaterialLotTest {
     public void testSetInvoiceItem_DoesNotThrowException_WhenMaterialUnitIsIncompatibleWithQuantity() {
         InvoiceItem invoiceItem = new InvoiceItem();
 
-        lot.setQuantity(Quantities.getQuantity("10 kg"));
+        lot.setQuantity(Quantities.getQuantity("10 g"));
 
         lot.setInvoiceItem(invoiceItem);
 
         assertEquals(invoiceItem, lot.getInvoiceItem());
-        assertEquals(Quantities.getQuantity("10 kg"), lot.getQuantity());
+        assertEquals(Quantities.getQuantity("10 g"), lot.getQuantity());
     }
 
     @Test
@@ -183,9 +176,9 @@ public class MaterialLotTest {
 
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
-        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), Units.KILOGRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+        this.lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), new InvoiceItem(200L), new Storage(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
-        final String json = "{\"id\":1,\"index\":0,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"kg\",\"value\":10},\"invoiceItem\":{\"id\":200,\"index\":null,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"1999-01-01T00:00:00\",\"lastUpdated\":\"2000-01-01T00:00:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"index\":0,\"lotNumber\":\"LOT_1\",\"quantity\":{\"symbol\":\"g\",\"value\":10},\"invoiceItem\":{\"id\":200,\"index\":null,\"description\":null,\"quantity\":null,\"price\":null,\"tax\":null,\"material\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"storage\":{\"id\":300,\"facility\":null,\"name\":null,\"type\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"1999-01-01T00:00:00\",\"lastUpdated\":\"2000-01-01T00:00:00\",\"version\":1}";
         JSONAssert.assertEquals(json, this.lot.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

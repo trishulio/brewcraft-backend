@@ -17,10 +17,10 @@ public class AddMaterialLotDtoTest {
 
     @Test
     public void testAllArgsConstructor_SetsValuesAllFields() {
-        dto = new AddMaterialLotDto("LOT_1", new QuantityDto("kg", new BigDecimal("10.00")), 2L, 3L);
+        dto = new AddMaterialLotDto("LOT_1", new QuantityDto("g", new BigDecimal("10.00")), 2L, 3L);
 
         assertEquals("LOT_1", dto.getLotNumber());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
         assertEquals(2L, dto.getInvoiceItemId());
         assertEquals(3L, dto.getStorageId());
     }
@@ -35,8 +35,8 @@ public class AddMaterialLotDtoTest {
     @Test
     public void testAccessQuantity() {
         assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", new BigDecimal("10.00")));
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        dto.setQuantity(new QuantityDto("g", new BigDecimal("10.00")));
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
@@ -26,9 +27,9 @@ public class QuantityMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenQuantityIsNotNull() {
-        QuantityDto dto = mapper.toDto(Quantities.getQuantity(new BigDecimal(100), SupportedUnits.KILOGRAM));
+        QuantityDto dto = mapper.toDto(Quantities.getQuantity(new BigDecimal(100), SupportedUnits.GRAM));
 
-        assertEquals("kg", dto.getSymbol());
+        assertEquals("g", dto.getSymbol());
         assertEquals(new BigDecimal(100), dto.getValue());
     }
 
@@ -54,8 +55,8 @@ public class QuantityMapperTest {
 
     @Test
     public void testFromDto_ReturnsQuantity_WhenDtoIsNotNull() {
-        Quantity<?> quantity = mapper.fromDto(new QuantityDto("kg", new BigDecimal(100)));
-        assertEquals(SupportedUnits.KILOGRAM, quantity.getUnit());
+        Quantity<?> quantity = mapper.fromDto(new QuantityDto("g", new BigDecimal(100)));
+        assertEquals(SupportedUnits.GRAM, quantity.getUnit());
         assertEquals(new BigDecimal(100), quantity.getValue());
     }
 

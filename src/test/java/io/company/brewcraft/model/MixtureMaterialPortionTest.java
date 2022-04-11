@@ -30,7 +30,7 @@ public class MixtureMaterialPortionTest {
     public void testConstructor() {
         Long id = 1L;
         MaterialLot materialLot = new MaterialLot(2L);
-        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM);
+        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
         Mixture mixture = new Mixture(2L);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
@@ -41,7 +41,7 @@ public class MixtureMaterialPortionTest {
 
         assertEquals(1L, mixtureMaterialPortion.getId());
         assertEquals(new MaterialLot(2L), mixtureMaterialPortion.getMaterialLot());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), mixtureMaterialPortion.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), mixtureMaterialPortion.getQuantity());
         assertEquals(new Mixture(2L), mixtureMaterialPortion.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), mixtureMaterialPortion.getAddedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), mixtureMaterialPortion.getCreatedAt());
@@ -67,20 +67,20 @@ public class MixtureMaterialPortionTest {
         MaterialLot materialLot = new MaterialLot(2L);
         materialLot.setQuantity(Quantities.getQuantity("10 l"));
 
-        mixtureMaterialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        mixtureMaterialPortion.setQuantity(Quantities.getQuantity("10 g"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> mixtureMaterialPortion.setMaterialLot(materialLot));
     }
 
     @Test
     public void testGetSetQuantity() {
-        mixtureMaterialPortion.setQuantity(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM));
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), mixtureMaterialPortion.getQuantity());
+        mixtureMaterialPortion.setQuantity(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM));
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), mixtureMaterialPortion.getQuantity());
     }
 
     @Test
     public void testSetQuantity_ThrowsException_WhenMaterialLotQuantityIsIncompatibleWithPortionQuantity() {
         MaterialLot materialLot = new MaterialLot(2L);
-        materialLot.setQuantity(Quantities.getQuantity("10 kg"));
+        materialLot.setQuantity(Quantities.getQuantity("10 g"));
         mixtureMaterialPortion.setMaterialLot(materialLot);
 
         assertThrows(IncompatibleQuantityUnitException.class, () -> mixtureMaterialPortion.setQuantity(Quantities.getQuantity("10 l")));
@@ -123,7 +123,7 @@ public class MixtureMaterialPortionTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
         MaterialLot materialLot = new MaterialLot(2L);
-        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM);
+        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
         Mixture mixture = new Mixture(2L);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
@@ -132,7 +132,7 @@ public class MixtureMaterialPortionTest {
 
         MixtureMaterialPortion mixtureMaterialPortion = new MixtureMaterialPortion(id, materialLot, quantity, mixture, addedAt, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"materialLot\":{\"id\":2,\"index\":null,\"lotNumber\":null,\"quantity\":null,\"invoiceItem\":null,\"storage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"kg\",\"value\":100},\"addedAt\":\"2018-01-02T03:04:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1,\"mixture\":{\"id\":2,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}}";
+        final String json = "{\"id\":1,\"materialLot\":{\"id\":2,\"index\":null,\"lotNumber\":null,\"quantity\":null,\"invoiceItem\":null,\"storage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"g\",\"value\":100},\"addedAt\":\"2018-01-02T03:04:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1,\"mixture\":{\"id\":2,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}}";
         JSONAssert.assertEquals(json, mixtureMaterialPortion.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

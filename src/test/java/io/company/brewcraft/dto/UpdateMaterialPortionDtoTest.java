@@ -20,7 +20,7 @@ public class UpdateMaterialPortionDtoTest {
     public void testConstructor() {
         Long id = 1L;
         Long materialLotId = 2L;
-        QuantityDto quantityDto = new QuantityDto("kg", new BigDecimal("100"));
+        QuantityDto quantityDto = new QuantityDto("g", new BigDecimal("100"));
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         Integer version = 1;
 
@@ -28,7 +28,7 @@ public class UpdateMaterialPortionDtoTest {
 
         assertEquals(1L, updateMaterialPortionBaseDto.getId());
         assertEquals(2L, updateMaterialPortionBaseDto.getMaterialLotId());
-        assertEquals(new QuantityDto("kg", new BigDecimal("100")), updateMaterialPortionBaseDto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("100")), updateMaterialPortionBaseDto.getQuantity());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), updateMaterialPortionBaseDto.getAddedAt());
         assertEquals(1, updateMaterialPortionBaseDto.getVersion());
     }
@@ -47,8 +47,8 @@ public class UpdateMaterialPortionDtoTest {
 
     @Test
     public void testGetSetQuantity() {
-        updateMaterialPortionBaseDto.setQuantity(new QuantityDto("kg", new BigDecimal("100")));
-        assertEquals(new QuantityDto("kg", new BigDecimal("100")), updateMaterialPortionBaseDto.getQuantity());
+        updateMaterialPortionBaseDto.setQuantity(new QuantityDto("g", new BigDecimal("100")));
+        assertEquals(new QuantityDto("g", new BigDecimal("100")), updateMaterialPortionBaseDto.getQuantity());
     }
 
     @Test

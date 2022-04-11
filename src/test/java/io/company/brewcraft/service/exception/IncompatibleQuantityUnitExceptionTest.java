@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.BaseQuantityUnitAccessor;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class IncompatibleQuantityUnitExceptionTest {
     private Exception ex;
@@ -38,36 +38,36 @@ public class IncompatibleQuantityUnitExceptionTest {
     @Test
     public void testValidateUnit_ThrowsException_WhenUnitsAreIncompatible() {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
-        doReturn(Units.LITRE).when(accessor).getBaseQuantityUnit();
+        doReturn(SupportedUnits.LITRE).when(accessor).getBaseQuantityUnit();
 
-        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateUnit(accessor, Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateUnit(accessor, Quantities.getQuantity("10 g")));
     }
 
     @Test
     public void testValidateUnit_DoesNothing_WhenUnitsAreNotIncompatible() {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
-        doReturn(Units.GRAM).when(accessor).getBaseQuantityUnit();
+        doReturn(SupportedUnits.GRAM).when(accessor).getBaseQuantityUnit();
 
-        IncompatibleQuantityUnitException.validateUnit(accessor, Quantities.getQuantity("10 kg"));
+        IncompatibleQuantityUnitException.validateUnit(accessor, Quantities.getQuantity("10 g"));
     }
 
     @Test
     public void testValidateCompatibleQuantities_ThrowsException_WhenUnitsAreIncompatible() {
-        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 l"), Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 l"), Quantities.getQuantity("10 g")));
     }
 
     @Test
     public void testValidateCompatibleQuantities_DoesNothing_WhenUnitsAreNotIncompatible() {
-        IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 g"), Quantities.getQuantity("10 kg"));
+        IncompatibleQuantityUnitException.validateCompatibleQuantities(Quantities.getQuantity("10 g"), Quantities.getQuantity("10 g"));
     }
 
     @Test
     public void testValidateExpectedUnit_ThrowsException_WhenUnitIsUnexpected() {
-        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.GRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
     }
 
     @Test
     public void testValidateExpectedUnit_DoesNothing_WhenUnitIsExpected() {
-        IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.KILOGRAM));
+        IncompatibleQuantityUnitException.validateExpectedUnit(SupportedUnits.GRAM, Quantities.getQuantity(100, SupportedUnits.GRAM));
     }
 }
