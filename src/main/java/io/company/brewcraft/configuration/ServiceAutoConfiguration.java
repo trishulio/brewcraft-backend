@@ -258,7 +258,7 @@ public class ServiceAutoConfiguration {
     public ProductDtoDecorator productDtoDecorator(TemporaryImageSrcDecorator temporaryImageSrcDecorator) {
         return new ProductDtoDecorator(temporaryImageSrcDecorator);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(BlockingAsyncExecutor.class)
     public BlockingAsyncExecutor executor() {
@@ -322,7 +322,7 @@ public class ServiceAutoConfiguration {
     public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, TenantIaasResourceBuilder resourceBuilder) {
         return new TenantIaasVfsService(TenantIaasVfsResourceMapper.INSTANCE, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, resourceBuilder);
     }
-    
+
     @Bean
     @ConditionalOnMissingBean(TenantIaasUserService.class)
     public TenantIaasUserService tenantIaasUserService(
