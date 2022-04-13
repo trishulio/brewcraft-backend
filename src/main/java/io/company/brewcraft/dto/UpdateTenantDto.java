@@ -4,10 +4,8 @@ import java.net.URL;
 import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
 
 public class UpdateTenantDto extends BaseDto {
-    @Null
     private UUID id;
 
     @NotBlank

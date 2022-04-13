@@ -1,5 +1,7 @@
 package io.company.brewcraft.model;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -31,6 +33,22 @@ public class TenantTest {
         assertEquals(new URL("http://localhost"), tenant.getUrl());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), tenant.getCreatedAt());
         assertEquals(LocalDateTime.of(2001, 1, 1, 0, 0), tenant.getLastUpdated());
+    }
+
+    @Test
+    public void testSetId_NoArgs_SetsRandomUuid_WhenIdIsNull() {
+        assertNull(tenant.getId());
+        tenant.setId();
+
+        assertNotNull(tenant.getId());
+    }
+
+    @Test
+    public void testSetId_NoArgs_DoesNothing_WhenIdIsSet() {
+        tenant.setId(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"));
+
+        tenant.setId();
+        assertEquals(UUID.fromString("89efec46-fd0b-4fec-bcde-7f4bcef4f8e9"), tenant.getId());
     }
 
     @Test
