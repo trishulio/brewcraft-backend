@@ -1,6 +1,6 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -138,7 +138,7 @@ public class MixtureTest {
 
         Mixture mixture = new Mixture(id, parentMixtures, quantity, equipment, materialPortions, recordedMeasures, brewStage, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"parentMixtures\":[{\"id\":9,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"equipment\":{\"id\":3,\"facility\":null,\"name\":null,\"type\":null,\"status\":null,\"maxCapacityValue\":null,\"maxCapacityUnit\":null,\"maxCapacityDisplayUnit\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null,\"maxCapacityInDisplayUnit\":null,\"maxCapacity\":null},\"brewStage\":{\"id\":4,\"brew\":null,\"status\":null,\"task\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"parentMixtures\":[{\"id\":9,\"parentMixtures\":null,\"quantity\":null,\"equipment\":null,\"brewStage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null}],\"quantity\":{\"symbol\":\"hl\",\"value\":100},\"equipment\":{\"id\":3,\"facility\":null,\"name\":null,\"type\":null,\"status\":null,\"maxCapacity\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"brewStage\":{\"id\":4,\"brew\":null,\"status\":null,\"task\":null,\"startedAt\":null,\"endedAt\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, mixture.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }
