@@ -11,7 +11,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,7 +27,6 @@ public class Tenant extends BaseEntity implements UpdateTenant, CrudEntity<UUID>
     public static final String FIELD_IS_READY = "isReady";
 
     @Id
-    @Type(type = "pg-uuid")
     private UUID id;
 
     @Column(name = "name")
