@@ -56,14 +56,14 @@ public class AwsIamPolicyClientTest {
         }).when(mAwsIamClient).getPolicy(any());
 
         doAnswer(inv -> {
-        	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
+            ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
 
-        	List<PolicyVersion> versions = List.of(
-    			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
-    			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
-			);
+            List<PolicyVersion> versions = List.of(
+                new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
+                new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
+            );
 
-        	return new ListPolicyVersionsResult().withVersions(versions);
+            return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
 
         IaasPolicy policy = client.get("POLICY");
@@ -105,14 +105,14 @@ public class AwsIamPolicyClientTest {
         }).when(mAwsIamClient).createPolicy(any());
 
         doAnswer(inv -> {
-        	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
+            ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
 
-        	List<PolicyVersion> versions = List.of(
-    			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
-    			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
-			);
+            List<PolicyVersion> versions = List.of(
+                new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true),
+                new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false)
+            );
 
-        	return new ListPolicyVersionsResult().withVersions(versions);
+            return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
 
         IaasPolicy policy = client.add(new IaasPolicy("POLICY_1", "DOCUMENT", "DESCRIPTION_1", "POLICY_1_ARN", "POLICY_1_ID", null, null));
@@ -132,14 +132,14 @@ public class AwsIamPolicyClientTest {
         }).when(mAwsIamClient).getPolicy(any());
 
         doAnswer(inv -> {
-        	ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
+            ListPolicyVersionsRequest req = inv.getArgument(0, ListPolicyVersionsRequest.class);
 
-        	List<PolicyVersion> versions = List.of(
-    			new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true).withVersionId("DEFAULT_V1"),
-    			new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false).withVersionId("NON_DEFAULT_V1")
-			);
+            List<PolicyVersion> versions = List.of(
+                new PolicyVersion().withDocument("DEFAULT_DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(true).withVersionId("DEFAULT_V1"),
+                new PolicyVersion().withDocument("DOCUMENT_" + req.getPolicyArn()).withIsDefaultVersion(false).withVersionId("NON_DEFAULT_V1")
+            );
 
-        	return new ListPolicyVersionsResult().withVersions(versions);
+            return new ListPolicyVersionsResult().withVersions(versions);
         }).when(mAwsIamClient).listPolicyVersions(any());
 
         IaasPolicy policy = client.update(new IaasPolicy("POLICY_1", "DOCUMENT_1", "DESCRIPTION_1", "IAAS_RES_1", "IAAS_ID_1", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0)));

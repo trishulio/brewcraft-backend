@@ -1,13 +1,14 @@
 package io.company.brewcraft.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.measure.Quantity;
-import javax.measure.Unit;
-import javax.measure.quantity.Mass;
-import javax.measure.quantity.Volume;
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,14 +21,13 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import io.company.brewcraft.service.mapper.QuantityUnitMapper;
-import io.company.brewcraft.util.SupportedUnits;
-import tec.uom.se.quantity.Quantities;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import io.company.brewcraft.service.mapper.QuantityMapper;
+import io.company.brewcraft.util.QuantityCalculator;
 
 @Entity
 @Table(name="EQUIPMENT")
@@ -57,16 +57,14 @@ public class Equipment extends BaseEntity implements Identified<Long> {
     @Enumerated(EnumType.STRING)
     private EquipmentStatus status;
 
-    @Column(name = "max_capacity_value")
-    private BigDecimal maxCapacityValue;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "max_capacity_unit", referencedColumnName = "symbol")
-    private UnitEntity maxCapacityUnit;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "max_capacity_display_unit", referencedColumnName = "symbol")
-    private UnitEntity maxCapacityDisplayUnit;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "value", column = @Column(name = "max_capacity_value_in_sys_unit"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "unit", joinColumns = @JoinColumn(name = "max_capacity_display_unit_symbol", referencedColumnName = "symbol"))
+    })
+    private QuantityEntity maxCapacity;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -87,21 +85,19 @@ public class Equipment extends BaseEntity implements Identified<Long> {
         setId(id);
     }
 
-    public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, BigDecimal maxCapacityValue,
-            Unit<?> maxCapacityUnit, Unit<?> maxCapacityDisplayUnit, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public Equipment(Long id, Facility facility, String name, EquipmentType type, EquipmentStatus status, Quantity<?> maxCapacity, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setFacility(facility);
         setName(name);
         setType(type);
         setStatus(status);
-        setMaxCapacityValue(maxCapacityValue);
-        setMaxCapacityUnit(maxCapacityUnit);
-        setMaxCapacityDisplayUnit(maxCapacityDisplayUnit);
+        setMaxCapacity(maxCapacity);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
         setVersion(version);
     }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -142,34 +138,15 @@ public class Equipment extends BaseEntity implements Identified<Long> {
         this.status = status;
     }
 
-    public BigDecimal getMaxCapacityValue() {
-        return this.maxCapacityValue;
+    public Quantity<?> getMaxCapacity() {
+        Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.maxCapacity);
+
+        return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
-    public void setMaxCapacityValue(BigDecimal value) {
-        this.maxCapacityValue = value;
-    }
-
-    public Unit<?> getMaxCapacityUnit() {
-        return QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit);
-    }
-
-    public void setMaxCapacityUnit(Unit<?> unit) throws IllegalArgumentException {
-        if (unit != null && !isValidUnit(unit)) {
-            throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", unit.getSymbol()));
-        }
-        this.maxCapacityUnit = QuantityUnitMapper.INSTANCE.toEntity(unit);
-    }
-
-    public Unit<?> getMaxCapacityDisplayUnit() {
-        return QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityDisplayUnit);
-    }
-
-    public void setMaxCapacityDisplayUnit(Unit<?> displayUnit) throws IllegalArgumentException {
-        if (displayUnit != null && !isValidUnit(displayUnit)) {
-            throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", displayUnit.getSymbol()));
-        }
-        this.maxCapacityDisplayUnit = QuantityUnitMapper.INSTANCE.toEntity(displayUnit);
+    public void setMaxCapacity(Quantity<?> maxCapacity) {
+        maxCapacity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(maxCapacity);
+        this.maxCapacity = QuantityMapper.INSTANCE.toEntity(maxCapacity);
     }
 
     public LocalDateTime getCreatedAt() {
@@ -194,55 +171,5 @@ public class Equipment extends BaseEntity implements Identified<Long> {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public Quantity<?> getMaxCapacity() {
-        Quantity<?> qty = null;
-        if (this.maxCapacityValue != null && this.maxCapacityUnit != null) {
-            qty = Quantities.getQuantity(this.maxCapacityValue, QuantityUnitMapper.INSTANCE.fromEntity(maxCapacityUnit));
-        }
-        return qty;
-    }
-
-    public Quantity<?> getMaxCapacityInDisplayUnit() {
-        Unit displayUnit = this.getMaxCapacityDisplayUnit();
-
-        if (maxCapacityValue != null && displayUnit != null) {
-            Quantity<?> quantity = this.getMaxCapacity();
-            Quantity<?> quantityInDisplayUnit = quantity.to(displayUnit);
-
-            return quantityInDisplayUnit;
-        } else {
-            return this.getMaxCapacity();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void setMaxCapacity(Quantity<?> maxCapacity) throws IllegalArgumentException {
-        Quantity<?> maxCapacityInPersistedUnit = null;
-
-        if (maxCapacity != null) {
-            if (!isValidUnit(maxCapacity.getUnit())) {
-                throw new IllegalArgumentException(String.format("Unit symbol '%s' is not a valid value", maxCapacity.getUnit().getSymbol()));
-            } else if (SupportedUnits.DEFAULT_VOLUME.isCompatible(maxCapacity.getUnit())) {
-                Quantity<Volume> quantity = (Quantity<Volume>) maxCapacity;
-                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_VOLUME);
-            } else {
-                //Must be mass if its not Volume
-                Quantity<Mass> quantity = (Quantity<Mass>) maxCapacity;
-                maxCapacityInPersistedUnit = quantity.to(SupportedUnits.DEFAULT_MASS);
-            }
-        }
-
-        this.maxCapacityValue = maxCapacityInPersistedUnit != null ? (BigDecimal) maxCapacityInPersistedUnit.getValue() : null;
-        this.maxCapacityUnit = maxCapacityInPersistedUnit != null ? QuantityUnitMapper.INSTANCE.toEntity(maxCapacityInPersistedUnit.getUnit()) : null;
-    }
-
-    private boolean isValidUnit(Unit<?> displayUnit) {
-        boolean result = false;
-        if (SupportedUnits.DEFAULT_VOLUME.isCompatible(displayUnit) || SupportedUnits.DEFAULT_MASS.isCompatible(displayUnit)) {
-            result = true;
-        }
-        return result;
     }
 }
