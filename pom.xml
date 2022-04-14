@@ -254,7 +254,7 @@
         <profile>
             <id>analysis</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
                 <property>
                     <name>env.SONARQUBE</name>
                     <value>true</value>
