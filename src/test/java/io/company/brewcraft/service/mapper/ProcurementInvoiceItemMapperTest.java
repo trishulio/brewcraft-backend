@@ -44,7 +44,7 @@ public class ProcurementInvoiceItemMapperTest {
             2L,
             0,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("200")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10"))),
             new Material(7L),
@@ -58,7 +58,7 @@ public class ProcurementInvoiceItemMapperTest {
         ProcurementInvoiceItemDto expected = new ProcurementInvoiceItemDto(
             2L,
             "desc2",
-            new QuantityDto("KG", new BigDecimal("100")),
+            new QuantityDto("g", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("200.00")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
             new MoneyDto("CAD", new BigDecimal("20000.00")),
@@ -81,7 +81,7 @@ public class ProcurementInvoiceItemMapperTest {
         UpdateProcurementInvoiceItemDto dto = new UpdateProcurementInvoiceItemDto(
             2L,
             "desc2",
-            new QuantityDto("KG", new BigDecimal("100")),
+            new QuantityDto("g", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("200")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             7L,
@@ -94,7 +94,7 @@ public class ProcurementInvoiceItemMapperTest {
             2L,
             null,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
             new Material(7L),
@@ -115,7 +115,7 @@ public class ProcurementInvoiceItemMapperTest {
     public void testFromAddDto_ReturnsEntity_WhenDtoIsNotNull() {
         AddProcurementInvoiceItemDto dto = new AddProcurementInvoiceItemDto(
             "desc2",
-            new QuantityDto("KG", new BigDecimal("100")),
+            new QuantityDto("g", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("200")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             7L
@@ -127,7 +127,7 @@ public class ProcurementInvoiceItemMapperTest {
             null,
             null,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
             new Material(7L),

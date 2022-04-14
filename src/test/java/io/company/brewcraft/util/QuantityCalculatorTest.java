@@ -30,11 +30,11 @@ public class QuantityCalculatorTest {
 
     @Test
     public void subtractMass_Success() {
-        Quantity<Mass> q1 = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM);
-        Quantity<Mass> q2 = Quantities.getQuantity(new BigDecimal("25"), SupportedUnits.KILOGRAM);
+        Quantity<Mass> q1 = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
+        Quantity<Mass> q2 = Quantities.getQuantity(new BigDecimal("25"), SupportedUnits.GRAM);
         Quantity<Mass> result = (Quantity<Mass>) calc.subtract(q1, q2);
 
-        assertEquals(Quantities.getQuantity(new BigDecimal("75"), SupportedUnits.KILOGRAM), result);
+        assertEquals(Quantities.getQuantity(new BigDecimal("75"), SupportedUnits.GRAM), result);
     }
 
     @Test
@@ -70,11 +70,11 @@ public class QuantityCalculatorTest {
 
     @Test
     public void testToSystemQuantityValueWithDisplayUnit_ReturnsSystemValueWithDisplayUnit_WhenArgIsNotNull() {
-        Quantity<?> input = Quantities.getQuantity(new BigDecimal("100000"), Units.GRAM);
+        Quantity<?> input = Quantities.getQuantity(new BigDecimal("100000"), SupportedUnits.GRAM);
 
         Quantity<?> output = calc.toSystemQuantityValueWithDisplayUnit(input);
 
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), Units.GRAM), output);
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), output);
     }
 
     @Test
@@ -84,11 +84,11 @@ public class QuantityCalculatorTest {
 
     @Test
     public void testFromSystemQuantityValueWithDisplayUnit_ReturnsQuantityInDisplayUnit_WhenArgIsNotNull() {
-        Quantity<?> input = Quantities.getQuantity(new BigDecimal("100"), Units.GRAM);
+        Quantity<?> input = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
 
         Quantity<?> output = calc.fromSystemQuantityValueWithDisplayUnit(input);
 
-        assertEquals(Quantities.getQuantity(new BigDecimal("100000"), Units.GRAM), output);
+        assertEquals(Quantities.getQuantity(new BigDecimal("100000"), SupportedUnits.GRAM), output);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class QuantityCalculatorTest {
 
     @Test
     public void testIsCompatibleQtyForUnitAccessor_ReturnsTrue_WhenUnitAccessorIsNull() {
-        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 kg"), null));
+        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 g"), null));
     }
 
     @Test
@@ -108,49 +108,49 @@ public class QuantityCalculatorTest {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
         doReturn(null).when(accessor).getBaseQuantityUnit();
 
-        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 kg"), accessor));
+        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 g"), accessor));
     }
 
     @Test
     public void testIsCompatibleQtyForUnitAccessor_ReturnsTrue_WhenAccessorQuantityIsCompatibleWithUnit() {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
-        doReturn(Units.GRAM).when(accessor).getBaseQuantityUnit();
+        doReturn(SupportedUnits.GRAM).when(accessor).getBaseQuantityUnit();
 
-        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 kg"), accessor));
+        assertTrue(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 g"), accessor));
     }
 
     @Test
     public void testIsCompatibleQtyForUnitAccessor_ReturnsFalse_WhenAccessorQuantityIsNotCompatibleWithUnit() {
         BaseQuantityUnitAccessor accessor = mock(BaseQuantityUnitAccessor.class);
-        doReturn(Units.LITRE).when(accessor).getBaseQuantityUnit();
+        doReturn(SupportedUnits.LITRE).when(accessor).getBaseQuantityUnit();
 
-        assertFalse(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 kg"), accessor));
+        assertFalse(calc.isCompatibleQtyForUnitAccessor(Quantities.getQuantity("10 g"), accessor));
     }
 
     @Test
     public void testAreCompatibleQuantities_ReturnsTrue_WhenQuantitiesHaveCompatibleUnits() {
-        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), Quantities.getQuantity("10 g")));
+        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 g"), Quantities.getQuantity("10 g")));
     }
 
     @Test
     public void testAreCompatibleQuantities_ReturnsTrue_WhenAtleastOneQuantityIsNull() {
         assertTrue(calc.areCompatibleQuantities(null, Quantities.getQuantity("10 g")));
-        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), null));
+        assertTrue(calc.areCompatibleQuantities(Quantities.getQuantity("10 g"), null));
         assertTrue(calc.areCompatibleQuantities(null, null));
     }
 
     @Test
     public void testAreCompatibleQuantities_ReturnsFalse_WhenQuantitiesHaveIncompatibleUnits() {
-        assertFalse(calc.areCompatibleQuantities(Quantities.getQuantity("10 kg"), Quantities.getQuantity("10 l")));
+        assertFalse(calc.areCompatibleQuantities(Quantities.getQuantity("10 g"), Quantities.getQuantity("10 l")));
     }
 
     @Test
     public void testIsExpectedUnit_ReturnsTrue_WhenUnitIsExpected() {
-        assertTrue(calc.isExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.KILOGRAM)));
+        assertTrue(calc.isExpectedUnit(SupportedUnits.GRAM, Quantities.getQuantity(100, SupportedUnits.GRAM)));
     }
 
     @Test
     public void testIsExpectedUnit_ReturnsFalse_WhenUnitIsNotExpected() {
-        assertFalse(calc.isExpectedUnit(SupportedUnits.KILOGRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
+        assertFalse(calc.isExpectedUnit(SupportedUnits.GRAM, Quantities.getQuantity(100, SupportedUnits.LITRE)));
     }
 }

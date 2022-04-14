@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +30,7 @@ public class MaterialTest {
         String description = "testDesc";
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
-        Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        Unit<?> baseQuantityUnit = SupportedUnits.GRAM;
         String imageSrc = "http://www.test.com";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -86,7 +87,7 @@ public class MaterialTest {
 
     @Test
     public void testGetSetBaseQuantityUnit() {
-        Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        Unit<?> baseQuantityUnit = SupportedUnits.GRAM;
         materialEntity.setBaseQuantityUnit(baseQuantityUnit);
         assertSame(baseQuantityUnit, materialEntity.getBaseQuantityUnit());
     }
@@ -125,7 +126,7 @@ public class MaterialTest {
         String description = "testDesc";
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
-        Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        Unit<?> baseQuantityUnit = SupportedUnits.GRAM;
         String imageSrc = "http://www.test.com";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -133,7 +134,7 @@ public class MaterialTest {
 
         Material material = new Material(id, name, description, category, upc, baseQuantityUnit, imageSrc, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"kg\"},\"imageSrc\":\"http://www.test.com\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"name\":\"testName\",\"description\":\"testDesc\",\"category\":{\"id\":null,\"name\":null,\"parentCategory\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"upc\":\"testUPC\",\"baseQuantityUnit\":{\"symbol\":\"g\"},\"imageSrc\":\"http://www.test.com\",\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, material.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 
@@ -144,7 +145,7 @@ public class MaterialTest {
         String description = "testDesc";
         MaterialCategory category = new MaterialCategory();
         String upc = "testUPC";
-        Unit<?> baseQuantityUnit = SupportedUnits.KILOGRAM;
+        Unit<?> baseQuantityUnit = SupportedUnits.GRAM;
         String imageSrc = "http://www.test.com";
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);

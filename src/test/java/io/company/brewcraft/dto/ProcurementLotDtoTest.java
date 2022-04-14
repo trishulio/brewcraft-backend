@@ -17,11 +17,11 @@ public class ProcurementLotDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        this.dto = new ProcurementLotDto(99L, "LOT_99", new QuantityDto("kg", new BigDecimal("10")), new InvoiceItemDto(99L), new StorageDto(99L), new MaterialDto(97L));
+        this.dto = new ProcurementLotDto(99L, "LOT_99", new QuantityDto("g", new BigDecimal("10")), new InvoiceItemDto(99L), new StorageDto(99L), new MaterialDto(97L));
 
         assertEquals(99L, this.dto.getId());
         assertEquals("LOT_99", this.dto.getLotNumber());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10")), this.dto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10")), this.dto.getQuantity());
         assertEquals(new InvoiceItemDto(99L), this.dto.getInvoiceItem());
         assertEquals(new StorageDto(99L), this.dto.getStorage());
         assertEquals(new MaterialDto(97L), this.dto.getMaterial());
@@ -44,8 +44,8 @@ public class ProcurementLotDtoTest {
     @Test
     public void testAccessQuantity() {
         assertNull(this.dto.getQuantity());
-        this.dto.setQuantity(new QuantityDto("kg", new BigDecimal("10")));
-        assertEquals(new QuantityDto("kg", new BigDecimal("10")), this.dto.getQuantity());
+        this.dto.setQuantity(new QuantityDto("g", new BigDecimal("10")));
+        assertEquals(new QuantityDto("g", new BigDecimal("10")), this.dto.getQuantity());
     }
 
     @Test

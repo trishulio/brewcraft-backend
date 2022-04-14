@@ -29,7 +29,7 @@ public class ShipmentTest {
 
     @Test
     public void testAllArgsConstructor_SetsAllValues() {
-        final List<MaterialLot> lots = List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
+        final List<MaterialLot> lots = List.of(new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.GRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1));
         this.shipment = new Shipment(1L,
             "SHIPMENT_1",
             "DESCRIPTION_1",
@@ -55,7 +55,7 @@ public class ShipmentTest {
 
         final MaterialLot lot = this.shipment.getLots().iterator().next();
         assertEquals(1L, lot.getId());
-        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), lot.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.GRAM), lot.getQuantity());
         assertEquals(this.shipment, lot.getShipment());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0, 0), lot.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0, 0), lot.getLastUpdated());

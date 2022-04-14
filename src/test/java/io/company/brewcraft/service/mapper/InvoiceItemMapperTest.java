@@ -37,7 +37,7 @@ public class InvoiceItemMapperTest {
             2L,
             0,
             "desc2",
-            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM),
             Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
             new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
             new Material(7L),
@@ -49,7 +49,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(2L, dto.getId());
         assertEquals("desc2", dto.getDescription());
-        assertEquals(new QuantityDto("KG", new BigDecimal("4")), dto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("4")), dto.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5.00")), dto.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), dto.getTax());
         assertEquals(new MaterialDto(7L), dto.getMaterial());
@@ -66,7 +66,7 @@ public class InvoiceItemMapperTest {
         InvoiceItemDto dto = new InvoiceItemDto(
             2L,
             "desc2",
-            new QuantityDto("KG", new BigDecimal("100")),
+            new QuantityDto("g", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             new MoneyDto("CAD", new BigDecimal("20")),
@@ -79,7 +79,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(2L, invoiceItem.getId());
         assertEquals("desc2", invoiceItem.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), invoiceItem.getQuantity());
         assertEquals(Money.parse("CAD 101"), invoiceItem.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), invoiceItem.getTax());
         assertEquals(new Material(7L), invoiceItem.getMaterial());
@@ -98,7 +98,7 @@ public class InvoiceItemMapperTest {
         UpdateInvoiceItemDto dto = new UpdateInvoiceItemDto(
             1L,
             "desc2",
-            new QuantityDto("KG", new BigDecimal("100")),
+            new QuantityDto("g", new BigDecimal("100")),
             new MoneyDto("CAD", new BigDecimal("101")),
             new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))),
             7L,
@@ -108,7 +108,7 @@ public class InvoiceItemMapperTest {
 
         assertEquals(1L, invoiceItem.getId());
         assertEquals("desc2", invoiceItem.getDescription());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), invoiceItem.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), invoiceItem.getQuantity());
         assertEquals(Money.parse("CAD 101"), invoiceItem.getPrice());
         assertEquals(new Tax(Money.parse("CAD 10")), invoiceItem.getTax());
         assertEquals(new Material(7L), invoiceItem.getMaterial());

@@ -19,7 +19,7 @@ import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMaterialLotMapper;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class ProcurementMaterialLotMapperTest {
     private ProcurementMaterialLotMapper mapper;
@@ -40,7 +40,7 @@ public class ProcurementMaterialLotMapperTest {
             1L,
             0,
             "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
             new InvoiceItem(10L),
             new Storage(100L),
             LocalDateTime.of(2000, 1, 1, 0, 0),
@@ -51,7 +51,7 @@ public class ProcurementMaterialLotMapperTest {
         ProcurementMaterialLotDto expected = new ProcurementMaterialLotDto(
             1L,
             "LOT_NUMBER",
-            new QuantityDto("kg", new BigDecimal("10")),
+            new QuantityDto("g", new BigDecimal("10")),
             new StorageDto(100L),
             LocalDateTime.of(2000, 1, 1, 0, 0),
             LocalDateTime.of(2001, 1, 1, 0, 0),
@@ -70,7 +70,7 @@ public class ProcurementMaterialLotMapperTest {
         MaterialLot lot = mapper.fromUpdateDto(new UpdateProcurementMaterialLotDto(
             1L,
             "LOT_NUMBER",
-            new QuantityDto("kg", new BigDecimal("10")),
+            new QuantityDto("g", new BigDecimal("10")),
             100L,
             1
         ));
@@ -79,7 +79,7 @@ public class ProcurementMaterialLotMapperTest {
             1L,
             null,
             "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
             null,
             new Storage(100L),
             null, // createdAt
@@ -98,7 +98,7 @@ public class ProcurementMaterialLotMapperTest {
     public void testFromAddDto_ReturnsEntity_WhenDtoIsNotNull() {
         MaterialLot lot = mapper.fromAddDto(new AddProcurementMaterialLotDto(
             "LOT_NUMBER",
-            new QuantityDto("kg", new BigDecimal("10")),
+            new QuantityDto("g", new BigDecimal("10")),
             100L
         ));
 
@@ -106,7 +106,7 @@ public class ProcurementMaterialLotMapperTest {
             null, // id
             null,
             "LOT_NUMBER",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
             null,
             new Storage(100L),
             null, // createdAt

@@ -66,8 +66,8 @@ public class FinishedGoodLotControllerTest {
            new FinishedGoodLot(
                10L,
                new Sku(5L),
-               List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
-               List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+               List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+               List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
                List.of(new FinishedGoodLotFinishedGoodLotPortion(8L, new FinishedGoodLot(9L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH), new FinishedGoodLot(10L), null, null, 1)),
                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH),
                LocalDateTime.of(1995, 1, 1, 1, 1),
@@ -118,8 +118,8 @@ public class FinishedGoodLotControllerTest {
        final FinishedGoodLotDto finishedGood = dto.getContent().get(0);
        assertEquals(10L, finishedGood.getId());
        assertEquals(new SkuDto(5L), finishedGood.getSku());
-       assertEquals(List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(8L, new FinishedGoodLotDto(9L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)), finishedGood.getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGood.getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
@@ -131,8 +131,8 @@ public class FinishedGoodLotControllerTest {
        final FinishedGoodLot finishedGood = new FinishedGoodLot(
                10L,
                new Sku(5L),
-               List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
-               List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+               List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+               List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
                List.of(new FinishedGoodLotFinishedGoodLotPortion(8L, new FinishedGoodLot(8L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH), new FinishedGoodLot(10L), null, null, 1)),
                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH),
                LocalDateTime.of(1995, 1, 1, 1, 1),
@@ -145,8 +145,8 @@ public class FinishedGoodLotControllerTest {
        final FinishedGoodLotDto finishedGoodDto = this.controller.getFinishedGood(10L, Set.of());
        assertEquals(10L, finishedGoodDto.getId());
        assertEquals(new SkuDto(5L), finishedGoodDto.getSku());
-       assertEquals(List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGoodDto.getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGoodDto.getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)), finishedGoodDto.getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGoodDto.getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(8L, new FinishedGoodLotDto(8L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)), finishedGoodDto.getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGoodDto.getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGoodDto.getPackagedOn());
@@ -176,8 +176,8 @@ public class FinishedGoodLotControllerTest {
 
        final AddFinishedGoodLotDto payload = new AddFinishedGoodLotDto(
                5L,
-               List.of(new AddMixturePortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(4)))),
-               List.of(new AddMaterialPortionDto(8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1))),
+               List.of(new AddMixturePortionDto(8L, new QuantityDto("g", BigDecimal.valueOf(4)))),
+               List.of(new AddMaterialPortionDto(8L, new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1))),
                List.of(new AddFinishedGoodLotPortionDto(10L, new QuantityDto("each", BigDecimal.valueOf(100)))),
                new QuantityDto("each", BigDecimal.valueOf(100)),
                LocalDateTime.of(1995, 1, 1, 1, 1)
@@ -187,8 +187,8 @@ public class FinishedGoodLotControllerTest {
        assertEquals(1, finishedGoods.size());
        assertEquals(null, finishedGoods.get(0).getId());
        assertEquals(new SkuDto(5L), finishedGoods.get(0).getSku());
-       assertEquals(List.of(new MixturePortionDto(null, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), null)), finishedGoods.get(0).getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(null, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), null)), finishedGoods.get(0).getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(null, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), null)), finishedGoods.get(0).getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(null, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), null)), finishedGoods.get(0).getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(null, new FinishedGoodLotDto(10L), new QuantityDto("each", BigDecimal.valueOf(100)), null)), finishedGoods.get(0).getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGoods.get(0).getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGoods.get(0).getPackagedOn());
@@ -202,8 +202,8 @@ public class FinishedGoodLotControllerTest {
        final UpdateFinishedGoodLotDto payload = new UpdateFinishedGoodLotDto(
                null,
                5L,
-               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
-               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("g", BigDecimal.valueOf(4)), 1)),
+               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                List.of(new UpdateFinishedGoodLotPortionDto(3L, 10L, new QuantityDto("each", BigDecimal.valueOf(100)), 1)),
                new QuantityDto("each", BigDecimal.valueOf(100)),
                LocalDateTime.of(1995, 1, 1, 1, 1),
@@ -214,8 +214,8 @@ public class FinishedGoodLotControllerTest {
 
        assertEquals(1L, finishedGood.getId());
        assertEquals(new SkuDto(5L), finishedGood.getSku());
-       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(3L, new FinishedGoodLotDto(10L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)), finishedGood.getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGood.getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());
@@ -229,8 +229,8 @@ public class FinishedGoodLotControllerTest {
        final List<UpdateFinishedGoodLotDto> payload = List.of(new UpdateFinishedGoodLotDto(
                1L,
                5L,
-               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
-               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("g", BigDecimal.valueOf(4)), 1)),
+               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                List.of(new UpdateFinishedGoodLotPortionDto(3L, 10L, new QuantityDto("each", BigDecimal.valueOf(100)), 1)),
                new QuantityDto("each", BigDecimal.valueOf(100)),
                LocalDateTime.of(1995, 1, 1, 1, 1),
@@ -242,8 +242,8 @@ public class FinishedGoodLotControllerTest {
        assertEquals(1, finishedGoods.size());
        assertEquals(1L, finishedGoods.get(0).getId());
        assertEquals(new SkuDto(5L), finishedGoods.get(0).getSku());
-       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGoods.get(0).getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGoods.get(0).getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)), finishedGoods.get(0).getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGoods.get(0).getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(3L, new FinishedGoodLotDto(10L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)), finishedGoods.get(0).getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGoods.get(0).getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGoods.get(0).getPackagedOn());
@@ -257,8 +257,8 @@ public class FinishedGoodLotControllerTest {
        final UpdateFinishedGoodLotDto payload = new UpdateFinishedGoodLotDto(
                null,
                5L,
-               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
-               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+               List.of(new UpdateMixturePortionDto(1L, 8L, new QuantityDto("g", BigDecimal.valueOf(4)), 1)),
+               List.of(new UpdateMaterialPortionDto(2L, 8L, new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                List.of(new UpdateFinishedGoodLotPortionDto(3L, 10L, new QuantityDto("each", BigDecimal.valueOf(100)), 1)),
                new QuantityDto("each", BigDecimal.valueOf(100)),
                LocalDateTime.of(1995, 1, 1, 1, 1),
@@ -269,8 +269,8 @@ public class FinishedGoodLotControllerTest {
 
        assertEquals(1L, finishedGood.getId());
        assertEquals(new SkuDto(5L), finishedGood.getSku());
-       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
-       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
+       assertEquals(List.of(new MixturePortionDto(1L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)), finishedGood.getMixturePortions());
+       assertEquals(List.of(new MaterialPortionDto(2L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)), finishedGood.getMaterialPortions());
        assertEquals(List.of(new FinishedGoodLotPortionDto(3L, new FinishedGoodLotDto(10L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)), finishedGood.getFinishedGoodLotPortions());
        assertEquals(new QuantityDto("each", BigDecimal.valueOf(100)), finishedGood.getQuantity());
        assertEquals(LocalDateTime.of(1995, 1, 1, 1, 1), finishedGood.getPackagedOn());

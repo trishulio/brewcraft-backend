@@ -24,11 +24,11 @@ public class MaterialLotDtoTest {
 
     @Test
     public void testAllArgConstructor() {
-        dto = new MaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("10.00")), new InvoiceItemDto(200L), new StorageDto(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
+        dto = new MaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10.00")), new InvoiceItemDto(200L), new StorageDto(300L), LocalDateTime.of(1999, 1, 1, 0, 0), LocalDateTime.of(2000, 1, 1, 0, 0), 1);
 
         assertEquals(1L, dto.getId());
         assertEquals("LOT_1", dto.getLotNumber());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
         assertEquals(new InvoiceItemDto(200L), dto.getInvoiceItem());
         assertEquals(new StorageDto(300L), dto.getStorage());
         assertEquals(LocalDateTime.of(1999, 1, 1, 0, 0), dto.getCreatedAt());
@@ -53,8 +53,8 @@ public class MaterialLotDtoTest {
     @Test
     public void testAccessQuantity() {
         assertNull(dto.getQuantity());
-        dto.setQuantity(new QuantityDto("kg", new BigDecimal("10.00")));
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), dto.getQuantity());
+        dto.setQuantity(new QuantityDto("g", new BigDecimal("10.00")));
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), dto.getQuantity());
     }
 
     @Test

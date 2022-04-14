@@ -18,7 +18,7 @@ import io.company.brewcraft.model.ProcurementLot;
 import io.company.brewcraft.model.Shipment;
 import io.company.brewcraft.model.Storage;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class ProcurementLotMapperTest {
     private ProcurementLotMapper mapper;
@@ -38,7 +38,7 @@ public class ProcurementLotMapperTest {
         final ProcurementLot lot = new ProcurementLot(
             1L,
             "LOT_1",
-            Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+            Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
             new Material(3L),
             new Shipment(1L),
             new InvoiceItem(4L),
@@ -50,7 +50,7 @@ public class ProcurementLotMapperTest {
         final ProcurementLotDto expected = new ProcurementLotDto(
             1L,
             "LOT_1",
-            new QuantityDto("kg", new BigDecimal("10")),
+            new QuantityDto("g", new BigDecimal("10")),
             new InvoiceItemDto(4L),
             new StorageDto(2L),
             new MaterialDto(3L)

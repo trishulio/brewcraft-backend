@@ -66,7 +66,7 @@ public class FinishedGoodLotMixturePortionTest {
         mixture.setQuantity(Quantities.getQuantity("10 l"));
         mixturePortion.setMixture(mixture);
 
-        assertThrows(IncompatibleQuantityUnitException.class, () -> mixturePortion.setQuantity(Quantities.getQuantity("10 kg")));
+        assertThrows(IncompatibleQuantityUnitException.class, () -> mixturePortion.setQuantity(Quantities.getQuantity("10 g")));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class FinishedGoodLotMixturePortionTest {
         Mixture mixture = new Mixture(3L);
         mixture.setQuantity(Quantities.getQuantity("10 l"));
 
-        mixturePortion.setQuantity(Quantities.getQuantity("10 kg"));
+        mixturePortion.setQuantity(Quantities.getQuantity("10 g"));
         assertThrows(IncompatibleQuantityUnitException.class, () -> mixturePortion.setMixture(mixture));
     }
 

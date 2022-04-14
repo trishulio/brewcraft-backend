@@ -17,10 +17,10 @@ public class AddInvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        invoiceItem = new AddInvoiceItemDto("desc2", new QuantityDto("kg", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
+        invoiceItem = new AddInvoiceItemDto("desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
 
         assertEquals("desc2", invoiceItem.getDescription());
-        assertEquals(new QuantityDto("KG", new BigDecimal("4")), invoiceItem.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("4")), invoiceItem.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), invoiceItem.getPrice());
         assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), invoiceItem.getTax());
         assertEquals(7L, invoiceItem.getMaterialId());
@@ -36,8 +36,8 @@ public class AddInvoiceItemDtoTest {
     @Test
     public void testAccessQuantity() {
         assertNull(invoiceItem.getQuantity());
-        invoiceItem.setQuantity(new QuantityDto("kg", new BigDecimal(100)));
-        assertEquals(new QuantityDto("kg", new BigDecimal(100)), invoiceItem.getQuantity());
+        invoiceItem.setQuantity(new QuantityDto("g", new BigDecimal(100)));
+        assertEquals(new QuantityDto("g", new BigDecimal(100)), invoiceItem.getQuantity());
     }
 
     @Test

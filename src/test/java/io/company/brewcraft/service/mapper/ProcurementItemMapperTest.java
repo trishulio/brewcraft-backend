@@ -35,7 +35,7 @@ import io.company.brewcraft.model.procurement.ProcurementItem;
 import io.company.brewcraft.service.mapper.procurement.ProcurementItemMapper;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class ProcurementItemMapperTest {
     private ProcurementItemMapper mapper;
@@ -57,7 +57,7 @@ public class ProcurementItemMapperTest {
                 1L,
                 0,
                 "LOT_NUMBER",
-                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
                 new InvoiceItem(10L),
                 new Storage(100L),
                 LocalDateTime.of(2000, 1, 1, 0, 0),
@@ -68,7 +68,7 @@ public class ProcurementItemMapperTest {
                 2L,
                 0,
                 "desc2",
-                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
                 new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
                 new Material(7L),
@@ -85,7 +85,7 @@ public class ProcurementItemMapperTest {
             new ProcurementMaterialLotDto(
                 1L,
                 "LOT_NUMBER",
-                new QuantityDto("kg", new BigDecimal("10")),
+                new QuantityDto("g", new BigDecimal("10")),
                 new StorageDto(100L),
                 LocalDateTime.of(2000, 1, 1, 0, 0),
                 LocalDateTime.of(2001, 1, 1, 0, 0),
@@ -94,7 +94,7 @@ public class ProcurementItemMapperTest {
             new ProcurementInvoiceItemDto(
                 2L,
                 "desc2",
-                new QuantityDto("KG", new BigDecimal("100")),
+                new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
                 new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
                 new MoneyDto("CAD", new BigDecimal("20000.00")),
@@ -118,12 +118,12 @@ public class ProcurementItemMapperTest {
         AddProcurementItemDto dto = new AddProcurementItemDto(
             new AddProcurementMaterialLotDto(
                 "LOT_NUMBER",
-                new QuantityDto("kg", new BigDecimal("10")),
+                new QuantityDto("g", new BigDecimal("10")),
                 100L
             ),
             new AddProcurementInvoiceItemDto(
                 "desc2",
-                new QuantityDto("KG", new BigDecimal("100")),
+                new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
                 new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
                 7L
@@ -137,7 +137,7 @@ public class ProcurementItemMapperTest {
                 null,
                 null,
                 "LOT_NUMBER",
-                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
                 null,
                 new Storage(100L),
                 null,
@@ -148,7 +148,7 @@ public class ProcurementItemMapperTest {
                 null,
                 null,
                 "desc2",
-                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
                 new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
                 new Material(7L),
@@ -172,14 +172,14 @@ public class ProcurementItemMapperTest {
             new UpdateProcurementMaterialLotDto(
                 1L,
                 "LOT_NUMBER",
-                new QuantityDto("kg", new BigDecimal("10")),
+                new QuantityDto("g", new BigDecimal("10")),
                 100L,
                 1
             ),
             new UpdateProcurementInvoiceItemDto(
                 2L,
                 "desc2",
-                new QuantityDto("KG", new BigDecimal("100")),
+                new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
                 new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
                 7L,
@@ -194,7 +194,7 @@ public class ProcurementItemMapperTest {
                 1L,
                 null,
                 "LOT_NUMBER",
-                Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM),
                 null,
                 new Storage(100L),
                 null,
@@ -205,7 +205,7 @@ public class ProcurementItemMapperTest {
                 2L,
                 null,
                 "desc2",
-                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM),
+                Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
                 new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
                 new Material(7L),

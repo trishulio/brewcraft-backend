@@ -1,7 +1,7 @@
 package io.company.brewcraft.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
@@ -12,13 +12,12 @@ import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
 
 import io.company.brewcraft.dto.AddMixtureMaterialPortionDto;
 import io.company.brewcraft.dto.MaterialLotDto;
-import io.company.brewcraft.dto.MixtureMaterialPortionDto;
 import io.company.brewcraft.dto.MixtureDto;
+import io.company.brewcraft.dto.MixtureMaterialPortionDto;
 import io.company.brewcraft.dto.PageDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMixtureMaterialPortionDto;
@@ -45,7 +44,7 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testGetMaterialPortions() {
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         List<MixtureMaterialPortion> materialPortionList = List.of(materialPortion);
         Page<MixtureMaterialPortion> mPage = mock(Page.class);
@@ -63,7 +62,7 @@ public class MixtureMaterialPortionControllerTest {
 
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
@@ -71,7 +70,7 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testGetMaterialPortion() {
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.00"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(materialPortion).when(materialPortionService).getMaterialPortion(1L);
 
@@ -79,7 +78,7 @@ public class MixtureMaterialPortionControllerTest {
 
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.00")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.00")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
@@ -94,10 +93,10 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testAddMaterialPortions() {
-        AddMixtureMaterialPortionDto addMaterialPortionDto = new AddMixtureMaterialPortionDto(2L, new QuantityDto("kg", new BigDecimal("100")), 1L, LocalDateTime.of(2018, 1, 2, 3, 4));
+        AddMixtureMaterialPortionDto addMaterialPortionDto = new AddMixtureMaterialPortionDto(2L, new QuantityDto("g", new BigDecimal("100")), 1L, LocalDateTime.of(2018, 1, 2, 3, 4));
 
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(null, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(1L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, null);
-        MixtureMaterialPortion addedMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(null, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), new Mixture(1L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, null);
+        MixtureMaterialPortion addedMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(addedMaterialPortion)).when(materialPortionService).addMaterialPortions(List.of(materialPortion));
 
@@ -105,7 +104,7 @@ public class MixtureMaterialPortionControllerTest {
 
         assertEquals(1L, materialPortionDtos.get(0).getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDtos.get(0).getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("100")), materialPortionDtos.get(0).getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("100")), materialPortionDtos.get(0).getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDtos.get(0).getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDtos.get(0).getAddedAt());
         assertEquals(1, materialPortionDtos.get(0).getVersion());
@@ -113,10 +112,10 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testPutMaterialPortion() {
-        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("kg", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("g", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
-        MixtureMaterialPortion putMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureMaterialPortion putMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(putMaterialPortion)).when(materialPortionService).putMaterialPortions(List.of(materialPortion));
 
@@ -125,7 +124,7 @@ public class MixtureMaterialPortionControllerTest {
         // Assert returned material portion
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.5")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.5")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());
@@ -133,10 +132,10 @@ public class MixtureMaterialPortionControllerTest {
 
     @Test
     public void testPatchMaterialPortion() {
-        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("kg", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
+        UpdateMixtureMaterialPortionDto updateMaterialPortionDto = new UpdateMixtureMaterialPortionDto(null, 2L, new QuantityDto("g", new BigDecimal("10.5")), 3L, LocalDateTime.of(2018, 1, 2, 3, 4), 1);
 
-        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
-        MixtureMaterialPortion patchMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.KILOGRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
+        MixtureMaterialPortion materialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), null, null, 1);
+        MixtureMaterialPortion patchMaterialPortion = new MixtureMaterialPortion(1L, new MaterialLot(2L), Quantities.getQuantity(new BigDecimal("10.5"), SupportedUnits.GRAM), new Mixture(3L), LocalDateTime.of(2018, 1, 2, 3, 4), LocalDateTime.of(2019, 1, 2, 3, 4), LocalDateTime.of(2020, 1, 2, 3, 4), 1);
 
         doReturn(List.of(patchMaterialPortion)).when(materialPortionService).patchMaterialPortions(List.of(materialPortion));
 
@@ -145,7 +144,9 @@ public class MixtureMaterialPortionControllerTest {
         // Assert returned material portion
         assertEquals(1L, materialPortionDto.getId());
         assertEquals(new MaterialLotDto(2L), materialPortionDto.getMaterialLot());
-        assertEquals(new QuantityDto("kg", new BigDecimal("10.5")), materialPortionDto.getQuantity());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.5")).getValue(), materialPortionDto.getQuantity().getValue());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.5")).getSymbol(), materialPortionDto.getQuantity().getSymbol());
+        assertEquals(new QuantityDto("g", new BigDecimal("10.5")), materialPortionDto.getQuantity());
         assertEquals(new MixtureDto(3L), materialPortionDto.getMixture());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortionDto.getAddedAt());
         assertEquals(1, materialPortionDto.getVersion());

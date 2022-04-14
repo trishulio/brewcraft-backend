@@ -50,7 +50,7 @@ public class QuantityUnitMapperTest {
         assertSame(Units.JOULE, mapper.fromSymbol("J"));
         assertSame(Units.KATAL, mapper.fromSymbol("kat"));
         assertSame(Units.KELVIN, mapper.fromSymbol("K"));
-        assertSame(Units.KILOGRAM, mapper.fromSymbol("kg"));
+        assertSame(Units.GRAM, mapper.fromSymbol("g"));
         assertSame(Units.KILOMETRE_PER_HOUR, mapper.fromSymbol("km/h"));
         assertSame(Units.LITRE, mapper.fromSymbol("l"));
         assertSame(Units.LUMEN, mapper.fromSymbol("lm"));
@@ -83,10 +83,10 @@ public class QuantityUnitMapperTest {
     @Test
     public void testFromEntity_ReturnsPojo_WhenEntityIsNotNull() {
         mapper = spy(mapper);
-        doReturn(Units.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
+        doReturn(Units.GRAM).when(mapper).fromSymbol("TEST_SYMBOL");
 
         Unit<?> unit = mapper.fromEntity(new UnitEntity("TEST_SYMBOL"));
-        assertSame(Units.KILOGRAM, unit);
+        assertSame(Units.GRAM, unit);
     }
 
     @Test
@@ -97,10 +97,10 @@ public class QuantityUnitMapperTest {
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
         mapper = spy(mapper);
-        doReturn(Units.KILOGRAM).when(mapper).fromSymbol("TEST_SYMBOL");
+        doReturn(Units.GRAM).when(mapper).fromSymbol("TEST_SYMBOL");
 
         Unit<?> unit = mapper.fromDto(new UnitDto("TEST_SYMBOL"));
-        assertSame(Units.KILOGRAM, unit);
+        assertSame(Units.GRAM, unit);
     }
 
     @Test
@@ -115,8 +115,8 @@ public class QuantityUnitMapperTest {
 
     @Test
     public void testToSymbol_ReturnsSymbol_WhenUnitIsNotNull() {
-        assertEquals(Units.KILOGRAM.toString(), mapper.toSymbol(Units.KILOGRAM));
-        assertEquals("kg", mapper.toSymbol(Units.KILOGRAM));
+        assertEquals(Units.GRAM.toString(), mapper.toSymbol(Units.GRAM));
+        assertEquals("g", mapper.toSymbol(Units.GRAM));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class QuantityUnitMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        assertEquals(new UnitDto("kg"), mapper.toDto(Units.KILOGRAM));
+        assertEquals(new UnitDto("g"), mapper.toDto(Units.GRAM));
     }
 
     @Test
@@ -136,6 +136,6 @@ public class QuantityUnitMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenEntityIsNotNull() {
-        assertEquals(new UnitDto("kg"), mapper.toDto(new UnitEntity("kg")));
+        assertEquals(new UnitDto("g"), mapper.toDto(new UnitEntity("g")));
     }
 }

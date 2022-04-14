@@ -21,7 +21,7 @@ import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Tax;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
+import io.company.brewcraft.util.SupportedUnits;
 
 public class InvoiceTest {
     private Invoice invoice;
@@ -176,11 +176,11 @@ public class InvoiceTest {
     public void testGetAmount_ReturnsTotalOfAllItemsAmount() {
         final InvoiceItem invoiceItem1 = spy(new InvoiceItem());
         invoiceItem1.setPrice(Money.parse("CAD 10"));
-        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         final InvoiceItem invoiceItem2 = spy(new InvoiceItem());
         invoiceItem2.setPrice(Money.parse("CAD 20"));
-        invoiceItem2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        invoiceItem2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         this.invoice.setInvoiceItems(List.of(invoiceItem1, invoiceItem2));
         assertEquals(Money.parse("CAD 300"), this.invoice.getAmount());
@@ -190,7 +190,7 @@ public class InvoiceTest {
     public void testGetAmount_ReturnsAmountOfAddedItem() {
         final InvoiceItem invoiceItem1 = spy(new InvoiceItem());
         invoiceItem1.setPrice(Money.parse("CAD 20"));
-        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         this.invoice.addItem(invoiceItem1);
         assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
@@ -200,11 +200,11 @@ public class InvoiceTest {
     public void testGetAmount_ReturnsAmountReducedByRemovedItem() {
         final InvoiceItem invoiceItem1 = spy(new InvoiceItem());
         invoiceItem1.setPrice(Money.parse("CAD 10"));
-        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         final InvoiceItem invoiceItem2 = spy(new InvoiceItem());
         invoiceItem2.setPrice(Money.parse("CAD 20"));
-        invoiceItem2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), Units.KILOGRAM));
+        invoiceItem2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         this.invoice.setInvoiceItems(List.of(invoiceItem1, invoiceItem2));
 

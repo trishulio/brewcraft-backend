@@ -102,7 +102,7 @@ public class AddInvoiceDtoTest {
     @Test
     public void testAccessInvoiceItems() {
         assertNull(invoice.getInvoiceItems());
-        invoice.setInvoiceItems(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)));
-        assertEquals(List.of(new AddInvoiceItemDto("desc", new QuantityDto("kg", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)), invoice.getInvoiceItems());
+        invoice.setInvoiceItems(List.of(new AddInvoiceItemDto("desc", new QuantityDto("g", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)));
+        assertEquals(List.of(new AddInvoiceItemDto("desc", new QuantityDto("g", new BigDecimal("10")), new MoneyDto("CAD", new BigDecimal("20")), new TaxDto(), 1L)), invoice.getInvoiceItems());
     }
 }

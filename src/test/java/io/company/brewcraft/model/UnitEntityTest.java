@@ -19,35 +19,35 @@ public class UnitEntityTest {
 
     @Test
     public void testArgConstructor_String() {
-        unit = new UnitEntity("kg");
+        unit = new UnitEntity("g");
 
-        assertEquals("kg", unit.getSymbol());
+        assertEquals("g", unit.getSymbol());
         assertNull(unit.getName());
         assertNull(unit.getBaseUnitEntity());
     }
 
     @Test
     public void testArgConstructor_StringString() {
-        unit = new UnitEntity("kg", "Kilogram");
+        unit = new UnitEntity("g", "gram");
 
-        assertEquals("kg", unit.getSymbol());
-        assertEquals("Kilogram", unit.getName());
+        assertEquals("g", unit.getSymbol());
+        assertEquals("gram", unit.getName());
         assertNull(unit.getBaseUnitEntity());
     }
 
     @Test
     public void testAllArgsConstructor() {
-        unit = new UnitEntity("g", "gram", new UnitEntity("kg"));
+        unit = new UnitEntity("g", "gram", new UnitEntity("g"));
         assertEquals("g", unit.getSymbol());
         assertEquals("gram", unit.getName());
-        assertEquals(new UnitEntity("kg"), unit.getBaseUnitEntity());
+        assertEquals(new UnitEntity("g"), unit.getBaseUnitEntity());
     }
 
     @Test
     public void testAccessSymbol() {
         assertNull(unit.getSymbol());
-        unit.setSymbol("KG");
-        assertEquals("KG", unit.getSymbol());
+        unit.setSymbol("g");
+        assertEquals("g", unit.getSymbol());
     }
 
     @Test
@@ -60,8 +60,8 @@ public class UnitEntityTest {
     @Test
     public void testGetSetBaseUnitEntity() {
         assertNull(unit.getBaseUnitEntity());
-        unit.setBaseUnitEntity(new UnitEntity("kg", "Kilogram"));
-        assertEquals(new UnitEntity("kg", "Kilogram"), unit.getBaseUnitEntity());
+        unit.setBaseUnitEntity(new UnitEntity("g", "gram"));
+        assertEquals(new UnitEntity("g", "gram"), unit.getBaseUnitEntity());
     }
 
     @Test

@@ -52,8 +52,8 @@ public class FinishedGoodInventoryMapperTest {
         FinishedGoodInventory finishedGoodInventory = new FinishedGoodInventory(
                 10L,
                 new Sku(5L),
-                List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
-                List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.KILOGRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+                List.of(new FinishedGoodLotMixturePortion(6L, new Mixture(8L), Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
+                List.of(new FinishedGoodLotMaterialPortion(7L, new MaterialLot(8L), Quantities.getQuantity(new BigDecimal("5"), SupportedUnits.GRAM), new FinishedGoodLot(10L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(2000, 1, 1, 1, 1), LocalDateTime.of(2001, 1, 1, 1, 1), 1)),
                 List.of(new FinishedGoodLotFinishedGoodLotPortion(8L, new FinishedGoodLot(9L), Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH), new FinishedGoodLot(10L), null, null, 1)),
                 Quantities.getQuantity(100.0, SupportedUnits.EACH),
                 LocalDateTime.of(1995, 1, 1, 1, 1)
@@ -64,8 +64,8 @@ public class FinishedGoodInventoryMapperTest {
         FinishedGoodInventoryDto expected = new FinishedGoodInventoryDto(
                 10L,
                 new SkuDto(5L),
-                List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("kg", BigDecimal.valueOf(4)), 1)),
-                List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("kg", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+                List.of(new MixturePortionDto(6L, new MixtureDto(8L), new QuantityDto("g", BigDecimal.valueOf(4)), 1)),
+                List.of(new MaterialPortionDto(7L, new MaterialLotDto(8L), new QuantityDto("g", BigDecimal.valueOf(5)), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                 List.of(new FinishedGoodLotPortionDto(8L, new FinishedGoodLotDto(9L), new QuantityDto("each", BigDecimal.valueOf(100)), 1)),
                 LocalDateTime.of(1995, 1, 1, 1, 1),
                 new QuantityDto("each", BigDecimal.valueOf(100.0))

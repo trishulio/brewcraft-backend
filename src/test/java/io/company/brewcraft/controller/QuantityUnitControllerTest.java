@@ -33,10 +33,10 @@ public class QuantityUnitControllerTest {
 
    @Test
    public void testGetUnits() {
-       Page<UnitEntity> mPage = new PageImpl<>(List.of(new UnitEntity("kg", "kg")));
+       Page<UnitEntity> mPage = new PageImpl<>(List.of(new UnitEntity("g", "g")));
 
        doReturn(mPage).when(quantityUnitService).getUnits(
-           Set.of("kg"),
+           Set.of("g"),
            new TreeSet<>(List.of("id")),
            true,
            1,
@@ -44,7 +44,7 @@ public class QuantityUnitControllerTest {
        );
 
        PageDto<UnitDto> dto = quantityUnitController.getUnits(
-               Set.of("kg"),
+               Set.of("g"),
                new TreeSet<>(List.of("id")),
                true,
                1,
@@ -52,6 +52,6 @@ public class QuantityUnitControllerTest {
        );
 
        assertEquals(1, dto.getTotalPages());
-       assertEquals(List.of(new UnitDto("kg")), dto.getContent());
+       assertEquals(List.of(new UnitDto("g")), dto.getContent());
    }
 }

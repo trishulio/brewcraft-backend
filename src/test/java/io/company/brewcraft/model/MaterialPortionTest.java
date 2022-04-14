@@ -17,7 +17,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
 
 public class MaterialPortionTest {
     private MaterialPortion materialPortion;
@@ -31,7 +30,7 @@ public class MaterialPortionTest {
     public void testConstructor() {
         Long id = 1L;
         MaterialLot materialLot = new MaterialLot(2L);
-        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM);
+        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -41,7 +40,7 @@ public class MaterialPortionTest {
 
         assertEquals(1L, materialPortion.getId());
         assertEquals(new MaterialLot(2L), materialPortion.getMaterialLot());
-        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM), materialPortion.getQuantity());
+        assertEquals(Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM), materialPortion.getQuantity());
         assertEquals(LocalDateTime.of(2018, 1, 2, 3, 4), materialPortion.getAddedAt());
         assertEquals(LocalDateTime.of(2019, 1, 2, 3, 4), materialPortion.getCreatedAt());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), materialPortion.getLastUpdated());
@@ -57,7 +56,7 @@ public class MaterialPortionTest {
     @Test
     public void testGetSetMaterialLot() {
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.KILOGRAM);
+        material.setBaseQuantityUnit(SupportedUnits.GRAM);
 
         InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setMaterial(material);
@@ -65,7 +64,7 @@ public class MaterialPortionTest {
         MaterialLot materialLot = new MaterialLot();
         materialLot.setInvoiceItem(invoiceItem);
 
-        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        materialPortion.setQuantity(Quantities.getQuantity("10 g"));
 
         materialPortion.setMaterialLot(new MaterialLot(2L));
 
@@ -77,7 +76,7 @@ public class MaterialPortionTest {
         MaterialLot materialLot = new MaterialLot();
         materialLot.setQuantity(Quantities.getQuantity("10 l"));
 
-        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        materialPortion.setQuantity(Quantities.getQuantity("10 g"));
 
         assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setMaterialLot(materialLot));
     }
@@ -85,7 +84,7 @@ public class MaterialPortionTest {
     @Test
     public void testGetSetQuantity() {
         Material material = new Material();
-        material.setBaseQuantityUnit(Units.KILOGRAM);
+        material.setBaseQuantityUnit(SupportedUnits.GRAM);
 
         InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setMaterial(material);
@@ -94,15 +93,15 @@ public class MaterialPortionTest {
         materialLot.setInvoiceItem(invoiceItem);
 
         materialPortion.setMaterialLot(materialLot);
-        materialPortion.setQuantity(Quantities.getQuantity("10 kg"));
+        materialPortion.setQuantity(Quantities.getQuantity("10 g"));
 
-        assertEquals(Quantities.getQuantity("10 kg"), materialPortion.getQuantity());
+        assertEquals(Quantities.getQuantity("10 g"), materialPortion.getQuantity());
     }
 
     @Test
     public void testGetSetQuantity_ThrowsException_WhenQuantityUnitDoesNotMatchLotQuantity() {
         MaterialLot materialLot = new MaterialLot();
-        materialLot.setQuantity(Quantities.getQuantity("10 kg"));
+        materialLot.setQuantity(Quantities.getQuantity("10 g"));
 
         materialPortion.setMaterialLot(materialLot);
         assertThrows(IncompatibleQuantityUnitException.class, () -> materialPortion.setQuantity(Quantities.getQuantity("10 l")));
@@ -139,7 +138,7 @@ public class MaterialPortionTest {
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
         MaterialLot materialLot = new MaterialLot(2L);
-        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.KILOGRAM);
+        Quantity<?> quantity = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
         LocalDateTime addedAt = LocalDateTime.of(2018, 1, 2, 3, 4);
         LocalDateTime created = LocalDateTime.of(2019, 1, 2, 3, 4);
         LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -147,7 +146,7 @@ public class MaterialPortionTest {
 
         MaterialPortion materialPortion = new MaterialPortion(id, materialLot, quantity, addedAt, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"materialLot\":{\"id\":2,\"index\":null,\"lotNumber\":null,\"quantity\":null,\"invoiceItem\":null,\"storage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"kg\",\"value\":100},\"addedAt\":\"2018-01-02T03:04:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"materialLot\":{\"id\":2,\"index\":null,\"lotNumber\":null,\"quantity\":null,\"invoiceItem\":null,\"storage\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"quantity\":{\"symbol\":\"g\",\"value\":100},\"addedAt\":\"2018-01-02T03:04:00\",\"createdAt\":\"2019-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
         JSONAssert.assertEquals(json, materialPortion.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

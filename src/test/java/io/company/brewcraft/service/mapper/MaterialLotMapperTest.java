@@ -31,11 +31,11 @@ public class MaterialLotMapperTest {
 
     @Test
     public void toDto_ReturnsDtoFromMaterialLot_WhenMaterialLotIsNotNull() {
-        final MaterialLot lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        final MaterialLot lot = new MaterialLot(1L, 0, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.GRAM), new InvoiceItem(1L), new Storage(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         final MaterialLotDto dto = this.mapper.toDto(lot);
 
-        final MaterialLotDto expected = new MaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("1")), new InvoiceItemDto(1L), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
+        final MaterialLotDto expected = new MaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("1")), new InvoiceItemDto(1L), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1);
 
         assertEquals(expected, dto);
     }
@@ -47,11 +47,11 @@ public class MaterialLotMapperTest {
 
     @Test
     public void fromDto_ReturnMaterialLot_WhenDtoIsNotNull() {
-        final UpdateMaterialLotDto dto = new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("kg", new BigDecimal("1")), 1L, 3L, 1);
+        final UpdateMaterialLotDto dto = new UpdateMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("1")), 1L, 3L, 1);
 
         final MaterialLot lot = this.mapper.fromUpdateDto(dto);
 
-        final MaterialLot expected = new MaterialLot(1L, null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.KILOGRAM), new InvoiceItem(1L), new Storage(3L), null, null, 1);
+        final MaterialLot expected = new MaterialLot(1L, null, "LOT_1", Quantities.getQuantity(new BigDecimal("1"), SupportedUnits.GRAM), new InvoiceItem(1L), new Storage(3L), null, null, 1);
         assertEquals(expected, lot);
     }
 
