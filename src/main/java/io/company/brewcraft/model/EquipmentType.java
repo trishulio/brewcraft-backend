@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
-@Table(name="EQUIPMENT_TYPE")
+@Entity(name = "equipment_type")
+@Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class EquipmentType extends BaseModel implements UpdateEquipmentType, Audited {
     public static final String FIELD_ID = "id";

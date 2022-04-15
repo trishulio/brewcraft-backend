@@ -31,8 +31,8 @@ import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
-@Entity
-@Table(name="EQUIPMENT")
+@Entity(name = "equipment")
+@Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
 public class Equipment extends BaseEntity implements CrudEntity<Long>, UpdateEquipment, Audited {
     public static final String FIELD_ID = "id";

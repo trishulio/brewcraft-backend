@@ -8,7 +8,6 @@ import io.company.brewcraft.service.FacilityAccessor;
 
 public interface BaseEquipment extends FacilityAccessor, EquipmentTypeAccessor {
     final String ATTR_NAME = "name";
-    final String ATTR_TYPE = "type";
     final String ATTR_STATUS = "status";
     final String ATTR_MAX_CAPACITY = "maxCapacity";
 

@@ -23,7 +23,6 @@ public class UpdateEquipmentDto extends BaseDto {
     private Integer version;
 
     public UpdateEquipmentDto() {
-        super();
     }
 
     public UpdateEquipmentDto(Long id) {

@@ -1,4 +1,4 @@
-package io.company.brewcraft.service.impl;
+package io.company.brewcraft.service;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,11 +19,6 @@ import io.company.brewcraft.model.EquipmentType;
 import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.repository.WhereClauseBuilder;
-import io.company.brewcraft.service.BaseService;
-import io.company.brewcraft.service.CrudService;
-import io.company.brewcraft.service.EquipmentAccessor;
-import io.company.brewcraft.service.RepoService;
-import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
 
 @Transactional
@@ -49,12 +44,12 @@ public class EquipmentService extends BaseService implements CrudService<Long, E
             boolean orderAscending
          ) {
         final Specification<Equipment> spec = WhereClauseBuilder
-                                            .builder()
-                                            .in(Equipment.FIELD_ID, ids)
-                                            .not().in(Equipment.FIELD_ID, excludeIds)
-                                            .in(new String[] { Equipment.FIELD_FACILITY, Facility.FIELD_ID }, facilityIds)
-                                            .in(new String[] { Equipment.FIELD_TYPE, EquipmentType.FIELD_ID }, typeIds)
-                                            .build();
+                                                .builder()
+                                                .in(Equipment.FIELD_ID, ids)
+                                                .not().in(Equipment.FIELD_ID, excludeIds)
+                                                .in(new String[] { Equipment.FIELD_FACILITY, Facility.FIELD_ID }, facilityIds)
+                                                .in(new String[] { Equipment.FIELD_TYPE, EquipmentType.FIELD_ID }, typeIds)
+                                                .build();
 
         return this.repoService.getAll(spec, sort, orderAscending, page, size);
     }

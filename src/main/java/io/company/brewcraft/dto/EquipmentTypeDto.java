@@ -8,7 +8,6 @@ public class EquipmentTypeDto extends BaseDto {
     private Integer version;
 
     public EquipmentTypeDto() {
-        super();
     }
 
     public EquipmentTypeDto(Long id) {

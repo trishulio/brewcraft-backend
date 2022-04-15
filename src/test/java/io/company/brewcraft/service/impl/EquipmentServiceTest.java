@@ -21,6 +21,7 @@ import io.company.brewcraft.dto.UpdateEquipment;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.Identified;
 import io.company.brewcraft.service.EquipmentAccessor;
+import io.company.brewcraft.service.EquipmentService;
 import io.company.brewcraft.service.RepoService;
 import io.company.brewcraft.service.UpdateService;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
