@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
 
 public class UpdateEquipmentDtoTest {
     private UpdateEquipmentDto updateEquipmentDto;
@@ -20,53 +19,58 @@ public class UpdateEquipmentDtoTest {
 
     @Test
     public void testConstructor() {
+        Long id = 1L;
         String name = "equipment1";
-        EquipmentType type = EquipmentType.BARREL;
+        Long typeId = 2L;
+        Long facilityId = 3L;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
         int version = 1;
 
-        UpdateEquipmentDto equipment = new UpdateEquipmentDto(name, type, status, maxCapacity, version);
+        UpdateEquipmentDto equipment = new UpdateEquipmentDto(id, name, typeId, facilityId, status, maxCapacity, version);
 
-        assertSame(name, equipment.getName());
-        assertSame(type, equipment.getType());
-        assertSame(status, equipment.getStatus());
-        assertSame(maxCapacity, equipment.getMaxCapacity());
-        assertSame(version, equipment.getVersion());
+        assertEquals(1L, equipment.getId());
+        assertEquals("equipment1", equipment.getName());
+        assertEquals(2L, equipment.getTypeId());
+        assertEquals(3L, equipment.getFacilityId());
+        assertEquals(EquipmentStatus.ACTIVE, equipment.getStatus());
+        assertEquals(new QuantityDto("L", new BigDecimal("100.0")), equipment.getMaxCapacity());
+        assertEquals(1, equipment.getVersion());
     }
 
     @Test
     public void testGetSetName() {
-        String name = "testName";
-        updateEquipmentDto.setName(name);
-        assertSame(name, updateEquipmentDto.getName());
+        updateEquipmentDto.setName("testName");
+        assertEquals("testName", updateEquipmentDto.getName());
     }
 
     @Test
-    public void testGetSetType() {
-        EquipmentType type = EquipmentType.FERMENTER;
-        updateEquipmentDto.setType(type);
-        assertSame(type, updateEquipmentDto.getType());
+    public void testGetSetTypeId() {
+        updateEquipmentDto.setTypeId(2L);
+        assertEquals(2L, updateEquipmentDto.getTypeId());
+    }
+
+    @Test
+    public void testGetFacilityId() {
+        updateEquipmentDto.setFacilityId(1L);
+        assertEquals(1L, updateEquipmentDto.getFacilityId());
     }
 
     @Test
     public void testGetSetStatus() {
-        EquipmentStatus status = EquipmentStatus.ACTIVE;
-        updateEquipmentDto.setStatus(status);
-        assertSame(status, updateEquipmentDto.getStatus());
+        updateEquipmentDto.setStatus(EquipmentStatus.ACTIVE);
+        assertEquals(EquipmentStatus.ACTIVE, updateEquipmentDto.getStatus());
     }
 
     @Test
     public void testGetSetMaxCapacity() {
-        QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
-        updateEquipmentDto.setMaxCapacity(maxCapacity);
-        assertSame(maxCapacity, updateEquipmentDto.getMaxCapacity());
+        updateEquipmentDto.setMaxCapacity(new QuantityDto("L", new BigDecimal("100.0")));
+        assertEquals(new QuantityDto("L", new BigDecimal("100.0")), updateEquipmentDto.getMaxCapacity());
     }
 
     @Test
     public void testGetSetVersion() {
-        Integer version = 1;
-        updateEquipmentDto.setVersion(version);
-        assertSame(version, updateEquipmentDto.getVersion());
+        updateEquipmentDto.setVersion(1);
+        assertEquals(1, updateEquipmentDto.getVersion());
     }
 }

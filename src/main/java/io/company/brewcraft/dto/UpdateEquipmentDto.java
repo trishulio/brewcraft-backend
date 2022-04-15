@@ -3,13 +3,17 @@ package io.company.brewcraft.dto;
 import javax.validation.constraints.NotNull;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
 
 public class UpdateEquipmentDto extends BaseDto {
+
+    private Long id;
+
     @NullOrNotBlank()
     private String name;
 
-    private EquipmentType type;
+    private Long typeId;
+
+    private Long facilityId;
 
     private EquipmentStatus status;
 
@@ -22,13 +26,27 @@ public class UpdateEquipmentDto extends BaseDto {
         super();
     }
 
-    public UpdateEquipmentDto(String name, EquipmentType type, EquipmentStatus status, QuantityDto maxCapacity, Integer version) {
-        super();
+    public UpdateEquipmentDto(Long id) {
+        this();
+        this.id = id;
+    }
+
+    public UpdateEquipmentDto(Long id, String name, Long typeId, Long facilityId, EquipmentStatus status, QuantityDto maxCapacity, Integer version) {
+        this(id);
         this.name = name;
-        this.type = type;
+        this.typeId = typeId;
+        this.facilityId = facilityId;
         this.status = status;
         this.maxCapacity = maxCapacity;
         this.version = version;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -39,12 +57,20 @@ public class UpdateEquipmentDto extends BaseDto {
         this.name = name;
     }
 
-    public EquipmentType getType() {
-        return type;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType(EquipmentType type) {
-        this.type = type;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    public Long getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(Long facilityId) {
+        this.facilityId = facilityId;
     }
 
     public EquipmentStatus getStatus() {

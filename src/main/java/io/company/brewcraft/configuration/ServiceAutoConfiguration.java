@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 import io.company.brewcraft.controller.IaasObjectStoreFileController;
 import io.company.brewcraft.controller.UserDtoDecorator;
+import io.company.brewcraft.dto.BaseEquipment;
 import io.company.brewcraft.dto.BaseInvoice;
+import io.company.brewcraft.dto.UpdateEquipment;
 import io.company.brewcraft.dto.UpdateFinishedGoodLot;
 import io.company.brewcraft.dto.UpdateInvoice;
 import io.company.brewcraft.migration.MigrationManager;
@@ -40,6 +42,7 @@ import io.company.brewcraft.model.BaseSkuMaterial;
 import io.company.brewcraft.model.BaseTenant;
 import io.company.brewcraft.model.Brew;
 import io.company.brewcraft.model.BrewStage;
+import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
@@ -147,7 +150,7 @@ import io.company.brewcraft.service.BrewTaskService;
 import io.company.brewcraft.service.BrewTaskServiceImpl;
 import io.company.brewcraft.service.BulkIaasClient;
 import io.company.brewcraft.service.CrudRepoService;
-import io.company.brewcraft.service.EquipmentService;
+import io.company.brewcraft.service.EquipmentAccessor;
 import io.company.brewcraft.service.FacilityService;
 import io.company.brewcraft.service.FinishedGoodInventoryService;
 import io.company.brewcraft.service.FinishedGoodInventoryServiceImpl;
@@ -216,7 +219,7 @@ import io.company.brewcraft.service.UserRoleService;
 import io.company.brewcraft.service.UserSalutationService;
 import io.company.brewcraft.service.impl.BrewServiceImpl;
 import io.company.brewcraft.service.impl.BrewStageServiceImpl;
-import io.company.brewcraft.service.impl.EquipmentServiceImpl;
+import io.company.brewcraft.service.impl.EquipmentService;
 import io.company.brewcraft.service.impl.FacilityServiceImpl;
 import io.company.brewcraft.service.impl.MaterialCategoryServiceImpl;
 import io.company.brewcraft.service.impl.MaterialLotService;
@@ -445,9 +448,10 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(EquipmentService.class)
-    public EquipmentService equipmentService(EquipmentRepository equipmentRepository, FacilityService facilityService) {
-        final EquipmentService equipmentService = new EquipmentServiceImpl(equipmentRepository, facilityService);
-        return equipmentService;
+    public EquipmentService equipmentService(UtilityProvider utilProvider, EquipmentRepository equipmentRepository, Refresher<Equipment, EquipmentAccessor> userRefresher) {
+        final UpdateService<Long, Equipment, BaseEquipment, UpdateEquipment> updateService = new SimpleUpdateService<>(utilProvider, BaseEquipment.class, UpdateEquipment.class, Equipment.class, Set.of());
+        final RepoService<Long, Equipment, EquipmentAccessor> repoService = new CrudRepoService<>(equipmentRepository, userRefresher);
+        return new EquipmentService(updateService, repoService);
     }
 
     @Bean
@@ -532,7 +536,7 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(UserService.class)
+    @ConditionalOnMissingBean(UserRoleService.class)
     public UserRoleService userRoleService(UtilityProvider utilProvider, UserRoleRepository userRoleRepository, Refresher<UserRole, UserRoleAccessor> userRoleRefresher) {
         final UpdateService<Long, UserRole, BaseUserRole, UpdateUserRole> updateService = new SimpleUpdateService<>(utilProvider, BaseUserRole.class, UpdateUserRole.class, UserRole.class, Set.of());
         final RepoService<Long, UserRole, UserRoleAccessor> repoService = new CrudRepoService<>(userRoleRepository, userRoleRefresher);

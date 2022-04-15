@@ -1,34 +1,26 @@
 package io.company.brewcraft.dto;
 
 import javax.measure.Quantity;
-import javax.measure.Unit;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
-import io.company.brewcraft.model.Facility;
+import io.company.brewcraft.service.EquipmentTypeAccessor;
+import io.company.brewcraft.service.FacilityAccessor;
 
-public interface BaseEquipment {
-    public Facility getFacility();
+public interface BaseEquipment extends FacilityAccessor, EquipmentTypeAccessor {
+    final String ATTR_NAME = "name";
+    final String ATTR_TYPE = "type";
+    final String ATTR_STATUS = "status";
+    final String ATTR_MAX_CAPACITY = "maxCapacity";
 
-    public void setFacility(Facility facility);
+    String getName();
 
-    public String getName();
+    void setName(String name);
 
-    public void setName(String name);
+    EquipmentStatus getStatus();
 
-    public EquipmentType getType();
+    void setStatus(EquipmentStatus status);
 
-    public void setType(EquipmentType type);
+    Quantity<?> getMaxCapacity();
 
-    public EquipmentStatus getStatus();
-
-    public void setStatus(EquipmentStatus status);
-
-    public Quantity<?> getMaxCapacity();
-
-    public void setMaxCapacity(Quantity<?> maxCapacity);
-
-    public Unit<?> getDisplayUnit();
-
-    public void setDisplayUnit(Unit<?> displayUnit);
+    void setMaxCapacity(Quantity<?> maxCapacity);
 }

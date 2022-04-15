@@ -9,7 +9,7 @@ public class MixtureDto extends BaseDto {
 
     private QuantityDto quantity;
 
-    private FacilityEquipmentDto equipment;
+    private EquipmentDto equipment;
 
     private BrewStageDto brewStage;
 
@@ -24,7 +24,7 @@ public class MixtureDto extends BaseDto {
         this.id = id;
     }
 
-    public MixtureDto(Long id, Set<Long> parentMixtureIds, QuantityDto quantity, FacilityEquipmentDto equipment,
+    public MixtureDto(Long id, Set<Long> parentMixtureIds, QuantityDto quantity, EquipmentDto equipment,
             BrewStageDto brewStage, Integer version) {
         this(id);
         this.parentMixtureIds = parentMixtureIds;
@@ -58,11 +58,11 @@ public class MixtureDto extends BaseDto {
         this.quantity = quantity;
     }
 
-    public FacilityEquipmentDto getEquipment() {
+    public EquipmentDto getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(FacilityEquipmentDto equipment) {
+    public void setEquipment(EquipmentDto equipment) {
         this.equipment = equipment;
     }
 

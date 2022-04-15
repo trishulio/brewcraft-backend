@@ -12,11 +12,11 @@ import io.company.brewcraft.model.ShipmentStatus;
 public interface InvoiceStatusMapper {
     InvoiceStatusMapper INSTANCE = Mappers.getMapper(InvoiceStatusMapper.class);
 
-    @Mapping(target = ShipmentStatus.ATTR_ID)
-    @Mapping(target = ShipmentStatus.ATTR_VERSION, ignore = true)
-    @Mapping(target = ShipmentStatus.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = ShipmentStatus.ATTR_CREATED_AT, ignore = true)
-    @Mapping(target = ShipmentStatus.ATTR_NAME, ignore = true)
+    @Mapping(target = InvoiceStatus.ATTR_ID)
+    @Mapping(target = InvoiceStatus.ATTR_VERSION, ignore = true)
+    @Mapping(target = InvoiceStatus.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = InvoiceStatus.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = InvoiceStatus.ATTR_NAME, ignore = true)
     InvoiceStatus fromDto(Long id);
 
     @Mapping(target = InvoiceStatus.ATTR_ID, source = "id")

@@ -7,8 +7,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import io.company.brewcraft.dto.AddStorageDto;
-import io.company.brewcraft.dto.FacilityBaseDto;
-import io.company.brewcraft.dto.FacilityStorageDto;
+import io.company.brewcraft.dto.FacilityDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.UpdateStorageDto;
 import io.company.brewcraft.model.Facility;
@@ -18,9 +17,7 @@ import io.company.brewcraft.model.Storage;
 public interface StorageMapper {
     StorageMapper INSTANCE = Mappers.getMapper(StorageMapper.class);
 
-    FacilityBaseDto facilityToFacilityBaseDto(Facility facility);
-
-    FacilityStorageDto toFacilityStorageDto(Storage storage);
+    FacilityDto facilityToFacilityDto(Facility facility);
 
     StorageDto toDto(Storage storage);
 

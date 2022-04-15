@@ -18,15 +18,15 @@ public class StorageDtoTest {
     @Test
     public void testConstructor() {
         Long id = 1L;
-        FacilityBaseDto facilityBaseDto = new FacilityBaseDto();
+        FacilityDto facilityDto = new FacilityDto();
         String name = "storage1";
         StorageType type = StorageType.GENERAL;
         Integer version = 1;
 
-        StorageDto storageDto = new StorageDto(id, facilityBaseDto, name, type, version);
+        StorageDto storageDto = new StorageDto(id, facilityDto, name, type, version);
 
         assertSame(id, storageDto.getId());
-        assertSame(facilityBaseDto, storageDto.getFacility());
+        assertSame(facilityDto, storageDto.getFacility());
         assertSame(name, storageDto.getName());
         assertSame(type, storageDto.getType());
         assertSame(version, storageDto.getVersion());
@@ -41,9 +41,9 @@ public class StorageDtoTest {
 
     @Test
     public void testGetSetFacility() {
-        FacilityBaseDto facilityBaseDto = new FacilityBaseDto();
-        storageDto.setFacility(facilityBaseDto);
-        assertSame(facilityBaseDto, storageDto.getFacility());
+        FacilityDto facilityDto = new FacilityDto();
+        storageDto.setFacility(facilityDto);
+        assertSame(facilityDto, storageDto.getFacility());
     }
 
     @Test

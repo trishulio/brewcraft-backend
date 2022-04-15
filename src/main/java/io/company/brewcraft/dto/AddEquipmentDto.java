@@ -4,14 +4,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
 
 public class AddEquipmentDto extends BaseDto {
     @NotBlank
     private String name;
 
     @NotNull
-    private EquipmentType type;
+    private Long typeId;
+
+    @NotNull
+    private Long facilityId;
 
     @NotNull
     private EquipmentStatus status;
@@ -23,10 +25,11 @@ public class AddEquipmentDto extends BaseDto {
         super();
     }
 
-    public AddEquipmentDto(String name, EquipmentType type, EquipmentStatus status, QuantityDto maxCapacity) {
+    public AddEquipmentDto(String name, Long typeId, Long facilityId, EquipmentStatus status, QuantityDto maxCapacity) {
         super();
         this.name = name;
-        this.type = type;
+        this.typeId = typeId;
+        this.facilityId = facilityId;
         this.status = status;
         this.maxCapacity = maxCapacity;
     }
@@ -39,12 +42,20 @@ public class AddEquipmentDto extends BaseDto {
         this.name = name;
     }
 
-    public EquipmentType getType() {
-        return type;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType(EquipmentType type) {
-        this.type = type;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    public Long getFacilityId() {
+        return facilityId;
+    }
+
+    public void setFacilityId(Long facilityId) {
+        this.facilityId = facilityId;
     }
 
     public EquipmentStatus getStatus() {

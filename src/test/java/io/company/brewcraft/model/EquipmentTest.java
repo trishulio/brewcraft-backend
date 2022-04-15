@@ -35,9 +35,9 @@ public class EquipmentTest {
     @Test
     public void testAllArgConstructor() {
         Long id = 1L;
-        Facility facility = new Facility();
+        Facility facility = new Facility(1L);
         String name = "equipment1";
-        EquipmentType type = EquipmentType.BARREL;
+        EquipmentType type = new EquipmentType(2L);
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         Quantity<?> maxCapacity = Quantities.getQuantity("1000 kg");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -49,9 +49,9 @@ public class EquipmentTest {
         equipment.getMaxCapacity();
 
         assertEquals(1L, equipment.getId());
-        assertEquals(new Facility(), equipment.getFacility());
+        assertEquals(new Facility(1L), equipment.getFacility());
         assertEquals("equipment1", equipment.getName());
-        assertEquals(EquipmentType.BARREL, equipment.getType());
+        assertEquals(new EquipmentType(2L), equipment.getType());
         assertEquals(EquipmentStatus.ACTIVE, equipment.getStatus());
         assertEquals(maxCapacity, equipment.getMaxCapacity());
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getCreatedAt());
@@ -61,64 +61,55 @@ public class EquipmentTest {
 
     @Test
     public void testGetSetId() {
-        Long id = 1L;
-        equipment.setId(id);
+        equipment.setId(1L);
         assertEquals(1L, equipment.getId());
     }
 
     @Test
     public void testGetSetFacility() {
-        Facility facility = new Facility();
-        equipment.setFacility(facility);
-        assertEquals(new Facility(), equipment.getFacility());
+        equipment.setFacility(new Facility(1L));
+        assertEquals(new Facility(1L), equipment.getFacility());
     }
 
     @Test
     public void testGetSetName() {
-        String name = "testName";
-        equipment.setName(name);
+        equipment.setName("testName");
         assertEquals("testName", equipment.getName());
     }
 
     @Test
     public void testGetSetType() {
-        EquipmentType type = EquipmentType.BARREL;
-        equipment.setType(type);
-        assertEquals(EquipmentType.BARREL, equipment.getType());
+        equipment.setType(new EquipmentType(2L));
+        assertEquals(new EquipmentType(2L), equipment.getType());
     }
 
     @Test
     public void testGetSetStatus() {
-        EquipmentStatus status = EquipmentStatus.ACTIVE;
-        equipment.setStatus(status);
+        equipment.setStatus(EquipmentStatus.ACTIVE);
         assertEquals(EquipmentStatus.ACTIVE, equipment.getStatus());
     }
 
     @Test
     public void testGetSetMaxCapacity() {
-        Quantity<?> maxCapacity = Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE);
-        equipment.setMaxCapacity(maxCapacity);
+        equipment.setMaxCapacity(Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE));
         assertEquals(Quantities.getQuantity(BigDecimal.valueOf(100.0), SupportedUnits.LITRE), equipment.getMaxCapacity());
     }
 
     @Test
     public void testGetSetVersion() {
-        Integer version = 1;
-        equipment.setVersion(version);
+        equipment.setVersion(1);
         assertEquals(1, equipment.getVersion());
     }
 
     @Test
     public void testGetSetCreated() {
-        LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
-        equipment.setCreatedAt(created);
+        equipment.setCreatedAt(LocalDateTime.of(2020, 1, 2, 3, 4));
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getCreatedAt());
     }
 
     @Test
     public void testGetSetLastUpdated() {
-        LocalDateTime lastUpdated = LocalDateTime.of(2020, 1, 2, 3, 4);
-        equipment.setLastUpdated(lastUpdated);
+        equipment.setLastUpdated(LocalDateTime.of(2020, 1, 2, 3, 4));
         assertEquals(LocalDateTime.of(2020, 1, 2, 3, 4), equipment.getLastUpdated());
     }
 
@@ -132,9 +123,9 @@ public class EquipmentTest {
     @Test
     public void testToString_ReturnsJsonifiedString() throws JSONException {
         Long id = 1L;
-        Facility facility = new Facility();
+        Facility facility = new Facility(1L);
         String name = "equipment1";
-        EquipmentType type = EquipmentType.BARREL;
+        EquipmentType type = new EquipmentType(2L);
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         Quantity<?> maxCapacity = Quantities.getQuantity("1000 kg");
         LocalDateTime created = LocalDateTime.of(2020, 1, 2, 3, 4);
@@ -143,7 +134,7 @@ public class EquipmentTest {
 
         Equipment equipment = new Equipment(id, facility, name, type, status, maxCapacity, created, lastUpdated, version);
 
-        final String json = "{\"id\":1,\"facility\":{\"id\":null,\"name\":null,\"address\":null,\"phoneNumber\":null,\"faxNumber\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"name\":\"equipment1\",\"type\":\"Barrel\",\"status\":\"Active\",\"maxCapacity\":{\"symbol\":\"kg\",\"value\":1000},\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
+        final String json = "{\"id\":1,\"facility\":{\"id\":1,\"name\":null,\"address\":null,\"phoneNumber\":null,\"faxNumber\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"name\":\"equipment1\",\"type\":{\"id\":2,\"name\":null,\"createdAt\":null,\"lastUpdated\":null,\"version\":null},\"status\":\"Active\",\"maxCapacity\":{\"symbol\":\"kg\",\"value\":1000},\"createdAt\":\"2020-01-02T03:04:00\",\"lastUpdated\":\"2020-01-02T03:04:00\",\"version\":1}";
 
         JSONAssert.assertEquals(json, equipment.toString(), JSONCompareMode.NON_EXTENSIBLE);
     }
