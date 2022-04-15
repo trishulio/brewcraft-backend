@@ -10,7 +10,7 @@ import io.company.brewcraft.model.Equipment;
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment>, ExtendedRepository<Long> {
 
     @Override
-    @Query("select count(i) > 0 from equipment u where e.id in (:ids)")
+    @Query("select count(i) > 0 from equipment e where e.id in (:ids)")
     boolean existsByIds(Iterable<Long> ids);
 
     @Override

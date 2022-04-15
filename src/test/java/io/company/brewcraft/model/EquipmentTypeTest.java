@@ -26,7 +26,7 @@ public class EquipmentTypeTest {
         equipmentType = new EquipmentType(1L, "WHIRLPOOL", LocalDateTime.of(1999, 12, 12, 0, 0), LocalDateTime.of(2000, 12, 12, 0, 0), 1);
 
         assertEquals(1L, equipmentType.getId());
-        assertEquals("FINAL", equipmentType.getName());
+        assertEquals("WHIRLPOOL", equipmentType.getName());
         assertEquals(LocalDateTime.of(1999, 12, 12, 0, 0), equipmentType.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 12, 12, 0, 0), equipmentType.getLastUpdated());
         assertEquals(1, equipmentType.getVersion());
