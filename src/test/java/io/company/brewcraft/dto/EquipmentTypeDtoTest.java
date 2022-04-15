@@ -17,7 +17,7 @@ public class EquipmentTypeDtoTest {
     @Test
     public void testIdArgConstructor() {
         equipmentTypeDto = new EquipmentTypeDto(1L);
-        assertEquals(99L, equipmentTypeDto.getId());
+        assertEquals(1L, equipmentTypeDto.getId());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class EquipmentTypeDtoTest {
         equipmentTypeDto = new EquipmentTypeDto(1L, "BRITETANK", 1);
 
         assertEquals(1L, equipmentTypeDto.getId());
-        assertEquals("FINAL", equipmentTypeDto.getName());
+        assertEquals("BRITETANK", equipmentTypeDto.getName());
         assertEquals(1, equipmentTypeDto.getVersion());
     }
 
