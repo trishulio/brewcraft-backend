@@ -6,11 +6,11 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.TaxDto;
 import io.company.brewcraft.model.Tax;
 
-@Mapper(uses = { MoneyMapper.class })
+@Mapper(uses = { TaxRateMapper.class })
 public interface TaxMapper {
-    TaxMapper INSTANCE = Mappers.getMapper(TaxMapper.class);
-
-    Tax fromDto(TaxDto dto);
+    final TaxMapper INSTANCE = Mappers.getMapper(TaxMapper.class);
 
     TaxDto toDto(Tax tax);
+
+    Tax fromDto(TaxDto dto);
 }

@@ -9,7 +9,7 @@ public class InvoiceDto extends BaseDto {
     private String description;
     private PurchaseOrderDto purchaseOrder;
     private FreightDto freight;
-    private MoneyDto amount;
+    private AmountDto amount;
     private TaxDto tax;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
@@ -28,7 +28,7 @@ public class InvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> invoiceItems, Integer version) {
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> invoiceItems, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -86,11 +86,11 @@ public class InvoiceDto extends BaseDto {
         this.freight = freight;
     }
 
-    public MoneyDto getAmount() {
+    public AmountDto getAmount() {
         return amount;
     }
 
-    public void setAmount(MoneyDto amount) {
+    public void setAmount(AmountDto amount) {
         this.amount = amount;
     }
 

@@ -8,18 +8,18 @@ import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.ProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.UpdateProcurementInvoiceDto;
 import io.company.brewcraft.model.Invoice;
+import io.company.brewcraft.service.mapper.AmountMapper;
 import io.company.brewcraft.service.mapper.BaseMapper;
 import io.company.brewcraft.service.mapper.FreightMapper;
 import io.company.brewcraft.service.mapper.InvoiceStatusMapper;
 import io.company.brewcraft.service.mapper.MaterialMapper;
-import io.company.brewcraft.service.mapper.MoneyMapper;
 import io.company.brewcraft.service.mapper.PurchaseOrderMapper;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.service.mapper.QuantityUnitMapper;
 import io.company.brewcraft.service.mapper.ShipmentMapper;
 import io.company.brewcraft.service.mapper.TaxMapper;
 
-@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, ProcurementInvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, ProcurementPurchaseOrderMapper.class, PurchaseOrderMapper.class })
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, AmountMapper.class, ProcurementInvoiceItemMapper.class, MaterialMapper.class, InvoiceStatusMapper.class, TaxMapper.class, ShipmentMapper.class, FreightMapper.class, ProcurementPurchaseOrderMapper.class, PurchaseOrderMapper.class })
 public interface ProcurementInvoiceMapper extends BaseMapper<Invoice, ProcurementInvoiceDto, AddProcurementInvoiceDto, UpdateProcurementInvoiceDto> {
     ProcurementInvoiceMapper INSTANCE = Mappers.getMapper(ProcurementInvoiceMapper.class);
 

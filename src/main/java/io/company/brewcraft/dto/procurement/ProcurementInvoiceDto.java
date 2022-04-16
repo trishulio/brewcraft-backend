@@ -2,10 +2,10 @@ package io.company.brewcraft.dto.procurement;
 
 import java.time.LocalDateTime;
 
+import io.company.brewcraft.dto.AmountDto;
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.InvoiceStatusDto;
-import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.TaxDto;
 
 public class ProcurementInvoiceDto extends BaseDto {
@@ -14,7 +14,7 @@ public class ProcurementInvoiceDto extends BaseDto {
     private String description;
     private ProcurementPurchaseOrderDto purchaseOrder;
     private FreightDto freight;
-    private MoneyDto amount;
+    private AmountDto amount;
     private TaxDto tax;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
@@ -32,7 +32,7 @@ public class ProcurementInvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, ProcurementPurchaseOrderDto purchaseOrder, FreightDto freight, MoneyDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
+    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, ProcurementPurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
@@ -89,11 +89,11 @@ public class ProcurementInvoiceDto extends BaseDto {
         this.freight = freight;
     }
 
-    public MoneyDto getAmount() {
+    public AmountDto getAmount() {
         return amount;
     }
 
-    public void setAmount(MoneyDto amount) {
+    public void setAmount(AmountDto amount) {
         this.amount = amount;
     }
 

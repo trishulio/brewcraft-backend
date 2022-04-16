@@ -8,7 +8,7 @@ public class InvoiceItemDto extends BaseDto {
     private QuantityDto quantity;
     private MoneyDto price;
     private TaxDto tax;
-    private MoneyDto amount;
+    private AmountDto amount;
     private MaterialDto material;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
@@ -22,7 +22,7 @@ public class InvoiceItemDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public InvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, AmountDto amount, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setDescription(description);
         setQuantity(quantity);
@@ -75,11 +75,11 @@ public class InvoiceItemDto extends BaseDto {
         this.tax = tax;
     }
 
-    public MoneyDto getAmount() {
+    public AmountDto getAmount() {
         return amount;
     }
 
-    public void setAmount(MoneyDto amount) {
+    public void setAmount(AmountDto amount) {
         this.amount = amount;
     }
 

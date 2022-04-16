@@ -11,7 +11,7 @@ import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotPortion;
 
-@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class})
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MaterialLotMapper.class })
 public interface FinishedGoodLotFinishedGoodLotPortionMapper {
     FinishedGoodLotFinishedGoodLotPortionMapper INSTANCE = Mappers.getMapper(FinishedGoodLotFinishedGoodLotPortionMapper.class);
 
