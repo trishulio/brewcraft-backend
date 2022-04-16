@@ -31,7 +31,7 @@ public interface EquipmentMapper extends BaseMapper<Equipment, EquipmentDto, Add
     @Override
     @Mapping(target = Equipment.FIELD_TYPE, source = "typeId")
     @Mapping(target = Equipment.ATTR_FACILITY, source = "facilityId")
-    @Mapping(target = Invoice.ATTR_LAST_UPDATED, ignore = true)
-    @Mapping(target = Invoice.ATTR_CREATED_AT, ignore = true)
+    @Mapping(target = Equipment.ATTR_LAST_UPDATED, ignore = true)
+    @Mapping(target = Equipment.ATTR_CREATED_AT, ignore = true)
     Equipment fromUpdateDto(UpdateEquipmentDto equipment);
 }

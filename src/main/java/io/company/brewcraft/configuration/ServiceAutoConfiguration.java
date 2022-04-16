@@ -448,9 +448,9 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(EquipmentService.class)
-    public EquipmentService equipmentService(UtilityProvider utilProvider, EquipmentRepository equipmentRepository, Refresher<Equipment, EquipmentAccessor> userRefresher) {
+    public EquipmentService equipmentService(UtilityProvider utilProvider, EquipmentRepository equipmentRepository, Refresher<Equipment, EquipmentAccessor> equipmentRefresher) {
         final UpdateService<Long, Equipment, BaseEquipment, UpdateEquipment> updateService = new SimpleUpdateService<>(utilProvider, BaseEquipment.class, UpdateEquipment.class, Equipment.class, Set.of());
-        final RepoService<Long, Equipment, EquipmentAccessor> repoService = new CrudRepoService<>(equipmentRepository, userRefresher);
+        final RepoService<Long, Equipment, EquipmentAccessor> repoService = new CrudRepoService<>(equipmentRepository, equipmentRefresher);
         return new EquipmentService(updateService, repoService);
     }
 

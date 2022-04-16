@@ -76,26 +76,26 @@ CREATE INDEX IDX_CATEGORY_PARENT ON MATERIAL_CATEGORY(PARENT_CATEGORY_ID);
 -- Update sequence start value when adding more categories
 INSERT INTO MATERIAL_CATEGORY VALUES
     /* Start of Material Top Level Categories */
-    (1, 'Ingredient', null, current_timestamp, current_timestamp, 0),
-    (2, 'Packaging', null, current_timestamp, current_timestamp, 0),
+    (1, 'Ingredient', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (2, 'Packaging', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
     /* Start of Ingredient Subcategories */
-    (3, 'Barley', 1, current_timestamp, current_timestamp, 0),
-    (4, 'Hop', 1, current_timestamp, current_timestamp, 0),
-    (5, 'Malt', 1, current_timestamp, current_timestamp, 0),
-    (6, 'Rice', 1, current_timestamp, current_timestamp, 0),
-    (7, 'Rye', 1, current_timestamp, current_timestamp, 0),
-    (8, 'Sugar', 1, current_timestamp, current_timestamp, 0),
-    (9, 'Syrup', 1, current_timestamp, current_timestamp, 0),
-    (10, 'Wheat', 1, current_timestamp, current_timestamp, 0),
-    (11, 'Yeast', 1, current_timestamp, current_timestamp, 0),
+    (3, 'Barley', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (4, 'Hop', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (5, 'Malt', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (6, 'Rice', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (7, 'Rye', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (8, 'Sugar', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (9, 'Syrup', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (10, 'Wheat', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (11, 'Yeast', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
     /* Start Of Packaging Subcategories */
-    (12, 'Bottle', 2, current_timestamp, current_timestamp, 0),
-    (13, 'Can', 2, current_timestamp, current_timestamp, 0),
-    (14, 'Case', 2, current_timestamp, current_timestamp, 0),
-    (15, 'Growler', 2, current_timestamp, current_timestamp, 0),
-    (16, 'Keg', 2, current_timestamp, current_timestamp, 0),
-    (17, 'Label', 2, current_timestamp, current_timestamp, 0),
-    (18, 'Rings', 2, current_timestamp, current_timestamp, 0);
+    (12, 'Bottle', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (13, 'Can', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (14, 'Case', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (15, 'Growler', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (16, 'Keg', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (17, 'Label', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (18, 'Rings', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
 CREATE SEQUENCE MATERIAL_CATEGORY_SEQUENCE START 19;
 
 CREATE TABLE MATERIAL (
@@ -123,10 +123,10 @@ CREATE TABLE INVOICE_STATUS (
 );
 -- TODO: Put better values
 INSERT INTO INVOICE_STATUS VALUES
-(1, 'PENDING', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(2, 'FINAL', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(3, 'PAID', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(4, 'REJECTED', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1);
+(1, 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(2, 'FINAL', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(3, 'PAID', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(4, 'REJECTED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 CREATE SEQUENCE INVOICE_STATUS_SEQUENCE START 5;
 
 CREATE TABLE PURCHASE_ORDER (
@@ -220,14 +220,14 @@ CREATE TABLE EQUIPMENT_TYPE (
     VERSION INTEGER
 );
 INSERT INTO EQUIPMENT_TYPE VALUES
-(1, 'Boil Kettle', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(2, 'Fermenter', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(3, 'Serving Tank', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(4, 'Mix Tank', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(5, 'Tote', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(6, 'Whirl Pool', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(7, 'Barrel', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(8, 'Brite Tank', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1);
+(1, 'Boil Kettle', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(2, 'Fermenter', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(3, 'Serving Tank', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(4, 'Mix Tank', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(5, 'Tote', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(6, 'Whirl Pool', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(7, 'Barrel', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(8, 'Brite Tank', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 CREATE SEQUENCE EQUIPMENT_TYPE_SEQUENCE START 9;
 
 CREATE TABLE EQUIPMENT (
@@ -267,10 +267,10 @@ CREATE TABLE SHIPMENT_STATUS (
 );
 -- TODO: Put better values
 INSERT INTO SHIPMENT_STATUS VALUES
-(1, 'DELIVERED', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(2, 'IN-TRANSIT', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(3, 'PROCESSING', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1),
-(4, 'PENDING', '1999-01-01T12:00:00', '2000-01-01T12:00:00', 1);
+(1, 'DELIVERED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(2, 'IN-TRANSIT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(3, 'PROCESSING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+(4, 'PENDING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 CREATE SEQUENCE SHIPMENT_STATUS_SEQUENCE START 5;
 
 CREATE TABLE SHIPMENT (
@@ -313,13 +313,13 @@ CREATE TABLE PRODUCT_CATEGORY (
 );
 INSERT INTO PRODUCT_CATEGORY VALUES
     /* Start of Product Top Level Categories */
-    (1, 'Beer', null, current_timestamp, current_timestamp, 0),
+    (1, 'Beer', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
     /* Start of Beer Subcategories */
-    (2, 'Lager', 1, current_timestamp, current_timestamp, 0),
-    (3, 'Ale', 1, current_timestamp, current_timestamp, 0),
-    (4, 'IPA', 1, current_timestamp, current_timestamp, 0),
-    (5, 'Stout', 1, current_timestamp, current_timestamp, 0),
-    (6, 'Porter', 1, current_timestamp, current_timestamp, 0);
+    (2, 'Lager', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (3, 'Ale', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (4, 'IPA', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (5, 'Stout', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0),
+    (6, 'Porter', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);
 CREATE SEQUENCE PRODUCT_CATEGORY_SEQUENCE START 7;
 
 CREATE TABLE MEASURE (
@@ -330,16 +330,16 @@ CREATE TABLE MEASURE (
     VERSION INTEGER
 );
 INSERT INTO MEASURE VALUES
-    (1, 'abv', current_timestamp, current_timestamp, 1),
-    (2, 'ibu', current_timestamp, current_timestamp, 1),
-    (3, 'ph', current_timestamp, current_timestamp, 1),
-    (4, 'temperature', current_timestamp, current_timestamp, 1),
-    (5, 'gravity', current_timestamp, current_timestamp, 1),
-    (6, 'yield', current_timestamp, current_timestamp, 1),
-    (7, 'brewhouseDuration', current_timestamp, current_timestamp, 1),
-    (8, 'fermentationDays', current_timestamp, current_timestamp, 1),
-    (9, 'conditioningDays', current_timestamp, current_timestamp, 1),
-    (10, 'initialVolume', current_timestamp, current_timestamp, 1);
+    (1, 'abv', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (2, 'ibu', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (3, 'ph', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (4, 'temperature', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (5, 'gravity', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (6, 'yield', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (7, 'brewhouseDuration', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (8, 'fermentationDays', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (9, 'conditioningDays', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1),
+    (10, 'initialVolume', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 CREATE SEQUENCE MEASURE_SEQUENCE START 10;
 
 CREATE TABLE PRODUCT (

@@ -70,7 +70,7 @@ public class EquipmentController extends BaseController {
 
     @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
-        @RequestParam(required = false) Set<Long> ids,
+        @RequestParam(required = false, name = "ids") Set<Long> ids,
         @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
         @RequestParam(required = false, name = "facility_ids") Set<Long> facilityIds,
         @RequestParam(required = false, name = "type_ids") Set<Long> typeIds,

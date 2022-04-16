@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import io.company.brewcraft.dto.EquipmentTypeDto;
 import io.company.brewcraft.model.EquipmentType;
 
-@Mapper()
+@Mapper
 public interface EquipmentTypeMapper {
     EquipmentTypeMapper INSTANCE = Mappers.getMapper(EquipmentTypeMapper.class);
 
