@@ -25,6 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.joda.money.Money;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.company.brewcraft.service.AmountCalculator;
@@ -236,6 +237,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     }
 
     @Override
+    @JsonIgnore
     public Amount getAmount() {
         return AmountCalculator.INSTANCE.getAmount(this);
     }

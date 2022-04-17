@@ -29,10 +29,6 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
     @Mapping(target = InvoiceItem.ATTR_TAX, ignore = true)
     InvoiceItem fromDto(Long id);
 
-    @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
-    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
-    InvoiceItem fromDto(InvoiceItemDto dto);
-
     @Override
     @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)

@@ -9,9 +9,9 @@ import org.joda.money.Money;
 
 import io.company.brewcraft.model.Amount;
 import io.company.brewcraft.model.AmountSupplier;
+import io.company.brewcraft.model.Good;
 import io.company.brewcraft.model.TaxAmount;
 import io.company.brewcraft.model.TaxCalculator;
-import io.company.brewcraft.model.Good;
 
 public class AmountCalculator {
     public static final AmountCalculator INSTANCE = new AmountCalculator(CostCalculator.INSTANCE, TaxCalculator.INSTANCE);
@@ -41,7 +41,7 @@ public class AmountCalculator {
         Money subTotal = null;
         TaxAmount taxAmount = null;
 
-        if (amountSuppliers != null) {
+        if (amountSuppliers != null && amountSuppliers.size() > 0) {
             List<Money> subTotals = new ArrayList<>(amountSuppliers.size());
             List<TaxAmount> taxAmounts = new ArrayList<>(amountSuppliers.size());
 
@@ -53,7 +53,9 @@ public class AmountCalculator {
                                subTotals.add(amount.getSubTotal());
                                taxAmounts.add(amount.getTaxAmount());
                            });
-            subTotal = Money.total(subTotals);
+            if (subTotals.size() > 0) {
+                subTotal = Money.total(subTotals);
+            }
             taxAmount = this.taxCalculator.total(taxAmounts);
         }
 

@@ -1,5 +1,8 @@
 package io.company.brewcraft.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
@@ -11,11 +14,11 @@ import javax.persistence.JoinColumn;
 
 import org.joda.money.Money;
 
-import io.company.brewcraft.service.MoneyService;
+import io.company.brewcraft.service.MoneyCalculator;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Embeddable
-public class TaxAmount {
+public class TaxAmount extends BaseEntity {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "amount", column = @Column(name = "pst_amount"))
@@ -54,6 +57,14 @@ public class TaxAmount {
         setHstAmount(hstAmount);
     }
 
+    public TaxAmount(Money pstAmount, Money gstAmount) {
+        this(pstAmount, gstAmount, null);
+    }
+
+    public TaxAmount(Money hstAmount) {
+        this(null, null, hstAmount);
+    }
+
     public Money getPstAmount() {
         return MoneyMapper.INSTANCE.fromEntity(pstAmount);
     }
@@ -79,6 +90,10 @@ public class TaxAmount {
     }
 
     public Money getTotalTaxAmount() {
-        return MoneyService.INSTANCE.total(getPstAmount(), getGstAmount(), getHstAmount());
+        List<Money> amounts = new ArrayList<>(3);
+        amounts.add(getPstAmount());
+        amounts.add(getGstAmount());
+        amounts.add(getHstAmount());
+        return MoneyCalculator.INSTANCE.totalAmount(amounts);
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.Embeddable;
 import org.joda.money.Money;
 
 @Embeddable
-public class TaxRate {
+public class TaxRate extends BaseEntity {
     public static final String FIELD_VALUE = "value";
 
     @Column(nullable = false, precision = 20, scale = 4)
@@ -19,7 +19,7 @@ public class TaxRate {
         super();
     }
 
-    protected TaxRate(BigDecimal value) {
+    public TaxRate(BigDecimal value) {
         this();
         setValue(value);
     }

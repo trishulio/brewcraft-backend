@@ -1,16 +1,17 @@
 package io.company.brewcraft.service.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.TaxRateDto;
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.TaxRate;
 
 public class TaxMapperTest {
     private TaxMapper mapper;
@@ -22,10 +23,12 @@ public class TaxMapperTest {
 
     @Test
     public void testFromDto_ReturnsPojo_WhenDtoIsNotNull() {
-        TaxDto dto = new TaxDto(new MoneyDto("CAD", new BigDecimal("10")));
+
+        TaxDto dto = new TaxDto(new TaxRateDto(new BigDecimal("1")), new TaxRateDto(new BigDecimal("2")));
         Tax tax = mapper.fromDto(dto);
 
-        assertEquals(new Tax(Money.parse("CAD 10")), tax);
+        Tax expected = new Tax(new TaxRate(new BigDecimal("1")), new TaxRate(new BigDecimal("2")));
+        assertEquals(expected, tax);
     }
 
     @Test
@@ -35,10 +38,12 @@ public class TaxMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenPojoIsNotNull() {
-        Tax tax = new Tax(Money.parse("CAD 10"));
+        Tax tax = new Tax(new TaxRate(new BigDecimal("1")), new TaxRate(new BigDecimal("2")));
+
         TaxDto dto = mapper.toDto(tax);
 
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))), dto);
+        TaxDto expected = new TaxDto(new TaxRateDto(new BigDecimal("1")), new TaxRateDto(new BigDecimal("2")));
+        assertEquals(expected, dto);
     }
 
     @Test

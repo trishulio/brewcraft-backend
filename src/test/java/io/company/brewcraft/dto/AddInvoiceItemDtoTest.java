@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
@@ -17,12 +18,12 @@ public class AddInvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        invoiceItem = new AddInvoiceItemDto("desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L);
+        invoiceItem = new AddInvoiceItemDto("desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new TaxRateDto(new BigDecimal("10"))), 7L);
 
         assertEquals("desc2", invoiceItem.getDescription());
         assertEquals(new QuantityDto("g", new BigDecimal("4")), invoiceItem.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), invoiceItem.getPrice());
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), invoiceItem.getTax());
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("10"))), invoiceItem.getTax());
         assertEquals(7L, invoiceItem.getMaterialId());
     }
 
@@ -50,8 +51,8 @@ public class AddInvoiceItemDtoTest {
     @Test
     public void testAccessTax() {
         assertNull(invoiceItem.getTax());
-        invoiceItem.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), invoiceItem.getTax());
+        invoiceItem.setTax(new TaxDto(new TaxRateDto(new BigDecimal("10"))));
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("10"))), invoiceItem.getTax());
     }
 
     @Test

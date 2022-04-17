@@ -9,10 +9,14 @@ public class AmountDto extends BaseDto {
         super();
     }
 
-    public AmountDto(MoneyDto totalAmount, MoneyDto subTotal, TaxAmountDto taxAmount) {
+    public AmountDto(MoneyDto subTotal) {
         this();
-        setTotalAmount(totalAmount);
         setSubTotal(subTotal);
+    }
+
+    public AmountDto(MoneyDto totalAmount, MoneyDto subTotal, TaxAmountDto taxAmount) {
+        this(subTotal);
+        setTotalAmount(totalAmount);
         setTaxAmount(taxAmount);
     }
 

@@ -26,8 +26,7 @@ public class InvoiceDtoTest {
             "desc1",
             new PurchaseOrderDto(2L),
             new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))),
-            new MoneyDto("CAD", new BigDecimal("10")),
-            new TaxDto(),
+            new AmountDto(new MoneyDto("CAD", new BigDecimal("10"))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -43,8 +42,7 @@ public class InvoiceDtoTest {
         assertEquals("desc1", invoice.getDescription());
         assertEquals(new PurchaseOrderDto(2L), invoice.getPurchaseOrder());
         assertEquals(new FreightDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getFreight());
-        assertEquals(new MoneyDto("CAD", new BigDecimal("10")), invoice.getAmount());
-        assertEquals(new TaxDto(), invoice.getTax());
+        assertEquals(new AmountDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getAmount());
         assertEquals(LocalDateTime.of(1999, 1, 1, 12, 0), invoice.getGeneratedOn());
         assertEquals(LocalDateTime.of(2000, 1, 1, 12, 0), invoice.getReceivedOn());
         assertEquals(LocalDateTime.of(2001, 1, 1, 12, 0), invoice.getPaymentDueDate());
@@ -94,15 +92,8 @@ public class InvoiceDtoTest {
     @Test
     public void testAccessAmount() {
         assertNull(invoice.getAmount());
-        invoice.setAmount(new MoneyDto("CAD", new BigDecimal("10")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("10")), invoice.getAmount());
-    }
-
-    @Test
-    public void testAccessTax() {
-        assertNull(invoice.getTax());
-        invoice.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getTax());
+        invoice.setAmount(new AmountDto(new MoneyDto("CAD", new BigDecimal("10"))));
+        assertEquals(new AmountDto(new MoneyDto("CAD", new BigDecimal("10"))), invoice.getAmount());
     }
 
     @Test

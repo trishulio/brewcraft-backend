@@ -10,7 +10,6 @@ public class InvoiceDto extends BaseDto {
     private PurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private AmountDto amount;
-    private TaxDto tax;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
@@ -28,14 +27,13 @@ public class InvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> invoiceItems, Integer version) {
+    public InvoiceDto(Long id, String invoiceNumber, String description, PurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, List<InvoiceItemDto> invoiceItems, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
         setPurchaseOrder(purchaseOrder);
         setFreight(freight);
         setAmount(amount);
-        setTax(tax);
         setGeneratedOn(generatedOn);
         setPaymentDueDate(paymentDueDate);
         setReceivedOn(receivedOn);
@@ -92,14 +90,6 @@ public class InvoiceDto extends BaseDto {
 
     public void setAmount(AmountDto amount) {
         this.amount = amount;
-    }
-
-    public TaxDto getTax() {
-        return tax;
-    }
-
-    public void setTax(TaxDto tax) {
-        this.tax = tax;
     }
 
     public LocalDateTime getGeneratedOn() {

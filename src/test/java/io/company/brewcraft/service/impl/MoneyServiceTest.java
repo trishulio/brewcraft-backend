@@ -11,26 +11,26 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.company.brewcraft.service.MoneyService;
+import io.company.brewcraft.service.MoneyCalculator;
 import io.company.brewcraft.service.MoneySupplier;
 
 public class MoneyServiceTest {
-    private MoneyService service;
+    private MoneyCalculator calculator;
 
     @BeforeEach
     public void init() {
-        service = new MoneyService();
+        calculator = MoneyCalculator.INSTANCE;
     }
 
     @Test
     public void testTotal_ReturnsNull_WhenCollectionIsNull() {
-        Money total = MoneyService.total(null);
+        Money total = calculator.total(null);
         assertNull(total);
     }
 
     @Test
     public void testTotal_ReturnsNull_WhenCollectionIsEmpty() {
-        Money total = MoneyService.total(Collections.emptyList());
+        Money total = calculator.total(Collections.emptyList());
         assertNull(total);
 
     }
@@ -41,7 +41,7 @@ public class MoneyServiceTest {
         suppliers.add(() -> Money.parse("CAD 10"));
         suppliers.add(null);
 
-        Money total = MoneyService.total(suppliers);
+        Money total = calculator.total(suppliers);
         assertEquals(Money.parse("CAD 10"), total);
     }
 
@@ -53,7 +53,7 @@ public class MoneyServiceTest {
             () -> null
         );
 
-        Money total = MoneyService.total(suppliers);
+        Money total = calculator.total(suppliers);
         assertEquals(Money.parse("CAD 10"), total);
     }
 
@@ -65,7 +65,7 @@ public class MoneyServiceTest {
             () -> Money.parse("CAD 30")
         );
 
-        Money total = MoneyService.total(suppliers);
+        Money total = calculator.total(suppliers);
         assertEquals(Money.parse("CAD 60"), total);
     }
 
@@ -77,6 +77,6 @@ public class MoneyServiceTest {
             () -> Money.parse("INR 30")
         );
 
-        assertThrows(CurrencyMismatchException.class, () -> MoneyService.total(suppliers));
+        assertThrows(CurrencyMismatchException.class, () -> calculator.total(suppliers));
     }
 }

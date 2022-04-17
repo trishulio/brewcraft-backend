@@ -308,6 +308,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     }
 
     @Override
+    @JsonIgnore
     public Amount getAmount() {
         setAmount();
         return this.amount;

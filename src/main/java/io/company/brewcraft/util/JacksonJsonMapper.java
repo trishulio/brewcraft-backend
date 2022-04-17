@@ -34,7 +34,7 @@ public class JacksonJsonMapper implements JsonMapper {
         try {
             return this.mapper.writeValueAsString(o);
         } catch (final JsonProcessingException e) {
-            throw new RuntimeException(String.format("Failed to serialize object: '%s' because %s", o, e.getMessage()), e);
+            throw new RuntimeException(String.format("Failed to serialize object of class: '%s' because %s", o.getClass(), e.getMessage()), e);
         }
     }
 

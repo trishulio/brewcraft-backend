@@ -18,6 +18,14 @@ public class TaxAmountDto extends BaseDto {
         setHstAmount(hstAmount);
     }
 
+    public TaxAmountDto(MoneyDto pstAmount, MoneyDto gstAmount) {
+        this(pstAmount, gstAmount, null);
+    }
+
+    public TaxAmountDto(MoneyDto hstAmount) {
+        this(null, null, hstAmount);
+    }
+
     public MoneyDto getPstAmount() {
         return pstAmount;
     }

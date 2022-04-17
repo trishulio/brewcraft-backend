@@ -11,11 +11,14 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.AmountDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.MoneyDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.StorageDto;
+import io.company.brewcraft.dto.TaxAmountDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.TaxRateDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceItemDto;
 import io.company.brewcraft.dto.procurement.AddProcurementItemDto;
 import io.company.brewcraft.dto.procurement.AddProcurementMaterialLotDto;
@@ -31,11 +34,11 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MaterialLot;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.TaxRate;
 import io.company.brewcraft.model.procurement.ProcurementItem;
 import io.company.brewcraft.service.mapper.procurement.ProcurementItemMapper;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import io.company.brewcraft.util.SupportedUnits;
 
 public class ProcurementItemMapperTest {
     private ProcurementItemMapper mapper;
@@ -70,7 +73,7 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
-                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Tax(new TaxRate(new BigDecimal("10"))),
                 new Material(7L),
                 LocalDateTime.of(2002, 1, 1, 0, 0),
                 LocalDateTime.of(2003, 1, 1, 0, 0),
@@ -85,7 +88,7 @@ public class ProcurementItemMapperTest {
             new ProcurementMaterialLotDto(
                 1L,
                 "LOT_NUMBER",
-                new QuantityDto("g", new BigDecimal("10")),
+                new QuantityDto("g", new BigDecimal("10.00")),
                 new StorageDto(100L),
                 LocalDateTime.of(2000, 1, 1, 0, 0),
                 LocalDateTime.of(2001, 1, 1, 0, 0),
@@ -96,8 +99,8 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
-                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
-                new MoneyDto("CAD", new BigDecimal("20000.00")),
+                new TaxDto(new TaxRateDto(new BigDecimal("10"))),
+                new AmountDto(new MoneyDto("CAD", new BigDecimal("220000.00")), new MoneyDto("CAD", new BigDecimal("20000.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200000.00")))),
                 new MaterialDto(7L),
                 LocalDateTime.of(2002, 1, 1, 0, 0),
                 LocalDateTime.of(2003, 1, 1, 0, 0),
@@ -125,7 +128,7 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
-                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
+                new TaxDto(new TaxRateDto(new BigDecimal("10.00"))),
                 7L
             )
         );
@@ -150,7 +153,7 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
-                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Tax(new TaxRate(new BigDecimal("10.00"))),
                 new Material(7L),
                 null,
                 null,
@@ -181,7 +184,7 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
-                new TaxDto(new MoneyDto("CAD", new BigDecimal("10.00"))),
+                new TaxDto(new TaxRateDto(new BigDecimal("10.00"))),
                 7L,
                 1
             )
@@ -207,7 +210,7 @@ public class ProcurementItemMapperTest {
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("200.00")),
-                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("10.00"))),
+                new Tax(new TaxRate(new BigDecimal("10.00"))),
                 new Material(7L),
                 null,
                 null,

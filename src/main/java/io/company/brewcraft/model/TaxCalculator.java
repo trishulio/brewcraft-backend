@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.joda.money.Money;
 
@@ -15,16 +14,6 @@ public class TaxCalculator {
 
     protected TaxCalculator(TaxRateCalculator rateCalculator) {
         this.rateCalculator = rateCalculator;
-    }
-
-    public TaxAmount getTaxAmount(TaxedAmount taxedAmount) {
-        TaxAmount taxAmount = null;
-
-        if (taxedAmount != null) {
-            taxAmount = getTaxAmount(taxedAmount.getTax(), taxedAmount.getAmount());
-        }
-
-        return taxAmount;
     }
 
     public TaxAmount getTaxAmount(Tax tax, Money amount) {
@@ -45,8 +34,6 @@ public class TaxCalculator {
         TaxAmount taxAmount = null;
 
         if (taxAmounts != null) {
-            final AtomicInteger i = new AtomicInteger(0);
-
             List<Money> pst = new ArrayList<>(taxAmounts.size());
             List<Money> gst = new ArrayList<>(taxAmounts.size());
             List<Money> hst = new ArrayList<>(taxAmounts.size());
@@ -54,14 +41,32 @@ public class TaxCalculator {
             taxAmounts.stream()
                       .filter(Objects::nonNull)
                       .forEach(taxAmt -> {
-                          pst.add(taxAmt.getPstAmount());
-                          gst.add(taxAmt.getGstAmount());
-                          hst.add(taxAmt.getHstAmount());
+                          Money pstAmount = taxAmt.getPstAmount();
+                          Money gstAmount = taxAmt.getGstAmount();
+                          Money hstAmount = taxAmt.getHstAmount();
+                          if (pstAmount != null) {
+                              pst.add(pstAmount);
+                          }
+                          if (gstAmount != null) {
+                              gst.add(gstAmount);
+                          }
+                          if (hstAmount != null) {
+                              hst.add(hstAmount);
+                          }
                       });
 
-            Money totalPst = Money.total(pst);
-            Money totalGst = Money.total(gst);
-            Money totalHst = Money.total(hst);
+            Money totalPst = null;
+            Money totalGst = null;
+            Money totalHst = null;
+            if (pst.size() > 0) {
+                totalPst = Money.total(pst);
+            }
+            if (gst.size() > 0) {
+                totalGst = Money.total(gst);
+            }
+            if (hst.size() > 0) {
+                totalHst = Money.total(hst);
+            }
 
             taxAmount = new TaxAmount(totalPst, totalGst, totalHst);
         }

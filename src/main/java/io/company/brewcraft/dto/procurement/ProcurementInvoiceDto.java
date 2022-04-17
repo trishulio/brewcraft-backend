@@ -6,7 +6,6 @@ import io.company.brewcraft.dto.AmountDto;
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.InvoiceStatusDto;
-import io.company.brewcraft.dto.TaxDto;
 
 public class ProcurementInvoiceDto extends BaseDto {
     private Long id;
@@ -15,7 +14,6 @@ public class ProcurementInvoiceDto extends BaseDto {
     private ProcurementPurchaseOrderDto purchaseOrder;
     private FreightDto freight;
     private AmountDto amount;
-    private TaxDto tax;
     private LocalDateTime generatedOn;
     private LocalDateTime receivedOn;
     private LocalDateTime paymentDueDate;
@@ -32,14 +30,13 @@ public class ProcurementInvoiceDto extends BaseDto {
         setId(id);
     }
 
-    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, ProcurementPurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, TaxDto tax, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
+    public ProcurementInvoiceDto(Long id, String invoiceNumber, String description, ProcurementPurchaseOrderDto purchaseOrder, FreightDto freight, AmountDto amount, LocalDateTime generatedOn, LocalDateTime receivedOn, LocalDateTime paymentDueDate, LocalDateTime createdAt, LocalDateTime lastUpdated, InvoiceStatusDto invoiceStatus, Integer version) {
         this(id);
         setInvoiceNumber(invoiceNumber);
         setDescription(description);
         setPurchaseOrder(purchaseOrder);
         setFreight(freight);
         setAmount(amount);
-        setTax(tax);
         setGeneratedOn(generatedOn);
         setPaymentDueDate(paymentDueDate);
         setReceivedOn(receivedOn);
@@ -95,14 +92,6 @@ public class ProcurementInvoiceDto extends BaseDto {
 
     public void setAmount(AmountDto amount) {
         this.amount = amount;
-    }
-
-    public TaxDto getTax() {
-        return tax;
-    }
-
-    public void setTax(TaxDto tax) {
-        this.tax = tax;
     }
 
     public LocalDateTime getGeneratedOn() {

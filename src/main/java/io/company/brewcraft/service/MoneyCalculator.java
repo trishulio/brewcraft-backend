@@ -1,16 +1,15 @@
 package io.company.brewcraft.service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 import org.joda.money.Money;
 
-public class MoneyService {
-    public static final MoneyService INSTANCE = new MoneyService();
+public class MoneyCalculator {
+    public static final MoneyCalculator INSTANCE = new MoneyCalculator();
 
-    protected MoneyService() {
+    protected MoneyCalculator() {
     }
 
     public Money total(Collection<? extends MoneySupplier> moneySuppliers) {
@@ -25,14 +24,16 @@ public class MoneyService {
         return total;
     }
 
-    public Money total(Money... monies) {
+    public Money totalAmount(Collection<Money> monies) {
         Money total = null;
 
         if (monies != null) {
-            monies = (Money[]) Arrays.stream(monies)
+            monies = monies.stream()
                            .filter(Objects::nonNull)
-                           .toArray();
-            total = Money.total(monies);
+                           .toList();
+            if (monies.size() > 0) {
+                total = Money.total(monies);
+            }
         }
 
         return total;

@@ -10,14 +10,16 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Amount;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.TaxAmount;
+import io.company.brewcraft.model.TaxRate;
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import io.company.brewcraft.util.SupportedUnits;
 
 public class InvoiceItemTest {
     private InvoiceItem invoiceItem;
@@ -34,7 +36,7 @@ public class InvoiceItemTest {
                 "desc2",
                 Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM),
                 Money.of(CurrencyUnit.CAD, new BigDecimal("5")),
-                new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))),
+                new Tax(new TaxRate(new BigDecimal("10"))),
                 new Material(7L),
                 LocalDateTime.of(1999, 1, 1, 1, 1),
                 LocalDateTime.of(1999, 1, 1, 1, 1),
@@ -44,8 +46,8 @@ public class InvoiceItemTest {
         assertEquals("desc2", invoiceItem.getDescription());
         assertEquals(Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), invoiceItem.getQuantity());
         assertEquals(Money.of(CurrencyUnit.CAD, new BigDecimal("5")), invoiceItem.getPrice());
-        assertEquals(new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), invoiceItem.getTax());
-        assertEquals(Money.parse("CAD 20"), invoiceItem.getAmount());
+        assertEquals(new Tax(new TaxRate(new BigDecimal("10"))), invoiceItem.getTax());
+        assertEquals(new Amount(Money.parse("CAD 20"), new TaxAmount(Money.parse("CAD 200"))), invoiceItem.getAmount());
         assertEquals(new Material(7L), invoiceItem.getMaterial());
         assertEquals(1, invoiceItem.getVersion());
     }
@@ -144,6 +146,6 @@ public class InvoiceItemTest {
         invoiceItem.setQuantity(Quantities.getQuantity(new BigDecimal("11"), SupportedUnits.GRAM));
         invoiceItem.setPrice(Money.parse("CAD 10"));
 
-        assertEquals(Money.parse("CAD 110"), invoiceItem.getAmount());
+        assertEquals(new Amount(Money.parse("CAD 110"), null), invoiceItem.getAmount());
     }
 }

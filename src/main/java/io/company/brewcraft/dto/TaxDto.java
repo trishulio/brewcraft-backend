@@ -9,11 +9,15 @@ public class TaxDto extends BaseDto {
         super();
     }
 
-    public TaxDto(TaxRateDto gstRate, TaxRateDto pstRate, TaxRateDto hstRate) {
+    public TaxDto(TaxRateDto hstRate) {
         this();
-        setGstRate(gstRate);
-        setPstRate(pstRate);
         setHstRate(hstRate);
+    }
+
+    public TaxDto(TaxRateDto pstRate, TaxRateDto gstRate) {
+        this();
+        setPstRate(pstRate);
+        setGstRate(gstRate);
     }
 
     public TaxRateDto getGstRate() {

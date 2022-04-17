@@ -1,14 +1,15 @@
 package io.company.brewcraft.pojo;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.TaxRate;
 
 public class TaxTest {
     private Tax tax;
@@ -19,28 +20,27 @@ public class TaxTest {
     }
 
     @Test
-    public void testAllArgsConstructor() {
-        tax = new Tax(Money.parse("CAD 2"));
-        assertEquals(Money.parse("CAD 2"), tax.getAmount());
+    public void testNoArgConstructor() {
+        assertNull(tax.getPstRate());
+        assertNull(tax.getGstRate());
+        assertNull(tax.getHstRate());
     }
 
     @Test
-    public void testAccessAmount() {
-        assertNull(tax.getAmount());
-        tax.setAmount(Money.parse("CAD 2"));
-        assertEquals(Money.parse("CAD 2"), tax.getAmount());
+    public void testHstConstructor() {
+        tax = new Tax(new TaxRate(new BigDecimal("1")));
+
+        assertEquals(new TaxRate(new BigDecimal("1")), tax.getHstRate());
+        assertNull(tax.getPstRate());
+        assertNull(tax.getGstRate());
     }
 
     @Test
-    public void testTotal_ReturnsNewTaxWithCombinedAmount() {
-        List<Tax> taxes = List.of(
-            new Tax(Money.parse("CAD 10")),
-            new Tax(Money.parse("CAD 20")),
-            new Tax(Money.parse("CAD 30"))
-        );
+    public void testGstPstConstructor() {
+        tax = new Tax(new TaxRate(new BigDecimal("1")), new TaxRate(new BigDecimal("2")));
 
-        Tax total = Tax.total(taxes);
-
-        assertEquals(new Tax(Money.parse("CAD 60")), total);
+        assertEquals(new TaxRate(new BigDecimal("1")), tax.getPstRate());
+        assertEquals(new TaxRate(new BigDecimal("2")), tax.getGstRate());
+        assertNull(tax.getHstRate());
     }
 }

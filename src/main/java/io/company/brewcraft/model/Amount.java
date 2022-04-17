@@ -15,7 +15,7 @@ import org.joda.money.Money;
 import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Embeddable
-public class Amount {
+public class Amount extends BaseEntity {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "amount", column = @Column(name = "total_amount"))
@@ -41,9 +41,13 @@ public class Amount {
         super();
     }
 
-    public Amount(Money subTotal, TaxAmount taxAmount) {
+    public Amount(Money subTotal) {
         this();
-        setSubTotal(getSubTotal());
+        setSubTotal(subTotal);
+    }
+
+    public Amount(Money subTotal, TaxAmount taxAmount) {
+        this(subTotal);
         setTaxAmount(taxAmount);
     }
 
