@@ -23,7 +23,7 @@ public class Amount extends BaseEntity {
     @AssociationOverrides({
         @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "total_amount_currency_code", referencedColumnName = "numeric_code"))
     })
-    private MoneyEntity totalAmount;
+    private MoneyEntity total;
 
     @Embedded
     @AttributeOverrides({
@@ -51,14 +51,14 @@ public class Amount extends BaseEntity {
         setTaxAmount(taxAmount);
     }
 
-    public Money getTotalAmount() {
-        setTotalAmount();
-        return MoneyMapper.INSTANCE.fromEntity(totalAmount);
+    public Money getTotal() {
+        setTotal();
+        return MoneyMapper.INSTANCE.fromEntity(total);
     }
 
     @PrePersist
-    public void setTotalAmount() {
-        Money totalAmount = null;
+    public void setTotal() {
+        Money total = null;
 
         Money subTotal = getSubTotal();
         TaxAmount taxAmount = getTaxAmount();
@@ -69,10 +69,10 @@ public class Amount extends BaseEntity {
         }
 
         if (subTotal != null && totalTaxAmount != null) {
-            totalAmount = subTotal.plus(totalTaxAmount);
+            total = subTotal.plus(totalTaxAmount);
         }
 
-        this.totalAmount = MoneyMapper.INSTANCE.toEntity(totalAmount);
+        this.total = MoneyMapper.INSTANCE.toEntity(total);
     }
 
     public Money getSubTotal() {

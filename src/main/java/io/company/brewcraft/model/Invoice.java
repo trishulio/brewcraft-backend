@@ -316,7 +316,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @PrePersist
     private void setAmount() {
-        this.amount = AmountCalculator.INSTANCE.getTotalAmount(this.invoiceItems);
+        this.amount = AmountCalculator.INSTANCE.getTotal(this.invoiceItems);
     }
 
     @JsonIgnore

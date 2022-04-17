@@ -1,7 +1,7 @@
 package io.company.brewcraft.dto;
 
 public class AmountDto extends BaseDto {
-    private MoneyDto totalAmount;
+    private MoneyDto total;
     private MoneyDto subTotal;
     private TaxAmountDto taxAmount;
 
@@ -14,18 +14,18 @@ public class AmountDto extends BaseDto {
         setSubTotal(subTotal);
     }
 
-    public AmountDto(MoneyDto totalAmount, MoneyDto subTotal, TaxAmountDto taxAmount) {
+    public AmountDto(MoneyDto total, MoneyDto subTotal, TaxAmountDto taxAmount) {
         this(subTotal);
-        setTotalAmount(totalAmount);
+        setTotal(total);
         setTaxAmount(taxAmount);
     }
 
-    public MoneyDto getTotalAmount() {
-        return totalAmount;
+    public MoneyDto getTotal() {
+        return total;
     }
 
-    public void setTotalAmount(MoneyDto totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTotal(MoneyDto total) {
+        this.total = total;
     }
 
     public MoneyDto getSubTotal() {

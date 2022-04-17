@@ -25,19 +25,19 @@ public class AmountCalculator {
     }
 
     public Amount getAmount(Good taxaleCommodity) {
-        Amount totalAmount = null;
+        Amount total = null;
 
         Money subTotal = this.costCalculator.getCost(taxaleCommodity);
         TaxAmount taxAmount = this.taxCalculator.getTaxAmount(taxaleCommodity.getTax(), subTotal);
 
         if (subTotal != null || taxAmount != null) {
-            totalAmount = new Amount(subTotal, taxAmount);
+            total = new Amount(subTotal, taxAmount);
         }
 
-        return totalAmount;
+        return total;
     }
 
-    public Amount getTotalAmount(Collection<? extends AmountSupplier> amountSuppliers) {
+    public Amount getTotal(Collection<? extends AmountSupplier> amountSuppliers) {
         Money subTotal = null;
         TaxAmount taxAmount = null;
 
