@@ -59,14 +59,14 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
 
     @Override
     public <BE extends BaseIaasUser> IaasUser add(BE addition) {
-        AttributeType[] types = new AttributeType[2];
-        types[0] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL).withValue(addition.getEmail());
-        types[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
+        AttributeType[] attributes = new AttributeType[2];
+        attributes[0] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL).withValue(addition.getEmail());
+        attributes[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
 
         final AdminCreateUserRequest request = new AdminCreateUserRequest().withUserPoolId(userPoolId)
                                                                                           .withUsername(addition.getUserName())
                                                                                           .withDesiredDeliveryMediums(DeliveryMediumType.EMAIL)
-                                                                                          .withUserAttributes(types);
+                                                                                          .withUserAttributes(attributes);
         final AdminCreateUserResult result = this.idp.adminCreateUser(request);
         return userTypeMapper.fromIaasEntity(result.getUser());
     }
@@ -103,13 +103,13 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
     }
 
     public <UE extends UpdateIaasUser> IaasUser update(UE update) {
-        AttributeType[] types = new AttributeType[2];
-        types[0] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL).withValue(update.getEmail());
-        types[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
+        AttributeType[] attributes = new AttributeType[2];
+        attributes[0] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL).withValue(update.getEmail());
+        attributes[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
 
         AdminUpdateUserAttributesRequest req = new AdminUpdateUserAttributesRequest().withUserPoolId(userPoolId)
                                                                                    .withUsername(update.getUserName())
-                                                                                   .withUserAttributes(types);
+                                                                                   .withUserAttributes(attributes);
 
         AdminUpdateUserAttributesResult result = this.idp.adminUpdateUserAttributes(req);
 

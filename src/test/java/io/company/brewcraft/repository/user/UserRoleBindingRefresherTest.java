@@ -34,14 +34,6 @@ public class UserRoleBindingRefresherTest {
     }
 
     @Test
-    public void testRefreshRoles_RefreshesRoles() {
-        List<UserRoleBinding> bindings = List.of(new UserRoleBinding(1L), new UserRoleBinding(2L));
-        userRoleBindingRefresher.refresh(bindings);
-
-        verify(mUserRoleRefresher, times(1)).refreshAccessors(List.of(new UserRoleBinding(1L), new UserRoleBinding(2L)));
-    }
-
-    @Test
     public void testRefreshAccessors_DoesNothing() {
         List<UserRoleBindingAccessor> accessors = List.of(mock(UserRoleBindingAccessor.class), mock(UserRoleBindingAccessor.class));
 

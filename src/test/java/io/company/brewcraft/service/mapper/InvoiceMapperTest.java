@@ -73,14 +73,14 @@ public class InvoiceMapperTest {
             "desc1",
             new PurchaseOrderDto(1L),
             new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
-            new AmountDto(new MoneyDto("CAD", new BigDecimal("220.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200.00")))),
+            new AmountDto(new MoneyDto("CAD", new BigDecimal("220.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200.00")), new MoneyDto("CAD", new BigDecimal("200.00")))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),
             LocalDateTime.of(2002, 1, 1, 12, 0),
             LocalDateTime.of(2003, 1, 1, 12, 0),
             new InvoiceStatusDto(99L),
-            List.of(new InvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("10"))), new AmountDto(new MoneyDto("CAD", new BigDecimal("220.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200.00")))), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+            List.of(new InvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("10"))), new AmountDto(new MoneyDto("CAD", new BigDecimal("220.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200.00")), new MoneyDto("CAD", new BigDecimal("200.00")))), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
             1
         );
 

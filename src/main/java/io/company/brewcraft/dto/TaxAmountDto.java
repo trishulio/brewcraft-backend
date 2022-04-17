@@ -7,23 +7,26 @@ public class TaxAmountDto extends BaseDto {
 
     private MoneyDto hstAmount;
 
+    private MoneyDto totalTaxAmount;
+
     public TaxAmountDto() {
         super();
     }
 
-    public TaxAmountDto(MoneyDto pstAmount, MoneyDto gstAmount, MoneyDto hstAmount) {
+    public TaxAmountDto(MoneyDto pstAmount, MoneyDto gstAmount, MoneyDto hstAmount, MoneyDto totalTaxAmount) {
         this();
         setPstAmount(pstAmount);
         setGstAmount(gstAmount);
         setHstAmount(hstAmount);
+        setTotalTaxAmount(totalTaxAmount);
     }
 
-    public TaxAmountDto(MoneyDto pstAmount, MoneyDto gstAmount) {
-        this(pstAmount, gstAmount, null);
+    public TaxAmountDto(MoneyDto pstAmount, MoneyDto gstAmount, MoneyDto totalTaxAmount) {
+        this(pstAmount, gstAmount, null, totalTaxAmount);
     }
 
-    public TaxAmountDto(MoneyDto hstAmount) {
-        this(null, null, hstAmount);
+    public TaxAmountDto(MoneyDto hstAmount, MoneyDto totalTaxAmount) {
+        this(null, null, hstAmount, totalTaxAmount);
     }
 
     public MoneyDto getPstAmount() {
@@ -48,5 +51,13 @@ public class TaxAmountDto extends BaseDto {
 
     public void setHstAmount(MoneyDto hstAmount) {
         this.hstAmount = hstAmount;
+    }
+
+    public MoneyDto getTotalTaxAmount() {
+        return totalTaxAmount;
+    }
+
+    public void setTotalTaxAmount(MoneyDto totalTaxAmount) {
+        this.totalTaxAmount = totalTaxAmount;
     }
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -148,6 +149,9 @@ public class UserTest {
 
         user.setRoles(List.of(new UserRole(10L), new UserRole(20L)));
         assertEquals(List.of(new UserRole(10L), new UserRole(20L)), user.getRoles());
+
+        user.setRoles(null);
+        assertEquals(new ArrayList<>(), user.getRoles());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package io.company.brewcraft.security.auth;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,8 +23,14 @@ public class ContextHolderFilter implements Filter {
     public static final String HEADER_NAME_IAAS_TOKEN = "X-Iaas-Token";
 
     private ThreadLocalContextHolder ctxHolder;
+    private Supplier<SecurityContext> securityCtxSupplier;
 
     public ContextHolderFilter(ThreadLocalContextHolder ctxHolder) {
+        this(() -> SecurityContextHolder.getContext(), ctxHolder);
+    }
+
+    protected ContextHolderFilter(Supplier<SecurityContext> securityCtxSupplier, ThreadLocalContextHolder ctxHolder) {
+        this.securityCtxSupplier = securityCtxSupplier;
         this.ctxHolder = ctxHolder;
     }
 
@@ -35,7 +42,7 @@ public class ContextHolderFilter implements Filter {
     }
 
     private void setPrincipalContext(HttpServletRequest request) {
-        SecurityContext ctx = SecurityContextHolder.getContext();
+        SecurityContext ctx = securityCtxSupplier.get();
         Authentication auth = ctx.getAuthentication();
         Object principal = auth.getPrincipal();
         PrincipalContext principalCtx = null;

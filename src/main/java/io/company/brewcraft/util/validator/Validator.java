@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,7 @@ public class Validator {
                 logger.error(err);
                 throw new IllegalStateException(err, e);
 
-            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 String err = String.format("Failed to instantiate class: '%s' because '%s'", clazz.getName(), e.getMessage());
                 logger.error(err);
                 throw new IllegalStateException(err, e);

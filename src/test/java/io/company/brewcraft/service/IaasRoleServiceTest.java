@@ -156,6 +156,11 @@ public class IaasRoleServiceTest {
     }
 
     @Test
+    public void testAdd_ReturnsNull_WhenArgIsNull() {
+        assertNull(service.add(null));
+    }
+
+    @Test
     public void testPut_ReturnsPutRepoEntities_AfterSavingPutEntitiesFromUpdateService() {
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasRepo).put(anyList());
 
@@ -174,6 +179,11 @@ public class IaasRoleServiceTest {
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(attachments);
         verify(mUpdateService).getPutEntities(null, updates);
+    }
+
+    @Test
+    public void testPut_ReturnsNull_WhenArgIsNull() {
+        assertNull(service.put(null));
     }
 
     @Test
@@ -206,5 +216,10 @@ public class IaasRoleServiceTest {
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(attachments);
         verify(mUpdateService).getPatchEntities(anyList(), eq(updates));
+    }
+
+    @Test
+    public void testPatch_ReturnsNull_WhenArgIsNull() {
+        assertNull(service.patch(null));
     }
 }

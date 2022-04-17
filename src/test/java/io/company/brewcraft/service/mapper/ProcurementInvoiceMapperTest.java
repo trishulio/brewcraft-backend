@@ -67,7 +67,7 @@ public class ProcurementInvoiceMapperTest {
             "desc1",
             new ProcurementPurchaseOrderDto(1L),
             new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
-            new AmountDto(new MoneyDto("CAD", new BigDecimal("40.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("20.00")))),
+            new AmountDto(new MoneyDto("CAD", new BigDecimal("40.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("20.00")), new MoneyDto("CAD", new BigDecimal("20.00")))),
             LocalDateTime.of(1999, 1, 1, 12, 0),
             LocalDateTime.of(2000, 1, 1, 12, 0),
             LocalDateTime.of(2001, 1, 1, 12, 0),

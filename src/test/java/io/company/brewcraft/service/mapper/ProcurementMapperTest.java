@@ -130,7 +130,7 @@ public class ProcurementMapperTest {
                     1
                 ),
                 new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
-                new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")))),
+                new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")), new MoneyDto("CAD", new BigDecimal("120.00")))),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
                 LocalDateTime.of(2000, 1, 1, 12, 0),
                 LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -154,7 +154,7 @@ public class ProcurementMapperTest {
                 new ProcurementItemDto(
                     new ProcurementItemIdDto(1L, 1L),
                     new ProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10")), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-                    new ProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("6"))), new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")))), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
+                    new ProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("6"))), new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")), new MoneyDto("CAD", new BigDecimal("120.00")))), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
                 )
             )
         );

@@ -100,7 +100,7 @@ public class ProcurementItemMapperTest {
                 new QuantityDto("g", new BigDecimal("100")),
                 new MoneyDto("CAD", new BigDecimal("200.00")),
                 new TaxDto(new TaxRateDto(new BigDecimal("10"))),
-                new AmountDto(new MoneyDto("CAD", new BigDecimal("220000.00")), new MoneyDto("CAD", new BigDecimal("20000.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200000.00")))),
+                new AmountDto(new MoneyDto("CAD", new BigDecimal("220000.00")), new MoneyDto("CAD", new BigDecimal("20000.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("200000.00")), new MoneyDto("CAD", new BigDecimal("200000.00")))),
                 new MaterialDto(7L),
                 LocalDateTime.of(2002, 1, 1, 0, 0),
                 LocalDateTime.of(2003, 1, 1, 0, 0),

@@ -266,6 +266,30 @@ public class InvoiceTest {
     }
 
     @Test
+    public void testAddLot_AddsLotToNewList_WhenLotsAreNull() {
+        this.invoice.addItem(new InvoiceItem(1L));
+
+        Invoice expected = new Invoice();
+        expected.setInvoiceItems(List.of(new InvoiceItem(1L)));
+        assertEquals(expected, this.invoice);
+    }
+
+    @Test
+    public void testAddLot_UpdatesInvoiceReference() {
+        Invoice other = new Invoice(2L);
+        InvoiceItem otherLot = new InvoiceItem(20L);
+        other.setInvoiceItems(List.of(otherLot));
+
+        assertEquals(otherLot.getInvoice(), other);
+
+        invoice.addItem(otherLot);
+
+        assertEquals(List.of(), other.getInvoiceItems());
+        assertEquals(List.of(otherLot), invoice.getInvoiceItems());
+        assertEquals(invoice, otherLot.getInvoice());
+    }
+
+    @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsNull() {
         assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
@@ -297,6 +321,12 @@ public class InvoiceTest {
     }
 
     @Test
+    public void testRemoveLot_ReturnsFalse_WhenArgIsNull() {
+        invoice.addItem(new InvoiceItem(1L));
+        assertFalse(invoice.removeItem(null));
+    }
+
+    @Test
     public void testGetItemCount_Returns0_WhenItemsIsNull() {
         invoice.setInvoiceItems(null);
 
@@ -316,4 +346,10 @@ public class InvoiceTest {
 
         assertEquals(1, invoice.getItemCount());
     }
+
+    @Test
+    public void testGetLotCount_Returns0_WhenLotIsNull() {
+        assertEquals(0, invoice.getItemCount());
+    }
+
 }

@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
+import javax.persistence.PrePersist;
 
 import org.joda.money.Money;
 
@@ -19,6 +20,10 @@ import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Embeddable
 public class TaxAmount extends BaseEntity {
+    public static final String FIELD_PST_AMOUNT = "pstAmount";
+    public static final String FIELD_GST_AMOUNT = "gstAmount";
+    public static final String FIELD_HST_AMOUNT = "hstAmount";
+
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "amount", column = @Column(name = "pst_amount"))
@@ -45,6 +50,15 @@ public class TaxAmount extends BaseEntity {
         @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "hst_amount_currency_code", referencedColumnName = "numeric_code"))
     })
     private MoneyEntity hstAmount;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "amount", column = @Column(name = "total_tax_amount"))
+    })
+    @AssociationOverrides({
+        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "total_tax_amount_currency_code", referencedColumnName = "numeric_code"))
+    })
+    private MoneyEntity totalTaxAmount;
 
     public TaxAmount() {
         super();
@@ -90,10 +104,19 @@ public class TaxAmount extends BaseEntity {
     }
 
     public Money getTotalTaxAmount() {
+        setTotalTaxAmount();
+
+        return MoneyMapper.INSTANCE.fromEntity(totalTaxAmount);
+    }
+
+    @PrePersist
+    public void setTotalTaxAmount() {
         List<Money> amounts = new ArrayList<>(3);
         amounts.add(getPstAmount());
         amounts.add(getGstAmount());
         amounts.add(getHstAmount());
-        return MoneyCalculator.INSTANCE.totalAmount(amounts);
+        Money totalTaxAmount = MoneyCalculator.INSTANCE.totalAmount(amounts);
+
+        this.totalTaxAmount = MoneyMapper.INSTANCE.toEntity(totalTaxAmount);
     }
 }
