@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.dto.AddMixtureDto;
 import io.company.brewcraft.dto.BrewStageDto;
-import io.company.brewcraft.dto.FacilityEquipmentDto;
+import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.MixtureDto;
 import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.UpdateMixtureDto;
@@ -60,6 +60,6 @@ public class MixtureMapperTest {
 
         MixtureDto dto = mixtureMapper.toDto(mixture);
 
-        assertEquals(new MixtureDto(1L, Set.of(2L), new QuantityDto("hl", BigDecimal.valueOf(100.0)), new FacilityEquipmentDto(3L), new BrewStageDto(4L), 1), dto);
+        assertEquals(new MixtureDto(1L, Set.of(2L), new QuantityDto("hl", BigDecimal.valueOf(100.0)), new EquipmentDto(3L), new BrewStageDto(4L), 1), dto);
     }
 }

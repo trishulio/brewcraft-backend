@@ -3,10 +3,11 @@ package io.company.brewcraft.controller;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,89 +24,93 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.company.brewcraft.dto.AddEquipmentDto;
+import io.company.brewcraft.dto.BaseEquipment;
 import io.company.brewcraft.dto.EquipmentDto;
 import io.company.brewcraft.dto.PageDto;
+import io.company.brewcraft.dto.UpdateEquipment;
 import io.company.brewcraft.dto.UpdateEquipmentDto;
 import io.company.brewcraft.model.Equipment;
 import io.company.brewcraft.service.EquipmentService;
-import io.company.brewcraft.service.exception.EntityNotFoundException;
 import io.company.brewcraft.service.mapper.EquipmentMapper;
 import io.company.brewcraft.util.controller.AttributeFilter;
-import io.company.brewcraft.util.validator.Validator;
 
 @RestController
-@RequestMapping(path = "/api/v1/facilities")
+@RequestMapping(path = "/api/v1/equipment")
 public class EquipmentController extends BaseController {
-    private EquipmentService equipmentService;
+    private CrudControllerService<
+        Long,
+        Equipment,
+        BaseEquipment,
+        UpdateEquipment,
+        EquipmentDto,
+        AddEquipmentDto,
+        UpdateEquipmentDto
+    > controller;
 
-    private EquipmentMapper equipmentMapper = EquipmentMapper.INSTANCE;
+    private final EquipmentService equipmentService;
 
-    public EquipmentController(EquipmentService equipmentService, AttributeFilter filter) {
-        super(filter);
+    protected EquipmentController(CrudControllerService<
+            Long,
+            Equipment,
+            BaseEquipment,
+            UpdateEquipment,
+            EquipmentDto,
+            AddEquipmentDto,
+            UpdateEquipmentDto
+        > controller, EquipmentService equipmentService)
+    {
+        this.controller = controller;
         this.equipmentService = equipmentService;
     }
 
-    @GetMapping(value = "/equipment", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+    public EquipmentController(EquipmentService equipmentService, AttributeFilter filter) {
+        this(new CrudControllerService<>(filter, EquipmentMapper.INSTANCE, equipmentService, "Equipment"), equipmentService);
+    }
+
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<EquipmentDto> getAllEquipment(
-        @RequestParam(required = false) Set<Long> ids,
-        @RequestParam(required = false) Set<String> types,
-        @RequestParam(required = false) Set<String> statuses,
-        @RequestParam(required = false) Set<Long> facilityIds,
+        @RequestParam(required = false, name = "ids") Set<Long> ids,
+        @RequestParam(required = false, name = "exclude_ids") Set<Long> excludeIds,
+        @RequestParam(required = false, name = "facility_ids") Set<Long> facilityIds,
+        @RequestParam(required = false, name = "type_ids") Set<Long> typeIds,
         @RequestParam(name = PROPNAME_SORT_BY, defaultValue = VALUE_DEFAULT_SORT_BY) SortedSet<String> sort,
         @RequestParam(name = PROPNAME_ORDER_ASC, defaultValue = VALUE_DEFAULT_ORDER_ASC) boolean orderAscending,
         @RequestParam(name = PROPNAME_PAGE_INDEX, defaultValue = VALUE_DEFAULT_PAGE_INDEX) int page,
-        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size
-    ) {
-        Page<Equipment> equipmentPage = equipmentService.getAllEquipment(ids, types, statuses, facilityIds, page, size, sort, orderAscending);
+        @RequestParam(name = PROPNAME_PAGE_SIZE, defaultValue = VALUE_DEFAULT_PAGE_SIZE) int size,
+        @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes
+     ) {
+        Page<Equipment> equipmentPage = equipmentService.getEquipment(ids, excludeIds, facilityIds, typeIds, page, size, sort, orderAscending);
 
-        List<EquipmentDto> equipmentList = equipmentPage.stream()
-                                                        .map(equipment -> equipmentMapper.toDto(equipment))
-                                                        .toList();
-
-        PageDto<EquipmentDto> dto = new PageDto<EquipmentDto>(equipmentList, equipmentPage.getTotalPages(), equipmentPage.getTotalElements());
-
-        return dto;
+        return this.controller.getAll(equipmentPage, attributes);
     }
 
-    @GetMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public EquipmentDto getEquipment(@PathVariable Long equipmentId) {
-        Equipment equipment = equipmentService.getEquipment(equipmentId);
-
-        Validator.assertion(equipment != null, EntityNotFoundException.class, "Equipment", equipmentId.toString());
-
-        return equipmentMapper.toDto(equipment);
+    @GetMapping(value = "/{equipmentId}", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public EquipmentDto getEquipment(@PathVariable(required = true, name = "equipmentId") Long equipmentId, @RequestParam(name = PROPNAME_ATTR, defaultValue = VALUE_DEFAULT_ATTR) Set<String> attributes) {
+        return this.controller.get(equipmentId, attributes);
     }
 
-    @PostMapping(value = "/{facilityId}/equipment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public EquipmentDto addEquipment(@PathVariable Long facilityId, @Valid @RequestBody AddEquipmentDto equipmentDto) {
-        Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-
-        Equipment addedEquipment = equipmentService.addEquipment(facilityId, equipment);
-
-        return equipmentMapper.toDto(addedEquipment);
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public long deleteEquipment(@RequestParam("ids") Set<Long> equipmentIds) {
+        return this.controller.delete(equipmentIds);
     }
 
-    @PutMapping(value = "/{facilityId}/equipment/{equipmentId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public EquipmentDto putEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long facilityId,  @PathVariable Long equipmentId) {
-        Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-
-        Equipment putEquipment = equipmentService.putEquipment(facilityId, equipmentId, equipment);
-
-        return equipmentMapper.toDto(putEquipment);
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public List<EquipmentDto> addEquipment(@Valid @NotNull @RequestBody List<AddEquipmentDto> addDtos) {
+        return this.controller.add(addDtos);
     }
 
-    @PatchMapping(value = "/equipment/{equipmentId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public EquipmentDto patchEquipment(@Valid @RequestBody UpdateEquipmentDto equipmentDto, @PathVariable Long equipmentId) {
-        Equipment equipment = equipmentMapper.fromDto(equipmentDto);
-
-        Equipment patchedEquipment = equipmentService.patchEquipment(equipmentId, equipment);
-
-        return equipmentMapper.toDto(patchedEquipment);
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<EquipmentDto> updateEquipment(@Valid @NotNull @RequestBody List<UpdateEquipmentDto> updateDtos) {
+        return this.controller.put(updateDtos);
     }
 
-    @DeleteMapping(value = "/equipment/{equipmentId}", consumes = MediaType.ALL_VALUE)
-    public void deleteEquipment(@PathVariable Long equipmentId) {
-        equipmentService.deleteEquipment(equipmentId);
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<EquipmentDto> patchEquipment(@Valid @NotNull @RequestBody List<UpdateEquipmentDto> updateDtos) {
+        return this.controller.patch(updateDtos);
     }
 }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
 
 public class AddEquipmentDtoTest {
     private AddEquipmentDto addEquipmentDto;
@@ -21,43 +20,47 @@ public class AddEquipmentDtoTest {
     @Test
     public void testConstructor() {
         String name = "equipment1";
-        EquipmentType type = EquipmentType.BARREL;
+        Long typeId = 2L;
+        Long facilityId = 3L;
         EquipmentStatus status = EquipmentStatus.ACTIVE;
         QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
 
-        AddEquipmentDto equipment = new AddEquipmentDto(name, type, status, maxCapacity);
+        AddEquipmentDto equipment = new AddEquipmentDto(name, typeId, facilityId, status, maxCapacity);
 
-        assertSame(name, equipment.getName());
-        assertSame(type, equipment.getType());
-        assertSame(status, equipment.getStatus());
-        assertSame(maxCapacity, equipment.getMaxCapacity());
+        assertEquals("equipment1", equipment.getName());
+        assertEquals(2L, equipment.getTypeId());
+        assertEquals(3L, equipment.getFacilityId());
+        assertEquals(EquipmentStatus.ACTIVE, equipment.getStatus());
+        assertEquals(new QuantityDto("L", new BigDecimal("100.0")), equipment.getMaxCapacity());
     }
 
     @Test
     public void testGetSetName() {
-        String name = "testName";
-        addEquipmentDto.setName(name);
-        assertSame(name, addEquipmentDto.getName());
+        addEquipmentDto.setName("testName");
+        assertEquals("testName", addEquipmentDto.getName());
     }
 
     @Test
-    public void testGetSetType() {
-        EquipmentType type = EquipmentType.FERMENTER;
-        addEquipmentDto.setType(type);
-        assertSame(type, addEquipmentDto.getType());
+    public void testGetSetTypeId() {
+        addEquipmentDto.setTypeId(2L);
+        assertEquals(2L, addEquipmentDto.getTypeId());
+    }
+
+    @Test
+    public void testGetFacilityId() {
+        addEquipmentDto.setFacilityId(1L);
+        assertEquals(1L, addEquipmentDto.getFacilityId());
     }
 
     @Test
     public void testGetSetStatus() {
-        EquipmentStatus status = EquipmentStatus.ACTIVE;
-        addEquipmentDto.setStatus(status);
-        assertSame(status, addEquipmentDto.getStatus());
+        addEquipmentDto.setStatus(EquipmentStatus.ACTIVE);
+        assertEquals(EquipmentStatus.ACTIVE, addEquipmentDto.getStatus());
     }
 
     @Test
     public void testGetSetMaxCapacity() {
-        QuantityDto maxCapacity = new QuantityDto("L", new BigDecimal("100.0"));
-        addEquipmentDto.setMaxCapacity(maxCapacity);
-        assertSame(maxCapacity, addEquipmentDto.getMaxCapacity());
+        addEquipmentDto.setMaxCapacity(new QuantityDto("L", new BigDecimal("100.0")));
+        assertEquals(new QuantityDto("L", new BigDecimal("100.0")), addEquipmentDto.getMaxCapacity());
     }
 }

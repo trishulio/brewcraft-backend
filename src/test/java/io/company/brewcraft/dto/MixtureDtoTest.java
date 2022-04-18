@@ -21,7 +21,7 @@ public class MixtureDtoTest {
         Long id = 1L;
         Set<Long> parentMixtureIds = Set.of(2L);
         QuantityDto quantity = new QuantityDto("hl", BigDecimal.valueOf(100.0));
-        FacilityEquipmentDto equipmentDto = new FacilityEquipmentDto(3L);
+        EquipmentDto equipmentDto = new EquipmentDto(3L);
         BrewStageDto brewStageDto = new BrewStageDto(4L);
         Integer version = 1;
 
@@ -30,7 +30,7 @@ public class MixtureDtoTest {
         assertEquals(1L, mixtureDto.getId());
         assertEquals(Set.of(2L), mixtureDto.getParentMixtureIds());
         assertEquals(new QuantityDto("hl", BigDecimal.valueOf(100.0)), mixtureDto.getQuantity());
-        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
+        assertEquals(new EquipmentDto(3L), mixtureDto.getEquipment());
         assertEquals(new BrewStageDto(4L), mixtureDto.getBrewStage());
         assertEquals(1, mixtureDto.getVersion());
     }
@@ -55,8 +55,8 @@ public class MixtureDtoTest {
 
     @Test
     public void testGetSetEquipment() {
-        mixtureDto.setEquipment(new FacilityEquipmentDto(3L));
-        assertEquals(new FacilityEquipmentDto(3L), mixtureDto.getEquipment());
+        mixtureDto.setEquipment(new EquipmentDto(3L));
+        assertEquals(new EquipmentDto(3L), mixtureDto.getEquipment());
     }
 
     @Test

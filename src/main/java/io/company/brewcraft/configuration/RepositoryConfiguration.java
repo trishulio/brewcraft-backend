@@ -15,6 +15,8 @@ import io.company.brewcraft.model.BrewStage;
 import io.company.brewcraft.model.BrewStageStatus;
 import io.company.brewcraft.model.BrewTask;
 import io.company.brewcraft.model.Equipment;
+import io.company.brewcraft.model.EquipmentType;
+import io.company.brewcraft.model.Facility;
 import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
@@ -67,6 +69,10 @@ import io.company.brewcraft.repository.BrewTaskRepository;
 import io.company.brewcraft.repository.CollectionAccessorRefresher;
 import io.company.brewcraft.repository.EquipmentRefresher;
 import io.company.brewcraft.repository.EquipmentRepository;
+import io.company.brewcraft.repository.EquipmentTypeRefresher;
+import io.company.brewcraft.repository.EquipmentTypeRepository;
+import io.company.brewcraft.repository.FacilityRefresher;
+import io.company.brewcraft.repository.FacilityRepository;
 import io.company.brewcraft.repository.FinishedGoodLotFinishedGoodLotPortionRefresher;
 import io.company.brewcraft.repository.FinishedGoodLotFinishedGoodLotPortionRepository;
 import io.company.brewcraft.repository.FinishedGoodLotMaterialPortionRefresher;
@@ -129,6 +135,8 @@ import io.company.brewcraft.service.BrewStageAccessor;
 import io.company.brewcraft.service.BrewStageStatusAccessor;
 import io.company.brewcraft.service.BrewTaskAccessor;
 import io.company.brewcraft.service.EquipmentAccessor;
+import io.company.brewcraft.service.EquipmentTypeAccessor;
+import io.company.brewcraft.service.FacilityAccessor;
 import io.company.brewcraft.service.FinishedGoodLotAccessor;
 import io.company.brewcraft.service.FinishedGoodLotFinishedGoodLotPortionAccessor;
 import io.company.brewcraft.service.FinishedGoodLotMaterialPortionAccessor;
@@ -415,11 +423,31 @@ public class RepositoryConfiguration {
     }
 
     @Bean
+    public AccessorRefresher<Long, EquipmentTypeAccessor, EquipmentType> equipmentTypeAccessorRefresher(EquipmentTypeRepository repo) {
+        return new AccessorRefresher<>(
+            EquipmentType.class,
+            accessor -> accessor.getType(),
+            (accessor, equipmentType) -> accessor.setType(equipmentType),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
     public AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher(EquipmentRepository repo) {
         return new AccessorRefresher<>(
             Equipment.class,
             accessor -> accessor.getEquipment(),
             (accessor, equipment) -> accessor.setEquipment(equipment),
+            ids -> repo.findAllById(ids)
+        );
+    }
+
+    @Bean
+    public AccessorRefresher<Long, FacilityAccessor, Facility> facilityAccessorRefresher(FacilityRepository repo) {
+        return new AccessorRefresher<>(
+            Facility.class,
+            accessor -> accessor.getFacility(),
+            (accessor, facility) -> accessor.setFacility(facility),
             ids -> repo.findAllById(ids)
         );
     }
@@ -535,8 +563,18 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public Refresher<Equipment, EquipmentAccessor> equipmentRefresher(AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher) {
-        return new EquipmentRefresher(equipmentAccessorRefresher);
+    public Refresher<Facility, FacilityAccessor> facilityRefresher(AccessorRefresher<Long, FacilityAccessor, Facility> facilityAccessorRefresher) {
+        return new FacilityRefresher(facilityAccessorRefresher);
+    }
+
+    @Bean
+    public Refresher<EquipmentType, EquipmentTypeAccessor> equipmentTypeRefresher(AccessorRefresher<Long, EquipmentTypeAccessor, EquipmentType> equipmentTypeAccessorRefresher) {
+        return new EquipmentTypeRefresher(equipmentTypeAccessorRefresher);
+    }
+
+    @Bean
+    public Refresher<Equipment, EquipmentAccessor> equipmentRefresher(AccessorRefresher<Long, EquipmentAccessor, Equipment> equipmentAccessorRefresher, Refresher<Facility, FacilityAccessor> facilityRefresher, Refresher<EquipmentType, EquipmentTypeAccessor> equipmentTypeRefresher) {
+        return new EquipmentRefresher(equipmentAccessorRefresher, facilityRefresher, equipmentTypeRefresher);
     }
 
     @Bean

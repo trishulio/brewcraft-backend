@@ -26,13 +26,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.dto.UpdateEquipment;
+import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.mapper.QuantityMapper;
 import io.company.brewcraft.util.QuantityCalculator;
 
-@Entity
-@Table(name="EQUIPMENT")
+@Entity(name = "equipment")
+@Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class Equipment extends BaseEntity implements Identified<Long> {
+public class Equipment extends BaseEntity implements CrudEntity<Long>, UpdateEquipment, Audited {
     public static final String FIELD_ID = "id";
     public static final String FIELD_FACILITY = "facility";
     public static final String FIELD_NAME = "name";
@@ -51,7 +53,8 @@ public class Equipment extends BaseEntity implements Identified<Long> {
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name="equipment_type_id", referencedColumnName = "id", nullable = false)
     private EquipmentType type;
 
     @Enumerated(EnumType.STRING)
@@ -102,69 +105,85 @@ public class Equipment extends BaseEntity implements Identified<Long> {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public Facility getFacility() {
         return facility;
     }
 
+    @Override
     public void setFacility(Facility facility) {
         this.facility = facility;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public EquipmentType getType() {
         return type;
     }
 
+    @Override
     public void setType(EquipmentType type) {
         this.type = type;
     }
 
+    @Override
     public EquipmentStatus getStatus() {
         return status;
     }
 
+    @Override
     public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
 
+    @Override
     public Quantity<?> getMaxCapacity() {
         Quantity<?> qty = QuantityMapper.INSTANCE.fromEntity(this.maxCapacity);
 
         return QuantityCalculator.INSTANCE.fromSystemQuantityValueWithDisplayUnit(qty);
     }
 
+    @Override
     public void setMaxCapacity(Quantity<?> maxCapacity) {
         maxCapacity = QuantityCalculator.INSTANCE.toSystemQuantityValueWithDisplayUnit(maxCapacity);
         this.maxCapacity = QuantityMapper.INSTANCE.toEntity(maxCapacity);
     }
 
+    @Override
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
     }
 
+    @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    @Override
     public Integer getVersion() {
         return version;
     }

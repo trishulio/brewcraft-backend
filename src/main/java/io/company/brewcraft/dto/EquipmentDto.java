@@ -1,16 +1,15 @@
 package io.company.brewcraft.dto;
 
 import io.company.brewcraft.model.EquipmentStatus;
-import io.company.brewcraft.model.EquipmentType;
 
 public class EquipmentDto extends BaseDto {
     private Long id;
 
-    private FacilityBaseDto facility;
+    private FacilityDto facility;
 
     private String name;
 
-    private EquipmentType type;
+    private EquipmentTypeDto type;
 
     private EquipmentStatus status;
 
@@ -27,7 +26,7 @@ public class EquipmentDto extends BaseDto {
         this.id = id;
     }
 
-    public EquipmentDto(Long id, FacilityBaseDto facility, String name, EquipmentType type, EquipmentStatus status,
+    public EquipmentDto(Long id, FacilityDto facility, String name, EquipmentTypeDto type, EquipmentStatus status,
             QuantityDto maxCapacity, Integer version) {
         this(id);
         this.facility = facility;
@@ -46,11 +45,11 @@ public class EquipmentDto extends BaseDto {
         this.id = id;
     }
 
-    public FacilityBaseDto getFacility() {
+    public FacilityDto getFacility() {
         return facility;
     }
 
-    public void setFacility(FacilityBaseDto facility) {
+    public void setFacility(FacilityDto facility) {
         this.facility = facility;
     }
 
@@ -62,11 +61,11 @@ public class EquipmentDto extends BaseDto {
         this.name = name;
     }
 
-    public EquipmentType getType() {
+    public EquipmentTypeDto getType() {
         return type;
     }
 
-    public void setType(EquipmentType type) {
+    public void setType(EquipmentTypeDto type) {
         this.type = type;
     }
 
