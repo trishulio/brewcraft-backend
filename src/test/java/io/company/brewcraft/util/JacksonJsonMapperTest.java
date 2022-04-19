@@ -1,7 +1,9 @@
 package io.company.brewcraft.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tec.uom.se.quantity.Quantities;
@@ -48,9 +51,12 @@ public class JacksonJsonMapperTest {
 
     private JsonMapper mapper;
 
+    private ObjectMapper mObjectMapper;
+
     @BeforeEach
     public void init() {
-        mapper = new JacksonJsonMapper(new ObjectMapper());
+        mObjectMapper = spy(new ObjectMapper());
+        mapper = new JacksonJsonMapper(mObjectMapper);
     }
 
     @Test
@@ -173,5 +179,20 @@ public class JacksonJsonMapperTest {
         String json = mapper.writeString(date);
 
         assertEquals("\"2020-12-31T12:00:00\"", json);
+    }
+
+    @Test
+    public void testWriteString_DoesNotCauseStackOverflowInCatchClause_WhenEntityOverridesToStringToCallJacksonMapper() throws JsonProcessingException {
+        doThrow(JsonProcessingException.class).when(mObjectMapper).writeValueAsString(any());
+
+        class OverrideToStringWithJackson extends TestData {
+            @Override
+            public String toString() {
+                return mapper.writeString(this);
+            }
+        }
+
+        OverrideToStringWithJackson o = new OverrideToStringWithJackson();
+        assertThrows(RuntimeException.class, () -> mapper.writeString(o));
     }
 }

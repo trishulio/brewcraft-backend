@@ -24,11 +24,11 @@ public class AmountCalculator {
         this.taxCalculator = taxCalculator;
     }
 
-    public Amount getAmount(Good taxaleCommodity) {
+    public Amount getAmount(Good good) {
         Amount total = null;
 
-        Money subTotal = this.costCalculator.getCost(taxaleCommodity);
-        TaxAmount taxAmount = this.taxCalculator.getTaxAmount(taxaleCommodity.getTax(), subTotal);
+        Money subTotal = this.costCalculator.getCost(good);
+        TaxAmount taxAmount = this.taxCalculator.getTaxAmount(good.getTax(), subTotal);
 
         if (subTotal != null || taxAmount != null) {
             total = new Amount(subTotal, taxAmount);
@@ -38,8 +38,8 @@ public class AmountCalculator {
     }
 
     public Amount getTotal(Collection<? extends AmountSupplier> amountSuppliers) {
-        Money subTotal = null;
-        TaxAmount taxAmount = null;
+        Money totalSubTotal = null;
+        TaxAmount totalTaxAmount = null;
 
         if (amountSuppliers != null && amountSuppliers.size() > 0) {
             List<Money> subTotals = new ArrayList<>(amountSuppliers.size());
@@ -50,15 +50,21 @@ public class AmountCalculator {
                            .map(AmountSupplier::getAmount)
                            .filter(Objects::nonNull)
                            .forEach(amount -> {
-                               subTotals.add(amount.getSubTotal());
-                               taxAmounts.add(amount.getTaxAmount());
+                               Money subTotal = amount.getSubTotal();
+                               TaxAmount taxAmount = amount.getTaxAmount();
+                               if (subTotal != null) {
+                                   subTotals.add(subTotal);
+                               }
+                               if (taxAmount != null) {
+                                   taxAmounts.add(taxAmount);
+                               }
                            });
             if (subTotals.size() > 0) {
-                subTotal = Money.total(subTotals);
+                totalSubTotal = Money.total(subTotals);
             }
-            taxAmount = this.taxCalculator.total(taxAmounts);
+            totalTaxAmount = this.taxCalculator.total(taxAmounts);
         }
 
-        return new Amount(subTotal, taxAmount);
+        return new Amount(totalSubTotal, totalTaxAmount);
     }
 }

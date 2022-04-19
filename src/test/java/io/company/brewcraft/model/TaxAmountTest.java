@@ -29,6 +29,7 @@ public class TaxAmountTest {
         assertEquals(Money.parse("CAD 10"), taxAmount.getPstAmount());
         assertEquals(Money.parse("CAD 20"), taxAmount.getGstAmount());
         assertEquals(Money.parse("CAD 30"), taxAmount.getHstAmount());
+        assertEquals(Money.parse("CAD 60"), taxAmount.getTotalTaxAmount());
     }
 
     @Test
@@ -37,6 +38,7 @@ public class TaxAmountTest {
 
         assertEquals(Money.parse("CAD 10"), taxAmount.getPstAmount());
         assertEquals(Money.parse("CAD 20"), taxAmount.getGstAmount());
+        assertEquals(Money.parse("CAD 30"), taxAmount.getTotalTaxAmount());
     }
 
     @Test
@@ -44,6 +46,7 @@ public class TaxAmountTest {
         taxAmount = new TaxAmount(Money.parse("CAD 10"));
 
         assertEquals(Money.parse("CAD 10"), taxAmount.getHstAmount());
+        assertEquals(Money.parse("CAD 10"), taxAmount.getTotalTaxAmount());
     }
 
     @Test
@@ -51,6 +54,7 @@ public class TaxAmountTest {
         taxAmount.setPstAmount(Money.parse("CAD 100"));
 
         assertEquals(Money.parse("CAD 100"), taxAmount.getPstAmount());
+        assertEquals(Money.parse("CAD 100"), taxAmount.getTotalTaxAmount());
     }
 
     @Test
@@ -58,6 +62,7 @@ public class TaxAmountTest {
         taxAmount.setGstAmount(Money.parse("CAD 100"));
 
         assertEquals(Money.parse("CAD 100"), taxAmount.getGstAmount());
+        assertEquals(Money.parse("CAD 100"), taxAmount.getTotalTaxAmount());
     }
 
     @Test
@@ -65,6 +70,7 @@ public class TaxAmountTest {
         taxAmount.setHstAmount(Money.parse("CAD 100"));
 
         assertEquals(Money.parse("CAD 100"), taxAmount.getHstAmount());
+        assertEquals(Money.parse("CAD 100"), taxAmount.getTotalTaxAmount());
     }
 
     @Test

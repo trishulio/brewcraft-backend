@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.service.MoneyCalculator;
 import io.company.brewcraft.service.MoneySupplier;
 
-public class MoneyServiceTest {
+public class MoneyCalculatorTest {
     private MoneyCalculator calculator;
 
     @BeforeEach
@@ -78,5 +78,10 @@ public class MoneyServiceTest {
         );
 
         assertThrows(CurrencyMismatchException.class, () -> calculator.total(suppliers));
+    }
+
+    @Test
+    public void todo() {
+        fail();
     }
 }
