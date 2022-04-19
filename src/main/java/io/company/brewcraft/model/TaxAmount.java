@@ -93,19 +93,20 @@ public class TaxAmount extends BaseEntity {
 
     public void setPstAmount(Money pstAmount) {
         this.pstAmount = MoneyMapper.INSTANCE.toEntity(pstAmount);
+        setTotalTaxAmount();
     }
 
     public void setGstAmount(Money gstAmount) {
         this.gstAmount = MoneyMapper.INSTANCE.toEntity(gstAmount);
+        setTotalTaxAmount();
     }
 
     public void setHstAmount(Money hstAmount) {
         this.hstAmount = MoneyMapper.INSTANCE.toEntity(hstAmount);
+        setTotalTaxAmount();
     }
 
     public Money getTotalTaxAmount() {
-        setTotalTaxAmount();
-
         return MoneyMapper.INSTANCE.fromEntity(totalTaxAmount);
     }
 

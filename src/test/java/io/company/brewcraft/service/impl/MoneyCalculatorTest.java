@@ -81,7 +81,33 @@ public class MoneyCalculatorTest {
     }
 
     @Test
-    public void todo() {
-        fail();
+    public void testTotalAmount_ReturnsNull_WhenArgIsNull() {
+        assertNull(calculator.totalAmount(null));
+    }
+
+    @Test
+    public void testTotalAmount_ReturnsNull_WhenListIsEmpty() {
+        assertNull(calculator.totalAmount(List.of()));
+    }
+
+    @Test
+    public void testTotalAmount_ReturnsNull_WhenListHasNullElements() {
+        List<Money> nulls = new ArrayList<>();
+        nulls.add(null);
+        nulls.add(null);
+        nulls.add(null);
+        assertNull(calculator.totalAmount(nulls));
+    }
+
+    @Test
+    public void testTotalAmount_ReturnsSum_WhenArgHasNonNullMoney() {
+        List<Money> monies = new ArrayList<>();
+        monies.add(null);
+        monies.add(Money.parse("CAD 5"));
+        monies.add(Money.parse("CAD 10"));
+        monies.add(null);
+        monies.add(Money.parse("CAD 15"));
+
+        assertEquals(Money.parse("CAD 30"), calculator.totalAmount(monies));
     }
 }

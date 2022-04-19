@@ -71,7 +71,7 @@ public class Tax extends BaseEntity {
     public void setHstRate(TaxRate hstRate) {
         if (hstRate != null) {
             Validator.assertion(getPstRate() == null, IllegalArgumentException.class, "Cannot set HST when PST is present. Remove PST");
-            Validator.assertion(getGstRate() == null, IllegalArgumentException.class, "Cannot set HST when GST is present. Remove PST");
+            Validator.assertion(getGstRate() == null, IllegalArgumentException.class, "Cannot set HST when GST is present. Remove GST");
         }
         this.hstRate = hstRate;
     }
