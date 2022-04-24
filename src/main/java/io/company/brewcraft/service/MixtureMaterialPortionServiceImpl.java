@@ -1,7 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,15 +71,17 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = materialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
-
+        Map<Long, Quantity<?>> lotIdToQuantity =  new HashMap<>();
         materialPortions.forEach(materialPortion -> {
-            Validator.assertion(new BigDecimal(materialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+            Quantity<?> quantity = materialPortion.getQuantity();
+            Validator.assertion(new BigDecimal(quantity.getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+
+            Long materialLotId = materialPortion.getMaterialLot().getId();
+            Quantity<?> total = lotIdToQuantity.get(materialLotId);
+            lotIdToQuantity.put(materialLotId, total == null ? quantity : QuantityCalculator.INSTANCE.add(total, quantity));
         });
 
-        Map<Long, Quantity<?>> lotToQuantity = materialPortions.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getMaterialLot().getId(), BaseMixtureMaterialPortion::getQuantity));
-        Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotToQuantity);
+        Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotIdToQuantity);
 
         Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
 
@@ -103,40 +105,52 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = putMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
+        Map<Long, Quantity<?>> lotIdToQuantity =  new HashMap<>();
+        putMaterialPortions.forEach(materialPortion -> {
+            Quantity<?> quantity = materialPortion.getQuantity();
+            Validator.assertion(new BigDecimal(quantity.getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+
+            Long materialLotId = materialPortion.getMaterialLot().getId();
+            Quantity<?> total = lotIdToQuantity.get(materialLotId);
+            lotIdToQuantity.put(materialLotId, total == null ? quantity : QuantityCalculator.INSTANCE.add(total, quantity));
+        });
 
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(putMaterialPortions);
-        Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
 
-        putMaterialPortions.forEach(putMaterialPortion -> {
-            Validator.assertion(new BigDecimal(putMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
+        Map<Long, Quantity<?>> existingLotIdToQuantity = new HashMap<>();
+        existingEntities.forEach(existingEntity -> {
+            Quantity<?> existingQuantity = existingEntity.getQuantity();
+            Long lotId = existingEntity.getMaterialLot().getId();
+            Quantity<?> total = existingLotIdToQuantity.get(lotId);
 
-            boolean isNewMaterialPortion = putMaterialPortion.getId() == null || !idToExistingEntity.containsKey(putMaterialPortion.getId());
+            existingLotIdToQuantity.put(lotId, total == null ? existingQuantity : QuantityCalculator.INSTANCE.add(total, existingQuantity));
+        });
 
-            if (isNewMaterialPortion) {
-                Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), putMaterialPortion.getQuantity());
+        Map<Long, Quantity<?>> lotQuantitiesToCheck = new HashMap<>();
+        lotIdToQuantity.forEach((lotId, quantity) -> {
+            Quantity<?> existingQuantity = existingLotIdToQuantity.get(lotId);
 
-                if (!quantityAvailable) {
-                    throw new MaterialLotQuantityNotAvailableException(Set.of(putMaterialPortion.getMaterialLot().getId()));
+            if (existingQuantity != null) {
+                Quantity<?> difference = QuantityCalculator.INSTANCE.subtract(quantity, existingQuantity);
+
+                if (new BigDecimal(difference.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                    // Quantity has been increased for an existing material portion, need to check if the additional quantity amount is available.
+                    lotQuantitiesToCheck.put(lotId, difference);
                 }
             } else {
-                MixtureMaterialPortion existing = idToExistingEntity.get(putMaterialPortion.getId());
-
-                boolean isPutOnSameLot = putMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
-
-                //If put is on the same lot, we only need to check if the difference in quantity is available
-                Quantity<?> quantityToCheck = isPutOnSameLot ? QuantityCalculator.INSTANCE.subtract(putMaterialPortion.getQuantity(), existing.getQuantity()) : putMaterialPortion.getQuantity();
-
-                if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
-                    Boolean quantityAvailable = this.isQuantityAvailable(putMaterialPortion.getMaterialLot().getId(), quantityToCheck);
-
-                    if (!quantityAvailable) {
-                        throw new MaterialLotQuantityNotAvailableException(Set.of(putMaterialPortion.getMaterialLot().getId()));
-                    }
-                }
+                // Portion(s) from a new lot have been added, check if the total quantity amount is available.
+                lotQuantitiesToCheck.put(lotId, quantity);
             }
         });
+
+        if (lotQuantitiesToCheck.size() > 0) {
+            Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotQuantitiesToCheck);
+
+            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
+                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
+            }
+        }
 
         final List<MixtureMaterialPortion> updated = this.updateService.getPutEntities(existingEntities, putMaterialPortions);
 
@@ -149,9 +163,6 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             return null;
         }
 
-        List<Long> lotIds = patchMaterialPortions.stream().map(x -> x.getMaterialLot().getId()).toList();
-        Validator.assertion(lotIds.size() == new HashSet<Long>(lotIds).size(), RuntimeException.class, "Material lot ids must be unique");
-
         final List<MixtureMaterialPortion> existingEntities = this.repoService.getByIds(patchMaterialPortions);
         Map<Long, MixtureMaterialPortion> idToExistingEntity = existingEntities.stream().collect(Collectors.toMap(materialPortion -> materialPortion.getId(), materialPortion -> materialPortion));
 
@@ -162,34 +173,52 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             throw new EntityNotFoundException(String.format("Cannot find material portion with Ids: %s", nonExistingIds));
         }
 
-        patchMaterialPortions.forEach(patchMaterialPortion -> {
-            if (patchMaterialPortion.getQuantity() != null) {
-                Validator.assertion(new BigDecimal(patchMaterialPortion.getQuantity().getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantity must be greater than 0");
-            }
+        Map<Long, Quantity<?>> lotIdToQuantity =  new HashMap<>();
+        patchMaterialPortions.forEach(materialPortion -> {
+            MixtureMaterialPortion existingPortion = idToExistingEntity.get(materialPortion.getId());
 
-            MixtureMaterialPortion existing = idToExistingEntity.get(patchMaterialPortion.getId());
+            Quantity<?> quantity = materialPortion.getQuantity() != null ? materialPortion.getQuantity() : existingPortion.getQuantity();
+            Validator.assertion(new BigDecimal(quantity.getValue().toString()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
 
-            boolean isPatchOnSameLot = patchMaterialPortion.getMaterialLot() == null || patchMaterialPortion.getMaterialLot().getId() == null
-                    || patchMaterialPortion.getMaterialLot().getId() == existing.getMaterialLot().getId();
+            Long materialLotId = materialPortion.getMaterialLot() != null && materialPortion.getMaterialLot().getId() != null ? materialPortion.getMaterialLot().getId() : existingPortion.getMaterialLot().getId();
+            Quantity<?> total = lotIdToQuantity.get(materialLotId);
+            lotIdToQuantity.put(materialLotId, total == null ? quantity : QuantityCalculator.INSTANCE.add(total, quantity));
+        });
 
-            boolean isQuantityCheckRequired = (isPatchOnSameLot && patchMaterialPortion.getQuantity() != null) || !isPatchOnSameLot;
+        Map<Long, Quantity<?>> existingLotIdToQuantity = new HashMap<>();
+        existingEntities.forEach(existingEntity -> {
+            Quantity<?> existingQuantity = existingEntity.getQuantity();
+            Long lotId = existingEntity.getMaterialLot().getId();
+            Quantity<?> total = existingLotIdToQuantity.get(lotId);
 
-            if (isQuantityCheckRequired) {
-                Long lotIdToCheck = isPatchOnSameLot ? existing.getMaterialLot().getId() : patchMaterialPortion.getMaterialLot().getId();
+            existingLotIdToQuantity.put(lotId, total == null ? existingQuantity : QuantityCalculator.INSTANCE.add(total, existingQuantity));
+        });
 
-                //If patch is on the same lot, we only need to check if the difference in quantity is available
-                Quantity<?> quantityToCheck = isPatchOnSameLot ? QuantityCalculator.INSTANCE.subtract(patchMaterialPortion.getQuantity(), existing.getQuantity()) :
-                    patchMaterialPortion.getQuantity() != null ? patchMaterialPortion.getQuantity() : existing.getQuantity();
+        Map<Long, Quantity<?>> lotQuantitiesToCheck = new HashMap<>();
+        lotIdToQuantity.forEach((lotId, quantity) -> {
+            Quantity<?> existingQuantity = existingLotIdToQuantity.get(lotId);
 
-                if (new BigDecimal(quantityToCheck.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
-                    Boolean quantityAvailable = this.isQuantityAvailable(lotIdToCheck, quantityToCheck);
+            if (existingQuantity != null) {
+                Quantity<?> difference = QuantityCalculator.INSTANCE.subtract(quantity, existingQuantity);
 
-                    if (!quantityAvailable) {
-                        throw new MaterialLotQuantityNotAvailableException(Set.of(lotIdToCheck));
-                    }
+                if (new BigDecimal(difference.getValue().toString()).compareTo(BigDecimal.ZERO) > 0) {
+                    // Quantity has been increased for an existing material portion, need to check if the additional quantity amount is available
+                    lotQuantitiesToCheck.put(lotId, difference);
                 }
+            } else {
+                // Portion(s) from a new lot has been added, check if the total quantity amount is available.
+                lotQuantitiesToCheck.put(lotId, quantity);
             }
         });
+
+        if (lotQuantitiesToCheck.size() > 0) {
+            Map<Long, Boolean> quantityCheckresult = this.areQuantitiesAvailable(lotQuantitiesToCheck);
+
+            Set<Long> lotIdsWithUnavailableQuantity = quantityCheckresult.entrySet().stream().filter(entry -> entry.getValue() == false).map(Map.Entry::getKey).collect(Collectors.toSet());
+            if (!lotIdsWithUnavailableQuantity.isEmpty()) {
+                throw new MaterialLotQuantityNotAvailableException(lotIdsWithUnavailableQuantity);
+            }
+        }
 
         final List<MixtureMaterialPortion> updated = this.updateService.getPatchEntities(existingEntities, patchMaterialPortions);
 

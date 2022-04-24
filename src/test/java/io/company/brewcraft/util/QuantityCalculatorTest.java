@@ -64,6 +64,41 @@ public class QuantityCalculatorTest {
     }
 
     @Test
+    public void addMass_Success() {
+        Quantity<Mass> q1 = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.GRAM);
+        Quantity<Mass> q2 = Quantities.getQuantity(new BigDecimal("25"), SupportedUnits.GRAM);
+        Quantity<Mass> result = (Quantity<Mass>) calc.add(q1, q2);
+
+        assertEquals(Quantities.getQuantity(new BigDecimal("125"), SupportedUnits.GRAM), result);
+    }
+
+    @Test
+    public void addVolume_Success() {
+        Quantity<Volume> q1 = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.LITRE);
+        Quantity<Volume> q2 = Quantities.getQuantity(new BigDecimal("25"), SupportedUnits.LITRE);
+        Quantity<Volume> result = (Quantity<Volume>) calc.add(q1, q2);
+
+        assertEquals(Quantities.getQuantity(new BigDecimal("125"), SupportedUnits.LITRE), result);
+    }
+
+    @Test
+    public void addAmmount_Succes() {
+        Quantity<AmountOfSubstance> q1 = Quantities.getQuantity(new BigDecimal("100"), SupportedUnits.EACH);
+        Quantity<AmountOfSubstance> q2 = Quantities.getQuantity(new BigDecimal("25"), SupportedUnits.EACH);
+        Quantity<AmountOfSubstance> result = (Quantity<AmountOfSubstance>) calc.add(q1, q2);
+
+        assertEquals(Quantities.getQuantity(new BigDecimal("125"), SupportedUnits.EACH), result);
+    }
+
+    @Test
+    public void addUnsupportedType_Throws() {
+        Quantity<Length> q1 = Quantities.getQuantity(new BigDecimal("100"), Units.METRE);
+        Quantity<Length> q2 = Quantities.getQuantity(new BigDecimal("25"), Units.METRE);
+
+        assertThrows(RuntimeException.class, () -> calc.add(q1, q2));
+    }
+
+    @Test
     public void testToSystemQuantityValueWithDisplayUnit_ReturnsNull_WhenArgIsNull() {
         assertNull(calc.toSystemQuantityValueWithDisplayUnit(null));
     }
