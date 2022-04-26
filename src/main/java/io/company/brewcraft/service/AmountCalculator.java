@@ -2,6 +2,7 @@ package io.company.brewcraft.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,33 +39,37 @@ public class AmountCalculator {
     }
 
     public Amount getTotal(Collection<? extends AmountSupplier> amountSuppliers) {
-        Money totalSubTotal = null;
-        TaxAmount totalTaxAmount = null;
+        Amount totalAmount = null;
+        if (amountSuppliers != null) {
+            Money subTotal = null;
+            TaxAmount totalTaxAmount = null;
 
-        if (amountSuppliers != null && amountSuppliers.size() > 0) {
-            List<Money> subTotals = new ArrayList<>(amountSuppliers.size());
             List<TaxAmount> taxAmounts = new ArrayList<>(amountSuppliers.size());
-
-            amountSuppliers.stream()
+            Iterator<Amount> it = amountSuppliers.stream()
                            .filter(Objects::nonNull)
                            .map(AmountSupplier::getAmount)
                            .filter(Objects::nonNull)
-                           .forEach(amount -> {
-                               Money subTotal = amount.getSubTotal();
-                               TaxAmount taxAmount = amount.getTaxAmount();
-                               if (subTotal != null) {
-                                   subTotals.add(subTotal);
-                               }
-                               if (taxAmount != null) {
-                                   taxAmounts.add(taxAmount);
-                               }
-                           });
-            if (subTotals.size() > 0) {
-                totalSubTotal = Money.total(subTotals);
+                           .iterator();
+
+            while (it.hasNext()) {
+                Amount current = it.next();
+                taxAmounts.add(current.getTaxAmount());
+
+                if (subTotal == null) {
+                    subTotal = current.getSubTotal();
+                } else {
+                    Money st = current.getSubTotal();
+                    if (st != null) {
+                        subTotal = subTotal.plus(st);
+                    }
+                }
             }
-            totalTaxAmount = this.taxCalculator.total(taxAmounts);
+
+            totalTaxAmount = this.taxCalculator.getTaxAmountTotal(taxAmounts);
+
+            totalAmount = new Amount(subTotal, totalTaxAmount);
         }
 
-        return new Amount(totalSubTotal, totalTaxAmount);
+        return totalAmount;
     }
 }

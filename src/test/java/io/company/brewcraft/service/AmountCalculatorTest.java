@@ -104,12 +104,15 @@ public class AmountCalculatorTest {
 
     @Test
     public void testGetTotal_ReturnsNull_WhenSuppliersAreNull() {
-        assertEquals(new Amount(), calculator.getTotal(null));
+        assertNull(calculator.getTotal(null));
     }
 
     @Test
-    public void testGetTotal_ReturnsNull_WhenListIsEmpty() {
-        assertEquals(new Amount(), calculator.getTotal(new ArrayList<>()));
+    public void testGetTotal_ReturnsEmptyAmountWithEmptyTaxes_WhenListIsEmpty() {
+        Amount expected = new Amount();
+        expected.setTaxAmount(new TaxAmount());
+
+        assertEquals(expected, calculator.getTotal(new ArrayList<>()));
     }
 
     @Test
@@ -117,8 +120,15 @@ public class AmountCalculatorTest {
         List<? extends AmountSupplier> suppliers = new ArrayList<>() {
             private static final long serialVersionUID = 1L;
             {
+                add(null);
+                add(() -> null);
+                add(null);
+                add(() -> null);
+                add(null);
+                add(() -> null);
                 add(() -> new Amount());
                 add(() -> new Amount(Money.parse("CAD 100")));
+                add(() -> new Amount(null, new TaxAmount(Money.parse("CAD 15"))));
                 add(() -> new Amount(Money.parse("CAD 150"), new TaxAmount(Money.parse("CAD 25"))));
                 add(null);
                 add(() -> new Amount(null, new TaxAmount(Money.parse("CAD 35"))));
@@ -128,7 +138,7 @@ public class AmountCalculatorTest {
 
         Amount total = calculator.getTotal(suppliers);
 
-        Amount expected = new Amount(Money.parse("CAD 250"), new TaxAmount(Money.parse("CAD 60")));
+        Amount expected = new Amount(Money.parse("CAD 250"), new TaxAmount(Money.parse("CAD 75")));
         assertEquals(expected, total);
     }
 }

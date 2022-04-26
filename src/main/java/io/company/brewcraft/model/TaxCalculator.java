@@ -1,9 +1,8 @@
 package io.company.brewcraft.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 import org.joda.money.Money;
 
@@ -30,45 +29,49 @@ public class TaxCalculator {
         return taxAmount;
     }
 
-    public TaxAmount total(Collection<TaxAmount> taxAmounts) {
+    public TaxAmount getTaxAmountTotal(Iterable<TaxAmount> taxAmounts) {
         TaxAmount taxAmount = null;
 
         if (taxAmounts != null) {
-            List<Money> pst = new ArrayList<>(taxAmounts.size());
-            List<Money> gst = new ArrayList<>(taxAmounts.size());
-            List<Money> hst = new ArrayList<>(taxAmounts.size());
+            Money pst = null;
+            Money gst = null;
+            Money hst = null;
 
-            taxAmounts.stream()
-                      .filter(Objects::nonNull)
-                      .forEach(taxAmt -> {
-                          Money pstAmount = taxAmt.getPstAmount();
-                          Money gstAmount = taxAmt.getGstAmount();
-                          Money hstAmount = taxAmt.getHstAmount();
-                          if (pstAmount != null) {
-                              pst.add(pstAmount);
-                          }
-                          if (gstAmount != null) {
-                              gst.add(gstAmount);
-                          }
-                          if (hstAmount != null) {
-                              hst.add(hstAmount);
-                          }
-                      });
+            Iterator<TaxAmount> it = StreamSupport.stream(taxAmounts.spliterator(), false)
+                  .filter(Objects::nonNull)
+                  .iterator();
 
-            Money totalPst = null;
-            Money totalGst = null;
-            Money totalHst = null;
-            if (pst.size() > 0) {
-                totalPst = Money.total(pst);
-            }
-            if (gst.size() > 0) {
-                totalGst = Money.total(gst);
-            }
-            if (hst.size() > 0) {
-                totalHst = Money.total(hst);
+            while(it.hasNext()) {
+                TaxAmount amount = it.next();
+                if (pst == null) {
+                    pst = amount.getPstAmount();
+                } else {
+                    Money currentPst = amount.getPstAmount();
+                    if (currentPst != null) {
+                        pst = pst.plus(currentPst);
+                    }
+                }
+
+                if (gst == null) {
+                    gst = amount.getGstAmount();
+                } else {
+                    Money currentGst = amount.getGstAmount();
+                    if (currentGst != null) {
+                        gst = gst.plus(currentGst);
+                    }
+                }
+
+                if (hst == null) {
+                    hst = amount.getHstAmount();
+                } else {
+                    Money currentHst = amount.getHstAmount();
+                    if (currentHst != null) {
+                        hst = hst.plus(currentHst);
+                    }
+                }
             }
 
-            taxAmount = new TaxAmount(totalPst, totalGst, totalHst);
+            taxAmount = new TaxAmount(pst, gst, hst);
         }
 
         return taxAmount;
