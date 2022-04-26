@@ -9,6 +9,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClientBuilder;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
@@ -73,13 +74,16 @@ public class AwsFactory {
                                      .build();
     }
 
-    public AmazonIdentityManagement iamClient(final String region, String iamAccessKey, String iamSecret) {
+    public AmazonIdentityManagement iamClient(String iamAccessKey, String iamSecret) {
         BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(iamAccessKey, iamSecret);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
 
         AmazonIdentityManagement awsIamClient = AmazonIdentityManagementClientBuilder.standard()
-                                                .withRegion(region)
                                                 .withCredentials(credsProvider)
+                                                // Note: IAM services are non-regional. The region defaults to US_EAST_1.
+                                                // We hard-code a value here to avoid making network calls that builder
+                                                // makes behind the scenes when this parameter is not being set.
+                                                .withRegion(Regions.US_EAST_1)
                                                 .build();
 
         return awsIamClient;

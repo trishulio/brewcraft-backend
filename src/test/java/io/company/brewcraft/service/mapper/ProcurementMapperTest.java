@@ -12,6 +12,7 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.dto.AmountDto;
 import io.company.brewcraft.dto.FreightDto;
 import io.company.brewcraft.dto.InvoiceStatusDto;
 import io.company.brewcraft.dto.MaterialDto;
@@ -20,7 +21,9 @@ import io.company.brewcraft.dto.QuantityDto;
 import io.company.brewcraft.dto.ShipmentStatusDto;
 import io.company.brewcraft.dto.StorageDto;
 import io.company.brewcraft.dto.SupplierDto;
+import io.company.brewcraft.dto.TaxAmountDto;
 import io.company.brewcraft.dto.TaxDto;
+import io.company.brewcraft.dto.TaxRateDto;
 import io.company.brewcraft.dto.procurement.AddProcurementDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceDto;
 import io.company.brewcraft.dto.procurement.AddProcurementInvoiceItemDto;
@@ -54,6 +57,7 @@ import io.company.brewcraft.model.ShipmentStatus;
 import io.company.brewcraft.model.Storage;
 import io.company.brewcraft.model.Supplier;
 import io.company.brewcraft.model.Tax;
+import io.company.brewcraft.model.TaxRate;
 import io.company.brewcraft.model.procurement.Procurement;
 import io.company.brewcraft.service.mapper.procurement.ProcurementMapper;
 import io.company.brewcraft.util.SupportedUnits;
@@ -106,7 +110,7 @@ public class ProcurementMapperTest {
                 LocalDateTime.of(2002, 1, 1, 12, 0),
                 LocalDateTime.of(2003, 1, 1, 12, 0),
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
+                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(new TaxRate(new BigDecimal("6"))), new Material(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)),
                 1
             )
         ));
@@ -126,8 +130,7 @@ public class ProcurementMapperTest {
                     1
                 ),
                 new FreightDto(new MoneyDto("CAD", new BigDecimal("3.00"))),
-                new MoneyDto("CAD", new BigDecimal("20.00")),
-                new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))),
+                new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")), new MoneyDto("CAD", new BigDecimal("120.00")))),
                 LocalDateTime.of(1999, 1, 1, 12, 0),
                 LocalDateTime.of(2000, 1, 1, 12, 0),
                 LocalDateTime.of(2001, 1, 1, 12, 0),
@@ -151,7 +154,7 @@ public class ProcurementMapperTest {
                 new ProcurementItemDto(
                     new ProcurementItemIdDto(1L, 1L),
                     new ProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10")), new StorageDto(3L), LocalDateTime.of(1999, 1, 1, 12, 0, 0), LocalDateTime.of(2000, 1, 1, 12, 0, 0), 1),
-                    new ProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), new MoneyDto("CAD", new BigDecimal("20.00")), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
+                    new ProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("6"))), new AmountDto(new MoneyDto("CAD", new BigDecimal("140.00")), new MoneyDto("CAD", new BigDecimal("20.00")), new TaxAmountDto(new MoneyDto("CAD", new BigDecimal("120.00")), new MoneyDto("CAD", new BigDecimal("120.00")))), new MaterialDto(7L), LocalDateTime.of(1999, 1, 1, 1, 1), LocalDateTime.of(1999, 1, 1, 1, 1), 1)
                 )
             )
         );
@@ -186,7 +189,7 @@ public class ProcurementMapperTest {
             List.of(
                 new AddProcurementItemDto(
                     new AddProcurementMaterialLotDto("LOT_1", new QuantityDto("g", new BigDecimal("10")), 3L),
-                    new AddProcurementInvoiceItemDto("desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L)
+                    new AddProcurementInvoiceItemDto("desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("6.00"))), 7L)
                 )
             )
         );
@@ -218,7 +221,7 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(null, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, null)),
+                List.of(new InvoiceItem(null, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(new TaxRate(new BigDecimal("6.00"))), new Material(7L), null, null, null)),
                 null
             )
         );
@@ -257,7 +260,7 @@ public class ProcurementMapperTest {
             List.of(
                 new UpdateProcurementItemDto(
                     new UpdateProcurementMaterialLotDto(1L, "LOT_1", new QuantityDto("g", new BigDecimal("10")), 3L, 1),
-                    new UpdateProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6.00"))), 7L, 1)
+                    new UpdateProcurementInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5.00")), new TaxDto(new TaxRateDto(new BigDecimal("6.00"))), 7L, 1)
                 )
             )
         );
@@ -289,7 +292,7 @@ public class ProcurementMapperTest {
                 null,
                 null,
                 new InvoiceStatus(99L),
-                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(Money.of(CurrencyUnit.CAD, new BigDecimal("6"))), new Material(7L), null, null, 1)),
+                List.of(new InvoiceItem(1L, 0, "desc2", Quantities.getQuantity(new BigDecimal("4"), SupportedUnits.GRAM), Money.of(CurrencyUnit.CAD, new BigDecimal("5")), new Tax(new TaxRate(new BigDecimal("6.00"))), new Material(7L), null, null, 1)),
                 1
             )
         );

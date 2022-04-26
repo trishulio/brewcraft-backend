@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.company.brewcraft.service.AmountCalculator;
 import io.company.brewcraft.service.CrudEntity;
 import io.company.brewcraft.service.exception.IncompatibleQuantityUnitException;
 import io.company.brewcraft.service.mapper.MoneyMapper;
@@ -37,7 +38,7 @@ import io.company.brewcraft.util.QuantityCalculator;
 @Entity(name = "invoice_item")
 @Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long> {
+public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice>, Audited, CrudEntity<Long>, AmountSupplier, Good {
     public static final String FIELD_ID = "id";
     public static final String FIELD_INDEX = "index";
     public static final String FIELD_DESCRIPTION = "description";
@@ -207,30 +208,6 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     }
 
     @Override
-    public Integer getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Override
-    @JsonIgnore
-    public Money getAmount() {
-        Money amount = null;
-
-        final Number qty = this.getQuantity() != null ? this.getQuantity().getValue() : null;
-        final Money price = this.getPrice() != null ? this.getPrice() : null;
-
-        if (qty != null && price != null) {
-            amount = price.multipliedBy(qty.longValue());
-        }
-
-        return amount;
-    }
-
-    @Override
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -248,5 +225,20 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     @Override
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public Integer getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    @Override
+    @JsonIgnore
+    public Amount getAmount() {
+        return AmountCalculator.INSTANCE.getAmount(this);
     }
 }

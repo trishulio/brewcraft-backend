@@ -25,7 +25,6 @@ import javax.validation.constraints.Email;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.URL;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -241,8 +240,9 @@ public class User extends BaseEntity implements CrudEntity<Long>, UpdateUser, Au
         if (roles == null) {
             if (this.roleBindings != null) {
                 this.roleBindings.clear();
+            } else {
+                this.roleBindings = null;
             }
-            this.roleBindings = null;
             return;
         }
 

@@ -2,6 +2,7 @@ package io.company.brewcraft.dto.procurement;
 
 import java.time.LocalDateTime;
 
+import io.company.brewcraft.dto.AmountDto;
 import io.company.brewcraft.dto.BaseDto;
 import io.company.brewcraft.dto.MaterialDto;
 import io.company.brewcraft.dto.MoneyDto;
@@ -14,7 +15,7 @@ public class ProcurementInvoiceItemDto extends BaseDto {
     private QuantityDto quantity;
     private MoneyDto price;
     private TaxDto tax;
-    private MoneyDto amount;
+    private AmountDto amount;
     private MaterialDto material;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
@@ -28,7 +29,7 @@ public class ProcurementInvoiceItemDto extends BaseDto {
         setId(id);
     }
 
-    public ProcurementInvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, MoneyDto amount, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
+    public ProcurementInvoiceItemDto(Long id, String description, QuantityDto quantity, MoneyDto price, TaxDto tax, AmountDto amount, MaterialDto material, LocalDateTime createdAt, LocalDateTime lastUpdated, Integer version) {
         this(id);
         setDescription(description);
         setQuantity(quantity);
@@ -81,11 +82,11 @@ public class ProcurementInvoiceItemDto extends BaseDto {
         this.tax = tax;
     }
 
-    public MoneyDto getAmount() {
+    public AmountDto getAmount() {
         return amount;
     }
 
-    public void setAmount(MoneyDto amount) {
+    public void setAmount(AmountDto amount) {
         this.amount = amount;
     }
 

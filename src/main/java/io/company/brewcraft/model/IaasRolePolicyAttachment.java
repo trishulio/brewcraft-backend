@@ -43,7 +43,15 @@ public class IaasRolePolicyAttachment extends BaseEntity implements UpdateIaasRo
 
     @Override
     public void setId(IaasRolePolicyAttachmentId id) {
-        if (id != null) {
+        if (id == null) {
+            if (this.role != null) {
+                this.role.setId(null);
+            }
+
+            if (this.policy != null) {
+                this.policy.setId(null);
+            }
+        } else {
             if (this.role == null) {
                 this.role = new IaasRole();
             }

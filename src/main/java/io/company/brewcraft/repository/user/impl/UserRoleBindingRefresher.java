@@ -2,8 +2,6 @@ package io.company.brewcraft.repository.user.impl;
 
 import java.util.Collection;
 
-import io.company.brewcraft.model.user.User;
-import io.company.brewcraft.model.user.UserAccessor;
 import io.company.brewcraft.model.user.UserRole;
 import io.company.brewcraft.model.user.UserRoleAccessor;
 import io.company.brewcraft.model.user.UserRoleBinding;
@@ -20,10 +18,6 @@ public class UserRoleBindingRefresher implements Refresher<UserRoleBinding, User
     @Override
     public void refresh(Collection<UserRoleBinding> bindings) {
         userRoleRefresher.refreshAccessors(bindings);
-    }
-
-    public void refreshRoles(Collection<UserRoleBinding> bindings) {
-        this.userRoleRefresher.refreshAccessors(bindings);
     }
 
     @Override

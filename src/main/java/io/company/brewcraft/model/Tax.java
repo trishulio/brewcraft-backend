@@ -1,58 +1,78 @@
 package io.company.brewcraft.model;
 
-import java.util.Collection;
-
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.JoinColumn;
 
-import org.joda.money.Money;
-
-import io.company.brewcraft.service.MoneyService;
-import io.company.brewcraft.service.MoneySupplier;
-import io.company.brewcraft.service.mapper.MoneyMapper;
+import io.company.brewcraft.util.validator.Validator;
 
 @Embeddable
-public class Tax extends BaseModel implements MoneySupplier {
-    public static final String FIELD_AMOUNT = "amount";
+public class Tax extends BaseEntity {
+    public static final String FIELD_GST_RATE = "gstRate";
+    public static final String FIELD_HST_RATE = "hstRate";
+    public static final String FIELD_PST_RATE = "pstRate";
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "amount", column = @Column(name = "tax_amount"))
+        @AttributeOverride(name = "value", column = @Column(name = "gst_rate"))
     })
-    @AssociationOverrides({
-        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "tax_currency_code", referencedColumnName = "numeric_code"))
+    private TaxRate gstRate;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "value", column = @Column(name = "pst_rate"))
     })
-    private MoneyEntity amount;
+    private TaxRate pstRate;
+
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "value", column = @Column(name = "hst_rate"))
+    })
+    private TaxRate hstRate;
 
     public Tax() {
+        super();
     }
 
-    public Tax(Money amount) {
+    public Tax(TaxRate hstRate) {
+        setHstRate(hstRate);
+    }
+
+    public Tax(TaxRate pstRate, TaxRate gstRate) {
         this();
-        setAmount(amount);
+        setPstRate(pstRate);
+        setGstRate(gstRate);
     }
 
-    @Override
-    public Money getAmount() {
-        return MoneyMapper.INSTANCE.fromEntity(amount);
+    public TaxRate getGstRate() {
+        return gstRate;
     }
 
-    public void setAmount(Money amount) {
-        this.amount = MoneyMapper.INSTANCE.toEntity(amount);
+    public void setGstRate(TaxRate gstRate) {
+        Validator.assertion(gstRate == null || (gstRate != null && getHstRate() == null), IllegalArgumentException.class, "Cannot set GST when HST is present. Remove HST");
+        this.gstRate = gstRate;
     }
 
-    public static Tax total(Collection<Tax> taxes) {
-        Tax combined = null;
-        Money total = MoneyService.total(taxes);
-        if (total != null) {
-            combined = new Tax(total);
+    public TaxRate getPstRate() {
+        return pstRate;
+    }
+
+    public void setPstRate(TaxRate pstRate) {
+        Validator.assertion(pstRate == null || (pstRate != null && getHstRate() == null), IllegalArgumentException.class, "Cannot set PST when HST is present. Remove HST");
+        this.pstRate = pstRate;
+    }
+
+    public TaxRate getHstRate() {
+        return hstRate;
+    }
+
+    public void setHstRate(TaxRate hstRate) {
+        if (hstRate != null) {
+            Validator.assertion(getPstRate() == null, IllegalArgumentException.class, "Cannot set HST when PST is present. Remove PST");
+            Validator.assertion(getGstRate() == null, IllegalArgumentException.class, "Cannot set HST when GST is present. Remove GST");
         }
-        return combined;
+        this.hstRate = hstRate;
     }
 }

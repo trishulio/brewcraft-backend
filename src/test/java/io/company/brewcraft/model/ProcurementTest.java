@@ -3,6 +3,7 @@ package io.company.brewcraft.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -131,6 +132,16 @@ public class ProcurementTest {
         Shipment expectedShipment = new Shipment(2L);
         expectedShipment.addLot(new MaterialLot(20L));
         assertEquals(new Procurement(expectedShipment, expectedInvoice), procurement);
+    }
+
+    @Test
+    public void testSetProcurementItems_SetsNull_WhenItemsAreNull() {
+        procurement.setInvoice(new Invoice(1L));
+        procurement.setShipment(new Shipment(2L));
+
+        procurement.setProcurementItems(null);
+
+        assertEquals(new ArrayList<>(), procurement.getProcurementItems());
     }
 
     @Test

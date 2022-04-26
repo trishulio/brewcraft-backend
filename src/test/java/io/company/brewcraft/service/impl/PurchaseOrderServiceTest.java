@@ -1,5 +1,6 @@
 package io.company.brewcraft.service.impl;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -256,5 +257,10 @@ public class PurchaseOrderServiceTest {
 
         // TODO: Spec is not tested
         captor.getValue();
+    }
+
+    @Test
+    public void testPutByOrderNumberAndSupplier_ReturnsNull_WhenArgIsNull() {
+        assertNull(service.putBySupplierAndOrderNumber(null));
     }
 }

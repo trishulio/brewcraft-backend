@@ -1,6 +1,6 @@
 package io.company.brewcraft;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import io.company.brewcraft.migration.MigrationManager;
 import io.company.brewcraft.service.impl.TenantService;
 
 @SpringBootTest

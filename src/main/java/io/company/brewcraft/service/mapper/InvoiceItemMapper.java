@@ -9,7 +9,7 @@ import io.company.brewcraft.dto.InvoiceItemDto;
 import io.company.brewcraft.dto.UpdateInvoiceItemDto;
 import io.company.brewcraft.model.InvoiceItem;
 
-@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, MaterialMapper.class, TaxMapper.class })
+@Mapper(uses = { QuantityMapper.class, QuantityUnitMapper.class, MoneyMapper.class, AmountMapper.class, MaterialMapper.class, TaxMapper.class })
 public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDto, AddInvoiceItemDto, UpdateInvoiceItemDto> {
     InvoiceItemMapper INSTANCE = Mappers.getMapper(InvoiceItemMapper.class);
 
@@ -28,10 +28,6 @@ public interface InvoiceItemMapper extends BaseMapper<InvoiceItem, InvoiceItemDt
     @Mapping(target = InvoiceItem.ATTR_QUANTITY, ignore = true)
     @Mapping(target = InvoiceItem.ATTR_TAX, ignore = true)
     InvoiceItem fromDto(Long id);
-
-    @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)
-    @Mapping(target = InvoiceItem.ATTR_INDEX, ignore = true)
-    InvoiceItem fromDto(InvoiceItemDto dto);
 
     @Override
     @Mapping(target = InvoiceItem.ATTR_INVOICE, ignore = true)

@@ -64,7 +64,7 @@ public class Procurement extends BaseEntity implements UpdateProcurement<Procure
 
     @Override
     public ProcurementId getId() {
-        return idFactory.build(shipment, invoice);
+        return idFactory.build(this.shipment, this.invoice);
     }
 
     public void setId(ProcurementId id) {

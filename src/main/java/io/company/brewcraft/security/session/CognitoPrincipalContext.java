@@ -6,9 +6,10 @@ import java.util.UUID;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import io.company.brewcraft.model.BaseModel;
 import io.company.brewcraft.model.IaasAuthorizationCredentials;
 
-public class CognitoPrincipalContext implements PrincipalContext {
+public class CognitoPrincipalContext extends BaseModel implements PrincipalContext {
     public static final String CLAIM_GROUPS = "cognito:groups";
     public static final String CLAIM_USERNAME = "username";
     public static final String CLAIM_SCOPE = "scope";

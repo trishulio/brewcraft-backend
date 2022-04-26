@@ -1,6 +1,7 @@
 package io.company.brewcraft.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 
@@ -17,13 +18,13 @@ public class UpdateInvoiceItemDtoTest {
 
     @Test
     public void testAllArgs() {
-        invoiceItem = new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), 7L, 1);
+        invoiceItem = new UpdateInvoiceItemDto(1L, "desc2", new QuantityDto("g", new BigDecimal("4")), new MoneyDto("CAD", new BigDecimal("5")), new TaxDto(new TaxRateDto(new BigDecimal("6"))), 7L, 1);
 
         assertEquals(1L, invoiceItem.getId());
         assertEquals("desc2", invoiceItem.getDescription());
         assertEquals(new QuantityDto("g", new BigDecimal("4")), invoiceItem.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), invoiceItem.getPrice());
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), invoiceItem.getTax());
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("6"))), invoiceItem.getTax());
         assertEquals(7L, invoiceItem.getMaterialId());
         assertEquals(1, invoiceItem.getVersion());
     }
@@ -59,8 +60,8 @@ public class UpdateInvoiceItemDtoTest {
     @Test
     public void testAccessTax() {
         assertNull(invoiceItem.getTax());
-        invoiceItem.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), invoiceItem.getTax());
+        invoiceItem.setTax(new TaxDto(new TaxRateDto(new BigDecimal("100"))));
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("100"))), invoiceItem.getTax());
     }
 
     @Test

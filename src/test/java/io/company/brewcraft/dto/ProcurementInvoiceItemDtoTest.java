@@ -33,8 +33,8 @@ public class ProcurementInvoiceItemDtoTest {
             "desc2",
             new QuantityDto("g", new BigDecimal("4")),
             new MoneyDto("CAD", new BigDecimal("5")),
-            new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))),
-            new MoneyDto("CAD", new BigDecimal("8")),
+            new TaxDto(new TaxRateDto(new BigDecimal("6"))),
+            new AmountDto(new MoneyDto("CAD", new BigDecimal("8"))),
             new MaterialDto(7L),
             LocalDateTime.of(1999, 1, 1, 1, 1),
             LocalDateTime.of(2000, 1, 1, 1, 1),
@@ -45,8 +45,8 @@ public class ProcurementInvoiceItemDtoTest {
         assertEquals("desc2", invoiceItem.getDescription());
         assertEquals(new QuantityDto("g", new BigDecimal("4")), invoiceItem.getQuantity());
         assertEquals(new MoneyDto("CAD", new BigDecimal("5")), invoiceItem.getPrice());
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("6"))), invoiceItem.getTax());
-        assertEquals(new MoneyDto("CAD", new BigDecimal("8")), invoiceItem.getAmount());
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("6"))), invoiceItem.getTax());
+        assertEquals(new AmountDto(new MoneyDto("CAD", new BigDecimal("8"))), invoiceItem.getAmount());
         assertEquals(new MaterialDto(7L), invoiceItem.getMaterial());
         assertEquals(LocalDateTime.of(1999, 1, 1, 1, 1), invoiceItem.getCreatedAt());
         assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), invoiceItem.getLastUpdated());
@@ -84,15 +84,15 @@ public class ProcurementInvoiceItemDtoTest {
     @Test
     public void testAccessTax() {
         assertNull(invoiceItem.getTax());
-        invoiceItem.setTax(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))));
-        assertEquals(new TaxDto(new MoneyDto("CAD", new BigDecimal("100"))), invoiceItem.getTax());
+        invoiceItem.setTax(new TaxDto(new TaxRateDto(new BigDecimal("100"))));
+        assertEquals(new TaxDto(new TaxRateDto(new BigDecimal("100"))), invoiceItem.getTax());
     }
 
     @Test
     public void testAccessAmount() {
         assertNull(invoiceItem.getAmount());
-        invoiceItem.setAmount(new MoneyDto("CAD", new BigDecimal("100")));
-        assertEquals(new MoneyDto("CAD", new BigDecimal("100")), invoiceItem.getAmount());
+        invoiceItem.setAmount(new AmountDto(new MoneyDto("CAD", new BigDecimal("100"))));
+        assertEquals(new AmountDto(new MoneyDto("CAD", new BigDecimal("100"))), invoiceItem.getAmount());
     }
 
     @Test

@@ -185,6 +185,30 @@ public class ShipmentTest {
     }
 
     @Test
+    public void testAddLot_AddsLotToNewList_WhenLotsAreNull() {
+        this.shipment.addLot(new MaterialLot(1L));
+
+        Shipment expected = new Shipment();
+        expected.setLots(List.of(new MaterialLot(1L)));
+        assertEquals(expected, this.shipment);
+    }
+
+    @Test
+    public void testAddLot_UpdatesShipmentReference() {
+        Shipment other = new Shipment(2L);
+        MaterialLot otherLot = new MaterialLot(20L);
+        other.setLots(List.of(otherLot));
+
+        assertEquals(otherLot.getShipment(), other);
+
+        shipment.addLot(otherLot);
+
+        assertEquals(List.of(), other.getLots());
+        assertEquals(List.of(otherLot), shipment.getLots());
+        assertEquals(shipment, otherLot.getShipment());
+    }
+
+    @Test
     public void testRemoveLot_ReturnsFalse_WhenListIsNull() {
         assertFalse(this.shipment.removeLot(new MaterialLot(1L)));
     }
@@ -216,6 +240,12 @@ public class ShipmentTest {
     }
 
     @Test
+    public void testRemoveLot_ReturnsFalse_WhenArgIsNull() {
+        shipment.addLot(new MaterialLot(1L));
+        assertFalse(shipment.removeLot(null));
+    }
+
+    @Test
     public void testGetItemCount_Returns0_WhenLotsIsNull() {
         shipment.setLots(null);
 
@@ -234,6 +264,11 @@ public class ShipmentTest {
         shipment.setLots(List.of(new MaterialLot()));
 
         assertEquals(1, shipment.getLotCount());
+    }
+
+    @Test
+    public void testGetLotCount_Returns0_WhenLotIsNull() {
+        assertEquals(0, shipment.getLotCount());
     }
 
     @Test

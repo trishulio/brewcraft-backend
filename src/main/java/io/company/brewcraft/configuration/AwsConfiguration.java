@@ -104,8 +104,8 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(AmazonIdentityManagement.class)
-    public AmazonIdentityManagement iamClient(AwsFactory awsFactory, @Value("${aws.iam.region}") String region, @Value("${aws.iam.access-key}") String iamAccessKey, @Value("${aws.iam.access-secret}") String iamSecret) {
-        return awsFactory.iamClient(region, iamAccessKey, iamSecret);
+    public AmazonIdentityManagement iamClient(AwsFactory awsFactory, @Value("${aws.iam.access-key}") String iamAccessKey, @Value("${aws.iam.access-secret}") String iamSecret) {
+        return awsFactory.iamClient(iamAccessKey, iamSecret);
     }
 
     @Bean

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import io.company.brewcraft.model.BaseQuantityUnitAccessor;
 import io.company.brewcraft.util.SupportedUnits;
 import tec.uom.se.quantity.Quantities;
-import io.company.brewcraft.util.SupportedUnits;
 
 public class IncompatibleQuantityUnitExceptionTest {
     private Exception ex;

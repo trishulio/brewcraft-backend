@@ -65,14 +65,12 @@ public class PostgresJdbcDialect implements JdbcDialect {
     public void dropSchema(Connection conn, String schemaName) throws SQLException {
         String sql = this.pgSql.dropSchema(schemaName);
         int count = update(conn, sql);
-        assert count == 1;
     }
 
     @Override
     public void dropUser(Connection conn, String username) throws SQLException {
         String sql = this.pgSql.dropUser(username);
         int count = update(conn, sql);
-        assert count == 1;
     }
 
     @Override

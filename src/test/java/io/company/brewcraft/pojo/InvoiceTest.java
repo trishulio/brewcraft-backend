@@ -1,7 +1,6 @@
 package io.company.brewcraft.pojo;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.math.BigDecimal;
@@ -14,14 +13,15 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.company.brewcraft.model.Amount;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Invoice;
 import io.company.brewcraft.model.InvoiceItem;
 import io.company.brewcraft.model.InvoiceStatus;
 import io.company.brewcraft.model.PurchaseOrder;
-import io.company.brewcraft.model.Tax;
-import tec.uom.se.quantity.Quantities;
+import io.company.brewcraft.model.TaxAmount;
 import io.company.brewcraft.util.SupportedUnits;
+import tec.uom.se.quantity.Quantities;
 
 public class InvoiceTest {
     private Invoice invoice;
@@ -59,8 +59,7 @@ public class InvoiceTest {
         assertEquals(LocalDateTime.of(2002, 1, 1, 12, 0), this.invoice.getCreatedAt());
         assertEquals(LocalDateTime.of(2003, 1, 1, 12, 0), this.invoice.getLastUpdated());
         assertEquals(new InvoiceStatus(99L), this.invoice.getInvoiceStatus());
-        assertNull(this.invoice.getAmount());
-        assertNull(this.invoice.getTax());
+        assertEquals(new Amount(null, new TaxAmount()), this.invoice.getAmount());
         assertEquals(1, this.invoice.getInvoiceItems().size());
         final InvoiceItem invoiceItem = new InvoiceItem();
         invoiceItem.setInvoice(this.invoice);
@@ -183,7 +182,7 @@ public class InvoiceTest {
         invoiceItem2.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         this.invoice.setInvoiceItems(List.of(invoiceItem1, invoiceItem2));
-        assertEquals(Money.parse("CAD 300"), this.invoice.getAmount());
+        assertEquals(new Amount(Money.parse("CAD 300"), new TaxAmount()), this.invoice.getAmount());
     }
 
     @Test
@@ -193,7 +192,7 @@ public class InvoiceTest {
         invoiceItem1.setQuantity(Quantities.getQuantity(new BigDecimal("10"), SupportedUnits.GRAM));
 
         this.invoice.addItem(invoiceItem1);
-        assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
+        assertEquals(new Amount(Money.parse("CAD 200"), new TaxAmount()), this.invoice.getAmount());
     }
 
     @Test
@@ -210,19 +209,7 @@ public class InvoiceTest {
 
         this.invoice.removeItem(invoiceItem1);
 
-        assertEquals(Money.parse("CAD 200"), this.invoice.getAmount());
-    }
-
-    @Test
-    public void testGetTax_ReturnsTotalOfAllItemsTax() {
-        final InvoiceItem invoiceItem1 = spy(new InvoiceItem());
-        doReturn(new Tax(Money.parse("CAD 100"))).when(invoiceItem1).getTax();
-
-        final InvoiceItem invoiceItem2 = spy(new InvoiceItem());
-        doReturn(new Tax(Money.parse("CAD 200"))).when(invoiceItem2).getTax();
-
-        this.invoice.setInvoiceItems(List.of(invoiceItem1, invoiceItem2));
-        assertEquals(new Tax(Money.parse("CAD 300")), this.invoice.getTax());
+        assertEquals(new Amount(Money.parse("CAD 200"), new TaxAmount()), this.invoice.getAmount());
     }
 
     @Test
@@ -279,6 +266,30 @@ public class InvoiceTest {
     }
 
     @Test
+    public void testAddLot_AddsLotToNewList_WhenLotsAreNull() {
+        this.invoice.addItem(new InvoiceItem(1L));
+
+        Invoice expected = new Invoice();
+        expected.setInvoiceItems(List.of(new InvoiceItem(1L)));
+        assertEquals(expected, this.invoice);
+    }
+
+    @Test
+    public void testAddLot_UpdatesInvoiceReference() {
+        Invoice other = new Invoice(2L);
+        InvoiceItem otherLot = new InvoiceItem(20L);
+        other.setInvoiceItems(List.of(otherLot));
+
+        assertEquals(otherLot.getInvoice(), other);
+
+        invoice.addItem(otherLot);
+
+        assertEquals(List.of(), other.getInvoiceItems());
+        assertEquals(List.of(otherLot), invoice.getInvoiceItems());
+        assertEquals(invoice, otherLot.getInvoice());
+    }
+
+    @Test
     public void testRemoveItem_ReturnsFalse_WhenListIsNull() {
         assertFalse(this.invoice.removeItem(new InvoiceItem(1L)));
     }
@@ -310,6 +321,12 @@ public class InvoiceTest {
     }
 
     @Test
+    public void testRemoveLot_ReturnsFalse_WhenArgIsNull() {
+        invoice.addItem(new InvoiceItem(1L));
+        assertFalse(invoice.removeItem(null));
+    }
+
+    @Test
     public void testGetItemCount_Returns0_WhenItemsIsNull() {
         invoice.setInvoiceItems(null);
 
@@ -329,4 +346,10 @@ public class InvoiceTest {
 
         assertEquals(1, invoice.getItemCount());
     }
+
+    @Test
+    public void testGetLotCount_Returns0_WhenLotIsNull() {
+        assertEquals(0, invoice.getItemCount());
+    }
+
 }

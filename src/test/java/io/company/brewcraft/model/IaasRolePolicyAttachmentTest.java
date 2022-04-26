@@ -3,6 +3,8 @@ package io.company.brewcraft.model;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,6 +46,12 @@ public class IaasRolePolicyAttachmentTest {
     }
 
     @Test
+    public void testSetId_SetsNull_WhenIdIsNull() {
+        attachment.setId(null);
+        assertNull(attachment.getId());
+    }
+
+    @Test
     public void testGetSetIaasRole() {
         attachment.setIaasRole(new IaasRole("ROLE"));
 
@@ -55,5 +63,17 @@ public class IaasRolePolicyAttachmentTest {
         attachment.setIaasPolicy(new IaasPolicy("POLICY"));
 
         assertEquals(new IaasPolicy("POLICY"), attachment.getIaasPolicy());
+    }
+
+    @Test
+    public void testGetSetLastUpdated() {
+        attachment.setLastUpdated(LocalDateTime.of(2000, 1, 1, 1, 1));
+
+        assertEquals(LocalDateTime.of(2000, 1, 1, 1, 1), attachment.getLastUpdated());
+    }
+
+    @Test
+    public void testGetVersion() {
+        assertNull(attachment.getVersion());
     }
 }

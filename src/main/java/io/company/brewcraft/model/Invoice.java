@@ -2,15 +2,8 @@ package io.company.brewcraft.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -23,13 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,15 +31,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.service.AmountCalculator;
 import io.company.brewcraft.service.CriteriaJoin;
 import io.company.brewcraft.service.CrudEntity;
-import io.company.brewcraft.service.MoneyService;
-import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Entity(name = "invoice")
 @Table
 @JsonIgnoreProperties({ "hibernateLazyInitializer" })
-public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited {
+public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, CrudEntity<Long>, Audited, AmountSupplier {
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
 
     public static final String FIELD_ID = "id";
@@ -86,13 +78,7 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
     private LocalDateTime paymentDueDate;
 
     @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "amount", column = @Column(name = "amount"))
-    })
-    @AssociationOverrides({
-        @AssociationOverride(name = "currency", joinColumns = @JoinColumn(name = "currency_code", referencedColumnName = "numeric_code"))
-    })
-    private MoneyEntity amount;
+    private Amount amount;
 
     @Embedded
     private Freight freight;
@@ -286,8 +272,6 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         invoiceItem.setInvoice(this);
         invoiceItem.setIndex(this.invoiceItems.size());
         this.invoiceItems.add(invoiceItem);
-
-        setAmount();
     }
 
     public boolean removeItem(InvoiceItem invoiceItem) {
@@ -300,8 +284,6 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
         if (removed) {
             invoiceItem.setInvoice(null);
         }
-
-        setAmount();
 
         return removed;
     }
@@ -327,25 +309,14 @@ public class Invoice extends BaseEntity implements UpdateInvoice<InvoiceItem>, C
 
     @Override
     @JsonIgnore
-    public Money getAmount() {
-        return MoneyMapper.INSTANCE.fromEntity(this.amount);
+    public Amount getAmount() {
+        setAmount();
+        return this.amount;
     }
 
+    @PrePersist
     private void setAmount() {
-        Money amount = MoneyService.total(this.getInvoiceItems());
-        this.amount = MoneyMapper.INSTANCE.toEntity(amount);
-    }
-
-    @Override
-    @JsonIgnore
-    public Tax getTax() {
-        Tax tax = null;
-        if (this.getInvoiceItems() != null) {
-            final Collection<Tax> taxes = this.getInvoiceItems().stream().filter(Objects::nonNull).map(i -> i.getTax()).collect(Collectors.toSet());
-            tax = Tax.total(taxes);
-        }
-
-        return tax;
+        this.amount = AmountCalculator.INSTANCE.getTotal(this.invoiceItems);
     }
 
     @JsonIgnore

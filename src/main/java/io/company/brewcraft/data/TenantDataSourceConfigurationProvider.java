@@ -14,7 +14,7 @@ public class TenantDataSourceConfigurationProvider implements DataSourceConfigur
     private LoadingCache<UUID, DataSourceConfiguration> cache;
     private DataSourceConfiguration adminDsConfig;
 
-    public TenantDataSourceConfigurationProvider(DataSourceConfiguration adminDsConfig,  Tenant adminTenant, GlobalDataSourceConfiguration globalTenantDsConfig, DataSourceConfigurationManager dsConfigMgr, SecretsManager<String, String> secretsManager) {
+    public TenantDataSourceConfigurationProvider(DataSourceConfiguration adminDsConfig, Tenant adminTenant, GlobalDataSourceConfiguration globalTenantDsConfig, DataSourceConfigurationManager dsConfigMgr, SecretsManager<String, String> secretsManager) {
         this.adminDsConfig = adminDsConfig;
 
         this.cache = CacheBuilder.newBuilder()
