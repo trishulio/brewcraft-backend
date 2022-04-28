@@ -46,7 +46,7 @@ public class TaxRate extends BaseEntity {
 
     @JsonIgnore
     public boolean isSet() {
-        return this.value != null && !this.value.equals(BigDecimal.ZERO);
+        return this.value != null && this.value.compareTo(BigDecimal.ZERO) != 0;
     }
 
     public static boolean isSet(TaxRate taxRate) {
