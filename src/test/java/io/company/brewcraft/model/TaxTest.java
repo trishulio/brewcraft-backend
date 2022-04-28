@@ -53,7 +53,7 @@ public class TaxTest {
         tax.setHstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setGstRate(null);
-        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        tax.setGstRate(new TaxRate(BigDecimal.ZERO));
         assertThrows(IllegalArgumentException.class, () -> tax.setGstRate(new TaxRate(new BigDecimal("2"))));
     }
 
@@ -68,7 +68,7 @@ public class TaxTest {
         tax.setHstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setPstRate(null);
-        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        tax.setGstRate(new TaxRate(BigDecimal.ZERO));
         assertThrows(IllegalArgumentException.class, () -> tax.setPstRate(new TaxRate(new BigDecimal("2"))));
     }
 
@@ -83,7 +83,7 @@ public class TaxTest {
         tax.setPstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setHstRate(null);
-        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        tax.setGstRate(new TaxRate(BigDecimal.ZERO));
         assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate(new BigDecimal("2"))));
     }
 
@@ -92,7 +92,7 @@ public class TaxTest {
         tax.setGstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setHstRate(null);
-        tax.setHstRate(new TaxRate(new BigDecimal("0.00")));
+        tax.setHstRate(new TaxRate(BigDecimal.ZERO));
         assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate(new BigDecimal("2"))));
     }
 }
