@@ -1,6 +1,7 @@
 package io.company.brewcraft.model;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 
 import javax.persistence.Column;
@@ -46,7 +47,7 @@ public class TaxRate extends BaseEntity {
 
     @JsonIgnore
     public boolean isSet() {
-        return this.value != null && !this.value.equals(BigDecimal.ZERO);
+        return this.value != null && !this.value.toBigInteger().equals(BigInteger.ZERO);
     }
 
     public static boolean isSet(TaxRate taxRate) {

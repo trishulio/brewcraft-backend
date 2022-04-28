@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,8 @@ public class BaseMaterialPortionService extends BaseService {
                 BigDecimal remainingQuantityValue = new BigDecimal(QuantityCalculator.INSTANCE.subtract(availableQuantity, requestedQuantity).getValue().toString());
 
                 //Requested quantity is only available if remaining quantity is >= 0
-                if (remainingQuantityValue.compareTo(BigDecimal.ZERO) == 0 || remainingQuantityValue.compareTo(BigDecimal.ZERO) > 0) {
+                BigInteger remainingQuantityValueInt = remainingQuantityValue.toBigInteger();
+                if (remainingQuantityValueInt.compareTo(BigInteger.ZERO) == 0 || remainingQuantityValueInt.compareTo(BigInteger.ZERO) > 0) {
                     result.put(stockLot.getId(), true);
                 }
             });

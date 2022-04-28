@@ -1,6 +1,7 @@
 package io.company.brewcraft.service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         Map<Long, Quantity<?>> lotIdToQuantity =  new HashMap<>();
         materialPortions.forEach(materialPortion -> {
             Quantity<?> quantity = materialPortion.getQuantity();
-            Validator.assertion(((BigDecimal)quantity.getValue()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+            Validator.assertion(((BigDecimal) quantity.getValue()).toBigInteger().compareTo(BigInteger.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
 
             Long materialLotId = materialPortion.getMaterialLot().getId();
             Quantity<?> total = lotIdToQuantity.get(materialLotId);
@@ -108,7 +109,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
         Map<Long, Quantity<?>> lotIdToQuantity =  new HashMap<>();
         putMaterialPortions.forEach(materialPortion -> {
             Quantity<?> quantity = materialPortion.getQuantity();
-            Validator.assertion(((BigDecimal)quantity.getValue()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+            Validator.assertion(((BigDecimal)quantity.getValue()).toBigInteger().compareTo(BigInteger.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
 
             Long materialLotId = materialPortion.getMaterialLot().getId();
             Quantity<?> total = lotIdToQuantity.get(materialLotId);
@@ -133,7 +134,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             if (existingQuantity != null) {
                 Quantity<?> difference = QuantityCalculator.INSTANCE.subtract(quantity, existingQuantity);
 
-                if (((BigDecimal)difference.getValue()).compareTo(BigDecimal.ZERO) > 0) {
+                if (((BigDecimal)difference.getValue()).toBigInteger().compareTo(BigInteger.ZERO) > 0) {
                     // Quantity has been increased for an existing material portion, need to check if the additional quantity amount is available.
                     lotQuantitiesToCheck.put(lotId, difference);
                 }
@@ -178,7 +179,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             MixtureMaterialPortion existingPortion = idToExistingEntity.get(materialPortion.getId());
 
             Quantity<?> quantity = materialPortion.getQuantity() != null ? materialPortion.getQuantity() : existingPortion.getQuantity();
-            Validator.assertion(((BigDecimal)quantity.getValue()).compareTo(BigDecimal.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
+            Validator.assertion(((BigDecimal)quantity.getValue()).toBigInteger().compareTo(BigInteger.ZERO) > 0, RuntimeException.class, "Quantities must be greater than 0");
 
             Long materialLotId = materialPortion.getMaterialLot() != null && materialPortion.getMaterialLot().getId() != null ? materialPortion.getMaterialLot().getId() : existingPortion.getMaterialLot().getId();
             Quantity<?> total = lotIdToQuantity.get(materialLotId);
@@ -201,7 +202,7 @@ public class MixtureMaterialPortionServiceImpl extends BaseMaterialPortionServic
             if (existingQuantity != null) {
                 Quantity<?> difference = QuantityCalculator.INSTANCE.subtract(quantity, existingQuantity);
 
-                if (((BigDecimal)difference.getValue()).compareTo(BigDecimal.ZERO) > 0) {
+                if (((BigDecimal)difference.getValue()).toBigInteger().compareTo(BigInteger.ZERO) > 0) {
                     // Quantity has been increased for an existing material portion, need to check if the additional quantity amount is available
                     lotQuantitiesToCheck.put(lotId, difference);
                 }
