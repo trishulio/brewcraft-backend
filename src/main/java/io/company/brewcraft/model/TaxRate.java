@@ -8,6 +8,8 @@ import javax.persistence.Embeddable;
 
 import org.joda.money.Money;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Embeddable
 public class TaxRate extends BaseEntity {
     public static final String FIELD_VALUE = "value";
@@ -40,5 +42,14 @@ public class TaxRate extends BaseEntity {
         }
 
         return taxAmount;
+    }
+
+    @JsonIgnore
+    public boolean isSet() {
+        return this.value != null && this.value.compareTo(BigDecimal.ZERO) != 0;
+    }
+
+    public static boolean isSet(TaxRate taxRate) {
+        return taxRate != null && taxRate.isSet();
     }
 }

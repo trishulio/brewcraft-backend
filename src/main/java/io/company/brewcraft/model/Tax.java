@@ -51,7 +51,7 @@ public class Tax extends BaseEntity {
     }
 
     public void setGstRate(TaxRate gstRate) {
-        Validator.assertion(gstRate == null || (gstRate != null && getHstRate() == null), IllegalArgumentException.class, "Cannot set GST when HST is present. Remove HST");
+        Validator.assertion(!TaxRate.isSet(gstRate) || (TaxRate.isSet(gstRate) && !TaxRate.isSet(getHstRate())), IllegalArgumentException.class, "Cannot set GST when HST is present. Remove HST");
         this.gstRate = gstRate;
     }
 
@@ -60,7 +60,7 @@ public class Tax extends BaseEntity {
     }
 
     public void setPstRate(TaxRate pstRate) {
-        Validator.assertion(pstRate == null || (pstRate != null && getHstRate() == null), IllegalArgumentException.class, "Cannot set PST when HST is present. Remove HST");
+        Validator.assertion(!TaxRate.isSet(pstRate) || (TaxRate.isSet(pstRate) && !TaxRate.isSet(getHstRate())), IllegalArgumentException.class, "Cannot set PST when HST is present. Remove HST");
         this.pstRate = pstRate;
     }
 
@@ -69,9 +69,9 @@ public class Tax extends BaseEntity {
     }
 
     public void setHstRate(TaxRate hstRate) {
-        if (hstRate != null) {
-            Validator.assertion(getPstRate() == null, IllegalArgumentException.class, "Cannot set HST when PST is present. Remove PST");
-            Validator.assertion(getGstRate() == null, IllegalArgumentException.class, "Cannot set HST when GST is present. Remove GST");
+        if (TaxRate.isSet(hstRate)) {
+            Validator.assertion(!TaxRate.isSet(getPstRate()), IllegalArgumentException.class, "Cannot set HST when PST is present. Remove PST");
+            Validator.assertion(!TaxRate.isSet(getGstRate()), IllegalArgumentException.class, "Cannot set HST when GST is present. Remove GST");
         }
         this.hstRate = hstRate;
     }

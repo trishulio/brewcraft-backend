@@ -50,10 +50,11 @@ public class TaxTest {
 
     @Test
     public void testSetGstRate_ThrowException_WhenHstIsPresent() {
-        tax.setHstRate(new TaxRate());
+        tax.setHstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setGstRate(null);
-        assertThrows(IllegalArgumentException.class, () -> tax.setGstRate(new TaxRate()));
+        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        assertThrows(IllegalArgumentException.class, () -> tax.setGstRate(new TaxRate(new BigDecimal("2"))));
     }
 
     @Test
@@ -64,10 +65,11 @@ public class TaxTest {
 
     @Test
     public void testSetPstRate_ThrowException_WhenHstIsPresent() {
-        tax.setHstRate(new TaxRate());
+        tax.setHstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setPstRate(null);
-        assertThrows(IllegalArgumentException.class, () -> tax.setPstRate(new TaxRate()));
+        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        assertThrows(IllegalArgumentException.class, () -> tax.setPstRate(new TaxRate(new BigDecimal("2"))));
     }
 
     @Test
@@ -78,17 +80,19 @@ public class TaxTest {
 
     @Test
     public void testSetHstRate_ThrowException_WhenPstIsPresent() {
-        tax.setPstRate(new TaxRate());
+        tax.setPstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setHstRate(null);
-        assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate()));
+        tax.setGstRate(new TaxRate(new BigDecimal("0.00")));
+        assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate(new BigDecimal("2"))));
     }
 
     @Test
     public void testSetHstRate_ThrowException_WhenGstIsPresent() {
-        tax.setGstRate(new TaxRate());
+        tax.setGstRate(new TaxRate(new BigDecimal("1")));
 
         tax.setHstRate(null);
-        assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate()));
+        tax.setHstRate(new TaxRate(new BigDecimal("0.00")));
+        assertThrows(IllegalArgumentException.class, () -> tax.setHstRate(new TaxRate(new BigDecimal("2"))));
     }
 }
