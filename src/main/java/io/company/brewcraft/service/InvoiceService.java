@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import io.company.brewcraft.dto.BaseInvoice;
 import io.company.brewcraft.dto.UpdateInvoice;
+import io.company.brewcraft.model.Amount;
 import io.company.brewcraft.model.BaseInvoiceItem;
 import io.company.brewcraft.model.Freight;
 import io.company.brewcraft.model.Identified;
@@ -28,6 +29,7 @@ import io.company.brewcraft.model.Material;
 import io.company.brewcraft.model.MoneyEntity;
 import io.company.brewcraft.model.PurchaseOrder;
 import io.company.brewcraft.model.Supplier;
+import io.company.brewcraft.model.TaxAmount;
 import io.company.brewcraft.model.UpdateInvoiceItem;
 import io.company.brewcraft.repository.WhereClauseBuilder;
 import io.company.brewcraft.service.exception.EntityNotFoundException;
@@ -60,8 +62,30 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
             LocalDateTime paymentDueDateTo,
             Set<Long> purchaseOrderIds,
             Set<Long> materialIds,
-            BigDecimal amtFrom,
-            BigDecimal amtTo,
+            BigDecimal totalAmountFrom,
+            BigDecimal totalAmountTo,
+            BigDecimal subTotalAmountFrom,
+            BigDecimal subTotalAmountTo,
+            BigDecimal pstAmountFrom,
+            BigDecimal pstAmountTo,
+            BigDecimal gstAmountFrom,
+            BigDecimal gstAmountTo,
+            BigDecimal hstAmountFrom,
+            BigDecimal hstAmountTo,
+            BigDecimal totalTaxAmountFrom,
+            BigDecimal totalTaxAmountTo,
+            BigDecimal invoiceItemTotalAmountFrom,
+            BigDecimal invoiceItemTotalAmountTo,
+            BigDecimal invoiceItemSubTotalAmountFrom,
+            BigDecimal invoiceItemSubTotalAmountTo,
+            BigDecimal invoiceItemPstAmountFrom,
+            BigDecimal invoiceItemPstAmountTo,
+            BigDecimal invoiceItemGstAmountFrom,
+            BigDecimal invoiceItemGstAmountTo,
+            BigDecimal invoiceItemHstAmountFrom,
+            BigDecimal invoiceItemHstAmountTo,
+            BigDecimal invoiceItemTotalTaxAmountFrom,
+            BigDecimal invoiceItemTotalTaxAmountTo,
             BigDecimal freightAmtFrom,
             BigDecimal freightAmtTo,
             Set<Long> invoiceStatusIds,
@@ -83,7 +107,20 @@ public class InvoiceService extends BaseService implements CrudService<Long, Inv
                                             .between(Invoice.FIELD_PAYMENT_DUE_DATE, paymentDueDateFrom, paymentDueDateTo)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_ID }, purchaseOrderIds)
                                             .in(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_MATERIAL, Material.FIELD_ID }, materialIds)
-                                            .between(new String[] { Invoice.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, amtFrom, amtTo)
+                                            // amount filter
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_TOTAL, MoneyEntity.FIELD_AMOUNT }, totalAmountFrom, totalAmountTo)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_SUB_TOTAL, MoneyEntity.FIELD_AMOUNT }, subTotalAmountFrom, subTotalAmountTo)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_PST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, pstAmountFrom, pstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_GST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, gstAmountFrom, gstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_HST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, hstAmountFrom, hstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_TOTAL_TAX_AMOUNT, MoneyEntity.FIELD_AMOUNT }, totalTaxAmountFrom, totalTaxAmountTo)
+                                            // invoiceItem amount filter
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_TOTAL, MoneyEntity.FIELD_AMOUNT }, invoiceItemTotalAmountFrom, invoiceItemTotalAmountTo)
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_SUB_TOTAL, MoneyEntity.FIELD_AMOUNT }, invoiceItemSubTotalAmountFrom, invoiceItemSubTotalAmountTo)
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_PST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, invoiceItemPstAmountFrom, invoiceItemPstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_GST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, invoiceItemGstAmountFrom, invoiceItemGstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_HST_AMOUNT, MoneyEntity.FIELD_AMOUNT }, invoiceItemHstAmountFrom, invoiceItemHstAmountTo)
+                                            .between(new String[] { Invoice.FIELD_ITEMS, InvoiceItem.FIELD_AMOUNT, Amount.FIELD_TAX_AMOUNT, TaxAmount.FIELD_TOTAL_TAX_AMOUNT, MoneyEntity.FIELD_AMOUNT }, invoiceItemTotalTaxAmountFrom, invoiceItemTotalTaxAmountTo)
                                             .between(new String[] { Invoice.FIELD_FREIGHT, Freight.FIELD_AMOUNT, MoneyEntity.FIELD_AMOUNT }, freightAmtFrom, freightAmtTo)
                                             .in(new String[] { Invoice.FIELD_INVOICE_STATUS, InvoiceStatus.FIELD_ID }, invoiceStatusIds)
                                             .in(new String[] { Invoice.FIELD_PURCHASE_ORDER, PurchaseOrder.FIELD_SUPPLIER, Supplier.FIELD_ID }, supplierIds)

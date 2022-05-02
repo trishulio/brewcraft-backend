@@ -64,10 +64,32 @@ public class InvoiceControllerTest {
            LocalDateTime.of(2004, 1, 1, 12, 0),
            Set.of(3L),
            Set.of(4L),
-           new BigDecimal("1"),
-           new BigDecimal("2"),
-           new BigDecimal("3"),
-           new BigDecimal("4"),
+           new BigDecimal("1"), // totalAmountFrom
+           new BigDecimal("2"), // totalAmountTo
+           new BigDecimal("3"), // subTotalAmountFrom
+           new BigDecimal("4"), // subTotalAmountTo
+           new BigDecimal("5"), // pstAmountFrom
+           new BigDecimal("6"), // pstAmountTo
+           new BigDecimal("7"), // gstAmountFrom
+           new BigDecimal("8"), // gstAmountTo
+           new BigDecimal("9"), // hstAmountFrom
+           new BigDecimal("10"), // hstAmountTo
+           new BigDecimal("11"), // totalTaxAmountFrom
+           new BigDecimal("12"), // totalTaxAmountTo
+           new BigDecimal("13"), // invoiceItemTotalAmountFrom
+           new BigDecimal("14"), // invoiceItemTotalAmountTo
+           new BigDecimal("15"), // invoiceItemSubTotalAmountFrom
+           new BigDecimal("16"), // invoiceItemSubTotalAmountTo
+           new BigDecimal("17"), // invoiceItemPstAmountFrom
+           new BigDecimal("18"), // invoiceItemPstAmountTo
+           new BigDecimal("19"), // invoiceItemGstAmountFrom
+           new BigDecimal("20"), // invoiceItemGstAmountTo
+           new BigDecimal("21"), // invoiceItemHstAmountFrom
+           new BigDecimal("22"), // invoiceItemHstAmountTo
+           new BigDecimal("23"), // invoiceItemTotalTaxAmountFrom
+           new BigDecimal("24"), // invoiceItemTotalTaxAmountTo
+           new BigDecimal("25"), // freightAmountFrom
+           new BigDecimal("26"), // freightAmountTo
            Set.of(99L),
            Set.of(4L),
            new TreeSet<>(List.of("id")),
@@ -91,10 +113,32 @@ public class InvoiceControllerTest {
            LocalDateTime.of(2004, 1, 1, 12, 0),
            Set.of(3L),
            Set.of(4L),
-           new BigDecimal("1"),
-           new BigDecimal("2"),
-           new BigDecimal("3"),
-           new BigDecimal("4"),
+           new BigDecimal("1"), // totalAmountFrom
+           new BigDecimal("2"), // totalAmountTo
+           new BigDecimal("3"), // subTotalAmountFrom
+           new BigDecimal("4"), // subTotalAmountTo
+           new BigDecimal("5"), // pstAmountFrom
+           new BigDecimal("6"), // pstAmountTo
+           new BigDecimal("7"), // gstAmountFrom
+           new BigDecimal("8"), // gstAmountTo
+           new BigDecimal("9"), // hstAmountFrom
+           new BigDecimal("10"), // hstAmountTo
+           new BigDecimal("11"), // totalTaxAmountFrom
+           new BigDecimal("12"), // totalTaxAmountTo
+           new BigDecimal("13"), // invoiceItemTotalAmountFrom
+           new BigDecimal("14"), // invoiceItemTotalAmountTo
+           new BigDecimal("15"), // invoiceItemSubTotalAmountFrom
+           new BigDecimal("16"), // invoiceItemSubTotalAmountTo
+           new BigDecimal("17"), // invoiceItemPstAmountFrom
+           new BigDecimal("18"), // invoiceItemPstAmountTo
+           new BigDecimal("19"), // invoiceItemGstAmountFrom
+           new BigDecimal("20"), // invoiceItemGstAmountTo
+           new BigDecimal("21"), // invoiceItemHstAmountFrom
+           new BigDecimal("22"), // invoiceItemHstAmountTo
+           new BigDecimal("23"), // invoiceItemTotalTaxAmountFrom
+           new BigDecimal("24"), // invoiceItemTotalTaxAmountTo
+           new BigDecimal("25"), // freightAmountFrom
+           new BigDecimal("26"), // freightAmountTo
            Set.of(99L),
            Set.of(4L),
            new TreeSet<>(List.of("id")),

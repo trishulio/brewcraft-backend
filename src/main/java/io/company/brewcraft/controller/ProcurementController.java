@@ -78,7 +78,7 @@ public class ProcurementController extends BaseController {
         this.service = service;
     }
 
-    @GetMapping(value = "/", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<ProcurementDto> getAll(
         // shipment filters
         @RequestParam(required = false, name = "shipment_ids") Set<Long> shipmentIds,
@@ -104,8 +104,30 @@ public class ProcurementController extends BaseController {
         @RequestParam(required = false, name = "payment_due_date_to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime paymentDueDateTo,
         @RequestParam(required = false, name = "purchase_order_ids") Set<Long> purchaseOrderIds,
         @RequestParam(required = false, name = "material_ids") Set<Long> materialIds,
-        @RequestParam(required = false, name = "amt_from") BigDecimal amtFrom,
-        @RequestParam(required = false, name = "amt_to") BigDecimal amtTo,
+        @RequestParam(required = false, name = "total_amt_from") BigDecimal totalAmountFrom,
+        @RequestParam(required = false, name = "total_amt_to") BigDecimal totalAmountTo,
+        @RequestParam(required = false, name = "subtotal_amt_from") BigDecimal subTotalAmountFrom,
+        @RequestParam(required = false, name = "subtotal_amt_to") BigDecimal subTotalAmountTo,
+        @RequestParam(required = false, name = "pst_amt_from") BigDecimal pstAmountFrom,
+        @RequestParam(required = false, name = "pst_amt_to") BigDecimal pstAmountTo,
+        @RequestParam(required = false, name = "gst_amt_from") BigDecimal gstAmountFrom,
+        @RequestParam(required = false, name = "gst_amt_to") BigDecimal gstAmountTo,
+        @RequestParam(required = false, name = "hst_amt_from") BigDecimal hstAmountFrom,
+        @RequestParam(required = false, name = "hst_amt_to") BigDecimal hstAmountTo,
+        @RequestParam(required = false, name = "total_tax_amt_from") BigDecimal totalTaxAmountFrom,
+        @RequestParam(required = false, name = "total_tax_amt_to") BigDecimal totalTaxAmountTo,
+        @RequestParam(required = false, name = "invoice_item_total_amt_from") BigDecimal invoiceItemTotalAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_total_amt_to") BigDecimal invoiceItemTotalAmountTo,
+        @RequestParam(required = false, name = "invoice_item_subtotal_amt_from") BigDecimal invoiceItemSubTotalAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_subtotal_amt_to") BigDecimal invoiceItemSubTotalAmountTo,
+        @RequestParam(required = false, name = "invoice_item_pst_amt_from") BigDecimal invoiceItemPstAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_pst_amt_to") BigDecimal invoiceItemPstAmountTo,
+        @RequestParam(required = false, name = "invoice_item_gst_amt_from") BigDecimal invoiceItemGstAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_gst_amt_to") BigDecimal invoiceItemGstAmountTo,
+        @RequestParam(required = false, name = "invoice_item_hst_amt_from") BigDecimal invoiceItemHstAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_hst_amt_to") BigDecimal invoiceItemHstAmountTo,
+        @RequestParam(required = false, name = "invoice_item_total_tax_amt_from") BigDecimal invoiceItemTotalTaxAmountFrom,
+        @RequestParam(required = false, name = "invoice_item_total_tax_amt_to") BigDecimal invoiceItemTotalTaxAmountTo,
         @RequestParam(required = false, name = "freight_amt_from") BigDecimal freightAmtFrom,
         @RequestParam(required = false, name = "freight_amt_to") BigDecimal freightAmtTo,
         @RequestParam(required = false, name = "invoice_status_ids") Set<Long> invoiceStatusIds,
@@ -142,8 +164,30 @@ public class ProcurementController extends BaseController {
             paymentDueDateTo,
             purchaseOrderIds,
             materialIds,
-            amtFrom,
-            amtTo,
+            totalAmountFrom,
+            totalAmountTo,
+            subTotalAmountFrom,
+            subTotalAmountTo,
+            pstAmountFrom,
+            pstAmountTo,
+            gstAmountFrom,
+            gstAmountTo,
+            hstAmountFrom,
+            hstAmountTo,
+            totalTaxAmountFrom,
+            totalTaxAmountTo,
+            invoiceItemTotalAmountFrom,
+            invoiceItemTotalAmountTo,
+            invoiceItemSubTotalAmountFrom,
+            invoiceItemSubTotalAmountTo,
+            invoiceItemPstAmountFrom,
+            invoiceItemPstAmountTo,
+            invoiceItemGstAmountFrom,
+            invoiceItemGstAmountTo,
+            invoiceItemHstAmountFrom,
+            invoiceItemHstAmountTo,
+            invoiceItemTotalTaxAmountFrom,
+            invoiceItemTotalTaxAmountTo,
             freightAmtFrom,
             freightAmtTo,
             invoiceStatusIds,
@@ -164,25 +208,25 @@ public class ProcurementController extends BaseController {
         return this.controller.get(id, attributes);
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<ProcurementDto> add(@Valid @RequestBody @NotNull List<AddProcurementDto> dtos) {
         return this.controller.add(dtos);
     }
 
-    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<ProcurementDto> put(@Valid @RequestBody @NotNull List<UpdateProcurementDto> dtos) {
         return this.controller.put(dtos);
     }
 
-    @PatchMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<ProcurementDto> patch(@Valid @RequestBody @NotNull List<UpdateProcurementDto> dtos) {
         return this.controller.patch(dtos);
     }
 
-    @DeleteMapping(value = "/", consumes = MediaType.ALL_VALUE)
+    @DeleteMapping(value = "", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public long delete(@Valid @RequestBody @NotNull Set<ProcurementIdDto> ids) {
         Set<ProcurementId> pIds = ids.stream().map(id -> ProcurementIdMapper.INSTANCE.fromDto(id)).collect(Collectors.toSet());
