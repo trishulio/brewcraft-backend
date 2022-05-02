@@ -23,6 +23,7 @@ public class TaxAmount extends BaseEntity {
     public static final String FIELD_PST_AMOUNT = "pstAmount";
     public static final String FIELD_GST_AMOUNT = "gstAmount";
     public static final String FIELD_HST_AMOUNT = "hstAmount";
+    public static final String FIELD_TOTAL_TAX_AMOUNT = "totalTaxAmount";
 
     @Embedded
     @AttributeOverrides({

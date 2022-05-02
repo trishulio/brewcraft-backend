@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -46,6 +47,7 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     public static final String FIELD_QUANTITY = "quantity";
     public static final String FIELD_PRICE = "price";
     public static final String FIELD_TAX = "tax";
+    public static final String FIELD_AMOUNT = "amount";
     public static final String FIELD_MATERIAL = "material";
 
     @Id
@@ -84,6 +86,9 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
 
     @Embedded
     private Tax tax;
+
+    @Embedded
+    private Amount amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id")
@@ -239,6 +244,12 @@ public class InvoiceItem extends BaseEntity implements UpdateInvoiceItem<Invoice
     @Override
     @JsonIgnore
     public Amount getAmount() {
-        return AmountCalculator.INSTANCE.getAmount(this);
+        setAmount();
+        return this.amount;
+    }
+
+    @PrePersist
+    private void setAmount() {
+        this.amount = AmountCalculator.INSTANCE.getAmount(this);
     }
 }

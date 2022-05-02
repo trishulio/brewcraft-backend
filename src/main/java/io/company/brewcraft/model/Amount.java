@@ -16,6 +16,10 @@ import io.company.brewcraft.service.mapper.MoneyMapper;
 
 @Embeddable
 public class Amount extends BaseEntity {
+    public static final String FIELD_TOTAL = "total";
+    public static final String FIELD_SUB_TOTAL = "subTotal";
+    public static final String FIELD_TAX_AMOUNT = "taxAmount";
+
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "amount", column = @Column(name = "total_amount"))
