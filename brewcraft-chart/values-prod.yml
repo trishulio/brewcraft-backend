@@ -1,0 +1,65 @@
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 2G
+  requests:
+    cpu: 250m
+    memory: 1.5G
+
+app:
+  services:
+    db:
+      schema: postgresql
+      host: ""
+      port: "5432"
+      name: postgres
+      username: ""
+      password: ""
+    authentication:
+      oauth:
+        jwtIssuerUri: ""
+        jwkSetUri: ""
+    secretsManager:
+      awsSecretsManager:
+        accessKeyId: ""
+        accessSecretKey: ""
+        region: ""
+        url: ""
+  networking:
+    port:
+      container: "8080"
+      service: "8080"
+  svc:
+    type: ClusterIP
+
+multitenancy:
+  provisioning:
+    authentication:
+      awsCognitoUserPool:
+        id: ""
+        region: ""
+        url: ""
+        accessKeyId: ""
+        accessSecretKey: ""
+      awsCognitoIdentityPool:
+        id: ""
+        userPoolUrl: ""
+    objectStore:
+      awsS3:
+        region: ""
+        accessKeyId: ""
+        accessSecretKey: ""
+    accessManagement:
+      awsIam:
+        accessKeyId: ""
+        accessSecretKey: ""
+
+serviceAccount:
+  id: ""
+  partition: aws

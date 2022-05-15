@@ -1,0 +1,17 @@
+app:
+  name: brewcraft
+  labels:
+    app: brewcraft
+  endpoints:
+    liveness: /actuator/health
+    readiness: /actuator/health
+  health:
+    probes:
+      liveness:
+        endpoint: /actuator/health
+        initialDelaySeconds: 120
+        periodSeconds: 5
+      readiness:
+        endpoint: /actuator/health
+        initialDelaySeconds: 120
+        periodSeconds: 5

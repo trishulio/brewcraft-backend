@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.1.3
+- name: pgadmin4
+  repository: https://helm.runix.net
+  version: 1.9.10
+- name: localstack
+  repository: https://helm.localstack.cloud
+  version: 0.4.0
+digest: sha256:fc43e99d5edb3c7e92f6daba411d3df796510c2a07ff894082734655f81171e5
+generated: "2022-05-11T20:43:35.214880739-07:00"

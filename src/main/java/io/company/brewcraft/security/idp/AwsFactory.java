@@ -25,11 +25,11 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 public class AwsFactory {
     private static final Logger logger = LoggerFactory.getLogger(AwsFactory.class);
 
-    public AWSCognitoIdentityProvider getIdentityProvider(final String cognitoRegion, String cognitoUrl, String cognitoAccessKey, String cognitoAccessSecret) {
+    public AWSCognitoIdentityProvider getIdentityProvider(final String cognitoRegion, String cognitoUrl, String cognitoAccessKeyId, String cognitoAccessSecretKey) {
         logger.debug("Creating an instance of AwsCognitoIdp");
         final AwsClientBuilder.EndpointConfiguration endpointConfig = new AwsClientBuilder.EndpointConfiguration(cognitoUrl, cognitoRegion);
         final AWSCognitoIdentityProviderClientBuilder idpClientBuilder = AWSCognitoIdentityProviderClient.builder().withEndpointConfiguration(endpointConfig);
-        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(cognitoAccessKey, cognitoAccessSecret);
+        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(cognitoAccessKeyId, cognitoAccessSecretKey);
         idpClientBuilder.withCredentials(new AWSStaticCredentialsProvider(basicAwsCredentials));
 
         AWSCognitoIdentityProvider awsCognitoIdp = idpClientBuilder.build();
@@ -37,15 +37,21 @@ public class AwsFactory {
         return awsCognitoIdp;
     }
 
-    public AWSSecretsManager secretsMgrClient(String region, String url) {
+    public AWSSecretsManager secretsMgrClient(String region, String url, String accessKeyId, String accessSecretKey) {
+        AWSCredentials creds = new BasicAWSCredentials(accessKeyId, accessSecretKey);
+        AWSStaticCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(creds);
+
         AwsClientBuilder.EndpointConfiguration endpointConfig = new AwsClientBuilder.EndpointConfiguration(url, region);
-        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().withEndpointConfiguration(endpointConfig).build();
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
+                                                                 .withEndpointConfiguration(endpointConfig)
+                                                                 .withCredentials(credsProvider)
+                                                                 .build();
 
         return client;
     }
 
-    public AmazonCognitoIdentity getAwsCognitoIdentityClient(String region, String accessKey, String accessSecret) {
-        AWSCredentials creds = new BasicAWSCredentials(accessKey, accessSecret);
+    public AmazonCognitoIdentity getAwsCognitoIdentityClient(String region, String accessKeyId, String accessSecretKey) {
+        AWSCredentials creds = new BasicAWSCredentials(accessKeyId, accessSecretKey);
         AWSStaticCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(creds);
         AmazonCognitoIdentity cognitoIdentityClient = AmazonCognitoIdentityClientBuilder.standard()
                                                                                         .withCredentials(credsProvider)
@@ -54,8 +60,8 @@ public class AwsFactory {
         return cognitoIdentityClient;
     }
 
-    public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret) {
-        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(s3AccessKey, s3Secret);
+    public AmazonS3 s3Client(String region, String s3AccessKeyId, String s3Secret) {
+        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(s3AccessKeyId, s3Secret);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
 
         return AmazonS3ClientBuilder.standard()
@@ -64,8 +70,8 @@ public class AwsFactory {
                                      .build();
     }
 
-    public AmazonS3 s3Client(String region, String s3AccessKey, String s3Secret, String sessionToken) {
-        AWSCredentials awsCreds = new BasicSessionCredentials(s3AccessKey, s3Secret, sessionToken);
+    public AmazonS3 s3Client(String region, String s3AccessKeyId, String s3Secret, String sessionToken) {
+        AWSCredentials awsCreds = new BasicSessionCredentials(s3AccessKeyId, s3Secret, sessionToken);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(awsCreds);
 
         return AmazonS3ClientBuilder.standard()
@@ -74,8 +80,8 @@ public class AwsFactory {
                                      .build();
     }
 
-    public AmazonIdentityManagement iamClient(String iamAccessKey, String iamSecret) {
-        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(iamAccessKey, iamSecret);
+    public AmazonIdentityManagement iamClient(String iamAccessKeyId, String iamSecret) {
+        BasicAWSCredentials basicAwsCredentials = new BasicAWSCredentials(iamAccessKeyId, iamSecret);
         AWSCredentialsProvider credsProvider = new AWSStaticCredentialsProvider(basicAwsCredentials);
 
         AmazonIdentityManagement awsIamClient = AmazonIdentityManagementClientBuilder.standard()

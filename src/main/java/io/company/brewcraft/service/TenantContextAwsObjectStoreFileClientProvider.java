@@ -36,7 +36,7 @@ public class TenantContextAwsObjectStoreFileClientProvider implements IaasReposi
                                  .build(new CacheLoader<GetAmazonS3ClientArgs, IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> >(){
                                     @Override
                                     public IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  load(GetAmazonS3ClientArgs args) throws Exception {
-                                        AmazonS3 s3Client = awsFactory.s3Client(args.region, args.accessKey, args.accessSecret, args.sessionToken);
+                                        AmazonS3 s3Client = awsFactory.s3Client(args.region, args.accessKeyId, args.accessSecretKey, args.sessionToken);
                                         IaasClient<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile> client = new AwsS3FileClient(s3Client, args.bucketName, LocalDateTimeMapper.INSTANCE, getPresignUrlDuration);
 
                                         return new SequentialExecutor<>(client);
@@ -48,7 +48,7 @@ public class TenantContextAwsObjectStoreFileClientProvider implements IaasReposi
     public IaasRepository<URI, IaasObjectStoreFile, BaseIaasObjectStoreFile, UpdateIaasObjectStoreFile>  getIaasRepository() {
         IaasAuthorization authorization = authFetcher.fetch();
 
-        GetAmazonS3ClientArgs args = new GetAmazonS3ClientArgs(this.region, bucketNameProvider.getObjectStoreName(), authorization.getAccessKey(), authorization.getAccessSecret(), authorization.getSessionToken());
+        GetAmazonS3ClientArgs args = new GetAmazonS3ClientArgs(this.region, bucketNameProvider.getObjectStoreName(), authorization.getAccessKeyId(), authorization.getAccessSecretKey(), authorization.getSessionToken());
 
         try {
             return this.cache.get(args);
@@ -61,15 +61,15 @@ public class TenantContextAwsObjectStoreFileClientProvider implements IaasReposi
 class GetAmazonS3ClientArgs extends BaseModel {
     String region;
     String bucketName;
-    String accessKey;
-    String accessSecret;
+    String accessKeyId;
+    String accessSecretKey;
     String sessionToken;
 
-    public GetAmazonS3ClientArgs(String region, String bucketName, String accessKey, String accessSecret, String sessionToken) {
+    public GetAmazonS3ClientArgs(String region, String bucketName, String accessKeyId, String accessSecretKey, String sessionToken) {
         this.region = region;
         this.bucketName = bucketName;
-        this.accessKey = accessKey;
-        this.accessSecret = accessSecret;
+        this.accessKeyId = accessKeyId;
+        this.accessSecretKey = accessSecretKey;
         this.sessionToken = sessionToken;
     }
 }

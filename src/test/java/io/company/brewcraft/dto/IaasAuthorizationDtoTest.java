@@ -18,32 +18,32 @@ public class IaasAuthorizationDtoTest {
 
     @Test
     public void testNoArgConstructor_SetsNull() {
-        assertNull(dto.getAccessKey());
-        assertNull(dto.getAccessSecret());
+        assertNull(dto.getAccessKeyId());
+        assertNull(dto.getAccessSecretKey());
         assertNull(dto.getExpiration());
         assertNull(dto.getSessionToken());
     }
 
     @Test
     public void testAllArgConstructor() {
-        dto = new IaasAuthorizationDto("ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
+        dto = new IaasAuthorizationDto("ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        assertEquals("ACCESS_KEY", dto.getAccessKey());
-        assertEquals("ACCESS_SECRET", dto.getAccessSecret());
+        assertEquals("ACCESS_KEY_ID", dto.getAccessKeyId());
+        assertEquals("ACCESS_SECRET_KEY", dto.getAccessSecretKey());
         assertEquals("SESSION_TOKEN", dto.getSessionToken());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), dto.getExpiration());
     }
 
     @Test
-    public void testGetSetAccessKey() {
-        dto.setAccessKey("ACCESS_KEY");
-        assertEquals("ACCESS_KEY", dto.getAccessKey());
+    public void testGetSetAccessKeyId() {
+        dto.setAccessKeyId("ACCESS_KEY_ID");
+        assertEquals("ACCESS_KEY_ID", dto.getAccessKeyId());
     }
 
     @Test
-    public void testGetSetAccessSecret() {
-        dto.setAccessSecret("ACCESS_SECRET");
-        assertEquals("ACCESS_SECRET", dto.getAccessSecret());
+    public void testGetSetAccessSecretKey() {
+        dto.setAccessSecretKey("ACCESS_SECRET_KEY");
+        assertEquals("ACCESS_SECRET_KEY", dto.getAccessSecretKey());
     }
 
     @Test

@@ -22,7 +22,7 @@ services:
       - "9001:${LS_WEB_UI}"
       - "4566-4599:4566-4599"
     environment:
-      DEFAULT_REGION: ${AWS_REGION}
+      DEFAULT_REGION: ${AWS_SECRETS_MANAGER_REGION}
       HOSTNAME_EXTERNAL: ${AWS_HOSTNAME_EXTERNAL}
       USE_SSL: "false"
       PORT_WEB_UI: ${LS_WEB_UI}

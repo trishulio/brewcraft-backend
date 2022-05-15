@@ -10,8 +10,8 @@ import io.company.brewcraft.service.CrudEntity;
 public class IaasAuthorization extends BaseModel implements UpdateIaasAuthorization, CrudEntity<String> {
     private static final Logger log = LoggerFactory.getLogger(IaasAuthorization.class);
 
-    private String accessKey;
-    private String accessSecret;
+    private String accessKeyId;
+    private String accessSecretKey;
     private String sessionToken;
     private LocalDateTime expiration;
 
@@ -19,42 +19,42 @@ public class IaasAuthorization extends BaseModel implements UpdateIaasAuthorizat
         super();
     }
 
-    public IaasAuthorization(String accessKey, String accessSecret, String sessionToken, LocalDateTime expiration) {
+    public IaasAuthorization(String accessKeyId, String accessSecretKey, String sessionToken, LocalDateTime expiration) {
         this();
-        setAccessKey(accessKey);
-        setAccessSecret(accessSecret);
+        setAccessKeyId(accessKeyId);
+        setAccessSecretKey(accessSecretKey);
         setSessionToken(sessionToken);
         setExpiration(expiration);
     }
 
     @Override
     public String getId() {
-        return getAccessKey();
+        return getAccessKeyId();
     }
 
     @Override
     public void setId(String id) {
-        setAccessKey(id);
+        setAccessKeyId(id);
     }
 
     @Override
-    public String getAccessKey() {
-        return accessKey;
+    public String getAccessKeyId() {
+        return accessKeyId;
     }
 
     @Override
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
+    public void setAccessKeyId(String accessKeyId) {
+        this.accessKeyId = accessKeyId;
     }
 
     @Override
-    public String getAccessSecret() {
-        return accessSecret;
+    public String getAccessSecretKey() {
+        return accessSecretKey;
     }
 
     @Override
-    public void setAccessSecret(String accessSecret) {
-        this.accessSecret = accessSecret;
+    public void setAccessSecretKey(String accessSecretKey) {
+        this.accessSecretKey = accessSecretKey;
     }
 
     @Override

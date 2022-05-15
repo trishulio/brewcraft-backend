@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-auth
+data: 
+  jwtIssuerUri: {{ .Values.app.services.authentication.oauth.jwtIssuerUri | quote }}
+  jwkSetUri: {{ .Values.app.services.authentication.oauth.jwkSetUri | quote }}

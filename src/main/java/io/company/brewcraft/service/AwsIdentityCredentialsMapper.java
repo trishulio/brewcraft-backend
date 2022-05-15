@@ -13,9 +13,9 @@ public interface AwsIdentityCredentialsMapper extends IaasEntityMapper<Credentia
     final AwsIdentityCredentialsMapper INSTANCE = Mappers.getMapper(AwsIdentityCredentialsMapper.class);
 
     @Override
-    @Mapping(ignore = true, target = IaasAuthorization.ATTR_ID) // AccessKey is the ID
-    @Mapping(source = "accessKeyId", target = IaasAuthorization.ATTR_ACCESS_KEY)
-    @Mapping(source = "secretKey", target = IaasAuthorization.ATTR_ACCESS_SECRET)
+    @Mapping(ignore = true, target = IaasAuthorization.ATTR_ID) // AccessKeyId is the ID
+    @Mapping(source = "accessKeyId", target = IaasAuthorization.ATTR_ACCESS_KEY_ID)
+    @Mapping(source = "secretKey", target = IaasAuthorization.ATTR_ACCESS_SECRET_KEY)
     @Mapping(source = "sessionToken", target = IaasAuthorization.ATTR_SESSION_TOKEN)
     @Mapping(source = "expiration", target = IaasAuthorization.ATTR_EXPIRATION)
     IaasAuthorization fromIaasEntity(Credentials credentials);

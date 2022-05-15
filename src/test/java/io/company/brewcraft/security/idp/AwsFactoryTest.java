@@ -27,7 +27,7 @@ public class AwsFactoryTest {
 
     @Test
     public void testGetIdentityProvider() throws IllegalAccessException, URISyntaxException {
-        AWSCognitoIdentityProvider idp = factory.getIdentityProvider("REGION", "URL", "ACCESS_KEY", "ACCESS_SECRET");
+        AWSCognitoIdentityProvider idp = factory.getIdentityProvider("REGION", "URL", "ACCESS_KEY_ID", "ACCESS_SECRET_KEY");
 
         final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(idp, "awsCredentialsProvider", true);
         final URI endpoint = (URI) FieldUtils.readField(idp, "endpoint", true);
@@ -35,24 +35,27 @@ public class AwsFactoryTest {
 
         assertEquals(new URI("https://URL"), endpoint);
         assertEquals("REGION", region);
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY");
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY_ID");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET_KEY");
     }
 
     @Test
     public void testSecretsMgrClient() throws URISyntaxException, IllegalAccessException {
-        AWSSecretsManager secretsMgr = factory.secretsMgrClient("REGION", "URL");
+        AWSSecretsManager secretsMgr = factory.secretsMgrClient("REGION", "URL", "ACCESS_KEY_ID", "ACCESS_SECRET_KEY");
 
+        final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(secretsMgr, "awsCredentialsProvider", true);
         final URI endpoint = (URI) FieldUtils.readField(secretsMgr, "endpoint", true);
         final String region = (String) FieldUtils.readField(secretsMgr, "signingRegion", true);
 
         assertEquals(new URI("https://URL"), endpoint);
         assertEquals("REGION", region);
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY_ID");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET_KEY");
     }
 
     @Test
     public void testGetAwsCognitoIdentityClient() throws IllegalAccessException, URISyntaxException {
-        AmazonCognitoIdentity idp = factory.getAwsCognitoIdentityClient("REGION", "ACCESS_KEY", "ACCESS_SECRET");
+        AmazonCognitoIdentity idp = factory.getAwsCognitoIdentityClient("REGION", "ACCESS_KEY_ID", "ACCESS_SECRET_KEY");
 
         final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(idp, "awsCredentialsProvider", true);
         final URI endpoint = (URI) FieldUtils.readField(idp, "endpoint", true);
@@ -60,13 +63,13 @@ public class AwsFactoryTest {
 
         assertEquals(new URI("https://cognito-identity.REGION.amazonaws.com"), endpoint);
         assertEquals("REGION", region);
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY");
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY_ID");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET_KEY");
     }
 
     @Test
     public void testS3Client() throws IllegalAccessException, URISyntaxException {
-        AmazonS3 s3 = factory.s3Client("REGION", "ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN");
+        AmazonS3 s3 = factory.s3Client("REGION", "ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN");
 
         final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(s3, "awsCredentialsProvider", true);
         final URI endpoint = (URI) FieldUtils.readField(s3, "endpoint", true);
@@ -74,14 +77,14 @@ public class AwsFactoryTest {
 
         assertEquals(new URI("https://s3.REGION.amazonaws.com"), endpoint);
         assertEquals("REGION", region);
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY");
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY_ID");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET_KEY");
         assertEquals(((BasicSessionCredentials) awsCredentialsProvider.getCredentials()).getSessionToken(), "SESSION_TOKEN");
     }
 
     @Test
     public void testIamClient() throws IllegalAccessException, URISyntaxException {
-        AmazonIdentityManagement iamClient = factory.iamClient("ACCESS_KEY", "ACCESS_SECRET");
+        AmazonIdentityManagement iamClient = factory.iamClient("ACCESS_KEY_ID", "ACCESS_SECRET_KEY");
 
         final AWSCredentialsProvider awsCredentialsProvider = (AWSCredentialsProvider) FieldUtils.readField(iamClient, "awsCredentialsProvider", true);
         final URI endpoint = (URI) FieldUtils.readField(iamClient, "endpoint", true);
@@ -89,7 +92,7 @@ public class AwsFactoryTest {
 
         assertEquals(new URI("https://iam.amazonaws.com"), endpoint);
         assertEquals("us-east-1", region);
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY");
-        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSAccessKeyId(), "ACCESS_KEY_ID");
+        assertEquals(awsCredentialsProvider.getCredentials().getAWSSecretKey(), "ACCESS_SECRET_KEY");
     }
 }

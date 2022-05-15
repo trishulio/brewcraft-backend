@@ -3,8 +3,8 @@ package io.company.brewcraft.dto;
 import java.time.LocalDateTime;
 
 public class IaasAuthorizationDto extends BaseDto {
-    private String accessKey;
-    private String accessSecret;
+    private String accessKeyId;
+    private String accessSecretKey;
     private String sessionToken;
     private LocalDateTime expiration;
 
@@ -12,27 +12,27 @@ public class IaasAuthorizationDto extends BaseDto {
         super();
     }
 
-    public IaasAuthorizationDto(String accessKey, String accessSecret, String sessionToken, LocalDateTime expiration) {
-        setAccessKey(accessKey);
-        setAccessSecret(accessSecret);
+    public IaasAuthorizationDto(String accessKeyId, String accessSecretKey, String sessionToken, LocalDateTime expiration) {
+        setAccessKeyId(accessKeyId);
+        setAccessSecretKey(accessSecretKey);
         setSessionToken(sessionToken);
         setExpiration(expiration);
     }
 
-    public String getAccessKey() {
-        return accessKey;
+    public String getAccessKeyId() {
+        return accessKeyId;
     }
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
+    public void setAccessKeyId(String accessKeyId) {
+        this.accessKeyId = accessKeyId;
     }
 
-    public String getAccessSecret() {
-        return accessSecret;
+    public String getAccessSecretKey() {
+        return accessSecretKey;
     }
 
-    public void setAccessSecret(String accessSecret) {
-        this.accessSecret = accessSecret;
+    public void setAccessSecretKey(String accessSecretKey) {
+        this.accessSecretKey = accessSecretKey;
     }
 
     public String getSessionToken() {
