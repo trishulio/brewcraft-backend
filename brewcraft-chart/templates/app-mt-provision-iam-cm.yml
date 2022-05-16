@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-mt-provision-iam
+data:
+  awsDeploymentAccountId: {{ .Values.serviceAccount.id | quote }}
+  awsDeploymentPartition: {{ .Values.serviceAccount.partition | quote }}

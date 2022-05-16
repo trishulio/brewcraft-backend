@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    {{ toYaml .Values.app.labels }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{ toYaml .Values.app.labels }}
+  template:
+    metadata:
+      labels:
+        {{ toYaml .Values.app.labels }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.image.repository }}/{{ .Values.app.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.networking.port.container }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.app.health.probes.liveness.endpoint }}
+              port: http
+            initialDelaySeconds: {{ .Values.app.health.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.app.health.probes.liveness.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.app.health.probes.readiness.endpoint }}
+              port: http
+            initialDelaySeconds: {{ .Values.app.health.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.app.health.probes.readiness.periodSeconds }}
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-db
+                  key: springDatasourceUrl
+                  optional: false
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: springDatasourceUsername
+                  optional: false
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-db
+                  key: springDatasourcePassword
+                  optional: false
+            - name: AWS_SECRETS_MANAGER_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: app-secrets-manager
+                  key: awsSecretsManagerRegion
+                  optional: false
+            - name: AWS_SECRETS_MANAGER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-secrets-manager
+                  key: awsSecretsManagerUrl
+                  optional: false
+            - name: AWS_SECRETS_MANAGER_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets-manager
+                  key: awsSecretsManagerAccessKeyId
+                  optional: false
+            - name: AWS_SECRETS_MANAGER_ACCESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets-manager
+                  key: awsSecretsManagerAccessSecretKey
+                  optional: false
+            - name: JWT_ISSUER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: app-auth
+                  key: jwtIssuerUri
+                  optional: false
+            - name: JWK_SET_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: app-auth
+                  key: jwkSetUri
+                  optional: false
+            - name: AWS_COGNITO_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoRegion
+                  optional: false
+            - name: AWS_COGNITO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoUrl
+                  optional: false
+            - name: AWS_COGNITO_USER_POOL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoUserPoolId
+                  optional: false
+            - name: AWS_COGNITO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoAccessKeyId
+                  optional: false
+            - name: AWS_COGNITO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoSecretKey
+                  optional: false
+            - name: AWS_S3_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-s3
+                  key: awsS3Region
+                  optional: false
+            - name: AWS_S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-s3
+                  key: awsS3AccessKeyId
+                  optional: false
+            - name: AWS_S3_ACCESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-s3
+                  key: awsS3AccessSecretKey
+                  optional: false
+            - name: AWS_IAM_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-iam
+                  key: awsIamAccessKeyId
+                  optional: false
+            - name: AWS_IAM_ACCESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-mt-provision-iam
+                  key: awsIamAccessSecretKey
+                  optional: false
+            - name: AWS_DEPLOYMENT_ACCOUNT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-iam
+                  key: awsDeploymentAccountId
+                  optional: false
+            - name: AWS_DEPLOYMENT_PARTITION
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-iam
+                  key: awsDeploymentPartition
+                  optional: false
+            - name: AWS_COGNITO_IDENTITY_POOL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoIdentityPoolId
+                  optional: false
+            - name: AWS_COGNITO_USER_POOL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-mt-provision-cognito
+                  key: awsCognitoUserPoolUrl
+                  optional: false

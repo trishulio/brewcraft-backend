@@ -18,40 +18,40 @@ public class IaasAuthorizationTest {
 
     @Test
     public void testNoArgConstructor_SetsNull() {
-        assertNull(authorization.getAccessKey());
-        assertNull(authorization.getAccessSecret());
+        assertNull(authorization.getAccessKeyId());
+        assertNull(authorization.getAccessSecretKey());
         assertNull(authorization.getExpiration());
         assertNull(authorization.getSessionToken());
     }
 
     @Test
     public void testAllArgConstructor() {
-        authorization = new IaasAuthorization("ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
+        authorization = new IaasAuthorization("ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        assertEquals("ACCESS_KEY", authorization.getAccessKey());
-        assertEquals("ACCESS_SECRET", authorization.getAccessSecret());
+        assertEquals("ACCESS_KEY_ID", authorization.getAccessKeyId());
+        assertEquals("ACCESS_SECRET_KEY", authorization.getAccessSecretKey());
         assertEquals("SESSION_TOKEN", authorization.getSessionToken());
         assertEquals(LocalDateTime.of(2000, 1, 1, 0, 0), authorization.getExpiration());
     }
 
     @Test
     public void testGetSetId() {
-        authorization.setId("ACCESS_KEY");
-        assertEquals("ACCESS_KEY", authorization.getId());
-        assertEquals("ACCESS_KEY", authorization.getAccessKey());
+        authorization.setId("ACCESS_KEY_ID");
+        assertEquals("ACCESS_KEY_ID", authorization.getId());
+        assertEquals("ACCESS_KEY_ID", authorization.getAccessKeyId());
     }
 
     @Test
-    public void testGetSetAccessKey() {
-        authorization.setAccessKey("ACCESS_KEY");
-        assertEquals("ACCESS_KEY", authorization.getAccessKey());
-        assertEquals("ACCESS_KEY", authorization.getId());
+    public void testGetSetAccessKeyId() {
+        authorization.setAccessKeyId("ACCESS_KEY_ID");
+        assertEquals("ACCESS_KEY_ID", authorization.getAccessKeyId());
+        assertEquals("ACCESS_KEY_ID", authorization.getId());
     }
 
     @Test
-    public void testGetSetAccessSecret() {
-        authorization.setAccessSecret("ACCESS_SECRET");
-        assertEquals("ACCESS_SECRET", authorization.getAccessSecret());
+    public void testGetSetAccessSecretKey() {
+        authorization.setAccessSecretKey("ACCESS_SECRET_KEY");
+        assertEquals("ACCESS_SECRET_KEY", authorization.getAccessSecretKey());
     }
 
     @Test

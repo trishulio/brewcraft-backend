@@ -3,18 +3,18 @@ package io.company.brewcraft.model;
 import java.time.LocalDateTime;
 
 public interface BaseIaasAuthorization {
-    final String ATTR_ACCESS_KEY = "accessKey";
-    final String ATTR_ACCESS_SECRET = "accessSecret";
+    final String ATTR_ACCESS_KEY_ID = "accessKeyId";
+    final String ATTR_ACCESS_SECRET_KEY = "accessSecretKey";
     final String ATTR_SESSION_TOKEN = "sessionToken";
     final String ATTR_EXPIRATION = "expiration";
 
-    String getAccessKey();
+    String getAccessKeyId();
 
-    void setAccessKey(String accessKey);
+    void setAccessKeyId(String accessKeyId);
 
-    String getAccessSecret();
+    String getAccessSecretKey();
 
-    void setAccessSecret(String accessSecret);
+    void setAccessSecretKey(String accessSecretKey);
 
     String getSessionToken();
 

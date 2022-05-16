@@ -15,4 +15,6 @@ RUN useradd -ms /bin/bash -u ${UUID} ${USER_ID} && \
     chown ${USER_ID} brewcraftapp.jar
 
 USER ${USER_ID}
-ENTRYPOINT ["java", "-jar", "brewcraftapp.jar"]
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-Xmx1g", "-jar", "brewcraftapp.jar"]

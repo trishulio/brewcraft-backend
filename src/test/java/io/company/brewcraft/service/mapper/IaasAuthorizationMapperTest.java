@@ -26,11 +26,11 @@ public class IaasAuthorizationMapperTest {
 
     @Test
     public void testToDto_ReturnsDto_WhenArgIsNotNull() {
-        IaasAuthorization pojo = new IaasAuthorization("ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
+        IaasAuthorization pojo = new IaasAuthorization("ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
 
         IaasAuthorizationDto dto = mapper.toDto(pojo);
 
-        IaasAuthorizationDto expected = new IaasAuthorizationDto("ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
+        IaasAuthorizationDto expected = new IaasAuthorizationDto("ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0));
         assertEquals(expected, dto);
     }
 }

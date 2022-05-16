@@ -11,8 +11,8 @@ import io.company.brewcraft.model.IaasAuthorization;
 public interface IaasAuthorizationMapper {
     static final IaasAuthorizationMapper INSTANCE = Mappers.getMapper(IaasAuthorizationMapper.class);
 
-    @Mapping(source = IaasAuthorization.ATTR_ACCESS_KEY, target = "accessKey")
-    @Mapping(source = IaasAuthorization.ATTR_ACCESS_SECRET, target = "accessSecret")
+    @Mapping(source = IaasAuthorization.ATTR_ACCESS_KEY_ID, target = "accessKeyId")
+    @Mapping(source = IaasAuthorization.ATTR_ACCESS_SECRET_KEY, target = "accessSecretKey")
     @Mapping(source = IaasAuthorization.ATTR_SESSION_TOKEN, target = "sessionToken")
     @Mapping(source = IaasAuthorization.ATTR_EXPIRATION, target = "expiration")
     IaasAuthorizationDto toDto(IaasAuthorization authorization);

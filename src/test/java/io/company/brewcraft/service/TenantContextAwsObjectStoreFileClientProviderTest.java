@@ -44,9 +44,9 @@ public class TenantContextAwsObjectStoreFileClientProviderTest {
         AmazonS3 mS3 = mock(AmazonS3.class);
         doReturn(null).when(mS3).generatePresignedUrl(captor.capture());
 
-        doReturn(mS3).when(mFactory).s3Client("REGION", "ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN");
+        doReturn(mS3).when(mFactory).s3Client("REGION", "ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN");
 
-        doReturn(new IaasAuthorization("ACCESS_KEY", "ACCESS_SECRET", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0))).when(mAuthFetcher).fetch();
+        doReturn(new IaasAuthorization("ACCESS_KEY_ID", "ACCESS_SECRET_KEY", "SESSION_TOKEN", LocalDateTime.of(2000, 1, 1, 0, 0))).when(mAuthFetcher).fetch();
 
         doReturn("OBJECT_STORE").when(mBucketNameProvider).getObjectStoreName();
 

@@ -101,7 +101,7 @@ public class AwsCognitoIdentitySdkWrapperTest {
     @Test
     public void testGetCredentialsForIdentity_ReturnsCredentials() {
         Credentials creds = new Credentials()
-                                .withAccessKeyId("ACCESS_KEY")
+                                .withAccessKeyId("ACCESS_KEY_ID")
                                 .withSecretKey("SECRET_KEY")
                                 .withSessionToken("SESSION_TOKEN")
                                 .withExpiration(new Date(1, 1, 1));
@@ -111,7 +111,7 @@ public class AwsCognitoIdentitySdkWrapperTest {
         Credentials credentials = client.getCredentialsForIdentity("IDENTITY_ID", Map.of("K", "V"));
 
         Credentials expected = new Credentials()
-                .withAccessKeyId("ACCESS_KEY")
+                .withAccessKeyId("ACCESS_KEY_ID")
                 .withSecretKey("SECRET_KEY")
                 .withSessionToken("SESSION_TOKEN")
                 .withExpiration(new Date(1, 1, 1));

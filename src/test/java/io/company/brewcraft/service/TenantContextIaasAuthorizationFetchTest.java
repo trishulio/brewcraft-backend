@@ -32,11 +32,11 @@ public class TenantContextIaasAuthorizationFetchTest {
         doReturn(new IaasAuthorizationCredentials("TOKEN")).when(mCtx).getIaasLogin();
         doReturn(mCtx).when(mCtxHolder).getPrincipalContext();
 
-        IaasAuthorization ret = new IaasAuthorization("ACCESS_KEY", null, null, null);
+        IaasAuthorization ret = new IaasAuthorization("ACCESS_KEY_ID", null, null, null);
         doReturn(ret).when(mFetcher).fetch(new IaasAuthorizationCredentials("TOKEN"));
 
         IaasAuthorization auth = ctxFetcher.fetch();
 
-        assertEquals(new IaasAuthorization("ACCESS_KEY", null, null, null), auth);
+        assertEquals(new IaasAuthorization("ACCESS_KEY_ID", null, null, null), auth);
     }
 }

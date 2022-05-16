@@ -68,13 +68,13 @@ public class CachedAwsCognitoIdentityClientTest {
 
     @Test
     public void testGetCredentialsForIdentity_ReturnsCachedEntities() {
-        doReturn(new Credentials().withAccessKeyId("ACCESS_KEY").withSecretKey("ACCESS_SECRET").withSessionToken("SESSION_TOKEN")).when(mDelegate).getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
+        doReturn(new Credentials().withAccessKeyId("ACCESS_KEY_ID").withSecretKey("ACCESS_SECRET_KEY").withSessionToken("SESSION_TOKEN")).when(mDelegate).getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
 
         Credentials creds = client.getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
         client.getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
         client.getCredentialsForIdentity("POOL_ID", Map.of("K", "V"));
 
-        assertEquals(new Credentials().withAccessKeyId("ACCESS_KEY").withSecretKey("ACCESS_SECRET").withSessionToken("SESSION_TOKEN"), creds);
+        assertEquals(new Credentials().withAccessKeyId("ACCESS_KEY_ID").withSecretKey("ACCESS_SECRET_KEY").withSessionToken("SESSION_TOKEN"), creds);
         verify(mDelegate, times(1)).getCredentialsForIdentity(anyString(), anyMap());
     }
 
