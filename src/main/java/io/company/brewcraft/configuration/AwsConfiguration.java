@@ -23,6 +23,7 @@ import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.BaseIaasUser;
 import io.company.brewcraft.model.BaseIaasUserTenantMembership;
+import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
@@ -49,6 +50,7 @@ import io.company.brewcraft.security.store.SecretsManager;
 import io.company.brewcraft.service.AwsArnMapper;
 import io.company.brewcraft.service.AwsCognitoIdentityClient;
 import io.company.brewcraft.service.AwsCognitoIdentitySdkWrapper;
+import io.company.brewcraft.service.AwsCrossOriginConfigClient;
 import io.company.brewcraft.service.AwsIaasObjectStoreMapper;
 import io.company.brewcraft.service.AwsIaasPolicyMapper;
 import io.company.brewcraft.service.AwsIaasRoleMapper;
@@ -200,4 +202,8 @@ public class AwsConfiguration {
         return new TenantContextAwsBucketNameProvider(awsTemplates, contextHolder, appBucketName);
     }
 
+    @Bean
+    public IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> awsCrossOriginConfigClient(AmazonS3 awsS3Client) {
+        return new AwsCrossOriginConfigClient(awsS3Client);
+    }
 }

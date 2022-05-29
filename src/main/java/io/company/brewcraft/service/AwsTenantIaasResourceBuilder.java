@@ -1,11 +1,18 @@
 package io.company.brewcraft.service;
 
+import java.util.List;
+
+import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
+import com.amazonaws.services.s3.model.CORSRule;
+import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
+
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
@@ -91,5 +98,21 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         attachment.setIaasPolicy(policy);
 
         return attachment;
+    }
+
+    public <T extends BaseIaasIdpTenant> IaasBucketCrossOriginConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
+        CORSRule corsRuleLocalHost = new CORSRule().withAllowedHeaders(List.of("*"))
+                                                   .withAllowedMethods(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE))
+                                                   .withAllowedOrigins(List.of("http://wwww.localhost:3000"));
+
+        CORSRule corsRuleProduction = new CORSRule().withAllowedHeaders(List.of("*"))
+                                                    .withAllowedMethods(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE))
+                                                    .withAllowedOrigins(List.of("https://apollo.brewcraft.io"));
+
+        List<CORSRule> corsRules = List.of(corsRuleLocalHost, corsRuleProduction);
+
+        String bucketName = this.getObjectStoreName(iaasIdpTenant);
+
+        return new IaasBucketCrossOriginConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
     }
 }
