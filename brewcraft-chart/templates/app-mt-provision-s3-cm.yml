@@ -1,6 +1,8 @@
+{{- if ne .Values.env "prod" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-mt-provision-s3
 data: 
   awsS3Region: {{ .Values.multitenancy.provisioning.objectStore.awsS3.region | quote }}
+{{- end }}

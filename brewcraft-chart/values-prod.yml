@@ -1,6 +1,8 @@
+env: prod
+
 image:
-  repository: ""
-  pullPolicy: IfNotPresent
+  repository: "782071516387.dkr.ecr.ca-central-1.amazonaws.com"
+  pullPolicy: Always # TODO: Revert to ifNotPresent
 
 imagePullSecrets: []
 
@@ -13,53 +15,19 @@ resources:
     memory: 1.5G
 
 app:
-  services:
-    db:
-      schema: postgresql
-      host: ""
-      port: "5432"
-      name: postgres
-      username: ""
-      password: ""
-    authentication:
-      oauth:
-        jwtIssuerUri: ""
-        jwkSetUri: ""
-    secretsManager:
-      awsSecretsManager:
-        accessKeyId: ""
-        accessSecretKey: ""
-        region: ""
-        url: ""
   networking:
     port:
       container: "8080"
       service: "8080"
   svc:
-    type: ClusterIP
+    type: NodePort
+    nodePort: "31000"
 
-multitenancy:
-  provisioning:
-    authentication:
-      awsCognitoUserPool:
-        id: ""
-        region: ""
-        url: ""
-        accessKeyId: ""
-        accessSecretKey: ""
-      awsCognitoIdentityPool:
-        id: ""
-        userPoolUrl: ""
-    objectStore:
-      awsS3:
-        region: ""
-        accessKeyId: ""
-        accessSecretKey: ""
-    accessManagement:
-      awsIam:
-        accessKeyId: ""
-        accessSecretKey: ""
 
-serviceAccount:
-  id: ""
-  partition: aws
+dependencies:
+  postgresql:
+    enabled: false
+  pgadmin4:
+    enabled: false
+  localstack:
+    enabled: false

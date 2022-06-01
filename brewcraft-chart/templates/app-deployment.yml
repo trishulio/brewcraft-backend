@@ -14,9 +14,64 @@ spec:
       labels:
         {{ toYaml .Values.app.labels }}
     spec:
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+      - name: init-admin-db-user-script
+        configMap:
+          name: init-admin-db-user-script
+          defaultMode: 0777
+          items:
+            - key: init-admin-db-user.sh
+              path: init-admin-db-user.sh
+      initContainers:
+        - name: setup-tenant-admin-dbuser
+          image: bitnami/postgresql:12.11.0
+          command: [ "/bin/bash", "-c", "/init-db/init-admin-db-user.sh" ]
+          volumeMounts:
+            - name: init-admin-db-user-script
+              mountPath: "/init-db"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: primary-db
+                  key: pgHost
+                  optional: false
+            - name: PGPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: primary-db
+                  key: pgPort
+                  optional: false
+            - name: PGDATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: primary-db
+                  key: pgDatabase
+                  optional: false
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: primary-db
+                  key: pgUser
+                  optional: false
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: primary-db
+                  key: pgPassword
+                  optional: false
+            - name: APP_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: primary-db
+                  key: appDbUser
+                  optional: false
       containers:
         - name: {{ .Values.app.name }}
           image: "{{ .Values.image.repository }}/{{ .Values.app.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy : {{ .Values.image.pullPolicy }}
           resources:
             requests:
               memory: {{ .Values.resources.requests.memory }}
@@ -41,6 +96,12 @@ spec:
             initialDelaySeconds: {{ .Values.app.health.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.app.health.probes.readiness.periodSeconds }}
           env:
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-db
+                  key: databaseName
+                  optional: false
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:

@@ -1,3 +1,4 @@
+env: dev
 replicaCount: 2
 
 image:
@@ -16,6 +17,7 @@ app:
   services:
     db:
       schema: postgresql
+      databaseName: postgres
       host: test-postgresql-hl # TODO: Inject release name automatically
       port: "5432"
       name: postgres

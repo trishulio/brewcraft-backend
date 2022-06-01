@@ -2,6 +2,7 @@
 
 TARGET_UPLOAD_DIR:=/var/server/brewcraft
 SOURCE_UPLOAD_DIR:=./dist
+REGISTRY=782071516387.dkr.ecr.ca-central-1.amazonaws.com
 APP_NAME:=brewcraft
 VERSION:=1.0.0-SNAPSHOT
 
@@ -9,12 +10,15 @@ install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
 containerize:
-	docker build . -t ${APP_NAME}:${VERSION}
+	docker build . -t ${REGISTRY}/${APP_NAME}:${VERSION}
+
+publish:
+	docker push ${REGISTRY}/${APP_NAME}:${VERSION}
 
 pack:
 	mkdir -p ${SOURCE_UPLOAD_DIR}
 	rm -rf ${SOURCE_UPLOAD_DIR}/* ; true
-	docker save -o ${SOURCE_UPLOAD_DIR}/${APP_NAME}_${VERSION}.image ${APP_NAME}:${VERSION}
+	docker save -o ${SOURCE_UPLOAD_DIR}/${REGISTRY}_${APP_NAME}_${VERSION}.image ${REGISTRY}/${APP_NAME}:${VERSION}
 	cp -r ./db-init-scripts ${SOURCE_UPLOAD_DIR}
 	cp -r ./wait-for-it.sh ${SOURCE_UPLOAD_DIR}
 	cp ./docker-compose.yml ${SOURCE_UPLOAD_DIR}
@@ -28,7 +32,7 @@ upload:
 unpack:
 	# Asserting that .env file is present.
 	ls .env
-	docker load -i ${APP_NAME}_${VERSION}.image
+	docker load -i ${REGISTRY}_${APP_NAME}_${VERSION}.image
 
 deploy:
 	ssh -i '${ID_KEY}' ${USERNAME}@${HOST} "cd ${TARGET_UPLOAD_DIR} && make unpack restart VERSION=${VERSION}"
