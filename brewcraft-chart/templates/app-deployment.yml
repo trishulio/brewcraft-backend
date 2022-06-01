@@ -35,37 +35,37 @@ spec:
             - name: PGHOST
               valueFrom:
                 configMapKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: pgHost
                   optional: false
             - name: PGPORT
               valueFrom:
                 configMapKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: pgPort
                   optional: false
             - name: PGDATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: pgDatabase
                   optional: false
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: pgUser
                   optional: false
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: pgPassword
                   optional: false
             - name: APP_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: primary-db
+                  name: init-admin-db-user-script-env
                   key: appDbUser
                   optional: false
       containers:
