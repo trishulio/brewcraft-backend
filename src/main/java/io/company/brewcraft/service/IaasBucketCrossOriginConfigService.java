@@ -96,9 +96,9 @@ public class IaasBucketCrossOriginConfigService extends BaseService implements C
             return null;
         }
 
-        List<IaasBucketCrossOriginConfiguration> rolePolicies = this.updateService.getAddEntities(additions);
+        List<IaasBucketCrossOriginConfiguration> objectStoreCorsConfigs = this.updateService.getAddEntities(additions);
 
-        return iaasRepo.add(rolePolicies);
+        return iaasRepo.add(objectStoreCorsConfigs);
     }
 
     @Override
