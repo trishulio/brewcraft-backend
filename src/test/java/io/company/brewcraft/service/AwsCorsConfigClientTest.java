@@ -3,7 +3,6 @@ package io.company.brewcraft.service;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 
-import com.amazonaws.services.identitymanagement.model.NoSuchEntityException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
@@ -19,10 +17,10 @@ import com.amazonaws.services.s3.model.DeleteBucketCrossOriginConfigurationReque
 import com.amazonaws.services.s3.model.GetBucketCrossOriginConfigurationRequest;
 import com.amazonaws.services.s3.model.SetBucketCrossOriginConfigurationRequest;
 
-import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
+import io.company.brewcraft.model.IaasBucketCorsConfiguration;
 
-public class AwsCrossOriginConfigClientTest {
-    private AwsCrossOriginConfigClient client;
+public class AwsCorsConfigClientTest {
+    private AwsCorsConfigClient client;
 
     private AmazonS3 mAwsClient;
 
@@ -30,14 +28,14 @@ public class AwsCrossOriginConfigClientTest {
     public void init() {
         mAwsClient = mock(AmazonS3.class);
 
-        client = new AwsCrossOriginConfigClient(mAwsClient);
+        client = new AwsCorsConfigClient(mAwsClient);
     }
 
     @Test
     public void testGet_ReturnsIaasBucketCrossOriginConfiguration() {
         doReturn(new BucketCrossOriginConfiguration()).when(mAwsClient).getBucketCrossOriginConfiguration(any(GetBucketCrossOriginConfigurationRequest.class));
 
-        IaasBucketCrossOriginConfiguration config = client.get("BUCKET_1");
+        IaasBucketCorsConfiguration config = client.get("BUCKET_1");
 
 
         assertEquals("BUCKET_1", config.getBucketName());
@@ -54,9 +52,9 @@ public class AwsCrossOriginConfigClientTest {
     @Test
     public void testAdd_ReturnsAddedAttachement() {
         client = spy(client);
-        doReturn(new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
-        IaasBucketCrossOriginConfiguration config = client.add(new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
+        IaasBucketCorsConfiguration config = client.add(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
 
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
@@ -69,9 +67,9 @@ public class AwsCrossOriginConfigClientTest {
     @Test
     public void testPut_ReturnsEntity_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
-        IaasBucketCrossOriginConfiguration config = client.put(new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
+        IaasBucketCorsConfiguration config = client.put(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
 
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
@@ -88,7 +86,7 @@ public class AwsCrossOriginConfigClientTest {
     @Test
     public void testExists_ReturnsTrue_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
         assertTrue(client.exists("BUCKET_1"));
     }

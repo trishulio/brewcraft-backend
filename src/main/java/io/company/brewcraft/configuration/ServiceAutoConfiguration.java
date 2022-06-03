@@ -47,7 +47,7 @@ import io.company.brewcraft.model.FinishedGoodLot;
 import io.company.brewcraft.model.FinishedGoodLotFinishedGoodLotPortion;
 import io.company.brewcraft.model.FinishedGoodLotMaterialPortion;
 import io.company.brewcraft.model.FinishedGoodLotMixturePortion;
-import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
+import io.company.brewcraft.model.IaasBucketCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
@@ -162,7 +162,7 @@ import io.company.brewcraft.service.FinishedGoodLotMaterialPortionService;
 import io.company.brewcraft.service.FinishedGoodLotMixturePortionService;
 import io.company.brewcraft.service.FinishedGoodLotService;
 import io.company.brewcraft.service.IaasAuthorizationFetch;
-import io.company.brewcraft.service.IaasBucketCrossOriginConfigService;
+import io.company.brewcraft.service.IaasBucketCorsConfigService;
 import io.company.brewcraft.service.IaasClient;
 import io.company.brewcraft.service.IaasIdpTenantService;
 import io.company.brewcraft.service.IaasObjectStoreFileService;
@@ -324,7 +324,7 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasVfsService.class)
-    public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, IaasBucketCrossOriginConfigService iaasBucketCrossOriginConfigService, TenantIaasResourceBuilder resourceBuilder) {
+    public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, IaasBucketCorsConfigService iaasBucketCrossOriginConfigService, TenantIaasResourceBuilder resourceBuilder) {
         return new TenantIaasVfsService(TenantIaasVfsResourceMapper.INSTANCE, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, iaasBucketCrossOriginConfigService, resourceBuilder);
     }
 
@@ -387,12 +387,12 @@ public class ServiceAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IaasBucketCrossOriginConfigService.class)
-    public IaasBucketCrossOriginConfigService iaasBucketCrossOriginConfigService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> iaasClient) {
-        UpdateService<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> updateService = new SimpleUpdateService<>(utilProvider, IaasBucketCrossOriginConfiguration.class, IaasBucketCrossOriginConfiguration.class, IaasBucketCrossOriginConfiguration.class, Set.of());
-        IaasRepository<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
+    @ConditionalOnMissingBean(IaasBucketCorsConfigService.class)
+    public IaasBucketCorsConfigService iaasBucketCrossOriginConfigService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> iaasClient) {
+        UpdateService<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> updateService = new SimpleUpdateService<>(utilProvider, IaasBucketCorsConfiguration.class, IaasBucketCorsConfiguration.class, IaasBucketCorsConfiguration.class, Set.of());
+        IaasRepository<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
 
-        return new IaasBucketCrossOriginConfigService(updateService, iaasRepo);
+        return new IaasBucketCorsConfigService(updateService, iaasRepo);
     }
 
     @Bean

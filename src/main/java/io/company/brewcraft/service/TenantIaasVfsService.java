@@ -10,7 +10,7 @@ import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
-import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
+import io.company.brewcraft.model.IaasBucketCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
@@ -28,11 +28,11 @@ public class TenantIaasVfsService {
     private IaasPolicyService policyService;
     private IaasRolePolicyAttachmentService rolePolicyAttachmentService;
     private IaasObjectStoreService objectStoreService;
-    private IaasBucketCrossOriginConfigService bucketCrossOriginConfigService;
+    private IaasBucketCorsConfigService bucketCrossOriginConfigService;
 
     private TenantIaasResourceBuilder resourceBuilder;
 
-    public TenantIaasVfsService(TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, IaasBucketCrossOriginConfigService bucketCrossOriginConfigService, TenantIaasResourceBuilder resourceBuilder) {
+    public TenantIaasVfsService(TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, IaasBucketCorsConfigService bucketCrossOriginConfigService, TenantIaasResourceBuilder resourceBuilder) {
         this.mapper = mapper;
         this.policyService = policyService;
         this.objectStoreService = objectStoreService;
@@ -84,12 +84,12 @@ public class TenantIaasVfsService {
 
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.add(attachmentAdditions);
 
-        List<IaasBucketCrossOriginConfiguration> crossOriginConfigs = tenants.stream()
+        List<IaasBucketCorsConfiguration> crossOriginConfigs = tenants.stream()
                 .map(tenant -> this.resourceBuilder.buildBucketCrossOriginConfiguration(tenant))
                 .map(o -> o)
                 .toList();
 
-        List<IaasBucketCrossOriginConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.add(crossOriginConfigs);
+        List<IaasBucketCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.add(crossOriginConfigs);
 
         return this.mapper.fromComponents(objectStores, policies);
     }
@@ -118,12 +118,12 @@ public class TenantIaasVfsService {
 
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.put(attachmentUpdates);
 
-        List<IaasBucketCrossOriginConfiguration> crossOriginConfigs = tenants.stream()
+        List<IaasBucketCorsConfiguration> crossOriginConfigs = tenants.stream()
                 .map(tenant -> this.resourceBuilder.buildBucketCrossOriginConfiguration(tenant))
                 .map(o -> o)
                 .toList();
 
-        List<IaasBucketCrossOriginConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.put(crossOriginConfigs);
+        List<IaasBucketCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.put(crossOriginConfigs);
 
         return this.mapper.fromComponents(objectStores, policies);
     }

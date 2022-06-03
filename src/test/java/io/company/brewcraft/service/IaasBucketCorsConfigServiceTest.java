@@ -15,22 +15,22 @@ import org.junit.jupiter.api.Test;
 
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 
-import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
-import io.company.brewcraft.model.IaasBucketCrossOriginConfigurationAccessor;
+import io.company.brewcraft.model.IaasBucketCorsConfiguration;
+import io.company.brewcraft.model.IaasBucketCorsConfigurationAccessor;
 
-public class IaasBucketCrossOriginConfigServiceTest {
-    private IaasBucketCrossOriginConfigService service;
+public class IaasBucketCorsConfigServiceTest {
+    private IaasBucketCorsConfigService service;
 
-    private UpdateService<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> mUpdateService;
+    private UpdateService<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> mUpdateService;
 
-    private IaasRepository<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> mIaasRepo;
+    private IaasRepository<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> mIaasRepo;
 
     @BeforeEach
     public void init() {
-        mUpdateService = TestBeans.updateService(IaasBucketCrossOriginConfiguration.class, IaasBucketCrossOriginConfiguration.class, IaasBucketCrossOriginConfiguration.class, Set.of("createdAt"));
+        mUpdateService = TestBeans.updateService(IaasBucketCorsConfiguration.class, IaasBucketCorsConfiguration.class, IaasBucketCorsConfiguration.class, Set.of("createdAt"));
         mIaasRepo = mock(IaasRepository.class);
 
-        service = new IaasBucketCrossOriginConfigService(mUpdateService, mIaasRepo);
+        service = new IaasBucketCorsConfigService(mUpdateService, mIaasRepo);
     }
 
     @Test
@@ -79,12 +79,12 @@ public class IaasBucketCrossOriginConfigServiceTest {
 
     @Test
     public void testGet_ReturnsAttachmentFromRepo() {
-        IaasBucketCrossOriginConfiguration expected = new IaasBucketCrossOriginConfiguration();
+        IaasBucketCorsConfiguration expected = new IaasBucketCorsConfiguration();
         doAnswer(inv -> {
             return List.of(expected);
         }).when(mIaasRepo).get(anySet());
 
-        IaasBucketCrossOriginConfiguration actual = service.get("BUCKET_1");
+        IaasBucketCorsConfiguration actual = service.get("BUCKET_1");
 
         assertEquals(expected, actual);
     }
@@ -93,72 +93,72 @@ public class IaasBucketCrossOriginConfigServiceTest {
     public void testGet_ReturnsNull_WhenNoAttachmentIsFound() {
         doReturn(new ArrayList<>()).when(mIaasRepo).get(anySet());
 
-        IaasBucketCrossOriginConfiguration actual = service.get("BUCKET_1");
+        IaasBucketCorsConfiguration actual = service.get("BUCKET_1");
 
         assertNull(actual);
     }
 
     @Test
     public void testGetAll_ReturnsAttachmentFromRepo() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(new IaasBucketCrossOriginConfiguration());
+        List<IaasBucketCorsConfiguration> expected = List.of(new IaasBucketCorsConfiguration());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasBucketCrossOriginConfiguration> actual = service.getAll(Set.of("BUCKET_1"));
+        List<IaasBucketCorsConfiguration> actual = service.getAll(Set.of("BUCKET_1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testGetByIds_ReturnAttachmentsFromRepo() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(new IaasBucketCrossOriginConfiguration());
+        List<IaasBucketCorsConfiguration> expected = List.of(new IaasBucketCorsConfiguration());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasBucketCrossOriginConfiguration> actual = service.getByIds(Set.of(() -> "BUCKET_1"));
+        List<IaasBucketCorsConfiguration> actual = service.getByIds(Set.of(() -> "BUCKET_1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testGetByAccessorIds_ReturnsAttachmentFromRepo() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(new IaasBucketCrossOriginConfiguration());
+        List<IaasBucketCorsConfiguration> expected = List.of(new IaasBucketCorsConfiguration());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        IaasBucketCrossOriginConfigurationAccessor accessor = new IaasBucketCrossOriginConfigurationAccessor() {
+        IaasBucketCorsConfigurationAccessor accessor = new IaasBucketCorsConfigurationAccessor() {
             @Override
-            public void setIaasBucketCrossOriginConfiguration(IaasBucketCrossOriginConfiguration attachment) {
+            public void setIaasBucketCorsConfiguration(IaasBucketCorsConfiguration attachment) {
             }
             @Override
-            public IaasBucketCrossOriginConfiguration getIaasBucketCrossOriginConfiguration() {
-                return new IaasBucketCrossOriginConfiguration();
+            public IaasBucketCorsConfiguration getIaasBucketCorsConfiguration() {
+                return new IaasBucketCorsConfiguration();
             }
         };
 
-        List<IaasBucketCrossOriginConfiguration> actual = service.getByAccessorIds(Set.of(accessor));
+        List<IaasBucketCorsConfiguration> actual = service.getByAccessorIds(Set.of(accessor));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testAdd_ReturnsAddedRepoEntities_AfterSavingAddEntitiesFromUpdateService() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> expected = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).add(anyList());
 
-        List<IaasBucketCrossOriginConfiguration> additions = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> additions = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
-        List<IaasBucketCrossOriginConfiguration> configs = service.add(additions);
+        List<IaasBucketCorsConfiguration> configs = service.add(additions);
 
         assertEquals(expected, configs);
         verify(mIaasRepo, times(1)).add(additions);
@@ -172,19 +172,19 @@ public class IaasBucketCrossOriginConfigServiceTest {
 
     @Test
     public void testPut_ReturnsPutRepoEntities_AfterSavingPutEntitiesFromUpdateService() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> expected = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).put(anyList());
 
-        List<IaasBucketCrossOriginConfiguration> updates = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> updates = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
-        List<IaasBucketCrossOriginConfiguration> configs = service.put(updates);
+        List<IaasBucketCorsConfiguration> configs = service.put(updates);
 
         assertEquals(expected, configs);
         verify(mIaasRepo, times(1)).put(updates);
@@ -198,9 +198,9 @@ public class IaasBucketCrossOriginConfigServiceTest {
 
     @Test
     public void testPatch_ReturnsPatchRepoEntities_AfterSavingPatchEntitiesFromUpdateService() {
-        List<IaasBucketCrossOriginConfiguration> expected = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> expected = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).put(anyList());
@@ -209,12 +209,12 @@ public class IaasBucketCrossOriginConfigServiceTest {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasBucketCrossOriginConfiguration> updates = List.of(
-            new IaasBucketCrossOriginConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
-            new IaasBucketCrossOriginConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
+        List<IaasBucketCorsConfiguration> updates = List.of(
+            new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()),
+            new IaasBucketCorsConfiguration("BUCKET_2", new BucketCrossOriginConfiguration())
         );
 
-        List<IaasBucketCrossOriginConfiguration> attachments = service.patch(updates);
+        List<IaasBucketCorsConfiguration> attachments = service.patch(updates);
 
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(updates);

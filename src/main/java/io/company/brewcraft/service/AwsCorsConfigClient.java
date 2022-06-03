@@ -10,19 +10,19 @@ import com.amazonaws.services.s3.model.DeleteBucketCrossOriginConfigurationReque
 import com.amazonaws.services.s3.model.GetBucketCrossOriginConfigurationRequest;
 import com.amazonaws.services.s3.model.SetBucketCrossOriginConfigurationRequest;
 
-import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
+import io.company.brewcraft.model.IaasBucketCorsConfiguration;
 
-public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> {
-    private static final Logger log = LoggerFactory.getLogger(AwsCrossOriginConfigClient.class);
+public class AwsCorsConfigClient implements IaasClient<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> {
+    private static final Logger log = LoggerFactory.getLogger(AwsCorsConfigClient.class);
 
     private final AmazonS3 awsClient;
 
-    public AwsCrossOriginConfigClient(final AmazonS3 awsClient) {
+    public AwsCorsConfigClient(final AmazonS3 awsClient) {
         this.awsClient = awsClient;
     }
 
     @Override
-    public IaasBucketCrossOriginConfiguration get(String bucketName) {
+    public IaasBucketCorsConfiguration get(String bucketName) {
         final GetBucketCrossOriginConfigurationRequest request = new GetBucketCrossOriginConfigurationRequest(bucketName);
 
         BucketCrossOriginConfiguration bucketCrossOriginConfiguration = null;
@@ -33,18 +33,18 @@ public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucket
             throw e;
         }
 
-        IaasBucketCrossOriginConfiguration iaasBucketCrossOriginConfiguration = new IaasBucketCrossOriginConfiguration(bucketName, bucketCrossOriginConfiguration);
+        IaasBucketCorsConfiguration iaasBucketCrossOriginConfiguration = new IaasBucketCorsConfiguration(bucketName, bucketCrossOriginConfiguration);
         return iaasBucketCrossOriginConfiguration;
     }
 
     @Override
-    public <BE extends IaasBucketCrossOriginConfiguration> IaasBucketCrossOriginConfiguration add(BE entity) {
+    public <BE extends IaasBucketCorsConfiguration> IaasBucketCorsConfiguration add(BE entity) {
         log.debug("Replacing existing CORS setting on the bucket: {} (if any) since only single CORS configuration can be applied.", entity.getBucketName());
         return this.put(entity);
     }
 
     @Override
-    public <UE extends IaasBucketCrossOriginConfiguration> IaasBucketCrossOriginConfiguration put(UE entity) {
+    public <UE extends IaasBucketCorsConfiguration> IaasBucketCorsConfiguration put(UE entity) {
         final SetBucketCrossOriginConfigurationRequest request = new SetBucketCrossOriginConfigurationRequest(entity.getBucketName(), entity.getBucketCrossOriginConfiguration());
         try {
             this.awsClient.setBucketCrossOriginConfiguration(request);
@@ -58,7 +58,7 @@ public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucket
 
     @Override
     public boolean exists(String bucketName) {
-        IaasBucketCrossOriginConfiguration result = get(bucketName);
+        IaasBucketCorsConfiguration result = get(bucketName);
         boolean exists = result != null && result.getBucketCrossOriginConfiguration() != null;
         return exists;
     }
