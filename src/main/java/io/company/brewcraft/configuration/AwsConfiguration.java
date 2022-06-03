@@ -203,7 +203,7 @@ public class AwsConfiguration {
     }
 
     @Bean
-    public IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> awsCrossOriginConfigClient(AmazonS3 awsS3Client) {
+    public IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> iaasObjectStoreCorsConfigClient(AmazonS3 awsS3Client) {
         return new AwsCrossOriginConfigClient(awsS3Client);
     }
 }
