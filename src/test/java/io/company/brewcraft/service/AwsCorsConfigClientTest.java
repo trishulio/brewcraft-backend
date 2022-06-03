@@ -17,7 +17,7 @@ import com.amazonaws.services.s3.model.DeleteBucketCrossOriginConfigurationReque
 import com.amazonaws.services.s3.model.GetBucketCrossOriginConfigurationRequest;
 import com.amazonaws.services.s3.model.SetBucketCrossOriginConfigurationRequest;
 
-import io.company.brewcraft.model.IaasBucketCorsConfiguration;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 
 public class AwsCorsConfigClientTest {
     private AwsCorsConfigClient client;
@@ -35,7 +35,7 @@ public class AwsCorsConfigClientTest {
     public void testGet_ReturnsIaasBucketCrossOriginConfiguration() {
         doReturn(new BucketCrossOriginConfiguration()).when(mAwsClient).getBucketCrossOriginConfiguration(any(GetBucketCrossOriginConfigurationRequest.class));
 
-        IaasBucketCorsConfiguration config = client.get("BUCKET_1");
+        IaasObjectStoreCorsConfiguration config = client.get("BUCKET_1");
 
 
         assertEquals("BUCKET_1", config.getBucketName());
@@ -52,9 +52,9 @@ public class AwsCorsConfigClientTest {
     @Test
     public void testAdd_ReturnsAddedAttachement() {
         client = spy(client);
-        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
-        IaasBucketCorsConfiguration config = client.add(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
+        IaasObjectStoreCorsConfiguration config = client.add(new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
 
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
@@ -67,9 +67,9 @@ public class AwsCorsConfigClientTest {
     @Test
     public void testPut_ReturnsEntity_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
-        IaasBucketCorsConfiguration config = client.put(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
+        IaasObjectStoreCorsConfiguration config = client.put(new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration()));
 
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
@@ -86,7 +86,7 @@ public class AwsCorsConfigClientTest {
     @Test
     public void testExists_ReturnsTrue_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration())).when(client).get("BUCKET_1");
 
         assertTrue(client.exists("BUCKET_1"));
     }

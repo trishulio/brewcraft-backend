@@ -23,7 +23,7 @@ import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.BaseIaasUser;
 import io.company.brewcraft.model.BaseIaasUserTenantMembership;
-import io.company.brewcraft.model.IaasBucketCorsConfiguration;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
@@ -203,7 +203,7 @@ public class AwsConfiguration {
     }
 
     @Bean
-    public IaasClient<String, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration, IaasBucketCorsConfiguration> iaasObjectStoreCorsConfigClient(AmazonS3 awsS3Client) {
+    public IaasClient<String, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration> iaasObjectStoreCorsConfigClient(AmazonS3 awsS3Client) {
         return new AwsCorsConfigClient(awsS3Client);
     }
 }

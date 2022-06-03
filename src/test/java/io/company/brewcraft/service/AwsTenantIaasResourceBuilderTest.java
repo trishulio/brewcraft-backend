@@ -14,7 +14,7 @@ import com.amazonaws.services.s3.model.CORSRule;
 import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
 
 import io.company.brewcraft.model.AwsDocumentTemplates;
-import io.company.brewcraft.model.IaasBucketCorsConfiguration;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
@@ -120,7 +120,7 @@ public class AwsTenantIaasResourceBuilderTest {
     public void testBuildBucketCrossOriginConfiguration_ReturnsCrossOriginConfig() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_OBJECT_STORE_NAME").when(mTemplates).getTenantVfsBucketName(anyString());
 
-        IaasBucketCorsConfiguration actual = builder.buildBucketCrossOriginConfiguration(new IaasIdpTenant("T1"));
+        IaasObjectStoreCorsConfiguration actual = builder.buildBucketCrossOriginConfiguration(new IaasIdpTenant("T1"));
 
         assertEquals("T1_OBJECT_STORE_NAME", actual.getId());
         assertEquals("T1_OBJECT_STORE_NAME", actual.getBucketName());

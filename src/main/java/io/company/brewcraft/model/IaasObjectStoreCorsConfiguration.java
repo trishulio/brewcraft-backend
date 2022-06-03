@@ -4,17 +4,17 @@ import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 
 import io.company.brewcraft.service.CrudEntity;
 
-public class IaasBucketCorsConfiguration extends BaseEntity implements CrudEntity<String> {
+public class IaasObjectStoreCorsConfiguration extends BaseEntity implements CrudEntity<String> {
 
     private String bucketName;
 
     private BucketCrossOriginConfiguration bucketCrossOriginConfiguration;
 
-    public IaasBucketCorsConfiguration() {
+    public IaasObjectStoreCorsConfiguration() {
         super();
     }
 
-    public IaasBucketCorsConfiguration(String bucketName,
+    public IaasObjectStoreCorsConfiguration(String bucketName,
             BucketCrossOriginConfiguration bucketCrossOriginConfiguration) {
         this();
         this.bucketName = bucketName;

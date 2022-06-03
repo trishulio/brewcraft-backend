@@ -12,7 +12,7 @@ import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
-import io.company.brewcraft.model.IaasBucketCorsConfiguration;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
@@ -100,7 +100,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         return attachment;
     }
 
-    public <T extends BaseIaasIdpTenant> IaasBucketCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
+    public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
         CORSRule corsRuleLocalHost = new CORSRule().withAllowedHeaders(List.of("*"))
                                                    .withAllowedMethods(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE))
                                                    .withAllowedOrigins(List.of("http://wwww.localhost:3000"));
@@ -113,6 +113,6 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
 
         String bucketName = this.getObjectStoreName(iaasIdpTenant);
 
-        return new IaasBucketCorsConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
+        return new IaasObjectStoreCorsConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
     }
 }

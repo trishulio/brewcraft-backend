@@ -10,12 +10,12 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 
-public class IaasBucketCorsConfigurationTest {
-    private IaasBucketCorsConfiguration config;
+public class IaasObjectStoreCorsConfigurationTest {
+    private IaasObjectStoreCorsConfiguration config;
 
     @BeforeEach
     public void init() {
-        config = new IaasBucketCorsConfiguration();
+        config = new IaasObjectStoreCorsConfiguration();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class IaasBucketCorsConfigurationTest {
 
     @Test
     public void testAllArgConstructor() {
-        config = new IaasBucketCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration());
+        config = new IaasObjectStoreCorsConfiguration("BUCKET_1", new BucketCrossOriginConfiguration());
 
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
