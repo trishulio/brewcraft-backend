@@ -58,7 +58,7 @@ public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucket
     @Override
     public boolean exists(String bucketName) {
         IaasBucketCrossOriginConfiguration result = get(bucketName);
-        boolean exists = result != null && result.getBucketCrossOriginConfiguration() != null ? true : false;
+        boolean exists = result != null && result.getBucketCrossOriginConfiguration() != null;
         return exists;
     }
 
