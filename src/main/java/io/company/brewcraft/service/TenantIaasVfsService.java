@@ -86,7 +86,6 @@ public class TenantIaasVfsService {
 
         List<IaasObjectStoreCorsConfiguration> crossOriginConfigs = tenants.stream()
                 .map(tenant -> this.resourceBuilder.buildBucketCrossOriginConfiguration(tenant))
-                .map(o -> o)
                 .toList();
 
         List<IaasObjectStoreCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.add(crossOriginConfigs);
