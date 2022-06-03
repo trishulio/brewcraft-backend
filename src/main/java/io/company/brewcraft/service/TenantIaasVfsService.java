@@ -85,7 +85,7 @@ public class TenantIaasVfsService {
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.add(attachmentAdditions);
 
         List<IaasObjectStoreCorsConfiguration> crossOriginConfigs = tenants.stream()
-                .map(tenant -> this.resourceBuilder.buildBucketCrossOriginConfiguration(tenant))
+                .map(this.resourceBuilder::buildBucketCrossOriginConfiguration)
                 .toList();
 
         List<IaasObjectStoreCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.add(crossOriginConfigs);
