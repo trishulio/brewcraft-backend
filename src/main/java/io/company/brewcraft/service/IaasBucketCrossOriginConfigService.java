@@ -59,7 +59,7 @@ public class IaasBucketCrossOriginConfigService extends BaseService implements C
         if (bucketCrossOriginConfigs.size() == 1) {
             bucketCrossOriginConfig = bucketCrossOriginConfigs.get(0);
         } else {
-            log.debug("Get bucket cross origin config: '{}' returned {}", bucketCrossOriginConfigs);
+            log.error("Unexpectedly returned more than 1 config for objectStore: {}: results {}", id, bucketCrossOriginConfigs);
         }
 
         return bucketCrossOriginConfig;
