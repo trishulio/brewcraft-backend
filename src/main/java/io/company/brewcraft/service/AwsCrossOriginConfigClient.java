@@ -39,6 +39,7 @@ public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucket
 
     @Override
     public <BE extends IaasBucketCrossOriginConfiguration> IaasBucketCrossOriginConfiguration add(BE entity) {
+        log.debug("Replacing existing CORS setting on the bucket: {} (if any) since only single CORS configuration can be applied.", entity.getBucketName());
         return this.put(entity);
     }
 
