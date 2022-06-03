@@ -12,7 +12,7 @@ import com.amazonaws.services.s3.model.SetBucketCrossOriginConfigurationRequest;
 
 import io.company.brewcraft.model.IaasBucketCrossOriginConfiguration;
 
-public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration>{
+public class AwsCrossOriginConfigClient implements IaasClient<String, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration, IaasBucketCrossOriginConfiguration> {
     private static final Logger log = LoggerFactory.getLogger(AwsCrossOriginConfigClient.class);
 
     private final AmazonS3 awsClient;
