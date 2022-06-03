@@ -33,7 +33,7 @@ public class AwsCorsConfigClient implements IaasClient<String, IaasObjectStoreCo
             throw e;
         }
 
-        IaasObjectStoreCorsConfiguration iaasObjectStoreCorsConfiguration = new IaasObjectStoreCorsConfiguration(bucketName, bucketCrossOriginConfiguration);
+        IaasObjectStoreCorsConfiguration iaasObjectStoreCorsConfiguration = bucketCrossOriginConfiguration == null ? null : new IaasObjectStoreCorsConfiguration(bucketName, bucketCrossOriginConfiguration);
         return iaasObjectStoreCorsConfiguration;
     }
 
@@ -58,9 +58,7 @@ public class AwsCorsConfigClient implements IaasClient<String, IaasObjectStoreCo
 
     @Override
     public boolean exists(String bucketName) {
-        IaasObjectStoreCorsConfiguration result = get(bucketName);
-        boolean exists = result != null && result.getBucketCrossOriginConfiguration() != null;
-        return exists;
+        return get(bucketName) != null;
     }
 
     @Override
