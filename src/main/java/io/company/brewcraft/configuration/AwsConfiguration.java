@@ -1,6 +1,7 @@
 package io.company.brewcraft.configuration;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -192,8 +193,8 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasResourceBuilder.class)
-    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
-        return new AwsTenantIaasResourceBuilder(templates);
+    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates, @Value("#{'${aws.s3.config.cors.allowed.headers}'.split(';')}") List<String> allowedHeaders, @Value("#{'${aws.s3.config.cors.allowed.methods}'.split(';')}") List<String> allowedMethods, @Value("#{'${aws.s3.config.cors.allowed.origins}'.split(';')}") List<String> allowedOrigins) {
+        return new AwsTenantIaasResourceBuilder(templates, allowedHeaders, allowedMethods, allowedOrigins);
     }
 
     @Bean

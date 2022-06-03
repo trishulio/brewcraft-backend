@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
-import com.amazonaws.services.s3.model.CORSRule;
 import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
 
 import io.company.brewcraft.model.AwsDocumentTemplates;
@@ -29,7 +27,7 @@ public class AwsTenantIaasResourceBuilderTest {
     @BeforeEach
     public void init() {
         mTemplates = mock(AwsDocumentTemplates.class);
-        this.builder = new AwsTenantIaasResourceBuilder(mTemplates);
+        this.builder = new AwsTenantIaasResourceBuilder(mTemplates, List.of("*"), List.of(AllowedMethods.PUT.toString(), AllowedMethods.POST.toString(), AllowedMethods.DELETE.toString()), List.of("http://wwww.localhost:3000", "https://apollo.brewcraft.io"));
     }
 
     @Test
@@ -125,12 +123,9 @@ public class AwsTenantIaasResourceBuilderTest {
         assertEquals("T1_OBJECT_STORE_NAME", actual.getId());
         assertEquals("T1_OBJECT_STORE_NAME", actual.getBucketName());
 
-        assertEquals(2, actual.getBucketCrossOriginConfiguration().getRules().size());
+        assertEquals(1, actual.getBucketCrossOriginConfiguration().getRules().size());
         assertEquals(List.of("*"), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedHeaders());
         assertEquals(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedMethods());
-        assertEquals(List.of("http://wwww.localhost:3000"), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedOrigins());
-        assertEquals(List.of("*"), actual.getBucketCrossOriginConfiguration().getRules().get(1).getAllowedHeaders());
-        assertEquals(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE), actual.getBucketCrossOriginConfiguration().getRules().get(1).getAllowedMethods());
-        assertEquals(List.of("https://apollo.brewcraft.io"), actual.getBucketCrossOriginConfiguration().getRules().get(1).getAllowedOrigins());
+        assertEquals(List.of("http://wwww.localhost:3000", "https://apollo.brewcraft.io"), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedOrigins());
     }
 }

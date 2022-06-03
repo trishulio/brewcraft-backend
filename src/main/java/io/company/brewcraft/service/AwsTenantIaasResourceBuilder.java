@@ -22,8 +22,15 @@ import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     private AwsDocumentTemplates templates;
 
-    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates) {
+    private List<String> allowedHeaders;
+    private List<String> allowedMethods;
+    private List<String> allowedOrigins;
+
+    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates, List<String> allowedHeaders, List<String> allowedMethods, List<String> allowedOrigins) {
         this.templates = templates;
+        this.allowedHeaders = allowedHeaders;
+        this.allowedMethods = allowedMethods;
+        this.allowedOrigins = allowedOrigins;
     }
 
     @Override
@@ -100,16 +107,13 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         return attachment;
     }
 
+    @Override
     public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
-        CORSRule corsRuleLocalHost = new CORSRule().withAllowedHeaders(List.of("*"))
-                                                   .withAllowedMethods(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE))
-                                                   .withAllowedOrigins(List.of("http://wwww.localhost:3000"));
+        CORSRule corsRule = new CORSRule().withAllowedHeaders(allowedHeaders)
+                                          .withAllowedMethods(allowedMethods.stream().map(method -> AllowedMethods.valueOf(method)).toList())
+                                          .withAllowedOrigins(allowedOrigins);
 
-        CORSRule corsRuleProduction = new CORSRule().withAllowedHeaders(List.of("*"))
-                                                    .withAllowedMethods(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE))
-                                                    .withAllowedOrigins(List.of("https://apollo.brewcraft.io"));
-
-        List<CORSRule> corsRules = List.of(corsRuleLocalHost, corsRuleProduction);
+        List<CORSRule> corsRules = List.of(corsRule);
 
         String bucketName = this.getObjectStoreName(iaasIdpTenant);
 
