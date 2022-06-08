@@ -1,11 +1,18 @@
 package io.company.brewcraft.service;
 
+import java.util.List;
+
+import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
+import com.amazonaws.services.s3.model.CORSRule;
+import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
+
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
@@ -15,8 +22,15 @@ import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     private AwsDocumentTemplates templates;
 
-    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates) {
+    private List<String> allowedHeaders;
+    private List<String> allowedMethods;
+    private List<String> allowedOrigins;
+
+    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates, List<String> allowedHeaders, List<String> allowedMethods, List<String> allowedOrigins) {
         this.templates = templates;
+        this.allowedHeaders = allowedHeaders;
+        this.allowedMethods = allowedMethods;
+        this.allowedOrigins = allowedOrigins;
     }
 
     @Override
@@ -91,5 +105,18 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         attachment.setIaasPolicy(policy);
 
         return attachment;
+    }
+
+    @Override
+    public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
+        CORSRule corsRule = new CORSRule().withAllowedHeaders(allowedHeaders)
+                                          .withAllowedMethods(allowedMethods.stream().map(method -> AllowedMethods.valueOf(method)).toList())
+                                          .withAllowedOrigins(allowedOrigins);
+
+        List<CORSRule> corsRules = List.of(corsRule);
+
+        String bucketName = this.getObjectStoreName(iaasIdpTenant);
+
+        return new IaasObjectStoreCorsConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
     }
 }

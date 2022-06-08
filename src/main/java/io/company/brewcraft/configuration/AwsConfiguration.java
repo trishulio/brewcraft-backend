@@ -1,6 +1,7 @@
 package io.company.brewcraft.configuration;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,6 +24,7 @@ import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.BaseIaasUser;
 import io.company.brewcraft.model.BaseIaasUserTenantMembership;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
@@ -49,6 +51,7 @@ import io.company.brewcraft.security.store.SecretsManager;
 import io.company.brewcraft.service.AwsArnMapper;
 import io.company.brewcraft.service.AwsCognitoIdentityClient;
 import io.company.brewcraft.service.AwsCognitoIdentitySdkWrapper;
+import io.company.brewcraft.service.AwsCorsConfigClient;
 import io.company.brewcraft.service.AwsIaasObjectStoreMapper;
 import io.company.brewcraft.service.AwsIaasPolicyMapper;
 import io.company.brewcraft.service.AwsIaasRoleMapper;
@@ -190,8 +193,8 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasResourceBuilder.class)
-    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates) {
-        return new AwsTenantIaasResourceBuilder(templates);
+    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates, @Value("#{'${aws.s3.config.cors.allowed.headers}'.split(';')}") List<String> allowedHeaders, @Value("#{'${aws.s3.config.cors.allowed.methods}'.split(';')}") List<String> allowedMethods, @Value("#{'${aws.s3.config.cors.allowed.origins}'.split(';')}") List<String> allowedOrigins) {
+        return new AwsTenantIaasResourceBuilder(templates, allowedHeaders, allowedMethods, allowedOrigins);
     }
 
     @Bean
@@ -200,4 +203,8 @@ public class AwsConfiguration {
         return new TenantContextAwsBucketNameProvider(awsTemplates, contextHolder, appBucketName);
     }
 
+    @Bean
+    public IaasClient<String, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration> iaasObjectStoreCorsConfigClient(AmazonS3 awsS3Client) {
+        return new AwsCorsConfigClient(awsS3Client);
+    }
 }

@@ -4,10 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
+
 import io.company.brewcraft.model.AwsDocumentTemplates;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
@@ -22,7 +27,7 @@ public class AwsTenantIaasResourceBuilderTest {
     @BeforeEach
     public void init() {
         mTemplates = mock(AwsDocumentTemplates.class);
-        this.builder = new AwsTenantIaasResourceBuilder(mTemplates);
+        this.builder = new AwsTenantIaasResourceBuilder(mTemplates, List.of("*"), List.of(AllowedMethods.PUT.toString(), AllowedMethods.POST.toString(), AllowedMethods.DELETE.toString()), List.of("http://wwww.localhost:3000", "https://apollo.brewcraft.io"));
     }
 
     @Test
@@ -107,5 +112,20 @@ public class AwsTenantIaasResourceBuilderTest {
         IaasRolePolicyAttachment expected = new IaasRolePolicyAttachment(new IaasRole("T1_ROLE"), new IaasPolicy("T1_POLICY"));
 
         assertEquals(expected, attachment);
+    }
+
+    @Test
+    public void testBuildBucketCrossOriginConfiguration_ReturnsCrossOriginConfig() {
+        doAnswer(inv -> inv.getArgument(0, String.class) + "_OBJECT_STORE_NAME").when(mTemplates).getTenantVfsBucketName(anyString());
+
+        IaasObjectStoreCorsConfiguration actual = builder.buildBucketCrossOriginConfiguration(new IaasIdpTenant("T1"));
+
+        assertEquals("T1_OBJECT_STORE_NAME", actual.getId());
+        assertEquals("T1_OBJECT_STORE_NAME", actual.getBucketName());
+
+        assertEquals(1, actual.getBucketCrossOriginConfiguration().getRules().size());
+        assertEquals(List.of("*"), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedHeaders());
+        assertEquals(List.of(AllowedMethods.PUT, AllowedMethods.POST, AllowedMethods.DELETE), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedMethods());
+        assertEquals(List.of("http://wwww.localhost:3000", "https://apollo.brewcraft.io"), actual.getBucketCrossOriginConfiguration().getRules().get(0).getAllowedOrigins());
     }
 }
