@@ -29,6 +29,7 @@ public class TenantIaasVfsServiceTest {
     private IaasObjectStoreService mObjectStoreService;
     private IaasRolePolicyAttachmentService mAttachmentService;
     private IaasObjectStoreCorsConfigService mIaasBucketCrossOriginConfigService;
+    private IaasPublicAccessBlockService mIaasPublicAccessBlockService;
     private TenantIaasResourceBuilder mBuilder;
 
     @BeforeEach
@@ -38,9 +39,10 @@ public class TenantIaasVfsServiceTest {
         mObjectStoreService = mock(IaasObjectStoreService.class);
         mAttachmentService = mock(IaasRolePolicyAttachmentService.class);
         mIaasBucketCrossOriginConfigService = mock(IaasObjectStoreCorsConfigService.class);
+        mIaasPublicAccessBlockService = mock(IaasPublicAccessBlockService.class);
         mBuilder = mock(TenantIaasResourceBuilder.class);
 
-        this.service = new TenantIaasVfsService(mResMapper, mPolicyService, mObjectStoreService, mAttachmentService, mIaasBucketCrossOriginConfigService, mBuilder);
+        this.service = new TenantIaasVfsService(mResMapper, mPolicyService, mObjectStoreService, mAttachmentService, mIaasBucketCrossOriginConfigService, mIaasPublicAccessBlockService, mBuilder);
 
         doAnswer(inv -> new IaasRolePolicyAttachment(inv.getArgument(0, IaasRole.class), inv.getArgument(1, IaasPolicy.class))).when(mBuilder).buildAttachment(any(IaasRole.class), any(IaasPolicy.class));
         doAnswer(inv -> {
@@ -90,6 +92,7 @@ public class TenantIaasVfsServiceTest {
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mObjectStoreService).add(anyList());
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mAttachmentService).add(anyList());
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasBucketCrossOriginConfigService).add(anyList());
+        doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasPublicAccessBlockService).add(anyList());
 
         List<TenantIaasVfsResources> expected = List.of(
             new TenantIaasVfsResources(new IaasObjectStore("OBJECT_STORE_1"), new IaasPolicy("VFS_POLICY_1")),
@@ -115,6 +118,7 @@ public class TenantIaasVfsServiceTest {
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mObjectStoreService).put(anyList());
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mAttachmentService).put(anyList());
         doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasBucketCrossOriginConfigService).put(anyList());
+        doAnswer(inv -> inv.getArgument(0, List.class)).when(mIaasPublicAccessBlockService).put(anyList());
 
         List<TenantIaasVfsResources> expected = List.of(
             new TenantIaasVfsResources(new IaasObjectStore("OBJECT_STORE_1"), new IaasPolicy("VFS_POLICY_1")),
@@ -137,9 +141,10 @@ public class TenantIaasVfsServiceTest {
 
         this.service.delete(iaasIdpTenant);
 
-        InOrder order = inOrder(mAttachmentService, mIaasBucketCrossOriginConfigService, mPolicyService, mObjectStoreService);
+        InOrder order = inOrder(mAttachmentService, mIaasBucketCrossOriginConfigService, mIaasPublicAccessBlockService, mPolicyService, mObjectStoreService);
         order.verify(mAttachmentService, times(1)).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")));
         order.verify(mIaasBucketCrossOriginConfigService, times(1)).delete(Set.of("OBJECT_STORE_1", "OBJECT_STORE_2"));
+        order.verify(mIaasPublicAccessBlockService, times(1)).delete(Set.of("OBJECT_STORE_1", "OBJECT_STORE_2"));
         order.verify(mPolicyService, times(1)).delete(Set.of("POLICY_ID_1", "POLICY_ID_2"));
         order.verify(mObjectStoreService, times(1)).delete(Set.of("OBJECT_STORE_1", "OBJECT_STORE_2"));
     }

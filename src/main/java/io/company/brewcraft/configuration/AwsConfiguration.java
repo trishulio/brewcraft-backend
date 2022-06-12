@@ -29,6 +29,7 @@ import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasPublicAccessBlock;
 import io.company.brewcraft.model.IaasRepositoryProvider;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
@@ -60,6 +61,7 @@ import io.company.brewcraft.service.AwsIamRoleClient;
 import io.company.brewcraft.service.AwsIamRolePolicyAttachmentClient;
 import io.company.brewcraft.service.AwsIdentityCredentialsMapper;
 import io.company.brewcraft.service.AwsObjectStoreClient;
+import io.company.brewcraft.service.AwsPublicAccessBlockClient;
 import io.company.brewcraft.service.AwsResourceCredentialsFetcher;
 import io.company.brewcraft.service.AwsTenantIaasResourceBuilder;
 import io.company.brewcraft.service.CachedAwsCognitoIdentityClient;
@@ -193,8 +195,8 @@ public class AwsConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasResourceBuilder.class)
-    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates, @Value("#{'${aws.s3.config.cors.allowed.headers}'.split(';')}") List<String> allowedHeaders, @Value("#{'${aws.s3.config.cors.allowed.methods}'.split(';')}") List<String> allowedMethods, @Value("#{'${aws.s3.config.cors.allowed.origins}'.split(';')}") List<String> allowedOrigins) {
-        return new AwsTenantIaasResourceBuilder(templates, allowedHeaders, allowedMethods, allowedOrigins);
+    public TenantIaasResourceBuilder resourceBuilder(AwsDocumentTemplates templates, @Value("#{'${aws.s3.config.cors.allowed.headers}'.split(';')}") List<String> allowedHeaders, @Value("#{'${aws.s3.config.cors.allowed.methods}'.split(';')}") List<String> allowedMethods, @Value("#{'${aws.s3.config.cors.allowed.origins}'.split(';')}") List<String> allowedOrigins, @Value("${aws.s3.config.block.public.acls}") boolean blockPublicAcls, @Value("${aws.s3.config.ignore.public.acls}") boolean ignorePublicAcls, @Value("${aws.s3.config.block.public.policy}") boolean blockPublicPolicy, @Value("${aws.s3.config.restrict.public.buckets}") boolean restrictPublicBuckets) {
+        return new AwsTenantIaasResourceBuilder(templates, allowedHeaders, allowedMethods, allowedOrigins, blockPublicAcls, ignorePublicAcls, blockPublicPolicy, restrictPublicBuckets);
     }
 
     @Bean
@@ -206,5 +208,10 @@ public class AwsConfiguration {
     @Bean
     public IaasClient<String, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration> iaasObjectStoreCorsConfigClient(AmazonS3 awsS3Client) {
         return new AwsCorsConfigClient(awsS3Client);
+    }
+
+    @Bean
+    public IaasClient<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> iaasPublicAccessBlockClient(AmazonS3 awsS3Client) {
+        return new AwsPublicAccessBlockClient(awsS3Client);
     }
 }

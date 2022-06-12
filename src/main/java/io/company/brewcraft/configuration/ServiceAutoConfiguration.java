@@ -52,6 +52,7 @@ import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasObjectStoreFile;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasPublicAccessBlock;
 import io.company.brewcraft.model.IaasRepositoryProvider;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
@@ -168,6 +169,7 @@ import io.company.brewcraft.service.IaasIdpTenantService;
 import io.company.brewcraft.service.IaasObjectStoreFileService;
 import io.company.brewcraft.service.IaasObjectStoreService;
 import io.company.brewcraft.service.IaasPolicyService;
+import io.company.brewcraft.service.IaasPublicAccessBlockService;
 import io.company.brewcraft.service.IaasRepository;
 import io.company.brewcraft.service.IaasRepositoryProviderProxy;
 import io.company.brewcraft.service.IaasRolePolicyAttachmentService;
@@ -324,8 +326,8 @@ public class ServiceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantIaasVfsService.class)
-    public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, IaasObjectStoreCorsConfigService iaasObjectStoreCorsConfigService, TenantIaasResourceBuilder resourceBuilder) {
-        return new TenantIaasVfsService(TenantIaasVfsResourceMapper.INSTANCE, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, iaasObjectStoreCorsConfigService, resourceBuilder);
+    public TenantIaasVfsService iaasVfsService(IaasPolicyService iaasPolicyService, IaasObjectStoreService iaasObjectStoreService, IaasRolePolicyAttachmentService iaasRolePolicyAttachmentService, IaasObjectStoreCorsConfigService iaasObjectStoreCorsConfigService, IaasPublicAccessBlockService iaasPublicAccessBlockService, TenantIaasResourceBuilder resourceBuilder) {
+        return new TenantIaasVfsService(TenantIaasVfsResourceMapper.INSTANCE, iaasPolicyService, iaasObjectStoreService, iaasRolePolicyAttachmentService, iaasObjectStoreCorsConfigService, iaasPublicAccessBlockService, resourceBuilder);
     }
 
     @Bean
@@ -393,6 +395,15 @@ public class ServiceAutoConfiguration {
         IaasRepository<String, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration, IaasObjectStoreCorsConfiguration> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
 
         return new IaasObjectStoreCorsConfigService(updateService, iaasRepo);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(IaasPublicAccessBlockService.class)
+    public IaasPublicAccessBlockService iaasPublicAccessBlockService(UtilityProvider utilProvider, BlockingAsyncExecutor executor, IaasClient<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> iaasClient) {
+        UpdateService<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> updateService = new SimpleUpdateService<>(utilProvider, IaasPublicAccessBlock.class, IaasPublicAccessBlock.class, IaasPublicAccessBlock.class, Set.of());
+        IaasRepository<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> iaasRepo = new BulkIaasClient<>(executor, iaasClient);
+
+        return new IaasPublicAccessBlockService(updateService, iaasRepo);
     }
 
     @Bean

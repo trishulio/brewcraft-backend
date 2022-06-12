@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
+
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
@@ -14,6 +16,7 @@ import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasPublicAccessBlock;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 import io.company.brewcraft.model.TenantIaasVfsDeleteResult;
@@ -29,15 +32,17 @@ public class TenantIaasVfsService {
     private IaasRolePolicyAttachmentService rolePolicyAttachmentService;
     private IaasObjectStoreService objectStoreService;
     private IaasObjectStoreCorsConfigService bucketCrossOriginConfigService;
+    private IaasPublicAccessBlockService publicAccessBlockService;
 
     private TenantIaasResourceBuilder resourceBuilder;
 
-    public TenantIaasVfsService(TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, IaasObjectStoreCorsConfigService bucketCrossOriginConfigService, TenantIaasResourceBuilder resourceBuilder) {
+    public TenantIaasVfsService(TenantIaasVfsResourceMapper mapper, IaasPolicyService policyService, IaasObjectStoreService objectStoreService, IaasRolePolicyAttachmentService rolePolicyAttachmentService, IaasObjectStoreCorsConfigService bucketCrossOriginConfigService, IaasPublicAccessBlockService publicAccessBlockService, TenantIaasResourceBuilder resourceBuilder) {
         this.mapper = mapper;
         this.policyService = policyService;
         this.objectStoreService = objectStoreService;
         this.rolePolicyAttachmentService = rolePolicyAttachmentService;
         this.bucketCrossOriginConfigService = bucketCrossOriginConfigService;
+        this.publicAccessBlockService = publicAccessBlockService;
         this.resourceBuilder = resourceBuilder;
     }
 
@@ -85,10 +90,16 @@ public class TenantIaasVfsService {
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.add(attachmentAdditions);
 
         List<IaasObjectStoreCorsConfiguration> crossOriginConfigs = tenants.stream()
-                .map(this.resourceBuilder::buildBucketCrossOriginConfiguration)
+                .map(this.resourceBuilder::buildObjectStoreCorsConfiguration)
                 .toList();
 
         List<IaasObjectStoreCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.add(crossOriginConfigs);
+
+        List<IaasPublicAccessBlock> publicAccessBlockUpdates = tenants.stream()
+                .map(this.resourceBuilder::buildPublicAccessBlock)
+                .toList();
+
+        List<IaasPublicAccessBlock> publicAccessBlocks = this.publicAccessBlockService.add(publicAccessBlockUpdates);
 
         return this.mapper.fromComponents(objectStores, policies);
     }
@@ -118,11 +129,17 @@ public class TenantIaasVfsService {
         List<IaasRolePolicyAttachment> attachments = this.rolePolicyAttachmentService.put(attachmentUpdates);
 
         List<IaasObjectStoreCorsConfiguration> crossOriginConfigs = tenants.stream()
-                .map(tenant -> this.resourceBuilder.buildBucketCrossOriginConfiguration(tenant))
+                .map(tenant -> this.resourceBuilder.buildObjectStoreCorsConfiguration(tenant))
                 .map(o -> o)
                 .toList();
 
         List<IaasObjectStoreCorsConfiguration> bucketCrossOriginConfigs = this.bucketCrossOriginConfigService.put(crossOriginConfigs);
+
+        List<IaasPublicAccessBlock> publicAccessBlockUpdates = tenants.stream()
+                .map(this.resourceBuilder::buildPublicAccessBlock)
+                .toList();
+
+        List<IaasPublicAccessBlock> publicAccessBlocks = this.publicAccessBlockService.put(publicAccessBlockUpdates);
 
         return this.mapper.fromComponents(objectStores, policies);
     }
@@ -147,6 +164,7 @@ public class TenantIaasVfsService {
 
         this.rolePolicyAttachmentService.delete(attachmentIds);
         this.bucketCrossOriginConfigService.delete(objectStoreIds);
+        this.publicAccessBlockService.delete(objectStoreIds);
         long policyCount = this.policyService.delete(policyIds);
         long objectStoreCount = this.objectStoreService.delete(objectStoreIds);
 
