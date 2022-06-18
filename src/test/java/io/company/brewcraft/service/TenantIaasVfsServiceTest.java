@@ -29,7 +29,7 @@ public class TenantIaasVfsServiceTest {
     private IaasObjectStoreService mObjectStoreService;
     private IaasRolePolicyAttachmentService mAttachmentService;
     private IaasObjectStoreCorsConfigService mIaasBucketCrossOriginConfigService;
-    private IaasPublicAccessBlockService mIaasPublicAccessBlockService;
+    private IaasObjectStoreAccessConfigService mIaasPublicAccessBlockService;
     private TenantIaasResourceBuilder mBuilder;
 
     @BeforeEach
@@ -39,7 +39,7 @@ public class TenantIaasVfsServiceTest {
         mObjectStoreService = mock(IaasObjectStoreService.class);
         mAttachmentService = mock(IaasRolePolicyAttachmentService.class);
         mIaasBucketCrossOriginConfigService = mock(IaasObjectStoreCorsConfigService.class);
-        mIaasPublicAccessBlockService = mock(IaasPublicAccessBlockService.class);
+        mIaasPublicAccessBlockService = mock(IaasObjectStoreAccessConfigService.class);
         mBuilder = mock(TenantIaasResourceBuilder.class);
 
         this.service = new TenantIaasVfsService(mResMapper, mPolicyService, mObjectStoreService, mAttachmentService, mIaasBucketCrossOriginConfigService, mIaasPublicAccessBlockService, mBuilder);

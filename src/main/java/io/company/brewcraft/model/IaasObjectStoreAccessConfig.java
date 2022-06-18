@@ -4,44 +4,44 @@ import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
 
 import io.company.brewcraft.service.CrudEntity;
 
-public class IaasPublicAccessBlock extends BaseEntity implements CrudEntity<String> {
+public class IaasObjectStoreAccessConfig extends BaseEntity implements CrudEntity<String> {
 
-    private String bucketName;
+    private String objectStoreName;
 
     private PublicAccessBlockConfiguration publicAccessBlockConfig;
 
-    public IaasPublicAccessBlock() {
+    public IaasObjectStoreAccessConfig() {
         super();
     }
 
-    public IaasPublicAccessBlock(String id) {
+    public IaasObjectStoreAccessConfig(String id) {
         this();
         setId(id);
     }
 
-    public IaasPublicAccessBlock(String bucketName,
+    public IaasObjectStoreAccessConfig(String objectStoreName,
             PublicAccessBlockConfiguration publicAccessBlockConfig) {
         this();
-        this.bucketName = bucketName;
+        this.objectStoreName = objectStoreName;
         this.publicAccessBlockConfig = publicAccessBlockConfig;
     }
 
     @Override
     public void setId(String id) {
-        setBucketName(id);
+        setObjectStoreName(id);
     }
 
     @Override
     public String getId() {
-        return getBucketName();
+        return getObjectStoreName();
     }
 
-    public String getBucketName() {
-        return bucketName;
+    public String getObjectStoreName() {
+        return objectStoreName;
     }
 
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
+    public void setObjectStoreName(String objectStoreName) {
+        this.objectStoreName = objectStoreName;
     }
 
     public PublicAccessBlockConfiguration getPublicAccessBlockConfig() {

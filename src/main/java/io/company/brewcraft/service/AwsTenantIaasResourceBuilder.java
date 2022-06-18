@@ -16,7 +16,7 @@ import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
-import io.company.brewcraft.model.IaasPublicAccessBlock;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
@@ -131,13 +131,13 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> IaasPublicAccessBlock buildPublicAccessBlock(T iaasIdpTenant) {
+    public <T extends BaseIaasIdpTenant> IaasObjectStoreAccessConfig buildPublicAccessBlock(T iaasIdpTenant) {
         PublicAccessBlockConfiguration publicAccessBlockConfiguration = new PublicAccessBlockConfiguration().withBlockPublicAcls(blockPublicAcls)
                                                                                                             .withBlockPublicPolicy(blockPublicPolicy)
                                                                                                             .withIgnorePublicAcls(ignorePublicAcls)
                                                                                                             .withRestrictPublicBuckets(restrictPublicBuckets);
 
         String bucketName = this.getObjectStoreName(iaasIdpTenant);
-        return new IaasPublicAccessBlock(bucketName, publicAccessBlockConfiguration);
+        return new IaasObjectStoreAccessConfig(bucketName, publicAccessBlockConfiguration);
     }
 }

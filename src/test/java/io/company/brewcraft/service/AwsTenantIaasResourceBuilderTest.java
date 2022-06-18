@@ -16,7 +16,7 @@ import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
-import io.company.brewcraft.model.IaasPublicAccessBlock;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
@@ -134,10 +134,10 @@ public class AwsTenantIaasResourceBuilderTest {
     public void testBuildPublicAccessBlock_ReturnsPublicAccessBlock() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_OBJECT_STORE_NAME").when(mTemplates).getTenantVfsBucketName(anyString());
 
-        IaasPublicAccessBlock actual = builder.buildPublicAccessBlock(new IaasIdpTenant("T1"));
+        IaasObjectStoreAccessConfig actual = builder.buildPublicAccessBlock(new IaasIdpTenant("T1"));
 
         assertEquals("T1_OBJECT_STORE_NAME", actual.getId());
-        assertEquals("T1_OBJECT_STORE_NAME", actual.getBucketName());
+        assertEquals("T1_OBJECT_STORE_NAME", actual.getObjectStoreName());
         assertEquals(true, actual.getPublicAccessBlockConfig().getBlockPublicAcls());
         assertEquals(true, actual.getPublicAccessBlockConfig().getBlockPublicPolicy());
         assertEquals(true, actual.getPublicAccessBlockConfig().getIgnorePublicAcls());

@@ -15,22 +15,22 @@ import org.junit.jupiter.api.Test;
 
 import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
 
-import io.company.brewcraft.model.IaasPublicAccessBlock;
-import io.company.brewcraft.model.IaasPublicAccessBlockAccessor;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfigAccessor;
 
-public class IaasPublicAccessBlockServiceTest {
-    private IaasPublicAccessBlockService service;
+public class IaasObjectStoreAccessConfigServiceTest {
+    private IaasObjectStoreAccessConfigService service;
 
-    private UpdateService<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> mUpdateService;
+    private UpdateService<String, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig> mUpdateService;
 
-    private IaasRepository<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> mIaasRepo;
+    private IaasRepository<String, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig> mIaasRepo;
 
     @BeforeEach
     public void init() {
-        mUpdateService = TestBeans.updateService(IaasPublicAccessBlock.class, IaasPublicAccessBlock.class, IaasPublicAccessBlock.class, Set.of("createdAt"));
+        mUpdateService = TestBeans.updateService(IaasObjectStoreAccessConfig.class, IaasObjectStoreAccessConfig.class, IaasObjectStoreAccessConfig.class, Set.of("createdAt"));
         mIaasRepo = mock(IaasRepository.class);
 
-        service = new IaasPublicAccessBlockService(mUpdateService, mIaasRepo);
+        service = new IaasObjectStoreAccessConfigService(mUpdateService, mIaasRepo);
     }
 
     @Test
@@ -64,87 +64,87 @@ public class IaasPublicAccessBlockServiceTest {
     }
 
     @Test
-    public void testGet_ReturnsPublicAccessBlockFromRepo() {
-        IaasPublicAccessBlock expected = new IaasPublicAccessBlock();
+    public void testGet_ReturnsObjectStoreConfigFromRepo() {
+        IaasObjectStoreAccessConfig expected = new IaasObjectStoreAccessConfig();
         doAnswer(inv -> {
             return List.of(expected);
         }).when(mIaasRepo).get(anySet());
 
-        IaasPublicAccessBlock actual = service.get("BUCKET_1");
+        IaasObjectStoreAccessConfig actual = service.get("BUCKET_1");
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testGet_ReturnsNull_WhenNoPublicAccessBlockIsFound() {
+    public void testGet_ReturnsNull_WhenNoObjectStoreConfigIsFound() {
         doReturn(new ArrayList<>()).when(mIaasRepo).get(anySet());
 
-        IaasPublicAccessBlock actual = service.get("BUCKET_1");
+        IaasObjectStoreAccessConfig actual = service.get("BUCKET_1");
 
         assertNull(actual);
     }
 
     @Test
-    public void testGetAll_ReturnsPublicAccessBlockFromRepo() {
-        List<IaasPublicAccessBlock> expected = List.of(new IaasPublicAccessBlock());
+    public void testGetAll_ReturnsObjectStoreConfigFromRepo() {
+        List<IaasObjectStoreAccessConfig> expected = List.of(new IaasObjectStoreAccessConfig());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasPublicAccessBlock> actual = service.getAll(Set.of("BUCKET_1"));
+        List<IaasObjectStoreAccessConfig> actual = service.getAll(Set.of("BUCKET_1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testGetByIds_ReturnPublicAccessBlocksFromRepo() {
-        List<IaasPublicAccessBlock> expected = List.of(new IaasPublicAccessBlock());
+    public void testGetByIds_ReturnObjectStoreConfigsFromRepo() {
+        List<IaasObjectStoreAccessConfig> expected = List.of(new IaasObjectStoreAccessConfig());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasPublicAccessBlock> actual = service.getByIds(Set.of(() -> "BUCKET_1"));
+        List<IaasObjectStoreAccessConfig> actual = service.getByIds(Set.of(() -> "BUCKET_1"));
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testGetByAccessorIds_ReturnsPublicAccessBlockFromRepo() {
-        List<IaasPublicAccessBlock> expected = List.of(new IaasPublicAccessBlock());
+    public void testGetByAccessorIds_ReturnsObjectStoreConfigFromRepo() {
+        List<IaasObjectStoreAccessConfig> expected = List.of(new IaasObjectStoreAccessConfig());
         doAnswer(inv -> {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        IaasPublicAccessBlockAccessor accessor = new IaasPublicAccessBlockAccessor() {
+        IaasObjectStoreAccessConfigAccessor accessor = new IaasObjectStoreAccessConfigAccessor() {
             @Override
-            public void setIaasPublicAccessBlock(IaasPublicAccessBlock attachment) {
+            public void setIaasObjectStoreAccessConfig(IaasObjectStoreAccessConfig attachment) {
             }
             @Override
-            public IaasPublicAccessBlock getIaasPublicAccessBlock() {
-                return new IaasPublicAccessBlock();
+            public IaasObjectStoreAccessConfig getIaasObjectStoreAccessConfig() {
+                return new IaasObjectStoreAccessConfig();
             }
         };
 
-        List<IaasPublicAccessBlock> actual = service.getByAccessorIds(Set.of(accessor));
+        List<IaasObjectStoreAccessConfig> actual = service.getByAccessorIds(Set.of(accessor));
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void testAdd_ReturnsAddedRepoEntities_AfterSavingAddEntitiesFromUpdateService() {
-        List<IaasPublicAccessBlock> expected = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> expected = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).add(anyList());
 
-        List<IaasPublicAccessBlock> additions = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> additions = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
-        List<IaasPublicAccessBlock> configs = service.add(additions);
+        List<IaasObjectStoreAccessConfig> configs = service.add(additions);
 
         assertEquals(expected, configs);
         verify(mIaasRepo, times(1)).add(additions);
@@ -158,19 +158,19 @@ public class IaasPublicAccessBlockServiceTest {
 
     @Test
     public void testPut_ReturnsPutRepoEntities_AfterSavingPutEntitiesFromUpdateService() {
-        List<IaasPublicAccessBlock> expected = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> expected = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).put(anyList());
 
-        List<IaasPublicAccessBlock> updates = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> updates = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
-        List<IaasPublicAccessBlock> configs = service.put(updates);
+        List<IaasObjectStoreAccessConfig> configs = service.put(updates);
 
         assertEquals(expected, configs);
         verify(mIaasRepo, times(1)).put(updates);
@@ -184,9 +184,9 @@ public class IaasPublicAccessBlockServiceTest {
 
     @Test
     public void testPatch_ReturnsPatchRepoEntities_AfterSavingPatchEntitiesFromUpdateService() {
-        List<IaasPublicAccessBlock> expected = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> expected = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
         doAnswer(inv -> expected).when(mIaasRepo).put(anyList());
@@ -195,12 +195,12 @@ public class IaasPublicAccessBlockServiceTest {
             return expected;
         }).when(mIaasRepo).get(anySet());
 
-        List<IaasPublicAccessBlock> updates = List.of(
-            new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()),
-            new IaasPublicAccessBlock("BUCKET_2", new PublicAccessBlockConfiguration())
+        List<IaasObjectStoreAccessConfig> updates = List.of(
+            new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()),
+            new IaasObjectStoreAccessConfig("BUCKET_2", new PublicAccessBlockConfiguration())
         );
 
-        List<IaasPublicAccessBlock> attachments = service.patch(updates);
+        List<IaasObjectStoreAccessConfig> attachments = service.patch(updates);
 
         assertEquals(expected, attachments);
         verify(mIaasRepo, times(1)).put(updates);

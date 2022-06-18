@@ -18,7 +18,7 @@ import com.amazonaws.services.s3.model.GetPublicAccessBlockResult;
 import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
 import com.amazonaws.services.s3.model.SetPublicAccessBlockRequest;
 
-import io.company.brewcraft.model.IaasPublicAccessBlock;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 
 public class AwsPublicAccessBlockClientTest {
     private AwsPublicAccessBlockClient client;
@@ -36,9 +36,9 @@ public class AwsPublicAccessBlockClientTest {
     public void testGet_ReturnsIaasPublicAccessBlock() {
         doReturn(new GetPublicAccessBlockResult().withPublicAccessBlockConfiguration(new PublicAccessBlockConfiguration())).when(mAwsClient).getPublicAccessBlock(any(GetPublicAccessBlockRequest.class));
 
-        IaasPublicAccessBlock config = client.get("BUCKET_1");
+        IaasObjectStoreAccessConfig config = client.get("BUCKET_1");
 
-        assertEquals("BUCKET_1", config.getBucketName());
+        assertEquals("BUCKET_1", config.getObjectStoreName());
         assertTrue(new ReflectionEquals(new PublicAccessBlockConfiguration()).matches(config.getPublicAccessBlockConfig()));
     }
 
@@ -52,11 +52,11 @@ public class AwsPublicAccessBlockClientTest {
     @Test
     public void testAdd_ReturnsAddedPublicAccessBlock() {
         client = spy(client);
-        doReturn(new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
 
-        IaasPublicAccessBlock config = client.add(new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()));
+        IaasObjectStoreAccessConfig config = client.add(new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()));
 
-        assertEquals("BUCKET_1", config.getBucketName());
+        assertEquals("BUCKET_1", config.getObjectStoreName());
         assertTrue(new ReflectionEquals(new PublicAccessBlockConfiguration()).matches(config.getPublicAccessBlockConfig()));
         ArgumentCaptor<SetPublicAccessBlockRequest> argument = ArgumentCaptor.forClass(SetPublicAccessBlockRequest.class);
         verify(mAwsClient).setPublicAccessBlock(argument.capture());
@@ -67,11 +67,11 @@ public class AwsPublicAccessBlockClientTest {
     @Test
     public void testPut_ReturnsEntity_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
 
-        IaasPublicAccessBlock config = client.put(new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration()));
+        IaasObjectStoreAccessConfig config = client.put(new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration()));
 
-        assertEquals("BUCKET_1", config.getBucketName());
+        assertEquals("BUCKET_1", config.getObjectStoreName());
         assertTrue(new ReflectionEquals(new PublicAccessBlockConfiguration()).matches(config.getPublicAccessBlockConfig()));
     }
 
@@ -86,7 +86,7 @@ public class AwsPublicAccessBlockClientTest {
     @Test
     public void testExists_ReturnsTrue_WhenGetReturnsEntity() {
         client = spy(client);
-        doReturn(new IaasPublicAccessBlock("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
+        doReturn(new IaasObjectStoreAccessConfig("BUCKET_1", new PublicAccessBlockConfiguration())).when(client).get("BUCKET_1");
 
         assertTrue(client.exists("BUCKET_1"));
     }

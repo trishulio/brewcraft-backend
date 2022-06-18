@@ -10,9 +10,9 @@ import com.amazonaws.services.s3.model.GetPublicAccessBlockRequest;
 import com.amazonaws.services.s3.model.GetPublicAccessBlockResult;
 import com.amazonaws.services.s3.model.SetPublicAccessBlockRequest;
 
-import io.company.brewcraft.model.IaasPublicAccessBlock;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 
-public class AwsPublicAccessBlockClient implements IaasClient<String, IaasPublicAccessBlock, IaasPublicAccessBlock, IaasPublicAccessBlock> {
+public class AwsPublicAccessBlockClient implements IaasClient<String, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig, IaasObjectStoreAccessConfig> {
     private static final Logger log = LoggerFactory.getLogger(AwsPublicAccessBlockClient.class);
 
     private final AmazonS3 awsClient;
@@ -22,7 +22,7 @@ public class AwsPublicAccessBlockClient implements IaasClient<String, IaasPublic
     }
 
     @Override
-    public IaasPublicAccessBlock get(String bucketName) {
+    public IaasObjectStoreAccessConfig get(String bucketName) {
         final GetPublicAccessBlockRequest request = new GetPublicAccessBlockRequest().withBucketName(bucketName);
 
         GetPublicAccessBlockResult publicAccessBlockResult = null;
@@ -33,28 +33,28 @@ public class AwsPublicAccessBlockClient implements IaasClient<String, IaasPublic
             throw e;
         }
 
-        IaasPublicAccessBlock iaasPublicAccessBlock = publicAccessBlockResult == null ? null : new IaasPublicAccessBlock(bucketName, publicAccessBlockResult.getPublicAccessBlockConfiguration());
-        return iaasPublicAccessBlock;
+        IaasObjectStoreAccessConfig iaasObjectStoreConfig = publicAccessBlockResult == null ? null : new IaasObjectStoreAccessConfig(bucketName, publicAccessBlockResult.getPublicAccessBlockConfiguration());
+        return iaasObjectStoreConfig;
     }
 
     @Override
-    public <BE extends IaasPublicAccessBlock> IaasPublicAccessBlock add(BE entity) {
-        log.debug("Replacing existing public access block configuration on the bucket: {} (if any) since only single public access block configuration can be applied.", entity.getBucketName());
+    public <BE extends IaasObjectStoreAccessConfig> IaasObjectStoreAccessConfig add(BE entity) {
+        log.debug("Replacing existing public access block configuration on the bucket: {} (if any) since only single public access block configuration can be applied.", entity.getObjectStoreName());
         return this.put(entity);
     }
 
     @Override
-    public <UE extends IaasPublicAccessBlock> IaasPublicAccessBlock put(UE entity) {
-        final SetPublicAccessBlockRequest request = new SetPublicAccessBlockRequest().withBucketName(entity.getBucketName())
+    public <UE extends IaasObjectStoreAccessConfig> IaasObjectStoreAccessConfig put(UE entity) {
+        final SetPublicAccessBlockRequest request = new SetPublicAccessBlockRequest().withBucketName(entity.getObjectStoreName())
                                                                                      .withPublicAccessBlockConfiguration(entity.getPublicAccessBlockConfig());
         try {
             this.awsClient.setPublicAccessBlock(request);
         } catch (AmazonS3Exception e) {
-            log.error("Failed to put the public access block configuration for bucket: {}", entity.getBucketName());
+            log.error("Failed to put the public access block configuration for bucket: {}", entity.getObjectStoreName());
             throw e;
         }
 
-        return this.get(entity.getBucketName());
+        return this.get(entity.getObjectStoreName());
     }
 
     @Override
