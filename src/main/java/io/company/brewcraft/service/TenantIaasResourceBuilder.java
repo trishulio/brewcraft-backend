@@ -7,6 +7,7 @@ import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 
@@ -23,5 +24,6 @@ public interface TenantIaasResourceBuilder {
     <T extends BaseIaasIdpTenant> IaasRolePolicyAttachmentId buildVfsAttachmentId(T iaasIdpTenant);
     <A extends BaseIaasRolePolicyAttachment> A buildAttachment(IaasRole role, IaasPolicy policy);
 
-    <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant);
+    <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildObjectStoreCorsConfiguration(T iaasIdpTenant);
+    <T extends BaseIaasIdpTenant> IaasObjectStoreAccessConfig buildPublicAccessBlock(T iaasIdpTenant);
 }

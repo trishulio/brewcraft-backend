@@ -5,6 +5,7 @@ import java.util.List;
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 import com.amazonaws.services.s3.model.CORSRule;
 import com.amazonaws.services.s3.model.CORSRule.AllowedMethods;
+import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
 
 import io.company.brewcraft.model.AwsDocumentTemplates;
 import io.company.brewcraft.model.BaseIaasIdpTenant;
@@ -15,6 +16,7 @@ import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
 import io.company.brewcraft.model.IaasPolicy;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
@@ -25,12 +27,20 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     private List<String> allowedHeaders;
     private List<String> allowedMethods;
     private List<String> allowedOrigins;
+    private boolean blockPublicAcls;
+    private boolean ignorePublicAcls;
+    private boolean blockPublicPolicy;
+    private boolean restrictPublicBuckets;
 
-    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates, List<String> allowedHeaders, List<String> allowedMethods, List<String> allowedOrigins) {
+    public AwsTenantIaasResourceBuilder(AwsDocumentTemplates templates, List<String> allowedHeaders, List<String> allowedMethods, List<String> allowedOrigins, boolean blockPublicAcls, boolean ignorePublicAcls, boolean blockPublicPolicy, boolean restrictPublicBuckets) {
         this.templates = templates;
         this.allowedHeaders = allowedHeaders;
         this.allowedMethods = allowedMethods;
         this.allowedOrigins = allowedOrigins;
+        this.blockPublicAcls = blockPublicAcls;
+        this.ignorePublicAcls = ignorePublicAcls;
+        this.blockPublicPolicy = blockPublicPolicy;
+        this.restrictPublicBuckets = restrictPublicBuckets;
     }
 
     @Override
@@ -108,7 +118,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildBucketCrossOriginConfiguration(T iaasIdpTenant) {
+    public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildObjectStoreCorsConfiguration(T iaasIdpTenant) {
         CORSRule corsRule = new CORSRule().withAllowedHeaders(allowedHeaders)
                                           .withAllowedMethods(allowedMethods.stream().map(method -> AllowedMethods.valueOf(method)).toList())
                                           .withAllowedOrigins(allowedOrigins);
@@ -118,5 +128,16 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
         String bucketName = this.getObjectStoreName(iaasIdpTenant);
 
         return new IaasObjectStoreCorsConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
+    }
+
+    @Override
+    public <T extends BaseIaasIdpTenant> IaasObjectStoreAccessConfig buildPublicAccessBlock(T iaasIdpTenant) {
+        PublicAccessBlockConfiguration publicAccessBlockConfiguration = new PublicAccessBlockConfiguration().withBlockPublicAcls(blockPublicAcls)
+                                                                                                            .withBlockPublicPolicy(blockPublicPolicy)
+                                                                                                            .withIgnorePublicAcls(ignorePublicAcls)
+                                                                                                            .withRestrictPublicBuckets(restrictPublicBuckets);
+
+        String bucketName = this.getObjectStoreName(iaasIdpTenant);
+        return new IaasObjectStoreAccessConfig(bucketName, publicAccessBlockConfiguration);
     }
 }
