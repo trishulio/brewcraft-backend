@@ -14,8 +14,10 @@ spec:
       labels:
         {{ toYaml .Values.app.labels }}
     spec:
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        - name: regcred
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: init-admin-db-user-script
         configMap:

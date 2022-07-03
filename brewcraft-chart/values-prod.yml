@@ -2,9 +2,10 @@ env: prod
 
 image:
   repository: 850645470889.dkr.ecr.ca-central-1.amazonaws.com
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: regcred
 
 resources:
   limits:

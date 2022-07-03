@@ -5,6 +5,8 @@ image:
   repository: docker.io/library
   pullPolicy: IfNotPresent
 
+imagePullSecrets: []
+
 resources:
   limits:
     cpu: 500m
