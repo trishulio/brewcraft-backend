@@ -1,6 +1,6 @@
 FROM openjdk:17 AS prod
 
-ARG JAR_FILE=./target/brewcraft-1.0.0.jar
+ARG JAR_FILE=./target/brewcraft-backend-1.0.0.jar
 ARG USER_ID=johndoe
 ARG UUID=8877
 

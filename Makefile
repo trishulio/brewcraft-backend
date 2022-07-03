@@ -3,7 +3,7 @@
 TARGET_UPLOAD_DIR:=/var/server/brewcraft
 SOURCE_UPLOAD_DIR:=./dist
 REGISTRY=782071516387.dkr.ecr.ca-central-1.amazonaws.com
-APP_NAME:=brewcraft
+APP_NAME:=brewcraft-backend
 VERSION:=1.0.0-SNAPSHOT
 
 install:

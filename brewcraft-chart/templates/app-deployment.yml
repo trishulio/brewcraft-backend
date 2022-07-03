@@ -96,6 +96,12 @@ spec:
             initialDelaySeconds: {{ .Values.app.health.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.app.health.probes.readiness.periodSeconds }}
           env:
+            - name: APP_HOST_URLS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-host-urls
+                  key: appHostUrls
+                  optional: false
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:

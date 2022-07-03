@@ -1,8 +1,8 @@
 env: prod
 
 image:
-  repository: "128638437657.dkr.ecr.ca-central-1.amazonaws.com"
-  pullPolicy: Always # TODO: Revert to ifNotPresent
+  repository: 850645470889.dkr.ecr.ca-central-1.amazonaws.com
+  pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 
