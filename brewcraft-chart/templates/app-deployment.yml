@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: brewcraft-backend
   labels:
     {{ toYaml .Values.app.labels }}
 spec:
@@ -99,144 +99,144 @@ spec:
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: app-db
+                  name: backend-db
                   key: databaseName
                   optional: false
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: app-db
+                  name: backend-db
                   key: springDatasourceUrl
                   optional: false
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: app-db
+                  name: backend-db
                   key: springDatasourceUsername
                   optional: false
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: app-db
+                  name: backend-db
                   key: springDatasourcePassword
                   optional: false
             - name: AWS_SECRETS_MANAGER_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: app-secrets-manager
+                  name: backend-secrets-manager
                   key: awsSecretsManagerRegion
                   optional: false
             - name: AWS_SECRETS_MANAGER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: app-secrets-manager
+                  name: backend-secrets-manager
                   key: awsSecretsManagerUrl
                   optional: false
             - name: AWS_SECRETS_MANAGER_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: app-secrets-manager
+                  name: backend-secrets-manager
                   key: awsSecretsManagerAccessKeyId
                   optional: false
             - name: AWS_SECRETS_MANAGER_ACCESS_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: app-secrets-manager
+                  name: backend-secrets-manager
                   key: awsSecretsManagerAccessSecretKey
                   optional: false
             - name: JWT_ISSUER_URI
               valueFrom:
                 configMapKeyRef:
-                  name: app-auth
+                  name: backend-auth
                   key: jwtIssuerUri
                   optional: false
             - name: JWK_SET_URI
               valueFrom:
                 configMapKeyRef:
-                  name: app-auth
+                  name: backend-auth
                   key: jwkSetUri
                   optional: false
             - name: AWS_COGNITO_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoRegion
                   optional: false
             - name: AWS_COGNITO_URL
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoUrl
                   optional: false
             - name: AWS_COGNITO_USER_POOL_ID
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoUserPoolId
                   optional: false
             - name: AWS_COGNITO_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoAccessKeyId
                   optional: false
             - name: AWS_COGNITO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoSecretKey
                   optional: false
             - name: AWS_S3_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-s3
+                  name: backend-mt-provision-s3
                   key: awsS3Region
                   optional: false
             - name: AWS_S3_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-s3
+                  name: backend-mt-provision-s3
                   key: awsS3AccessKeyId
                   optional: false
             - name: AWS_S3_ACCESS_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-s3
+                  name: backend-mt-provision-s3
                   key: awsS3AccessSecretKey
                   optional: false
             - name: AWS_IAM_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-iam
+                  name: backend-mt-provision-iam
                   key: awsIamAccessKeyId
                   optional: false
             - name: AWS_IAM_ACCESS_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: app-mt-provision-iam
+                  name: backend-mt-provision-iam
                   key: awsIamAccessSecretKey
                   optional: false
             - name: AWS_DEPLOYMENT_ACCOUNT_ID
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-iam
+                  name: backend-mt-provision-iam
                   key: awsDeploymentAccountId
                   optional: false
             - name: AWS_DEPLOYMENT_PARTITION
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-iam
+                  name: backend-mt-provision-iam
                   key: awsDeploymentPartition
                   optional: false
             - name: AWS_COGNITO_IDENTITY_POOL_ID
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoIdentityPoolId
                   optional: false
             - name: AWS_COGNITO_USER_POOL_URL
               valueFrom:
                 configMapKeyRef:
-                  name: app-mt-provision-cognito
+                  name: backend-mt-provision-cognito
                   key: awsCognitoUserPoolUrl
                   optional: false
