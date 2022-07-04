@@ -1,4 +1,5 @@
-env: prod
+env: production
+replicaCount: 2
 
 image:
   repository: 850645470889.dkr.ecr.ca-central-1.amazonaws.com
@@ -23,12 +24,3 @@ app:
   svc:
     type: NodePort
     nodePort: "31000"
-
-
-dependencies:
-  postgresql:
-    enabled: false
-  pgadmin4:
-    enabled: false
-  localstack:
-    enabled: false
