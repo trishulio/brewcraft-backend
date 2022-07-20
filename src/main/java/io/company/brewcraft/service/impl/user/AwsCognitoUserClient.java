@@ -64,16 +64,16 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
         attributes[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
 
         final AdminCreateUserRequest request = new AdminCreateUserRequest().withUserPoolId(userPoolId)
-                                                                                          .withUsername(addition.getUserName())
-                                                                                          .withDesiredDeliveryMediums(DeliveryMediumType.EMAIL)
-                                                                                          .withUserAttributes(attributes);
+                                                                           .withUsername(addition.getEmail())
+                                                                           .withDesiredDeliveryMediums(DeliveryMediumType.EMAIL)
+                                                                           .withUserAttributes(attributes);
         final AdminCreateUserResult result = this.idp.adminCreateUser(request);
         return userTypeMapper.fromIaasEntity(result.getUser());
     }
 
     @Override
     public <UE extends UpdateIaasUser> IaasUser put(UE update) {
-        if (!exists(update.getId())) {
+        if (!exists(update.getEmail())) {
             return add(update);
         } else {
             return update(update);
@@ -108,8 +108,8 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
         attributes[1] = new AttributeType().withName(CognitoPrincipalContext.ATTRIBUTE_EMAIL_VERIFIED).withValue("true"); // TODO: Do we need to change this?
 
         AdminUpdateUserAttributesRequest req = new AdminUpdateUserAttributesRequest().withUserPoolId(userPoolId)
-                                                                                   .withUsername(update.getUserName())
-                                                                                   .withUserAttributes(attributes);
+                                                                                     .withUsername(update.getEmail())
+                                                                                     .withUserAttributes(attributes);
 
         AdminUpdateUserAttributesResult result = this.idp.adminUpdateUserAttributes(req);
 
