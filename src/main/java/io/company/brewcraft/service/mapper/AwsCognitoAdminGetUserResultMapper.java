@@ -24,7 +24,7 @@ public interface AwsCognitoAdminGetUserResultMapper extends IaasEntityMapper<Adm
 
         if (result != null) {
             iaasUser = new IaasUser();
-            iaasUser.setUserName(result.getUsername());
+            iaasUser.setId(result.getUsername());
             iaasUser.setCreatedAt(LocalDateTimeMapper.INSTANCE.fromUtilDate(result.getUserCreateDate()));
             iaasUser.setLastUpdated(LocalDateTimeMapper.INSTANCE.fromUtilDate(result.getUserLastModifiedDate()));
 

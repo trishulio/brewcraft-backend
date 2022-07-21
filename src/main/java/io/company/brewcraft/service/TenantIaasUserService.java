@@ -58,7 +58,7 @@ public class TenantIaasUserService {
         String tenantId = this.ctxHolder.getPrincipalContext().getTenantId().toString();
 
         List<IaasUser> iaasUsers = userMapper.fromUsers(users);
-        Set<String> userIds = iaasUsers.stream().map(IaasUser::getEmail).collect(Collectors.toSet());
+        Set<String> userIds = iaasUsers.stream().map(IaasUser::getId).collect(Collectors.toSet());
         Set<IaasUserTenantMembershipId> membershipIds = userIds.stream().map(userId -> new IaasUserTenantMembershipId(userId, tenantId)).collect(Collectors.toSet());
 
         long membershipCount = this.membershipService.delete(membershipIds);

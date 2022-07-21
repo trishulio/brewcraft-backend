@@ -21,22 +21,21 @@ public class IaasUser extends BaseEntity implements CrudEntity<String>, UpdateIa
     }
 
     public IaasUser(String userName, String email, String phoneNumber, LocalDateTime createdAt, LocalDateTime lastUpdated) {
-        this(userName);
-        setEmail(email);
+        this(email);
+        setUserName(userName);
         setPhoneNumber(phoneNumber);
         setCreatedAt(createdAt);
         setLastUpdated(lastUpdated);
-
     }
 
     @Override
     public String getId() {
-        return getUserName();
+        return getEmail();
     }
 
     @Override
     public void setId(String id) {
-        setUserName(id);
+        setEmail(id);
     }
 
     @Override

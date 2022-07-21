@@ -73,7 +73,7 @@ public class AwsCognitoUserClient implements IaasClient<String, IaasUser, BaseIa
 
     @Override
     public <UE extends UpdateIaasUser> IaasUser put(UE update) {
-        if (!exists(update.getEmail())) {
+        if (!exists(update.getId())) {
             return add(update);
         } else {
             return update(update);
