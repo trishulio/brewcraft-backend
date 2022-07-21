@@ -83,7 +83,7 @@ public class AwsCognitoUserClientTest {
 
         IaasUser user = client.add(new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0)));
 
-        IaasUser expected = new IaasUser("EMAIL", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
+        IaasUser expected = new IaasUser(null, "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
         assertEquals(expected, user);
     }
 
