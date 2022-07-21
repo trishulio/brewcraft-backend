@@ -23,7 +23,7 @@ public class MigrationAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(RandomGenerator.class)
     public RandomGenerator randomGenerator() throws NoSuchAlgorithmException {
-        Random random = new Random();
+        SecureRandom random = SecureRandom.getInstanceStrong();
         return new RandomGeneratorImpl(random);
     }
 
