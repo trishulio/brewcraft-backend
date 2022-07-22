@@ -55,7 +55,7 @@ public class AwsCognitoUserClientTest {
 
         IaasUser user = client.get("USERNAME");
 
-        IaasUser expected = new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
+        IaasUser expected = new IaasUser(null, "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
         assertEquals(expected, user);
     }
 
@@ -83,7 +83,7 @@ public class AwsCognitoUserClientTest {
 
         IaasUser user = client.add(new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0)));
 
-        IaasUser expected = new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
+        IaasUser expected = new IaasUser(null, "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
         assertEquals(expected, user);
     }
 
@@ -116,7 +116,7 @@ public class AwsCognitoUserClientTest {
 
         IaasUser user = client.update(new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0)));
 
-        IaasUser expected = new IaasUser("USERNAME", "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
+        IaasUser expected = new IaasUser(null, "EMAIL", null, LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2000, 2, 2, 0, 0));
         assertEquals(expected, user);
 
         verify(mIdp).adminUpdateUserAttributes(any());
@@ -166,13 +166,13 @@ public class AwsCognitoUserClientTest {
     @Test
     public void testPut_CallsUpdate_WhenExistIsTrue() {
         client = spy(client);
-        doReturn(true).when(client).exists("USERNAME");
+        doReturn(true).when(client).exists("USER_EMAIL");
 
         doAnswer(inv -> inv.getArgument(0, IaasUser.class)).when(client).update(any());
 
-        IaasUser user = client.put(new IaasUser("USERNAME"));
+        IaasUser user = client.put(new IaasUser("USERNAME", "USER_EMAIL", null, null, null));
 
-        IaasUser expected = new IaasUser("USERNAME");
+        IaasUser expected = new IaasUser("USERNAME", "USER_EMAIL", null, null, null);
         assertEquals(expected, user);
     }
 }

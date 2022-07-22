@@ -31,7 +31,7 @@ public class IaasUserTest {
     public void testAllArgConstructor() {
         iaasUser = new IaasUser("USERNAME", "EMAIL", "PHONE_NUMBER", LocalDateTime.of(2000, 1, 1, 0, 0), LocalDateTime.of(2001, 1, 1, 0, 0));
 
-        assertEquals("USERNAME", iaasUser.getId());
+        assertEquals("EMAIL", iaasUser.getId());
         assertEquals("USERNAME", iaasUser.getUserName());
         assertEquals("EMAIL", iaasUser.getEmail());
         assertEquals("PHONE_NUMBER", iaasUser.getPhoneNumber());

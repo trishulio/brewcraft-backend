@@ -140,8 +140,6 @@ public class UserService extends BaseService implements CrudService<Long, User, 
 
         List<User> users = this.repoService.saveAll(updated);
 
-        this.iaasService.put(users);
-
         return users;
     }
 
