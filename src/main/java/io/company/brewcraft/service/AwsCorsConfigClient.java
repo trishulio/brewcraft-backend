@@ -30,7 +30,6 @@ public class AwsCorsConfigClient implements IaasClient<String, IaasObjectStoreCo
             bucketCrossOriginConfiguration = awsClient.getBucketCrossOriginConfiguration(request);
         } catch (AmazonS3Exception e) {
             log.error("Failed to get the cross origin configuration for bucket: {}", bucketName);
-            throw e;
         }
 
         IaasObjectStoreCorsConfiguration iaasObjectStoreCorsConfiguration = bucketCrossOriginConfiguration == null ? null : new IaasObjectStoreCorsConfiguration(bucketName, bucketCrossOriginConfiguration);

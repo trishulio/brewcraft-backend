@@ -30,7 +30,6 @@ public class AwsPublicAccessBlockClient implements IaasClient<String, IaasObject
             publicAccessBlockResult = awsClient.getPublicAccessBlock(request);
         } catch (AmazonS3Exception e) {
             log.error("Failed to get the public access block configuration for bucket: {}", bucketName);
-            throw e;
         }
 
         IaasObjectStoreAccessConfig iaasObjectStoreConfig = publicAccessBlockResult == null ? null : new IaasObjectStoreAccessConfig(bucketName, publicAccessBlockResult.getPublicAccessBlockConfiguration());

@@ -43,10 +43,10 @@ public class AwsCorsConfigClientTest {
     }
 
     @Test
-    public void testGet_ThrowsException_WhenCacheThrowsException() {
+    public void testGet_ReturnsNull_WhenClientThrowsException() {
         doThrow(AmazonS3Exception.class).when(mAwsClient).getBucketCrossOriginConfiguration(any(GetBucketCrossOriginConfigurationRequest.class));
 
-        assertThrows(AmazonS3Exception.class, () -> client.get("BUCKET_1"));
+        assertNull(client.get("BUCKET_1"));
     }
 
     @Test
