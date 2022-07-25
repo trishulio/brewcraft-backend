@@ -19,8 +19,8 @@ resources:
 app:
   networking:
     port:
-      container: "8080"
-      service: "8080"
-  svc:
-    type: NodePort
-    nodePort: "31000"
+      http: "8080"
+    httpService:
+      type: NodePort
+      port: "8080"
+      nodePort: "31000"

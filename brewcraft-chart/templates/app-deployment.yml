@@ -74,6 +74,9 @@ spec:
         - name: {{ .Values.app.name }}
           image: "{{ .Values.image.repository }}/{{ .Values.app.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy : {{ .Values.image.pullPolicy }}
+          {{ if .Values.app.command }}
+          command: {{ .Values.app.command }}
+          {{ end }}
           resources:
             requests:
               memory: {{ .Values.resources.requests.memory }}
@@ -83,8 +86,13 @@ spec:
               cpu: {{ .Values.resources.limits.cpu }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.networking.port.container }}
+              containerPort: {{ .Values.app.networking.port.http }}
               protocol: TCP
+            {{ if .Values.app.networking.port.debug }}
+            - name: debug
+              containerPort: {{ .Values.app.networking.port.debug }}
+              protocol: TCP
+            {{ end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.app.health.probes.liveness.endpoint }}
