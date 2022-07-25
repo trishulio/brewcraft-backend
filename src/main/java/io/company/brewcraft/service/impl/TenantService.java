@@ -106,7 +106,7 @@ public class TenantService implements CrudService<UUID, Tenant, BaseTenant, Upda
 
         long deleteCount = this.repoService.delete(ids);
 
-        this.iaasService.delete(tenants); // TODO: Change the IaaService to delete by Ids
+        this.iaasService.delete(tenants);
 
         return deleteCount;
     }
