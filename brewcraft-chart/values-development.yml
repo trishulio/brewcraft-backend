@@ -16,7 +16,9 @@ resources:
     memory: 1.5G
 
 app:
-  command: [ "java -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000 -jar brewcraftapp.jar" ]
+  command:
+    #entrypoint: <Unused parameter>
+    args: ["\"-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000\",-jar,brewcraftapp.jar"]
   networking:
     port:
       http: "8080"

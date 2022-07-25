@@ -74,8 +74,11 @@ spec:
         - name: {{ .Values.app.name }}
           image: "{{ .Values.image.repository }}/{{ .Values.app.name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy : {{ .Values.image.pullPolicy }}
-          {{ if .Values.app.command }}
-          command: {{ .Values.app.command }}
+          {{ if .Values.app.command.entrypoint }}
+          command: {{ .Values.app.command.entrypoint }}
+          {{ end }}
+          {{ if .Values.app.command.args }}
+          args: {{ .Values.app.command.args }}
           {{ end }}
           resources:
             requests:

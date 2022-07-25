@@ -17,4 +17,5 @@ RUN useradd -ms /bin/bash -u ${UUID} ${USER_ID} && \
 USER ${USER_ID}
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-Xmx1g", "-jar", "brewcraftapp.jar"]
+ENTRYPOINT [ "java" ]
+CMD [ "-Xmx1g", "-jar", "brewcraftapp.jar" ]
