@@ -21,6 +21,5 @@ app:
     port:
       http: "8080"
     httpService:
-      type: NodePort
+      type: ClusterIP
       port: "8080"
-      nodePort: "31000"
