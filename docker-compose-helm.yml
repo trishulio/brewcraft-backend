@@ -8,5 +8,4 @@ services:
     volumes:
       - ${PWD}:/usr/code/app
       - ${HOME}/.kube:/root/.kube
-      # - ${HOME}/.minikube/:/home/mrishab/.minikube:ro
-      # TODO: relative path is specific to the user
+      - ${HOME}/.minikube/:${HOME}/.minikube

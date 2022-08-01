@@ -18,6 +18,7 @@ pipeline {
             steps {
                 script {
                     def config = [
+                        // Production
                         "release": [
                             "awsCredsId": "AWS_CREDS_PRODUCTION",
                             "kubeConfigId": "KUBE_CONFIG_PRODUCTION",
@@ -26,6 +27,7 @@ pipeline {
                             "namespace": "production",
                             "valuesFile": "values-production.yml"
                         ],
+                        // Staging
                         "master": [
                             "awsCredsId": "AWS_CREDS_STAGING",
                             "kubeConfigId": "KUBE_CONFIG_STAGING",
@@ -34,6 +36,7 @@ pipeline {
                             "namespace": "staging",
                             "valuesFile": "values-staging.yml"
                         ],
+                        // Default
                         "develop": [
                             "awsCredsId": "144571613969", // Not applicable for non-deployment builds
                             "kubeConfigId": "NA", // Not applicable for non-deployment builds
