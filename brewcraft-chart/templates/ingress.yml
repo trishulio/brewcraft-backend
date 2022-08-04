@@ -3,8 +3,10 @@ kind: Ingress
 metadata:
   name: brewcraft-backend
 spec:
+  ingressClassName: nginx
   rules:
-  - http:
+  - host: {{ .Values.app.networking.ingress.host }}
+    http:
       paths:
       - pathType: Prefix
         path: /api

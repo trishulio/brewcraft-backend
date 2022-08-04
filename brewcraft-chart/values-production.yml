@@ -18,6 +18,8 @@ resources:
 
 app:
   networking:
+    ingress:
+      host: "brewcraft.io"
     port:
       http: "8080"
     httpService:

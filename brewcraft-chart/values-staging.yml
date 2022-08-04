@@ -21,6 +21,8 @@ app:
     #entrypoint: <Unused parameter>
     args: ["\"-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000\",-jar,brewcraftapp.jar"]
   networking:
+    ingress:
+      host: "staging.brewcraft.io"
     port:
       http: "8080"
       debug: "8000"
