@@ -1,5 +1,5 @@
 env: production
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: 850645470889.dkr.ecr.ca-central-1.amazonaws.com
@@ -17,6 +17,8 @@ resources:
     memory: 1.5G
 
 app:
+  command: {}
+    #entrypoint: <Unused parameter>
   networking:
     ingress:
       host: "brewcraft.io"
