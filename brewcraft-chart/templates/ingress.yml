@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: brewcraft-backend
 spec:
-  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -13,4 +12,11 @@ spec:
           service:
             name: app-svc-http
             port:
-              number: {{ .Values.app.networking.port.http }}
+              number: {{ .Values.app.networking.httpService.port }}
+      - pathType: Prefix
+        path: /actuator
+        backend:
+          service:
+            name: app-svc-http
+            port:
+              number: {{ .Values.app.networking.httpService.port }}
