@@ -2,6 +2,7 @@ package io.company.brewcraft.migration;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +24,6 @@ public class MigrationAutoConfiguration {
     @ConditionalOnMissingBean(RandomGenerator.class)
     public RandomGenerator randomGenerator() throws NoSuchAlgorithmException {
         SecureRandom random = SecureRandom.getInstanceStrong();
-
         return new RandomGeneratorImpl(random);
     }
 

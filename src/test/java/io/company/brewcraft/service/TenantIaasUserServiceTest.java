@@ -66,8 +66,8 @@ public class TenantIaasUserServiceTest {
 
     @Test
     public void testDelete_RemovesMembershipAndDeletesUsers() {
-        doReturn(55L).when(mMembershipService).delete(Set.of(new IaasUserTenantMembershipId("USERNAME_1", "00000000-0000-0000-0000-000000000001"), new IaasUserTenantMembershipId("USERNAME_2", "00000000-0000-0000-0000-000000000001")));
-        doReturn(55L).when(mUserService).delete(Set.of("USERNAME_1", "USERNAME_2"));
+        doReturn(55L).when(mMembershipService).delete(Set.of(new IaasUserTenantMembershipId("example-1@localhost", "00000000-0000-0000-0000-000000000001"), new IaasUserTenantMembershipId("example-2@localhost", "00000000-0000-0000-0000-000000000001")));
+        doReturn(55L).when(mUserService).delete(Set.of("example-1@localhost", "example-2@localhost"));
 
         PrincipalContext ctx = mock(PrincipalContext.class);
         doReturn(ctx).when(mCtxHolder).getPrincipalContext();
