@@ -16,6 +16,13 @@ spec:
             port:
               number: {{ .Values.app.networking.httpService.port }}
       - pathType: Prefix
+        path: /operations
+        backend:
+          service:
+            name: app-svc-http
+            port:
+              number: {{ .Values.app.networking.httpService.port }}
+      - pathType: Prefix
         path: /swagger
         backend:
           service:
