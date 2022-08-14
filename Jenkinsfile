@@ -70,10 +70,9 @@ pipeline {
         stage ('Install') {
             steps {
                 // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container.
-                //TODO: REVERT BACK CODE_COVERAGE=TRUE
                 sh """
                     export MUTATION_COVERAGE=false
-                    export CODE_COVERAGE=false
+                    export CODE_COVERAGE=true
                     export SONARQUBE=${SONARQUBE_REPORTING}
                     export SONARQUBE_HOST_URL=${SONARQUBE_URL}
                     export SONARQUBE_PROJECT_KEY=$SONARQUBE_USR
@@ -94,7 +93,6 @@ pipeline {
                 anyOf {
                     branch 'master';
                     branch 'release';
-                    branch 'deployment-ready' // TODO: Remove
                 }
             }
 
@@ -106,7 +104,6 @@ pipeline {
             stages {
                 stage ('Publish') {
                     steps {
-                        // TODO: AWS Login not working. Returns empty password when run on jenkins.
                         sh """
                             export AWS_ACCESS_KEY_ID=$AWS_CREDS_USR
                             export AWS_SECRET_ACCESS_KEY=$AWS_CREDS_PSW
