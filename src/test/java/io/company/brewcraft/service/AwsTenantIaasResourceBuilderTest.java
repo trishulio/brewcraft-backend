@@ -35,7 +35,7 @@ public class AwsTenantIaasResourceBuilderTest {
     public void testGetRoleName_ReturnsRoleNameFromTemplateWithTenantName() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_ROLE_NAME").when(mTemplates).getTenantIaasRoleName(anyString());
 
-        String roleName = builder.getRoleName(new IaasIdpTenant("T1"));
+        String roleName = builder.getRoleId("T1");
 
         assertEquals("T1_ROLE_NAME", roleName);
     }
@@ -57,7 +57,7 @@ public class AwsTenantIaasResourceBuilderTest {
     public void testGetVfsPolicyName_ReturnsVfsPolicyNameFromTenant() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_POLICY_NAME").when(mTemplates).getTenantVfsPolicyName(anyString());
 
-        String policyName = builder.getVfsPolicyName(new IaasIdpTenant("T1"));
+        String policyName = builder.getVfsPolicyId("T1");
 
         assertEquals("T1_POLICY_NAME", policyName);
     }
@@ -79,7 +79,7 @@ public class AwsTenantIaasResourceBuilderTest {
     public void testGetObjectStoreName_ReturnsObjectStoreNameFromTenant() {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_OBJECT_STORE_NAME").when(mTemplates).getTenantVfsBucketName(anyString());
 
-        String objectStoreName = builder.getObjectStoreName(new IaasIdpTenant("T1"));
+        String objectStoreName = builder.getObjectStoreId("T1");
 
         assertEquals("T1_OBJECT_STORE_NAME", objectStoreName);
     }
@@ -100,7 +100,7 @@ public class AwsTenantIaasResourceBuilderTest {
         doAnswer(inv -> inv.getArgument(0, String.class) + "_ROLE_NAME").when(mTemplates).getTenantIaasRoleName(anyString());
         doAnswer(inv -> inv.getArgument(0, String.class) + "_POLICY_NAME").when(mTemplates).getTenantVfsPolicyName(anyString());
 
-        IaasRolePolicyAttachmentId id = builder.buildVfsAttachmentId(new IaasIdpTenant("T1"));
+        IaasRolePolicyAttachmentId id = builder.buildVfsAttachmentId("T1");
 
         IaasRolePolicyAttachmentId expected = new IaasRolePolicyAttachmentId("T1_ROLE_NAME", "T1_POLICY_NAME");
         assertEquals(expected, id);

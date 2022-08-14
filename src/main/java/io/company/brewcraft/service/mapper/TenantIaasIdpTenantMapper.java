@@ -1,7 +1,9 @@
 package io.company.brewcraft.service.mapper;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseTenant;
@@ -11,6 +13,15 @@ public class TenantIaasIdpTenantMapper {
     public static final TenantIaasIdpTenantMapper INSTANCE = new TenantIaasIdpTenantMapper();
 
     protected TenantIaasIdpTenantMapper() {}
+
+    public Set<String> toIaasTenantIds(Set<UUID> tenantIds) {
+        Set<String> iaasTenantIds = null;
+        if (tenantIds != null) {
+            iaasTenantIds = tenantIds.stream().map(UUID::toString).collect(Collectors.toSet());
+        }
+
+        return iaasTenantIds;
+    }
 
     @SuppressWarnings("unchecked")
     public <Idp extends BaseIaasIdpTenant, T extends BaseTenant> List<Idp> fromTenants(List<T> tenants) {

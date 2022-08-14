@@ -46,7 +46,6 @@ public class AwsObjectStoreClient implements IaasClient<String, IaasObjectStore,
             success = true;
         } catch (AmazonS3Exception e) {
             log.error("Failed to delete the objectStore: {}", bucketName);
-            throw e;
         } finally {
             reset();
         }

@@ -5,23 +5,23 @@ import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
+import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasPolicy;
-import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 
 public interface TenantIaasResourceBuilder {
-    <T extends BaseIaasIdpTenant> String getRoleName(T iaasIdpTenant);
+    String getRoleId(String iaasIdpTenantId);
     <R extends BaseIaasRole, T extends BaseIaasIdpTenant> R buildRole(T iaasIdpTenant);
 
-    <T extends BaseIaasIdpTenant> String getVfsPolicyName(T iaasIdpTenant);
+    String getVfsPolicyId(String iaasIdpTenantId);
     <P extends BaseIaasPolicy, T extends BaseIaasIdpTenant> P buildVfsPolicy(T iaasIdpTenant);
 
-    <T extends BaseIaasIdpTenant> String getObjectStoreName(T iaasIdpTenant);
+    String getObjectStoreId(String iaasIdpTenantId);
     <O extends BaseIaasObjectStore, T extends BaseIaasIdpTenant> O buildObjectStore(T iaasIdpTenant);
 
-    <T extends BaseIaasIdpTenant> IaasRolePolicyAttachmentId buildVfsAttachmentId(T iaasIdpTenant);
+    IaasRolePolicyAttachmentId buildVfsAttachmentId(String iaasIdpTenantId);
     <A extends BaseIaasRolePolicyAttachment> A buildAttachment(IaasRole role, IaasPolicy policy);
 
     <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildObjectStoreCorsConfiguration(T iaasIdpTenant);

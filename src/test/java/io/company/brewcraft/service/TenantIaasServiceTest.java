@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -45,19 +46,19 @@ public class TenantIaasServiceTest {
 
     @Test
     public void testGet_GetsAndReturnsListTenantIaasResourcesFromIndividualResources() {
-        List<IaasIdpTenant> idpTenants = List.of(new IaasIdpTenant("00000000-0000-0000-0000-000000000001"), new IaasIdpTenant("00000000-0000-0000-0000-000000000002"));
+        Set<String> iaasIdpTenantIds = Set.of("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002");
 
         List<TenantIaasAuthResources> authResources = List.of(new TenantIaasAuthResources(new IaasRole("T1_ROLE")), new TenantIaasAuthResources(new IaasRole("T2_ROLE")));
-        doReturn(authResources).when(mAuthService).get(idpTenants);
+        doReturn(authResources).when(mAuthService).get(iaasIdpTenantIds);
 
         List<TenantIaasIdpResources> idpResources = List.of(new TenantIaasIdpResources(new IaasIdpTenant("IDP_T1")), new TenantIaasIdpResources(new IaasIdpTenant("IDP_T2")));
-        doReturn(idpResources).when(mIdpService).get(idpTenants);
+        doReturn(idpResources).when(mIdpService).get(iaasIdpTenantIds);
 
         List<TenantIaasVfsResources> vfsResources = List.of(new TenantIaasVfsResources(new IaasObjectStore("T1_OBJECT_STORE"), new IaasPolicy("T1_POLICY")), new TenantIaasVfsResources(new IaasObjectStore("T2_OBJECT_STORE"), new IaasPolicy("T2_POLICY")));
-        doReturn(vfsResources).when(mVfsService).get(idpTenants);
+        doReturn(vfsResources).when(mVfsService).get(iaasIdpTenantIds);
 
-        List<Tenant> tenants = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")), new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000002")));
-        List<TenantIaasResources> resources = service.get(tenants);
+        Set<UUID> tenantIds = Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001"), UUID.fromString("00000000-0000-0000-0000-000000000002"));
+        List<TenantIaasResources> resources = service.get(tenantIds);
 
         List<TenantIaasResources> expected = List.of(
             new TenantIaasResources(new TenantIaasAuthResources(new IaasRole("T1_ROLE")), new TenantIaasIdpResources(new IaasIdpTenant("IDP_T1")), new TenantIaasVfsResources(new IaasObjectStore("T1_OBJECT_STORE"), new IaasPolicy("T1_POLICY"))),
@@ -121,14 +122,14 @@ public class TenantIaasServiceTest {
 
     @Test
     public void testDelete_DeletesAndReturnsCombinedDeleteResult() {
-        List<IaasIdpTenant> idpTenants = List.of(new IaasIdpTenant("00000000-0000-0000-0000-000000000001"), new IaasIdpTenant("00000000-0000-0000-0000-000000000002"));
+        Set<String> idpTenantIds = Set.of("00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002");
 
-        doReturn(new TenantIaasAuthDeleteResult(3)).when(mAuthService).delete(idpTenants);
-        doReturn(new TenantIaasIdpDeleteResult(4)).when(mIdpService).delete(idpTenants);
-        doReturn(new TenantIaasVfsDeleteResult(5, 6)).when(mVfsService).delete(idpTenants);
+        doReturn(new TenantIaasAuthDeleteResult(3)).when(mAuthService).delete(idpTenantIds);
+        doReturn(new TenantIaasIdpDeleteResult(4)).when(mIdpService).delete(idpTenantIds);
+        doReturn(new TenantIaasVfsDeleteResult(5, 6)).when(mVfsService).delete(idpTenantIds);
 
-        List<Tenant> tenants = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")), new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000002")));
-        TenantIaasDeleteResult result = service.delete(tenants);
+        Set<UUID> tenantIds = Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001"), UUID.fromString("00000000-0000-0000-0000-000000000002"));
+        TenantIaasDeleteResult result = service.delete(tenantIds);
 
         TenantIaasDeleteResult expected = new TenantIaasDeleteResult(new TenantIaasAuthDeleteResult(3), new TenantIaasIdpDeleteResult(4), new TenantIaasVfsDeleteResult(5, 6));
         assertEquals(expected, result);

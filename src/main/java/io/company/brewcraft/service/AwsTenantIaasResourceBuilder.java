@@ -44,8 +44,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getRoleName(T iaasIdpTenant) {
-        String iaasIdpTenantId = iaasIdpTenant.getName();
+    public String getRoleId(String iaasIdpTenantId) {
         return this.templates.getTenantIaasRoleName(iaasIdpTenantId);
     }
 
@@ -62,9 +61,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getVfsPolicyName(T iaasIdpTenant) {
-        String iaasIdpTenantId = iaasIdpTenant.getName();
-
+    public String getVfsPolicyId(String iaasIdpTenantId) {
         return this.templates.getTenantVfsPolicyName(iaasIdpTenantId);
     }
 
@@ -81,9 +78,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> String getObjectStoreName(T iaasIdpTenant) {
-        String iaasIdpTenantId = iaasIdpTenant.getName();
-
+    public String getObjectStoreId(String iaasIdpTenantId) {
         return this.templates.getTenantVfsBucketName(iaasIdpTenantId);
     }
 
@@ -98,10 +93,10 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
     }
 
     @Override
-    public <T extends BaseIaasIdpTenant> IaasRolePolicyAttachmentId buildVfsAttachmentId(T iaasIdpTenant) {
+    public IaasRolePolicyAttachmentId buildVfsAttachmentId(String iaasIdpTenantId) {
         IaasRolePolicyAttachmentId id = new IaasRolePolicyAttachmentId();
-        id.setPolicyId(this.templates.getTenantVfsPolicyName(iaasIdpTenant.getName()));
-        id.setRoleId(this.templates.getTenantIaasRoleName(iaasIdpTenant.getName()));
+        id.setPolicyId(this.templates.getTenantVfsPolicyName(iaasIdpTenantId));
+        id.setRoleId(this.templates.getTenantIaasRoleName(iaasIdpTenantId));
 
         return id;
     }
@@ -127,7 +122,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
 
         List<CORSRule> corsRules = List.of(corsRule);
 
-        String bucketName = this.getObjectStoreName(iaasIdpTenant);
+        String bucketName = this.getObjectStoreId(iaasIdpTenant.getName());
 
         return new IaasObjectStoreCorsConfiguration(bucketName, new BucketCrossOriginConfiguration(corsRules));
     }
@@ -139,7 +134,7 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
                                                                                                             .withIgnorePublicAcls(ignorePublicAcls)
                                                                                                             .withRestrictPublicBuckets(restrictPublicBuckets);
 
-        String bucketName = this.getObjectStoreName(iaasIdpTenant);
+        String bucketName = this.getObjectStoreId(iaasIdpTenant.getName());
         return new IaasObjectStoreAccessConfig(bucketName, publicAccessBlockConfiguration);
     }
 }

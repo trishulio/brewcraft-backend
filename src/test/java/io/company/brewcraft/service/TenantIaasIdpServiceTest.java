@@ -33,7 +33,7 @@ public class TenantIaasIdpServiceTest {
     public void testGet_ReturnsAuthResourcesFromComponents() {
         doReturn(List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2"))).when(mIdpTenantService).getAll(Set.of("T1", "T2"));
 
-        List<TenantIaasIdpResources> resources = service.get(List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2")));
+        List<TenantIaasIdpResources> resources = service.get(Set.of("T1", "T2"));
 
         List<TenantIaasIdpResources> expected = List.of(
             new TenantIaasIdpResources(new IaasIdpTenant("T1")),
@@ -77,7 +77,7 @@ public class TenantIaasIdpServiceTest {
     public void testDelete_ReturnsDeleteResult() {
         doAnswer(inv -> new Long(inv.getArgument(0, Set.class).size())).when(mIdpTenantService).delete(anySet());
 
-        TenantIaasIdpDeleteResult res = service.delete(List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2")));
+        TenantIaasIdpDeleteResult res = service.delete(Set.of("T1", "T2"));
 
         assertEquals(new TenantIaasIdpDeleteResult(2), res);
         verify(mIdpTenantService).delete(Set.of("T1", "T2"));

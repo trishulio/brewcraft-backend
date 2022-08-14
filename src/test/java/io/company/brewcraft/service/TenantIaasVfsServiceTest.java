@@ -55,12 +55,12 @@ public class TenantIaasVfsServiceTest {
 
     @Test
     public void testGet_ReturnsListOfVfsResourcesBuiltFromAllServiceResponse_WhenIdpTenantsAreNotNull() {
-        List<IaasIdpTenant> iaasIdpTenant = List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2"));
+        Set<String> iaasIdpTenantIds = Set.of("T1", "T2");
 
-        doReturn("POLICY_ID_1").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(0));
-        doReturn("POLICY_ID_2").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(1));
-        doReturn("OBJECT_STORE_1").when(mBuilder).getObjectStoreName(iaasIdpTenant.get(0));
-        doReturn("OBJECT_STORE_2").when(mBuilder).getObjectStoreName(iaasIdpTenant.get(1));
+        doReturn("POLICY_ID_1").when(mBuilder).getVfsPolicyId("T1");
+        doReturn("POLICY_ID_2").when(mBuilder).getVfsPolicyId("T2");
+        doReturn("OBJECT_STORE_1").when(mBuilder).getObjectStoreId("T1");
+        doReturn("OBJECT_STORE_2").when(mBuilder).getObjectStoreId("T2");
 
         List<IaasPolicy> mPolicies = List.of(new IaasPolicy("VFS_POLICY_1"), new IaasPolicy("VFS_POLICY_2"));
         doReturn(mPolicies).when(mPolicyService).getAll(Set.of("POLICY_ID_1", "POLICY_ID_2"));
@@ -73,7 +73,7 @@ public class TenantIaasVfsServiceTest {
             new TenantIaasVfsResources(new IaasObjectStore("OBJECT_STORE_2"), new IaasPolicy("VFS_POLICY_2"))
         );
 
-        assertEquals(expected, this.service.get(iaasIdpTenant));
+        assertEquals(expected, this.service.get(iaasIdpTenantIds));
     }
 
     @Test
@@ -130,16 +130,16 @@ public class TenantIaasVfsServiceTest {
 
     @Test
     public void testDelete_DelegatesDelete_WhenIdpTenantsAreNotNull() {
-        List<IaasIdpTenant> iaasIdpTenant = List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2"));
+        Set<String> iaasIdpTenantIds = Set.of("T1", "T2");
 
-        doReturn(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T1"));
-        doReturn(new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")).when(mBuilder).buildVfsAttachmentId(new IaasIdpTenant("T2"));
-        doReturn("POLICY_ID_1").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(0));
-        doReturn("POLICY_ID_2").when(mBuilder).getVfsPolicyName(iaasIdpTenant.get(1));
-        doReturn("OBJECT_STORE_1").when(mBuilder).getObjectStoreName(iaasIdpTenant.get(0));
-        doReturn("OBJECT_STORE_2").when(mBuilder).getObjectStoreName(iaasIdpTenant.get(1));
+        doReturn(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1")).when(mBuilder).buildVfsAttachmentId("T1");
+        doReturn(new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")).when(mBuilder).buildVfsAttachmentId("T2");
+        doReturn("POLICY_ID_1").when(mBuilder).getVfsPolicyId("T1");
+        doReturn("POLICY_ID_2").when(mBuilder).getVfsPolicyId("T2");
+        doReturn("OBJECT_STORE_1").when(mBuilder).getObjectStoreId("T1");
+        doReturn("OBJECT_STORE_2").when(mBuilder).getObjectStoreId("T2");
 
-        this.service.delete(iaasIdpTenant);
+        this.service.delete(iaasIdpTenantIds);
 
         InOrder order = inOrder(mAttachmentService, mIaasBucketCrossOriginConfigService, mIaasPublicAccessBlockService, mPolicyService, mObjectStoreService);
         order.verify(mAttachmentService, times(1)).delete(Set.of(new IaasRolePolicyAttachmentId("ROLE_1", "POLICY_ID_1"), new IaasRolePolicyAttachmentId("ROLE_2", "POLICY_ID_2")));
