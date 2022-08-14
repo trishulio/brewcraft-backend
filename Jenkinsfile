@@ -111,7 +111,8 @@ pipeline {
                             export AWS_ACCESS_KEY_ID=$AWS_CREDS_USR
                             export AWS_SECRET_ACCESS_KEY=$AWS_CREDS_PSW
 
-                            make login_repo AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION
+                            aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/brewcraft-backend
+
                             make publish AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION VERSION=$IMAGE_TAG
                         """
                     }
