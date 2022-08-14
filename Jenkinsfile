@@ -46,7 +46,7 @@ pipeline {
                             "valuesFile": "values-development.yml"
                         ]
                     ]
-                    
+
                     def configKey = ['master', 'release'].contains(env.BRANCH_NAME) ? env.BRANCH_NAME : 'develop'
 
                     configKey = 'master' // TODO: REMOVE

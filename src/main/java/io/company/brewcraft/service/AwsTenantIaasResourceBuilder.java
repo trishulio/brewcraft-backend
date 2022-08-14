@@ -13,10 +13,10 @@ import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRole;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
-import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
 import io.company.brewcraft.model.IaasObjectStore;
-import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
+import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
@@ -119,9 +119,11 @@ public class AwsTenantIaasResourceBuilder implements TenantIaasResourceBuilder {
 
     @Override
     public <T extends BaseIaasIdpTenant> IaasObjectStoreCorsConfiguration buildObjectStoreCorsConfiguration(T iaasIdpTenant) {
+        List<String> sanitizedOrigins = allowedOrigins.stream().map(o -> o.replaceAll("/*$", "")).toList();
+
         CORSRule corsRule = new CORSRule().withAllowedHeaders(allowedHeaders)
                                           .withAllowedMethods(allowedMethods.stream().map(method -> AllowedMethods.valueOf(method)).toList())
-                                          .withAllowedOrigins(allowedOrigins);
+                                          .withAllowedOrigins(sanitizedOrigins);
 
         List<CORSRule> corsRules = List.of(corsRule);
 
