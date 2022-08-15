@@ -168,12 +168,13 @@ public class TenantServiceTest {
 
         this.service.delete(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        List<Tenant> tenants = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
-        tenants.forEach(tenant -> tenant.setIsReady(false));
+        Set<UUID> tenantIds = Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        verify(mIaasService, times(1)).delete(tenants);
+        verify(mIaasService, times(1)).delete(tenantIds);
 
-        verify(mRepoService, times(1)).saveAll(tenants);
+        List<Tenant> expected = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")));
+        expected.get(0).setIsReady(false);
+        verify(mRepoService, times(1)).saveAll(expected);
         verify(mRepoService).delete(Set.of(UUID.fromString("00000000-0000-0000-0000-000000000001")));
     }
 

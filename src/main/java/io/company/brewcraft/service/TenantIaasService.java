@@ -2,9 +2,10 @@ package io.company.brewcraft.service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import io.company.brewcraft.model.BaseIaasIdpTenant;
-import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.Tenant;
 import io.company.brewcraft.model.TenantIaasAuthDeleteResult;
 import io.company.brewcraft.model.TenantIaasAuthResources;
@@ -32,12 +33,12 @@ public class TenantIaasService {
         this.mapper = mapper;
     }
 
-    public List<TenantIaasResources> get(List<Tenant> tenants) {
-        List<IaasIdpTenant> idpTenants = mapper.fromTenants(tenants);
+    public List<TenantIaasResources> get(Set<UUID> tenantIds) {
+        Set<String> idpTenantsIds = mapper.toIaasTenantIds(tenantIds);
 
-        List<TenantIaasAuthResources> authResources = this.authService.get(idpTenants);
-        List<TenantIaasIdpResources> idpResources = this.idpService.get(idpTenants);
-        List<TenantIaasVfsResources> vfsResources = this.vfsService.get(idpTenants);
+        List<TenantIaasAuthResources> authResources = this.authService.get(idpTenantsIds);
+        List<TenantIaasIdpResources> idpResources = this.idpService.get(idpTenantsIds);
+        List<TenantIaasVfsResources> vfsResources = this.vfsService.get(idpTenantsIds);
 
         return map(idpResources, authResources, vfsResources);
     }
@@ -70,12 +71,12 @@ public class TenantIaasService {
         return map(idpResources, authResources, vfsResources);
     }
 
-    public TenantIaasDeleteResult delete(List<Tenant> tenants) {
-        List<IaasIdpTenant> idpTenants = mapper.fromTenants(tenants);
+    public TenantIaasDeleteResult delete(Set<UUID> tenantIds) {
+        Set<String> iaasTenantsIds = mapper.toIaasTenantIds(tenantIds);
 
-        TenantIaasVfsDeleteResult vfsDelete = this.vfsService.delete(idpTenants);
-        TenantIaasIdpDeleteResult idpDelete = this.idpService.delete(idpTenants);
-        TenantIaasAuthDeleteResult authDelete = this.authService.delete(idpTenants);
+        TenantIaasVfsDeleteResult vfsDelete = this.vfsService.delete(iaasTenantsIds);
+        TenantIaasIdpDeleteResult idpDelete = this.idpService.delete(iaasTenantsIds);
+        TenantIaasAuthDeleteResult authDelete = this.authService.delete(iaasTenantsIds);
 
         return new TenantIaasDeleteResult(authDelete, idpDelete, vfsDelete);
     }

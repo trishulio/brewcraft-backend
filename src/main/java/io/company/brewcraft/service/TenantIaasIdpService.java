@@ -2,7 +2,6 @@ package io.company.brewcraft.service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.IaasIdpTenant;
@@ -19,8 +18,7 @@ public class TenantIaasIdpService {
         this.mapper = mapper;
     }
 
-    public List<TenantIaasIdpResources> get(List<IaasIdpTenant> tenants) {
-        Set<String> iaasIdpTenantIds = tenants.stream().map(tenant -> tenant.getId()).collect(Collectors.toSet());
+    public List<TenantIaasIdpResources> get(Set<String> iaasIdpTenantIds) {
         List<IaasIdpTenant> idpTenants = this.idpService.getAll(iaasIdpTenantIds);
         return this.mapper.fromComponents(idpTenants);
     }
@@ -37,8 +35,7 @@ public class TenantIaasIdpService {
         return this.mapper.fromComponents(idpTenants);
     }
 
-    public TenantIaasIdpDeleteResult delete(List<IaasIdpTenant> iaasIdpTenants) {
-        Set<String> iaasIdpTenantIds = iaasIdpTenants.stream().map(iaasIdpTenant -> iaasIdpTenant.getId()).collect(Collectors.toSet());
+    public TenantIaasIdpDeleteResult delete(Set<String> iaasIdpTenantIds) {
 
         long idpCount = this.idpService.delete(iaasIdpTenantIds);
 

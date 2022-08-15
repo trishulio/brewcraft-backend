@@ -7,7 +7,6 @@ import java.util.Set;
 
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasRole;
-import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasRole;
 import io.company.brewcraft.model.TenantIaasAuthDeleteResult;
 import io.company.brewcraft.model.TenantIaasAuthResources;
@@ -25,13 +24,13 @@ public class TenantIaasAuthService {
         this.mapper = mapper;
     }
 
-    public List<TenantIaasAuthResources> get(List<IaasIdpTenant> idpTenants) {
+    public List<TenantIaasAuthResources> get(Set<String> idpTenantsIds) {
         Set<String> roleIds = new HashSet<>();
 
-        idpTenants
+        idpTenantsIds
         .stream()
-        .forEach(idpTenant -> {
-            String roleName = this.resourceBuilder.getRoleName(idpTenant);
+        .forEach(idpTenantsId -> {
+            String roleName = this.resourceBuilder.getRoleId(idpTenantsId);
             roleIds.add(roleName);
          });
 
@@ -67,13 +66,13 @@ public class TenantIaasAuthService {
         return this.mapper.fromComponents(roles);
     }
 
-    public TenantIaasAuthDeleteResult delete(List<IaasIdpTenant> idpTenants) {
+    public TenantIaasAuthDeleteResult delete(Set<String> iaasIdpTenantIds) {
         Set<String> roleIds = new HashSet<>();
 
-        idpTenants
+        iaasIdpTenantIds
         .stream()
-        .forEach(idpTenant -> {
-            String roleName = this.resourceBuilder.getRoleName(idpTenant);
+        .forEach(iaasIdpTenantId -> {
+            String roleName = this.resourceBuilder.getRoleId(iaasIdpTenantId);
             roleIds.add(roleName);
          });
 

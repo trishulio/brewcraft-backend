@@ -34,10 +34,10 @@ public class TenantIaasAuthServiceTest {
 
     @Test
     public void testGet_ReturnsAuthResourceWithComponents() {
-        doAnswer(inv -> inv.getArgument(0, IaasIdpTenant.class).getName() + "_ROLE_NAME").when(mResourceBuilder).getRoleName(any(IaasIdpTenant.class));
+        doAnswer(inv -> inv.getArgument(0, String.class) + "_ROLE_NAME").when(mResourceBuilder).getRoleId(anyString());
         doAnswer(inv -> inv.getArgument(0, Set.class).stream().map(id -> new IaasRole(id.toString())).toList()).when(mRoleService).getAll(anySet());
 
-        List<TenantIaasAuthResources> resources = this.service.get(List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2")));
+        List<TenantIaasAuthResources> resources = this.service.get(Set.of("T1", "T2"));
 
         List<TenantIaasAuthResources> expected = List.of(
             new TenantIaasAuthResources(new IaasRole("T1_ROLE_NAME")),
@@ -79,10 +79,10 @@ public class TenantIaasAuthServiceTest {
 
     @Test
     public void testDelete_ReturnsDeleteResultWithCounts() {
-        doAnswer(inv -> inv.getArgument(0, IaasIdpTenant.class).getId()).when(mResourceBuilder).getRoleName(any(IaasIdpTenant.class));
+        doAnswer(inv -> inv.getArgument(0, String.class)).when(mResourceBuilder).getRoleId(anyString());
         doAnswer(inv -> new Long(inv.getArgument(0, Set.class).size())).when(mRoleService).delete(anySet());
 
-        TenantIaasAuthDeleteResult result = this.service.delete(List.of(new IaasIdpTenant("T1"), new IaasIdpTenant("T2")));
+        TenantIaasAuthDeleteResult result = this.service.delete(Set.of("T1", "T2"));
 
         assertEquals(new TenantIaasAuthDeleteResult(2L), result);
     }

@@ -6,17 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
-
 import io.company.brewcraft.model.BaseIaasIdpTenant;
 import io.company.brewcraft.model.BaseIaasObjectStore;
 import io.company.brewcraft.model.BaseIaasPolicy;
 import io.company.brewcraft.model.BaseIaasRolePolicyAttachment;
-import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
-import io.company.brewcraft.model.IaasIdpTenant;
 import io.company.brewcraft.model.IaasObjectStore;
-import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasObjectStoreAccessConfig;
+import io.company.brewcraft.model.IaasObjectStoreCorsConfiguration;
+import io.company.brewcraft.model.IaasPolicy;
 import io.company.brewcraft.model.IaasRolePolicyAttachment;
 import io.company.brewcraft.model.IaasRolePolicyAttachmentId;
 import io.company.brewcraft.model.TenantIaasVfsDeleteResult;
@@ -46,16 +43,16 @@ public class TenantIaasVfsService {
         this.resourceBuilder = resourceBuilder;
     }
 
-    public List<TenantIaasVfsResources> get(List<IaasIdpTenant> tenants) {
+    public List<TenantIaasVfsResources> get(Set<String> iaasIdpTenantIds) {
         Set<String> policyIds = new HashSet<>();
         Set<String> objectStoreIds = new HashSet<>();
 
-        tenants.stream()
-               .forEach(iaasIdpTenant -> {
-                   String policyId = this.resourceBuilder.getVfsPolicyName(iaasIdpTenant);
+        iaasIdpTenantIds.stream()
+               .forEach(iaasIdpTenantId -> {
+                   String policyId = this.resourceBuilder.getVfsPolicyId(iaasIdpTenantId);
                    policyIds.add(policyId);
 
-                   String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
+                   String objectStoreId = this.resourceBuilder.getObjectStoreId(iaasIdpTenantId);
                    objectStoreIds.add(objectStoreId);
                 });
 
@@ -144,21 +141,21 @@ public class TenantIaasVfsService {
         return this.mapper.fromComponents(objectStores, policies);
     }
 
-    public TenantIaasVfsDeleteResult delete(List<IaasIdpTenant> iaasIdpTenants) {
+    public TenantIaasVfsDeleteResult delete(Set<String> iaasIdpTenantIds) {
         Set<String> objectStoreIds = new HashSet<>();
         Set<String> policyIds = new HashSet<>();
         Set<IaasRolePolicyAttachmentId> attachmentIds = new HashSet<>();
 
-        iaasIdpTenants
+        iaasIdpTenantIds
         .stream()
-        .forEach(iaasIdpTenant -> {
-            String policyId = this.resourceBuilder.getVfsPolicyName(iaasIdpTenant);
+        .forEach(iaasIdpTenantId -> {
+            String policyId = this.resourceBuilder.getVfsPolicyId(iaasIdpTenantId);
             policyIds.add(policyId);
 
-            IaasRolePolicyAttachmentId attachmentId = this.resourceBuilder.buildVfsAttachmentId(iaasIdpTenant);
+            IaasRolePolicyAttachmentId attachmentId = this.resourceBuilder.buildVfsAttachmentId(iaasIdpTenantId);
             attachmentIds.add(attachmentId);
 
-            String objectStoreId = this.resourceBuilder.getObjectStoreName(iaasIdpTenant);
+            String objectStoreId = this.resourceBuilder.getObjectStoreId(iaasIdpTenantId);
             objectStoreIds.add(objectStoreId);
          });
 
