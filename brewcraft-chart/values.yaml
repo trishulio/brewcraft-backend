@@ -1,5 +1,5 @@
 app:
-  name: brewcraft
+  name: brewcraft-backend
   labels:
     app: brewcraft
   endpoints:

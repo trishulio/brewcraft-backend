@@ -1,0 +1,29 @@
+env: production
+replicaCount: 1
+
+image:
+  repository: 850645470889.dkr.ecr.ca-central-1.amazonaws.com
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 2G
+  requests:
+    cpu: 250m
+    memory: 1.5G
+
+app:
+  command: {}
+    #entrypoint: <Unused parameter>
+  networking:
+    ingress:
+      host: "brewcraft.io"
+    port:
+      http: "8080"
+    httpService:
+      type: ClusterIP
+      port: "8080"

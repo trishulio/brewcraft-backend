@@ -1,6 +1,6 @@
 FROM openjdk:17 AS prod
 
-ARG JAR_FILE=./target/brewcraft-1.0.0.jar
+ARG JAR_FILE=./target/brewcraft-backend-1.0.0.jar
 ARG USER_ID=johndoe
 ARG UUID=8877
 
@@ -17,4 +17,5 @@ RUN useradd -ms /bin/bash -u ${UUID} ${USER_ID} && \
 USER ${USER_ID}
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-Xmx1g", "-jar", "brewcraftapp.jar"]
+ENTRYPOINT [ "java" ]
+CMD [ "-Xmx1g", "-jar", "brewcraftapp.jar" ]

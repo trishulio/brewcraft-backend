@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-db
-data: 
-  springDatasourceUrl:  {{ printf "jdbc:%s://%s:%s/%s" .Values.app.services.db.schema .Values.app.services.db.host .Values.app.services.db.port .Values.app.services.db.name }}

@@ -1,0 +1,36 @@
+env: staging
+replicaCount: 1
+
+image:
+  repository: 346608161962.dkr.ecr.ca-central-1.amazonaws.com
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 2G
+  requests:
+    cpu: 250m
+    memory: 1.5G
+
+app:
+  command:
+    #entrypoint: <Unused parameter>
+    args: ["\"-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:8000\",-jar,brewcraftapp.jar"]
+  networking:
+    ingress:
+      host: "staging.brewcraft.io"
+    port:
+      http: "8080"
+      debug: "8000"
+    httpService:
+      type: NodePort
+      port: "8080"
+      nodePort: "31000"
+    debugService:
+      type: NodePort
+      port: "8000"
+      nodePort: "31800"

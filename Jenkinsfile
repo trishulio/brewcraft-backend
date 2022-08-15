@@ -17,9 +17,50 @@ pipeline {
         stage ('Setup Job') {
             steps {
                 script {
+                    def config = [
+                        // Production
+                        "release": [
+                            "awsCredsId": "AWS_CREDS_PRODUCTION",
+                            "kubeConfigId": "KUBE_CONFIG_PRODUCTION",
+                            "awsAccountId": "850645470889",
+                            "awsRegion": "ca-central-1",
+                            "namespace": "production",
+                            "valuesFile": "values-production.yml"
+                        ],
+                        // Staging
+                        "master": [
+                            "awsCredsId": "AWS_CREDS_STAGING",
+                            "kubeConfigId": "KUBE_CONFIG_STAGING",
+                            "awsAccountId": "346608161962",
+                            "awsRegion": "ca-central-1",
+                            "namespace": "staging",
+                            "valuesFile": "values-staging.yml"
+                        ],
+                        // Default
+                        "develop": [
+                            "awsCredsId": "144571613969", // Not applicable for non-deployment builds
+                            "kubeConfigId": "NA", // Not applicable for non-deployment builds
+                            "awsAccountId": "144571613969",
+                            "awsRegion": "ca-central-1",
+                            "namespace": "local",
+                            "valuesFile": "values-development.yml"
+                        ]
+                    ]
+                    
+                    def configKey = ['master', 'release'].contains(env.BRANCH_NAME) ? env.BRANCH_NAME : 'develop'
+
+                    AWS_CREDS_ID = config[configKey]['awsCredsId']
+                    KUBE_CREDS_ID = config[configKey]['kubeConfigId']
+                    AWS_ACCOUNT_ID = config[configKey]['awsAccountId']
+                    AWS_REGION = config[configKey]['awsRegion']
+                    NAMESPACE = config[configKey]['namespace']
+                    VALUES_FILE = config[configKey]['valuesFile']
+
                     def commitId = sh(script: 'git rev-parse HEAD', returnStdout: true)
                     IMAGE_TAG = "${env.BRANCH_NAME}_${commitId}"
+
                     SONARQUBE_URL="https://sonarqube.cloudville.me"
+                    SONARQUBE_REPORTING = ['master', 'release'].contains(env.BRANCH_NAME) ? 'true' : 'false'
                 }
             }
         }
@@ -30,10 +71,10 @@ pipeline {
                 sh """
                     export MUTATION_COVERAGE=false
                     export CODE_COVERAGE=true
-                    export SONARQUBE=true
+                    export SONARQUBE=${SONARQUBE_REPORTING}
                     export SONARQUBE_HOST_URL=${SONARQUBE_URL}
-                    export SONARQUBE_PROJECT_KEY=${SONARQUBE_USR}
-                    export SONARQUBE_LOGIN=${SONARQUBE_PSW}
+                    export SONARQUBE_PROJECT_KEY=$SONARQUBE_USR
+                    export SONARQUBE_LOGIN=$SONARQUBE_PSW
                     make install PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}'
                 """
             }
@@ -41,29 +82,45 @@ pipeline {
 
         stage ('Containerize') {
             steps {
-                sh "make containerize VERSION=${IMAGE_TAG}"
+                sh "make containerize AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION VERSION=$IMAGE_TAG"
             }
         }
 
         stage ('Post Success') {
-            when { branch 'master' }
+            when {
+                anyOf {
+                    branch 'master';
+                    branch 'release';
+                }
+            }
+
+            environment {
+                AWS_CREDS = credentials("${AWS_CREDS_ID}")
+                KUBE_CREDS = credentials("${KUBE_CREDS_ID}")
+            }
 
             stages {
-                stage ('Prune Host') {
+                stage ('Publish') {
                     steps {
-                        build job: '../Nucleus Prune', parameters: [
-                            string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com')
-                        ]
+                        sh """
+                            export AWS_ACCESS_KEY_ID=$AWS_CREDS_USR
+                            export AWS_SECRET_ACCESS_KEY=$AWS_CREDS_PSW
+
+                            aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/brewcraft-backend
+
+                            make publish AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION VERSION=$IMAGE_TAG
+                        """
                     }
                 }
 
-                stage ('Deploy Host') {
+                stage ('Deploy') {
                     steps {
-                        build job: '../Brewcraft Deploy', parameters: [
-                            string(name: 'HOST_URL', value: 'ec2-18-222-253-162.us-east-2.compute.amazonaws.com'),
-                            string(name: 'TARGET_UPLOAD_DIR', value: '/var/server/brewcraft'),
-                            string(name: 'SOURCE_UPLOAD_DIR', value: './dist')
-                        ]
+                        // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container. PWD and HOME are manipulated to be relative to the host.
+                        sh """
+                            mkdir -p $WORKSPACE/.kube
+                            cp $KUBE_CREDS $WORKSPACE/.kube/config
+                            make deploy PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' HOME='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' VALUES_FILE=${VALUES_FILE} NAMESPACE=${NAMESPACE} VERSION=${IMAGE_TAG}
+                        """
                     }
                 }
 

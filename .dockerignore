@@ -1,0 +1,7 @@
+.git*
+**/.keep
+*.md
+!README*.md
+README-secret.md
+.*
+!/.dockerignore

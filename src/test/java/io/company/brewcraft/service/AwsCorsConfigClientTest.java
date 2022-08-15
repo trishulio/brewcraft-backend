@@ -37,7 +37,6 @@ public class AwsCorsConfigClientTest {
 
         IaasObjectStoreCorsConfiguration config = client.get("BUCKET_1");
 
-
         assertEquals("BUCKET_1", config.getBucketName());
         assertTrue(new ReflectionEquals(new BucketCrossOriginConfiguration()).matches(config.getBucketCrossOriginConfiguration()));
     }

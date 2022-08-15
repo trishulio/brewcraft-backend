@@ -1,0 +1,18 @@
+{{- if .Values.app.networking.debugService -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc-debug
+spec:
+  selector:
+    {{ toYaml .Values.app.labels }}
+  type: {{ .Values.app.networking.debugService.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.app.networking.debugService.port }}
+      targetPort: {{ .Values.app.networking.port.debug }}
+      {{ if eq .Values.app.networking.debugService.type "NodePort" }}
+      nodePort: {{ .Values.app.networking.debugService.nodePort }}
+      {{ end }}
+{{- end -}}
