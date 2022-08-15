@@ -49,8 +49,6 @@ pipeline {
                     
                     def configKey = ['master', 'release'].contains(env.BRANCH_NAME) ? env.BRANCH_NAME : 'develop'
 
-                    configKey = 'master' // TODO: REMOVE
-
                     AWS_CREDS_ID = config[configKey]['awsCredsId']
                     KUBE_CREDS_ID = config[configKey]['kubeConfigId']
                     AWS_ACCOUNT_ID = config[configKey]['awsAccountId']
