@@ -48,6 +48,12 @@ public class AwsCorsConfigClient implements IaasClient<String, IaasObjectStoreCo
         try {
             this.awsClient.setBucketCrossOriginConfiguration(request);
         } catch (AmazonS3Exception e) {
+            if (awsClient.doesBucketExistV2(entity.getBucketName()) && e.getErrorCode().equalsIgnoreCase("AccessDenied")) {
+                String msg = String.format("Bucket: '%s' exists, but failed to put the cross origin configuration. S3 buckets name are universal (i.e. not specific to this AWS account). This is likely because the bucket already exists in a different account. You might already have a Tenant with this ID on a different AWS account. Recommendation is to use a different Tenant ID for this environment.", entity.getBucketName());
+                log.error(msg);
+                e.setErrorMessage(e.getErrorMessage() + "; " + msg);
+            }
+
             log.error("Failed to put the cross origin configuration for bucket: {}", entity.getBucketName());
             throw e;
         }
