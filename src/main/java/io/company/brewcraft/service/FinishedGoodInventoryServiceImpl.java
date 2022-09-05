@@ -39,6 +39,7 @@ public class FinishedGoodInventoryServiceImpl implements FinishedGoodInventorySe
             int page, int size, SortedSet<String> sort, boolean orderAscending) {
         Specification<FinishedGoodInventoryAggregation> spec = WhereClauseBuilder.builder()
                                                                                  .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
+                                                                                 .not().isNull(FinishedGoodLot.FIELD_SKU)
                                                                                  .build();
 
         return this.aggrService.getAggregation(FinishedGoodInventoryAggregation.class, spec, aggrFn, FinishedGoodInventoryAggregation.AggregationField.QUANTITY_VALUE, groupBy, sort, orderAscending, page, size);

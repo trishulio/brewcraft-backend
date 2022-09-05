@@ -21,6 +21,7 @@ public class PredicateSpecAccumulator {
 
     private List<CriteriaSpec<Boolean>> aggregations;
     private boolean isNot;
+    private Boolean isPredicate;
 
     public PredicateSpecAccumulator() {
         this(new ArrayList<>());
@@ -29,9 +30,16 @@ public class PredicateSpecAccumulator {
     protected PredicateSpecAccumulator(List<CriteriaSpec<Boolean>> aggregations) {
         this.aggregations = aggregations;
         this.isNot = false;
+        this.isPredicate = true;
     }
 
     public void add(CriteriaSpec<Boolean> spec) {
+        if (this.isPredicate == null || !this.isPredicate) {
+            this.isNot = false;
+            this.isPredicate = true;
+            return;
+        }
+
         if (this.isNot) {
             spec = new NotSpec(spec);
         }
@@ -43,6 +51,10 @@ public class PredicateSpecAccumulator {
 
     public void setIsNot(boolean isNot) {
         this.isNot = isNot;
+    }
+
+    public void setIsPredicate(Boolean isPredicate) {
+        this.isPredicate = isPredicate;
     }
 
     public Predicate[] getPredicates(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {

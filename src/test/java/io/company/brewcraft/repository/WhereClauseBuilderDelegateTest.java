@@ -41,7 +41,7 @@ public class WhereClauseBuilderDelegateTest {
     }
 
     @Test
-    public void testIsNull_AddsInNullSpecAndResetNotFlag() {
+    public void testIsNull_AddsIsNullSpecAndResetNotFlag() {
         builder.isNull(new String[] { "layer-1" });
 
         CriteriaSpec<Boolean> expected = new IsNullSpec(new ColumnSpec(new String[] { "layer-1" }));
@@ -110,6 +110,13 @@ public class WhereClauseBuilderDelegateTest {
         assertEquals(List.of(), captor.getAllValues());
 
         verify(mAccumulator).setIsNot(false);
+    }
+
+    @Test
+    public void testPredicate_callsSetIsPredicate() {
+        builder.predicate(true);
+
+        verify(mAccumulator).setIsPredicate(true);
     }
 
     @Test

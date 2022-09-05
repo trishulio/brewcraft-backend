@@ -63,6 +63,7 @@ public class FinishedGoodLotService extends BaseService implements CrudService<L
             Set<Long> brewIds,
             Set<String> brewBatchIds,
             Set<Long> productIds,
+            Boolean skuIsNull,
             SortedSet<String> sort,
             boolean orderAscending,
             int page,
@@ -72,6 +73,8 @@ public class FinishedGoodLotService extends BaseService implements CrudService<L
                                             .builder()
                                             .in(FinishedGoodLot.FIELD_ID, ids)
                                             .not().in(FinishedGoodLot.FIELD_ID, excludeIds)
+                                            .predicate(skuIsNull).isNull(FinishedGoodLot.FIELD_SKU)
+                                            .predicate(skuIsNull == null ? null : !skuIsNull).not().isNull(FinishedGoodLot.FIELD_SKU)
                                             .in(new String[] { FinishedGoodLot.FIELD_SKU, Sku.FIELD_ID }, skuIds)
                                             .in(new String[] { FinishedGoodLot.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_ID}, mixtureIds)
                                             .in(new String[] { FinishedGoodLot.FIELD_MIXTURE_PORTIONS, MixturePortion.FIELD_MIXTURE, Mixture.FIELD_BREW_STAGE, BrewStage.FIELD_ID }, brewStageIds)
