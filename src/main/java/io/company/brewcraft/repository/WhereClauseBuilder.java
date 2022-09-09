@@ -24,8 +24,6 @@ public interface WhereClauseBuilder {
 
     WhereClauseBuilder not();
 
-    WhereClauseBuilder not(Boolean bool);
-
     WhereClauseBuilder predicate(Boolean bool);
 
     WhereClauseBuilder like(String[] paths, Set<String> queries);

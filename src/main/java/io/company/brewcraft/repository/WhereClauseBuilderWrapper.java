@@ -64,14 +64,6 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
 
 
     @Override
-    public WhereClauseBuilder not(Boolean bool) {
-        if (bool != null && bool == true) {
-            this.delegate.not();
-        }
-        return this;
-    }
-
-    @Override
     public WhereClauseBuilder like(String[] paths, Set<String> queries) {
         this.delegate.like(paths, queries);
         return this;
