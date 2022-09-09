@@ -109,6 +109,14 @@ public class WhereClauseBuilderTest {
     }
 
     @Test
+    public void testPredicate_CallsPredicateOnDelegate() {
+        WhereClauseBuilder ret = builder.predicate(true);
+
+        assertSame(builder, ret);
+        verify(mDelegate, times(1)).predicate(true);;
+    }
+
+    @Test
     public void testBuild_ReturnsSpecificationFromDelegate() {
         Specification<Object> mSpec = mock(Specification.class);
         doReturn(mSpec).when(mDelegate).build();

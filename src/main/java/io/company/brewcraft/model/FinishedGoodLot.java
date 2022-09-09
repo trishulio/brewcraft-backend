@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
+import javax.persistence.criteria.JoinType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -55,8 +56,9 @@ public class FinishedGoodLot extends BaseEntity implements UpdateFinishedGoodLot
     @SequenceGenerator(name = "finished_good_lot_generator", sequenceName = "finished_good_lot_sequence", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "sku_id", referencedColumnName = "id")
+    @CriteriaJoin(type = JoinType.LEFT)
     private Sku sku;
 
     @OneToMany(mappedBy = "finishedGoodLot", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

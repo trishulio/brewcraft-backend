@@ -21,10 +21,10 @@ publish:
 	docker push ${REGISTRY}/${APP_NAME}:${VERSION}
 
 deploy:
-	docker-compose -f docker-compose-helm.yml run --rm -T helm upgrade --install -f values.yaml -f ${VALUES_FILE} -n ${NAMESPACE} ${APP_NAME} . --set image.tag=${VERSION}
+	(cd brewcraft-chart && helm upgrade --install -f values.yaml -f ${VALUES_FILE} -n ${NAMESPACE} ${APP_NAME} . --set image.tag=${VERSION})
 
 undeploy:
-	docker-compose -f docker-compose-helm.yml run --rm -T helm uninstall -n ${NAMESPACE} ${APP_NAME}
+	(cd brewcraft-chart && helm uninstall -n ${NAMESPACE} ${APP_NAME})
 
 ## Development
 

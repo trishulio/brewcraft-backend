@@ -30,6 +30,10 @@ public class WhereClauseBuilderDelegate {
         this.accumulator.setIsNot(true);
     }
 
+    public void predicate(Boolean bool) {
+        this.accumulator.setIsPredicate(bool);
+    }
+
     public void isNull(String[] paths) {
         CriteriaSpec<Boolean> spec = new IsNullSpec(new ColumnSpec<>(paths));
         accumulator.add(spec);

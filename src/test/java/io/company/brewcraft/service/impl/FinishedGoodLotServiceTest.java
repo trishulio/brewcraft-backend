@@ -76,6 +76,7 @@ public class FinishedGoodLotServiceTest {
            Set.of(6L),
            Set.of("a123"),
            Set.of(8L),
+           true,
            new TreeSet<>(List.of("id")),
            true,
            10,
