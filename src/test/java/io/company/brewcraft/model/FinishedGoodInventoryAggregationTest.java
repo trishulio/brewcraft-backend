@@ -102,7 +102,7 @@ public class FinishedGoodInventoryAggregationTest {
 
     @Test
     public void testGetSetId() {
-        finishedGoodInventory.setId(9L);;
+        finishedGoodInventory.setId(9L);
         assertEquals(9L, finishedGoodInventory.getId());
     }
 

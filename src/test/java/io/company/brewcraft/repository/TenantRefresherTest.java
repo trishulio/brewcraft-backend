@@ -37,7 +37,7 @@ public class TenantRefresherTest {
     @Test
     public void testRefresh_RefreshesSuppliers() {
         List<Tenant> entities = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")), new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000002")));
-        tenantRefresher.refresh(entities);;
+        tenantRefresher.refresh(entities);
 
         List<Tenant> expected = List.of(new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000001")), new Tenant(UUID.fromString("00000000-0000-0000-0000-000000000002")));
         assertEquals(expected, entities);

@@ -35,7 +35,7 @@ public class FinishedGoodInventoryDto extends BaseDto {
         this.materialPortions = materialPortions;
         this.finishedGoodLotPortions = finishedGoodLotPortions;
         this.packagedOn = packagedOn;
-        this.quantity = quantity;;
+        this.quantity = quantity;
     }
 
     public Long getId() {
