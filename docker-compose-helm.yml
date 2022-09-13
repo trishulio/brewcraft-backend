@@ -3,7 +3,7 @@ services:
   helm:
     image: alpine/helm:3.9.2
     container_name: brewcraft_helm
-    working_dir: /usr/code/app/brewcraft-chart
+    working_dir: /usr/code/app
     network_mode: "host" # Hack: This is needed so the helm can access the host's minikube IP
     environment:
       KUBECONFIG: ${KUBECONFIG}

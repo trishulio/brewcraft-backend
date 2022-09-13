@@ -46,7 +46,7 @@ pipeline {
                             "valuesFile": "values-development.yml"
                         ]
                     ]
-                    
+
                     def configKey = ['master', 'release'].contains(env.BRANCH_NAME) ? env.BRANCH_NAME : 'develop'
 
                     AWS_CREDS_ID = config[configKey]['awsCredsId']
@@ -119,7 +119,7 @@ pipeline {
                         sh """
                             mkdir -p $WORKSPACE/.kube
                             cp $KUBE_CREDS $WORKSPACE/.kube/config
-                            make deploy PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' HOME='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' VALUES_FILE=${VALUES_FILE} NAMESPACE=${NAMESPACE} VERSION=${IMAGE_TAG}
+                            make deploy PWD='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' HOME='${env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)}' VALUES_FILE=${VALUES_FILE} NAMESPACE=${NAMESPACE} VERSION=${IMAGE_TAG} HELM="docker-compose -f ../docker-compose-helm.yml run --rm -T helm"
                         """
                     }
                 }
