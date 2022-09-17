@@ -8,6 +8,9 @@ REGISTRY=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 VALUES_FILE:=values-development.yml
 NAMESPACE:=local
 
+# Binaries Path
+HELM=helm
+
 install:
 	docker-compose -f docker-compose-install.yml run --rm install
 
@@ -21,10 +24,10 @@ publish:
 	docker push ${REGISTRY}/${APP_NAME}:${VERSION}
 
 deploy:
-	(cd brewcraft-chart && helm upgrade --install -f values.yaml -f ${VALUES_FILE} -n ${NAMESPACE} ${APP_NAME} . --set image.tag=${VERSION})
+	(cd brewcraft-chart && ${HELM} upgrade --install -f values.yaml -f ${VALUES_FILE} -n ${NAMESPACE} ${APP_NAME} . --set image.tag=${VERSION})
 
 undeploy:
-	(cd brewcraft-chart && helm uninstall -n ${NAMESPACE} ${APP_NAME})
+	(cd brewcraft-chart && ${HELM} uninstall -n ${NAMESPACE} ${APP_NAME})
 
 ## Development
 

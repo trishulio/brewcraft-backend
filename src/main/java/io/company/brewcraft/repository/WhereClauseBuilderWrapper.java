@@ -62,7 +62,6 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
         return this;
     }
 
-
     @Override
     public WhereClauseBuilder like(String[] paths, Set<String> queries) {
         this.delegate.like(paths, queries);
@@ -89,6 +88,13 @@ public class WhereClauseBuilderWrapper implements WhereClauseBuilder {
 
     @Override
     public WhereClauseBuilder predicate(Boolean bool) {
+        this.delegate.predicate(bool);
+        return this;
+    }
+
+    @Override
+    public WhereClauseBuilder negatePredicate(Boolean bool) {
+        bool = bool == null ? null : !bool;
         this.delegate.predicate(bool);
         return this;
     }

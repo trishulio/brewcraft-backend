@@ -113,7 +113,31 @@ public class WhereClauseBuilderTest {
         WhereClauseBuilder ret = builder.predicate(true);
 
         assertSame(builder, ret);
-        verify(mDelegate, times(1)).predicate(true);;
+        verify(mDelegate, times(1)).predicate(true);
+    }
+
+    @Test
+    public void testNegatePredicate_CallsDelegateWithNull_WhenPredicateIsNull() {
+        WhereClauseBuilder ret = builder.negatePredicate(null);
+
+        assertSame(builder, ret);
+        verify(mDelegate, times(1)).predicate(null);
+    }
+
+    @Test
+    public void testNegatePredicate_CallsDelegateWithFalse_WhenPredicateIsTrue() {
+        WhereClauseBuilder ret = builder.negatePredicate(true);
+
+        assertSame(builder, ret);
+        verify(mDelegate, times(1)).predicate(false);
+    }
+
+    @Test
+    public void testNegatePredicate_CallsDelegateWithTrue_WhenPredicateIsFalse() {
+        WhereClauseBuilder ret = builder.negatePredicate(false);
+
+        assertSame(builder, ret);
+        verify(mDelegate, times(1)).predicate(true);
     }
 
     @Test
