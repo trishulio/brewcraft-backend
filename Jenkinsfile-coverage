@@ -7,8 +7,14 @@ pipeline {
         SSH_CREDS = credentials('jaas_user')
     }
 
+    options {
+        disableConcurrentBuilds()
+        quietPeriod(12 * 3600) // 12 hours because this build is slow and don't need immediate completion.
+        timeout(time: 3, unit: 'HOURS')
+    }
+
     parameters {
-        string(name: 'HOST_URL', defaultValue: '172.17.0.1')
+        string(name: 'HOST_URL', defaultValue: 'host.docker.internal')
         string(name: 'JACOCO_SOURCE_HTML_DIR', defaultValue: "target/site/jacoco", description: 'Location of the code coverage files.')
         string(name: 'PITEST_SOURCE_HTML_DIR', defaultValue: "target/pit-reports/**", description: 'Location of the mutation coverage files.')
         string(name: 'JACOCO_TARGET_HTML_DIR', defaultValue: '/home/mrishab/brewcraft/code/html/jacoco', description: 'Absolute path of the host directory where code coverage is hosted')
