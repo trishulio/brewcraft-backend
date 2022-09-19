@@ -89,31 +89,33 @@ pipeline {
                 }
             }
 
-            stage ('Publish') {
-                environment {
-                    AWS_CREDS = credentials("${AWS_CREDS_ID}")
+            stages {
+                stage ('Publish') {
+                    environment {
+                        AWS_CREDS = credentials("${AWS_CREDS_ID}")
+                    }
+
+                    steps {
+                        sh """
+                            export AWS_ACCESS_KEY_ID=$AWS_CREDS_USR
+                            export AWS_SECRET_ACCESS_KEY=$AWS_CREDS_PSW
+
+                            aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/brewcraft-backend
+
+                            make publish AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION VERSION=$IMAGE_TAG
+                        """
+                    }
                 }
 
-                steps {
-                    sh """
-                        export AWS_ACCESS_KEY_ID=$AWS_CREDS_USR
-                        export AWS_SECRET_ACCESS_KEY=$AWS_CREDS_PSW
-
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login -u AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/brewcraft-backend
-
-                        make publish AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID AWS_REGION=$AWS_REGION VERSION=$IMAGE_TAG
-                    """
-                }
-            }
-
-            stage ('Deploy') {
-                steps {
-                    build job: '../Backend-Deploy', parameters: [
-                        string(name: 'initialDelay', value: '0'),
-                        string(name: 'version', value: IMAGE_TAG),
-                        string(name: 'environment', value: 'staging'),
-                        booleanParam(name: 'rollingUpdate', value: true),
-                    ]
+                stage ('Deploy') {
+                    steps {
+                        build job: '../Backend-Deploy', parameters: [
+                            string(name: 'initialDelay', value: '0'),
+                            string(name: 'version', value: IMAGE_TAG),
+                            string(name: 'environment', value: 'staging'),
+                            booleanParam(name: 'rollingUpdate', value: true),
+                        ]
+                    }
                 }
             }
         }
