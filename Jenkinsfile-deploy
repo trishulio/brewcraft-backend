@@ -83,7 +83,7 @@ pipeline {
             steps {
                 // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container. PWD and HOME are manipulated to be relative to the host.
                 sh """
-                    make undeploy PWD='${HOST_WORKSPACE}' HOME='${HOST_WORKSPACE}' NAMESPACE='${NAMESPACE}'
+                    make undeploy HELM='docker-compose -f ../docker-compose-helm.yml run --rm -T helm' PWD='${HOST_WORKSPACE}' HOME='${HOST_WORKSPACE}' NAMESPACE='${NAMESPACE}'
                 """
             }
         }
