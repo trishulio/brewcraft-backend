@@ -2,8 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: brewcraft-backend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ .Values.app.networking.ingress.host }}
+    secretName: {{ .Values.app.networking.ingress.host }}-tls
   rules:
   - host: {{ .Values.app.networking.ingress.host }}
     http:
