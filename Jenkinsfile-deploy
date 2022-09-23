@@ -1,0 +1,100 @@
+pipeline {
+    agent {
+        label 'docker'
+    }
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    environment {
+        HOST_WORKSPACE = env.WORKSPACE.replaceFirst(env.WORKSPACE_HOME, env.HOST_WORKSPACE_HOME)
+    }
+
+    parameters {
+        string(name: 'initialDelay', defaultValue: '0', description: 'Wait for N minutes before deploying')
+        string(name: 'version', defaultValue: 'master', description: "The image tag available on the repository")
+        choice(name: 'environment', choices: ['staging', 'production'], description: 'Environment to deploy to')
+        booleanParam(name: 'rollingUpdate', defaultValue: true, description: 'Unchecking will first uninstall the existing deployment and then perform a fresh install. (Note: In most cases, you don\'t need this)')
+    }
+
+    stages {
+        stage ('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Initialize') {
+            steps {
+                script {
+                    def envConfigs = [
+                        "production": [
+                            "kubeConfigId": "KUBE_CONFIG_PRODUCTION",
+                            "namespace": "production",
+                            "valuesFile": "values-production.yml"
+                        ],
+                        // Staging
+                        "staging": [
+                            "kubeConfigId": "KUBE_CONFIG_STAGING",
+                            "namespace": "staging",
+                            "valuesFile": "values-staging.yml"
+                        ]
+                    ]
+
+                    def envConfig = envConfigs[params.environment];
+
+                    KUBE_CREDS_ID = envConfig['kubeConfigId'];
+                    VALUES_FILE = envConfig['valuesFile'];
+                    NAMESPACE = envConfig['namespace'];
+                    VERSION = params.version.trim();
+                }
+            }
+        }
+
+        stage('Setup KubeConfig') {
+            environment {
+                KUBE_CREDS = credentials("${KUBE_CREDS_ID}")
+            }
+
+            steps {
+                sh """
+                    mkdir -p "$WORKSPACE/.kube"
+                    cp "$KUBE_CREDS" "$WORKSPACE/.kube/config"
+                """
+            }
+        }
+
+        stage('Waiting') {
+            steps {
+                script {
+                    sh """
+                        sleep ${params.initialDelay}m
+                    """
+                }
+            }
+        }
+
+        stage('Undeploy') {
+            when {
+                expression { !params.rollingUpdate }
+            }
+
+            steps {
+                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container. PWD and HOME are manipulated to be relative to the host.
+                sh """
+                    make undeploy HELM='docker-compose -f ../docker-compose-helm.yml run --rm -T helm' PWD='${HOST_WORKSPACE}' HOME='${HOST_WORKSPACE}' NAMESPACE='${NAMESPACE}'
+                """
+            }
+        }
+
+        stage ('Deploy') {
+            steps {
+                // Hack: The sibling container mounts on the host and therefore the mount path needs to be relative to the host, not the parent container. PWD and HOME are manipulated to be relative to the host.
+                sh """
+                    make deploy HELM='docker-compose -f ../docker-compose-helm.yml run --rm -T helm' PWD='${HOST_WORKSPACE}' HOME='${HOST_WORKSPACE}' VALUES_FILE='${VALUES_FILE}' NAMESPACE='${NAMESPACE}' VERSION='${VERSION}'
+                """
+            }
+        }
+    }
+}
